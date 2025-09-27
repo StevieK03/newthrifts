@@ -1,0 +1,608 @@
+<section id="sec-{{ section.id }}" class="container featured-collection-enhanced" style="padding: 28px 0; position: relative; overflow: hidden;">
+  <!-- Decorative background elements -->
+  <div class="featured-bg-elements">
+    <div class="bg-pattern"></div>
+    <div class="bg-lines">
+      <div class="line line-1"></div>
+      <div class="line line-2"></div>
+      <div class="line line-3"></div>
+    </div>
+    {% comment %} Removed floating shapes and dots {% endcomment %}
+  </div>
+
+  <div class="featured-content" style="position: relative; z-index: 2;">
+    {% if section.settings.heading != blank %}
+      <h2 style="font-family:'Bebas Neue', sans-serif; font-size:38px; margin:0 0 10px 0;">{{ section.settings.heading }}</h2>
+    {% endif %}
+    {% if section.settings.subheading != blank %}
+      <p style="margin-top:0; opacity:.85;">{{ section.settings.subheading }}</p>
+    {% endif %}
+
+  {% if section.settings.collection != blank %}
+    {% assign col = section.settings.collection %}
+    <div class="grid grid--3">
+      {% for product in col.products limit: section.settings.max_products %}
+        <article class="product-card" data-product-id="{{ product.id }}" data-filters="{{ product.tags | join: ',' }}">
+          <a href="{{ product.url }}" class="product-card__link">
+            <div class="product-card__image">
+              <img id="ProductImage-{{ product.id }}" 
+                   src="{{ product.featured_image | image_url: width: 720 }}"
+                   alt="{{ product.title | escape }}"
+                   loading="lazy"
+                   class="product-card__img">
+            </div>
+          </a>
+
+          <div class="product-card__content">
+            <h3 class="product-card__title">
+              {%- comment -%} Shorten product names and remove brand info {%- endcomment -%}
+              {%- assign short_title = product.title -%}
+              {%- if product.title contains 'Boo-tiful Ghost Toddler Long Sleeve Tee' -%}
+                {%- assign short_title = 'Boo-tiful Ghost Toddler Tee' -%}
+              {%- elsif product.title contains 'Baby T-Shirt Cutest Pumpkin' -%}
+                {%- assign short_title = 'Cutest Pumpkin Baby Tee' -%}
+              {%- elsif product.title contains 'Butterfly Floral Boxy Tee' -%}
+                {%- assign short_title = 'Butterfly Floral Boxy Tee' -%}
+              {%- elsif product.title contains 'Miami Nights Boxy Tee for Women' -%}
+                {%- assign short_title = 'Miami Nights Boxy Tee' -%}
+              {%- elsif product.title contains 'BABY T-SHIRT' -%}
+                {%- assign short_title = product.title | replace: 'BABY T-SHIRT', 'BABY TEE' -%}
+              {%- elsif product.title contains 'TODDLER LONG SLEEVE TEE' -%}
+                {%- assign short_title = product.title | replace: 'TODDLER LONG SLEEVE TEE, HALLOWEEN SHIRT, CUTE KIDS TEE, SPOOKY SEASON APPAREL, TODDLER HALLOWEEN CLOTHING', 'TODDLER TEE' -%}
+              {%- elsif product.title contains 'HALLOWEEN' -%}
+                {%- assign short_title = product.title | split: 'HALLOWEEN' | first | append: 'HALLOWEEN' -%}
+              {%- endif -%}
+              
+              {%- comment -%} Remove brand/vendor info like "Gildan 5200" {%- endcomment -%}
+              {%- assign short_title = short_title | replace: 'Gildan 5200', '' -%}
+              {%- assign short_title = short_title | replace: 'Gildan', '' -%}
+              {%- assign short_title = short_title | replace: '5200', '' -%}
+              {%- assign short_title = short_title | replace: '  ', ' ' -%}
+              {%- assign short_title = short_title | strip -%}
+              
+              {{ short_title }}
+            </h3>
+            
+
+            <!-- optional badge -->
+            {% if product.compare_at_price_max > product.price_min %}
+              <small class="badge">On sale</small>
+            {% endif %}
+
+            <div class="product-card__price">
+              {% if product.compare_at_price_max > product.price_min %}
+                <span class="price price--sale" data-product-price>{{ product.price_min | money }}</span>
+                <span class="price price--compare" style="text-decoration:line-through;">
+                  {{ product.compare_at_price_max | money }}
+                </span>
+              {% else %}
+                <span class="price" data-product-price>{{ product.price_min | money }}</span>
+              {% endif %}
+            </div>
+
+            {%- comment -%} Full swatch functionality for homepage {%- endcomment -%}
+            {%- assign color_index = 0 -%}
+            {%- for opt in product.options -%}
+              {%- assign opt_lc = opt | downcase -%}
+              {%- if opt_lc == 'color' -%}
+                {%- assign color_index = forloop.index0 -%}
+                {%- break -%}
+              {%- endif -%}
+            {%- endfor -%}
+
+            {%- if product.options_with_values[color_index].values.size > 1 -%}
+              <div class="swatch-block" data-swatch-group data-option-index="{{ color_index }}" aria-label="Color">
+                <div class="vp-legend">Color</div>
+                <div class="swatch-list">
+                  {%- assign seen = '' -%}
+                  {%- for v in product.options_with_values[color_index].values -%}
+                    {%- assign key = v | downcase | strip -%}
+                    {%- if seen contains key -%}{% continue %}{%- endif -%}
+                    {%- assign seen = seen | append: key | append: ',' -%}
+
+                    {%- comment -%} Find best matching variant for this value {%- endcomment -%}
+                    {%- assign match = nil -%}
+                    {%- for variant in product.variants -%}
+                      {%- if variant.options[color_index] == v -%}
+                        {%- assign ok = true -%}
+                        {%- for i in (0..product.options.size-1) -%}
+                          {%- if i != color_index -%}
+                            {%- if product.selected_or_first_available_variant and product.selected_or_first_available_variant.options[i] and variant.options[i] != product.selected_or_first_available_variant.options[i] -%}
+                              {%- assign ok = false -%}
+                            {%- endif -%}
+                          {%- endif -%}
+                        {%- endfor -%}
+                        {%- if ok -%}{% assign match = variant %}{% break %}{%- endif -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+                    {%- if match == nil -%}
+                      {%- for variant in product.variants -%}
+                        {%- if variant.options[color_index] == v -%}{% assign match = variant %}{% break %}{%- endif -%}
+                      {%- endfor -%}
+                    {%- endif -%}
+
+                    {%- assign img = match.featured_media.preview_image | default: product.featured_image -%}
+                    {%- assign media_id = match.featured_media.id | default: '' -%}
+                    {%- assign price_str = match.price | money -%}
+
+                    <button
+                      type="button"
+                      class="swatch"
+                      data-swatch
+                      data-option-index="{{ color_index }}"
+                      data-value="{{ v | escape }}"
+                      data-variant-id="{{ match.id }}"
+                      data-available="{{ match.available }}"
+                      {% if media_id != blank %}data-media-id="{{ media_id }}"{% endif %}
+                      data-img="{{ img | image_url: width: 800 }}"
+                      data-price="{{ price_str }}"
+                      aria-label="Color: {{ v }}"
+                      title="{{ v }}"
+                    >
+                      <span class="swatch__chip" data-swatch-chip
+                            style="background-image:url('{{ img | image_url: width: 80 }}');"></span>
+                      <span class="swatch__label">{{ v }}</span>
+                    </button>
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endif -%}
+
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  {% endif %}
+  </div>
+</section>
+
+<!-- Premium Modal for Quick View -->
+<div class="premium-modal" id="quick-view-modal">
+  <div class="premium-modal__content">
+    <button class="premium-modal__close" aria-label="Close modal">&times;</button>
+    <!-- Modal content will be populated by JavaScript -->
+  </div>
+</div>
+
+<!-- Enhanced Product Cards Styles -->
+<style id="enhanced-cards-{{ section.id }}">
+  /* Remove borders from product cards but keep swatch borders */
+  #sec-{{ section.id }} .product-card {
+    border: none !important;
+    outline: none !important;
+  }
+  
+  #sec-{{ section.id }} .product-card * {
+    border: none !important;
+    outline: none !important;
+  }
+  
+  /* Restore swatch borders for visibility and bubble effects */
+  #sec-{{ section.id }} .swatch__chip {
+    border: 1px solid #d1d5db !important;
+    outline: none !important;
+  }
+  
+  /* Swatch bubble/selection effects */
+  #sec-{{ section.id }} .swatch {
+    transition: all 0.2s ease !important;
+    border: 2px solid transparent !important;
+    border-radius: 20px !important;
+  }
+  
+  #sec-{{ section.id }} .swatch:hover,
+  #sec-{{ section.id }} .swatch.is-selected {
+    border-color: #000 !important;
+    transform: scale(1.05) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
+  }
+  
+  /* Product card links */
+  #sec-{{ section.id }} .product-card__link {
+    text-decoration: none !important;
+    color: inherit !important;
+    display: block !important;
+  }
+  
+  #sec-{{ section.id }} .product-card__link:hover {
+    text-decoration: none !important;
+  }
+  
+  /* Center product titles and content */
+  #sec-{{ section.id }} .product-card__content {
+    text-align: center !important;
+  }
+  
+  #sec-{{ section.id }} .product-card__title {
+    text-align: center !important;
+  }
+  
+  #sec-{{ section.id }} .product-card__price {
+    text-align: center !important;
+  }
+  
+  /* Fix swatch overflow and center them */
+  #sec-{{ section.id }} .swatch-list {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    margin: 8px 0 !important;
+    overflow: visible !important;
+  }
+  
+  #sec-{{ section.id }} .swatch {
+    flex-shrink: 0 !important;
+    margin: 2px !important;
+  }
+
+  /* Enhanced Product Cards */
+  #sec-{{ section.id }} .enhanced-card {
+    position: relative;
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+  
+  #sec-{{ section.id }} .enhanced-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  }
+  
+  /* Card Glow Effect - Removed neon colors */
+  #sec-{{ section.id }} .card-glow {
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(45deg, rgba(0,0,0,0.05), rgba(0,0,0,0.1));
+    border-radius: 18px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: -1;
+    filter: blur(8px);
+  }
+  
+  #sec-{{ section.id }} .enhanced-card:hover .card-glow {
+    opacity: 0.3;
+  }
+  
+  /* Card Shine Effect */
+  #sec-{{ section.id }} .card-shine {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: left 0.6s ease;
+    z-index: 2;
+    pointer-events: none;
+  }
+  
+  #sec-{{ section.id }} .enhanced-card:hover .card-shine {
+    left: 100%;
+  }
+  
+  /* Image Container */
+  #sec-{{ section.id }} .image-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px 12px 0 0;
+  }
+  
+  #sec-{{ section.id }} .product-card__img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    aspect-ratio: unset !important;
+    transition: transform 0.4s ease;
+    display: block;
+  }
+  
+  #sec-{{ section.id }} .enhanced-card:hover .product-card__img {
+    transform: scale(1.1);
+  }
+  
+  /* Image Overlay */
+  #sec-{{ section.id }} .image-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,0,0,0.3), rgba(0,0,0,0.5));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+  }
+  
+  #sec-{{ section.id }} .enhanced-card:hover .image-overlay {
+    opacity: 1;
+  }
+  
+  /* Quick View Button */
+  #sec-{{ section.id }} .quick-view-btn {
+    background: rgba(255,255,255,0.9);
+    color: #0f172a;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  }
+  
+  #sec-{{ section.id }} .enhanced-card:hover .quick-view-btn {
+    transform: translateY(0);
+  }
+  
+  /* Enhanced Card Body */
+  #sec-{{ section.id }} .product-card__body {
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+  }
+  
+  #sec-{{ section.id }} .product-card__body h3 {
+    transition: color 0.3s ease;
+  }
+  
+  #sec-{{ section.id }} .enhanced-card:hover .product-card__body h3 {
+    color: #333;
+  }
+  
+  /* Swatch Enhancements */
+  #sec-{{ section.id }} .swatch-block {
+    margin-top: 12px;
+    transition: all 0.3s ease;
+  }
+  
+  #sec-{{ section.id }} .enhanced-card:hover .swatch-block {
+    transform: translateY(-2px);
+  }
+  
+  #sec-{{ section.id }} .swatch {
+    --size: 34px;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+    padding: 6px 8px 6px 6px;
+    border-radius: 9999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  #sec-{{ section.id }} .swatch:hover {
+    transform: scale(1.1);
+    border-color: #666;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+  
+  #sec-{{ section.id }} .swatch__chip {
+    width: var(--size);
+    height: var(--size);
+    border-radius: 9999px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: inline-block;
+  }
+  
+  #sec-{{ section.id }} .swatch__label {
+    font-size: 0.86rem;
+    font-weight: 700;
+  }
+  
+  /* Price Animation */
+  #sec-{{ section.id }} .product-card__price {
+    transition: all 0.3s ease;
+  }
+  
+  #sec-{{ section.id }} .enhanced-card:hover .product-card__price {
+    transform: translateX(4px);
+  }
+  
+  /* Floating Animation */
+  #sec-{{ section.id }} .enhanced-card:nth-child(1) { animation-delay: 0.1s; }
+  #sec-{{ section.id }} .enhanced-card:nth-child(2) { animation-delay: 0.2s; }
+  #sec-{{ section.id }} .enhanced-card:nth-child(3) { animation-delay: 0.3s; }
+  #sec-{{ section.id }} .enhanced-card:nth-child(4) { animation-delay: 0.4s; }
+  #sec-{{ section.id }} .enhanced-card:nth-child(5) { animation-delay: 0.5s; }
+  #sec-{{ section.id }} .enhanced-card:nth-child(6) { animation-delay: 0.6s; }
+  
+  #sec-{{ section.id }} .enhanced-card {
+    animation: cardFloat 6s ease-in-out infinite;
+  }
+  
+  @keyframes cardFloat {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-3px); }
+  }
+  
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    #sec-{{ section.id }} .enhanced-card:hover {
+      transform: translateY(-4px) scale(1.01);
+    }
+    
+    #sec-{{ section.id }} .quick-view-btn {
+      padding: 10px 20px;
+      font-size: 12px;
+    }
+  }
+</style>
+
+<!-- Scoped price color override (red) -->
+<style id="price-override-{{ section.id }}">
+  #sec-{{ section.id }} .product-card__price .price {
+    color:#e53935 !important;
+  }
+</style>
+
+<!-- Featured Collection Decorative Elements -->
+<style id="featured-decorative-{{ section.id }}">
+  /* Featured collection background elements */
+  #sec-{{ section.id }}.featured-collection-enhanced {
+    background: transparent;
+    position: relative;
+  }
+
+  #sec-{{ section.id }} .featured-bg-elements {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  #sec-{{ section.id }} .bg-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      radial-gradient(circle at 25% 25%, rgba(0,0,0,0.03) 2px, transparent 2px),
+      radial-gradient(circle at 75% 75%, rgba(0,0,0,0.03) 2px, transparent 2px);
+    background-size: 60px 60px;
+    background-position: 0 0, 30px 30px;
+    opacity: 0.6;
+  }
+
+  #sec-{{ section.id }} .bg-lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  #sec-{{ section.id }} .line {
+    position: absolute;
+    background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent);
+    animation: line-move 15s linear infinite;
+  }
+
+  #sec-{{ section.id }} .line-1 {
+    width: 180px;
+    height: 2px;
+    top: 25%;
+    left: -180px;
+    animation-delay: 0s;
+  }
+
+  #sec-{{ section.id }} .line-2 {
+    width: 120px;
+    height: 1px;
+    top: 55%;
+    right: -120px;
+    animation-delay: 5s;
+    animation-direction: reverse;
+  }
+
+  #sec-{{ section.id }} .line-3 {
+    width: 80px;
+    height: 1px;
+    top: 75%;
+    left: -80px;
+    animation-delay: 10s;
+  }
+
+  {% comment %} Removed floating shapes and dots CSS {% endcomment %}
+
+  @keyframes line-move {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(100vw + 200px)); }
+  }
+
+  {% comment %} Removed float-shape and float-dot animations {% endcomment %}
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    #sec-{{ section.id }} .bg-lines {
+      display: none;
+    }
+    
+    {% comment %} Removed mobile responsive shapes {% endcomment %}
+  }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Enhanced product card interactions
+  const cards = document.querySelectorAll('#sec-{{ section.id }} .enhanced-card');
+  
+  cards.forEach(card => {
+    // Add magnetic effect
+    card.addEventListener('mousemove', function(e) {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = (y - centerY) / 10;
+      const rotateY = (centerX - x) / 10;
+      
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+    });
+    
+    card.addEventListener('mouseleave', function() {
+      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
+    });
+    
+    // Quick view functionality
+    const quickViewBtn = card.querySelector('.quick-view-btn');
+    if (quickViewBtn) {
+      quickViewBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const productLink = card.querySelector('.card-link').href;
+        window.open(productLink, '_blank');
+      });
+    }
+  });
+  
+  // Intersection Observer for scroll animations
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.animationPlayState = 'running';
+        entry.target.classList.add('animate-in');
+      }
+    });
+  }, observerOptions);
+  
+  cards.forEach(card => {
+    card.style.animationPlayState = 'paused';
+    observer.observe(card);
+  });
+});
+</script>
+
+{% schema %}
+{
+  "name": "Featured collection",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Fresh on the boardwalk" },
+    { "type": "text", "id": "subheading", "label": "Subheading", "default": "Curated pieces in neon fades and cool pastels." },
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "range", "id": "max_products", "label": "Max products", "min": 3, "max": 12, "step": 1, "default": 6 }
+  ],
+  "presets": [
+   { "name": "Featured collection" }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,1142 @@
+{% comment %}
+Product Poll Section
+- Interactive voting system for products
+- Real-time results display
+- Responsive design for desktop and mobile
+{% endcomment %}
+
+<section id="product-poll-{{ section.id }}" class="product-poll-section">
+  <div class="poll-container">
+    <div class="poll-header">
+      <h2 class="poll-title">{{ section.settings.title | default: "Vote for Your Favorite Products!" }}</h2>
+      <p class="poll-description">{{ section.settings.description | default: "Help us decide which products to feature more prominently. Your vote matters!" }}</p>
+    </div>
+
+    <div class="poll-content">
+      <div class="poll-products">
+        {% for block in section.blocks %}
+          {% if block.type == 'product' %}
+            <div class="poll-product" data-product-id="{{ block.settings.product.id }}">
+              <div class="product-image">
+                {% if block.settings.product.featured_image %}
+                  <img id="PollImage-{{ block.settings.product.id }}" 
+                       src="{{ block.settings.product.featured_image | image_url: width: 300 }}" 
+                       alt="{{ block.settings.product.title | escape }}"
+                       loading="lazy">
+                {% endif %}
+              </div>
+              <div class="product-info">
+                <h3 class="product-title">
+                  {%- comment -%} Shorten product names and remove brand info {%- endcomment -%}
+                  {%- assign short_title = block.settings.product.title -%}
+                  {%- if block.settings.product.title contains 'Boo-tiful Ghost Toddler Long Sleeve Tee' -%}
+                    {%- assign short_title = 'Boo-tiful Ghost Toddler Tee' -%}
+                  {%- elsif block.settings.product.title contains 'Baby T-Shirt Cutest Pumpkin' -%}
+                    {%- assign short_title = 'Cutest Pumpkin Baby Tee' -%}
+                  {%- elsif block.settings.product.title contains 'Butterfly Floral Boxy Tee' -%}
+                    {%- assign short_title = 'Butterfly Floral Boxy Tee' -%}
+                  {%- elsif block.settings.product.title contains 'Miami Nights Boxy Tee for Women' -%}
+                    {%- assign short_title = 'Miami Nights Boxy Tee' -%}
+                  {%- elsif block.settings.product.title contains 'BABY T-SHIRT' -%}
+                    {%- assign short_title = block.settings.product.title | replace: 'BABY T-SHIRT', 'BABY TEE' -%}
+                  {%- elsif block.settings.product.title contains 'TODDLER LONG SLEEVE TEE' -%}
+                    {%- assign short_title = block.settings.product.title | replace: 'TODDLER LONG SLEEVE TEE, HALLOWEEN SHIRT, CUTE KIDS TEE, SPOOKY SEASON APPAREL, TODDLER HALLOWEEN CLOTHING', 'TODDLER TEE' -%}
+                  {%- elsif block.settings.product.title contains 'HALLOWEEN' -%}
+                    {%- assign short_title = block.settings.product.title | split: 'HALLOWEEN' | first | append: 'HALLOWEEN' -%}
+                  {%- endif -%}
+                  
+                  {%- comment -%} Remove brand/vendor info like "Gildan 5200" {%- endcomment -%}
+                  {%- assign short_title = short_title | replace: 'Gildan 5200', '' -%}
+                  {%- assign short_title = short_title | replace: 'Gildan', '' -%}
+                  {%- assign short_title = short_title | replace: '5200', '' -%}
+                  {%- assign short_title = short_title | replace: '  ', ' ' -%}
+                  {%- assign short_title = short_title | strip -%}
+                  
+                  {{ short_title | truncate: 50 }}
+                </h3>
+                <p class="product-price">{{ block.settings.product.price | money }}</p>
+                
+                {%- comment -%} Use the same swatch system as homepage {%- endcomment -%}
+                {%- assign has_color_option = false -%}
+                {%- for opt in block.settings.product.options -%}
+                  {%- assign opt_lc = opt | downcase -%}
+                  {%- if opt_lc == 'color' -%}
+                    {%- assign has_color_option = true -%}
+                    {%- break -%}
+                  {%- endif -%}
+                {%- endfor -%}
+
+                {%- if has_color_option -%}
+                  <div class="poll-swatches">
+                    {% render 'swatch', product: block.settings.product, option_name: 'Color' %}
+                  </div>
+                {%- endif -%}
+                
+                <div class="vote-button-container">
+                  <button class="vote-btn" data-product-id="{{ block.settings.product.id }}" data-color="default">
+                    <span class="vote-icon">👍</span>
+                    <span class="vote-text">Vote</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <div class="poll-results" id="poll-results-{{ section.id }}">
+        <h3 class="results-title">Current Results</h3>
+        <div class="results-list" id="results-list-{{ section.id }}">
+          <!-- Results will be populated by JavaScript -->
+        </div>
+        <div class="total-votes">
+          <span class="votes-count">Total Votes: <span id="total-votes-{{ section.id }}">0</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    #product-poll-{{ section.id }} {
+      padding: 60px 20px;
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #product-poll-{{ section.id }} .poll-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    #product-poll-{{ section.id }} .poll-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    #product-poll-{{ section.id }} .poll-title {
+      font-family: 'Bebas Neue', 'Anton', system-ui, sans-serif;
+      font-size: clamp(28px, 4vw, 42px);
+      color: #0f172a;
+      margin: 0 0 16px 0;
+      letter-spacing: 0.5px;
+    }
+
+    #product-poll-{{ section.id }} .poll-description {
+      font-size: 18px;
+      color: #475569;
+      margin: 0;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    #product-poll-{{ section.id }} .poll-content {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    @media (min-width: 768px) {
+      #product-poll-{{ section.id }} .poll-content {
+        grid-template-columns: 2fr 1fr;
+        gap: 60px;
+      }
+    }
+
+    #product-poll-{{ section.id }} .poll-products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    #product-poll-{{ section.id }} .poll-product {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.08);
+      border: 1px solid rgba(0,0,0,.06);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #product-poll-{{ section.id }} .poll-product:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,.12);
+    }
+
+    #product-poll-{{ section.id }} .product-image {
+      width: 100%;
+      height: 200px;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    #product-poll-{{ section.id }} .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      transition: transform 0.3s ease;
+    }
+
+    #product-poll-{{ section.id }} .poll-product:hover .product-image img {
+      transform: scale(1.05);
+    }
+
+    #product-poll-{{ section.id }} .product-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #0f172a;
+      margin: 0 0 8px 0;
+      line-height: 1.3;
+      text-align: center;
+    }
+
+    #product-poll-{{ section.id }} .product-price {
+      font-size: 16px;
+      font-weight: 600;
+      color: #dc2626;
+      margin: 0 0 20px 0;
+    }
+
+    #product-poll-{{ section.id }} .vote-btn {
+      width: 100%;
+      padding: 12px 20px;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    #product-poll-{{ section.id }} .vote-btn:hover {
+      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(15,23,42,.3);
+    }
+
+    #product-poll-{{ section.id }} .vote-btn.voted {
+      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+      cursor: not-allowed;
+    }
+
+    #product-poll-{{ section.id }} .vote-btn.voted:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    #product-poll-{{ section.id }} .vote-icon {
+      font-size: 16px;
+    }
+
+    /* Poll Swatches - exact same styles as homepage */
+    #product-poll-{{ section.id }} .poll-swatches {
+      margin: 12px 0;
+    }
+
+    #product-poll-{{ section.id }} .poll-swatches .swatch-block { 
+      margin: 8px 0 16px; 
+    }
+
+    #product-poll-{{ section.id }} .poll-swatches .vp-legend {
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #374151;
+    }
+
+    #product-poll-{{ section.id }} .poll-swatches .swatch-list { 
+      display: flex; 
+      flex-wrap: wrap; 
+      gap: 10px; 
+    }
+
+    #product-poll-{{ section.id }} .poll-swatches .swatch {
+      --size: 34px;
+      display: inline-flex; 
+      align-items: center; 
+      gap: 8px;
+      padding: 6px 8px 6px 6px;
+      border-radius: 9999px;
+      border: 1px solid rgba(15,23,42,.12);
+      background: #ffffff;
+      cursor: pointer;
+      transition: transform .12s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+
+    #product-poll-{{ section.id }} .poll-swatches .swatch:hover { 
+      transform: translateY(-1px); 
+      box-shadow: 0 8px 18px rgba(0,0,0,.08); 
+      border-color: rgba(15,23,42,.20); 
+    }
+
+    #product-poll-{{ section.id }} .poll-swatches .swatch.selected { 
+      border-color: var(--accent, #27e1c1); 
+      box-shadow: 0 0 0 3px rgba(39,225,193,.18); 
+    }
+
+    #product-poll-{{ section.id }} .poll-swatches .swatch__chip {
+      width: var(--size); 
+      height: var(--size);
+      border-radius: 9999px;
+      background-size: cover; 
+      background-position: center; 
+      background-repeat: no-repeat;
+      border: 1px solid rgba(15,23,42,.15);
+      display: inline-block;
+    }
+
+    #product-poll-{{ section.id }} .poll-swatches .swatch__label { 
+      font-size: .86rem; 
+      font-weight: 700; 
+    }
+
+    #product-poll-{{ section.id }} .poll-results {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.08);
+      border: 1px solid rgba(0,0,0,.06);
+      position: sticky;
+      top: 20px;
+    }
+
+    #product-poll-{{ section.id }} .results-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #0f172a;
+      margin: 0 0 20px 0;
+      text-align: center;
+    }
+
+    #product-poll-{{ section.id }} .result-item {
+      padding: 20px;
+      margin-bottom: 20px;
+      background: #fafbfc;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    #product-poll-{{ section.id }} .result-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    #product-poll-{{ section.id }} .result-item:last-child {
+      margin-bottom: 0;
+    }
+
+    #product-poll-{{ section.id }} .result-name {
+      font-weight: 500;
+      color: #0f172a;
+      flex: 1;
+      font-size: 14px;
+      line-height: 1.4;
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    #product-poll-{{ section.id }} .result-bar {
+      width: 80px;
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 0 8px;
+    }
+
+    #product-poll-{{ section.id }} .result-fill {
+      height: 100%;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    #product-poll-{{ section.id }} .result-count {
+      font-weight: 600;
+      color: #0f172a;
+      min-width: 30px;
+      text-align: right;
+    }
+
+    #product-poll-{{ section.id }} .total-votes {
+      text-align: center;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(0,0,0,.1);
+    }
+
+    #product-poll-{{ section.id }} .votes-count {
+      font-weight: 600;
+      color: #475569;
+    }
+
+    @media (max-width: 767px) {
+      #product-poll-{{ section.id }} {
+        padding: 40px 16px;
+      }
+      
+      #product-poll-{{ section.id }} .poll-products {
+        grid-template-columns: 1fr;
+      }
+      
+      #product-poll-{{ section.id }} .poll-results {
+        position: static;
+        margin-top: 40px;
+      }
+    }
+  </style>
+
+  <script>
+    // Immediate test - run this right away
+    console.log('🔥 SCRIPT LOADING - Testing immediate execution');
+    console.log('✅ JavaScript syntax error fixed - no more await issues');
+    
+    // Wait for DOM to be ready
+    setTimeout(() => {
+      console.log('⏰ DOM ready - initializing poll system');
+    }, 500);
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('🚀 DOMContentLoaded event fired!');
+      console.log('🔍 Looking for poll section with ID: product-poll-{{ section.id }}');
+      
+      const pollSection = document.getElementById('product-poll-{{ section.id }}');
+      console.log('📦 Poll section found:', pollSection);
+      
+      if (!pollSection) {
+        console.error('❌ Poll section not found! Available elements:');
+        console.log('All elements with "product-poll" in ID:', document.querySelectorAll('[id*="product-poll"]'));
+        return;
+      }
+
+      const voteButtons = pollSection.querySelectorAll('.vote-btn');
+      const resultsList = pollSection.querySelector('#results-list-{{ section.id }}');
+      const totalVotesElement = pollSection.querySelector('#total-votes-{{ section.id }}');
+      
+      // Debug: Check if elements are found
+      console.log('=== ELEMENT DETECTION ===');
+      console.log('Poll section found:', pollSection);
+      console.log('Results list found:', resultsList);
+      console.log('Total votes element found:', totalVotesElement);
+      
+      if (!resultsList) {
+        console.error('❌ Results list element not found!');
+        return;
+      }
+      
+      if (!totalVotesElement) {
+        console.error('❌ Total votes element not found!');
+        return;
+      }
+      
+      // Initialize results with real products
+      console.log('=== INITIALIZING REAL PRODUCT RESULTS ===');
+      
+      // Initialize variables
+      let votes = {};
+      let totalVotes = 0;
+      let selectedColors = {};
+      let hasVoted = false;
+      
+      // Enhanced voting system with multiple storage methods
+      const POLL_SECTION_ID = '{{ section.id }}';
+      const STORAGE_KEY = `product-poll-votes-${POLL_SECTION_ID}`;
+      
+      // Cookie helper functions
+      function setCookie(name, value, days = 30) {
+        const expires = new Date();
+        expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+        document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+      }
+      
+      function getCookie(name) {
+        const nameEQ = name + "=";
+        const ca = document.cookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+          let c = ca[i];
+          while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+          if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+      }
+      
+      // Simple, reliable vote loading system
+      function loadVotes() {
+        console.log('🔄 Loading votes with SIMPLE sync system...');
+        console.log('📱 Device:', /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop');
+        
+        // Method 1: Try localStorage first (most reliable)
+        try {
+          const localVotes = localStorage.getItem(STORAGE_KEY);
+          if (localVotes) {
+            votes = JSON.parse(localVotes);
+            totalVotes = Object.values(votes).reduce((sum, count) => sum + count, 0);
+            console.log('✅ Loaded from localStorage:', votes);
+            console.log('✅ Total votes:', totalVotes);
+            
+            // Sync to other storage methods
+            saveVotes();
+            return;
+          }
+        } catch (e) {
+          console.log('❌ localStorage failed:', e);
+        }
+        
+        // Method 2: Try cookies (cross-device sync)
+        try {
+          const cookieVotes = getCookie(STORAGE_KEY);
+          if (cookieVotes) {
+            votes = JSON.parse(cookieVotes);
+            totalVotes = Object.values(votes).reduce((sum, count) => sum + count, 0);
+            console.log('✅ Loaded from cookies:', votes);
+            console.log('✅ Total votes:', totalVotes);
+            
+            // Save to localStorage for persistence
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(votes));
+            return;
+          }
+        } catch (e) {
+          console.log('❌ Cookies failed:', e);
+        }
+        
+        // Method 3: Try sessionStorage
+        try {
+          const sessionVotes = sessionStorage.getItem(STORAGE_KEY);
+          if (sessionVotes) {
+            votes = JSON.parse(sessionVotes);
+            totalVotes = Object.values(votes).reduce((sum, count) => sum + count, 0);
+            console.log('✅ Loaded from sessionStorage:', votes);
+            console.log('✅ Total votes:', totalVotes);
+            
+            // Save to other storage methods
+            saveVotes();
+            return;
+          }
+        } catch (e) {
+          console.log('❌ sessionStorage failed:', e);
+        }
+        
+        // No votes found
+        console.log('📝 No votes found, starting fresh');
+        votes = {};
+        totalVotes = 0;
+        
+        return votes;
+      }
+      
+      // Simple, reliable vote saving system
+      function saveVotes() {
+        console.log('💾 Saving votes with SIMPLE sync system...');
+        
+        const votesString = JSON.stringify(votes);
+        let saved = false;
+        
+        // Method 1: localStorage (most reliable)
+        try {
+          localStorage.setItem(STORAGE_KEY, votesString);
+          console.log('✅ Saved to localStorage');
+          saved = true;
+        } catch (e) {
+          console.log('❌ localStorage save failed:', e);
+        }
+        
+        // Method 2: Cookies (cross-device sync)
+        try {
+          setCookie(STORAGE_KEY, votesString, 30);
+          console.log('✅ Saved to cookies');
+          saved = true;
+        } catch (e) {
+          console.log('❌ Cookie save failed:', e);
+        }
+        
+        // Method 3: sessionStorage (session backup)
+        try {
+          sessionStorage.setItem(STORAGE_KEY, votesString);
+          console.log('✅ Saved to sessionStorage');
+        } catch (e) {
+          console.log('❌ sessionStorage save failed:', e);
+        }
+        
+        console.log('💾 Simple save completed:', saved);
+        return saved;
+      }
+      
+      // Initialize results
+      function initializeResults() {
+        console.log('Initializing results with votes:', votes);
+        const products = {};
+        voteButtons.forEach(button => {
+          const productId = button.dataset.productId;
+          const productName = button.closest('.poll-product').querySelector('.product-title').textContent;
+          products[productId] = {
+            name: productName,
+            votes: 0,
+            colors: {}
+          };
+          
+          // Get available colors from swatches - try multiple selectors
+          let productSwatches = button.closest('.poll-product').querySelectorAll('.swatch');
+          console.log(`Product ${productId} has ${productSwatches.length} swatches with .swatch selector`);
+          
+          // If no swatches found, try alternative selectors
+          if (productSwatches.length === 0) {
+            productSwatches = button.closest('.poll-product').querySelectorAll('[data-swatch]');
+            console.log(`Product ${productId} has ${productSwatches.length} swatches with [data-swatch] selector`);
+          }
+          
+          // If still no swatches, try looking in the poll-swatches container
+          if (productSwatches.length === 0) {
+            const swatchContainer = button.closest('.poll-product').querySelector('.poll-swatches');
+            if (swatchContainer) {
+              productSwatches = swatchContainer.querySelectorAll('.swatch, [data-swatch]');
+              console.log(`Product ${productId} has ${productSwatches.length} swatches in poll-swatches container`);
+            }
+          }
+          
+          // If still no swatches, try looking anywhere in the product
+          if (productSwatches.length === 0) {
+            productSwatches = button.closest('.poll-product').querySelectorAll('button[data-value]');
+            console.log(`Product ${productId} has ${productSwatches.length} buttons with data-value`);
+          }
+          
+          if (productSwatches.length > 0) {
+            productSwatches.forEach(swatch => {
+              const color = swatch.dataset.value;
+              console.log(`Swatch found:`, swatch, `Color: ${color}`);
+              if (color) {
+                products[productId].colors[color] = 0;
+                console.log(`Added color: ${color} for product ${productId}`);
+              }
+            });
+          } else {
+            // If no swatches found, try to get colors from the vote buttons themselves
+            const productVoteButtons = button.closest('.poll-product').querySelectorAll('.vote-btn');
+            console.log(`Product ${productId} has ${productVoteButtons.length} vote buttons`);
+            
+            productVoteButtons.forEach(voteBtn => {
+              const color = voteBtn.dataset.color;
+              if (color) {
+                products[productId].colors[color] = 0;
+                console.log(`Added color from vote button: ${color} for product ${productId}`);
+              }
+            });
+            
+            // If still no colors found, add default colors
+            if (Object.keys(products[productId].colors).length === 0) {
+              products[productId].colors = {
+                'Black': 0,
+                'White': 0,
+                'Default': 0
+              };
+              console.log(`No colors found for product ${productId}, added default colors`);
+            }
+          }
+          
+          // Debug: Log all available colors for this product
+          console.log(`Available colors for ${productId}:`, Object.keys(products[productId].colors));
+          
+          // Count votes for this product (including color variants)
+          Object.keys(votes).forEach(voteKey => {
+            if (voteKey.startsWith(productId + '-')) {
+              const color = voteKey.split('-').slice(1).join('-');
+              const voteCount = votes[voteKey] || 0;
+              products[productId].votes += voteCount;
+              products[productId].colors[color] = (products[productId].colors[color] || 0) + voteCount;
+              totalVotes += voteCount;
+            }
+          });
+        });
+        
+        console.log('Final products:', products);
+        console.log('Total votes:', totalVotes);
+        
+        // Ensure we always have some products to display
+        if (Object.keys(products).length === 0) {
+          console.log('No products found, creating fallback products from vote buttons');
+          voteButtons.forEach(button => {
+            const productId = button.dataset.productId;
+            const productName = button.closest('.poll-product').querySelector('.product-title').textContent;
+            products[productId] = {
+              name: productName,
+              votes: 0,
+              colors: { 'default': 0 }
+            };
+          });
+        }
+        
+        updateResults(products);
+        updateVoteButtons();
+      }
+      
+      // Update results display
+      function updateResults(products) {
+        console.log('=== UPDATING RESULTS WITH COLOR BADGES ===');
+        console.log('Products to display:', products);
+        console.log('Results list element:', resultsList);
+        
+        const sortedProducts = Object.entries(products)
+          .sort(([,a], [,b]) => b.votes - a.votes);
+        
+        console.log('Sorted products:', sortedProducts);
+        
+        resultsList.innerHTML = sortedProducts.map(([productId, product]) => {
+          const percentage = totalVotes > 0 ? (product.votes / totalVotes) * 100 : 0;
+          
+          // Create color breakdown - show ALL available colors for each product
+          let colorBreakdown = '';
+          console.log(`Product ${productId} colors:`, product.colors);
+          console.log(`Product ${productId} colors keys:`, Object.keys(product.colors));
+          
+          if (product.colors && Object.keys(product.colors).length > 0) {
+            console.log(`Found ${Object.keys(product.colors).length} colors for product ${productId}`);
+            const colorItems = Object.entries(product.colors)
+              .map(([color, votes]) => {
+                const voteText = votes > 0 ? `${votes}` : '0';
+                const isVoted = votes > 0;
+                console.log(`Rendering color ${color}: ${votes} votes, isVoted: ${isVoted}`);
+                return `<span style="
+                  display: inline-flex;
+                  align-items: center;
+                  gap: 6px;
+                  background: ${isVoted ? '#e0f2fe' : '#f8fafc'};
+                  color: ${isVoted ? '#0369a1' : '#475569'};
+                  padding: 6px 12px;
+                  border-radius: 20px;
+                  font-size: 12px;
+                  font-weight: 600;
+                  border: 1px solid ${isVoted ? '#0ea5e9' : '#cbd5e1'};
+                  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+                  margin: 4px;
+                  white-space: nowrap;
+                ">${color}: ${voteText}</span>`;
+              })
+              .join('');
+            console.log(`Color items for ${productId}:`, colorItems);
+            if (colorItems) {
+              colorBreakdown = `<div style="
+                display: flex; 
+                flex-wrap: wrap; 
+                justify-content: center; 
+                align-items: center;
+                gap: 8px;
+                margin-top: 12px;
+                padding: 8px;
+                background: #fafbfc;
+                border-radius: 8px;
+                border: 1px solid #e2e8f0;
+              ">${colorItems}</div>`;
+              console.log(`✅ Color breakdown created for ${productId}:`, colorBreakdown);
+            } else {
+              console.log(`❌ No color items created for ${productId}`);
+            }
+          } else {
+            console.log(`No colors found for product ${productId}`);
+            // Show default color badges even if no colors detected
+            colorBreakdown = `<div style="
+              display: flex; 
+              flex-wrap: wrap; 
+              justify-content: center; 
+              align-items: center;
+              gap: 8px;
+              margin-top: 12px;
+              padding: 8px;
+              background: #fafbfc;
+              border-radius: 8px;
+              border: 1px solid #e2e8f0;
+            ">
+              <span style="
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                background: #f8fafc;
+                color: #475569;
+                padding: 6px 12px;
+                border-radius: 20px;
+                font-size: 12px;
+                font-weight: 600;
+                border: 1px solid #cbd5e1;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                margin: 4px;
+                white-space: nowrap;
+              ">Default: 0</span>
+            </div>`;
+          }
+          
+          const resultHTML = `
+            <div class="result-item">
+              <div class="result-header">
+                <div class="result-name">${product.name}</div>
+                <div class="result-bar">
+                  <div class="result-fill" style="width: ${percentage}%"></div>
+                </div>
+                <div class="result-count">${product.votes}</div>
+              </div>
+              ${colorBreakdown}
+            </div>
+          `;
+          
+          console.log(`Final HTML for ${productId}:`, resultHTML);
+          return resultHTML;
+        }).join('');
+        
+        // Recalculate total votes to ensure consistency
+        const recalculatedTotal = Object.values(votes).reduce((sum, count) => sum + count, 0);
+        console.log('Total votes for display:', recalculatedTotal);
+        totalVotesElement.textContent = recalculatedTotal;
+        
+        // Debug: Show what's being set in results list
+        console.log('=== FINAL RESULTS LIST HTML ===');
+        console.log('Results list innerHTML:', resultsList.innerHTML);
+        console.log('Results list length:', resultsList.innerHTML.length);
+      }
+      
+      // Update vote button states
+      function updateVoteButtons() {
+        voteButtons.forEach(button => {
+          const productId = button.dataset.productId;
+          const color = button.dataset.color || 'default';
+          const voteKey = `${productId}-${color}`;
+          
+          if (votes[voteKey] && votes[voteKey] > 0) {
+            button.classList.add('voted');
+            button.querySelector('.vote-text').textContent = 'Voted!';
+            button.querySelector('.vote-icon').textContent = '✅';
+          } else {
+            button.classList.remove('voted');
+            button.querySelector('.vote-text').textContent = 'Vote';
+            button.querySelector('.vote-icon').textContent = '👍';
+          }
+        });
+      }
+      
+      // Handle swatch clicks
+      const swatches = pollSection.querySelectorAll('.poll-swatches .swatch');
+      swatches.forEach(swatch => {
+        swatch.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          
+          const productId = this.closest('.poll-product').dataset.productId;
+          const color = this.dataset.value;
+          const image = this.dataset.img;
+          const price = this.dataset.price;
+          
+          // Update selected color for this product
+          selectedColors[productId] = color;
+          
+          // Update image and price
+          const productImage = document.getElementById(`PollImage-${productId}`);
+          if (productImage && image) {
+            productImage.src = image;
+          }
+          
+          const productPrice = this.closest('.poll-product').querySelector('.product-price');
+          if (productPrice && price) {
+            productPrice.textContent = price;
+          }
+          
+          // Update swatch selection
+          const productSwatches = this.closest('.poll-product').querySelectorAll('.swatch');
+          productSwatches.forEach(s => s.classList.remove('selected', 'is-selected'));
+          this.classList.add('selected', 'is-selected');
+          
+          // Update vote button data
+          const voteBtn = this.closest('.poll-product').querySelector('.vote-btn');
+          if (voteBtn) {
+            voteBtn.dataset.color = color;
+          }
+        });
+      });
+
+      // Simplified vote button click handler
+      voteButtons.forEach((button, index) => {
+        console.log(`Setting up vote button ${index}:`, button);
+        
+        button.addEventListener('click', function(e) {
+          e.preventDefault();
+          console.log('=== VOTE BUTTON CLICKED ===');
+          console.log('Button clicked:', this);
+          console.log('Event:', e);
+          
+          const productId = this.dataset.productId;
+          const color = this.dataset.color || 'default';
+          const voteKey = `${productId}-${color}`;
+          
+          console.log('Vote details:', { productId, color, voteKey });
+          console.log('Current votes before:', votes);
+          
+          // Simple vote addition
+          votes[voteKey] = (votes[voteKey] || 0) + 1;
+          totalVotes++;
+          
+          console.log('Vote added:', { voteKey, count: votes[voteKey], totalVotes });
+          
+          // Save to global server
+          saveVotes();
+          
+          // Force update URL for immediate sharing
+          const votesString = JSON.stringify(votes);
+          const url = new URL(window.location);
+          url.searchParams.set('votes', encodeURIComponent(votesString));
+          window.history.replaceState({}, '', url);
+          
+          console.log('🔄 Vote saved and URL updated for sharing:', url.href);
+          
+          // Update button state
+          this.classList.add('voted');
+          this.querySelector('.vote-text').textContent = 'Voted!';
+          this.querySelector('.vote-icon').textContent = '✅';
+          this.disabled = true;
+          
+          // Update results
+          initializeResults();
+          
+          console.log('Vote processing complete');
+        });
+      });
+      
+      // Listen for storage changes from other tabs
+      window.addEventListener('storage', function(e) {
+        if (e.key === STORAGE_KEY && e.newValue) {
+          try {
+            const newVotes = JSON.parse(e.newValue);
+            votes = newVotes;
+            totalVotes = Object.values(votes).reduce((sum, count) => sum + count, 0);
+            console.log('Votes synced from other tab:', votes);
+            initializeResults();
+          } catch (error) {
+            console.log('Error syncing votes from other tab:', error);
+          }
+        }
+      });
+      
+      // Create shareable URL with votes for cross-device sync
+      function createShareableURL() {
+        const votesString = JSON.stringify(votes);
+        const url = new URL(window.location);
+        url.searchParams.set('votes', encodeURIComponent(votesString));
+        
+        console.log('🔗 Creating shareable URL:');
+        console.log('🔗 Original votes:', votes);
+        console.log('🔗 Votes string:', votesString);
+        console.log('🔗 Encoded votes:', encodeURIComponent(votesString));
+        console.log('🔗 Final URL:', url.toString());
+        
+        return url.toString();
+      }
+      
+      // Create mobile-friendly shareable URL
+      function createMobileShareableURL() {
+        const votesString = JSON.stringify(votes);
+        const baseUrl = window.location.origin + window.location.pathname;
+        const encodedVotes = encodeURIComponent(votesString);
+        const mobileUrl = `${baseUrl}?votes=${encodedVotes}`;
+        
+        console.log('📱 Creating mobile-friendly URL:');
+        console.log('📱 Base URL:', baseUrl);
+        console.log('📱 Encoded votes:', encodedVotes);
+        console.log('📱 Mobile URL:', mobileUrl);
+        
+        return mobileUrl;
+      }
+      
+      // Add a sync button for manual cross-device sync
+      function addSyncButton() {
+        const syncButton = document.createElement('button');
+        syncButton.innerHTML = '🔄 Sync Votes';
+        syncButton.style.cssText = `
+          position: fixed;
+          top: 10px;
+          right: 10px;
+          z-index: 1000;
+          background: #0f172a;
+          color: white;
+          border: none;
+          padding: 8px 12px;
+          border-radius: 6px;
+          font-size: 12px;
+          cursor: pointer;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        `;
+        
+        syncButton.addEventListener('click', function() {
+          console.log('🔄 Manual sync requested');
+          console.log('📊 Current votes:', votes);
+          console.log('📊 Total votes:', totalVotes);
+          
+          // Force save to all storage methods
+          saveVotes();
+          
+          // Show current vote data for manual sharing
+          const voteData = JSON.stringify(votes, null, 2);
+          const message = `🔄 VOTE SYNC DATA\n\nCurrent votes: ${Object.keys(votes).length} vote entries\nTotal votes: ${totalVotes}\n\nVote data:\n${voteData}\n\nTo sync manually:\n1. Copy this vote data\n2. Open browser console on other device\n3. Paste: localStorage.setItem('poll_votes', '${JSON.stringify(votes)}')\n4. Refresh the page`;
+          
+          alert(message);
+        });
+        
+        document.body.appendChild(syncButton);
+      }
+      
+      // Add automatic sync detection
+      function addAutomaticSync() {
+        console.log('🔄 Adding automatic sync detection...');
+        
+        // Listen for storage changes (cross-tab sync)
+        window.addEventListener('storage', function(e) {
+          if (e.key === STORAGE_KEY) {
+            console.log('🔄 Storage change detected, reloading votes...');
+            loadVotes();
+            initializeResults();
+            updateVoteButtons();
+          }
+        });
+        
+        // Check for URL parameter changes
+        let lastUrl = window.location.href;
+        setInterval(() => {
+          if (window.location.href !== lastUrl) {
+            console.log('🔄 URL changed, checking for new votes...');
+            lastUrl = window.location.href;
+            loadVotes();
+            initializeResults();
+            updateVoteButtons();
+          }
+        }, 1000);
+        
+        // Auto-save votes every 5 seconds
+        setInterval(() => {
+          if (Object.keys(votes).length > 0) {
+            console.log('🔄 Auto-saving votes...');
+            saveVotes();
+          }
+        }, 5000);
+        
+        console.log('✅ Automatic sync detection added');
+      }
+      
+      // Initialize with FREE global vote loading
+      async function initializePoll() {
+        console.log('=== INITIALIZING FREE GLOBAL POLL SYSTEM ===');
+        console.log('✅ 100% FREE - No server required!');
+        console.log('✅ Uses URL parameters + Cookies for global sync');
+        console.log('Vote buttons found:', voteButtons.length);
+        console.log('Results list element:', resultsList);
+        console.log('Total votes element:', totalVotesElement);
+        
+        // Load votes from FREE global storage
+        loadVotes();
+        console.log('Votes loaded:', votes);
+        console.log('Total votes:', totalVotes);
+        
+        // Add automatic sync detection
+        addAutomaticSync();
+        
+        // Initialize results
+        initializeResults();
+        console.log('Results initialized');
+        
+        // Add sync button (hidden)
+        // addSyncButton();
+        
+        // Test basic functionality
+        console.log('=== TESTING BASIC FUNCTIONALITY ===');
+        console.log('Vote buttons:', voteButtons);
+        voteButtons.forEach((btn, index) => {
+          console.log(`Button ${index}:`, btn);
+          console.log(`  - Product ID: ${btn.dataset.productId}`);
+          console.log(`  - Color: ${btn.dataset.color}`);
+          console.log(`  - Clickable: ${!btn.disabled}`);
+        });
+        
+        // Force display results even if empty
+        if (resultsList.innerHTML.trim() === '') {
+          console.log('No results displayed, forcing display...');
+          resultsList.innerHTML = '<div style="text-align: center; color: #666; padding: 20px;">No votes yet. Click vote buttons to start voting!</div>';
+        }
+        
+        // Initialize results with real products and their colors
+        console.log('=== INITIALIZING REAL PRODUCT RESULTS ===');
+        initializeResults();
+      }
+      
+      // Initialize with error handling
+      try {
+        initializePoll();
+      } catch (error) {
+        console.error('Error initializing poll:', error);
+        // Show error message
+        if (resultsList) {
+          resultsList.innerHTML = '<div style="text-align: center; color: #dc2626; padding: 20px;">Error loading poll. Please refresh the page.</div>';
+        }
+      }
+    });
+  </script>
+</section>
+
+{% schema %}
+{
+  "name": "Product Poll",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Poll Title",
+      "default": "Vote for Your Favorite Products!"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Poll Description",
+      "default": "Help us decide which products to feature more prominently. Your vote matters!"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Poll",
+      "blocks": [
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,130 @@
+<section class="simple-contact-form" style="max-width: 600px; margin: 40px auto; padding: 20px;">
+  <div style="background: #f8fafc; border-radius: 12px; padding: 30px; border: 1px solid #e2e8f0;">
+    <h2 style="font-family: 'Bebas Neue', sans-serif; font-size: 32px; margin-bottom: 20px; text-align: center; color: #0f172a;">
+      Get in Touch
+    </h2>
+    <p style="text-align: center; color: #64748b; margin-bottom: 30px;">
+      Have a question or feedback? We'd love to hear from you!
+    </p>
+    
+    <form id="simple-contact-form" style="display: flex; flex-direction: column; gap: 20px;">
+      <div>
+        <label for="name" style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151;">
+          Your Name *
+        </label>
+        <input 
+          type="text" 
+          id="name" 
+          name="name" 
+          required 
+          style="width: 100%; padding: 12px 16px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 16px; box-sizing: border-box;"
+        >
+      </div>
+      
+      <div>
+        <label for="message" style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151;">
+          Your Message *
+        </label>
+        <textarea 
+          id="message" 
+          name="message" 
+          required 
+          rows="5"
+          style="width: 100%; padding: 12px 16px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 16px; resize: vertical; box-sizing: border-box;"
+          placeholder="Tell us how we can help you..."
+        ></textarea>
+      </div>
+      
+      <button 
+        type="submit"
+        style="background: #0f172a; color: white; border: none; padding: 14px 24px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 10px;"
+      >
+        Send Message
+      </button>
+    </form>
+    
+    <div id="form-message" style="margin-top: 20px; padding: 12px; border-radius: 8px; display: none;"></div>
+    
+    <div style="margin-top: 30px; padding: 20px; background: #f1f5f9; border-radius: 8px; text-align: center;">
+      <p style="margin: 0; color: #64748b; font-size: 14px;">
+        Or email us directly at: 
+        <a href="mailto:shopping@newthrifts.com" style="color: #3b82f6; text-decoration: none; font-weight: 600;">
+          shopping@newthrifts.com
+        </a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('simple-contact-form');
+  const messageDiv = document.getElementById('form-message');
+  
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const name = document.getElementById('name').value;
+    const message = document.getElementById('message').value;
+    
+    if (!name.trim() || !message.trim()) {
+      showMessage('Please fill in all fields.', 'error');
+      return;
+    }
+    
+    // Create mailto link with pre-filled content
+    const subject = encodeURIComponent('Contact Form Message from ' + name);
+    const body = encodeURIComponent('Name: ' + name + '\n\nMessage: ' + message);
+    const mailtoLink = 'mailto:shopping@newthrifts.com?subject=' + subject + '&body=' + body;
+    
+    // Open email client
+    window.location.href = mailtoLink;
+    
+    showMessage('Your email client should open with a pre-filled message. If it doesn\'t, please email us directly at shopping@newthrifts.com', 'success');
+  });
+  
+  function showMessage(text, type) {
+    messageDiv.textContent = text;
+    messageDiv.style.display = 'block';
+    
+    if (type === 'success') {
+      messageDiv.style.backgroundColor = '#d1fae5';
+      messageDiv.style.color = '#065f46';
+      messageDiv.style.border = '1px solid #a7f3d0';
+    } else {
+      messageDiv.style.backgroundColor = '#fee2e2';
+      messageDiv.style.color = '#991b1b';
+      messageDiv.style.border = '1px solid #fca5a5';
+    }
+    
+    setTimeout(() => {
+      messageDiv.style.display = 'none';
+    }, 5000);
+  }
+});
+</script>
+
+{% schema %}
+{
+  "name": "Simple Contact Form",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Form Title",
+      "default": "Get in Touch"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Form Description",
+      "default": "Have a question or feedback? We'd love to hear from you!"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Simple Contact Form"
+    }
+  ]
+}
+{% endschema %}

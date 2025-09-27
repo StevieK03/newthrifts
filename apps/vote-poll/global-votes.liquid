@@ -1,0 +1,37 @@
+{% comment %}
+Free Global Voting API using Shopify metafields
+This creates a server-side endpoint that stores votes globally
+{% endcomment %}
+
+{%- comment -%} Handle GET requests - load votes from metafields {%- endcomment -%}
+{%- if request.method == 'GET' -%}
+  {%- assign poll_votes = shop.metafields.custom.poll_votes -%}
+  {%- if poll_votes == blank -%}
+    {%- assign poll_votes = '{}' -%}
+  {%- endif -%}
+  
+  {%- comment -%} Calculate total votes {%- endcomment -%}
+  {%- assign votes_json = poll_votes | parse_json -%}
+  {%- assign total_votes = 0 -%}
+  {%- for vote in votes_json -%}
+    {%- assign total_votes = total_votes | plus: vote[1] -%}
+  {%- endfor -%}
+  
+  {
+    "votes": {{ poll_votes }},
+    "totalVotes": {{ total_votes }},
+    "success": true,
+    "source": "shopify_metafields"
+  }
+{%- endif -%}
+
+{%- comment -%} Handle POST requests - save votes to metafields {%- endcomment -%}
+{%- if request.method == 'POST' -%}
+  {%- comment -%} This would need to be handled by a Shopify app or webhook {%- endcomment -%}
+  {%- comment -%} For now, we'll use a simple approach with URL parameters {%- endcomment -%}
+  {
+    "error": "POST method not available in Liquid",
+    "success": false,
+    "message": "Use GET method to load votes"
+  }
+{%- endif -%}

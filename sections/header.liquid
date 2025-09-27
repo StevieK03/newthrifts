@@ -1,0 +1,72 @@
+<header id="Header-{{ section.id }}" class="nt-header" role="banner">
+  <div class="nt-header__wrap">
+    <!-- Logo -->
+    <div class="nt-header__logo">
+      {% if section.settings.logo != blank %}
+        <a href="{{ routes.root_url }}" class="nt-header__logo-link">
+          <img src="{{ section.settings.logo | img_url: '200x' }}" alt="{{ shop.name }}" class="nt-header__logo-img">
+        </a>
+      {% else %}
+        <a href="{{ routes.root_url }}" class="nt-header__logo-text">{{ section.settings.logo_text }}</a>
+      {% endif %}
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nt-header__nav" aria-label="Main navigation">
+      {% assign menu = section.settings.menu %}
+      {% if menu != blank %}
+        <ul class="nt-header__list">
+          {% for link in menu.links %}
+            <li><a href="{{ link.url }}" class="nt-header__link">{{ link.title }}</a></li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <!-- Fallback links if no menu chosen in settings -->
+        <ul class="nt-header__list">
+          <li><a href="/collections/all" class="nt-header__link">Shop</a></li>
+          <li><a href="/pages/about" class="nt-header__link">About</a></li>
+          <li><a href="/pages/contact" class="nt-header__link">Contact</a></li>
+        </ul>
+      {% endif %}
+    </nav>
+  </div>
+</header>
+
+<style>
+  /* ===== Hard-force a white header and dark text ===== */
+  #Header-{{ section.id }}{
+    background:#ffffff !important;
+    position:relative;
+    z-index:50;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+  }
+  #Header-{{ section.id }} *{ box-sizing:border-box }
+  #Header-{{ section.id }} .nt-header__wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:15px 20px;
+    backdrop-filter:none !important; -webkit-backdrop-filter:none !important;
+  }
+  #Header-{{ section.id }} .nt-header__logo-img{ max-height:60px; display:block }
+  #Header-{{ section.id }} .nt-header__logo-text{
+    font-weight:800; text-decoration:none;
+    color:#0f172a !important; /* dark text */
+    font-size:1.25rem;
+  }
+  #Header-{{ section.id }} .nt-header__list{
+    display:flex; gap:20px; list-style:none; margin:0; padding:0;
+  }
+  #Header-{{ section.id }} .nt-header__link{
+    text-decoration:none; color:#0f172a !important; font-weight:600;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo" },
+    { "type": "text", "id": "logo_text", "label": "Logo text", "default": "New Thrifts" },
+    { "type": "link_list", "id": "menu", "label": "Main menu" }
+  ]
+}
+{% endschema %}

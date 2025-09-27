@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <title>{% if page_title %}{{ page_title }} – {% endif %}{{ shop.name }}</title>
+
+    {%- comment -%} Use Primary accent for browser UI color (falls back if not set) {%- endcomment -%}
+    <meta name="theme-color" content="{{ settings.accent | default: '#27e1c1' }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    {{ 'base.css' | asset_url | stylesheet_tag }}
+
+    {%- comment -%} ✅ Halloween styles (global include) {%- endcomment -%}
+    {{ 'halloween.css' | asset_url | stylesheet_tag }}
+
+    {%- comment -%}
+      Moved the “force-brand-teal” block into <head> (valid HTML)
+    {%- endcomment -%}
+     <style id="force-brand-teal">
+      :root{ --brand-teal: rgb(0, 0, 0); } /* your teal */
+
+      /* Higher specificity + !important so it beats any earlier .brand-line rules */
+      html body header.header .brand-title .brand-line{
+        color: var(--brand-teal) !important;
+
+      /* Make sure pills stay red-glow too (even if --accent is pink) */
+      html body header.header .nav a{
+        box-shadow: 0 4px 14px rgba(241, 20, 31, 0.18), 0 0 10px rgba(242, 10, 2, 0.94) !important;
+        border: 1px solid rgba(246, 5, 5, 0.25) !important;
+      }
+      html body header.header .nav a:hover{
+        background: rgba(39,225,193,.10) !important;
+        border-color: rgba(39,225,193,.45) !important;
+        box-shadow: 0 8px 20px rgba(39,225,193,.28), 0 0 18px rgba(39,225,193,.35) !important;
+      }
+    </style>
+
+    {%- comment -%} Theme variables + header/nav styling {%- endcomment -%}
+    <style>
+      :root{
+        --bg-deep: {{ settings.bg_deep | default: '#0B1220' }};
+        --bg-mid: {{ settings.bg_mid | default: '#1A1031' }};
+        --neon-teal: {{ settings.neon_teal | default: '#00F5D4' }};
+        --neon-pink: {{ settings.neon_pink | default: '#FFFFFF' }};
+        --neon-purple: {{ settings.neon_purple | default: '#9D4EDD' }};
+        --accent: {{ settings.accent | default: '#27e1c1' }};
+        --accent-2: {{ settings.accent_2 | default: '#ff4fa3' }};
+      }
+
+      /* ===== HEADER: force white + neon brand + pill nav ===== */
+      body > header.header,
+      .header{
+        background:#fff !important;
+        color:#0f172a;
+        border-bottom:1px solid rgba(0,0,0,.06);
+        position:relative; z-index:50;
+      }
+      .header::before, .header::after{ background:transparent !important; }
+
+      .header__inner{ display:flex; align-items:center; justify-content:space-between; padding:14px 20px; }
+
+      /* Stacked brand (teal + glow) */
+      .brand-title{ display:flex; flex-direction:column; align-items:center; justify-content:center; text-decoration:none; margin:0; }
+      .brand-line{
+        font-family:'Bebas Neue', sans-serif; line-height:0.95; letter-spacing:.08em; text-align:center;
+        color: var(--accent,rgba(39,225,193,.70)) !important;
+        text-shadow:
+          0 0 6px rgba(39,225,193,.70),
+          0 0 14px rgba(39,225,193,.50),
+          0 0 24px rgba(39,225,193,.35);
+        font-size:26px;
+      }
+      @media (min-width:768px){ .brand-line{ font-size:32px; } }
+
+      /* Menu layout: horizontal, no bullets */
+      .nav{ display:flex; align-items:center; }
+      .nav .menu, .nav ul{
+        display:flex !important; flex-wrap:wrap; gap:10px; align-items:center;
+        margin:0 !important; padding:0 !important; list-style:none !important;
+      }
+      .nav li{ list-style:none !important; }
+
+      /* Pill links + black glow */
+.nav .menu a,
+.nav ul a,
+.nav a {
+  display:inline-flex; align-items:center; justify-content:center;
+  padding:9px 16px; border-radius:9999px; text-decoration:none;
+  background:#fff; color:#0f172a; font-weight:700; letter-spacing:.01em;
+  border:1px solid rgba(0,0,0,.10);
+  /* changed teal glow to black glow */
+  box-shadow: 0 4px 14px rgba(0,0,0,.18), 0 0 10px rgba(0,0,0,.22);
+  transition:transform .15s ease, box-shadow .22s ease, background .22s ease, border-color .22s ease;
+}
+.nav .menu a:hover,
+.nav ul a:hover,
+.nav a:hover {
+  /* changed hover teal to black */
+  background: rgba(0,0,0,.05); /* subtle black tint on hover */
+  border-color: rgba(0,0,0,.45);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(0,0,0,.28), 0 0 18px rgba(0,0,0,.35);
+}
+
+    </style>
+
+    <script>document.documentElement.classList.add('no-js');</script>
+    {{ content_for_header }}
+  </head>
+
+  <body>
+    {%- comment -%}
+      IMPORTANT: Only one header should render.
+      If you previously created sections/header.liquid and added {% section 'header' %} here,
+      remove it. Keeping it commented below as a reminder.
+      {% section 'header' %}
+    {%- endcomment -%}
+
+    <header class="header">
+      <div class="container header__inner">
+        <div class="header__logo">
+          <a href="{{ routes.root_url }}" class="brand-title" aria-label="{{ shop.name }}">
+            <span class="brand-line">NEW</span>
+            <span class="brand-line">THRIFTS</span>
+          </a>
+        </div>
+
+        <nav class="nav" aria-label="Main navigation">
+          <div class="hide-on-mobile">
+            {% render 'menu', menu: settings.main_menu %}
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main role="main">
+      {{ content_for_layout }}
+    </main>
+
+    <footer class="footer">
+      <div class="container grid grid--3">
+        <div>
+          <h4 style="margin:0 0 10px 0;">About</h4>
+          <p style="opacity:.85;">{{ settings.footer_about | default: "Sunset palettes, neon nights, and beach-breeze basics." }}</p>
+        </div>
+        <div>
+          <h4 style="margin:0 0 10px 0;">Links</h4>
+          {% render 'menu', menu: settings.footer_menu %}
+        </div>
+        <div>
+          <h4 style="margin:0 0 10px 0;">Newsletter</h4>
+          {% form 'customer' %}
+            <input type="email" name="contact[email]" placeholder="Your email" style="padding:12px; border-radius:12px; border:1px solid rgba(0,0,0,.2); background:#fff; color:#0f172a; width:100%; margin-bottom:10px;" required>
+            <button class="button button--primary" type="submit">Subscribe</button>
+          {% endform %}
+        </div>
+      </div>
+      <div class="container" style="margin-top:20px;">
+        <small>© {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</small>
+      </div>
+    </footer>
+
+    <!-- Mobile Navigation -->
+
+    {%- comment -%} ✅ Halloween script (global include, non-module) {%- endcomment -%}
+    {{ 'halloween.js' | asset_url | script_tag }}
+
+    <!-- Global Interactive Elements -->
+    <div id="cursor-trail"></div>
+    <div id="floating-particles"></div>
+    
+    <script src="{{ 'theme.js' | asset_url }}" defer></script>
+    <script src="{{ 'swatch.js' | asset_url }}" defer></script>
+    <script src="{{ 'visitor-counter.js' | asset_url }}" defer></script>
+    
+    <!-- Enhanced Homepage Features -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Custom Cursor Trail Effect
+      const cursorTrail = document.getElementById('cursor-trail');
+      let mouseX = 0, mouseY = 0;
+      let trailX = 0, trailY = 0;
+      
+      document.addEventListener('mousemove', function(e) {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+      
+      function animateTrail() {
+        trailX += (mouseX - trailX) * 0.1;
+        trailY += (mouseY - trailY) * 0.1;
+        
+        cursorTrail.style.left = trailX + 'px';
+        cursorTrail.style.top = trailY + 'px';
+        
+        requestAnimationFrame(animateTrail);
+      }
+      animateTrail();
+      
+      // Floating Particles System
+      const particlesContainer = document.getElementById('floating-particles');
+      const particleCount = 10;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'floating-particle';
+        particle.style.position = 'fixed';
+        particle.style.width = Math.random() * 4 + 2 + 'px';
+        particle.style.height = particle.style.width;
+        particle.style.background = Math.random() > 0.5 ? 'rgba(0,0,0,0.1)' : 'rgba(0,0,0,0.05)';
+        particle.style.borderRadius = '50%';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        particle.style.pointerEvents = 'none';
+        particle.style.zIndex = '1';
+        particle.style.animation = `particleFloat ${Math.random() * 20 + 10}s linear infinite`;
+        particle.style.animationDelay = Math.random() * 10 + 's';
+        particlesContainer.appendChild(particle);
+      }
+      
+      // Parallax Scrolling Effect
+      const parallaxElements = document.querySelectorAll('[data-parallax]');
+      
+      function updateParallax() {
+        const scrolled = window.pageYOffset;
+        const rate = scrolled * -0.5;
+        
+        parallaxElements.forEach(element => {
+          const speed = element.dataset.parallax || 0.5;
+          element.style.transform = `translateY(${scrolled * speed}px)`;
+        });
+      }
+      
+      window.addEventListener('scroll', updateParallax);
+      
+      // Smooth Scroll for Anchor Links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      });
+      
+      // Intersection Observer for Fade-in Animations
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-in');
+          }
+        });
+      }, observerOptions);
+      
+      // Observe all sections for animations
+      document.querySelectorAll('section').forEach(section => {
+        section.classList.add('fade-in-section');
+        observer.observe(section);
+      });
+    });
+    </script>
+    
+    <style>
+    /* Global Interactive Styles */
+    #cursor-trail {
+      position: fixed;
+      width: 12px;
+      height: 12px;
+      background: radial-gradient(circle, rgba(0,0,0,0.1), transparent);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transition: opacity 0.3s ease;
+    }
+    
+    #floating-particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    @keyframes particleFloat {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+    }
+    
+    /* Fade-in Section Animations */
+    .fade-in-section {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease;
+    }
+    
+    .fade-in-section.animate-in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    /* Enhanced Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(45deg, #27e1c1, #ff4fa3);
+      border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(45deg, #ff4fa3, #27e1c1);
+    }
+    
+    /* Smooth scrolling */
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    /* Mobile optimizations */
+    @media (max-width: 768px) {
+      #cursor-trail {
+        display: none;
+      }
+      
+      #floating-particles {
+        display: none;
+      }
+    }
+    </style>
+  </body>
+</html>

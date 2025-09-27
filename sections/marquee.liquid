@@ -1,0 +1,35 @@
+<div class="container marquee">
+  <div class="marquee__inner">
+    <span>🌴 Free shipping over ${{ section.settings.free_ship | default: 75 }}</span>
+    <span>🌅 Miami Vice Palette in stock</span>
+    <span>🏝️ New arrivals Monthly</span>
+    <span>🎃 Scary-Good Style: Halloween Clothing for EveryBody!👻</span>
+  </div>
+</div>
+
+<style>
+  .marquee {
+    overflow: hidden;
+    white-space: nowrap;
+    background: linear-gradient(
+      90deg,
+      rgb(0, 0, 0) 0%,
+      rgba(255, 117, 24, 1) 100%
+    ); /* vibrant neon gradient */
+    color: #fff;
+    font-family: 'Orbitron', sans-serif; /* retro font */
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0.5rem 0;
+  }
+
+  /* give each repeated bit of text some breathing room */
+  .marquee span {
+    display: inline-block;
+    padding: 0 4rem; /* wider gap between repeats */
+    /* optional: also increase letter/word spacing inside each chunk */
+    /* letter-spacing: 2px;
+       word-spacing: 8px; */
+  }
+</style>

@@ -1,0 +1,902 @@
+{% comment %}
+Main product section — safe + styled + correct add-to-cart
+- Valid 'product' form with explicit action
+- Swatches + (hidden Color select only; Size stays visible)
+- Price stays red on product page
+{% endcomment %}
+
+{% liquid
+  assign product_form_id = 'product-form-' | append: section.id
+%}
+
+<section class="container" style="padding: 28px 0;">
+  <div>
+    {% if product.featured_image %}
+      <img
+        id="MainProductImage"
+        src="{{ product.featured_image | img_url: '1200x' }}"
+        alt="{{ product.title | escape }}"
+        style="width:100%; border-radius: var(--radius-xl); border:1px solid rgba(0,0,0,.08);">
+    {% endif %}
+  </div>
+
+  <div class="card" style="max-width: 800px; margin: 0 auto;">
+    <h1 class="product-title" style="margin-top:0; font-family:'Bebas Neue', sans-serif; font-size:42px; text-align:center;">
+      {% comment %} Create a shorter, more concise title {% endcomment %}
+      {% assign short_title = product.title %}
+      
+           {% comment %} Handle specific long product names {% endcomment %}
+           {% if product.title contains 'Boo-tiful Ghost Toddler Long Sleeve Tee' %}
+             {% assign short_title = 'Boo-tiful Ghost Toddler Tee' %}
+           {% elsif product.title contains 'Baby T-Shirt Cutest Pumpkin' %}
+             {% assign short_title = 'Cutest Pumpkin Baby Tee' %}
+           {% elsif product.title contains 'Butterfly Floral Boxy Tee' %}
+             {% assign short_title = 'Butterfly Floral Boxy Tee' %}
+           {% elsif product.title contains 'Miami Nights Boxy Tee for Women' %}
+             {% assign short_title = 'Miami Nights Boxy Tee' %}
+           {% elsif product.title contains 'BABY T-SHIRT' %}
+             {% assign short_title = product.title | replace: 'BABY T-SHIRT', 'BABY TEE' %}
+           {% elsif product.title contains 'TODDLER LONG SLEEVE TEE' %}
+             {% assign short_title = product.title | replace: 'TODDLER LONG SLEEVE TEE, HALLOWEEN SHIRT, CUTE KIDS TEE, SPOOKY SEASON APPAREL, TODDLER HALLOWEEN CLOTHING', 'TODDLER TEE' %}
+           {% elsif product.title contains 'HALLOWEEN' %}
+             {% assign short_title = product.title | split: 'HALLOWEEN' | first | append: 'HALLOWEEN' %}
+           {% endif %}
+      
+      <span class="full-title" style="display: none;">{{ product.title }}</span>
+      <span class="short-title">{{ short_title }}</span>
+    </h1>
+
+    {% comment %} Create a vertical container with color swatches and size selector stacked {% endcomment %}
+    <div class="product-options-container" style="display: flex; flex-direction: column; gap: 16px; margin: 16px 0;">
+      {% comment %} Color swatches at the top {% endcomment %}
+      <div class="swatches-container">
+        {% render 'swatch', product: product, option_name: 'Color', section_id: section.id %}
+      </div>
+      
+      {% comment %} Size selector directly under color {% endcomment %}
+      <div class="size-container">
+        {%- unless product.has_only_default_variant -%}
+          {%- for option in product.options_with_values -%}
+            {%- assign opt_lc = option.name | downcase -%}
+            {%- unless opt_lc == 'color' -%}
+              <label for="Option{{ forloop.index }}" class="vp-legend" style="font-weight:700; display:block; margin:0 0 8px;">
+                {{ option.name }}
+              </label>
+              <select
+                id="Option{{ forloop.index }}"
+                class="single-option-selector nice-select"
+                data-index="option{{ forloop.index }}">
+                {%- for value in option.values -%}
+                  <option value="{{ value | escape }}" {% if option.selected_value == value %}selected{% endif %}>{{ value }}</option>
+                {%- endfor -%}
+              </select>
+            {%- endunless -%}
+          {%- endfor -%}
+        {%- endunless -%}
+      </div>
+    </div>
+
+    <div class="product__price" data-product-price style="font-size:1.1rem; margin:8px 0 16px 0; color: #dc2626; font-weight: 600;">
+      {{ product.selected_or_first_available_variant.price | money }}
+    </div>
+
+    {% comment %} Extract main product description for collapsible section {% endcomment %}
+    {% assign description_parts = product.description | split: 'Product features' %}
+    {% assign clean_description = description_parts[0] | split: 'Care instructions' %}
+    {% assign final_description = clean_description[0] | split: 'Size Chart' %}
+    {% assign final_description2 = final_description[0] | split: 'Size chart' %}
+    {% assign final_description3 = final_description2[0] | split: 'SIZE CHART' %}
+    {% assign final_description4 = final_description3[0] | split: 'Sizing Chart' %}
+    {% assign final_description5 = final_description4[0] | split: 'Sizing chart' %}
+    {% assign main_description = final_description5[0] | strip %}
+
+    {% if main_description != blank %}
+      <div class="info-section">
+        <button class="info-section-toggle" data-target="description-content">
+          <span class="section-title">Product Description</span>
+          <span class="toggle-icon">▼</span>
+        </button>
+        <div class="info-section-content" id="description-content">
+          <div class="description-content">
+            {{ main_description }}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- Collapsible Product Information Sections -->
+    <div class="product-info-sections" style="margin: 24px 0;">
+      
+      {% comment %} Extract Product Features from description {% endcomment %}
+      {% assign features_section = product.description | split: 'Product features' | last | split: 'Care instructions' | first %}
+      {% if features_section != blank %}
+        <div class="info-section">
+          <button class="info-section-toggle" data-target="features-content">
+            <span class="section-title">Product Features</span>
+            <span class="toggle-icon">▼</span>
+          </button>
+          <div class="info-section-content" id="features-content">
+            <div class="features-list">
+              {% comment %} Split by newlines first, then process each line {% endcomment %}
+              {% assign features_lines = features_section | split: '
+' %}
+              {% for line in features_lines %}
+                {% assign clean_line = line | strip %}
+                {% comment %} Only process lines that start with dash and have content {% endcomment %}
+                {% if clean_line != blank and clean_line contains '-' %}
+                  {% assign feature_text = clean_line | remove_first: '-' | strip %}
+                  {% if feature_text != blank %}
+                    <div class="feature-item">
+                      <span class="feature-icon">✓</span>
+                      <span>{{ feature_text }}</span>
+                    </div>
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      {% comment %} Extract Care Instructions from description {% endcomment %}
+      {% assign care_section = product.description | split: 'Care instructions' | last %}
+      {% if care_section != blank %}
+        <div class="info-section">
+          <button class="info-section-toggle" data-target="care-content">
+            <span class="section-title">Care Instructions</span>
+            <span class="toggle-icon">▼</span>
+          </button>
+          <div class="info-section-content" id="care-content">
+            <div class="care-list">
+              {% comment %} Split by newlines first, then process each line {% endcomment %}
+              {% assign care_lines = care_section | split: '
+' %}
+              {% for line in care_lines %}
+                {% assign clean_line = line | strip %}
+                {% comment %} Only process lines that start with dash and have content {% endcomment %}
+                {% if clean_line != blank and clean_line contains '-' %}
+                  {% assign care_text = clean_line | remove_first: '-' | strip %}
+                  {% if care_text != blank %}
+                    <div class="care-item">
+                      {% comment %} Assign appropriate icons based on content {% endcomment %}
+                      {% if care_text contains 'wash' %}
+                        <span class="care-icon">🌡️</span>
+                      {% elsif care_text contains 'bleach' %}
+                        <span class="care-icon">🧴</span>
+                      {% elsif care_text contains 'tumble dry' %}
+                        <span class="care-icon">❌</span>
+                      {% elsif care_text contains 'iron' %}
+                        <span class="care-icon">🔥</span>
+                      {% elsif care_text contains 'dry clean' %}
+                        <span class="care-icon">❌</span>
+                      {% else %}
+                        <span class="care-icon">📋</span>
+                      {% endif %}
+                      <span>{{ care_text }}</span>
+                    </div>
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      {% comment %} Extract Size Chart from description - always show for testing {% endcomment %}
+      {% assign size_chart_section = '' %}
+      {% assign has_size_chart = true %}
+      
+      {% if product.description contains 'Size Chart' %}
+        {% assign size_chart_section = product.description | split: 'Size Chart' | last | split: 'Product features' | first %}
+      {% elsif product.description contains 'Size chart' %}
+        {% assign size_chart_section = product.description | split: 'Size chart' | last | split: 'Product features' | first %}
+      {% elsif product.description contains 'SIZE CHART' %}
+        {% assign size_chart_section = product.description | split: 'SIZE CHART' | last | split: 'Product features' | first %}
+      {% elsif product.description contains 'Sizing Chart' %}
+        {% assign size_chart_section = product.description | split: 'Sizing Chart' | last | split: 'Product features' | first %}
+      {% elsif product.description contains 'Sizing chart' %}
+        {% assign size_chart_section = product.description | split: 'Sizing chart' | last | split: 'Product features' | first %}
+      {% else %}
+        {% assign size_chart_section = 'Size information available in product description. Please refer to the product description for sizing details.' %}
+      {% endif %}
+      
+      {% comment %} Always show size chart section for now {% endcomment %}
+      {% if true %}
+        <div class="info-section">
+          <button class="info-section-toggle" data-target="size-chart-content">
+            <span class="section-title">Size Chart</span>
+            <span class="toggle-icon">▼</span>
+          </button>
+          <div class="info-section-content" id="size-chart-content">
+            <div class="size-chart-content">
+              <div class="size-chart-header">
+                <h4 style="margin: 0 0 16px 0; color: #333; font-weight: 600;">Find Your Perfect Fit</h4>
+                <p style="margin: 0 0 16px 0; color: #666; font-size: 14px;">Measure yourself and compare with our size chart below.</p>
+              </div>
+              <div class="size-chart-data">
+                {{ size_chart_section | strip }}
+              </div>
+              <div class="size-chart-footer">
+                <p style="margin: 16px 0 0 0; color: #888; font-size: 12px; font-style: italic;">
+                  💡 <strong>Tip:</strong> If you're between sizes, we recommend sizing up for a more comfortable fit.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+    </div>
+
+    {%- comment -%} ONE valid product form only {%- endcomment -%}
+    {% form 'product', product, id: product_form_id, action: routes.cart_add_url %}
+
+      {% comment %} Swatches moved to top - removed from form section {% endcomment %}
+
+      {% comment %} All options (Color and Size) moved to top - removed from form {% endcomment %}
+
+      <!-- Hidden variant id Shopify reads on submit -->
+      <input type="hidden"
+             name="id"
+             id="VariantId-{{ section.id }}"
+             value="{{ product.selected_or_first_available_variant.id }}">
+
+      <button class="button button--primary btn-glow" type="submit"
+        {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
+        {% if product.selected_or_first_available_variant.available %}Add to cart{% else %}Sold out{% endif %}
+      </button>
+    {% endform %}
+
+    <script>
+    (function(){
+      var form       = document.getElementById('{{ product_form_id }}');
+      if(!form) return;
+
+      var productData = {{ product | json }};
+      var selectors   = form.querySelectorAll('.single-option-selector');
+      var idInput     = document.getElementById('VariantId-{{ section.id }}');
+      var priceEl     = form.closest('.card').querySelector('[data-product-price]');
+      var submitBtn   = form.querySelector('button[type="submit"]');
+
+      function syncVariant(){
+        if(!selectors.length) return; // single-variant products
+        var chosen  = Array.from(selectors).map(function(s){ return s.value; }).join(' / ');
+        var variant = productData.variants.find(function(v){ return v.options.join(' / ') === chosen; });
+
+        if(variant){
+          idInput.value = String(variant.id);
+
+          if(priceEl){
+            try {
+              priceEl.textContent = (variant.price/100).toLocaleString(undefined, {style:'currency',currency:'{{ shop.currency }}'});
+            } catch(e) { priceEl.textContent = (variant.price/100).toFixed(2); }
+          }
+          if(submitBtn){
+            submitBtn.disabled = !variant.available;
+            submitBtn.textContent = variant.available ? 'Add to cart' : 'Sold out';
+          }
+
+          var url = new URL(window.location.href);
+          url.searchParams.set('variant', variant.id);
+          history.replaceState({}, '', url);
+        }
+      }
+
+      selectors.forEach(function(s){ s.addEventListener('change', syncVariant); });
+    })();
+
+    // Collapsible sections functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const toggles = document.querySelectorAll('.info-section-toggle');
+      
+      toggles.forEach(function(toggle) {
+        toggle.addEventListener('click', function() {
+          const targetId = this.getAttribute('data-target');
+          const content = document.getElementById(targetId);
+          const isActive = this.classList.contains('active');
+          
+          // Close all other sections
+          toggles.forEach(function(otherToggle) {
+            if (otherToggle !== toggle) {
+              otherToggle.classList.remove('active');
+              const otherTargetId = otherToggle.getAttribute('data-target');
+              const otherContent = document.getElementById(otherTargetId);
+              if (otherContent) {
+                otherContent.classList.remove('active');
+              }
+            }
+          });
+          
+          // Toggle current section
+          if (isActive) {
+            this.classList.remove('active');
+            content.classList.remove('active');
+          } else {
+            this.classList.add('active');
+            content.classList.add('active');
+          }
+        });
+      });
+    });
+    </script>
+  </div>
+</section>
+
+<style>
+  /* Only price red on product page */
+  .template-product [data-product-price],
+  .template-product .product__price { color:#ff0000 !important; }
+
+  /* Hide ONLY the Color select, and ONLY after JS is ready */
+  html.swatch-ready .single-option-selector.is-color {
+    position: absolute !important;
+    width: 1px; height: 1px;
+    padding: 0; margin: 0;
+    overflow: hidden; clip: rect(0 0 0 0);
+    white-space: nowrap; clip-path: inset(50%);
+    border: 0;
+  }
+  
+/* SAFEGUARD: make non-Color selects visible & clickable */
+.single-option-selector:not(.is-color){
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  padding: 12px 44px 12px 14px;
+  overflow: visible !important;
+  clip: auto !important;
+  clip-path: none !important;
+  border: 1px solid rgba(15,23,42,.12) !important;
+  background: #fff !important;
+  pointer-events: auto !important;
+  opacity: 1 !important;
+}
+
+  /* --- Fancy selects (kept if JS disabled) --- */
+  .nice-select{
+    appearance:none; -webkit-appearance:none; -moz-appearance:none;
+    background:#fff;
+    border:1px solid rgba(15,23,42,.12);
+    border-radius:16px;
+    padding:12px 44px 12px 14px;
+    font-weight:600;
+    line-height:1.2;
+    box-shadow: 0 6px 18px rgba(0,0,0,.06);
+    transition: box-shadow .2s ease, transform .12s ease, border-color .2s ease;
+    position:relative;
+  }
+  .nice-select:hover{ box-shadow: 0 10px 26px rgba(0,0,0,.08); transform: translateY(-1px); }
+  .nice-select:focus{ outline:none; border-color: rgba(39,225,193,.55); box-shadow: 0 0 0 4px rgba(39,225,193,.20); }
+  .nice-select{
+    background-image:
+      linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0)),
+      url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 9l6 6 6-6' stroke='%23111' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position: right 12px center;
+    background-size: 20px 20px;
+  }
+
+  .vp-legend{ font-weight:800; font-size:1.05rem; color:#0f172a; margin:12px 0 8px; }
+  
+  /* Product options container styling - vertical layout */
+  .product-options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  
+  .swatches-container {
+    width: 100%;
+  }
+  
+  .size-container {
+    width: 100%;
+  }
+  
+  /* Ensure both sections start at the same level */
+  .swatches-container .vp-legend,
+  .size-container .vp-legend {
+    margin-top: 0 !important;
+    margin-bottom: 8px !important;
+    line-height: 1.2 !important;
+    font-size: 1.05rem !important;
+  }
+  
+  /* Force alignment of both containers */
+  .swatches-container,
+  .size-container {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+  
+  /* Ensure swatch block has consistent spacing */
+  .swatches-container .swatch-block {
+    margin-top: 0;
+  }
+  
+  /* Make swatches display horizontally - match exact positioning */
+  .swatches-container .swatch-list {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 10px !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+  }
+  
+  .swatches-container .swatch {
+    flex-shrink: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 6px 12px !important;
+    border-radius: 9999px !important;
+    border: 1px solid rgba(15,23,42,.12) !important;
+    background: #ffffff !important;
+    transition: all 0.2s ease !important;
+    --size: 34px !important;
+  }
+  
+  .swatches-container .swatch:hover {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.1) !important;
+  }
+  
+  .swatches-container .swatch.selected {
+    border-color: #3b82f6 !important;
+    background: #eff6ff !important;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2) !important;
+  }
+  
+  /* Style the swatch chip (t-shirt image) - match homepage size */
+  .swatches-container .swatch__chip {
+    width: 34px !important;
+    height: 34px !important;
+    border-radius: 50% !important;
+    border: 1px solid #d1d5db !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    flex-shrink: 0 !important;
+  }
+  
+  /* Style the swatch label */
+  .swatches-container .swatch__label {
+    font-size: 0.875rem !important;
+    font-weight: 500 !important;
+    color: #374151 !important;
+    white-space: nowrap !important;
+  }
+  
+  /* Override any existing swatch layout */
+  .product-options-container .swatch-list {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+  
+  /* Mobile responsiveness for horizontal swatches */
+  @media (max-width: 768px) {
+    .swatches-container .swatch-list {
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: wrap !important;
+      gap: 6px !important;
+    }
+  }
+  
+  {% comment %} Separator removed - using vertical layout {% endcomment %}
+  
+  /* Mobile responsiveness for product options */
+  @media (max-width: 768px) {
+    .product-options-container {
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .swatches-container,
+    .size-container {
+      min-width: 100%;
+    }
+    
+    .options-separator {
+      display: none;
+    }
+  }
+
+  /* --- Add to cart: neon gradient pill --- */
+  .btn-glow{
+    border-radius: 9999px !important;
+    padding: 12px 22px !important;
+    font-weight: 800 !important;
+    letter-spacing:.2px;
+    border:0 !important;
+    background: linear-gradient(135deg, var(--accent, #27e1c1), var(--accent-2, #ff4fa3));
+    color:#0b1220 !important;
+    box-shadow: 0 12px 30px rgba(39,225,193,.28), 0 6px 18px rgba(255,79,163,.22);
+    transition: transform .15s ease, box-shadow .2s ease, filter .2s ease;
+  }
+  .btn-glow:hover{ transform: translateY(-2px); box-shadow: 0 16px 36px rgba(39,225,193,.36), 0 10px 24px rgba(255,79,163,.30); filter: brightness(1.02); }
+  .btn-glow:active{ transform: translateY(0); box-shadow: 0 8px 20px rgba(39,225,193,.22), 0 4px 12px rgba(255,79,163,.18); }
+  .button[disabled].btn-glow{ opacity:.55; cursor:not-allowed; filter: grayscale(15%); }
+
+  /* Optional: polish the right column card */
+  .card{
+    border-radius: 22px;
+    background: linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,255,255,.94));
+    backdrop-filter: blur(6px);
+    border:1px solid rgba(15,23,42,.06);
+    box-shadow: 0 16px 44px rgba(15,23,42,.08);
+    padding: 22px;
+  }
+
+  /* Collapsible Product Information Sections */
+  .product-info-sections {
+    margin: 24px 0;
+  }
+
+  .info-section {
+    margin-bottom: 12px;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .info-section-toggle {
+    width: 100%;
+    background: #f8f9fa;
+    border: none;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .info-section-toggle:hover {
+    background: #e9ecef;
+  }
+
+  .section-title {
+    font-weight: 600;
+    color: #333;
+  }
+
+  .toggle-icon {
+    font-size: 14px;
+    transition: transform 0.3s ease;
+    color: #666;
+  }
+
+  .info-section-toggle.active .toggle-icon {
+    transform: rotate(180deg);
+  }
+
+  .info-section-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background: #fff;
+  }
+
+  .info-section-content.active {
+    max-height: 500px;
+  }
+
+  .features-list, .care-list {
+    padding: 20px;
+  }
+
+  .feature-item, .care-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    padding: 8px 0;
+  }
+
+  .feature-item:last-child, .care-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .feature-icon, .care-icon {
+    margin-right: 12px;
+    font-size: 16px;
+    min-width: 20px;
+    text-align: center;
+  }
+
+  .feature-icon {
+    color: #28a745;
+    font-weight: bold;
+  }
+
+  .care-icon {
+    font-size: 18px;
+  }
+
+  .feature-item span:last-child, .care-item span:last-child {
+    flex: 1;
+    line-height: 1.4;
+    color: #555;
+  }
+
+  /* Enhanced Size Chart Styling */
+  .size-chart-content {
+    padding: 24px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border-radius: 12px;
+    margin: 10px 0;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+
+  .size-chart-header {
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 16px;
+    margin-bottom: 20px;
+  }
+
+  .size-chart-data {
+    margin: 16px 0;
+  }
+
+  .size-chart-data table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .size-chart-data th,
+  .size-chart-data td {
+    padding: 12px 16px;
+    text-align: center;
+    border: 1px solid #e9ecef;
+    font-size: 14px;
+  }
+
+  .size-chart-data th {
+    background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 12px;
+  }
+
+  .size-chart-data tr:nth-child(even) {
+    background: #f8f9fa;
+  }
+
+  .size-chart-data tr:hover {
+    background: #e3f2fd;
+    transform: scale(1.01);
+    transition: all 0.2s ease;
+  }
+
+  .size-chart-data td:first-child {
+    font-weight: 600;
+    background: #f8f9fa;
+    color: #495057;
+  }
+
+  .size-chart-data p {
+    margin: 12px 0;
+    line-height: 1.6;
+    color: #555;
+  }
+
+  .size-chart-data ul {
+    margin: 12px 0;
+    padding-left: 24px;
+  }
+
+  .size-chart-data li {
+    margin: 6px 0;
+    color: #555;
+    line-height: 1.5;
+  }
+
+  .size-chart-footer {
+    border-top: 1px solid #e9ecef;
+    padding-top: 16px;
+    margin-top: 20px;
+  }
+
+  /* Mobile responsiveness for size charts */
+  @media (max-width: 768px) {
+    .size-chart-data table {
+      font-size: 12px;
+    }
+    
+    .size-chart-data th,
+    .size-chart-data td {
+      padding: 8px 10px;
+    }
+    
+    .size-chart-content {
+      padding: 16px;
+    }
+  }
+
+  /* Mobile title size reduction and layout optimization */
+  @media (max-width: 768px) {
+    .product-title {
+      font-size: 20px !important;
+      line-height: 1.1;
+      margin-bottom: 4px;
+      max-height: 2.4em;
+      overflow: hidden;
+    }
+    
+    .product__price {
+      font-size: 1rem !important;
+      margin: 4px 0 8px 0 !important;
+    }
+    
+    .product-info-sections {
+      margin: 12px 0 !important;
+    }
+    
+    .info-section {
+      margin-bottom: 8px !important;
+    }
+    
+    .info-section-toggle {
+      padding: 8px 12px !important;
+      font-size: 14px !important;
+    }
+    
+    .section-title {
+      font-size: 14px !important;
+    }
+    
+    .toggle-icon {
+      font-size: 12px !important;
+    }
+    
+    .card {
+      padding: 16px !important;
+    }
+    
+    .container {
+      padding: 16px !important;
+    }
+  }
+
+  /* Description content styling */
+  .description-content {
+    padding: 20px;
+    line-height: 1.6;
+    color: #555;
+  }
+
+  .description-content p {
+    margin: 0 0 12px 0;
+  }
+
+  .description-content p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Product price styling - red color to match homepage */
+  .product__price {
+    color: #dc2626 !important;
+    font-weight: 600 !important;
+    font-size: 1.1rem !important;
+  }
+
+  .product__price[data-product-price] {
+    color: #dc2626 !important;
+    font-weight: 600 !important;
+  }
+
+  /* Ensure single column layout */
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  /* Product image spacing */
+  .container > div:first-child {
+    margin-bottom: 20px;
+  }
+
+  /* Center product title and content */
+  .product-title {
+    text-align: center !important;
+  }
+  
+  .product__price {
+    text-align: center !important;
+  }
+  
+  /* Fix swatch styling with bubble effects */
+  .swatch__chip {
+    border: 1px solid #d1d5db !important;
+  }
+  
+  /* Swatch bubble/selection effects */
+  .swatch {
+    transition: all 0.2s ease !important;
+    border: 2px solid transparent !important;
+    border-radius: 20px !important;
+  }
+  
+  .swatch:hover,
+  .swatch.is-selected {
+    border-color: #000 !important;
+    transform: scale(1.05) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
+  }
+  
+  .swatch-list {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    margin: 8px 0 !important;
+    overflow: visible !important;
+  }
+  
+  .swatch {
+    flex-shrink: 0 !important;
+    margin: 2px !important;
+  }
+
+  /* Mobile swatch optimization */
+  @media (max-width: 768px) {
+    .container {
+      padding: 0 16px;
+    }
+    
+    .swatch {
+      --size: 28px !important;
+      padding: 4px 6px 4px 4px !important;
+      margin: 2px !important;
+    }
+    
+    .swatch__label {
+      font-size: 12px !important;
+    }
+    
+    .swatch-list {
+      margin: 8px 0 !important;
+      justify-content: center !important;
+    }
+    
+    .swatch-block {
+      margin: 8px 0 !important;
+    }
+    
+    .product-form__buttons {
+      margin-top: 12px !important;
+    }
+    
+    .button {
+      padding: 12px 16px !important;
+      font-size: 14px !important;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Main product",
+  "settings": [],
+  "presets": [{ "name": "Main product" }]
+}
+{% endschema %}
+
+
