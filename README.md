@@ -31,24 +31,35 @@ cd newthrifts-theme
 npm install -g @shopify/cli @shopify/theme
 ```
 
-3. Connect to your Shopify store:
+3. Set your store domain for scripts:
 ```bash
-shopify theme dev --store=your-store-name.myshopify.com
+cp .env.shopify.example .env.shopify
+# edit .env.shopify and set SHOPIFY_STORE=your-store-name.myshopify.com
+```
+
+4. Start a live dev session:
+```bash
+npm run dev:shopify
 ```
 
 ### Development Workflow
 
 1. **Make changes** to theme files
-2. **Test locally** with `shopify theme dev`
+2. **Test locally** with `npm run dev:shopify`
 3. **Commit changes** to Git:
 ```bash
 git add .
 git commit -m "Description of changes"
 git push origin main
 ```
-4. **Deploy to store**:
+4. **Deploy to store** (live):
 ```bash
-shopify theme push --store=your-store-name.myshopify.com
+npm run push:shopify:live
+```
+
+5. **Pull from live** (if you edited in admin):
+```bash
+npm run pull:shopify:live
 ```
 
 ## File Structure
