@@ -9,7 +9,7 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "push:shopify:live": "shopify theme push --live --no-interactive"
+    "push:shopify:live": "shopify theme push --store newthrifts.myshopify.com --allow-live --live"
   },
   "dependencies": {
     "react": "18.2.0",
