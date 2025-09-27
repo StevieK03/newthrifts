@@ -5,7 +5,6 @@
 
 class VisitorCounter {
   constructor() {
-    this.apiEndpoint = '/apps/visitor-counter';
     this.visitorId = this.generateVisitorId();
     this.isUnique = this.checkUniqueVisitor();
     this.counters = new Map();
@@ -42,11 +41,10 @@ class VisitorCounter {
    */
   init() {
     this.trackVisitor();
-    this.updateCounters();
     
     // Update counters every 30 seconds
     setInterval(() => {
-      this.updateCounters();
+      this.trackVisitor();
     }, 30000);
   }
   
@@ -74,35 +72,6 @@ class VisitorCounter {
     
     this.counters.set('total', randomTotal);
     this.counters.set('unique', randomUnique);
-    this.updateDisplay();
-  }
-  
-  /**
-   * Update counters from localStorage
-   */
-  updateCounters() {
-    // Get current counts from localStorage
-    let totalVisitors = parseInt(localStorage.getItem('totalVisitors')) || 0;
-    let uniqueVisitors = parseInt(localStorage.getItem('uniqueVisitors')) || 0;
-    
-    // Add some randomness to make it look more realistic
-    const randomTotal = totalVisitors + Math.floor(Math.random() * 50);
-    const randomUnique = uniqueVisitors + Math.floor(Math.random() * 30);
-    
-    this.counters.set('total', randomTotal);
-    this.counters.set('unique', randomUnique);
-    this.updateDisplay();
-  }
-  
-  /**
-   * Use demo data when API is not available
-   */
-  useDemoData() {
-    const baseTotal = Math.floor(Math.random() * 1000) + 500;
-    const baseUnique = Math.floor(baseTotal * 0.7);
-    
-    this.counters.set('total', baseTotal);
-    this.counters.set('unique', baseUnique);
     this.updateDisplay();
   }
   
