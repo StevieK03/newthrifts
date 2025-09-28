@@ -50,6 +50,7 @@
     },
     "halloween-countdown": {
       "type": "countdown-halloween",
+      "disabled": true,
       "settings": {
         "show_label": true,
         "label": "Countdown to Halloween",
@@ -174,11 +175,11 @@
         "bg_color_2": "#e2e8f0",
         "text_color": "#0f172a",
         "counter_bg": "#ffffff",
-        "counter_border": "rgba(0,0,0,0.1)",
+        "counter_border": "#0000001a",
         "counter_color": "#27e1c1",
         "counter_color_2": "#ff4fa3",
-        "accent_color": "rgba(39,225,193,0.1)",
-        "accent_color_2": "rgba(255,79,163,0.1)",
+        "accent_color": "#27e1c11a",
+        "accent_color_2": "#ff4fa31a",
         "pad_y": 40,
         "margin_y": 20,
         "border_radius": 16,
