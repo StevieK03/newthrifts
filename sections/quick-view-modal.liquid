@@ -716,45 +716,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
   
-  // Add quick view buttons to existing product cards
-  function addQuickViewButtons() {
-    const productCards = document.querySelectorAll('[data-product-handle]');
-    
-    productCards.forEach(card => {
-      if (card.querySelector('.quick-view-btn')) return; // Already has button
-      
-      const productHandle = card.dataset.productHandle;
-      const quickViewBtn = document.createElement('button');
-      quickViewBtn.className = 'quick-view-btn';
-      quickViewBtn.innerHTML = '👁️ Quick View';
-      quickViewBtn.setAttribute('aria-label', 'Quick view product');
-      
-      quickViewBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        openQuickView(productHandle);
-      });
-      
-      card.appendChild(quickViewBtn);
-    });
-  }
-  
-  // Initialize quick view buttons
-  addQuickViewButtons();
-  
-  // Re-initialize when new products are loaded (for infinite scroll, etc.)
-  const observer = new MutationObserver(function(mutations) {
-    mutations.forEach(function(mutation) {
-      if (mutation.addedNodes.length) {
-        addQuickViewButtons();
-      }
-    });
-  });
-  
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true
-  });
+  // Automatic quick view button generation disabled to prevent duplicates
+  // Quick view buttons are now manually added in collection sections
 });
 </script>
 

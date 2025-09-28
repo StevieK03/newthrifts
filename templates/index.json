@@ -17,10 +17,6 @@
       "type": "quick-view-modal",
       "settings": {}
     },
-    "wishlist": {
-      "type": "wishlist",
-      "settings": {}
-    },
     "welcome_social_bar_YkCFUP": {
       "type": "welcome-social-bar",
       "name": "Welcome / Social Bar",
@@ -166,7 +162,6 @@
   "order": [
     "header",
     "quick_view_modal",
-    "wishlist",
     "welcome_social_bar_YkCFUP",
     "visitor_counter_section",
     "halloween-countdown",

@@ -28,35 +28,140 @@
           <li><a href="/pages/contact" class="nt-header__link">Contact</a></li>
         </ul>
       {% endif %}
+      
+      <!-- Wishlist Toggle -->
+      <div class="header-wishlist">
+        <div class="wishlist-toggle" id="header-wishlist-toggle" aria-label="Toggle wishlist">
+          <svg class="wishlist-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path class="heart-outline" d="M20.84 4.61C20.32 4.09 19.69 3.69 19 3.44C18.31 3.19 17.58 3.09 16.85 3.15C16.12 3.21 15.42 3.42 14.78 3.78C14.14 4.14 13.58 4.64 13.14 5.25L12 6.75L10.86 5.25C10.42 4.64 9.86 4.14 9.22 3.78C8.58 3.42 7.88 3.21 7.15 3.15C6.42 3.09 5.69 3.19 5 3.44C4.31 3.69 3.68 4.09 3.16 4.61C2.11 5.66 1.5 7.13 1.5 8.66C1.5 10.19 2.11 11.66 3.16 12.71L12 21.55L20.84 12.71C21.89 11.66 22.5 10.19 22.5 8.66C22.5 7.13 21.89 5.66 20.84 4.61Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path class="heart-filled" d="M20.84 4.61C20.32 4.09 19.69 3.69 19 3.44C18.31 3.19 17.58 3.09 16.85 3.15C16.12 3.21 15.42 3.42 14.78 3.78C14.14 4.14 13.58 4.64 13.14 5.25L12 6.75L10.86 5.25C10.42 4.64 9.86 4.14 9.22 3.78C8.58 3.42 7.88 3.21 7.15 3.15C6.42 3.09 5.69 3.19 5 3.44C4.31 3.69 3.68 4.09 3.16 4.61C2.11 5.66 1.5 7.13 1.5 8.66C1.5 10.19 2.11 11.66 3.16 12.71L12 21.55L20.84 12.71C21.89 11.66 22.5 10.19 22.5 8.66C22.5 7.13 21.89 5.66 20.84 4.61Z" fill="currentColor" style="display: none;"/>
+          </svg>
+          <span class="wishlist-count" id="header-wishlist-count">0</span>
+        </div>
+      </div>
     </nav>
   </div>
 </header>
 
 <style>
-  /* ===== Hard-force a white header and dark text ===== */
+  /* ===== Clean white header that matches the gap area ===== */
   #Header-{{ section.id }}{
-    background:#ffffff !important;
+    background: #f2f3f5 !important;
     position:relative;
     z-index:50;
-    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    box-shadow: 0 2px 15px rgba(0,0,0,.08);
+    border-bottom: 1px solid rgba(0,0,0,.06);
   }
   #Header-{{ section.id }} *{ box-sizing:border-box }
   #Header-{{ section.id }} .nt-header__wrap{
-    display:flex; align-items:center; justify-content:space-between;
-    padding:15px 20px;
+    display:flex; align-items:center; justify-content:center;
+    padding:15px 40px;
     backdrop-filter:none !important; -webkit-backdrop-filter:none !important;
+    gap: 60px;
+    max-width: 1200px;
+    margin: 0 auto;
   }
-  #Header-{{ section.id }} .nt-header__logo-img{ max-height:60px; display:block }
+  #Header-{{ section.id }} .nt-header__logo-img{ max-height:80px; display:block }
   #Header-{{ section.id }} .nt-header__logo-text{
     font-weight:800; text-decoration:none;
-    color:#0f172a !important; /* dark text */
-    font-size:1.25rem;
+    color:#0f172a !important; /* dark text on light background */
+    font-size:1.8rem;
   }
   #Header-{{ section.id }} .nt-header__list{
-    display:flex; gap:20px; list-style:none; margin:0; padding:0;
+    display:flex; gap:8px; list-style:none; margin:0; padding:0;
   }
   #Header-{{ section.id }} .nt-header__link{
-    text-decoration:none; color:#0f172a !important; font-weight:600;
+    text-decoration:none; 
+    color:#0f172a !important; 
+    font-weight:600;
+    padding: 12px 20px;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    background: rgba(0,0,0,.05);
+    border: 1px solid rgba(0,0,0,.1);
+  }
+  
+  #Header-{{ section.id }} .nt-header__link:hover{
+    background: rgba(0,0,0,.08);
+    color: #0f172a !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,.1);
+    border-color: rgba(0,0,0,.15);
+  }
+  
+  /* Removed shine effect to clean up header */
+  
+  /* Header Wishlist Styling */
+  #Header-{{ section.id }} .header-wishlist {
+    margin-left: 20px;
+  }
+  
+  #Header-{{ section.id }} .wishlist-toggle {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: white;
+    border: 2px solid #e5e7eb;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  #Header-{{ section.id }} .wishlist-toggle:hover {
+    border-color: #dc2626;
+    transform: scale(1.05);
+    box-shadow: 0 4px 16px rgba(220, 38, 38, 0.2);
+  }
+  
+  #Header-{{ section.id }} .wishlist-toggle.has-items {
+    border-color: #dc2626;
+    background: #fef2f2;
+  }
+  
+  #Header-{{ section.id }} .wishlist-icon {
+    color: #6b7280;
+    transition: color 0.3s ease;
+  }
+  
+  #Header-{{ section.id }} .wishlist-toggle:hover .wishlist-icon,
+  #Header-{{ section.id }} .wishlist-toggle.has-items .wishlist-icon {
+    color: #dc2626;
+  }
+  
+  #Header-{{ section.id }} .wishlist-toggle.has-items .heart-outline {
+    display: none;
+  }
+  
+  #Header-{{ section.id }} .wishlist-toggle.has-items .heart-filled {
+    display: block !important;
+  }
+  
+  #Header-{{ section.id }} .wishlist-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #dc2626;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 10px;
+    min-width: 18px;
+    text-align: center;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.3s ease;
+  }
+  
+  #Header-{{ section.id }} .wishlist-count.visible {
+    opacity: 1;
+    transform: scale(1);
   }
 </style>
 
