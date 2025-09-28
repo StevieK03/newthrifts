@@ -3,10 +3,16 @@
     "name": "Theme settings",
     "settings": [
       {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo image"
+      },
+      {
         "type": "text",
         "id": "logo_text",
-        "label": "Logo text",
-        "default": "Retro MB"
+        "label": "Logo text (fallback)",
+        "default": "Your Store Name",
+        "info": "Used when no logo image is uploaded"
       },
       {
         "type": "link_list",
