@@ -10,7 +10,7 @@ Main product section — safe + styled + correct add-to-cart
 %}
 
 <section class="container" style="padding: 28px 0;">
-  <div class="product-layout" style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; max-width: 1200px; margin: 0 auto; align-items: start;">
+  <div class="product-layout" style="display: grid; grid-template-columns: 1fr 1fr; gap: 48px; max-width: 1400px; margin: 0 auto; align-items: start;">
     
     <!-- Product Image -->
     <div class="product-image-container">
@@ -25,7 +25,7 @@ Main product section — safe + styled + correct add-to-cart
 
     <!-- Product Details -->
     <div class="product-details-container">
-      <div class="card" style="padding: 24px; height: fit-content;">
+      <div class="card" style="padding: 32px; height: fit-content; min-width: 400px;">
     <h1 class="product-title" style="margin-top:0; font-family:'Bebas Neue', sans-serif; font-size:28px; text-align:left; line-height: 1.2;">
       {% comment %} Create a shorter, more concise title {% endcomment %}
       {% assign short_title = product.title %}
@@ -739,16 +739,16 @@ Main product section — safe + styled + correct add-to-cart
   /* Product layout responsive design */
   .product-layout {
     display: grid;
-    grid-template-columns: 1.2fr 0.8fr;
-    gap: 40px;
-    max-width: 1200px;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    max-width: 1400px;
     margin: 0 auto;
     align-items: start;
   }
 
   .product-image-container img {
     width: 100%;
-    max-width: 700px;
+    max-width: 600px;
     height: auto;
     object-fit: cover;
   }
