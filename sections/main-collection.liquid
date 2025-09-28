@@ -198,35 +198,70 @@
   #collection-{{ collection.id }} .image-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, rgba(0,0,0,0.3), rgba(0,0,0,0.5));
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
     display: flex;
     align-items: center;
     justify-content: center;
     opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: 1;
+    transition: all 0.3s ease;
+    z-index: 3;
   }
   
   #collection-{{ collection.id }} .enhanced-card:hover .image-overlay {
     opacity: 1;
   }
   
-  /* Quick View Button */
-  #collection-{{ collection.id }} .quick-view-btn {
-    background: white;
+  /* Product Actions */
+  #collection-{{ collection.id }} .product-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transform: translateY(20px);
+    transition: transform 0.3s ease 0.1s;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  #collection-{{ collection.id }} .enhanced-card:hover .product-actions {
+    transform: translateY(0);
+  }
+  
+  /* Action Buttons */
+  #collection-{{ collection.id }} .action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 24px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border: none;
+    border-radius: 30px;
     color: #333;
-    padding: 12px 24px;
-    border-radius: 25px;
     font-weight: 600;
     font-size: 14px;
     cursor: pointer;
     transition: all 0.3s ease;
-    border: none;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    min-width: 140px;
+    white-space: nowrap;
+  }
+  
+  #collection-{{ collection.id }} .action-btn:hover {
+    background: white;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   }
   
   #collection-{{ collection.id }} .quick-view-btn:hover {
-    background: #f8f9fa;
-    transform: translateY(-2px);
+    background: linear-gradient(135deg, #27e1c1, #00d4aa);
+    color: white;
+  }
+  
+  #collection-{{ collection.id }} .wishlist-btn:hover {
+    background: linear-gradient(135deg, #ff4fa3, #e91e63);
+    color: white;
   }
   
   /* Product Card Body */
