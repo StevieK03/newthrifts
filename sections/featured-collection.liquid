@@ -265,7 +265,7 @@
   }
   
   /* Remove hover effects from entire card - only apply to image area */
-  #sec-{{ section.id }} .enhanced-card:hover {
+  #sec-{{ section.id }} .enhanced-product-card:hover {
     transform: none;
     box-shadow: 0 4px 20px rgba(0,0,0,0.08);
   }
@@ -282,7 +282,7 @@
     filter: blur(8px);
   }
   
-  #sec-{{ section.id }} .enhanced-card:hover .card-glow {
+  #sec-{{ section.id }} .enhanced-product-card:hover .card-glow {
     opacity: 0.3;
   }
   
@@ -299,7 +299,7 @@
     pointer-events: none;
   }
   
-  #sec-{{ section.id }} .enhanced-card:hover .card-shine {
+  #sec-{{ section.id }} .enhanced-product-card:hover .card-shine {
     left: 100%;
   }
   
@@ -321,12 +321,12 @@
   }
 
   /* Enhanced hover effects on image area only */
-  #sec-{{ section.id }} .enhanced-card:hover .image-container {
+  #sec-{{ section.id }} .enhanced-product-card:hover .image-container {
     transform: translateY(-6px);
     box-shadow: 0 16px 32px rgba(0,0,0,0.12);
   }
 
-  #sec-{{ section.id }} .enhanced-card:hover .product-card__img {
+  #sec-{{ section.id }} .enhanced-product-card:hover .product-card__img {
     transform: scale(1.08);
   }
   
@@ -343,7 +343,7 @@
     z-index: 1;
   }
   
-  #sec-{{ section.id }} .enhanced-card:hover .image-overlay {
+  #sec-{{ section.id }} .enhanced-product-card:hover .image-overlay {
     opacity: 1;
   }
   
@@ -360,7 +360,7 @@
     transition: color 0.3s ease;
   }
   
-  #sec-{{ section.id }} .enhanced-card:hover .product-card__body h3 {
+  #sec-{{ section.id }} .enhanced-product-card:hover .product-card__body h3 {
     color: #333;
   }
   
@@ -371,7 +371,7 @@
   }
 
   /* Remove hover effects from swatch area to keep them fully interactive */
-  #sec-{{ section.id }} .enhanced-card:hover .swatch-block {
+  #sec-{{ section.id }} .enhanced-product-card:hover .swatch-block {
     transform: none;
   }
   
@@ -412,7 +412,7 @@
     transition: none;
   }
 
-  #sec-{{ section.id }} .enhanced-card:hover .product-card__price {
+  #sec-{{ section.id }} .enhanced-product-card:hover .product-card__price {
     transform: none;
   }
   
@@ -437,12 +437,12 @@
   /* Responsive */
   @media (max-width: 768px) {
     /* Remove mobile hover effects from entire card */
-    #sec-{{ section.id }} .enhanced-card:hover {
+    #sec-{{ section.id }} .enhanced-product-card:hover {
       transform: none;
     }
     
     /* Keep image hover effects on mobile */
-    #sec-{{ section.id }} .enhanced-card:hover .image-container {
+    #sec-{{ section.id }} .enhanced-product-card:hover .image-container {
       transform: translateY(-3px);
       box-shadow: 0 8px 16px rgba(0,0,0,0.1);
     }
