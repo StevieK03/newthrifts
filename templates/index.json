@@ -157,10 +157,10 @@
       "type": "featured-collection",
       "name": "Featured collection",
       "settings": {
-        "heading": "Fresh on the boardwalk",
-        "subheading": "Curated pieces in neon fades and cool pastels.",
-        "collection": "",
-        "max_products": 6
+        "heading": "Featured Collection",
+        "subheading": "",
+        "collection": "entire-collection",
+        "max_products": 12
       }
     }
   },
