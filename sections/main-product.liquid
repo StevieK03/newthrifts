@@ -58,26 +58,42 @@ Main product section — safe + styled + correct add-to-cart
         {% render 'swatch', product: product, option_name: 'Color', section_id: section.id %}
       </div>
       
-      {% comment %} Size selector directly under color {% endcomment %}
-      <div class="size-container">
-        {%- unless product.has_only_default_variant -%}
-          {%- for option in product.options_with_values -%}
-            {%- assign opt_lc = option.name | downcase -%}
-            {%- unless opt_lc == 'color' -%}
-              <label for="Option{{ forloop.index }}" class="vp-legend" style="font-weight:700; display:block; margin:0 0 8px;">
-                {{ option.name }}
-              </label>
-              <select
-                id="Option{{ forloop.index }}"
-                class="single-option-selector nice-select"
-                data-index="option{{ forloop.index }}">
-                {%- for value in option.values -%}
-                  <option value="{{ value | escape }}" {% if option.selected_value == value %}selected{% endif %}>{{ value }}</option>
-                {%- endfor -%}
-              </select>
-            {%- endunless -%}
-          {%- endfor -%}
-        {%- endunless -%}
+      {% comment %} Size selector and Add to Cart in inline container {% endcomment %}
+      <div class="size-and-cart-container">
+        <div class="size-container">
+          {%- unless product.has_only_default_variant -%}
+            {%- for option in product.options_with_values -%}
+              {%- assign opt_lc = option.name | downcase -%}
+              {%- unless opt_lc == 'color' -%}
+                <label for="Option{{ forloop.index }}" class="vp-legend">
+                  {{ option.name }}
+                </label>
+                <select
+                  id="Option{{ forloop.index }}"
+                  class="single-option-selector nice-select"
+                  data-index="option{{ forloop.index }}">
+                  {%- for value in option.values -%}
+                    <option value="{{ value | escape }}" {% if option.selected_value == value %}selected{% endif %}>{{ value }}</option>
+                  {%- endfor -%}
+                </select>
+              {%- endunless -%}
+            {%- endfor -%}
+          {%- endunless -%}
+        </div>
+        
+        {% comment %} Add to Cart Button - moved next to size {% endcomment %}
+        {% form 'product', product, id: product_form_id, class: 'product-form' %}
+          <!-- Hidden variant id Shopify reads on submit -->
+          <input type="hidden"
+                 name="id"
+                 id="VariantId-{{ section.id }}"
+                 value="{{ product.selected_or_first_available_variant.id }}">
+
+          <button class="button button--primary btn-glow" type="submit"
+            {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
+            {% if product.selected_or_first_available_variant.available %}Add to cart{% else %}Sold out{% endif %}
+          </button>
+        {% endform %}
       </div>
     </div>
 
@@ -85,21 +101,6 @@ Main product section — safe + styled + correct add-to-cart
       {{ product.selected_or_first_available_variant.price | money }}
     </div>
 
-    {% comment %} Add to Cart Button - moved above description {% endcomment %}
-    {% form 'product', product, id: product_form_id, class: 'product-form' %}
-      {% comment %} All options (Color and Size) moved to top - removed from form {% endcomment %}
-
-      <!-- Hidden variant id Shopify reads on submit -->
-      <input type="hidden"
-             name="id"
-             id="VariantId-{{ section.id }}"
-             value="{{ product.selected_or_first_available_variant.id }}">
-
-      <button class="button button--primary btn-glow" type="submit"
-        {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
-        {% if product.selected_or_first_available_variant.available %}Add to cart{% else %}Sold out{% endif %}
-      </button>
-    {% endform %}
 
     {% comment %} Extract main product description for collapsible section {% endcomment %}
     {% assign description_parts = product.description | split: 'Product features' %}
@@ -846,10 +847,12 @@ Main product section — safe + styled + correct add-to-cart
     .swatch-list {
       display: flex !important;
       justify-content: center !important;
-      gap: 10px !important;
+      align-items: center !important;
+      gap: 12px !important;
       flex-wrap: wrap !important;
-      margin: 0 !important;
+      margin: 0 auto !important;
       padding: 0 !important;
+      width: 100% !important;
     }
     
     .swatch {
@@ -880,8 +883,10 @@ Main product section — safe + styled + correct add-to-cart
       height: 100% !important;
       background-size: cover !important;
       background-position: center !important;
-      border-radius: 8px !important;
+      border-radius: 10px !important;
       display: block !important;
+      border: none !important;
+      outline: none !important;
     }
     
     .swatch__label {
@@ -898,30 +903,48 @@ Main product section — safe + styled + correct add-to-cart
       border-radius: 3px !important;
     }
     
-    /* Size Selector - Inline with label */
-    .size-container {
-      text-align: center !important;
+    /* Size Selector and Add to Cart - Inline layout */
+    .size-and-cart-container {
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+      gap: 20px !important;
       margin-bottom: 16px !important;
+      flex-wrap: wrap !important;
+    }
+    
+    .size-container {
+      display: flex !important;
+      align-items: center !important;
+      gap: 8px !important;
     }
     
     .size-container .vp-legend {
-      display: inline !important;
       font-size: 16px !important;
       font-weight: 700 !important;
-      margin-right: 8px !important;
       color: #374151 !important;
       text-transform: uppercase !important;
+      margin: 0 !important;
     }
     
     .single-option-selector {
-      display: inline-block !important;
-      width: auto !important;
-      margin: 0 !important;
       padding: 6px 12px !important;
       border-radius: 6px !important;
       border: 2px solid #e5e7eb !important;
       background: white !important;
       font-size: 14px !important;
+      min-width: 60px !important;
+    }
+    
+    .product-form {
+      margin: 0 !important;
+    }
+    
+    .btn-glow {
+      padding: 8px 16px !important;
+      font-size: 14px !important;
+      border-radius: 6px !important;
+      min-width: 120px !important;
     }
     
     /* Add to Cart Button */
