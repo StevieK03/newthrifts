@@ -433,6 +433,13 @@
     margin: 8px 0 !important;
   }
   
+  /* Feature icons styling to match product page */
+  .feature-icon {
+    color: #10b981;
+    font-weight: bold;
+    margin-right: 8px;
+  }
+  
   /* Collapsible Sections Styling */
   .quick-view-info-sections {
     margin: 20px 0;
@@ -587,12 +594,67 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
   }
   
+  // Parse product description like the product page does
+  function parseProductDescription(description) {
+    if (!description) return { main: '', features: '', care: '' };
+    
+    // Extract main description (before "Product features")
+    const mainParts = description.split('Product features');
+    const mainDescription = mainParts[0].split('Care instructions')[0].split('Size Chart')[0].split('Size chart')[0].split('SIZE CHART')[0].split('Sizing Chart')[0].split('Sizing chart')[0].trim();
+    
+    // Extract features section
+    const featuresSection = description.split('Product features')[1];
+    let features = '';
+    if (featuresSection) {
+      const featuresText = featuresSection.split('Care instructions')[0];
+      if (featuresText) {
+        const featuresLines = featuresText.split('\n');
+        const featuresList = featuresLines
+          .map(line => {
+            const cleanLine = line.trim();
+            if (cleanLine && cleanLine.includes('-')) {
+              const featureText = cleanLine.replace(/^-/, '').trim();
+              return featureText ? `<li><span class="feature-icon">✓</span>${featureText}</li>` : '';
+            }
+            return '';
+          })
+          .filter(item => item)
+          .join('');
+        features = featuresList ? `<ul>${featuresList}</ul>` : '';
+      }
+    }
+    
+    // Extract care instructions
+    const careSection = description.split('Care instructions')[1];
+    let care = '';
+    if (careSection) {
+      const careLines = careSection.split('\n');
+      const careList = careLines
+        .map(line => {
+          const cleanLine = line.trim();
+          if (cleanLine && cleanLine.includes('-')) {
+            const careText = cleanLine.replace(/^-/, '').trim();
+            return careText ? `<li>${careText}</li>` : '';
+          }
+          return '';
+        })
+        .filter(item => item)
+        .join('');
+      care = careList ? `<ul>${careList}</ul>` : '';
+    }
+    
+    return { main: mainDescription, features, care };
+  }
+
   // Render product
   function renderProduct(product) {
     title.textContent = product.title;
     
     const firstVariant = product.variants[0];
     const hasMultipleImages = product.images.length > 1;
+    
+    // Parse product description like the product page
+    const { main: mainDescription, features: featuresHTML, care: careHTML } = parseProductDescription(product.description);
     
     // Generate thumbnails HTML
     const thumbnailsHTML = hasMultipleImages ? `
@@ -625,46 +687,41 @@ document.addEventListener('DOMContentLoaded', function() {
           
           <!-- Collapsible Product Information Sections -->
           <div class="quick-view-info-sections">
+            ${mainDescription ? `
             <div class="info-section">
               <button class="info-section-toggle">
                 <span class="section-title">Product Description</span>
                 <span class="toggle-icon">▼</span>
               </button>
               <div class="section-content">
-                ${product.description || 'No description available.'}
+                ${mainDescription}
               </div>
             </div>
+            ` : ''}
             
+            ${featuresHTML ? `
             <div class="info-section">
               <button class="info-section-toggle">
                 <span class="section-title">Product Features</span>
                 <span class="toggle-icon">▼</span>
               </button>
               <div class="section-content">
-                <ul>
-                  <li>High-quality materials</li>
-                  <li>Comfortable fit</li>
-                  <li>Durable construction</li>
-                  <li>Easy care instructions</li>
-                </ul>
+                ${featuresHTML}
               </div>
             </div>
+            ` : ''}
 
+            ${careHTML ? `
             <div class="info-section">
               <button class="info-section-toggle">
                 <span class="section-title">Care Instructions</span>
                 <span class="toggle-icon">▼</span>
               </button>
               <div class="section-content">
-                <ul>
-                  <li>Machine wash: cold (max 30C or 90F)</li>
-                  <li>Non-chlorine: bleach as needed</li>
-                  <li>Do not tumble dry</li>
-                  <li>Iron, steam or dry: low heat</li>
-                  <li>Do not dry clean</li>
-                </ul>
+                ${careHTML}
               </div>
             </div>
+            ` : ''}
 
             <div class="info-section">
               <button class="info-section-toggle">
