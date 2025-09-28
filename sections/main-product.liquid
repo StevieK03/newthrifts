@@ -823,11 +823,6 @@ Main product section — safe + styled + correct add-to-cart
       font-weight: 600 !important;
     }
     
-    .product__price::before {
-      content: "Price: " !important;
-      color: #374151 !important;
-      font-weight: 600 !important;
-    }
     
     /* Swatches - Perfectly centered */
     .swatches-container {
@@ -905,6 +900,20 @@ Main product section — safe + styled + correct add-to-cart
       left: 0 !important;
     }
     
+    /* Remove any inner borders or circles from swatches */
+    .swatch * {
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+    }
+    
+    .swatch img,
+    .swatch .swatch__chip img {
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+    }
+    
     .swatch__label {
       position: absolute !important;
       bottom: -22px !important;
@@ -950,6 +959,7 @@ Main product section — safe + styled + correct add-to-cart
       background: white !important;
       font-size: 14px !important;
       min-width: 60px !important;
+      text-align: center !important;
     }
     
     .product-form {
