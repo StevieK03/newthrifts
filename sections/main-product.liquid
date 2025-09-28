@@ -900,18 +900,33 @@ Main product section — safe + styled + correct add-to-cart
       left: 0 !important;
     }
     
-    /* Remove any inner borders or circles from swatches */
-    .swatch * {
+    /* AGGRESSIVELY Remove ALL inner borders, outlines, circles from swatches */
+    .swatch *,
+    .swatch *:before,
+    .swatch *:after {
       border: none !important;
       outline: none !important;
       box-shadow: none !important;
+      border-radius: 0 !important;
     }
     
     .swatch img,
-    .swatch .swatch__chip img {
+    .swatch .swatch__chip,
+    .swatch .swatch__chip img,
+    .swatch [class*="chip"],
+    .swatch [class*="image"] {
       border: none !important;
       outline: none !important;
       box-shadow: none !important;
+      border-radius: 10px !important;
+    }
+    
+    /* Force remove any pseudo-elements */
+    .swatch::before,
+    .swatch::after,
+    .swatch *::before,
+    .swatch *::after {
+      display: none !important;
     }
     
     .swatch__label {

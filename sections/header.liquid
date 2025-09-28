@@ -55,9 +55,13 @@
   /* Mobile header adjustments */
   @media (max-width: 768px) {
     #Header-{{ section.id }} .nt-header__wrap {
-      justify-content: center;
+      justify-content: flex-start;
       gap: 40px;
       padding: 12px 16px;
+    }
+    
+    #Header-{{ section.id }} .nt-header__logo {
+      margin-left: 20px;
     }
     
     #Header-{{ section.id }} .nt-header__logo-img { 
