@@ -1,0 +1,693 @@
+<!-- Heat Mapping & User Behavior Tracking -->
+<div class="heat-mapping-tracker" id="heat-mapping-{{ section.id }}" style="display: none;">
+  <!-- This section is invisible but tracks user behavior -->
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Heat Mapping and User Behavior Tracking System
+  class HeatMappingTracker {
+    constructor() {
+      this.sessionId = this.generateSessionId();
+      this.userId = this.getUserId();
+      this.pageLoadTime = Date.now();
+      this.interactions = [];
+      this.scrollData = [];
+      this.clickHeatmap = new Map();
+      this.mouseMovements = [];
+      this.formInteractions = [];
+      this.productViews = [];
+      this.searchQueries = [];
+      this.cartActions = [];
+      
+      this.init();
+    }
+    
+    init() {
+      this.trackPageView();
+      this.setupEventListeners();
+      this.startSessionTracking();
+      this.trackDeviceInfo();
+      
+      // Send data periodically
+      setInterval(() => {
+        this.sendBatchData();
+      }, 30000); // Every 30 seconds
+      
+      // Send data before page unload
+      window.addEventListener('beforeunload', () => {
+        this.sendFinalData();
+      });
+    }
+    
+    generateSessionId() {
+      return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    }
+    
+    getUserId() {
+      let userId = localStorage.getItem('nt_user_id');
+      if (!userId) {
+        userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('nt_user_id', userId);
+      }
+      return userId;
+    }
+    
+    trackPageView() {
+      const pageData = {
+        type: 'page_view',
+        timestamp: Date.now(),
+        url: window.location.href,
+        referrer: document.referrer,
+        title: document.title,
+        viewport: {
+          width: window.innerWidth,
+          height: window.innerHeight
+        },
+        screen: {
+          width: screen.width,
+          height: screen.height
+        }
+      };
+      
+      this.interactions.push(pageData);
+    }
+    
+    trackDeviceInfo() {
+      const deviceData = {
+        type: 'device_info',
+        timestamp: Date.now(),
+        userAgent: navigator.userAgent,
+        language: navigator.language,
+        platform: navigator.platform,
+        cookieEnabled: navigator.cookieEnabled,
+        onLine: navigator.onLine,
+        connection: navigator.connection ? {
+          effectiveType: navigator.connection.effectiveType,
+          downlink: navigator.connection.downlink,
+          rtt: navigator.connection.rtt
+        } : null
+      };
+      
+      this.interactions.push(deviceData);
+    }
+    
+    setupEventListeners() {
+      // Click tracking with heatmap data
+      document.addEventListener('click', (e) => {
+        this.trackClick(e);
+      });
+      
+      // Mouse movement tracking (throttled)
+      let mouseThrottle = false;
+      document.addEventListener('mousemove', (e) => {
+        if (!mouseThrottle) {
+          this.trackMouseMovement(e);
+          mouseThrottle = true;
+          setTimeout(() => { mouseThrottle = false; }, 100);
+        }
+      });
+      
+      // Scroll tracking
+      let scrollThrottle = false;
+      window.addEventListener('scroll', () => {
+        if (!scrollThrottle) {
+          this.trackScroll();
+          scrollThrottle = true;
+          setTimeout(() => { scrollThrottle = false; }, 200);
+        }
+      });
+      
+      // Form interactions
+      document.addEventListener('focus', (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+          this.trackFormInteraction(e, 'focus');
+        }
+      }, true);
+      
+      document.addEventListener('blur', (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+          this.trackFormInteraction(e, 'blur');
+        }
+      }, true);
+      
+      // Product interactions
+      this.trackProductInteractions();
+      
+      // Search tracking
+      this.trackSearchInteractions();
+      
+      // Cart tracking
+      this.trackCartInteractions();
+      
+      // Error tracking
+      window.addEventListener('error', (e) => {
+        this.trackError(e);
+      });
+      
+      // Performance tracking
+      window.addEventListener('load', () => {
+        this.trackPerformance();
+      });
+    }
+    
+    trackClick(event) {
+      const element = event.target;
+      const rect = element.getBoundingClientRect();
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+      
+      const clickData = {
+        type: 'click',
+        timestamp: Date.now(),
+        x: event.clientX + scrollLeft,
+        y: event.clientY + scrollTop,
+        elementType: element.tagName.toLowerCase(),
+        elementId: element.id || null,
+        elementClass: element.className || null,
+        elementText: element.textContent?.substring(0, 100) || null,
+        href: element.href || null,
+        viewport: {
+          x: event.clientX,
+          y: event.clientY
+        }
+      };
+      
+      // Update heatmap data
+      const heatmapKey = `${Math.floor(clickData.x / 10)},${Math.floor(clickData.y / 10)}`;
+      this.clickHeatmap.set(heatmapKey, (this.clickHeatmap.get(heatmapKey) || 0) + 1);
+      
+      this.interactions.push(clickData);
+      
+      // Track specific element types
+      if (element.matches('[data-product-handle]')) {
+        this.trackProductClick(element, clickData);
+      }
+      
+      if (element.matches('.quick-add-btn, .wishlist-heart-btn, .quick-view-btn')) {
+        this.trackProductAction(element, clickData);
+      }
+    }
+    
+    trackMouseMovement(event) {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+      
+      const movementData = {
+        x: event.clientX + scrollLeft,
+        y: event.clientY + scrollTop,
+        timestamp: Date.now()
+      };
+      
+      this.mouseMovements.push(movementData);
+      
+      // Keep only last 100 movements to prevent memory issues
+      if (this.mouseMovements.length > 100) {
+        this.mouseMovements = this.mouseMovements.slice(-50);
+      }
+    }
+    
+    trackScroll() {
+      const scrollData = {
+        type: 'scroll',
+        timestamp: Date.now(),
+        scrollTop: window.pageYOffset,
+        scrollLeft: window.pageXOffset,
+        documentHeight: document.documentElement.scrollHeight,
+        viewportHeight: window.innerHeight,
+        scrollPercentage: Math.round((window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight)) * 100)
+      };
+      
+      this.scrollData.push(scrollData);
+      
+      // Track scroll depth milestones
+      const percentage = scrollData.scrollPercentage;
+      if (percentage >= 25 && !this.scrollMilestones?.['25']) {
+        this.trackScrollMilestone(25);
+      }
+      if (percentage >= 50 && !this.scrollMilestones?.['50']) {
+        this.trackScrollMilestone(50);
+      }
+      if (percentage >= 75 && !this.scrollMilestones?.['75']) {
+        this.trackScrollMilestone(75);
+      }
+      if (percentage >= 90 && !this.scrollMilestones?.['90']) {
+        this.trackScrollMilestone(90);
+      }
+    }
+    
+    trackScrollMilestone(percentage) {
+      if (!this.scrollMilestones) {
+        this.scrollMilestones = {};
+      }
+      
+      this.scrollMilestones[percentage] = true;
+      
+      this.interactions.push({
+        type: 'scroll_milestone',
+        timestamp: Date.now(),
+        percentage: percentage,
+        timeToReach: Date.now() - this.pageLoadTime
+      });
+    }
+    
+    trackFormInteraction(event, action) {
+      const element = event.target;
+      
+      const formData = {
+        type: 'form_interaction',
+        timestamp: Date.now(),
+        action: action,
+        elementType: element.type || element.tagName.toLowerCase(),
+        elementId: element.id || null,
+        elementName: element.name || null,
+        formId: element.form?.id || null,
+        value: action === 'blur' ? (element.value?.length || 0) : null // Only track length, not actual value
+      };
+      
+      this.formInteractions.push(formData);
+    }
+    
+    trackProductInteractions() {
+      // Track product card hovers
+      const productCards = document.querySelectorAll('[data-product-handle]');
+      
+      productCards.forEach(card => {
+        let hoverStartTime = null;
+        
+        card.addEventListener('mouseenter', () => {
+          hoverStartTime = Date.now();
+        });
+        
+        card.addEventListener('mouseleave', () => {
+          if (hoverStartTime) {
+            const hoverDuration = Date.now() - hoverStartTime;
+            
+            this.productViews.push({
+              type: 'product_hover',
+              timestamp: Date.now(),
+              productHandle: card.dataset.productHandle,
+              productId: card.dataset.productId,
+              duration: hoverDuration
+            });
+          }
+        });
+      });
+      
+      // Track product image interactions
+      document.addEventListener('click', (e) => {
+        if (e.target.matches('.product-image, .product-card img')) {
+          const productCard = e.target.closest('[data-product-handle]');
+          if (productCard) {
+            this.productViews.push({
+              type: 'product_image_click',
+              timestamp: Date.now(),
+              productHandle: productCard.dataset.productHandle,
+              productId: productCard.dataset.productId
+            });
+          }
+        }
+      });
+    }
+    
+    trackProductClick(element, clickData) {
+      this.productViews.push({
+        type: 'product_click',
+        timestamp: Date.now(),
+        productHandle: element.dataset.productHandle,
+        productId: element.dataset.productId,
+        clickData: clickData
+      });
+    }
+    
+    trackProductAction(element, clickData) {
+      let actionType = 'unknown';
+      if (element.classList.contains('quick-add-btn')) actionType = 'quick_add';
+      if (element.classList.contains('wishlist-heart-btn')) actionType = 'wishlist';
+      if (element.classList.contains('quick-view-btn')) actionType = 'quick_view';
+      
+      const productCard = element.closest('[data-product-handle]');
+      
+      this.productViews.push({
+        type: 'product_action',
+        timestamp: Date.now(),
+        action: actionType,
+        productHandle: productCard?.dataset.productHandle,
+        productId: productCard?.dataset.productId,
+        clickData: clickData
+      });
+    }
+    
+    trackSearchInteractions() {
+      // Track search input interactions
+      const searchInputs = document.querySelectorAll('input[type="search"], #smart-search-input, .search-input');
+      
+      searchInputs.forEach(input => {
+        let searchStartTime = null;
+        
+        input.addEventListener('focus', () => {
+          searchStartTime = Date.now();
+        });
+        
+        input.addEventListener('input', (e) => {
+          if (e.target.value.length >= 3) {
+            this.searchQueries.push({
+              type: 'search_query',
+              timestamp: Date.now(),
+              query: e.target.value,
+              queryLength: e.target.value.length,
+              timeToType: searchStartTime ? Date.now() - searchStartTime : null
+            });
+          }
+        });
+        
+        input.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            this.searchQueries.push({
+              type: 'search_submit',
+              timestamp: Date.now(),
+              query: e.target.value,
+              method: 'enter_key'
+            });
+          }
+        });
+      });
+      
+      // Track search result clicks
+      document.addEventListener('click', (e) => {
+        if (e.target.closest('.search-result-item, .suggestion-item')) {
+          this.searchQueries.push({
+            type: 'search_result_click',
+            timestamp: Date.now(),
+            resultType: e.target.closest('.search-result-item') ? 'result' : 'suggestion',
+            resultText: e.target.textContent?.substring(0, 100)
+          });
+        }
+      });
+    }
+    
+    trackCartInteractions() {
+      // Track add to cart events
+      document.addEventListener('click', (e) => {
+        if (e.target.matches('.quick-add-btn, .add-to-cart-btn, [data-add-to-cart]')) {
+          this.cartActions.push({
+            type: 'add_to_cart_attempt',
+            timestamp: Date.now(),
+            buttonType: e.target.className,
+            productHandle: e.target.closest('[data-product-handle]')?.dataset.productHandle
+          });
+        }
+      });
+      
+      // Track cart drawer/page interactions
+      document.addEventListener('click', (e) => {
+        if (e.target.matches('.cart-link, [data-cart-toggle]')) {
+          this.cartActions.push({
+            type: 'cart_view',
+            timestamp: Date.now()
+          });
+        }
+      });
+    }
+    
+    trackError(event) {
+      this.interactions.push({
+        type: 'javascript_error',
+        timestamp: Date.now(),
+        message: event.message,
+        filename: event.filename,
+        lineno: event.lineno,
+        colno: event.colno,
+        stack: event.error?.stack?.substring(0, 500)
+      });
+    }
+    
+    trackPerformance() {
+      if (window.performance && window.performance.timing) {
+        const timing = window.performance.timing;
+        
+        this.interactions.push({
+          type: 'performance',
+          timestamp: Date.now(),
+          loadTime: timing.loadEventEnd - timing.navigationStart,
+          domContentLoaded: timing.domContentLoadedEventEnd - timing.navigationStart,
+          firstPaint: window.performance.getEntriesByType('paint').find(entry => entry.name === 'first-paint')?.startTime,
+          firstContentfulPaint: window.performance.getEntriesByType('paint').find(entry => entry.name === 'first-contentful-paint')?.startTime
+        });
+      }
+    }
+    
+    startSessionTracking() {
+      // Track session duration
+      this.sessionStartTime = Date.now();
+      
+      // Track page visibility changes
+      document.addEventListener('visibilitychange', () => {
+        this.interactions.push({
+          type: 'visibility_change',
+          timestamp: Date.now(),
+          hidden: document.hidden
+        });
+      });
+      
+      // Track window focus/blur
+      window.addEventListener('focus', () => {
+        this.interactions.push({
+          type: 'window_focus',
+          timestamp: Date.now()
+        });
+      });
+      
+      window.addEventListener('blur', () => {
+        this.interactions.push({
+          type: 'window_blur',
+          timestamp: Date.now()
+        });
+      });
+    }
+    
+    sendBatchData() {
+      if (this.interactions.length === 0) return;
+      
+      const batchData = {
+        sessionId: this.sessionId,
+        userId: this.userId,
+        timestamp: Date.now(),
+        url: window.location.href,
+        interactions: this.interactions.splice(0, 50), // Send max 50 interactions at a time
+        mouseMovements: this.mouseMovements.splice(0, 20), // Send max 20 mouse movements
+        scrollData: this.scrollData.splice(0, 10), // Send max 10 scroll events
+        heatmapData: Array.from(this.clickHeatmap.entries()).slice(0, 100) // Send max 100 heatmap points
+      };
+      
+      this.sendData(batchData);
+      
+      // Clear sent heatmap data
+      if (this.clickHeatmap.size > 100) {
+        const entries = Array.from(this.clickHeatmap.entries());
+        this.clickHeatmap.clear();
+        entries.slice(100).forEach(([key, value]) => {
+          this.clickHeatmap.set(key, value);
+        });
+      }
+    }
+    
+    sendFinalData() {
+      const finalData = {
+        sessionId: this.sessionId,
+        userId: this.userId,
+        timestamp: Date.now(),
+        url: window.location.href,
+        sessionDuration: Date.now() - this.sessionStartTime,
+        interactions: this.interactions,
+        formInteractions: this.formInteractions,
+        productViews: this.productViews,
+        searchQueries: this.searchQueries,
+        cartActions: this.cartActions,
+        scrollData: this.scrollData,
+        mouseMovements: this.mouseMovements.slice(-10), // Last 10 movements
+        heatmapData: Array.from(this.clickHeatmap.entries()),
+        final: true
+      };
+      
+      this.sendData(finalData, true);
+    }
+    
+    sendData(data, isBeacon = false) {
+      const endpoint = '/apps/analytics/track'; // You'll need to set up this endpoint
+      
+      try {
+        if (isBeacon && navigator.sendBeacon) {
+          // Use sendBeacon for final data to ensure it's sent even if page is closing
+          navigator.sendBeacon(endpoint, JSON.stringify(data));
+        } else {
+          // Use fetch for regular data
+          fetch(endpoint, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+            keepalive: isBeacon
+          }).catch(error => {
+            console.warn('Analytics tracking failed:', error);
+          });
+        }
+      } catch (error) {
+        console.warn('Analytics tracking error:', error);
+      }
+    }
+    
+    // Public methods for manual tracking
+    trackCustomEvent(eventName, eventData = {}) {
+      this.interactions.push({
+        type: 'custom_event',
+        timestamp: Date.now(),
+        eventName: eventName,
+        eventData: eventData
+      });
+    }
+    
+    trackConversion(conversionType, value = null) {
+      this.interactions.push({
+        type: 'conversion',
+        timestamp: Date.now(),
+        conversionType: conversionType,
+        value: value
+      });
+    }
+  }
+  
+  // Initialize heat mapping tracker
+  const heatMapTracker = new HeatMappingTracker();
+  
+  // Make it globally available for custom tracking
+  window.heatMapTracker = heatMapTracker;
+  
+  // Track specific Shopify events
+  document.addEventListener('cart:item-added', (e) => {
+    heatMapTracker.trackConversion('add_to_cart', e.detail?.price);
+  });
+  
+  document.addEventListener('cart:updated', (e) => {
+    heatMapTracker.trackCustomEvent('cart_updated', {
+      itemCount: e.detail?.item_count,
+      totalPrice: e.detail?.total_price
+    });
+  });
+  
+  // Track checkout initiation
+  if (window.location.pathname.includes('/checkout')) {
+    heatMapTracker.trackConversion('checkout_initiated');
+  }
+  
+  // Track purchase completion
+  if (window.location.pathname.includes('/thank_you') || window.location.search.includes('checkout=success')) {
+    heatMapTracker.trackConversion('purchase_completed');
+  }
+});
+</script>
+
+{% schema %}
+{
+  "name": "Heat Mapping & Analytics",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Tracking Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_heat_mapping",
+      "label": "Enable heat mapping",
+      "default": true,
+      "info": "Track click patterns and user interactions"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_scroll_tracking",
+      "label": "Enable scroll tracking",
+      "default": true,
+      "info": "Track how users scroll through pages"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_form_tracking",
+      "label": "Enable form interaction tracking",
+      "default": true,
+      "info": "Track form field interactions (no personal data)"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_product_tracking",
+      "label": "Enable product interaction tracking",
+      "default": true,
+      "info": "Track product views, hovers, and clicks"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_search_tracking",
+      "label": "Enable search behavior tracking",
+      "default": true,
+      "info": "Track search queries and result interactions"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_performance_tracking",
+      "label": "Enable performance tracking",
+      "default": true,
+      "info": "Track page load times and performance metrics"
+    },
+    {
+      "type": "header",
+      "content": "Privacy Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "anonymize_data",
+      "label": "Anonymize user data",
+      "default": true,
+      "info": "Remove personally identifiable information"
+    },
+    {
+      "type": "range",
+      "id": "data_retention_days",
+      "label": "Data retention period (days)",
+      "min": 7,
+      "max": 365,
+      "step": 1,
+      "default": 90,
+      "info": "How long to keep tracking data"
+    },
+    {
+      "type": "header",
+      "content": "Advanced Settings"
+    },
+    {
+      "type": "range",
+      "id": "batch_size",
+      "label": "Data batch size",
+      "min": 10,
+      "max": 100,
+      "step": 10,
+      "default": 50,
+      "info": "Number of events to send in each batch"
+    },
+    {
+      "type": "range",
+      "id": "send_interval",
+      "label": "Send interval (seconds)",
+      "min": 10,
+      "max": 300,
+      "step": 10,
+      "default": 30,
+      "info": "How often to send data to server"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Heat Mapping & Analytics"
+    }
+  ]
+}
+{% endschema %}

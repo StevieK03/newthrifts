@@ -1,0 +1,985 @@
+<!-- Quick Add to Cart Enhancement -->
+<div class="quick-add-enhancement" id="quick-add-enhancement">
+  <!-- Quick Add Modal for Variants -->
+  <div class="quick-add-modal" id="quick-add-modal" role="dialog" aria-labelledby="quick-add-title" aria-hidden="true">
+    <div class="quick-add-overlay" id="quick-add-overlay"></div>
+    
+    <div class="quick-add-container">
+      <div class="quick-add-header">
+        <h3 id="quick-add-title">Select Options</h3>
+        <button class="quick-add-close" id="quick-add-close" aria-label="Close options">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      
+      <div class="quick-add-content" id="quick-add-content">
+        <!-- Content will be populated by JavaScript -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Quick Add to Cart Button Styles */
+  .quick-add-btn {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
+    background: var(--color-accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateY(10px);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .product-card:hover .quick-add-btn {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .quick-add-btn:hover {
+    background: var(--color-accent-2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  .quick-add-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .quick-add-btn.loading {
+    pointer-events: none;
+  }
+
+  .quick-add-btn.success {
+    background: #10b981;
+  }
+
+  .quick-add-btn.error {
+    background: #ef4444;
+  }
+
+  /* Quick Add Modal Styles */
+  .quick-add-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9998;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .quick-add-modal.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .quick-add-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+  }
+
+  .quick-add-container {
+    position: relative;
+    background: white;
+    border-radius: 12px;
+    max-width: 90vw;
+    max-height: 90vh;
+    width: 500px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+  }
+
+  .quick-add-modal.active .quick-add-container {
+    transform: scale(1);
+  }
+
+  .quick-add-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid #e5e7eb;
+    background: #f9fafb;
+  }
+
+  .quick-add-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #111827;
+  }
+
+  .quick-add-close {
+    background: none;
+    border: none;
+    color: #6b7280;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+  }
+
+  .quick-add-close:hover {
+    background: #e5e7eb;
+    color: #374151;
+  }
+
+  .quick-add-content {
+    padding: 24px;
+    max-height: calc(90vh - 140px);
+    overflow-y: auto;
+  }
+
+  .quick-add-product-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #f3f4f6;
+  }
+
+  .quick-add-product-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 16px;
+  }
+
+  .quick-add-product-details h4 {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #111827;
+  }
+
+  .quick-add-product-price {
+    font-size: 18px;
+    font-weight: 700;
+    color: #dc2626;
+    margin: 0;
+  }
+
+  .quick-add-variants {
+    margin-bottom: 24px;
+  }
+
+  .variant-group {
+    margin-bottom: 20px;
+  }
+
+  .variant-group:last-child {
+    margin-bottom: 0;
+  }
+
+  .variant-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 8px;
+  }
+
+  .variant-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .variant-option {
+    padding: 8px 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    background: white;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 14px;
+    min-width: 44px;
+    text-align: center;
+  }
+
+  .variant-option:hover {
+    border-color: #d1d5db;
+  }
+
+  .variant-option.selected {
+    border-color: var(--color-accent);
+    background: var(--color-accent);
+    color: white;
+  }
+
+  .variant-option.unavailable {
+    opacity: 0.5;
+    cursor: not-allowed;
+    text-decoration: line-through;
+  }
+
+  .quantity-selector {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .quantity-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+  }
+
+  .quantity-controls {
+    display: flex;
+    align-items: center;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .quantity-btn {
+    background: #f9fafb;
+    border: none;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    color: #374151;
+  }
+
+  .quantity-btn:hover {
+    background: #e5e7eb;
+  }
+
+  .quantity-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .quantity-input {
+    border: none;
+    width: 60px;
+    height: 40px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+    background: white;
+  }
+
+  .quantity-input:focus {
+    outline: none;
+  }
+
+  .quick-add-actions {
+    display: flex;
+    gap: 12px;
+  }
+
+  .quick-add-to-cart-btn {
+    flex: 1;
+    padding: 16px 24px;
+    background: var(--color-accent);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .quick-add-to-cart-btn:hover {
+    background: var(--color-accent-2);
+    transform: translateY(-1px);
+  }
+
+  .quick-add-to-cart-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .quick-add-continue {
+    padding: 16px 20px;
+    background: transparent;
+    border: 2px solid #e5e7eb;
+    color: #6b7280;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .quick-add-continue:hover {
+    border-color: #d1d5db;
+    color: #374151;
+  }
+
+  /* Loading States */
+  .loading-dots {
+    display: inline-flex;
+    gap: 2px;
+  }
+
+  .loading-dot {
+    width: 4px;
+    height: 4px;
+    background: currentColor;
+    border-radius: 50%;
+    animation: loading-bounce 1.4s ease-in-out infinite both;
+  }
+
+  .loading-dot:nth-child(1) { animation-delay: -0.32s; }
+  .loading-dot:nth-child(2) { animation-delay: -0.16s; }
+
+  @keyframes loading-bounce {
+    0%, 80%, 100% {
+      transform: scale(0);
+    }
+    40% {
+      transform: scale(1);
+    }
+  }
+
+  /* Mobile Responsive */
+  @media (max-width: 768px) {
+    .quick-add-container {
+      max-width: 95vw;
+      margin: 16px;
+    }
+
+    .quick-add-header {
+      padding: 16px 20px;
+    }
+
+    .quick-add-content {
+      padding: 20px;
+    }
+
+    .quick-add-product-info {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .quick-add-product-image {
+      margin: 0 0 12px 0;
+    }
+
+    .variant-options {
+      justify-content: center;
+    }
+
+    .quick-add-actions {
+      flex-direction: column;
+    }
+
+    .quick-add-continue {
+      order: 2;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .variant-option {
+      padding: 6px 12px;
+      font-size: 13px;
+    }
+
+    .quantity-controls {
+      flex: 1;
+      max-width: 140px;
+    }
+  }
+
+  /* Product Card Enhancements */
+  .product-card {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .product-card .quick-add-btn {
+    transition-delay: 0.1s;
+  }
+
+  .product-card:hover .product-image {
+    transform: scale(1.05);
+  }
+
+  /* Cart Success Animation */
+  @keyframes cart-success {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
+
+  .cart-success-animation {
+    animation: cart-success 0.6s ease-in-out;
+  }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const modal = document.getElementById('quick-add-modal');
+  const overlay = document.getElementById('quick-add-overlay');
+  const closeBtn = document.getElementById('quick-add-close');
+  const content = document.getElementById('quick-add-content');
+  const title = document.getElementById('quick-add-title');
+  
+  let currentProduct = null;
+  let selectedVariant = null;
+  let quantity = 1;
+  
+  // Initialize quick add buttons
+  function initQuickAddButtons() {
+    const productCards = document.querySelectorAll('[data-product-handle]');
+    
+    productCards.forEach(card => {
+      if (card.querySelector('.quick-add-btn')) return; // Already has button
+      
+      const productHandle = card.dataset.productHandle;
+      const productId = card.dataset.productId;
+      
+      // Create quick add button
+      const quickAddBtn = document.createElement('button');
+      quickAddBtn.className = 'quick-add-btn';
+      quickAddBtn.setAttribute('aria-label', 'Quick add to cart');
+      quickAddBtn.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M2.5 2.5H3.5L4 4.5M5.5 10.5H13.5L16.5 4.5H4M5.5 10.5L4 4.5M5.5 10.5L3.76 12.24C3.44 12.56 3.68 13 4.1 13H13.5M13.5 10.5V13.5C13.5 13.78 13.28 14 13 14H7C6.72 14 6.5 13.78 6.5 13.5V10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Quick Add
+      `;
+      
+      quickAddBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        handleQuickAdd(productHandle);
+      });
+      
+      // Ensure card has relative positioning
+      card.style.position = 'relative';
+      card.appendChild(quickAddBtn);
+    });
+  }
+  
+  // Handle quick add click
+  async function handleQuickAdd(productHandle) {
+    try {
+      // Fetch product data
+      const response = await fetch(`/products/${productHandle}.js`);
+      const product = await response.json();
+      
+      currentProduct = product;
+      
+      // If product has only one variant and it's available, add directly
+      if (product.variants.length === 1 && product.variants[0].available) {
+        await addToCartDirectly(product.variants[0].id, 1);
+      } else {
+        // Show variant selection modal
+        showVariantModal(product);
+      }
+      
+    } catch (error) {
+      console.error('Error fetching product:', error);
+      showQuickAddMessage('Error loading product', 'error');
+    }
+  }
+  
+  // Add to cart directly (for single variant products)
+  async function addToCartDirectly(variantId, qty) {
+    const button = document.querySelector(`[data-product-handle="${currentProduct.handle}"] .quick-add-btn`);
+    const originalHTML = button.innerHTML;
+    
+    try {
+      button.innerHTML = `
+        <div class="loading-dots">
+          <div class="loading-dot"></div>
+          <div class="loading-dot"></div>
+          <div class="loading-dot"></div>
+        </div>
+        Adding...
+      `;
+      button.classList.add('loading');
+      
+      const response = await fetch('/cart/add.js', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: variantId,
+          quantity: qty
+        })
+      });
+      
+      if (response.ok) {
+        button.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M13.5 5L6 12.5L2.5 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Added!
+        `;
+        button.classList.remove('loading');
+        button.classList.add('success');
+        
+        // Update cart count
+        if (window.updateCartCount) {
+          window.updateCartCount();
+        }
+        
+        // Add success animation
+        button.classList.add('cart-success-animation');
+        
+        // Show success message
+        showQuickAddMessage(`${currentProduct.title} added to cart!`, 'success');
+        
+        // Reset button after delay
+        setTimeout(() => {
+          button.innerHTML = originalHTML;
+          button.classList.remove('success', 'cart-success-animation');
+        }, 2000);
+        
+      } else {
+        throw new Error('Failed to add to cart');
+      }
+      
+    } catch (error) {
+      console.error('Add to cart error:', error);
+      button.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M12 4L4 12M4 4L12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        Error
+      `;
+      button.classList.remove('loading');
+      button.classList.add('error');
+      
+      showQuickAddMessage('Failed to add to cart', 'error');
+      
+      setTimeout(() => {
+        button.innerHTML = originalHTML;
+        button.classList.remove('error');
+      }, 2000);
+    }
+  }
+  
+  // Show variant selection modal
+  function showVariantModal(product) {
+    title.textContent = `Add ${product.title} to Cart`;
+    selectedVariant = product.variants.find(v => v.available) || product.variants[0];
+    quantity = 1;
+    
+    renderVariantModal(product);
+    showModal();
+  }
+  
+  // Render variant modal content
+  function renderVariantModal(product) {
+    const variantsHTML = generateVariantsHTML(product);
+    const quantityHTML = generateQuantityHTML();
+    
+    content.innerHTML = `
+      <div class="quick-add-product-info">
+        <img src="${product.images[0]}" alt="${product.title}" class="quick-add-product-image">
+        <div class="quick-add-product-details">
+          <h4>${product.title}</h4>
+          <div class="quick-add-product-price" id="modal-price">
+            ${formatPrice(selectedVariant.price)}
+          </div>
+        </div>
+      </div>
+      
+      ${variantsHTML}
+      ${quantityHTML}
+      
+      <div class="quick-add-actions">
+        <button class="quick-add-to-cart-btn" id="modal-add-to-cart" ${!selectedVariant.available ? 'disabled' : ''}>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.5 5.1 16.5H17M17 13V17C17 17.6 16.6 18 16 18H8C7.4 18 7 17.6 7 17V13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          ${selectedVariant.available ? 'Add to Cart' : 'Sold Out'}
+        </button>
+        <button class="quick-add-continue" id="modal-continue">Continue Shopping</button>
+      </div>
+    `;
+    
+    initializeModalInteractions();
+  }
+  
+  // Generate variants HTML
+  function generateVariantsHTML(product) {
+    if (product.variants.length <= 1) return '';
+    
+    const options = product.options;
+    let variantsHTML = '<div class="quick-add-variants">';
+    
+    options.forEach((option, optionIndex) => {
+      if (option.values.length > 1) {
+        variantsHTML += `
+          <div class="variant-group">
+            <label class="variant-label">${option.name}:</label>
+            <div class="variant-options" data-option-index="${optionIndex}">
+              ${option.values.map(value => {
+                const variant = product.variants.find(v => v.options[optionIndex] === value);
+                const isSelected = selectedVariant && selectedVariant.options[optionIndex] === value;
+                return `
+                  <button class="variant-option ${isSelected ? 'selected' : ''} ${!variant?.available ? 'unavailable' : ''}" 
+                          data-value="${value}" 
+                          ${!variant?.available ? 'disabled' : ''}>
+                    ${value}
+                  </button>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `;
+      }
+    });
+    
+    variantsHTML += '</div>';
+    return variantsHTML;
+  }
+  
+  // Generate quantity HTML
+  function generateQuantityHTML() {
+    return `
+      <div class="quantity-selector">
+        <label class="quantity-label">Quantity:</label>
+        <div class="quantity-controls">
+          <button class="quantity-btn" id="qty-decrease" ${quantity <= 1 ? 'disabled' : ''}>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M4 8H12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <input type="number" class="quantity-input" id="qty-input" value="${quantity}" min="1" max="10">
+          <button class="quantity-btn" id="qty-increase" ${quantity >= 10 ? 'disabled' : ''}>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M8 4V12M4 8H12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    `;
+  }
+  
+  // Initialize modal interactions
+  function initializeModalInteractions() {
+    // Variant selection
+    const variantOptions = content.querySelectorAll('.variant-option');
+    const priceElement = content.querySelector('#modal-price');
+    const addToCartBtn = content.querySelector('#modal-add-to-cart');
+    
+    variantOptions.forEach(option => {
+      option.addEventListener('click', function() {
+        if (this.disabled) return;
+        
+        // Update selected state
+        const group = this.closest('.variant-options');
+        group.querySelectorAll('.variant-option').forEach(opt => opt.classList.remove('selected'));
+        this.classList.add('selected');
+        
+        // Find matching variant
+        const selectedOptions = Array.from(content.querySelectorAll('.variant-option.selected')).map(opt => opt.dataset.value);
+        const matchingVariant = currentProduct.variants.find(variant => 
+          variant.options.every((option, index) => option === selectedOptions[index])
+        );
+        
+        if (matchingVariant) {
+          selectedVariant = matchingVariant;
+          
+          // Update price
+          priceElement.textContent = formatPrice(matchingVariant.price);
+          
+          // Update add to cart button
+          if (matchingVariant.available) {
+            addToCartBtn.disabled = false;
+            addToCartBtn.innerHTML = `
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.5 5.1 16.5H17M17 13V17C17 17.6 16.6 18 16 18H8C7.4 18 7 17.6 7 17V13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Add to Cart
+            `;
+          } else {
+            addToCartBtn.disabled = true;
+            addToCartBtn.textContent = 'Sold Out';
+          }
+        }
+      });
+    });
+    
+    // Quantity controls
+    const qtyDecrease = content.querySelector('#qty-decrease');
+    const qtyIncrease = content.querySelector('#qty-increase');
+    const qtyInput = content.querySelector('#qty-input');
+    
+    qtyDecrease?.addEventListener('click', function() {
+      if (quantity > 1) {
+        quantity--;
+        updateQuantityUI();
+      }
+    });
+    
+    qtyIncrease?.addEventListener('click', function() {
+      if (quantity < 10) {
+        quantity++;
+        updateQuantityUI();
+      }
+    });
+    
+    qtyInput?.addEventListener('change', function() {
+      const newQty = parseInt(this.value);
+      if (newQty >= 1 && newQty <= 10) {
+        quantity = newQty;
+        updateQuantityUI();
+      } else {
+        this.value = quantity;
+      }
+    });
+    
+    // Add to cart button
+    addToCartBtn?.addEventListener('click', function() {
+      if (selectedVariant && selectedVariant.available) {
+        addToCartFromModal();
+      }
+    });
+    
+    // Continue shopping button
+    const continueBtn = content.querySelector('#modal-continue');
+    continueBtn?.addEventListener('click', hideModal);
+  }
+  
+  // Update quantity UI
+  function updateQuantityUI() {
+    const qtyInput = content.querySelector('#qty-input');
+    const qtyDecrease = content.querySelector('#qty-decrease');
+    const qtyIncrease = content.querySelector('#qty-increase');
+    
+    if (qtyInput) qtyInput.value = quantity;
+    if (qtyDecrease) qtyDecrease.disabled = quantity <= 1;
+    if (qtyIncrease) qtyIncrease.disabled = quantity >= 10;
+  }
+  
+  // Add to cart from modal
+  async function addToCartFromModal() {
+    const addToCartBtn = content.querySelector('#modal-add-to-cart');
+    const originalHTML = addToCartBtn.innerHTML;
+    
+    try {
+      addToCartBtn.innerHTML = `
+        <div class="loading-dots">
+          <div class="loading-dot"></div>
+          <div class="loading-dot"></div>
+          <div class="loading-dot"></div>
+        </div>
+        Adding...
+      `;
+      addToCartBtn.disabled = true;
+      
+      const response = await fetch('/cart/add.js', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: selectedVariant.id,
+          quantity: quantity
+        })
+      });
+      
+      if (response.ok) {
+        addToCartBtn.innerHTML = `
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M16.5 6L7 15.5L3.5 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Added to Cart!
+        `;
+        
+        // Update cart count
+        if (window.updateCartCount) {
+          window.updateCartCount();
+        }
+        
+        // Show success message
+        showQuickAddMessage(`${currentProduct.title} added to cart!`, 'success');
+        
+        // Close modal after success
+        setTimeout(() => {
+          hideModal();
+        }, 1500);
+        
+      } else {
+        throw new Error('Failed to add to cart');
+      }
+      
+    } catch (error) {
+      console.error('Add to cart error:', error);
+      addToCartBtn.innerHTML = 'Error - Try Again';
+      showQuickAddMessage('Failed to add to cart', 'error');
+      
+      setTimeout(() => {
+        addToCartBtn.innerHTML = originalHTML;
+        addToCartBtn.disabled = false;
+      }, 2000);
+    }
+  }
+  
+  // Show modal
+  function showModal() {
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    modal.setAttribute('aria-hidden', 'false');
+    
+    setTimeout(() => {
+      closeBtn.focus();
+    }, 100);
+  }
+  
+  // Hide modal
+  function hideModal() {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+    modal.setAttribute('aria-hidden', 'true');
+    currentProduct = null;
+    selectedVariant = null;
+    quantity = 1;
+  }
+  
+  // Format price
+  function formatPrice(price) {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD'
+    }).format(price / 100);
+  }
+  
+  // Show quick add message
+  function showQuickAddMessage(message, type = 'info') {
+    const messageEl = document.createElement('div');
+    messageEl.className = `quick-add-message quick-add-message-${type}`;
+    messageEl.textContent = message;
+    
+    Object.assign(messageEl.style, {
+      position: 'fixed',
+      top: '20px',
+      right: '20px',
+      background: type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#6b7280',
+      color: 'white',
+      padding: '12px 20px',
+      borderRadius: '8px',
+      fontSize: '14px',
+      fontWeight: '500',
+      zIndex: '10001',
+      boxShadow: '0 4px 16px rgba(0, 0, 0, 0.15)',
+      transform: 'translateX(100%)',
+      transition: 'transform 0.3s ease'
+    });
+    
+    document.body.appendChild(messageEl);
+    
+    setTimeout(() => {
+      messageEl.style.transform = 'translateX(0)';
+    }, 100);
+    
+    setTimeout(() => {
+      messageEl.style.transform = 'translateX(100%)';
+      setTimeout(() => {
+        if (document.body.contains(messageEl)) {
+          document.body.removeChild(messageEl);
+        }
+      }, 300);
+    }, 3000);
+  }
+  
+  // Event listeners
+  closeBtn.addEventListener('click', hideModal);
+  overlay.addEventListener('click', hideModal);
+  
+  // Keyboard navigation
+  modal.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      hideModal();
+    }
+  });
+  
+  // Initialize
+  initQuickAddButtons();
+  
+  // Re-initialize when new products are loaded
+  const observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+      if (mutation.addedNodes.length) {
+        initQuickAddButtons();
+      }
+    });
+  });
+  
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+});
+</script>
+
+{% schema %}
+{
+  "name": "Quick Add to Cart",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "auto_add_buttons",
+      "label": "Automatically add quick add buttons to product cards",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "max_quantity",
+      "label": "Maximum quantity per quick add",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "default": 10
+    }
+  ],
+  "presets": [
+    {
+      "name": "Quick Add to Cart"
+    }
+  ]
+}
+{% endschema %}
