@@ -159,6 +159,43 @@
       "type": "quick-add-to-cart",
       "name": "Quick Add to Cart",
       "settings": {}
+    },
+    "visitor_counter_HdxPVx": {
+      "type": "visitor-counter",
+      "name": "Visitor Counter",
+      "settings": {
+        "show_heading": true,
+        "heading": "Site Visitors",
+        "heading_size": 32,
+        "show_subheading": true,
+        "subheading": "Join thousands of visitors exploring our collection",
+        "subheading_size": 16,
+        "bg_color": "#f8fafc",
+        "bg_color_2": "#e2e8f0",
+        "text_color": "#0f172a",
+        "counter_bg": "#ffffff",
+        "counter_border": "rgba(0,0,0,0.1)",
+        "counter_color": "#27e1c1",
+        "counter_color_2": "#ff4fa3",
+        "accent_color": "rgba(39,225,193,0.1)",
+        "accent_color_2": "rgba(255,79,163,0.1)",
+        "pad_y": 40,
+        "margin_y": 20,
+        "border_radius": 16,
+        "counter_size": 36,
+        "label_size": 14,
+        "show_last_updated": true
+      }
+    },
+    "smart_search_6imMpb": {
+      "type": "smart-search",
+      "name": "Smart Search",
+      "settings": {}
+    },
+    "wishlist_jbxLr8": {
+      "type": "wishlist",
+      "name": "Wishlist",
+      "settings": {}
     }
   },
   "order": [
@@ -169,6 +206,9 @@
     "marquee",
     "featured_collection_ETkhqA",
     "quick_view_modal_YwPqLi",
-    "quick_add_to_cart_N3W3xx"
+    "quick_add_to_cart_N3W3xx",
+    "visitor_counter_HdxPVx",
+    "smart_search_6imMpb",
+    "wishlist_jbxLr8"
   ]
 }
