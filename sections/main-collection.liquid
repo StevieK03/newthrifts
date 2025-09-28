@@ -137,9 +137,10 @@
     border: 1px solid rgba(0,0,0,0.05);
   }
   
+  /* Remove hover effects from entire card - only apply to image area */
   #collection-{{ collection.id }} .enhanced-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.05);
+    transform: none;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
   }
   
   /* Card Glow Effect */
@@ -190,8 +191,14 @@
     display: block;
   }
   
+  /* Enhanced hover effects on image area only */
+  #collection-{{ collection.id }} .enhanced-card:hover .product-card__image {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 32px rgba(0,0,0,0.12);
+  }
+
   #collection-{{ collection.id }} .enhanced-card:hover .product-card__img {
-    transform: scale(1.1);
+    transform: scale(1.08);
   }
   
   /* Image Overlay */
@@ -285,8 +292,9 @@
     transition: all 0.3s ease;
   }
   
+  /* Remove hover effects from swatch area to keep them fully interactive */
   #collection-{{ collection.id }} .enhanced-card:hover .swatch-block {
-    transform: translateY(-2px);
+    transform: none;
   }
   
   #collection-{{ collection.id }} .swatch {
@@ -327,8 +335,9 @@
     transition: all 0.3s ease;
   }
   
+  /* Remove price animation to avoid interference with swatches */
   #collection-{{ collection.id }} .enhanced-card:hover .product-card__price {
-    transform: translateX(4px);
+    transform: none;
   }
   
   /* Floating Animation */
