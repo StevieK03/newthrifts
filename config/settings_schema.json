@@ -22,7 +22,7 @@
         "type": "textarea",
         "id": "footer_about",
         "label": "Footer about text",
-        "default": "Sunset palettes, neon nights, and beach-breeze basics."
+        "default": "New Thrifts (NT)."
       },
       {
         "type": "color",
