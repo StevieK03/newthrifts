@@ -11,11 +11,7 @@
   "sections": {
     "header": {
       "type": "header",
-      "disabled": true,
-      "settings": {
-        "logo_text": "New Thrifts",
-        "menu": ""
-      }
+      "settings": {}
     },
     "quick_view_modal": {
       "type": "quick-view-modal",
@@ -33,6 +29,70 @@
         "section_bg": "#f2f3f5"
       }
     },
+    "halloween-countdown": {
+      "type": "countdown-halloween",
+      "settings": {
+        "show_label": true,
+        "label": "Countdown to Halloween",
+        "headline": "Spooky season in:",
+        "on_day_headline": "It's Halloween!",
+        "emoji_left": "🧟‍♂️",
+        "emoji_right": "👻",
+        "size": "lg",
+        "bg_color": "#000000",
+        "bg_color_2": "#000000",
+        "text_color": "#DC143C",
+        "muted_color": "#B22222",
+        "accent_color": "#8B0000",
+        "accent2_color": "#4B0000",
+        "ring_color": "#DC143C",
+        "pad_y": 18,
+        "pad_x": 18,
+        "sticky": true,
+        "target_month": 10,
+        "target_day": 31,
+        "target_hour": 0,
+        "show_progress": true,
+        "season_start_month": 8,
+        "season_start_day": 1,
+        "hours_only_under": 3,
+        "burst_on_day": true,
+        "respect_reduced_motion": false,
+        "confetti_count": 30,
+        "confetti_emojis": "['🎃','🧟‍♂️','👻','🕸️','🦇','🍬']",
+        "actor_mode": "glide",
+        "show_bats": true,
+        "bats_only_at_night": false,
+        "bats_count": 3,
+        "bat_min_speed": 10,
+        "bat_max_speed": 18,
+        "ghosts_count": 4,
+        "show_stars": true,
+        "stars_count": 20,
+        "show_moon": true,
+        "show_lightning": true,
+        "lightning_debug": true,
+        "lightning_min_gap": 10,
+        "lightning_max_gap": 28,
+        "lightning_color": "#DC143C",
+        "lightning_intensity": 85,
+        "thunder_url": "",
+        "thunder_volume_pct": 35,
+        "cta_label": "Shop Halloween",
+        "cta_link": "/collections/halloween",
+        "noscript_text": "10/31 at 12:00am (your local time)"
+      }
+    },
+    "marquee": {
+      "type": "marquee",
+      "disabled": true,
+      "settings": {}
+    },
+    "featured_collection_ETkhqA": {
+      "type": "featured-collection",
+      "name": "Featured collection",
+      "settings": {}
+    },
     "visitor_counter_section": {
       "type": "visitor-counter",
       "name": "Visitor Counter",
@@ -47,11 +107,11 @@
         "bg_color_2": "#e2e8f0",
         "text_color": "#0f172a",
         "counter_bg": "#ffffff",
-        "counter_border": "#0000001a",
+        "counter_border": "rgba(0,0,0,0.1)",
         "counter_color": "#27e1c1",
         "counter_color_2": "#ff4fa3",
-        "accent_color": "#27e1c11a",
-        "accent_color_2": "#ff4fa31a",
+        "accent_color": "rgba(39,225,193,0.1)",
+        "accent_color_2": "rgba(255,79,163,0.1)",
         "pad_y": 40,
         "margin_y": 20,
         "border_radius": 16,
@@ -92,21 +152,6 @@
         "title": "Vote for Your Favorite Products!",
         "description": "Help us decide which products to feature more prominently. Your vote matters!"
       }
-    },
-    "marquee": {
-      "type": "marquee",
-      "disabled": true,
-      "settings": {}
-    },
-    "featured_collection_ETkhqA": {
-      "type": "featured-collection",
-      "name": "Featured collection",
-      "settings": {
-        "heading": "Featured Collection",
-        "subheading": "",
-        "collection": "entire-collection",
-        "max_products": 12
-      }
     }
   },
   "order": [
@@ -114,6 +159,7 @@
     "quick_view_modal",
     "welcome_social_bar_YkCFUP",
     "visitor_counter_section",
+    "halloween-countdown",
     "product_poll_section",
     "marquee",
     "featured_collection_ETkhqA"
