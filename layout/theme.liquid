@@ -771,21 +771,50 @@
           
           const firstVariant = product.variants[0];
           
+          // Generate swatches HTML
+          let swatchesHTML = '';
+          if (product.options && product.options.length > 0) {
+            const colorOption = product.options.find(opt => opt.name.toLowerCase() === 'color');
+            if (colorOption && colorOption.values.length > 1) {
+              swatchesHTML = `
+                <div style="margin-bottom: 20px;">
+                  <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #374151;">Color:</label>
+                  <div class="quick-view-swatches" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    ${colorOption.values.map((color, index) => {
+                      const variant = product.variants.find(v => v.options.includes(color));
+                      const colorClass = color.toLowerCase().replace(/\s+/g, '-');
+                      return `
+                        <button class="quick-view-swatch ${index === 0 ? 'selected' : ''}" 
+                                data-color="${color}" 
+                                data-variant-id="${variant?.id}"
+                                style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid ${index === 0 ? '#27e1c1' : '#e5e7eb'}; cursor: pointer; transition: all 0.2s ease;"
+                                title="${color}">
+                          <div style="width: 100%; height: 100%; border-radius: 50%; background: ${getSwatchColor(color)};"></div>
+                        </button>
+                      `;
+                    }).join('')}
+                  </div>
+                </div>
+              `;
+            }
+          }
+          
           quickViewContent.innerHTML = `
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
               <div>
-                <img src="${product.images[0]}" alt="${product.title}" style="width: 100%; border-radius: 8px;">
+                <img id="quick-view-image" src="${product.images[0]}" alt="${product.title}" style="width: 100%; border-radius: 8px;">
               </div>
               <div>
                 <h3 style="margin: 0 0 12px 0; font-size: 24px;">${product.title}</h3>
-                <div style="font-size: 20px; color: #dc2626; font-weight: 600; margin-bottom: 16px;">
+                <div id="quick-view-price" style="font-size: 20px; color: #dc2626; font-weight: 600; margin-bottom: 16px;">
                   ${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(firstVariant.price / 100)}
                 </div>
+                ${swatchesHTML}
                 <div style="color: #6b7280; margin-bottom: 24px; line-height: 1.6;">
                   ${product.description || 'No description available.'}
                 </div>
-                <button onclick="addToCartFromQuickView('${firstVariant.id}')" 
-                        style="width: 100%; padding: 16px; background: #27e1c1; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer;"
+                <button id="quick-view-add-to-cart" onclick="addToCartFromQuickView('${firstVariant.id}')" 
+                        style="width: 100%; padding: 16px; background: #27e1c1; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;"
                         ${!firstVariant.available ? 'disabled' : ''}>
                   ${firstVariant.available ? 'Add to Cart' : 'Sold Out'}
                 </button>
@@ -795,6 +824,89 @@
               </div>
             </div>
           `;
+          
+          // Initialize swatch functionality in quick view
+          initQuickViewSwatches(product);
+      }
+      
+      // Swatch color mapping function
+      function getSwatchColor(colorName) {
+        const colorMap = {
+          'black': '#000000',
+          'white': '#ffffff',
+          'pink': '#ff69b4',
+          'blue': '#0066cc',
+          'royal': '#4169e1',
+          'true royal': '#4169e1',
+          'red': '#dc2626',
+          'green': '#10b981',
+          'neon green': '#00ff00',
+          'yellow': '#fbbf24',
+          'purple': '#8b5cf6',
+          'orange': '#f97316',
+          'gray': '#6b7280',
+          'grey': '#6b7280',
+          'navy': '#1e3a8a',
+          'brown': '#92400e',
+          'chalky mint': '#a7f3d0',
+          'orchid': '#d946ef',
+          'peachy': '#fed7aa',
+          'ivory': '#fffbeb'
+        };
+        
+        const normalizedColor = colorName.toLowerCase().trim();
+        return colorMap[normalizedColor] || '#e5e7eb';
+      }
+      
+      // Initialize Quick View swatches
+      function initQuickViewSwatches(product) {
+        const swatches = document.querySelectorAll('.quick-view-swatch');
+        const quickViewImage = document.getElementById('quick-view-image');
+        const quickViewPrice = document.getElementById('quick-view-price');
+        const addToCartBtn = document.getElementById('quick-view-add-to-cart');
+        
+        swatches.forEach(swatch => {
+          swatch.addEventListener('click', function() {
+            // Remove selected state from all swatches
+            swatches.forEach(s => {
+              s.style.border = '2px solid #e5e7eb';
+              s.classList.remove('selected');
+            });
+            
+            // Add selected state to clicked swatch
+            this.style.border = '2px solid #27e1c1';
+            this.classList.add('selected');
+            
+            // Find matching variant
+            const color = this.dataset.color;
+            const variant = product.variants.find(v => v.options.includes(color));
+            
+            if (variant) {
+              // Update price
+              quickViewPrice.textContent = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+              }).format(variant.price / 100);
+              
+              // Update image if variant has image
+              const variantImage = product.images.find(img => img.alt && img.alt.toLowerCase().includes(color.toLowerCase()));
+              if (variantImage && quickViewImage) {
+                quickViewImage.style.opacity = '0.5';
+                setTimeout(() => {
+                  quickViewImage.src = variantImage;
+                  quickViewImage.style.opacity = '1';
+                }, 150);
+              }
+              
+              // Update add to cart button
+              addToCartBtn.onclick = () => addToCartFromQuickView(variant.id);
+              addToCartBtn.disabled = !variant.available;
+              addToCartBtn.textContent = variant.available ? 'Add to Cart' : 'Sold Out';
+              addToCartBtn.style.background = variant.available ? '#27e1c1' : '#6b7280';
+            }
+          });
+        });
+      }
           
         } catch (error) {
           console.error('Error loading product:', error);

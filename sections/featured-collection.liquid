@@ -345,26 +345,7 @@
     opacity: 1;
   }
   
-  /* Quick View Button */
-  #sec-{{ section.id }} .quick-view-btn {
-    background: rgba(255,255,255,0.9);
-    color: #0f172a;
-    padding: 12px 24px;
-    border-radius: 25px;
-    font-weight: 700;
-    font-size: 14px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    transform: translateY(20px);
-    transition: transform 0.3s ease;
-    cursor: pointer;
-    border: none;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  }
-  
-  #sec-{{ section.id }} .enhanced-card:hover .quick-view-btn {
-    transform: translateY(0);
-  }
+  /* Old Quick View Button - Removed to prevent duplicates */
   
   /* Enhanced Card Body */
   #sec-{{ section.id }} .product-card__body {
@@ -456,10 +437,7 @@
       transform: translateY(-4px) scale(1.01);
     }
     
-    #sec-{{ section.id }} .quick-view-btn {
-      padding: 10px 20px;
-      font-size: 12px;
-    }
+    /* Mobile quick view button styles handled by action-btn class */
   }
   
   /* Enhanced Product Card Effects */
