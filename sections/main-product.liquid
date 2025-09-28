@@ -51,6 +51,10 @@ Main product section — safe + styled + correct add-to-cart
       <span class="short-title">{{ short_title }}</span>
     </h1>
 
+    <div class="product__price" data-product-price style="font-size:1.1rem; margin:8px 0 16px 0; color: #dc2626; font-weight: 600;">
+      {{ product.selected_or_first_available_variant.price | money }}
+    </div>
+
     {% comment %} Create a vertical container with color swatches and size selector stacked {% endcomment %}
     <div class="product-options-container" style="display: flex; flex-direction: column; gap: 16px; margin: 16px 0;">
       {% comment %} Color swatches at the top {% endcomment %}
@@ -95,12 +99,7 @@ Main product section — safe + styled + correct add-to-cart
           </button>
         {% endform %}
       </div>
-    </div>
-
-    <div class="product__price" data-product-price style="font-size:1.1rem; margin:8px 0 16px 0; color: #dc2626; font-weight: 600;">
-      {{ product.selected_or_first_available_variant.price | money }}
-    </div>
-
+      </div>
 
     {% comment %} Extract main product description for collapsible section {% endcomment %}
     {% assign description_parts = product.description | split: 'Product features' %}
@@ -830,10 +829,19 @@ Main product section — safe + styled + correct add-to-cart
       font-weight: 600 !important;
     }
     
-    /* Swatches - Large and centered */
-    .swatch-block {
+    /* Swatches - Perfectly centered */
+    .swatches-container {
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+      width: 100% !important;
       margin-bottom: 16px !important;
+    }
+    
+    .swatch-block {
+      width: 100% !important;
       text-align: center !important;
+      margin: 0 !important;
     }
     
     .swatch-block .vp-legend {
@@ -842,6 +850,7 @@ Main product section — safe + styled + correct add-to-cart
       margin-bottom: 10px !important;
       color: #374151 !important;
       text-transform: uppercase !important;
+      text-align: center !important;
     }
     
     .swatch-list {
@@ -852,7 +861,8 @@ Main product section — safe + styled + correct add-to-cart
       flex-wrap: wrap !important;
       margin: 0 auto !important;
       padding: 0 !important;
-      width: 100% !important;
+      width: fit-content !important;
+      max-width: 100% !important;
     }
     
     .swatch {
@@ -865,6 +875,8 @@ Main product section — safe + styled + correct add-to-cart
       position: relative !important;
       overflow: hidden !important;
       transition: all 0.3s ease !important;
+      padding: 0 !important;
+      margin: 0 !important;
     }
     
     .swatch:hover {
@@ -887,6 +899,10 @@ Main product section — safe + styled + correct add-to-cart
       display: block !important;
       border: none !important;
       outline: none !important;
+      box-shadow: none !important;
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
     }
     
     .swatch__label {
