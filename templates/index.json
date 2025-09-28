@@ -9,6 +9,10 @@
  */
 {
   "sections": {
+    "header": {
+      "type": "header",
+      "settings": {}
+    },
     "welcome_social_bar_YkCFUP": {
       "type": "welcome-social-bar",
       "name": "Welcome / Social Bar",
@@ -152,6 +156,7 @@
     }
   },
   "order": [
+    "header",
     "welcome_social_bar_YkCFUP",
     "visitor_counter_section",
     "halloween-countdown",

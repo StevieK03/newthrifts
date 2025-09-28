@@ -64,8 +64,19 @@
 {
   "name": "Header",
   "settings": [
-    { "type": "image_picker", "id": "logo", "label": "Logo" },
-    { "type": "text", "id": "logo_text", "label": "Logo text", "default": "New Thrifts" },
+    { 
+      "type": "image_picker", 
+      "id": "logo", 
+      "label": "Upload Your Logo",
+      "info": "Recommended size: 400px wide. PNG with transparent background works best."
+    },
+    { 
+      "type": "text", 
+      "id": "logo_text", 
+      "label": "Logo text (fallback)", 
+      "default": "New Thrifts",
+      "info": "Used when no logo image is uploaded"
+    },
     { "type": "link_list", "id": "menu", "label": "Main menu" }
   ]
 }
