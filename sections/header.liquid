@@ -44,16 +44,13 @@
 </header>
 
 <style>
-  /* ===== Seamless header that blends with main background ===== */
+  /* ===== Clean white header that matches the gap area ===== */
   #Header-{{ section.id }}{
-    background: 
-      radial-gradient(1500px 800px at 80% -10%, rgba(255, 255, 255, 0.25), transparent),
-      radial-gradient(1200px 900px at 10% 110%, rgba(255, 255, 255, 0.18), transparent),
-      rgb(13, 220, 243) !important;
+    background: #f2f3f5 !important;
     position:relative;
     z-index:50;
-    box-shadow: 0 2px 15px rgba(0,0,0,.1);
-    border-bottom: 1px solid rgba(255,255,255,.2);
+    box-shadow: 0 2px 15px rgba(0,0,0,.08);
+    border-bottom: 1px solid rgba(0,0,0,.06);
   }
   #Header-{{ section.id }} *{ box-sizing:border-box }
   #Header-{{ section.id }} .nt-header__wrap{
@@ -67,33 +64,31 @@
   #Header-{{ section.id }} .nt-header__logo-img{ max-height:60px; display:block }
   #Header-{{ section.id }} .nt-header__logo-text{
     font-weight:800; text-decoration:none;
-    color:#ffffff !important; /* white text for better contrast */
+    color:#0f172a !important; /* dark text on light background */
     font-size:1.25rem;
-    text-shadow: 0 2px 4px rgba(0,0,0,.3);
   }
   #Header-{{ section.id }} .nt-header__list{
     display:flex; gap:8px; list-style:none; margin:0; padding:0;
   }
   #Header-{{ section.id }} .nt-header__link{
     text-decoration:none; 
-    color:#ffffff !important; 
+    color:#0f172a !important; 
     font-weight:600;
     padding: 12px 20px;
     border-radius: 25px;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
-    background: rgba(255,255,255,.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,.2);
+    background: rgba(39,225,193,.08);
+    border: 1px solid rgba(39,225,193,.15);
   }
   
   #Header-{{ section.id }} .nt-header__link:hover{
-    background: rgba(255,255,255,.2);
-    color: #ffffff !important;
+    background: rgba(39,225,193,.15);
+    color: #27e1c1 !important;
     transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0,0,0,.15);
-    border-color: rgba(255,255,255,.4);
+    box-shadow: 0 6px 20px rgba(39,225,193,.2);
+    border-color: rgba(39,225,193,.3);
   }
   
   #Header-{{ section.id }} .nt-header__link::before{
@@ -123,9 +118,8 @@
     justify-content: center;
     width: 44px;
     height: 44px;
-    background: rgba(255,255,255,.15);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,.3);
+    background: white;
+    border: 2px solid #e5e7eb;
     border-radius: 50%;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -133,26 +127,22 @@
   }
   
   #Header-{{ section.id }} .wishlist-toggle:hover {
-    background: rgba(255,255,255,.25);
-    border-color: rgba(255,255,255,.5);
+    border-color: #dc2626;
     transform: scale(1.05);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 16px rgba(220, 38, 38, 0.2);
   }
   
   #Header-{{ section.id }} .wishlist-toggle.has-items {
-    background: rgba(220, 38, 38, 0.2);
-    border-color: rgba(220, 38, 38, 0.4);
+    border-color: #dc2626;
+    background: #fef2f2;
   }
   
   #Header-{{ section.id }} .wishlist-icon {
-    color: #ffffff;
+    color: #6b7280;
     transition: color 0.3s ease;
   }
   
-  #Header-{{ section.id }} .wishlist-toggle:hover .wishlist-icon {
-    color: #ffffff;
-  }
-  
+  #Header-{{ section.id }} .wishlist-toggle:hover .wishlist-icon,
   #Header-{{ section.id }} .wishlist-toggle.has-items .wishlist-icon {
     color: #dc2626;
   }
