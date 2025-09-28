@@ -63,7 +63,18 @@
 
       .header__inner{ display:flex; align-items:center; justify-content:space-between; padding:14px 20px; }
 
-      /* Stacked brand (teal + glow) */
+      /* Logo image styling */
+      .brand-logo-link{ display:flex; align-items:center; justify-content:center; text-decoration:none; margin:0; }
+      .brand-logo-img{ 
+        max-height:50px; 
+        width:auto; 
+        display:block;
+        transition: transform 0.3s ease;
+      }
+      .brand-logo-img:hover{ transform:scale(1.05); }
+      @media (min-width:768px){ .brand-logo-img{ max-height:60px; } }
+
+      /* Fallback text brand (teal + glow) */
       .brand-title{ display:flex; flex-direction:column; align-items:center; justify-content:center; text-decoration:none; margin:0; }
       .brand-line{
         font-family:'Bebas Neue', sans-serif; line-height:0.95; letter-spacing:.08em; text-align:center;
@@ -113,29 +124,46 @@
   </head>
 
   <body>
-    {%- comment -%}
-      IMPORTANT: Only one header should render.
-      If you previously created sections/header.liquid and added {% section 'header' %} here,
-      remove it. Keeping it commented below as a reminder.
-      {% section 'header' %}
-    {%- endcomment -%}
+    {% section 'header' %}
 
-    <header class="header">
-      <div class="container header__inner">
-        <div class="header__logo">
-          <a href="{{ routes.root_url }}" class="brand-title" aria-label="{{ shop.name }}">
-            <span class="brand-line">NEW</span>
-            <span class="brand-line">THRIFTS</span>
-          </a>
+    <!-- Quick View Modal (Global) -->
+    <div class="quick-view-modal" id="quick-view-modal" role="dialog" aria-hidden="true">
+      <div class="quick-view-overlay" id="quick-view-overlay"></div>
+      <div class="quick-view-container">
+        <div class="quick-view-header">
+          <h2 id="quick-view-title">Quick View</h2>
+          <button class="quick-view-close" id="quick-view-close" aria-label="Close">×</button>
         </div>
-
-        <nav class="nav" aria-label="Main navigation">
-          <div class="hide-on-mobile">
-            {% render 'menu', menu: settings.main_menu %}
-          </div>
-        </nav>
+        <div class="quick-view-content" id="quick-view-content">
+          <div class="quick-view-loading">Loading...</div>
+        </div>
       </div>
-    </header>
+    </div>
+
+    <!-- Wishlist Dropdown (Global) -->
+    <div class="wishlist-dropdown" id="wishlist-dropdown">
+      <div class="wishlist-header">
+        <h3>My Wishlist</h3>
+        <button class="wishlist-close" id="wishlist-close" aria-label="Close wishlist">×</button>
+      </div>
+      
+      <div class="wishlist-content" id="wishlist-content">
+        <div class="wishlist-empty" id="wishlist-empty">
+          <div class="empty-heart">💝</div>
+          <h4>Your wishlist is empty</h4>
+          <p>Save your favorite products to view them here</p>
+        </div>
+        
+        <div class="wishlist-items" id="wishlist-items">
+          <!-- Wishlist items will be populated by JavaScript -->
+        </div>
+      </div>
+      
+      <div class="wishlist-footer">
+        <button class="wishlist-clear" id="wishlist-clear">Clear All</button>
+        <button class="wishlist-share" id="wishlist-share">Share Wishlist</button>
+      </div>
+    </div>
 
     <main role="main">
       {{ content_for_layout }}
@@ -345,6 +373,474 @@
         display: none;
       }
     }
+    
+    /* Global Quick View Modal Styles */
+    .quick-view-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .quick-view-modal.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .quick-view-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+    }
+
+    .quick-view-container {
+      position: relative;
+      background: white;
+      border-radius: 16px;
+      max-width: 90vw;
+      max-height: 90vh;
+      width: 800px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+    }
+
+    .quick-view-modal.active .quick-view-container {
+      transform: scale(1);
+    }
+
+    .quick-view-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      border-bottom: 1px solid #e5e7eb;
+      background: #f9fafb;
+    }
+
+    .quick-view-header h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .quick-view-close {
+      background: none;
+      border: none;
+      color: #6b7280;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      font-size: 24px;
+    }
+
+    .quick-view-close:hover {
+      background: #e5e7eb;
+      color: #374151;
+    }
+
+    .quick-view-content {
+      padding: 24px;
+      max-height: calc(90vh - 80px);
+      overflow-y: auto;
+    }
+
+    .quick-view-loading {
+      text-align: center;
+      padding: 40px;
+      color: #6b7280;
+    }
+
+    /* Global Wishlist Dropdown Styles */
+    .wishlist-dropdown {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      width: 400px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
+      border: 1px solid #e5e7eb;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+      z-index: 1000;
+      max-height: 500px;
+      overflow: hidden;
+    }
+
+    .wishlist-dropdown.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .wishlist-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      border-bottom: 1px solid #f3f4f6;
+      background: #f9fafb;
+      border-radius: 12px 12px 0 0;
+    }
+
+    .wishlist-header h3 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .wishlist-close {
+      background: none;
+      border: none;
+      color: #6b7280;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+      font-size: 20px;
+    }
+
+    .wishlist-close:hover {
+      background: #e5e7eb;
+      color: #374151;
+    }
+
+    .wishlist-content {
+      max-height: 350px;
+      overflow-y: auto;
+    }
+
+    .wishlist-empty {
+      text-align: center;
+      padding: 40px 20px;
+      color: #6b7280;
+    }
+
+    .empty-heart {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .wishlist-empty h4 {
+      margin: 0 0 8px 0;
+      color: #374151;
+      font-size: 16px;
+    }
+
+    .wishlist-empty p {
+      margin: 0;
+      font-size: 14px;
+    }
+
+    .wishlist-footer {
+      display: flex;
+      gap: 8px;
+      padding: 16px 20px;
+      border-top: 1px solid #f3f4f6;
+      background: #f9fafb;
+      border-radius: 0 0 12px 12px;
+    }
+
+    .wishlist-clear,
+    .wishlist-share {
+      flex: 1;
+      padding: 8px 16px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: white;
+      color: #374151;
+    }
+
+    .wishlist-clear:hover {
+      background: #fee2e2;
+      border-color: #fca5a5;
+      color: #dc2626;
+    }
+
+    .wishlist-share:hover {
+      background: #eff6ff;
+      border-color: #93c5fd;
+      color: #2563eb;
+    }
+
+    @media (max-width: 768px) {
+      .wishlist-dropdown {
+        width: 90vw;
+        max-width: 350px;
+        right: 5vw;
+      }
+    }
     </style>
+    
+    <!-- Global Wishlist JavaScript -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Global wishlist functionality
+      let wishlist = JSON.parse(localStorage.getItem('newthrifts_wishlist') || '[]');
+      
+      const headerWishlistToggle = document.getElementById('header-wishlist-toggle');
+      const headerWishlistCount = document.getElementById('header-wishlist-count');
+      const wishlistDropdown = document.getElementById('wishlist-dropdown');
+      const wishlistClose = document.getElementById('wishlist-close');
+      const wishlistEmpty = document.getElementById('wishlist-empty');
+      const wishlistItems = document.getElementById('wishlist-items');
+      
+      // Update wishlist UI
+      function updateWishlistUI() {
+        const count = wishlist.length;
+        
+        if (headerWishlistCount) {
+          headerWishlistCount.textContent = count;
+          if (count > 0) {
+            headerWishlistCount.classList.add('visible');
+            headerWishlistToggle?.classList.add('has-items');
+          } else {
+            headerWishlistCount.classList.remove('visible');
+            headerWishlistToggle?.classList.remove('has-items');
+          }
+        }
+        
+        // Update dropdown content
+        if (wishlistEmpty && wishlistItems) {
+          if (count === 0) {
+            wishlistEmpty.style.display = 'block';
+            wishlistItems.style.display = 'none';
+          } else {
+            wishlistEmpty.style.display = 'none';
+            wishlistItems.style.display = 'block';
+            renderWishlistItems();
+          }
+        }
+      }
+      
+      // Render wishlist items
+      function renderWishlistItems() {
+        if (!wishlistItems) return;
+        
+        wishlistItems.innerHTML = wishlist.map(item => `
+          <div class="wishlist-item" style="display: flex; align-items: center; padding: 12px; border-bottom: 1px solid #f3f4f6;">
+            <img src="${item.image}" alt="${item.title}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px; margin-right: 12px;">
+            <div style="flex: 1;">
+              <h4 style="margin: 0 0 4px 0; font-size: 14px; color: #111827;">${item.title}</h4>
+              <div style="font-size: 14px; color: #dc2626; font-weight: 600;">${item.price}</div>
+            </div>
+            <button onclick="removeFromWishlist('${item.id}')" style="background: none; border: none; color: #6b7280; cursor: pointer; padding: 4px;">×</button>
+          </div>
+        `).join('');
+      }
+      
+      // Add to wishlist function
+      window.addToWishlist = function(productData) {
+        if (wishlist.find(item => item.id === productData.id)) {
+          showMessage('Already in wishlist!', 'info');
+          return false;
+        }
+        
+        wishlist.push(productData);
+        localStorage.setItem('newthrifts_wishlist', JSON.stringify(wishlist));
+        updateWishlistUI();
+        showMessage(`${productData.title} added to wishlist!`, 'success');
+        return true;
+      };
+      
+      // Remove from wishlist function
+      window.removeFromWishlist = function(productId) {
+        const index = wishlist.findIndex(item => item.id === productId);
+        if (index > -1) {
+          const removedItem = wishlist.splice(index, 1)[0];
+          localStorage.setItem('newthrifts_wishlist', JSON.stringify(wishlist));
+          updateWishlistUI();
+          showMessage(`${removedItem.title} removed from wishlist!`, 'info');
+        }
+      };
+      
+      // Show message function
+      function showMessage(message, type = 'info') {
+        const messageEl = document.createElement('div');
+        messageEl.textContent = message;
+        Object.assign(messageEl.style, {
+          position: 'fixed',
+          top: '20px',
+          right: '20px',
+          background: type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#6b7280',
+          color: 'white',
+          padding: '12px 20px',
+          borderRadius: '8px',
+          fontSize: '14px',
+          fontWeight: '500',
+          zIndex: '10000',
+          boxShadow: '0 4px 16px rgba(0, 0, 0, 0.15)',
+          transform: 'translateX(100%)',
+          transition: 'transform 0.3s ease'
+        });
+        
+        document.body.appendChild(messageEl);
+        
+        setTimeout(() => messageEl.style.transform = 'translateX(0)', 100);
+        setTimeout(() => {
+          messageEl.style.transform = 'translateX(100%)';
+          setTimeout(() => {
+            if (document.body.contains(messageEl)) {
+              document.body.removeChild(messageEl);
+            }
+          }, 300);
+        }, 3000);
+      }
+      
+      // Toggle wishlist dropdown
+      if (headerWishlistToggle) {
+        headerWishlistToggle.addEventListener('click', function() {
+          wishlistDropdown.classList.toggle('active');
+        });
+      }
+      
+      if (wishlistClose) {
+        wishlistClose.addEventListener('click', function() {
+          wishlistDropdown.classList.remove('active');
+        });
+      }
+      
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.wishlist-dropdown') && !e.target.closest('#header-wishlist-toggle')) {
+          wishlistDropdown.classList.remove('active');
+        }
+      });
+      
+      // Initialize
+      updateWishlistUI();
+      
+      console.log('Global wishlist initialized with', wishlist.length, 'items');
+      
+      // Global Quick View functionality
+      const quickViewModal = document.getElementById('quick-view-modal');
+      const quickViewOverlay = document.getElementById('quick-view-overlay');
+      const quickViewClose = document.getElementById('quick-view-close');
+      const quickViewContent = document.getElementById('quick-view-content');
+      const quickViewTitle = document.getElementById('quick-view-title');
+      
+      // Open Quick View function
+      window.openQuickView = function(productHandle) {
+        showQuickViewModal();
+        loadQuickViewProduct(productHandle);
+      };
+      
+      function showQuickViewModal() {
+        quickViewModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        quickViewModal.setAttribute('aria-hidden', 'false');
+      }
+      
+      function hideQuickViewModal() {
+        quickViewModal.classList.remove('active');
+        document.body.style.overflow = '';
+        quickViewModal.setAttribute('aria-hidden', 'true');
+      }
+      
+      async function loadQuickViewProduct(productHandle) {
+        try {
+          quickViewContent.innerHTML = '<div class="quick-view-loading">Loading product...</div>';
+          
+          const response = await fetch(`/products/${productHandle}.js`);
+          const product = await response.json();
+          
+          quickViewTitle.textContent = product.title;
+          
+          const firstVariant = product.variants[0];
+          
+          quickViewContent.innerHTML = `
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+              <div>
+                <img src="${product.images[0]}" alt="${product.title}" style="width: 100%; border-radius: 8px;">
+              </div>
+              <div>
+                <h3 style="margin: 0 0 12px 0; font-size: 24px;">${product.title}</h3>
+                <div style="font-size: 20px; color: #dc2626; font-weight: 600; margin-bottom: 16px;">
+                  ${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(firstVariant.price / 100)}
+                </div>
+                <div style="color: #6b7280; margin-bottom: 24px; line-height: 1.6;">
+                  ${product.description || 'No description available.'}
+                </div>
+                <button onclick="addToCartFromQuickView('${firstVariant.id}')" 
+                        style="width: 100%; padding: 16px; background: #27e1c1; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer;"
+                        ${!firstVariant.available ? 'disabled' : ''}>
+                  ${firstVariant.available ? 'Add to Cart' : 'Sold Out'}
+                </button>
+                <a href="${product.url}" style="display: block; text-align: center; margin-top: 12px; color: #6b7280; text-decoration: none;">
+                  View Full Details
+                </a>
+              </div>
+            </div>
+          `;
+          
+        } catch (error) {
+          console.error('Error loading product:', error);
+          quickViewContent.innerHTML = '<div class="quick-view-loading">Error loading product</div>';
+        }
+      }
+      
+      // Add to cart from quick view
+      window.addToCartFromQuickView = async function(variantId) {
+        try {
+          const response = await fetch('/cart/add.js', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: variantId, quantity: 1 })
+          });
+          
+          if (response.ok) {
+            showMessage('Added to cart!', 'success');
+            hideQuickViewModal();
+          } else {
+            showMessage('Failed to add to cart', 'error');
+          }
+        } catch (error) {
+          console.error('Add to cart error:', error);
+          showMessage('Error adding to cart', 'error');
+        }
+      };
+      
+      // Quick View event listeners
+      if (quickViewClose) {
+        quickViewClose.addEventListener('click', hideQuickViewModal);
+      }
+      
+      if (quickViewOverlay) {
+        quickViewOverlay.addEventListener('click', hideQuickViewModal);
+      }
+      
+      // Keyboard navigation
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && quickViewModal.classList.contains('active')) {
+          hideQuickViewModal();
+        }
+      });
+      
+      console.log('Global Quick View initialized');
+    });
+    </script>
   </body>
 </html>
