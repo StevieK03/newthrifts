@@ -793,9 +793,12 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
         
         // Call our advanced quick view modal
+        console.log('Quick View clicked for:', productHandle);
         if (window.openQuickView) {
+          console.log('Opening Quick View modal');
           window.openQuickView(productHandle);
         } else {
+          console.log('Quick View function not found, using fallback');
           // Fallback: open product page in modal-like popup
           const popup = window.open(`/products/${productHandle}`, 'quickview', 'width=800,height=600,scrollbars=yes,resizable=yes');
           if (popup) {
