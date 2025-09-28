@@ -124,34 +124,7 @@
   </head>
 
   <body>
-    {%- comment -%}
-      IMPORTANT: Only one header should render.
-      If you previously created sections/header.liquid and added {% section 'header' %} here,
-      remove it. Keeping it commented below as a reminder.
-      {% section 'header' %}
-    {%- endcomment -%}
-
-    <header class="header">
-      <div class="container header__inner">
-        <div class="header__logo">
-          {% if settings.logo != blank %}
-            <a href="{{ routes.root_url }}" class="brand-logo-link" aria-label="{{ shop.name }}">
-              <img src="{{ settings.logo | img_url: '200x' }}" alt="{{ shop.name }}" class="brand-logo-img">
-            </a>
-          {% else %}
-            <a href="{{ routes.root_url }}" class="brand-title" aria-label="{{ shop.name }}">
-              <span class="brand-line">{{ settings.logo_text | default: shop.name }}</span>
-            </a>
-          {% endif %}
-        </div>
-
-        <nav class="nav" aria-label="Main navigation">
-          <div class="hide-on-mobile">
-            {% render 'menu', menu: settings.main_menu %}
-          </div>
-        </nav>
-      </div>
-    </header>
+    {% section 'header' %}
 
     <main role="main">
       {{ content_for_layout }}
