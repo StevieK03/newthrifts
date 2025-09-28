@@ -62,6 +62,7 @@
     },
     "halloween-countdown": {
       "type": "countdown-halloween",
+      "disabled": true,
       "settings": {
         "show_label": true,
         "label": "Countdown to Halloween",
