@@ -438,6 +438,52 @@
       padding: 40px;
       color: #6b7280;
     }
+    
+    /* Mobile Quick View Responsive */
+    @media (max-width: 768px) {
+      .quick-view-container {
+        width: 95vw;
+        max-height: 85vh;
+        margin: 16px;
+      }
+      
+      .quick-view-content {
+        padding: 16px;
+      }
+      
+      .quick-view-product {
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+      }
+      
+      .quick-view-image-section {
+        order: 1;
+      }
+      
+      .quick-view-details-section {
+        order: 2;
+      }
+      
+      .quick-view-swatches {
+        justify-content: flex-start !important;
+        flex-wrap: wrap !important;
+      }
+      
+      .quick-view-swatch {
+        width: 32px !important;
+        height: 32px !important;
+      }
+      
+      .info-section-toggle {
+        padding: 10px 12px !important;
+        font-size: 14px !important;
+      }
+      
+      .section-content {
+        padding: 12px !important;
+        font-size: 14px !important;
+      }
+    }
 
     /* Global Wishlist Dropdown Styles */
     .wishlist-dropdown {
@@ -773,11 +819,11 @@
           }
           
           quickViewContent.innerHTML = `
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
-              <div>
+            <div class="quick-view-product" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+              <div class="quick-view-image-section">
                 <img id="quick-view-image" src="${product.images[0]}" alt="${product.title}" style="width: 100%; border-radius: 8px;">
               </div>
-              <div>
+              <div class="quick-view-details-section">
                 <h3 style="margin: 0 0 12px 0; font-size: 24px;">${product.title}</h3>
                 <div id="quick-view-price" style="font-size: 20px; color: #dc2626; font-weight: 600; margin-bottom: 16px;">
                   ${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(firstVariant.price / 100)}
@@ -876,7 +922,15 @@
           'chalky mint': '#a7f3d0',
           'orchid': '#d946ef',
           'peachy': '#fed7aa',
-          'ivory': '#fffbeb'
+          'ivory': '#fffbeb',
+          'new york': '#2563eb',
+          'heather': '#9ca3af',
+          'charcoal': '#374151',
+          'forest': '#065f46',
+          'maroon': '#7f1d1d',
+          'cream': '#fef7ed',
+          'sand': '#fbbf24',
+          'slate': '#475569'
         };
         
         const normalizedColor = colorName.toLowerCase().trim();
