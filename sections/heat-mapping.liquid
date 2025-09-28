@@ -590,103 +590,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 {% schema %}
 {
-  "name": "Heat Mapping & Analytics",
-  "settings": [
-    {
-      "type": "header",
-      "content": "Tracking Settings"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_heat_mapping",
-      "label": "Enable heat mapping",
-      "default": true,
-      "info": "Track click patterns and user interactions"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_scroll_tracking",
-      "label": "Enable scroll tracking",
-      "default": true,
-      "info": "Track how users scroll through pages"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_form_tracking",
-      "label": "Enable form interaction tracking",
-      "default": true,
-      "info": "Track form field interactions (no personal data)"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_product_tracking",
-      "label": "Enable product interaction tracking",
-      "default": true,
-      "info": "Track product views, hovers, and clicks"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_search_tracking",
-      "label": "Enable search behavior tracking",
-      "default": true,
-      "info": "Track search queries and result interactions"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_performance_tracking",
-      "label": "Enable performance tracking",
-      "default": true,
-      "info": "Track page load times and performance metrics"
-    },
-    {
-      "type": "header",
-      "content": "Privacy Settings"
-    },
-    {
-      "type": "checkbox",
-      "id": "anonymize_data",
-      "label": "Anonymize user data",
-      "default": true,
-      "info": "Remove personally identifiable information"
-    },
-    {
-      "type": "range",
-      "id": "data_retention_days",
-      "label": "Data retention period (days)",
-      "min": 7,
-      "max": 90,
-      "step": 1,
-      "default": 30,
-      "info": "How long to keep tracking data"
-    },
-    {
-      "type": "header",
-      "content": "Advanced Settings"
-    },
-    {
-      "type": "range",
-      "id": "batch_size",
-      "label": "Data batch size",
-      "min": 10,
-      "max": 100,
-      "step": 10,
-      "default": 50,
-      "info": "Number of events to send in each batch"
-    },
-    {
-      "type": "range",
-      "id": "send_interval",
-      "label": "Send interval (seconds)",
-      "min": 10,
-      "max": 300,
-      "step": 10,
-      "default": 30,
-      "info": "How often to send data to server"
-    }
-  ],
+  "name": "Heat Mapping Analytics",
+  "settings": [],
   "presets": [
     {
-      "name": "Heat Mapping & Analytics"
+      "name": "Heat Mapping Analytics"
     }
   ]
 }
