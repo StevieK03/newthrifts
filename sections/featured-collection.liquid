@@ -304,7 +304,7 @@
   }
   
   /* Image Container with Enhanced Hover Effects */
-  #sec-{{ section.id }} .image-container {
+  #sec-{{ section.id }} .product-card__image {
     position: relative;
     overflow: hidden;
     border-radius: 12px 12px 0 0;
@@ -321,13 +321,24 @@
   }
 
   /* Enhanced hover effects on image area only */
-  #sec-{{ section.id }} .enhanced-product-card:hover .image-container {
-    transform: translateY(-6px);
-    box-shadow: 0 16px 32px rgba(0,0,0,0.12);
+  #sec-{{ section.id }} .enhanced-product-card:hover .product-card__image {
+    transform: translateY(-8px) !important;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15) !important;
+    transition: all 0.3s ease !important;
   }
 
   #sec-{{ section.id }} .enhanced-product-card:hover .product-card__img {
-    transform: scale(1.08);
+    transform: scale(1.1) !important;
+    transition: all 0.3s ease !important;
+  }
+
+  /* Force hover effects with higher specificity */
+  #sec-{{ section.id }} .enhanced-product-card .product-card__image {
+    transition: all 0.3s ease !important;
+  }
+
+  #sec-{{ section.id }} .enhanced-product-card .product-card__img {
+    transition: all 0.3s ease !important;
   }
   
   /* Image Overlay */
@@ -442,7 +453,7 @@
     }
     
     /* Keep image hover effects on mobile */
-    #sec-{{ section.id }} .enhanced-product-card:hover .image-container {
+    #sec-{{ section.id }} .enhanced-product-card:hover .product-card__image {
       transform: translateY(-3px);
       box-shadow: 0 8px 16px rgba(0,0,0,0.1);
     }
