@@ -4,7 +4,7 @@
   {% if collection.description != blank %}<p style="opacity:.85;">{{ collection.description }}</p>{% endif %}
   <div class="grid grid--3">
     {% for product in collection.products %}
-      <article class="product-card enhanced-card" data-product-id="{{ product.id }}">
+      <article class="product-card enhanced-card" data-product-id="{{ product.id }}" data-product-handle="{{ product.handle }}">
         <div class="card-glow"></div>
         <div class="card-shine"></div>
         <a href="{{ product.url }}" class="card-link">
@@ -13,7 +13,21 @@
                  src="{{ product.featured_image | image_url: width: 720 }}"
                  alt="{{ product.title | escape }}">
             <div class="image-overlay">
-              <div class="quick-view-btn">Quick View</div>
+              <div class="product-actions">
+                <button class="action-btn quick-view-btn" data-product-handle="{{ product.handle }}" aria-label="Quick view {{ product.title }}">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z" stroke="currentColor" stroke-width="2"/>
+                    <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                  </svg>
+                  Quick View
+                </button>
+                <button class="action-btn wishlist-btn" data-product-id="{{ product.id }}" aria-label="Add to wishlist">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <path d="M20.84 4.61C20.32 4.09 19.69 3.69 19 3.44C18.31 3.19 17.58 3.09 16.85 3.15C16.12 3.21 15.42 3.42 14.78 3.78C14.14 4.14 13.58 4.64 13.14 5.25L12 6.75L10.86 5.25C10.42 4.64 9.86 4.14 9.22 3.78C8.58 3.42 7.88 3.21 7.15 3.15C6.42 3.09 5.69 3.19 5 3.44C4.31 3.69 3.68 4.09 3.16 4.61C2.11 5.66 1.5 7.13 1.5 8.66C1.5 10.19 2.11 11.66 3.16 12.71L12 21.55L20.84 12.71C21.89 11.66 22.5 10.19 22.5 8.66C22.5 7.13 21.89 5.66 20.84 4.61Z" stroke="currentColor" stroke-width="2"/>
+                  </svg>
+                  Wishlist
+                </button>
+              </div>
             </div>
           </div>
         </a>
@@ -343,13 +357,83 @@ document.addEventListener('DOMContentLoaded', function() {
       card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
     });
     
-    // Quick view functionality
+    // Enhanced Quick View functionality
     const quickViewBtn = card.querySelector('.quick-view-btn');
     if (quickViewBtn) {
       quickViewBtn.addEventListener('click', function(e) {
         e.preventDefault();
-        const productLink = card.querySelector('.card-link').href;
-        window.open(productLink, '_blank');
+        e.stopPropagation();
+        
+        const productHandle = this.dataset.productHandle;
+        
+        // Add loading animation
+        const originalHTML = this.innerHTML;
+        this.innerHTML = `
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2">
+              <animate attributeName="r" values="3;6;3" dur="1s" repeatCount="indefinite"/>
+            </circle>
+          </svg>
+          Loading...
+        `;
+        
+        // Call our advanced quick view modal
+        if (window.openQuickView) {
+          window.openQuickView(productHandle);
+        } else {
+          // Fallback: open product page
+          window.location.href = `/products/${productHandle}`;
+        }
+        
+        // Reset button
+        setTimeout(() => {
+          this.innerHTML = originalHTML;
+        }, 1000);
+      });
+    }
+    
+    // Enhanced Wishlist functionality
+    const wishlistBtn = card.querySelector('.wishlist-btn');
+    if (wishlistBtn) {
+      wishlistBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const productId = this.dataset.productId;
+        const productHandle = card.dataset.productHandle;
+        
+        // Visual feedback
+        this.style.background = 'linear-gradient(135deg, #ff4fa3, #e91e63)';
+        this.style.color = 'white';
+        this.innerHTML = `
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20.84 4.61C20.32 4.09 19.69 3.69 19 3.44C18.31 3.19 17.58 3.09 16.85 3.15C16.12 3.21 15.42 3.42 14.78 3.78C14.14 4.14 13.58 4.64 13.14 5.25L12 6.75L10.86 5.25C10.42 4.64 9.86 4.14 9.22 3.78C8.58 3.42 7.88 3.21 7.15 3.15C6.42 3.09 5.69 3.19 5 3.44C4.31 3.69 3.68 4.09 3.16 4.61C2.11 5.66 1.5 7.13 1.5 8.66C1.5 10.19 2.11 11.66 3.16 12.71L12 21.55L20.84 12.71C21.89 11.66 22.5 10.19 22.5 8.66C22.5 7.13 21.89 5.66 20.84 4.61Z"/>
+          </svg>
+          Added!
+        `;
+        
+        // Add to wishlist if function exists
+        if (window.addToWishlist) {
+          fetch(`/products/${productHandle}.js`)
+            .then(response => response.json())
+            .then(product => {
+              const productData = {
+                id: product.id.toString(),
+                title: product.title,
+                handle: product.handle,
+                price: new Intl.NumberFormat('en-US', {
+                  style: 'currency',
+                  currency: 'USD'
+                }).format(product.variants[0].price / 100),
+                image: product.images[0],
+                available: product.variants[0].available,
+                variantId: product.variants[0].id,
+                url: `/products/${product.handle}`
+              };
+              
+              window.addToWishlist(productData);
+            });
+        }
       });
     }
   });
