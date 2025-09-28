@@ -22,7 +22,12 @@
     {% assign col = section.settings.collection %}
     <div class="grid grid--3">
       {% for product in col.products limit: section.settings.max_products %}
-        <article class="product-card" data-product-id="{{ product.id }}" data-filters="{{ product.tags | join: ',' }}">
+        <article class="product-card enhanced-product-card" data-product-id="{{ product.id }}" data-product-handle="{{ product.handle }}" data-filters="{{ product.tags | join: ',' }}">
+          <!-- Cool Effects Elements -->
+          <div class="card-glow"></div>
+          <div class="card-shine"></div>
+          <div class="card-particles"></div>
+          
           <a href="{{ product.url }}" class="product-card__link">
             <div class="product-card__image">
               <img id="ProductImage-{{ product.id }}" 
@@ -30,6 +35,25 @@
                    alt="{{ product.title | escape }}"
                    loading="lazy"
                    class="product-card__img">
+              
+              <!-- Hover Overlay with Actions -->
+              <div class="product-overlay">
+                <div class="product-actions">
+                  <button class="action-btn quick-view-btn" data-product-handle="{{ product.handle }}" aria-label="Quick view {{ product.title }}">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                      <path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z" stroke="currentColor" stroke-width="2"/>
+                      <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    Quick View
+                  </button>
+                  <button class="action-btn wishlist-btn" data-product-id="{{ product.id }}" aria-label="Add to wishlist">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                      <path d="M20.84 4.61C20.32 4.09 19.69 3.69 19 3.44C18.31 3.19 17.58 3.09 16.85 3.15C16.12 3.21 15.42 3.42 14.78 3.78C14.14 4.14 13.58 4.64 13.14 5.25L12 6.75L10.86 5.25C10.42 4.64 9.86 4.14 9.22 3.78C8.58 3.42 7.88 3.21 7.15 3.15C6.42 3.09 5.69 3.19 5 3.44C4.31 3.69 3.68 4.09 3.16 4.61C2.11 5.66 1.5 7.13 1.5 8.66C1.5 10.19 2.11 11.66 3.16 12.71L12 21.55L20.84 12.71C21.89 11.66 22.5 10.19 22.5 8.66C22.5 7.13 21.89 5.66 20.84 4.61Z" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    Wishlist
+                  </button>
+                </div>
+              </div>
             </div>
           </a>
 
@@ -437,6 +461,190 @@
       font-size: 12px;
     }
   }
+  
+  /* Enhanced Product Card Effects */
+  #sec-{{ section.id }} .enhanced-product-card {
+    position: relative;
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    border: 1px solid rgba(0,0,0,0.05);
+    transform-style: preserve-3d;
+  }
+  
+  #sec-{{ section.id }} .enhanced-product-card:hover {
+    transform: translateY(-12px) scale(1.03);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.05);
+  }
+  
+  /* Card Glow Effect */
+  #sec-{{ section.id }} .card-glow {
+    position: absolute;
+    inset: -3px;
+    background: linear-gradient(45deg, 
+      rgba(39, 225, 193, 0.3), 
+      rgba(255, 79, 163, 0.3), 
+      rgba(39, 225, 193, 0.3)
+    );
+    border-radius: 19px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: -1;
+    filter: blur(10px);
+    animation: glow-rotate 3s linear infinite;
+  }
+  
+  @keyframes glow-rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  #sec-{{ section.id }} .enhanced-product-card:hover .card-glow {
+    opacity: 1;
+  }
+  
+  /* Card Shine Effect */
+  #sec-{{ section.id }} .card-shine {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+      transparent, 
+      rgba(255,255,255,0.6), 
+      transparent
+    );
+    transition: left 0.8s ease;
+    z-index: 2;
+    pointer-events: none;
+  }
+  
+  #sec-{{ section.id }} .enhanced-product-card:hover .card-shine {
+    left: 100%;
+  }
+  
+  /* Floating Particles Effect */
+  #sec-{{ section.id }} .card-particles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  #sec-{{ section.id }} .card-particles::before,
+  #sec-{{ section.id }} .card-particles::after {
+    content: '';
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: rgba(39, 225, 193, 0.8);
+    border-radius: 50%;
+    opacity: 0;
+    transition: all 0.6s ease;
+  }
+  
+  #sec-{{ section.id }} .card-particles::before {
+    top: 20%;
+    left: 20%;
+    animation: float-particle-1 2s ease-in-out infinite;
+  }
+  
+  #sec-{{ section.id }} .card-particles::after {
+    bottom: 20%;
+    right: 20%;
+    background: rgba(255, 79, 163, 0.8);
+    animation: float-particle-2 2.5s ease-in-out infinite;
+  }
+  
+  #sec-{{ section.id }} .enhanced-product-card:hover .card-particles::before,
+  #sec-{{ section.id }} .enhanced-product-card:hover .card-particles::after {
+    opacity: 1;
+  }
+  
+  @keyframes float-particle-1 {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(180deg); }
+  }
+  
+  @keyframes float-particle-2 {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(-180deg); }
+  }
+  
+  /* Product Overlay */
+  #sec-{{ section.id }} .product-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 3;
+  }
+  
+  #sec-{{ section.id }} .enhanced-product-card:hover .product-overlay {
+    opacity: 1;
+  }
+  
+  /* Product Actions */
+  #sec-{{ section.id }} .product-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transform: translateY(20px);
+    transition: transform 0.3s ease 0.1s;
+  }
+  
+  #sec-{{ section.id }} .enhanced-product-card:hover .product-actions {
+    transform: translateY(0);
+  }
+  
+  #sec-{{ section.id }} .action-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border: none;
+    border-radius: 25px;
+    color: #333;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  }
+  
+  #sec-{{ section.id }} .action-btn:hover {
+    background: white;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  }
+  
+  #sec-{{ section.id }} .quick-view-btn:hover {
+    background: linear-gradient(135deg, #27e1c1, #00d4aa);
+    color: white;
+  }
+  
+  #sec-{{ section.id }} .wishlist-btn:hover {
+    background: linear-gradient(135deg, #ff4fa3, #e91e63);
+    color: white;
+  }
+  
+  #sec-{{ section.id }} .action-btn svg {
+    transition: transform 0.3s ease;
+  }
+  
+  #sec-{{ section.id }} .action-btn:hover svg {
+    transform: scale(1.1);
+  }
 </style>
 
 <!-- Scoped price color override (red) -->
@@ -539,7 +747,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   // Enhanced product card interactions
-  const cards = document.querySelectorAll('#sec-{{ section.id }} .enhanced-card');
+  const cards = document.querySelectorAll('#sec-{{ section.id }} .enhanced-product-card');
   
   cards.forEach(card => {
     // Add magnetic effect
@@ -559,13 +767,87 @@ document.addEventListener('DOMContentLoaded', function() {
       card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
     });
     
-    // Quick view functionality
+    // Enhanced Quick View functionality
     const quickViewBtn = card.querySelector('.quick-view-btn');
     if (quickViewBtn) {
       quickViewBtn.addEventListener('click', function(e) {
         e.preventDefault();
-        const productLink = card.querySelector('.card-link').href;
-        window.open(productLink, '_blank');
+        e.stopPropagation();
+        
+        const productHandle = this.dataset.productHandle;
+        
+        // Add loading state
+        const originalHTML = this.innerHTML;
+        this.innerHTML = `
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2">
+              <animate attributeName="r" values="3;6;3" dur="1s" repeatCount="indefinite"/>
+            </circle>
+          </svg>
+          Loading...
+        `;
+        
+        // Call our advanced quick view modal
+        if (window.openQuickView) {
+          window.openQuickView(productHandle);
+        } else {
+          // Fallback: open product page in modal-like popup
+          const popup = window.open(`/products/${productHandle}`, 'quickview', 'width=800,height=600,scrollbars=yes,resizable=yes');
+          if (popup) {
+            popup.focus();
+          }
+        }
+        
+        // Reset button
+        setTimeout(() => {
+          this.innerHTML = originalHTML;
+        }, 1000);
+      });
+    }
+    
+    // Enhanced Wishlist functionality
+    const wishlistBtn = card.querySelector('.wishlist-btn');
+    if (wishlistBtn) {
+      wishlistBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const productId = this.dataset.productId;
+        const productHandle = card.dataset.productHandle;
+        
+        // Visual feedback
+        const originalHTML = this.innerHTML;
+        this.style.background = 'linear-gradient(135deg, #ff4fa3, #e91e63)';
+        this.style.color = 'white';
+        this.innerHTML = `
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20.84 4.61C20.32 4.09 19.69 3.69 19 3.44C18.31 3.19 17.58 3.09 16.85 3.15C16.12 3.21 15.42 3.42 14.78 3.78C14.14 4.14 13.58 4.64 13.14 5.25L12 6.75L10.86 5.25C10.42 4.64 9.86 4.14 9.22 3.78C8.58 3.42 7.88 3.21 7.15 3.15C6.42 3.09 5.69 3.19 5 3.44C4.31 3.69 3.68 4.09 3.16 4.61C2.11 5.66 1.5 7.13 1.5 8.66C1.5 10.19 2.11 11.66 3.16 12.71L12 21.55L20.84 12.71C21.89 11.66 22.5 10.19 22.5 8.66C22.5 7.13 21.89 5.66 20.84 4.61Z"/>
+          </svg>
+          Added!
+        `;
+        
+        // Add to wishlist if function exists
+        if (window.addToWishlist) {
+          fetch(`/products/${productHandle}.js`)
+            .then(response => response.json())
+            .then(product => {
+              const productData = {
+                id: product.id.toString(),
+                title: product.title,
+                handle: product.handle,
+                price: new Intl.NumberFormat('en-US', {
+                  style: 'currency',
+                  currency: 'USD'
+                }).format(product.variants[0].price / 100),
+                image: product.images[0],
+                available: product.variants[0].available,
+                variantId: product.variants[0].id,
+                url: `/products/${product.handle}`
+              };
+              
+              window.addToWishlist(productData);
+            });
+        }
       });
     }
   });
