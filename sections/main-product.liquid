@@ -10,16 +10,16 @@ Main product section — safe + styled + correct add-to-cart
 %}
 
 <section class="container" style="padding: 28px 0;">
-  <div class="product-layout" style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; max-width: 1000px; margin: 0 auto; align-items: start;">
+  <div class="product-layout" style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; max-width: 1200px; margin: 0 auto; align-items: start;">
     
     <!-- Product Image -->
     <div class="product-image-container">
       {% if product.featured_image %}
         <img
           id="MainProductImage"
-          src="{{ product.featured_image | img_url: '600x' }}"
+          src="{{ product.featured_image | img_url: '800x' }}"
           alt="{{ product.title | escape }}"
-          style="width:100%; max-width: 500px; border-radius: var(--radius-xl); border:1px solid rgba(0,0,0,.08);">
+          style="width:100%; max-width: 700px; border-radius: var(--radius-xl); border:1px solid rgba(0,0,0,.08);">
       {% endif %}
     </div>
 
@@ -739,16 +739,16 @@ Main product section — safe + styled + correct add-to-cart
   /* Product layout responsive design */
   .product-layout {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 32px;
-    max-width: 1000px;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 40px;
+    max-width: 1200px;
     margin: 0 auto;
     align-items: start;
   }
 
   .product-image-container img {
     width: 100%;
-    max-width: 500px;
+    max-width: 700px;
     height: auto;
     object-fit: cover;
   }
@@ -776,7 +776,7 @@ Main product section — safe + styled + correct add-to-cart
     
     .product-image-container img {
       max-width: 100%;
-      max-height: 400px;
+      max-height: 500px;
       object-fit: contain;
     }
     .product-title {
