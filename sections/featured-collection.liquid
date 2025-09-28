@@ -596,9 +596,11 @@
   #sec-{{ section.id }} .product-actions {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
     transform: translateY(20px);
     transition: transform 0.3s ease 0.1s;
+    align-items: center;
+    padding: 20px;
   }
   
   #sec-{{ section.id }} .enhanced-product-card:hover .product-actions {
@@ -608,18 +610,21 @@
   #sec-{{ section.id }} .action-btn {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
-    padding: 12px 20px;
+    padding: 14px 24px;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(8px);
     border: none;
-    border-radius: 25px;
+    border-radius: 30px;
     color: #333;
     font-weight: 600;
     font-size: 14px;
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    min-width: 140px;
+    white-space: nowrap;
   }
   
   #sec-{{ section.id }} .action-btn:hover {
@@ -826,27 +831,76 @@ document.addEventListener('DOMContentLoaded', function() {
           Added!
         `;
         
-        // Add to wishlist if function exists
-        if (window.addToWishlist) {
-          fetch(`/products/${productHandle}.js`)
-            .then(response => response.json())
-            .then(product => {
-              const productData = {
-                id: product.id.toString(),
-                title: product.title,
-                handle: product.handle,
-                price: new Intl.NumberFormat('en-US', {
-                  style: 'currency',
-                  currency: 'USD'
-                }).format(product.variants[0].price / 100),
-                image: product.images[0],
-                available: product.variants[0].available,
-                variantId: product.variants[0].id,
-                url: `/products/${product.handle}`
-              };
-              
+        // Add to wishlist with better feedback
+        fetch(`/products/${productHandle}.js`)
+          .then(response => response.json())
+          .then(product => {
+            const productData = {
+              id: product.id.toString(),
+              title: product.title,
+              handle: product.handle,
+              price: new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+              }).format(product.variants[0].price / 100),
+              image: product.images[0],
+              available: product.variants[0].available,
+              variantId: product.variants[0].id,
+              url: `/products/${product.handle}`
+            };
+            
+            // Add to wishlist (using localStorage if global function not available)
+            if (window.addToWishlist) {
               window.addToWishlist(productData);
-            });
+            } else {
+              // Fallback localStorage implementation
+              let wishlist = JSON.parse(localStorage.getItem('newthrifts_wishlist') || '[]');
+              if (!wishlist.find(item => item.id === productData.id)) {
+                wishlist.push(productData);
+                localStorage.setItem('newthrifts_wishlist', JSON.stringify(wishlist));
+                
+                // Show success message
+                showWishlistMessage(`${productData.title} added to wishlist!`);
+              }
+            }
+          })
+          .catch(error => {
+            console.error('Error adding to wishlist:', error);
+            // Reset button on error
+            setTimeout(() => {
+              this.style.background = '';
+              this.style.color = '';
+              this.innerHTML = originalHTML;
+            }, 1000);
+          });
+        
+        // Show success message function
+        function showWishlistMessage(message) {
+          const messageEl = document.createElement('div');
+          messageEl.textContent = message;
+          Object.assign(messageEl.style, {
+            position: 'fixed',
+            top: '20px',
+            right: '20px',
+            background: '#10b981',
+            color: 'white',
+            padding: '12px 20px',
+            borderRadius: '8px',
+            fontSize: '14px',
+            fontWeight: '500',
+            zIndex: '10000',
+            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.15)',
+            transform: 'translateX(100%)',
+            transition: 'transform 0.3s ease'
+          });
+          
+          document.body.appendChild(messageEl);
+          
+          setTimeout(() => messageEl.style.transform = 'translateX(0)', 100);
+          setTimeout(() => {
+            messageEl.style.transform = 'translateX(100%)';
+            setTimeout(() => document.body.removeChild(messageEl), 300);
+          }, 3000);
         }
       });
     }
@@ -870,6 +924,71 @@ document.addEventListener('DOMContentLoaded', function() {
   cards.forEach(card => {
     card.style.animationPlayState = 'paused';
     observer.observe(card);
+  });
+  
+  // Initialize Swatch Functionality
+  const swatchGroups = document.querySelectorAll('#sec-{{ section.id }} [data-swatch-group]');
+  
+  swatchGroups.forEach(group => {
+    const swatches = group.querySelectorAll('.swatch');
+    const productCard = group.closest('.product-card');
+    const productImage = productCard.querySelector('.product-card__img');
+    const productLink = productCard.querySelector('.product-card__link');
+    
+    swatches.forEach(swatch => {
+      swatch.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // Remove active state from all swatches in this group
+        swatches.forEach(s => s.classList.remove('is-selected'));
+        
+        // Add active state to clicked swatch
+        this.classList.add('is-selected');
+        
+        // Update product image if variant has image
+        const variantImage = this.dataset.variantImage;
+        if (variantImage && productImage) {
+          productImage.style.opacity = '0.5';
+          setTimeout(() => {
+            productImage.src = variantImage;
+            productImage.style.opacity = '1';
+          }, 150);
+        }
+        
+        // Update product link to variant
+        const variantUrl = this.dataset.variantUrl;
+        if (variantUrl && productLink) {
+          productLink.href = variantUrl;
+        }
+        
+        // Add selection animation
+        this.style.transform = 'scale(1.1)';
+        setTimeout(() => {
+          this.style.transform = '';
+        }, 200);
+      });
+      
+      // Add hover effects
+      swatch.addEventListener('mouseenter', function() {
+        if (!this.classList.contains('is-selected')) {
+          this.style.transform = 'scale(1.05)';
+          this.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+        }
+      });
+      
+      swatch.addEventListener('mouseleave', function() {
+        if (!this.classList.contains('is-selected')) {
+          this.style.transform = '';
+          this.style.boxShadow = '';
+        }
+      });
+    });
+    
+    // Set first swatch as selected by default
+    if (swatches.length > 0) {
+      swatches[0].classList.add('is-selected');
+    }
   });
 });
 </script>
