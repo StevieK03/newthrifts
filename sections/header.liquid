@@ -30,6 +30,16 @@
       {% endif %}
       
     </nav>
+
+    <!-- Cart Button -->
+    <div class="nt-header__cart">
+      <a href="{{ routes.cart_url }}" class="nt-header__cart-link" aria-label="View cart">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="nt-header__cart-icon">
+          <path d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.5 5.1 16.5H17M17 13V17C17 17.6 16.6 18 16 18H8C7.4 18 7 17.6 7 17V13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="nt-header__cart-count" id="cart-count">{{ cart.item_count }}</span>
+      </a>
+    </div>
   </div>
 </header>
 
@@ -52,6 +62,68 @@
     margin: 0 auto;
   }
   
+  /* Cart Button Styling - Matches navigation buttons */
+  #Header-{{ section.id }} .nt-header__cart {
+    display: flex;
+    align-items: center;
+  }
+  
+  #Header-{{ section.id }} .nt-header__cart-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 12px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    color: #0f172a !important;
+    font-weight: 600;
+    background: rgba(0,0,0,.05);
+    border: 1px solid rgba(0,0,0,.1);
+    transition: all 0.3s ease;
+    min-width: 60px;
+    height: 48px;
+  }
+  
+  #Header-{{ section.id }} .nt-header__cart-link:hover {
+    background: rgba(0,0,0,.08);
+    color: #0f172a !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,.1);
+    border-color: rgba(0,0,0,.15);
+  }
+  
+  #Header-{{ section.id }} .nt-header__cart-icon {
+    color: #0f172a;
+    transition: all 0.3s ease;
+  }
+  
+  #Header-{{ section.id }} .nt-header__cart-link:hover .nt-header__cart-icon {
+    transform: scale(1.1);
+  }
+  
+  #Header-{{ section.id }} .nt-header__cart-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #dc2626;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    border: 2px solid #f2f3f5;
+    min-width: 20px;
+  }
+  
+  #Header-{{ section.id }} .nt-header__cart-count:empty {
+    display: none;
+  }
+
   /* Mobile header adjustments */
   @media (max-width: 768px) {
     #Header-{{ section.id }} .nt-header__wrap {
@@ -79,6 +151,26 @@
     #Header-{{ section.id }} .nt-header__link {
       padding: 8px 12px;
       font-size: 14px;
+    }
+    
+    /* Mobile cart button adjustments */
+    #Header-{{ section.id }} .nt-header__cart-link {
+      padding: 8px 12px;
+      min-width: 50px;
+      height: 40px;
+    }
+    
+    #Header-{{ section.id }} .nt-header__cart-icon {
+      width: 20px;
+      height: 20px;
+    }
+    
+    #Header-{{ section.id }} .nt-header__cart-count {
+      width: 18px;
+      height: 18px;
+      font-size: 11px;
+      top: -6px;
+      right: -6px;
     }
     
     #Header-{{ section.id }} .header-wishlist {
@@ -193,6 +285,48 @@
     transform: scale(1);
   }
 </style>
+
+<script>
+// Update cart count dynamically
+function updateCartCount() {
+  fetch('/cart.js')
+    .then(response => response.json())
+    .then(cart => {
+      const cartCountElement = document.getElementById('cart-count');
+      if (cartCountElement) {
+        cartCountElement.textContent = cart.item_count;
+        
+        // Hide count badge if cart is empty
+        if (cart.item_count === 0) {
+          cartCountElement.style.display = 'none';
+        } else {
+          cartCountElement.style.display = 'flex';
+        }
+      }
+    })
+    .catch(error => console.error('Error updating cart count:', error));
+}
+
+// Listen for cart updates
+document.addEventListener('DOMContentLoaded', function() {
+  // Update cart count on page load
+  updateCartCount();
+  
+  // Listen for custom cart update events
+  document.addEventListener('cart:updated', updateCartCount);
+  
+  // Listen for cart form submissions
+  document.addEventListener('submit', function(e) {
+    if (e.target.classList.contains('product-form') || 
+        e.target.querySelector('input[name="add"]')) {
+      setTimeout(updateCartCount, 1000); // Update after form submission
+    }
+  });
+});
+
+// Global function to trigger cart count update
+window.updateCartCount = updateCartCount;
+</script>
 
 {% schema %}
 {
