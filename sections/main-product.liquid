@@ -10,7 +10,7 @@ Main product section — safe + styled + correct add-to-cart
 %}
 
 <section class="container" style="padding: 28px 0;">
-  <div class="product-layout" style="display: grid; grid-template-columns: 1fr 1fr; gap: 48px; max-width: 1400px; margin: 0 auto; align-items: start;">
+  <div class="product-layout" style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 48px; max-width: 1600px; margin: 0 auto; align-items: start;">
     
     <!-- Product Image -->
     <div class="product-image-container">
@@ -19,7 +19,7 @@ Main product section — safe + styled + correct add-to-cart
           id="MainProductImage"
           src="{{ product.featured_image | img_url: '800x' }}"
           alt="{{ product.title | escape }}"
-          style="width:100%; max-width: 700px; border-radius: var(--radius-xl); border:1px solid rgba(0,0,0,.08);">
+          style="width:100%; max-width: 900px; border-radius: var(--radius-xl); border:1px solid rgba(0,0,0,.08);">
       {% endif %}
     </div>
 
@@ -62,9 +62,9 @@ Main product section — safe + styled + correct add-to-cart
         {% render 'swatch', product: product, option_name: 'Color', section_id: section.id %}
       </div>
       
-      {% comment %} Size selector and Add to Cart in inline container {% endcomment %}
-      <div class="size-and-cart-container">
-        <div class="size-container">
+      {% comment %} Size selector and Add to Cart in horizontal container {% endcomment %}
+      <div class="size-and-cart-container" style="display: flex; align-items: end; gap: 20px; justify-content: flex-start;">
+        <div class="size-container" style="flex: 1; max-width: 200px;">
           {%- unless product.has_only_default_variant -%}
             {%- for option in product.options_with_values -%}
               {%- assign opt_lc = option.name | downcase -%}
@@ -85,19 +85,22 @@ Main product section — safe + styled + correct add-to-cart
           {%- endunless -%}
         </div>
         
-        {% comment %} Add to Cart Button - moved next to size {% endcomment %}
-        {% form 'product', product, id: product_form_id, class: 'product-form' %}
-          <!-- Hidden variant id Shopify reads on submit -->
-          <input type="hidden"
-                 name="id"
-                 id="VariantId-{{ section.id }}"
-                 value="{{ product.selected_or_first_available_variant.id }}">
+        {% comment %} Add to Cart Button - positioned to the right of size with equal spacing {% endcomment %}
+        <div class="add-to-cart-container" style="flex: 1; max-width: 200px;">
+          {% form 'product', product, id: product_form_id, class: 'product-form' %}
+            <!-- Hidden variant id Shopify reads on submit -->
+            <input type="hidden"
+                   name="id"
+                   id="VariantId-{{ section.id }}"
+                   value="{{ product.selected_or_first_available_variant.id }}">
 
-          <button class="button button--primary btn-glow" type="submit"
-            {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
-            {% if product.selected_or_first_available_variant.available %}Add to cart{% else %}Sold out{% endif %}
-          </button>
-        {% endform %}
+            <button class="button button--primary btn-glow" type="submit"
+              {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}
+              style="width: 100%;">
+              {% if product.selected_or_first_available_variant.available %}Add to cart{% else %}Sold out{% endif %}
+            </button>
+          {% endform %}
+        </div>
       </div>
       </div>
 
@@ -396,7 +399,20 @@ Main product section — safe + styled + correct add-to-cart
   }
   
   .size-container {
-    width: 100%;
+    flex: 1;
+    max-width: 200px;
+  }
+  
+  .add-to-cart-container {
+    flex: 1;
+    max-width: 200px;
+  }
+  
+  .size-and-cart-container {
+    display: flex !important;
+    align-items: end !important;
+    gap: 20px !important;
+    justify-content: flex-start !important;
   }
   
   /* Ensure both sections start at the same level */
@@ -737,16 +753,16 @@ Main product section — safe + styled + correct add-to-cart
   /* Product layout responsive design */
   .product-layout {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.2fr 0.8fr;
     gap: 48px;
-    max-width: 1400px;
+    max-width: 1600px;
     margin: 0 auto;
     align-items: start;
   }
 
   .product-image-container img {
     width: 100%;
-    max-width: 600px;
+    max-width: 900px;
     height: auto;
     object-fit: cover;
   }
@@ -942,15 +958,22 @@ Main product section — safe + styled + correct add-to-cart
       border-radius: 3px !important;
     }
     
-    /* Size Selector and Add to Cart - Centered layout */
+    /* Size Selector and Add to Cart - Horizontal layout */
     .size-and-cart-container {
       display: flex !important;
       justify-content: center !important;
-      align-items: center !important;
-      gap: 20px !important;
+      align-items: end !important;
+      gap: 16px !important;
       margin-bottom: 16px !important;
-      flex-wrap: wrap !important;
+      flex-wrap: nowrap !important;
       width: 100% !important;
+    }
+    
+    .size-container,
+    .add-to-cart-container {
+      flex: 1 !important;
+      max-width: 140px !important;
+      min-width: 120px !important;
     }
     
     .size-container {
