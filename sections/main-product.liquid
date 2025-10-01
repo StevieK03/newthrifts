@@ -10,16 +10,16 @@ Main product section — safe + styled + correct add-to-cart
 %}
 
 <section class="container" style="padding: 28px 0;">
-  <div class="product-layout" style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 48px; max-width: 1600px; margin: 0 auto; align-items: start;">
+  <div class="product-layout" style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 48px; max-width: 1800px; margin: 0 auto; align-items: start;">
     
     <!-- Product Image -->
     <div class="product-image-container">
       {% if product.featured_image %}
         <img
           id="MainProductImage"
-          src="{{ product.featured_image | img_url: '800x' }}"
+          src="{{ product.featured_image | img_url: '1200x' }}"
           alt="{{ product.title | escape }}"
-          style="width:100%; max-width: 900px; border-radius: var(--radius-xl); border:1px solid rgba(0,0,0,.08);">
+          style="width:100%; max-width: 1200px; border-radius: var(--radius-xl); border:1px solid rgba(0,0,0,.08);">
       {% endif %}
     </div>
 
@@ -358,6 +358,7 @@ Main product section — safe + styled + correct add-to-cart
   background: #fff !important;
   pointer-events: auto !important;
   opacity: 1 !important;
+  text-align: center !important;
 }
 
   /* --- Fancy selects (kept if JS disabled) --- */
@@ -372,6 +373,7 @@ Main product section — safe + styled + correct add-to-cart
     box-shadow: 0 6px 18px rgba(0,0,0,.06);
     transition: box-shadow .2s ease, transform .12s ease, border-color .2s ease;
     position:relative;
+    text-align:center;
   }
   .nice-select:hover{ box-shadow: 0 10px 26px rgba(0,0,0,.08); transform: translateY(-1px); }
   .nice-select:focus{ outline:none; border-color: rgba(39,225,193,.55); box-shadow: 0 0 0 4px rgba(39,225,193,.20); }
@@ -753,16 +755,16 @@ Main product section — safe + styled + correct add-to-cart
   /* Product layout responsive design */
   .product-layout {
     display: grid;
-    grid-template-columns: 1.2fr 0.8fr;
+    grid-template-columns: 1.5fr 1fr;
     gap: 48px;
-    max-width: 1600px;
+    max-width: 1800px;
     margin: 0 auto;
     align-items: start;
   }
 
   .product-image-container img {
     width: 100%;
-    max-width: 900px;
+    max-width: 1200px;
     height: auto;
     object-fit: cover;
   }
