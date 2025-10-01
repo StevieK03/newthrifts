@@ -9,7 +9,7 @@ Main product section — safe + styled + correct add-to-cart
   assign product_form_id = 'product-form-' | append: section.id
 %}
 
-<section class="container" style="padding: 28px 0;">
+<section class="container" style="padding: 28px 0; width: 95vw; max-width: 1800px;">
   <div class="product-layout" style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 48px; max-width: 1800px; margin: 0 auto; align-items: start;">
     
     <!-- Product Image -->
@@ -17,9 +17,9 @@ Main product section — safe + styled + correct add-to-cart
       {% if product.featured_image %}
         <img
           id="MainProductImage"
-          src="{{ product.featured_image | img_url: '1200x' }}"
+          src="{{ product.featured_image | img_url: '1600x' }}"
           alt="{{ product.title | escape }}"
-          style="width:100%; max-width: 1200px; border-radius: var(--radius-xl); border:1px solid rgba(0,0,0,.08);">
+          style="width:100%; max-width: 1400px; border-radius: var(--radius-xl); border:1px solid rgba(0,0,0,.08);">
       {% endif %}
     </div>
 
@@ -334,6 +334,12 @@ Main product section — safe + styled + correct add-to-cart
   /* Only price red on product page */
   .template-product [data-product-price],
   .template-product .product__price { color:#ff0000 !important; }
+
+  /* Override container constraints for product page */
+  .template-product .container {
+    width: 95vw !important;
+    max-width: 1800px !important;
+  }
 
   /* Hide ONLY the Color select, and ONLY after JS is ready */
   html.swatch-ready .single-option-selector.is-color {
@@ -764,7 +770,7 @@ Main product section — safe + styled + correct add-to-cart
 
   .product-image-container img {
     width: 100%;
-    max-width: 1200px;
+    max-width: 1400px;
     height: auto;
     object-fit: cover;
   }
