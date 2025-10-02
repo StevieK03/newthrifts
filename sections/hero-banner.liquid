@@ -35,22 +35,22 @@
       <span class="ribbon hero__badge">{{ section.settings.badge_text }}</span>
     {% endif %}
 
-    <h1 class="hero__title" style="font-family:'Bebas Neue', sans-serif;">{{ section.settings.heading }}</h1>
+    <h1 class="hero__title fade-in-up text-reveal" style="font-family:'Bebas Neue', sans-serif;">{{ section.settings.heading }}</h1>
 
     {% if section.settings.subheading != blank %}
-      <p class="hero__subtitle">{{ section.settings.subheading }}</p>
+      <p class="hero__subtitle fade-in-up stagger-1">{{ section.settings.subheading }}</p>
     {% endif %}
 
-    <div class="hero__buttons" style="display:flex; gap:12px; flex-wrap:wrap;">
+    <div class="hero__buttons fade-in-up stagger-2" style="display:flex; gap:12px; flex-wrap:wrap;">
       {% if section.settings.primary_label != blank and section.settings.primary_link != blank %}
-        <a href="{{ section.settings.primary_link }}" class="my-button hero__btn hero__btn--primary">
+        <a href="{{ section.settings.primary_link }}" class="my-button hero__btn hero__btn--primary btn-enhanced magnetic">
           <span class="btn-text">{{ section.settings.primary_label }}</span>
           <div class="btn-shine"></div>
         </a>
       {% endif %}
 
       {% if section.settings.secondary_label != blank and section.settings.secondary_link != blank %}
-        <a href="{{ section.settings.secondary_link }}" class="my-button my-button--ghost hero__btn hero__btn--secondary">
+        <a href="{{ section.settings.secondary_link }}" class="my-button my-button--ghost hero__btn hero__btn--secondary btn-enhanced magnetic">
           <span class="btn-text">{{ section.settings.secondary_label }}</span>
         </a>
       {% endif %}
