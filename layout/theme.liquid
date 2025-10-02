@@ -277,7 +277,7 @@
         });
       });
       
-      // Enhanced Scroll-Triggered Animations
+      // Intersection Observer for Fade-in Animations
       const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
@@ -287,127 +287,14 @@
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             entry.target.classList.add('animate-in');
-            
-            // Add specific animation classes based on element type
-            if (entry.target.classList.contains('fade-in-up')) {
-              entry.target.classList.add('animate');
-            }
-            if (entry.target.classList.contains('fade-in-left')) {
-              entry.target.classList.add('animate');
-            }
-            if (entry.target.classList.contains('fade-in-right')) {
-              entry.target.classList.add('animate');
-            }
-            if (entry.target.classList.contains('scale-in')) {
-              entry.target.classList.add('animate');
-            }
-            
-            // Stagger animations for child elements
-            const children = entry.target.querySelectorAll('.stagger-1, .stagger-2, .stagger-3, .stagger-4, .stagger-5, .stagger-6');
-            children.forEach((child, index) => {
-              setTimeout(() => {
-                child.classList.add('animate');
-              }, index * 100);
-            });
           }
         });
       }, observerOptions);
       
-      // Observe all sections and elements with animation classes
-      document.querySelectorAll('section, .fade-in-up, .fade-in-left, .fade-in-right, .scale-in').forEach(element => {
-        element.classList.add('fade-in-section');
-        observer.observe(element);
-      });
-      
-      // Enhanced Parallax Scrolling
-      const parallaxElements = document.querySelectorAll('.parallax');
-      
-      function updateParallax() {
-        const scrolled = window.pageYOffset;
-        
-        parallaxElements.forEach(element => {
-          const speed = element.dataset.speed || 0.5;
-          const yPos = -(scrolled * speed);
-          element.style.transform = `translateY(${yPos}px)`;
-        });
-      }
-      
-      // Throttled scroll event for better performance
-      let ticking = false;
-      function requestTick() {
-        if (!ticking) {
-          requestAnimationFrame(updateParallax);
-          ticking = true;
-        }
-      }
-      
-      window.addEventListener('scroll', requestTick);
-      
-      // Magnetic hover effects
-      const magneticElements = document.querySelectorAll('.magnetic');
-      
-      magneticElements.forEach(element => {
-        element.addEventListener('mousemove', function(e) {
-          const rect = element.getBoundingClientRect();
-          const x = e.clientX - rect.left - rect.width / 2;
-          const y = e.clientY - rect.top - rect.height / 2;
-          
-          const distance = Math.sqrt(x * x + y * y);
-          const maxDistance = 50;
-          
-          if (distance < maxDistance) {
-            const moveX = (x / maxDistance) * 10;
-            const moveY = (y / maxDistance) * 10;
-            
-            element.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.05)`;
-          }
-        });
-        
-        element.addEventListener('mouseleave', function() {
-          element.style.transform = 'translate(0, 0) scale(1)';
-        });
-      });
-      
-      // Text reveal animation
-      const textRevealElements = document.querySelectorAll('.text-reveal');
-      
-      textRevealElements.forEach(element => {
-        const text = element.textContent;
-        element.innerHTML = '';
-        
-        for (let i = 0; i < text.length; i++) {
-          const span = document.createElement('span');
-          span.textContent = text[i];
-          span.style.animationDelay = `${i * 0.05}s`;
-          element.appendChild(span);
-        }
-        
-        observer.observe(element);
-      });
-      
-      // Enhanced product card interactions
-      const productCards = document.querySelectorAll('.product-card, .enhanced-product-card');
-      
-      productCards.forEach(card => {
-        // Add enhanced hover classes
-        card.classList.add('card-enhanced', 'glow-on-hover');
-        
-        // 3D tilt effect
-        card.addEventListener('mousemove', function(e) {
-          const rect = card.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
-          const centerX = rect.width / 2;
-          const centerY = rect.height / 2;
-          const rotateX = (y - centerY) / 10;
-          const rotateY = (centerX - x) / 10;
-          
-          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
-        });
-        
-        card.addEventListener('mouseleave', function() {
-          card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
-        });
+      // Observe all sections for animations
+      document.querySelectorAll('section').forEach(section => {
+        section.classList.add('fade-in-section');
+        observer.observe(section);
       });
     });
     </script>
