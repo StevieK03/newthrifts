@@ -12,17 +12,17 @@
 
   <div class="featured-content" style="position: relative; z-index: 2;">
     {% if section.settings.heading != blank %}
-      <h2 class="fade-in-up text-reveal" style="font-family:'Bebas Neue', sans-serif; font-size:38px; margin:0 0 10px 0;">{{ section.settings.heading }}</h2>
+      <h2 style="font-family:'Bebas Neue', sans-serif; font-size:38px; margin:0 0 10px 0;">{{ section.settings.heading }}</h2>
     {% endif %}
     {% if section.settings.subheading != blank %}
-      <p class="fade-in-up stagger-1" style="margin-top:0; opacity:.85;">{{ section.settings.subheading }}</p>
+      <p style="margin-top:0; opacity:.85;">{{ section.settings.subheading }}</p>
     {% endif %}
 
   {% if section.settings.collection != blank %}
     {% assign col = section.settings.collection %}
     <div class="grid grid--3">
       {% for product in col.products limit: section.settings.max_products %}
-        <article class="product-card enhanced-product-card fade-in-up magnetic stagger-{{ forloop.index }}" data-product-id="{{ product.id }}" data-product-handle="{{ product.handle }}" data-filters="{{ product.tags | join: ',' }}">
+        <article class="product-card enhanced-product-card" data-product-id="{{ product.id }}" data-product-handle="{{ product.handle }}" data-filters="{{ product.tags | join: ',' }}">
           <!-- Cool Effects Elements -->
           <div class="card-glow"></div>
           <div class="card-shine"></div>
