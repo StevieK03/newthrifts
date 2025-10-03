@@ -44,13 +44,14 @@
 </header>
 
 <style>
-  /* ===== Clean white header that matches the gap area ===== */
+  /* ===== Premium dark header with luxury feel ===== */
   #Header-{{ section.id }}{
-    background: #f2f3f5 !important;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%) !important;
     position:relative;
     z-index:50;
-    box-shadow: 0 2px 15px rgba(0,0,0,.08);
-    border-bottom: 1px solid rgba(0,0,0,.06);
+    box-shadow: 0 4px 20px rgba(0,0,0,.15);
+    border-bottom: 1px solid rgba(255,255,255,.1);
+    backdrop-filter: blur(10px);
   }
   #Header-{{ section.id }} *{ box-sizing:border-box }
   #Header-{{ section.id }} .nt-header__wrap{
@@ -198,31 +199,33 @@
   #Header-{{ section.id }} .nt-header__logo-img{ max-height:80px; display:block }
   #Header-{{ section.id }} .nt-header__logo-text{
     font-weight:800; text-decoration:none;
-    color:#0f172a !important; /* dark text on light background */
+    color:#ffffff !important; /* white text on dark background */
     font-size:1.8rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
   }
   #Header-{{ section.id }} .nt-header__list{
     display:flex; gap:8px; list-style:none; margin:0; padding:0;
   }
   #Header-{{ section.id }} .nt-header__link{
     text-decoration:none; 
-    color:#0f172a !important; 
+    color:#ffffff !important; 
     font-weight:600;
     padding: 12px 20px;
     border-radius: 25px;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
-    background: rgba(0,0,0,.05);
-    border: 1px solid rgba(0,0,0,.1);
+    background: rgba(255,255,255,.1);
+    border: 1px solid rgba(255,255,255,.2);
+    backdrop-filter: blur(10px);
   }
   
   #Header-{{ section.id }} .nt-header__link:hover{
-    background: rgba(0,0,0,.08);
-    color: #0f172a !important;
+    background: rgba(255,255,255,.2);
+    color: #ffffff !important;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,.1);
-    border-color: rgba(0,0,0,.15);
+    box-shadow: 0 4px 12px rgba(255,255,255,.2);
+    border-color: rgba(255,255,255,.4);
   }
   
   /* Removed shine effect to clean up header */
