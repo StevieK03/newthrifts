@@ -23,6 +23,7 @@
     },
     "welcome_social_bar_YkCFUP": {
       "type": "welcome-social-bar",
+      "disabled": true,
       "name": "Welcome / Social Bar",
       "settings": {
         "heading": "Welcome to New Thrifts — fresh drops, great prices.",
