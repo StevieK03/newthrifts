@@ -143,6 +143,7 @@
         "product_2",
         "product_3"
       ],
+      "disabled": true,
       "name": "Product Poll",
       "settings": {
         "title": "Vote for Your Favorite Products!",
