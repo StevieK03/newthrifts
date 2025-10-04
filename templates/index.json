@@ -164,6 +164,18 @@
         "collection": "entire-collection",
         "max_products": 12
       }
+    },
+    "bar_cdJnzk": {
+      "type": "bar",
+      "name": "Social Bar",
+      "settings": {
+        "heading": "",
+        "body": "",
+        "facebook_url": "",
+        "instagram_url": "",
+        "pad_y": 36,
+        "section_bg": "#f2f3f5"
+      }
     }
   },
   "order": [
@@ -174,6 +186,7 @@
     "halloween-countdown",
     "product_poll_section",
     "marquee",
+    "bar_cdJnzk",
     "featured_collection_ETkhqA"
   ]
 }
