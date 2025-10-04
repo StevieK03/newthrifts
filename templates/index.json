@@ -11,7 +11,11 @@
   "sections": {
     "header": {
       "type": "header",
-      "settings": {}
+      "disabled": true,
+      "settings": {
+        "logo_text": "New Thrifts",
+        "menu": ""
+      }
     },
     "quick_view_modal": {
       "type": "quick-view-modal",
@@ -19,17 +23,47 @@
     },
     "welcome_social_bar_YkCFUP": {
       "type": "welcome-social-bar",
+      "disabled": true,
       "name": "Welcome / Social Bar",
       "settings": {
         "heading": "Welcome to New Thrifts — fresh drops, great prices.",
         "body": "<p>We keep your wardrobe fresh with <strong>new products weekly</strong>. From classic tees & hoodies to <strong>must-have hats, shorts, and gadgets</strong>—plus fun seasonal collections for everyone. Dive into the full catalog and find your next favorite fit today!</p>",
         "facebook_url": "https://www.facebook.com/profile.php?id=61580618386334",
         "instagram_url": "",
-        "pad_y": 36
+        "pad_y": 36,
+        "section_bg": "#f2f3f5"
+      }
+    },
+    "visitor_counter_section": {
+      "type": "visitor-counter",
+      "name": "Visitor Counter",
+      "settings": {
+        "show_heading": true,
+        "heading": "Site Visitors",
+        "heading_size": 32,
+        "show_subheading": true,
+        "subheading": "Join thousands of visitors exploring our collection",
+        "subheading_size": 16,
+        "bg_color": "#f8fafc",
+        "bg_color_2": "#e2e8f0",
+        "text_color": "#0f172a",
+        "counter_bg": "#ffffff",
+        "counter_border": "#0000001a",
+        "counter_color": "#27e1c1",
+        "counter_color_2": "#ff4fa3",
+        "accent_color": "#27e1c11a",
+        "accent_color_2": "#ff4fa31a",
+        "pad_y": 40,
+        "margin_y": 20,
+        "border_radius": 16,
+        "counter_size": 36,
+        "label_size": 14,
+        "show_last_updated": true
       }
     },
     "halloween-countdown": {
       "type": "countdown-halloween",
+      "disabled": true,
       "settings": {
         "show_label": true,
         "label": "Countdown to Halloween",
@@ -40,11 +74,11 @@
         "size": "lg",
         "bg_color": "#000000",
         "bg_color_2": "#000000",
-        "text_color": "#DC143C",
-        "muted_color": "#B22222",
-        "accent_color": "#8B0000",
-        "accent2_color": "#4B0000",
-        "ring_color": "#DC143C",
+        "text_color": "#dc143c",
+        "muted_color": "#b22222",
+        "accent_color": "#8b0000",
+        "accent2_color": "#4b0000",
+        "ring_color": "#dc143c",
         "pad_y": 18,
         "pad_x": 18,
         "sticky": true,
@@ -73,7 +107,7 @@
         "lightning_debug": true,
         "lightning_min_gap": 10,
         "lightning_max_gap": 28,
-        "lightning_color": "#DC143C",
+        "lightning_color": "#dc143c",
         "lightning_intensity": 85,
         "thunder_url": "",
         "thunder_volume_pct": 35,
@@ -82,55 +116,8 @@
         "noscript_text": "10/31 at 12:00am (your local time)"
       }
     },
-    "marquee": {
-      "type": "marquee",
-      "disabled": true,
-      "settings": {}
-    },
-    "featured_collection_ETkhqA": {
-      "type": "featured-collection",
-      "name": "Featured collection",
-      "settings": {
-        "heading": "Featured Collection",
-        "subheading": "",
-        "collection": "entire-collection",
-        "max_products": 12
-      }
-    },
-    "visitor_counter_section": {
-      "type": "visitor-counter",
-      "name": "Visitor Counter",
-      "settings": {
-        "show_heading": true,
-        "heading": "Site Visitors",
-        "heading_size": 32,
-        "show_subheading": true,
-        "subheading": "Join thousands of visitors exploring our collection",
-        "subheading_size": 16,
-        "bg_color": "#f8fafc",
-        "bg_color_2": "#e2e8f0",
-        "text_color": "#0f172a",
-        "counter_bg": "#ffffff",
-        "counter_border": "rgba(0,0,0,0.1)",
-        "counter_color": "#27e1c1",
-        "counter_color_2": "#ff4fa3",
-        "accent_color": "rgba(39,225,193,0.1)",
-        "accent_color_2": "rgba(255,79,163,0.1)",
-        "pad_y": 40,
-        "margin_y": 20,
-        "border_radius": 16,
-        "counter_size": 36,
-        "label_size": 14,
-        "show_last_updated": true
-      }
-    },
     "product_poll_section": {
       "type": "product-poll",
-      "name": "Product Poll",
-      "settings": {
-        "title": "Vote for Your Favorite Products!",
-        "description": "Help us decide which products to feature more prominently. Your vote matters!"
-      },
       "blocks": {
         "product_1": {
           "type": "product",
@@ -155,7 +142,40 @@
         "product_1",
         "product_2",
         "product_3"
-      ]
+      ],
+      "disabled": true,
+      "name": "Product Poll",
+      "settings": {
+        "title": "Vote for Your Favorite Products!",
+        "description": "Help us decide which products to feature more prominently. Your vote matters!"
+      }
+    },
+    "marquee": {
+      "type": "marquee",
+      "disabled": true,
+      "settings": {}
+    },
+    "featured_collection_ETkhqA": {
+      "type": "featured-collection",
+      "name": "Featured collection",
+      "settings": {
+        "heading": "Featured Collection",
+        "subheading": "",
+        "collection": "entire-collection",
+        "max_products": 12
+      }
+    },
+    "bar_cdJnzk": {
+      "type": "bar",
+      "name": "Social Bar",
+      "settings": {
+        "heading": "",
+        "body": "",
+        "facebook_url": "",
+        "instagram_url": "",
+        "pad_y": 36,
+        "section_bg": "#f2f3f5"
+      }
     }
   },
   "order": [
@@ -166,6 +186,7 @@
     "halloween-countdown",
     "product_poll_section",
     "marquee",
+    "bar_cdJnzk",
     "featured_collection_ETkhqA"
   ]
 }
