@@ -2069,53 +2069,93 @@ document.addEventListener('DOMContentLoaded', function() {
         // Draw base image
         ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
 
-        // Draw design text
-        ctx.save();
-        ctx.font = `${this.designState.fontSize * 2}px ${this.designState.fontFamily}`;
-        ctx.fillStyle = this.designState.textColor;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-
-        // Calculate text position based on overlay settings
-        const stage = document.querySelector(`#nt-mockup-{{ section.id }} .nt-mockup__canvas`);
-        const topPct = parseFloat(getComputedStyle(stage).getPropertyValue('--overlay-top')) / 100;
-        const leftPct = parseFloat(getComputedStyle(stage).getPropertyValue('--overlay-left')) / 100;
-        const widthPct = parseFloat(getComputedStyle(stage).getPropertyValue('--overlay-width')) / 100;
-        const rotateDeg = parseFloat(getComputedStyle(stage).getPropertyValue('--overlay-rotate')) || 0;
-
-        const x = canvas.width * (leftPct + widthPct / 2);
-        const y = canvas.height * (topPct + 0.3); // Adjust for text positioning
-
-        ctx.translate(x, y);
-        ctx.rotate(rotateDeg * Math.PI / 180);
+        // Check if there's an uploaded design image
+        const overlayImg = document.querySelector(`#nt-overlay-{{ section.id }} img`);
         
-        // Apply text effects
-        switch (this.designState.effect) {
-          case 'outline':
-            ctx.strokeStyle = this.designState.textColor;
-            ctx.lineWidth = 4;
-            ctx.strokeText(this.designState.text, 0, 0);
-            ctx.fillStyle = 'transparent';
-            break;
-          case 'shadow':
-            ctx.shadowColor = 'rgba(0,0,0,0.5)';
-            ctx.shadowBlur = 8;
-            ctx.shadowOffsetX = 4;
-            ctx.shadowOffsetY = 4;
-            ctx.fillStyle = this.designState.textColor;
-            break;
-          default:
-            ctx.fillStyle = this.designState.textColor;
+        if (overlayImg && overlayImg.src && !overlayImg.src.includes('data:image/svg+xml')) {
+          // Draw uploaded design image
+          const designImg = new Image();
+          designImg.crossOrigin = "anonymous";
+          designImg.src = overlayImg.src;
+          
+          designImg.onload = () => {
+            // Get overlay positioning from CSS variables
+            const stage = document.querySelector(`#nt-mockup-{{ section.id }} .nt-mockup__canvas`);
+            const topPct = parseFloat(getComputedStyle(stage).getPropertyValue('--overlay-top')) / 100;
+            const leftPct = parseFloat(getComputedStyle(stage).getPropertyValue('--overlay-left')) / 100;
+            const widthPct = parseFloat(getComputedStyle(stage).getPropertyValue('--overlay-width')) / 100;
+            const rotateDeg = parseFloat(getComputedStyle(stage).getPropertyValue('--overlay-rotate')) || 0;
+
+            // Calculate design position and size on canvas
+            const designX = canvas.width * leftPct;
+            const designY = canvas.height * topPct;
+            const designWidth = canvas.width * widthPct;
+            const designHeight = (designImg.height / designImg.width) * designWidth;
+
+            // Save context for rotation
+            ctx.save();
+            ctx.translate(designX + designWidth / 2, designY + designHeight / 2);
+            ctx.rotate(rotateDeg * Math.PI / 180);
+            
+            // Draw the design image
+            ctx.drawImage(designImg, -designWidth / 2, -designHeight / 2, designWidth, designHeight);
+            ctx.restore();
+
+            // Download
+            const a = document.createElement('a');
+            a.download = `custom_mockup_${this.state.view}_${this.state.color}.png`;
+            a.href = canvas.toDataURL("image/png");
+            a.click();
+          };
+        } else {
+          // Fallback to text if no image uploaded
+          ctx.save();
+          ctx.font = `${this.designState.fontSize * 2}px ${this.designState.fontFamily}`;
+          ctx.fillStyle = this.designState.textColor;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+
+          // Calculate text position based on overlay settings
+          const stage = document.querySelector(`#nt-mockup-{{ section.id }} .nt-mockup__canvas`);
+          const topPct = parseFloat(getComputedStyle(stage).getPropertyValue('--overlay-top')) / 100;
+          const leftPct = parseFloat(getComputedStyle(stage).getPropertyValue('--overlay-left')) / 100;
+          const widthPct = parseFloat(getComputedStyle(stage).getPropertyValue('--overlay-width')) / 100;
+          const rotateDeg = parseFloat(getComputedStyle(stage).getPropertyValue('--overlay-rotate')) || 0;
+
+          const x = canvas.width * (leftPct + widthPct / 2);
+          const y = canvas.height * (topPct + 0.3); // Adjust for text positioning
+
+          ctx.translate(x, y);
+          ctx.rotate(rotateDeg * Math.PI / 180);
+          
+          // Apply text effects
+          switch (this.designState.effect) {
+            case 'outline':
+              ctx.strokeStyle = this.designState.textColor;
+              ctx.lineWidth = 4;
+              ctx.strokeText(this.designState.text, 0, 0);
+              ctx.fillStyle = 'transparent';
+              break;
+            case 'shadow':
+              ctx.shadowColor = 'rgba(0,0,0,0.5)';
+              ctx.shadowBlur = 8;
+              ctx.shadowOffsetX = 4;
+              ctx.shadowOffsetY = 4;
+              ctx.fillStyle = this.designState.textColor;
+              break;
+            default:
+              ctx.fillStyle = this.designState.textColor;
+          }
+          
+          ctx.fillText(this.designState.text, 0, 0);
+          ctx.restore();
+
+          // Download
+          const a = document.createElement('a');
+          a.download = `custom_mockup_${this.state.view}_${this.state.color}.png`;
+          a.href = canvas.toDataURL("image/png");
+          a.click();
         }
-        
-        ctx.fillText(this.designState.text, 0, 0);
-        ctx.restore();
-
-        // Download
-        const a = document.createElement('a');
-        a.download = `custom_mockup_${this.state.view}_${this.state.color}.png`;
-        a.href = canvas.toDataURL("image/png");
-        a.click();
       };
     }
     {% endif %}
