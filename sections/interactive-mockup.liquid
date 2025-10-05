@@ -101,7 +101,7 @@ Enhanced Interactive Product Mockup
       </div>
 
       <!-- Advanced Placement Controls -->
-      <div id="nt-placement-controls-{{ section.id }}" class="nt-placement-controls" style="display: none; background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin: 20px 0;">
+      <div id="nt-placement-controls-{{ section.id }}" class="nt-placement-controls" style="display: block; background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin: 20px 0;">
         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
           <span style="font-weight: 600; font-size: 16px; color: #374151;">🎯 Precise Placement Controls</span>
           <button id="nt-reset-placement-{{ section.id }}" style="padding: 6px 12px; background: #f3f4f6; color: #6b7280; border: 1px solid #d1d5db; border-radius: 8px; font-size: 12px; cursor: pointer;">
@@ -436,11 +436,16 @@ document.addEventListener('DOMContentLoaded', function() {
     },
 
     init() {
+      console.log('🎯 Initializing Enhanced Interactive Mockup...');
       this.bindEvents();
       this.loadFromCustomizer();
       this.updateBase();
       this.updateDesign();
       this.updatePlacementDisplay();
+      
+      // Show placement controls by default for testing
+      this.showPlacementControls();
+      console.log('✅ Mockup initialized with placement controls visible');
     },
 
     bindEvents() {
@@ -773,12 +778,21 @@ document.addEventListener('DOMContentLoaded', function() {
     },
 
     bindPlacementControls() {
+      console.log('🎛️ Binding placement controls...');
       // Get placement control elements
       const topSlider = document.getElementById(`nt-top-{{ section.id }}`);
       const leftSlider = document.getElementById(`nt-left-{{ section.id }}`);
       const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
       const rotateSlider = document.getElementById(`nt-rotate-{{ section.id }}`);
       const resetBtn = document.getElementById(`nt-reset-placement-{{ section.id }}`);
+
+      console.log('Placement controls found:', {
+        topSlider: !!topSlider,
+        leftSlider: !!leftSlider,
+        widthSlider: !!widthSlider,
+        rotateSlider: !!rotateSlider,
+        resetBtn: !!resetBtn
+      });
 
       // Bind slider events
       if (topSlider) {
