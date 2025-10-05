@@ -100,10 +100,65 @@ Enhanced Interactive Product Mockup
         </div>
       </div>
 
+      <!-- Advanced Placement Controls -->
+      <div id="nt-placement-controls-{{ section.id }}" class="nt-placement-controls" style="display: none; background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin: 20px 0;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+          <span style="font-weight: 600; font-size: 16px; color: #374151;">🎯 Precise Placement Controls</span>
+          <button id="nt-reset-placement-{{ section.id }}" style="padding: 6px 12px; background: #f3f4f6; color: #6b7280; border: 1px solid #d1d5db; border-radius: 8px; font-size: 12px; cursor: pointer;">
+            🔄 Reset
+          </button>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+          <!-- Top Position -->
+          <div class="placement-slider">
+            <label style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: #374151;">
+              <span>📐 Top Position</span>
+              <span id="nt-top-val-{{ section.id }}" style="font-weight: 600; color: #27e1c1;">{{ section.settings.overlay_top }}%</span>
+            </label>
+            <input type="range" id="nt-top-{{ section.id }}" min="0" max="90" step="0.5" value="{{ section.settings.overlay_top }}" style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; outline: none; cursor: pointer;">
+          </div>
+
+          <!-- Left Position -->
+          <div class="placement-slider">
+            <label style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: #374151;">
+              <span>📐 Left Position</span>
+              <span id="nt-left-val-{{ section.id }}" style="font-weight: 600; color: #27e1c1;">{{ section.settings.overlay_left }}%</span>
+            </label>
+            <input type="range" id="nt-left-{{ section.id }}" min="0" max="90" step="0.5" value="{{ section.settings.overlay_left }}" style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; outline: none; cursor: pointer;">
+          </div>
+
+          <!-- Width -->
+          <div class="placement-slider">
+            <label style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: #374151;">
+              <span>📏 Design Width</span>
+              <span id="nt-width-val-{{ section.id }}" style="font-weight: 600; color: #27e1c1;">{{ section.settings.overlay_width }}%</span>
+            </label>
+            <input type="range" id="nt-width-{{ section.id }}" min="10" max="100" step="1" value="{{ section.settings.overlay_width }}" style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; outline: none; cursor: pointer;">
+          </div>
+
+          <!-- Rotation -->
+          <div class="placement-slider">
+            <label style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: #374151;">
+              <span>🔄 Rotation</span>
+              <span id="nt-rotate-val-{{ section.id }}" style="font-weight: 600; color: #27e1c1;">{{ section.settings.overlay_rotate }}°</span>
+            </label>
+            <input type="range" id="nt-rotate-{{ section.id }}" min="-45" max="45" step="0.5" value="{{ section.settings.overlay_rotate }}" style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; outline: none; cursor: pointer;">
+          </div>
+        </div>
+
+        <div style="margin-top: 16px; padding: 12px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
+          <div style="font-size: 12px; color: #6b7280; text-align: center;">
+            💡 <strong>Pro Tip:</strong> You can also drag the design directly on the mockup to move it, or use scroll wheel to resize!
+          </div>
+        </div>
+      </div>
+
       <!-- Enhanced Preview Stage -->
       <div class="nt-mockup__stage" style="width: 100%; display: grid; place-items: center;">
         <div class="nt-mockup__canvas" 
-             style="position: relative; width: min(720px, 100%); aspect-ratio: 1 / 1; background: linear-gradient(180deg, #ffffff, #f6f7f9); border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.1); --overlay-top: {{ section.settings.overlay_top }}%; --overlay-left: {{ section.settings.overlay_left }}%; --overlay-width: {{ section.settings.overlay_width }}%; --overlay-rotate: {{ section.settings.overlay_rotate }}deg;">
+             id="nt-mockup-canvas-{{ section.id }}"
+             style="position: relative; width: min(720px, 100%); aspect-ratio: 1 / 1; background: linear-gradient(180deg, #ffffff, #f6f7f9); border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.1); cursor: grab; --overlay-top: {{ section.settings.overlay_top }}%; --overlay-left: {{ section.settings.overlay_left }}%; --overlay-width: {{ section.settings.overlay_width }}%; --overlay-rotate: {{ section.settings.overlay_rotate }}deg;">
           
           <!-- Base Mockup (swapped by JS) -->
           <img
@@ -113,24 +168,35 @@ Enhanced Interactive Product Mockup
             alt="T-shirt mockup"
             loading="eager"
             decoding="async"
-            style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain;"
+            style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none;"
           >
           
           <!-- Dynamic Design Overlay -->
           <div
             id="nt-overlay-{{ section.id }}"
             class="nt-mockup__overlay"
-            style="position: absolute; width: var(--overlay-width); left: var(--overlay-left); top: var(--overlay-top); transform: rotate(var(--overlay-rotate)); height: auto; inset: auto; pointer-events: none; display: flex; align-items: center; justify-content: center;"
+            style="position: absolute; width: var(--overlay-width); left: var(--overlay-left); top: var(--overlay-top); transform: rotate(var(--overlay-rotate)); height: auto; inset: auto; display: flex; align-items: center; justify-content: center; cursor: grab; transition: all 0.1s ease;"
           >
             <span id="nt-design-text-{{ section.id }}" 
-                  style="font-family: 'Bebas Neue', sans-serif; font-size: 32px; font-weight: bold; color: #000000; text-align: center; white-space: nowrap; user-select: none; text-shadow: 1px 1px 2px rgba(255,255,255,0.8);">
+                  style="font-family: 'Bebas Neue', sans-serif; font-size: 32px; font-weight: bold; color: #000000; text-align: center; white-space: nowrap; user-select: none; text-shadow: 1px 1px 2px rgba(255,255,255,0.8); pointer-events: none;">
               Your Design Here
             </span>
+            
+            <!-- Drag Handle (only visible when dragging) -->
+            <div id="nt-drag-handle-{{ section.id }}" 
+                 style="position: absolute; top: -8px; right: -8px; width: 16px; height: 16px; background: #27e1c1; border: 2px solid white; border-radius: 50%; cursor: grab; display: none; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
+            </div>
+          </div>
+
+          <!-- Resize Handle (only visible when hovering over design) -->
+          <div id="nt-resize-handle-{{ section.id }}" 
+               style="position: absolute; bottom: -8px; right: -8px; width: 20px; height: 20px; background: #8b5cf6; border: 2px solid white; border-radius: 50%; cursor: nw-resize; display: none; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; border-right: 2px solid white; border-bottom: 2px solid white; transform: translate(-50%, -50%) rotate(45deg);"></div>
           </div>
         </div>
         
         <p class="nt-mockup__hint" style="color: #6b7280; font-size: 14px; margin-top: 16px; text-align: center;">
-          💡 Tip: Use the "Edit Design" button to customize your text, colors, and effects
+          💡 Tip: Drag the design to move it, use scroll wheel to resize, or use the precise controls above
         </p>
       </div>
     </div>
@@ -174,6 +240,77 @@ Enhanced Interactive Product Mockup
   color: #1d4ed8 !important;
 }
 
+/* Enhanced Interactive Styles */
+.nt-mockup__overlay:hover {
+  cursor: grab !important;
+  box-shadow: 0 0 0 2px rgba(39, 225, 193, 0.3) !important;
+}
+
+.nt-mockup__overlay:active {
+  cursor: grabbing !important;
+}
+
+.nt-mockup__canvas.dragging {
+  cursor: grabbing !important;
+}
+
+.nt-placement-controls {
+  animation: slideInUp 0.3s ease;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.placement-slider input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.placement-slider input[type="range"]::-webkit-slider-track {
+  background: #e5e7eb;
+  height: 6px;
+  border-radius: 3px;
+}
+
+.placement-slider input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  background: #27e1c1;
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  cursor: pointer;
+}
+
+.placement-slider input[type="range"]::-moz-range-track {
+  background: #e5e7eb;
+  height: 6px;
+  border-radius: 3px;
+  border: none;
+}
+
+.placement-slider input[type="range"]::-moz-range-thumb {
+  background: #27e1c1;
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  cursor: pointer;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .nt-mockup__controls {
@@ -198,6 +335,15 @@ Enhanced Interactive Product Mockup
   .nt-mockup__canvas {
     width: 100% !important;
     max-width: 500px !important;
+  }
+
+  .nt-placement-controls {
+    margin: 10px 0 !important;
+    padding: 16px !important;
+  }
+
+  .placement-slider {
+    margin-bottom: 12px !important;
   }
 }
 
@@ -276,11 +422,25 @@ document.addEventListener('DOMContentLoaded', function() {
     // Current view state
     state: { view: "front", color: "white" },
 
+    // Enhanced placement state
+    placementState: {
+      topPct: {{ section.settings.overlay_top }},
+      leftPct: {{ section.settings.overlay_left }},
+      widthPct: {{ section.settings.overlay_width }},
+      rotateDeg: {{ section.settings.overlay_rotate }},
+      dragging: false,
+      resizing: false,
+      lastX: 0,
+      lastY: 0,
+      hasUploadedDesign: false
+    },
+
     init() {
       this.bindEvents();
       this.loadFromCustomizer();
       this.updateBase();
       this.updateDesign();
+      this.updatePlacementDisplay();
     },
 
     bindEvents() {
@@ -342,6 +502,12 @@ document.addEventListener('DOMContentLoaded', function() {
           this.showHelpModal();
         });
       }
+
+      // Bind placement controls
+      this.bindPlacementControls();
+
+      // Bind drag/resize functionality
+      this.bindDragResize();
 
       {% if section.settings.allow_download %}
       // Bind download button
@@ -579,12 +745,265 @@ document.addEventListener('DOMContentLoaded', function() {
           max-height: 100%;
           object-fit: contain;
           filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+          pointer-events: none;
         `;
         
         overlayDiv.appendChild(uploadedImg);
         
+        // Mark as uploaded design
+        this.placementState.hasUploadedDesign = true;
+        
+        // Show placement controls
+        this.showPlacementControls();
+        
         this.showMessage('✨ Uploaded design applied to mockup!', 'success');
       }
+    },
+
+    showPlacementControls() {
+      const placementControls = document.getElementById(`nt-placement-controls-{{ section.id }}`);
+      if (placementControls) {
+        placementControls.style.display = 'block';
+        // Animate in
+        setTimeout(() => {
+          placementControls.style.opacity = '1';
+          placementControls.style.transform = 'translateY(0)';
+        }, 100);
+      }
+    },
+
+    bindPlacementControls() {
+      // Get placement control elements
+      const topSlider = document.getElementById(`nt-top-{{ section.id }}`);
+      const leftSlider = document.getElementById(`nt-left-{{ section.id }}`);
+      const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
+      const rotateSlider = document.getElementById(`nt-rotate-{{ section.id }}`);
+      const resetBtn = document.getElementById(`nt-reset-placement-{{ section.id }}`);
+
+      // Bind slider events
+      if (topSlider) {
+        topSlider.addEventListener('input', () => {
+          this.placementState.topPct = parseFloat(topSlider.value);
+          this.updatePlacementDisplay();
+          this.updateDesignPosition();
+        });
+      }
+
+      if (leftSlider) {
+        leftSlider.addEventListener('input', () => {
+          this.placementState.leftPct = parseFloat(leftSlider.value);
+          this.updatePlacementDisplay();
+          this.updateDesignPosition();
+        });
+      }
+
+      if (widthSlider) {
+        widthSlider.addEventListener('input', () => {
+          this.placementState.widthPct = parseFloat(widthSlider.value);
+          this.updatePlacementDisplay();
+          this.updateDesignPosition();
+        });
+      }
+
+      if (rotateSlider) {
+        rotateSlider.addEventListener('input', () => {
+          this.placementState.rotateDeg = parseFloat(rotateSlider.value);
+          this.updatePlacementDisplay();
+          this.updateDesignPosition();
+        });
+      }
+
+      // Bind reset button
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          this.resetPlacement();
+        });
+      }
+    },
+
+    updatePlacementDisplay() {
+      // Update value displays
+      const topVal = document.getElementById(`nt-top-val-{{ section.id }}`);
+      const leftVal = document.getElementById(`nt-left-val-{{ section.id }}`);
+      const widthVal = document.getElementById(`nt-width-val-{{ section.id }}`);
+      const rotateVal = document.getElementById(`nt-rotate-val-{{ section.id }}`);
+
+      if (topVal) topVal.textContent = this.placementState.topPct.toFixed(1) + '%';
+      if (leftVal) leftVal.textContent = this.placementState.leftPct.toFixed(1) + '%';
+      if (widthVal) widthVal.textContent = this.placementState.widthPct.toFixed(0) + '%';
+      if (rotateVal) rotateVal.textContent = this.placementState.rotateDeg.toFixed(1) + '°';
+    },
+
+    updateDesignPosition() {
+      const overlayDiv = document.getElementById(`nt-overlay-{{ section.id }}`);
+      if (overlayDiv) {
+        overlayDiv.style.setProperty('--overlay-top', this.placementState.topPct + '%');
+        overlayDiv.style.setProperty('--overlay-left', this.placementState.leftPct + '%');
+        overlayDiv.style.setProperty('--overlay-width', this.placementState.widthPct + '%');
+        overlayDiv.style.setProperty('--overlay-rotate', this.placementState.rotateDeg + 'deg');
+      }
+    },
+
+    resetPlacement() {
+      this.placementState.topPct = {{ section.settings.overlay_top }};
+      this.placementState.leftPct = {{ section.settings.overlay_left }};
+      this.placementState.widthPct = {{ section.settings.overlay_width }};
+      this.placementState.rotateDeg = {{ section.settings.overlay_rotate }};
+
+      // Update sliders
+      const topSlider = document.getElementById(`nt-top-{{ section.id }}`);
+      const leftSlider = document.getElementById(`nt-left-{{ section.id }}`);
+      const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
+      const rotateSlider = document.getElementById(`nt-rotate-{{ section.id }}`);
+
+      if (topSlider) topSlider.value = this.placementState.topPct;
+      if (leftSlider) leftSlider.value = this.placementState.leftPct;
+      if (widthSlider) widthSlider.value = this.placementState.widthPct;
+      if (rotateSlider) rotateSlider.value = this.placementState.rotateDeg;
+
+      this.updatePlacementDisplay();
+      this.updateDesignPosition();
+    },
+
+    bindDragResize() {
+      const canvas = document.getElementById(`nt-mockup-canvas-{{ section.id }}`);
+      const overlay = document.getElementById(`nt-overlay-{{ section.id }}`);
+      
+      if (!canvas || !overlay) return;
+
+      // Mouse events
+      overlay.addEventListener('mousedown', (e) => {
+        if (e.target.tagName === 'IMG' || e.target.tagName === 'SPAN') {
+          this.startDrag(e);
+        }
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (this.placementState.dragging) {
+          this.handleDrag(e);
+        }
+      });
+
+      document.addEventListener('mouseup', () => {
+        this.endDrag();
+      });
+
+      // Touch events
+      overlay.addEventListener('touchstart', (e) => {
+        if (e.target.tagName === 'IMG' || e.target.tagName === 'SPAN') {
+          this.startDrag(e.touches[0]);
+        }
+      }, { passive: true });
+
+      document.addEventListener('touchmove', (e) => {
+        if (this.placementState.dragging) {
+          this.handleDrag(e.touches[0]);
+        }
+      }, { passive: true });
+
+      document.addEventListener('touchend', () => {
+        this.endDrag();
+      });
+
+      // Scroll wheel for resize
+      canvas.addEventListener('wheel', (e) => {
+        if (this.placementState.hasUploadedDesign) {
+          e.preventDefault();
+          this.handleResize(e.deltaY);
+        }
+      }, { passive: false });
+
+      // Hover effects
+      overlay.addEventListener('mouseenter', () => {
+        this.showDragHandles();
+      });
+
+      overlay.addEventListener('mouseleave', () => {
+        this.hideDragHandles();
+      });
+    },
+
+    startDrag(e) {
+      this.placementState.dragging = true;
+      const canvas = document.getElementById(`nt-mockup-canvas-{{ section.id }}`);
+      const rect = canvas.getBoundingClientRect();
+      
+      this.placementState.lastX = e.clientX - rect.left;
+      this.placementState.lastY = e.clientY - rect.top;
+      
+      canvas.classList.add('dragging');
+      this.showMessage('🎯 Drag to move design', 'info');
+    },
+
+    handleDrag(e) {
+      if (!this.placementState.dragging) return;
+      
+      const canvas = document.getElementById(`nt-mockup-canvas-{{ section.id }}`);
+      const rect = canvas.getBoundingClientRect();
+      
+      const currentX = e.clientX - rect.left;
+      const currentY = e.clientY - rect.top;
+      
+      const deltaX = currentX - this.placementState.lastX;
+      const deltaY = currentY - this.placementState.lastY;
+      
+      // Convert pixel deltas to percentages
+      const deltaXPercent = (deltaX / rect.width) * 100;
+      const deltaYPercent = (deltaY / rect.height) * 100;
+      
+      // Update position
+      this.placementState.leftPct = Math.max(0, Math.min(90, this.placementState.leftPct + deltaXPercent));
+      this.placementState.topPct = Math.max(0, Math.min(90, this.placementState.topPct + deltaYPercent));
+      
+      // Update display
+      this.updatePlacementDisplay();
+      this.updateDesignPosition();
+      
+      // Update sliders
+      const leftSlider = document.getElementById(`nt-left-{{ section.id }}`);
+      const topSlider = document.getElementById(`nt-top-{{ section.id }}`);
+      if (leftSlider) leftSlider.value = this.placementState.leftPct;
+      if (topSlider) topSlider.value = this.placementState.topPct;
+      
+      this.placementState.lastX = currentX;
+      this.placementState.lastY = currentY;
+    },
+
+    endDrag() {
+      if (this.placementState.dragging) {
+        this.placementState.dragging = false;
+        const canvas = document.getElementById(`nt-mockup-canvas-{{ section.id }}`);
+        canvas.classList.remove('dragging');
+      }
+    },
+
+    handleResize(deltaY) {
+      const delta = Math.sign(deltaY);
+      this.placementState.widthPct = Math.max(10, Math.min(100, this.placementState.widthPct - delta * 2));
+      
+      this.updatePlacementDisplay();
+      this.updateDesignPosition();
+      
+      const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
+      if (widthSlider) widthSlider.value = this.placementState.widthPct;
+    },
+
+    showDragHandles() {
+      const dragHandle = document.getElementById(`nt-drag-handle-{{ section.id }}`);
+      const resizeHandle = document.getElementById(`nt-resize-handle-{{ section.id }}`);
+      
+      if (dragHandle) dragHandle.style.display = 'block';
+      if (resizeHandle && this.placementState.hasUploadedDesign) {
+        resizeHandle.style.display = 'block';
+      }
+    },
+
+    hideDragHandles() {
+      const dragHandle = document.getElementById(`nt-drag-handle-{{ section.id }}`);
+      const resizeHandle = document.getElementById(`nt-resize-handle-{{ section.id }}`);
+      
+      if (dragHandle) dragHandle.style.display = 'none';
+      if (resizeHandle) resizeHandle.style.display = 'none';
     },
 
     closeUploadPreview() {
