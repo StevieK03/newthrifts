@@ -1510,7 +1510,7 @@ document.addEventListener('DOMContentLoaded', function() {
       // Calculate the optimal position for equidistant placement
       // Left margin = Right margin, Top margin = Bottom margin
       const optimalLeft = (100 - currentWidth) / 2;
-      const optimalTop = 45; // Keep at t-shirt center for vertical balance
+      const optimalTop = 35; // Position higher on t-shirt for better visual balance
       
       // Apply the equidistant positioning
       this.placementState.leftPct = Math.max(5, Math.min(95 - currentWidth, optimalLeft));
