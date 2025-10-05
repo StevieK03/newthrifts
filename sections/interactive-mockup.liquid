@@ -158,7 +158,7 @@ Enhanced Interactive Product Mockup
       <div class="nt-mockup__stage" style="width: 100%; display: grid; place-items: center;">
         <div class="nt-mockup__canvas" 
              id="nt-mockup-canvas-{{ section.id }}"
-             style="position: relative; width: min(720px, 100%); aspect-ratio: 1 / 1; background: linear-gradient(180deg, #ffffff, #f6f7f9); border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.1); cursor: grab; --overlay-top: 40%; --overlay-left: 30%; --overlay-width: 50%; --overlay-rotate: 0deg;">
+             style="position: relative; width: min(720px, 100%); aspect-ratio: 1 / 1; background: linear-gradient(180deg, #ffffff, #f6f7f9); border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.1); cursor: grab; --overlay-top: 45%; --overlay-left: 25%; --overlay-width: 60%; --overlay-rotate: 0deg;">
           
       <!-- Base Mockup (swapped by JS) -->
       <img
@@ -437,9 +437,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Enhanced placement state - Initialize with centered values
     placementState: {
-      topPct: 40,
-      leftPct: 30,
-      widthPct: 50,
+      topPct: 45,
+      leftPct: 25,
+      widthPct: 60,
       rotateDeg: 0,
       dragging: false,
       resizing: false,
@@ -478,9 +478,9 @@ document.addEventListener('DOMContentLoaded', function() {
     forceCenterPositioning() {
       console.log('🔧 Applying centered positioning...');
       // Update the placement state to centered values
-      this.placementState.topPct = 40;
-      this.placementState.leftPct = 30;
-      this.placementState.widthPct = 50;
+      this.placementState.topPct = 45;
+      this.placementState.leftPct = 25;
+      this.placementState.widthPct = 60;
       this.placementState.rotateDeg = 0;
       
       // Update the display and position
@@ -1028,9 +1028,9 @@ document.addEventListener('DOMContentLoaded', function() {
     },
 
     resetPlacement() {
-      this.placementState.topPct = 40;
-      this.placementState.leftPct = 30;
-      this.placementState.widthPct = 50;
+      this.placementState.topPct = 45;
+      this.placementState.leftPct = 25;
+      this.placementState.widthPct = 60;
       this.placementState.rotateDeg = 0;
 
       // Update sliders
@@ -1467,7 +1467,7 @@ document.addEventListener('DOMContentLoaded', function() {
       "step": 1,
       "unit": "%",
       "label": "Top Position",
-      "default": 40
+      "default": 45
     },
     {
       "type": "range",
@@ -1477,7 +1477,7 @@ document.addEventListener('DOMContentLoaded', function() {
       "step": 1,
       "unit": "%",
       "label": "Left Position",
-      "default": 30
+      "default": 25
     },
     {
       "type": "range",
@@ -1487,7 +1487,7 @@ document.addEventListener('DOMContentLoaded', function() {
       "step": 1,
       "unit": "%",
       "label": "Design Width",
-      "default": 50
+      "default": 60
     },
     {
       "type": "range",
