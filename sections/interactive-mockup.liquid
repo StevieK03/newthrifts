@@ -164,7 +164,7 @@ Enhanced Interactive Product Mockup
           <img
             id="nt-base-{{ section.id }}"
             class="nt-mockup__base"
-            src="{{ section.settings.front_white | default: 'https://via.placeholder.com/800x800/f8f9fa/64748b?text=Front+White' | image_url }}"
+            src="{{ section.settings.base_mockup | default: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&h=800&fit=crop&crop=center' | image_url: width: 800 }}"
             alt="T-shirt mockup"
             loading="eager"
             decoding="async"
@@ -375,39 +375,8 @@ Enhanced Interactive Product Mockup
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const mockup = {
-    // Enhanced mockup sources with more colors and views
-    sources: {
-      front: {
-        white: "{{ section.settings.front_white | default: 'https://via.placeholder.com/800x800/ffffff/000000?text=Front+White' | image_url }}",
-        black: "{{ section.settings.front_black | default: 'https://via.placeholder.com/800x800/000000/ffffff?text=Front+Black' | image_url }}",
-        pink: "{{ section.settings.front_pink | default: 'https://via.placeholder.com/800x800/ff69b4/ffffff?text=Front+Pink' | image_url }}",
-        blue: "{{ section.settings.front_blue | default: 'https://via.placeholder.com/800x800/0066cc/ffffff?text=Front+Blue' | image_url }}"
-      },
-      back: {
-        white: "{{ section.settings.back_white | default: 'https://via.placeholder.com/800x800/ffffff/000000?text=Back+White' | image_url }}",
-        black: "{{ section.settings.back_black | default: 'https://via.placeholder.com/800x800/000000/ffffff?text=Back+Black' | image_url }}",
-        pink: "{{ section.settings.back_pink | default: 'https://via.placeholder.com/800x800/ff69b4/ffffff?text=Back+Pink' | image_url }}",
-        blue: "{{ section.settings.back_blue | default: 'https://via.placeholder.com/800x800/0066cc/ffffff?text=Back+Blue' | image_url }}"
-      },
-      hanging: {
-        white: "{{ section.settings.hanging_white | default: 'https://via.placeholder.com/800x800/ffffff/000000?text=Hanging+White' | image_url }}",
-        black: "{{ section.settings.hanging_black | default: 'https://via.placeholder.com/800x800/000000/ffffff?text=Hanging+Black' | image_url }}",
-        pink: "{{ section.settings.hanging_pink | default: 'https://via.placeholder.com/800x800/ff69b4/ffffff?text=Hanging+Pink' | image_url }}",
-        blue: "{{ section.settings.hanging_blue | default: 'https://via.placeholder.com/800x800/0066cc/ffffff?text=Hanging+Blue' | image_url }}"
-      },
-      person1: {
-        white: "{{ section.settings.person1_white | default: 'https://via.placeholder.com/800x800/ffffff/000000?text=Model+1+White' | image_url }}",
-        black: "{{ section.settings.person1_black | default: 'https://via.placeholder.com/800x800/000000/ffffff?text=Model+1+Black' | image_url }}",
-        pink: "{{ section.settings.person1_pink | default: 'https://via.placeholder.com/800x800/ff69b4/ffffff?text=Model+1+Pink' | image_url }}",
-        blue: "{{ section.settings.person1_blue | default: 'https://via.placeholder.com/800x800/0066cc/ffffff?text=Model+1+Blue' | image_url }}"
-      },
-      person2: {
-        white: "{{ section.settings.person2_white | default: 'https://via.placeholder.com/800x800/ffffff/000000?text=Model+2+White' | image_url }}",
-        black: "{{ section.settings.person2_black | default: 'https://via.placeholder.com/800x800/000000/ffffff?text=Model+2+Black' | image_url }}",
-        pink: "{{ section.settings.person2_pink | default: 'https://via.placeholder.com/800x800/ff69b4/ffffff?text=Model+2+Pink' | image_url }}",
-        blue: "{{ section.settings.person2_blue | default: 'https://via.placeholder.com/800x800/0066cc/ffffff?text=Model+2+Blue' | image_url }}"
-      }
-    },
+    // Base mockup image
+    baseMockup: "{{ section.settings.base_mockup | default: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&h=800&fit=crop&crop=center' | image_url: width: 800 }}",
 
     // Current design state
     designState: {
@@ -548,9 +517,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     updateBase() {
       const baseEl = document.getElementById("nt-base-{{ section.id }}");
-      const src = this.sources[this.state.view]?.[this.state.color];
-      if (src && baseEl) {
-        baseEl.src = src;
+      if (baseEl && this.baseMockup) {
+        baseEl.src = this.baseMockup;
       }
     },
 
@@ -1278,107 +1246,13 @@ document.addEventListener('DOMContentLoaded', function() {
   "settings": [
     {
       "type": "header",
-      "content": "🖼 Base Mockups (Front/Back/Hanging × Colors)"
+      "content": "🖼 Base T-shirt Mockup"
     },
     {
       "type": "image_picker",
-      "id": "front_white",
-      "label": "Front • White"
-    },
-    {
-      "type": "image_picker",
-      "id": "front_black",
-      "label": "Front • Black"
-    },
-    {
-      "type": "image_picker",
-      "id": "front_pink",
-      "label": "Front • Pink"
-    },
-    {
-      "type": "image_picker",
-      "id": "front_blue",
-      "label": "Front • Blue"
-    },
-    {
-      "type": "image_picker",
-      "id": "back_white",
-      "label": "Back • White"
-    },
-    {
-      "type": "image_picker",
-      "id": "back_black",
-      "label": "Back • Black"
-    },
-    {
-      "type": "image_picker",
-      "id": "back_pink",
-      "label": "Back • Pink"
-    },
-    {
-      "type": "image_picker",
-      "id": "back_blue",
-      "label": "Back • Blue"
-    },
-    {
-      "type": "image_picker",
-      "id": "hanging_white",
-      "label": "Hanging • White"
-    },
-    {
-      "type": "image_picker",
-      "id": "hanging_black",
-      "label": "Hanging • Black"
-    },
-    {
-      "type": "image_picker",
-      "id": "hanging_pink",
-      "label": "Hanging • Pink"
-    },
-    {
-      "type": "image_picker",
-      "id": "hanging_blue",
-      "label": "Hanging • Blue"
-    },
-    {
-      "type": "image_picker",
-      "id": "person1_white",
-      "label": "Model 1 • White"
-    },
-    {
-      "type": "image_picker",
-      "id": "person1_black",
-      "label": "Model 1 • Black"
-    },
-    {
-      "type": "image_picker",
-      "id": "person1_pink",
-      "label": "Model 1 • Pink"
-    },
-    {
-      "type": "image_picker",
-      "id": "person1_blue",
-      "label": "Model 1 • Blue"
-    },
-    {
-      "type": "image_picker",
-      "id": "person2_white",
-      "label": "Model 2 • White"
-    },
-    {
-      "type": "image_picker",
-      "id": "person2_black",
-      "label": "Model 2 • Black"
-    },
-    {
-      "type": "image_picker",
-      "id": "person2_pink",
-      "label": "Model 2 • Pink"
-    },
-    {
-      "type": "image_picker",
-      "id": "person2_blue",
-      "label": "Model 2 • Blue"
+      "id": "base_mockup",
+      "label": "Base T-shirt Image",
+      "info": "Upload a high-quality T-shirt mockup image. Recommended size: 800x800px or larger."
     },
     {
       "type": "header",
