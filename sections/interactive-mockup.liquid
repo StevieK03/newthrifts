@@ -44,6 +44,12 @@ Enhanced Interactive Product Mockup
             <button class="nt-btn nt-btn--view" data-view="person2" aria-selected="false" style="padding: 8px 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
               👤 Model 2
             </button>
+            <button class="nt-btn nt-btn--view" data-view="left" aria-selected="false" style="padding: 8px 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              ⬅️ Left
+            </button>
+            <button class="nt-btn nt-btn--view" data-view="right" aria-selected="false" style="padding: 8px 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              ➡️ Right
+            </button>
           </div>
         </div>
 
@@ -164,7 +170,7 @@ Enhanced Interactive Product Mockup
           <img
             id="nt-base-{{ section.id }}"
             class="nt-mockup__base"
-            src="{{ section.settings.base_mockup | default: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&h=800&fit=crop&crop=center' | image_url: width: 800 }}"
+            src="{{ section.settings.base_mockup | default: 'WFront_t-shirt.png' | asset_url }}"
             alt="T-shirt mockup"
             loading="eager"
             decoding="async"
@@ -252,6 +258,23 @@ Enhanced Interactive Product Mockup
 
 .nt-mockup__canvas.dragging {
   cursor: grabbing !important;
+}
+
+/* Color Filter Effects for T-shirt Colors */
+.nt-mockup__base.color-white {
+  filter: none;
+}
+
+.nt-mockup__base.color-black {
+  filter: brightness(0.3) saturate(0.8) contrast(1.2);
+}
+
+.nt-mockup__base.color-pink {
+  filter: hue-rotate(320deg) saturate(1.3) brightness(1.1) contrast(0.9);
+}
+
+.nt-mockup__base.color-blue {
+  filter: hue-rotate(220deg) saturate(1.2) brightness(0.9) contrast(1.1);
 }
 
 .nt-placement-controls {
@@ -375,8 +398,54 @@ Enhanced Interactive Product Mockup
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const mockup = {
-    // Base mockup image
-    baseMockup: "{{ section.settings.base_mockup | default: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&h=800&fit=crop&crop=center' | image_url: width: 800 }}",
+    // Mockup images mapping
+    mockupImages: {
+      front: {
+        white: "{{ 'WFront_t-shirt.png' | asset_url }}",
+        black: "{{ 'WFront_t-shirt.png' | asset_url }}",
+        pink: "{{ 'WFront_t-shirt.png' | asset_url }}",
+        blue: "{{ 'WFront_t-shirt.png' | asset_url }}"
+      },
+      back: {
+        white: "{{ 'WBack_t-shirt.png' | asset_url }}",
+        black: "{{ 'WBack_t-shirt.png' | asset_url }}",
+        pink: "{{ 'WBack_t-shirt.png' | asset_url }}",
+        blue: "{{ 'WBack_t-shirt.png' | asset_url }}"
+      },
+      hanging: {
+        white: "{{ 'W3-D_t-shirt.png' | asset_url }}",
+        black: "{{ 'W3-D_t-shirt.png' | asset_url }}",
+        pink: "{{ 'W3-D_t-shirt.png' | asset_url }}",
+        blue: "{{ 'W3-D_t-shirt.png' | asset_url }}"
+      },
+      person1: {
+        white: "{{ 'Girl-Model.png' | asset_url }}",
+        black: "{{ 'Girl-Model.png' | asset_url }}",
+        pink: "{{ 'Girl-Model.png' | asset_url }}",
+        blue: "{{ 'Girl-Model.png' | asset_url }}"
+      },
+      person2: {
+        white: "{{ 'Women-side.png' | asset_url }}",
+        black: "{{ 'Women-side.png' | asset_url }}",
+        pink: "{{ 'Women-side.png' | asset_url }}",
+        blue: "{{ 'Women-side.png' | asset_url }}"
+      },
+      left: {
+        white: "{{ 'Wleft_t-shirt.png' | asset_url }}",
+        black: "{{ 'Wleft_t-shirt.png' | asset_url }}",
+        pink: "{{ 'Wleft_t-shirt.png' | asset_url }}",
+        blue: "{{ 'Wleft_t-shirt.png' | asset_url }}"
+      },
+      right: {
+        white: "{{ 'Wright_t-shirt.png' | asset_url }}",
+        black: "{{ 'Wright_t-shirt.png' | asset_url }}",
+        pink: "{{ 'Wright_t-shirt.png' | asset_url }}",
+        blue: "{{ 'Wright_t-shirt.png' | asset_url }}"
+      }
+    },
+    
+    // Current base mockup image
+    baseMockup: "{{ section.settings.base_mockup | default: 'WFront_t-shirt.png' | asset_url }}",
 
     // Current design state
     designState: {
@@ -517,9 +586,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
     updateBase() {
       const baseEl = document.getElementById("nt-base-{{ section.id }}");
-      if (baseEl && this.baseMockup) {
-        baseEl.src = this.baseMockup;
+      if (baseEl) {
+        // Get the appropriate mockup image based on current view and color
+        const mockupImage = this.mockupImages[this.state.view]?.[this.state.color] || 
+                           this.mockupImages[this.state.view]?.white ||
+                           this.mockupImages.front?.white ||
+                           this.baseMockup;
+        
+        baseEl.src = mockupImage;
+        
+        // Apply color filter based on selected color
+        this.applyColorFilter(baseEl, this.state.color);
+        
+        console.log('🔄 Updated mockup image:', mockupImage, 'for view:', this.state.view, 'color:', this.state.color);
       }
+    },
+
+    applyColorFilter(element, color) {
+      // Remove any existing color filter classes
+      element.classList.remove('color-white', 'color-black', 'color-pink', 'color-blue');
+      
+      // Add the appropriate color filter class
+      element.classList.add(`color-${color}`);
     },
 
     updateDesign() {
