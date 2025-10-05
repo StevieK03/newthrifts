@@ -151,6 +151,17 @@ Enhanced Interactive Product Mockup
           </div>
         </div>
 
+        <!-- Placement Guide Controls -->
+        <div style="margin-top: 20px; padding: 16px; background: #fef3c7; border-radius: 12px; border: 1px solid #fbbf24;">
+          <h5 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #92400e;">🎯 Placement Guide</h5>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <button id="nt-toggle-guide-{{ section.id }}" style="padding: 8px 16px; background: linear-gradient(45deg, #f59e0b, #d97706); color: white; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 500;">
+              📐 Show Placement Guide
+            </button>
+            <span style="font-size: 12px; color: #92400e;">Toggle crosshairs and placement area</span>
+          </div>
+        </div>
+
         <!-- Mockup Size Controls -->
         <div style="margin-top: 20px; padding: 16px; background: #f0fdf4; border-radius: 12px; border: 1px solid #bbf7d0;">
           <h5 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #166534;">🔍 Mockup Size Controls</h5>
@@ -266,6 +277,31 @@ Enhanced Interactive Product Mockup
             <div class="resize-handle" data-direction="e" 
                  style="position: absolute; right: -8px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; background: #4ecdc4; border: 2px solid white; border-radius: 50%; cursor: e-resize; display: block; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 10;"
                  title="Resize from right">
+            </div>
+            
+            <!-- Interactive Placement Guide -->
+            <div id="nt-placement-guide-{{ section.id }}" 
+                 style="position: absolute; inset: 0; pointer-events: none; z-index: 5; display: none;">
+              
+              <!-- Crosshairs -->
+              <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: rgba(255, 255, 255, 0.8); transform: translateY(-50%);"></div>
+              <div style="position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: rgba(255, 255, 255, 0.8); transform: translateX(-50%);"></div>
+              
+              <!-- Center circle -->
+              <div style="position: absolute; top: 50%; left: 50%; width: 20px; height: 20px; border: 2px solid rgba(255, 255, 255, 0.9); border-radius: 50%; transform: translate(-50%, -50%); background: rgba(0, 0, 0, 0.3);"></div>
+              
+              <!-- Placement area indicator -->
+              <div style="position: absolute; top: 20%; left: 20%; right: 20%; bottom: 20%; border: 2px dashed rgba(255, 255, 255, 0.7); border-radius: 12px; background: rgba(0, 0, 0, 0.1);">
+                <div style="position: absolute; top: 8px; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.7); color: white; padding: 4px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; white-space: nowrap;">
+                  Place Design Here
+                </div>
+              </div>
+              
+              <!-- Corner guides -->
+              <div style="position: absolute; top: 15%; left: 15%; width: 8px; height: 8px; border: 1px solid rgba(255, 255, 255, 0.6); border-radius: 50%; background: rgba(255, 255, 255, 0.3);"></div>
+              <div style="position: absolute; top: 15%; right: 15%; width: 8px; height: 8px; border: 1px solid rgba(255, 255, 255, 0.6); border-radius: 50%; background: rgba(255, 255, 255, 0.3);"></div>
+              <div style="position: absolute; bottom: 15%; left: 15%; width: 8px; height: 8px; border: 1px solid rgba(255, 255, 255, 0.6); border-radius: 50%; background: rgba(255, 255, 255, 0.3);"></div>
+              <div style="position: absolute; bottom: 15%; right: 15%; width: 8px; height: 8px; border: 1px solid rgba(255, 255, 255, 0.6); border-radius: 50%; background: rgba(255, 255, 255, 0.3);"></div>
             </div>
           </div>
 
@@ -652,6 +688,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // Bind mockup size controls
       this.bindMockupSizeControls();
+
+      // Bind placement guide controls
+      this.bindPlacementGuideControls();
 
       // Bind drag/resize functionality
       this.bindDragResize();
@@ -1172,6 +1211,31 @@ document.addEventListener('DOMContentLoaded', function() {
       const scaleContainer = scaleSlider?.parentElement;
       if (scaleContainer) {
         scaleContainer.appendChild(resetScaleBtn);
+      }
+    },
+
+    bindPlacementGuideControls() {
+      const toggleBtn = document.getElementById(`nt-toggle-guide-{{ section.id }}`);
+      const guide = document.getElementById(`nt-placement-guide-{{ section.id }}`);
+      
+      if (toggleBtn && guide) {
+        let isVisible = false;
+        
+        toggleBtn.addEventListener('click', () => {
+          isVisible = !isVisible;
+          
+          if (isVisible) {
+            guide.style.display = 'block';
+            toggleBtn.textContent = '📐 Hide Placement Guide';
+            toggleBtn.style.background = 'linear-gradient(45deg, #ef4444, #dc2626)';
+            console.log('🎯 Placement guide shown');
+          } else {
+            guide.style.display = 'none';
+            toggleBtn.textContent = '📐 Show Placement Guide';
+            toggleBtn.style.background = 'linear-gradient(45deg, #f59e0b, #d97706)';
+            console.log('🎯 Placement guide hidden');
+          }
+        });
       }
     },
 
