@@ -147,6 +147,24 @@ Enhanced Interactive Product Mockup
           </div>
         </div>
 
+        <!-- Mockup Size Controls -->
+        <div style="margin-top: 20px; padding: 16px; background: #f0fdf4; border-radius: 12px; border: 1px solid #bbf7d0;">
+          <h5 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #166534;">🔍 Mockup Size Controls</h5>
+          <div style="display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: end;">
+            <div>
+              <label style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: #374151;">
+                <span>📏 T-shirt Scale</span>
+                <span id="nt-mockup-scale-val-{{ section.id }}" style="font-weight: 600; color: #27e1c1;">100%</span>
+              </label>
+              <input type="range" id="nt-mockup-scale-{{ section.id }}" min="50" max="150" step="5" value="100" style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; outline: none; cursor: pointer;">
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <button id="nt-zoom-in-{{ section.id }}" style="padding: 8px 12px; background: #4299e1; color: white; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 500;">🔍 Zoom In</button>
+              <button id="nt-zoom-out-{{ section.id }}" style="padding: 8px 12px; background: #ed8936; color: white; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 500;">🔍 Zoom Out</button>
+            </div>
+          </div>
+        </div>
+
         <div style="margin-top: 16px; padding: 12px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
           <div style="font-size: 12px; color: #6b7280; text-align: center;">
             💡 <strong>Pro Tip:</strong> You can also drag the design directly on the mockup to move it, or use scroll wheel to resize!
@@ -620,6 +638,9 @@ document.addEventListener('DOMContentLoaded', function() {
       // Bind placement controls
       this.bindPlacementControls();
 
+      // Bind mockup size controls
+      this.bindMockupSizeControls();
+
       // Bind drag/resize functionality
       this.bindDragResize();
 
@@ -1083,6 +1104,60 @@ document.addEventListener('DOMContentLoaded', function() {
       if (leftVal) leftVal.textContent = this.placementState.leftPct.toFixed(1) + '%';
       if (widthVal) widthVal.textContent = this.placementState.widthPct.toFixed(0) + '%';
       if (rotateVal) rotateVal.textContent = this.placementState.rotateDeg.toFixed(1) + '°';
+    },
+
+    bindMockupSizeControls() {
+      const scaleSlider = document.getElementById(`nt-mockup-scale-{{ section.id }}`);
+      const scaleValue = document.getElementById(`nt-mockup-scale-val-{{ section.id }}`);
+      const zoomInBtn = document.getElementById(`nt-zoom-in-{{ section.id }}`);
+      const zoomOutBtn = document.getElementById(`nt-zoom-out-{{ section.id }}`);
+
+      if (scaleSlider) {
+        scaleSlider.addEventListener('input', () => {
+          const scale = parseFloat(scaleSlider.value);
+          this.updateMockupScale(scale);
+          if (scaleValue) scaleValue.textContent = scale + '%';
+        });
+      }
+
+      if (zoomInBtn) {
+        zoomInBtn.addEventListener('click', () => {
+          const currentScale = parseFloat(scaleSlider?.value || 100);
+          const newScale = Math.min(150, currentScale + 10);
+          if (scaleSlider) scaleSlider.value = newScale;
+          this.updateMockupScale(newScale);
+          if (scaleValue) scaleValue.textContent = newScale + '%';
+        });
+      }
+
+      if (zoomOutBtn) {
+        zoomOutBtn.addEventListener('click', () => {
+          const currentScale = parseFloat(scaleSlider?.value || 100);
+          const newScale = Math.max(50, currentScale - 10);
+          if (scaleSlider) scaleSlider.value = newScale;
+          this.updateMockupScale(newScale);
+          if (scaleValue) scaleValue.textContent = newScale + '%';
+        });
+      }
+    },
+
+    updateMockupScale(scale) {
+      const canvas = document.getElementById(`nt-mockup-canvas-{{ section.id }}`);
+      const baseImage = document.getElementById(`nt-base-{{ section.id }}`);
+      
+      if (canvas && baseImage) {
+        console.log('🔍 Scaling mockup to:', scale + '%');
+        
+        // Apply scale to the canvas container
+        canvas.style.transform = `scale(${scale / 100})`;
+        canvas.style.transformOrigin = 'center center';
+        
+        // Update the base image size to maintain quality
+        baseImage.style.width = `${100 / (scale / 100)}%`;
+        baseImage.style.height = `${100 / (scale / 100)}%`;
+        
+        console.log('✅ Mockup scaled successfully');
+      }
     },
 
     updateDesignPosition() {
