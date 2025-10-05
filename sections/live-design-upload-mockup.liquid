@@ -1,0 +1,248 @@
+{% comment %}
+  LIVE DESIGN UPLOAD MOCKUP (New Thrifts) — with fine-tune fields
+  - Upload artwork, preview on T-shirt, drag/resize on canvas.
+  - Sliders use step:1 (Shopify limit). Fine-tune number inputs allow decimals.
+{% endcomment %}
+
+<section id="ldu-{{ section.id }}" class="ldu">
+  <div class="ldu__wrap">
+    <header class="ldu__header">
+      <h2 class="ldu__title">🫧 Live Design Preview</h2>
+      <p class="ldu__sub">Upload your artwork and see it on the shirt instantly.</p>
+    </header>
+
+    <!-- Controls -->
+    <div class="ldu__controls">
+      <label class="ldu__upload">
+        <input id="ldu-file-{{ section.id }}" type="file" accept="image/*,.svg,.pdf" />
+        <span class="ldu__upload-btn">⬆️ Upload Your Design</span>
+      </label>
+
+      {% if section.settings.show_download %}
+      <button id="ldu-download-{{ section.id }}" class="ldu__btn ldu__btn--primary">⬇️ Download Mockup</button>
+      {% endif %}
+    </div>
+
+    <!-- Placement sliders + fine-tune -->
+    <div class="ldu__sliders">
+      <div class="ldu__slider">
+        <label>Top</label>
+        <div class="ldu__row">
+          <input type="range" id="ldu-top-{{ section.id }}" min="0" max="90" step="1" value="{{ section.settings.area_top }}">
+          <input type="number" id="ldu-top-n-{{ section.id }}" min="0" max="90" step="0.1" value="{{ section.settings.area_top }}" class="ldu__num"><span class="ldu__unit">%</span>
+        </div>
+      </div>
+      <div class="ldu__slider">
+        <label>Left</label>
+        <div class="ldu__row">
+          <input type="range" id="ldu-left-{{ section.id }}" min="0" max="90" step="1" value="{{ section.settings.area_left }}">
+          <input type="number" id="ldu-left-n-{{ section.id }}" min="0" max="90" step="0.1" value="{{ section.settings.area_left }}" class="ldu__num"><span class="ldu__unit">%</span>
+        </div>
+      </div>
+      <div class="ldu__slider">
+        <label>Width</label>
+        <div class="ldu__row">
+          <input type="range" id="ldu-width-{{ section.id }}" min="10" max="100" step="1" value="{{ section.settings.area_width }}">
+          <input type="number" id="ldu-width-n-{{ section.id }}" min="10" max="100" step="0.5" value="{{ section.settings.area_width }}" class="ldu__num"><span class="ldu__unit">%</span>
+        </div>
+      </div>
+      <div class="ldu__slider">
+        <label>Rotate</label>
+        <div class="ldu__row">
+          <input type="range" id="ldu-rot-{{ section.id }}" min="-45" max="45" step="1" value="{{ section.settings.area_rotate }}">
+          <input type="number" id="ldu-rot-n-{{ section.id }}" min="-45" max="45" step="0.5" value="{{ section.settings.area_rotate }}" class="ldu__num"><span class="ldu__unit">°</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Canvas Stage -->
+    <div class="ldu__stage">
+      <canvas id="ldu-canvas-{{ section.id }}" width="1200" height="1600" aria-label="T-shirt mockup canvas"></canvas>
+    </div>
+  </div>
+
+  <style>
+    .ldu { padding: 24px 0; }
+    .ldu__wrap { max-width: 980px; margin: 0 auto; }
+    .ldu__title { margin: 0 0 6px; font-size: 1.6rem; }
+    .ldu__sub { color:#6b7280; margin:0 0 18px; }
+    .ldu__controls { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom: 10px; }
+    .ldu__btn, .ldu__upload-btn {
+      display:inline-flex; align-items:center; gap:8px; cursor:pointer;
+      border:1px solid #d1d5db; background:#fff; padding:8px 12px; border-radius:12px;
+    }
+    .ldu__btn--primary { background:#111827; color:#fff; border-color:#111827; }
+    .ldu__upload input[type=file] { display:none; }
+
+    .ldu__sliders { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:12px; margin: 8px 0 14px; }
+    @media (min-width: 900px){ .ldu__sliders { grid-template-columns: repeat(4, minmax(0,1fr)); } }
+    .ldu__slider label { display:block; margin-bottom:6px; font-size:.9rem; font-weight:600; }
+    .ldu__row { display:flex; gap:8px; align-items:center; }
+    .ldu__num { width: 92px; padding:6px 8px; border:1px solid #d1d5db; border-radius:10px; }
+    .ldu__unit { color:#6b7280; font-size:.9rem; }
+    .ldu__stage { background:linear-gradient(#fff,#f6f7f9); border-radius:16px; padding:16px; box-shadow:0 10px 30px rgba(0,0,0,.06); }
+    canvas { width:100%; height:auto; display:block; border-radius:12px; background:#ffffff; }
+  </style>
+
+  <script>
+  (() => {
+    const sid = "{{ section.id }}";
+    const canvas = document.getElementById(`ldu-canvas-${sid}`);
+    const ctx = canvas.getContext("2d");
+
+    // UI elements (sliders + number fields)
+    const topR = document.getElementById(`ldu-top-${sid}`);
+    const leftR = document.getElementById(`ldu-left-${sid}`);
+    const widthR = document.getElementById(`ldu-width-${sid`);
+    const rotR = document.getElementById(`ldu-rot-${sid}`);
+
+    const topN = document.getElementById(`ldu-top-n-${sid}`);
+    const leftN = document.getElementById(`ldu-left-n-${sid}`);
+    const widthN = document.getElementById(`ldu-width-n-${sid}`);
+    const rotN = document.getElementById(`ldu-rot-n-${sid}`);
+
+    const fileInput = document.getElementById(`ldu-file-${sid}`);
+    const dlBtn = document.getElementById(`ldu-download-${sid}`);
+
+    // Base mockup
+    const baseUrl = "{{ section.settings.base_mockup | image_url: width: 2000 }}";
+    const baseImg = new Image(); baseImg.crossOrigin = "anonymous"; baseImg.src = baseUrl;
+
+    // Uploaded artwork
+    const designImg = new Image(); designImg.crossOrigin = "anonymous";
+    let designLoaded = false;
+
+    // State
+    const clamp = (v,min,max) => Math.max(min, Math.min(max, v));
+    const state = {
+      topPct: parseFloat(topR.value),
+      leftPct: parseFloat(leftR.value),
+      widthPct: parseFloat(widthR.value),
+      rotateDeg: parseFloat(rotR.value),
+      dragging: false, lastX: 0, lastY: 0
+    };
+
+    function syncUI() {
+      // slider -> num and num -> slider
+      topR.value = state.topPct;  topN.value = state.topPct.toFixed(1);
+      leftR.value = state.leftPct; leftN.value = state.leftPct.toFixed(1);
+      widthR.value = state.widthPct; widthN.value = state.widthPct.toFixed(1);
+      rotR.value = state.rotateDeg; rotN.value = state.rotateDeg.toFixed(1);
+    }
+
+    function draw() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
+
+      if (designLoaded) {
+        const ow = canvas.width * (state.widthPct / 100);
+        const oh = designImg.naturalHeight * (ow / (designImg.naturalWidth || 1));
+        const ox = canvas.width * (state.leftPct / 100);
+        const oy = canvas.height * (state.topPct / 100);
+        const cx = ox + ow/2, cy = oy + oh/2;
+
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(state.rotateDeg * Math.PI/180);
+        ctx.drawImage(designImg, -ow/2, -oh/2, ow, oh);
+        ctx.restore();
+      }
+    }
+
+    // Slider listeners
+    [topR, leftR, widthR, rotR].forEach(el => {
+      el.addEventListener('input', () => {
+        state.topPct = parseFloat(topR.value);
+        state.leftPct = parseFloat(leftR.value);
+        state.widthPct = parseFloat(widthR.value);
+        state.rotateDeg = parseFloat(rotR.value);
+        syncUI(); draw();
+      });
+    });
+
+    // Number listeners (allow decimals)
+    topN.addEventListener('input', () => { state.topPct  = clamp(parseFloat(topN.value || 0), 0, 90); syncUI(); draw(); });
+    leftN.addEventListener('input', () => { state.leftPct = clamp(parseFloat(leftN.value || 0), 0, 90); syncUI(); draw(); });
+    widthN.addEventListener('input', () => { state.widthPct = clamp(parseFloat(widthN.value || 10), 10, 100); syncUI(); draw(); });
+    rotN.addEventListener('input', () => { state.rotateDeg = clamp(parseFloat(rotN.value || 0), -45, 45); syncUI(); draw(); });
+
+    // Base load
+    baseImg.onload = draw;
+
+    // Upload handling
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files?.[0]; if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        designImg.onload = () => { designLoaded = true; draw(); };
+        designImg.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // Drag to move
+    function clientToCanvas(evt) {
+      const rect = canvas.getBoundingClientRect();
+      const clientX = evt.touches ? evt.touches[0].clientX : evt.clientX;
+      const clientY = evt.touches ? evt.touches[0].clientY : evt.clientY;
+      const x = (clientX - rect.left) * (canvas.width / rect.width);
+      const y = (clientY - rect.top) * (canvas.height / rect.height);
+      return { x, y };
+    }
+    canvas.addEventListener('mousedown', (e) => { if(!designLoaded) return; state.dragging = true; const {x,y}=clientToCanvas(e); state.lastX=x; state.lastY=y; });
+    canvas.addEventListener('mousemove', (e) => {
+      if (!state.dragging) return;
+      const {x,y}=clientToCanvas(e);
+      const dx=x-state.lastX, dy=y-state.lastY;
+      state.leftPct = clamp(state.leftPct + (dx/canvas.width)*100, 0, 90);
+      state.topPct  = clamp(state.topPct  + (dy/canvas.height)*100, 0, 90);
+      state.lastX=x; state.lastY=y; syncUI(); draw();
+    });
+    window.addEventListener('mouseup', () => state.dragging = false);
+
+    canvas.addEventListener('touchstart', (e)=>{ if(!designLoaded) return; state.dragging=true; const {x,y}=clientToCanvas(e); state.lastX=x; state.lastY=y; }, {passive:true});
+    canvas.addEventListener('touchmove', (e)=>{ if(!state.dragging) return; const {x,y}=clientToCanvas(e); const dx=x-state.lastX, dy=y-state.lastY; state.leftPct=clamp(state.leftPct+(dx/canvas.width)*100,0,90); state.topPct=clamp(state.topPct+(dy/canvas.height)*100,0,90); state.lastX=x; state.lastY=y; syncUI(); draw(); }, {passive:true});
+    window.addEventListener('touchend', ()=> state.dragging=false);
+
+    // Wheel resize
+    canvas.addEventListener('wheel', (e) => {
+      if (!designLoaded) return;
+      e.preventDefault();
+      const delta = Math.sign(e.deltaY);
+      state.widthPct = clamp(state.widthPct - delta * 2, 10, 100);
+      syncUI(); draw();
+    }, { passive: false });
+
+    // Download
+    {% if section.settings.show_download %}
+    dlBtn?.addEventListener('click', () => {
+      const a = document.createElement('a');
+      a.download = 'mockup.png';
+      a.href = canvas.toDataURL('image/png');
+      a.click();
+    });
+    {% endif %}
+
+    // Initial sync
+    syncUI();
+  })();
+  </script>
+
+  {% schema %}
+  {
+    "name": "Live Design Upload Mockup",
+    "settings": [
+      { "type": "image_picker", "id": "base_mockup", "label": "Base T-shirt image (PNG/JPG)", "info": "Use a high-res blank shirt image. 1200×1600 or larger recommended." },
+
+      { "type": "header", "content": "Default placement (percent of canvas)" },
+      { "type": "range", "id": "area_top", "min": 0, "max": 90, "step": 1, "unit": "%", "label": "Top", "default": 30 },
+      { "type": "range", "id": "area_left", "min": 0, "max": 90, "step": 1, "unit": "%", "label": "Left", "default": 25 },
+      { "type": "range", "id": "area_width", "min": 10, "max": 100, "step": 1, "unit": "%", "label": "Width", "default": 50 },
+      { "type": "range", "id": "area_rotate", "min": -45, "max": 45, "step": 1, "unit": "°", "label": "Rotate", "default": 0 },
+
+      { "type": "checkbox", "id": "show_download", "label": "Show Download Mockup button", "default": true }
+    ],
+    "presets": [{ "name": "Live Design Upload Mockup" }]
+  }
+  {% endschema %}
+</section>
