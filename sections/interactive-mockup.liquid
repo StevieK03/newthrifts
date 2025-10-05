@@ -2079,14 +2079,13 @@ document.addEventListener('DOMContentLoaded', function() {
           designImg.src = overlayImg.src;
           
           designImg.onload = () => {
-            // Get overlay positioning from CSS variables
-            const stage = document.querySelector(`#nt-mockup-{{ section.id }} .nt-mockup__canvas`);
-            const topPct = parseFloat(getComputedStyle(stage).getPropertyValue('--overlay-top')) / 100;
-            const leftPct = parseFloat(getComputedStyle(stage).getPropertyValue('--overlay-left')) / 100;
-            const widthPct = parseFloat(getComputedStyle(stage).getPropertyValue('--overlay-width')) / 100;
-            const rotateDeg = parseFloat(getComputedStyle(stage).getPropertyValue('--overlay-rotate')) || 0;
+            // Use the exact placement state values that match the preview
+            const topPct = this.placementState.topPct / 100;
+            const leftPct = this.placementState.leftPct / 100;
+            const widthPct = this.placementState.widthPct / 100;
+            const rotateDeg = this.placementState.rotate || 0;
 
-            // Calculate design position and size on canvas
+            // Calculate design position and size on canvas (matching the visual positioning exactly)
             const designX = canvas.width * leftPct;
             const designY = canvas.height * topPct;
             const designWidth = canvas.width * widthPct;
