@@ -138,9 +138,14 @@ Customizer Integration Section
 
     <!-- Call to Action -->
     <div class="cta-section" style="text-align: center; margin-top: 40px;">
-      <button id="start-designing-btn" style="padding: 16px 32px; background: linear-gradient(45deg, #27e1c1, #20b2aa); color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 8px 25px rgba(39, 225, 193, 0.3);">
-        🎨 Start Designing Now
-      </button>
+      <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+        <button id="start-designing-btn" style="padding: 16px 32px; background: linear-gradient(45deg, #27e1c1, #20b2aa); color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 8px 25px rgba(39, 225, 193, 0.3);">
+          🎨 Start Designing Now
+        </button>
+        <button id="view-mockup-btn" style="padding: 16px 32px; background: linear-gradient(45deg, #8b5cf6, #a855f7); color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);">
+          👁️ View Live Preview
+        </button>
+      </div>
       <p style="margin: 16px 0 0 0; opacity: 0.8; font-size: 14px;">
         Join thousands of satisfied customers who've created their perfect custom t-shirt
       </p>
@@ -309,6 +314,19 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       } else {
         console.log('Start designing button not found');
+      }
+
+      // Bind view mockup button
+      const viewMockupBtn = document.getElementById('view-mockup-btn');
+      if (viewMockupBtn) {
+        console.log('View mockup button found, adding event listener');
+        viewMockupBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          console.log('View mockup button clicked!');
+          this.scrollToMockup();
+        });
+      } else {
+        console.log('View mockup button not found');
       }
     },
 
@@ -644,6 +662,25 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Customizer section not found');
         // Fallback: scroll to top of page
         window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    },
+
+    scrollToMockup() {
+      console.log('scrollToMockup called');
+      
+      // Look for interactive mockup section
+      let mockupSection = document.querySelector('.section-interactive-mockup');
+      
+      if (!mockupSection) {
+        mockupSection = document.querySelector('[id*="nt-mockup"]');
+      }
+      
+      if (mockupSection) {
+        console.log('Found mockup section, scrolling...');
+        mockupSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        console.log('Mockup section not found, falling back to customizer');
+        this.scrollToCustomizer();
       }
     },
 
