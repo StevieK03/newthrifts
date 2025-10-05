@@ -164,7 +164,7 @@ Enhanced Interactive Product Mockup
           <img
             id="nt-base-{{ section.id }}"
             class="nt-mockup__base"
-            src="{{ section.settings.base_mockup | default: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&h=800&fit=crop&crop=center' | image_url: width: 800 }}"
+            src="{{ 'WFront_t-shirt.png' | asset_url }}"
             alt="T-shirt mockup"
             loading="eager"
             decoding="async"
@@ -375,8 +375,39 @@ Enhanced Interactive Product Mockup
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const mockup = {
-    // Base mockup image
-    baseMockup: "{{ section.settings.base_mockup | default: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&h=800&fit=crop&crop=center' | image_url: width: 800 }}",
+    // T-shirt mockup sources using your local assets
+    sources: {
+      front: {
+        white: "{{ 'WFront_t-shirt.png' | asset_url }}",
+        black: "{{ 'WFront_t-shirt.png' | asset_url }}", // Using same image for now
+        pink: "{{ 'WFront_t-shirt.png' | asset_url }}",
+        blue: "{{ 'WFront_t-shirt.png' | asset_url }}"
+      },
+      back: {
+        white: "{{ 'WBack_t-shirt.png' | asset_url }}",
+        black: "{{ 'WBack_t-shirt.png' | asset_url }}",
+        pink: "{{ 'WBack_t-shirt.png' | asset_url }}",
+        blue: "{{ 'WBack_t-shirt.png' | asset_url }}"
+      },
+      hanging: {
+        white: "{{ 'W3-D_t-shirt.png' | asset_url }}",
+        black: "{{ 'W3-D_t-shirt.png' | asset_url }}",
+        pink: "{{ 'W3-D_t-shirt.png' | asset_url }}",
+        blue: "{{ 'W3-D_t-shirt.png' | asset_url }}"
+      },
+      person1: {
+        white: "{{ 'Wleft_t-shirt.png' | asset_url }}",
+        black: "{{ 'Wleft_t-shirt.png' | asset_url }}",
+        pink: "{{ 'Wleft_t-shirt.png' | asset_url }}",
+        blue: "{{ 'Wleft_t-shirt.png' | asset_url }}"
+      },
+      person2: {
+        white: "{{ 'Wright_t-shirt.png' | asset_url }}",
+        black: "{{ 'Wright_t-shirt.png' | asset_url }}",
+        pink: "{{ 'Wright_t-shirt.png' | asset_url }}",
+        blue: "{{ 'Wright_t-shirt.png' | asset_url }}"
+      }
+    },
 
     // Current design state
     designState: {
@@ -517,8 +548,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     updateBase() {
       const baseEl = document.getElementById("nt-base-{{ section.id }}");
-      if (baseEl && this.baseMockup) {
-        baseEl.src = this.baseMockup;
+      const src = this.sources[this.state.view]?.[this.state.color];
+      if (src && baseEl) {
+        baseEl.src = src;
+        console.log('🔄 Updated base image:', src);
       }
     },
 
@@ -1246,13 +1279,11 @@ document.addEventListener('DOMContentLoaded', function() {
   "settings": [
     {
       "type": "header",
-      "content": "🖼 Base T-shirt Mockup"
+      "content": "🖼 T-shirt Mockups"
     },
     {
-      "type": "image_picker",
-      "id": "base_mockup",
-      "label": "Base T-shirt Image",
-      "info": "Upload a high-quality T-shirt mockup image. Recommended size: 800x800px or larger."
+      "type": "paragraph",
+      "content": "T-shirt mockup images are loaded from your Assets folder: WFront_t-shirt.png, WBack_t-shirt.png, W3-D_t-shirt.png, Wleft_t-shirt.png, Wright_t-shirt.png"
     },
     {
       "type": "header",
