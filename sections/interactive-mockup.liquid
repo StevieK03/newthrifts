@@ -1162,37 +1162,33 @@ document.addEventListener('DOMContentLoaded', function() {
       const baseImage = document.getElementById(`nt-base-{{ section.id }}`);
       
       if (canvas && baseImage) {
-        console.log('🔍 Scaling t-shirt image to:', scale + '%');
+        console.log('🔍 Scaling t-shirt container to:', scale + '%');
         
-        // Calculate new container size to accommodate the scaled t-shirt
-        const baseSize = 720; // Original container size
-        const newSize = baseSize * (scale / 100);
-        
-        // Update container size to fit the scaled t-shirt
-        canvas.style.width = `${newSize}px`;
-        canvas.style.height = `${newSize}px`;
+        // Reset container to original size
+        canvas.style.width = '720px';
+        canvas.style.height = '720px';
         canvas.style.maxWidth = '100%';
         canvas.style.maxHeight = '100%';
         
-        // Reset any previous transforms on the canvas
-        canvas.style.transform = 'none';
-        canvas.style.transformOrigin = 'unset';
-        
-        // Scale the t-shirt image
-        baseImage.style.transform = `scale(${scale / 100})`;
-        baseImage.style.transformOrigin = 'center center';
-        
-        // Keep the image centered in the container
+        // Reset image positioning
         baseImage.style.position = 'absolute';
-        baseImage.style.top = '50%';
-        baseImage.style.left = '50%';
-        baseImage.style.marginTop = `-${50 * (scale / 100)}%`;
-        baseImage.style.marginLeft = `-${50 * (scale / 100)}%`;
+        baseImage.style.top = '0';
+        baseImage.style.left = '0';
+        baseImage.style.width = '100%';
+        baseImage.style.height = '100%';
+        baseImage.style.marginTop = '0';
+        baseImage.style.marginLeft = '0';
+        baseImage.style.transform = 'none';
+        baseImage.style.transformOrigin = 'unset';
         
-        // Update the design overlay to match the t-shirt scale
+        // Scale the entire container using CSS transform
+        canvas.style.transform = `scale(${scale / 100})`;
+        canvas.style.transformOrigin = 'center center';
+        
+        // Update the design overlay to match the container scale
         this.updateDesignPosition();
         
-        console.log('✅ T-shirt image scaled successfully, container size:', newSize + 'px');
+        console.log('✅ T-shirt container scaled successfully to:', scale + '%');
       }
     },
 
@@ -1208,15 +1204,11 @@ document.addEventListener('DOMContentLoaded', function() {
           rotate: this.placementState.rotateDeg + 'deg'
         });
         
-        // Get current t-shirt scale
-        const scaleSlider = document.getElementById(`nt-mockup-scale-{{ section.id }}`);
-        const currentScale = scaleSlider ? parseFloat(scaleSlider.value) : 100;
-        
         // Apply positioning directly to the element
         overlayDiv.style.top = this.placementState.topPct + '%';
         overlayDiv.style.left = this.placementState.leftPct + '%';
         overlayDiv.style.width = this.placementState.widthPct + '%';
-        overlayDiv.style.transform = `rotate(${this.placementState.rotateDeg}deg) scale(${currentScale / 100})`;
+        overlayDiv.style.transform = `rotate(${this.placementState.rotateDeg}deg)`;
         overlayDiv.style.transformOrigin = 'center center';
         
         // Also update CSS variables for consistency
