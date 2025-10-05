@@ -212,7 +212,7 @@ Enhanced Interactive Product Mockup
           <!-- Debug: Test direct asset access -->
           <div id="debug-assets-{{ section.id }}" style="position: absolute; top: -100px; left: -100px; width: 1px; height: 1px; overflow: hidden;">
             <img src="{{ 'WFront_t-shirt.png' | asset_url }}" onload="console.log('✅ Direct asset test - WFront_t-shirt.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - WFront_t-shirt.png failed:', this.src);">
-            <img src="{{ 'WBack_t-shirt.png' | asset_url }}" onload="console.log('✅ Direct asset test - WBack_t-shirt.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - WBack_t-shirt.png failed:', this.src);">
+            <img src="{{ 'Wback_t-shirt.png' | asset_url }}" onload="console.log('✅ Direct asset test - Wback_t-shirt.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - Wback_t-shirt.png failed:', this.src);">
             <img src="{{ 'Models/Women/Girl-Model.png' | asset_url }}" onload="console.log('✅ Direct asset test - Girl-Model.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - Girl-Model.png failed:', this.src);">
           </div>
           
@@ -552,10 +552,10 @@ document.addEventListener('DOMContentLoaded', function() {
         blue: "{{ 'WFront_t-shirt.png' | asset_url }}"
       },
       back: {
-        white: "{{ 'WBack_t-shirt.png' | asset_url }}",
-        black: "{{ 'WBack_t-shirt.png' | asset_url }}",
-        pink: "{{ 'WBack_t-shirt.png' | asset_url }}",
-        blue: "{{ 'WBack_t-shirt.png' | asset_url }}"
+        white: "{{ 'Wback_t-shirt.png' | asset_url }}",
+        black: "{{ 'Wback_t-shirt.png' | asset_url }}",
+        pink: "{{ 'Wback_t-shirt.png' | asset_url }}",
+        blue: "{{ 'Wback_t-shirt.png' | asset_url }}"
       },
       hanging: {
         white: "{{ 'W3-D_t-shirt.png' | asset_url }}",
@@ -672,7 +672,9 @@ document.addEventListener('DOMContentLoaded', function() {
       const viewBtns = Array.from(document.querySelectorAll(`#${rootId} .nt-btn--view`));
       viewBtns.forEach(btn => {
         btn.addEventListener("click", () => {
+          console.log('🖱️ View button clicked:', btn.dataset.view);
           this.state.view = btn.dataset.view;
+          console.log('🔄 State updated to:', this.state);
           this.setActive(viewBtns, this.state.view);
           this.updateBase();
         });
@@ -810,15 +812,18 @@ document.addEventListener('DOMContentLoaded', function() {
                            this.baseMockup;
         
         console.log('🔄 Loading mockup image:', mockupImage, 'for view:', this.state.view, 'color:', this.state.color);
+        console.log('🔍 Available mockup images:', this.mockupImages);
+        console.log('🔍 Current state:', this.state);
         
         // Add error handling
         baseEl.onerror = () => {
           console.error('❌ Failed to load mockup image:', mockupImage);
+          console.error('❌ Image URL:', baseEl.src);
           this.createFallbackTshirt();
         };
         
         baseEl.onload = () => {
-          console.log('✅ Mockup image loaded successfully');
+          console.log('✅ Mockup image loaded successfully:', baseEl.src);
           // Remove any existing fallback when real image loads
           const existingFallback = document.querySelector('.fallback-tshirt');
           if (existingFallback) {
@@ -826,7 +831,13 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         };
         
-        baseEl.src = mockupImage;
+        // Force reload by setting src to empty first
+        baseEl.src = '';
+        setTimeout(() => {
+          baseEl.src = mockupImage;
+        }, 10);
+      } else {
+        console.error('❌ Base element not found:', "nt-base-{{ section.id }}");
       }
     },
 
