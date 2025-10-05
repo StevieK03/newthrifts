@@ -254,6 +254,14 @@ Enhanced Interactive Product Mockup
   cursor: grabbing !important;
 }
 
+/* Force center positioning - override any cached values */
+#nt-overlay-{{ section.id }} {
+  top: 40% !important;
+  left: 30% !important;
+  width: 50% !important;
+  transform: rotate(0deg) !important;
+}
+
 .nt-placement-controls {
   animation: slideInUp 0.3s ease;
 }
@@ -418,9 +426,39 @@ document.addEventListener('DOMContentLoaded', function() {
       this.updateDesign();
       this.updatePlacementDisplay();
       
+      // Force override positioning after a short delay
+      setTimeout(() => {
+        this.forceCenterPositioning();
+      }, 100);
+      
       // Show placement controls by default for testing
       this.showPlacementControls();
       console.log('✅ Mockup initialized with placement controls visible');
+    },
+
+    forceCenterPositioning() {
+      console.log('🔧 Forcing center positioning...');
+      const overlayDiv = document.getElementById(`nt-overlay-{{ section.id }}`);
+      if (overlayDiv) {
+        // Force the CSS variables directly
+        overlayDiv.style.setProperty('--overlay-top', '40%', 'important');
+        overlayDiv.style.setProperty('--overlay-left', '30%', 'important');
+        overlayDiv.style.setProperty('--overlay-width', '50%', 'important');
+        overlayDiv.style.setProperty('--overlay-rotate', '0deg', 'important');
+        
+        // Also set the inline styles directly
+        overlayDiv.style.top = '40%';
+        overlayDiv.style.left = '30%';
+        overlayDiv.style.width = '50%';
+        overlayDiv.style.transform = 'rotate(0deg)';
+        
+        console.log('✅ Forced positioning applied:', {
+          top: '40%',
+          left: '30%',
+          width: '50%',
+          rotate: '0deg'
+        });
+      }
     },
 
     bindEvents() {
