@@ -160,18 +160,18 @@ Enhanced Interactive Product Mockup
              id="nt-mockup-canvas-{{ section.id }}"
              style="position: relative; width: min(720px, 100%); aspect-ratio: 1 / 1; background: linear-gradient(180deg, #ffffff, #f6f7f9); border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.1); cursor: grab; --overlay-top: 40%; --overlay-left: 30%; --overlay-width: 50%; --overlay-rotate: 0deg;">
           
-          <!-- Base Mockup (swapped by JS) -->
-          <img
-            id="nt-base-{{ section.id }}"
-            class="nt-mockup__base"
-            src="{{ section.settings.base_mockup | default: 'WFront_t-shirt.png' | asset_url }}"
-            alt="T-shirt mockup"
-            loading="eager"
-            decoding="async"
-            style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none;"
-            onerror="console.error('❌ Failed to load t-shirt image:', this.src);"
-            onload="console.log('✅ T-shirt image loaded:', this.src);"
-          >
+      <!-- Base Mockup (swapped by JS) -->
+      <img
+        id="nt-base-{{ section.id }}"
+        class="nt-mockup__base"
+        src="{{ 'WFront_t-shirt.png' | asset_url }}"
+        alt="T-shirt mockup"
+        loading="eager"
+        decoding="async"
+        style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none;"
+        onerror="console.error('❌ Failed to load t-shirt image:', this.src);"
+        onload="console.log('✅ T-shirt image loaded:', this.src);"
+      >
           
           <!-- Debug: Test direct asset access -->
           <div id="debug-assets-{{ section.id }}" style="position: absolute; top: -100px; left: -100px; width: 1px; height: 1px; overflow: hidden;">
@@ -419,8 +419,8 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     },
     
-    // Current base mockup image
-    baseMockup: "{{ section.settings.base_mockup | default: 'WFront_t-shirt.png' | asset_url }}",
+      // Current base mockup image
+      baseMockup: "{{ 'WFront_t-shirt.png' | asset_url }}",
 
     // Current design state
     designState: {
@@ -623,6 +623,11 @@ document.addEventListener('DOMContentLoaded', function() {
         
         baseEl.onload = () => {
           console.log('✅ Mockup image loaded successfully');
+          // Remove any existing fallback when real image loads
+          const existingFallback = document.querySelector('.fallback-tshirt');
+          if (existingFallback) {
+            existingFallback.remove();
+          }
         };
         
         baseEl.src = mockupImage;
