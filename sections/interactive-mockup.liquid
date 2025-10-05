@@ -419,16 +419,16 @@ document.addEventListener('DOMContentLoaded', function() {
         blue: "{{ 'W3-D_t-shirt.png' | asset_url }}"
       },
       person1: {
-        white: "{{ 'Girl-Model.png' | asset_url }}",
-        black: "{{ 'Girl-Model.png' | asset_url }}",
-        pink: "{{ 'Girl-Model.png' | asset_url }}",
-        blue: "{{ 'Girl-Model.png' | asset_url }}"
+        white: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        black: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        pink: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        blue: "{{ 'Models/Women/Girl-Model.png' | asset_url }}"
       },
       person2: {
-        white: "{{ 'Women-side.png' | asset_url }}",
-        black: "{{ 'Women-side.png' | asset_url }}",
-        pink: "{{ 'Women-side.png' | asset_url }}",
-        blue: "{{ 'Women-side.png' | asset_url }}"
+        white: "{{ 'Models/Women/Women-side.png' | asset_url }}",
+        black: "{{ 'Models/Women/Women-side.png' | asset_url }}",
+        pink: "{{ 'Models/Women/Women-side.png' | asset_url }}",
+        blue: "{{ 'Models/Women/Women-side.png' | asset_url }}"
       },
       left: {
         white: "{{ 'Wleft_t-shirt.png' | asset_url }}",
@@ -475,6 +475,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     init() {
       console.log('🎯 Initializing Enhanced Interactive Mockup...');
+      console.log('📁 Available mockup images:', this.mockupImages);
+      console.log('🎨 Current state:', this.state);
+      console.log('🖼️ Base mockup:', this.baseMockup);
+      
       this.bindEvents();
       this.loadFromCustomizer();
       this.updateBase();
@@ -593,13 +597,67 @@ document.addEventListener('DOMContentLoaded', function() {
                            this.mockupImages.front?.white ||
                            this.baseMockup;
         
+        console.log('🔄 Loading mockup image:', mockupImage, 'for view:', this.state.view, 'color:', this.state.color);
+        
+        // Add error handling for image loading
+        baseEl.onerror = () => {
+          console.error('❌ Failed to load image:', mockupImage);
+          // Fallback to a simple colored rectangle if image fails
+          baseEl.style.display = 'none';
+          this.createFallbackMockup(baseEl, this.state.color);
+        };
+        
+        baseEl.onload = () => {
+          console.log('✅ Successfully loaded image:', mockupImage);
+          baseEl.style.display = 'block';
+        };
+        
         baseEl.src = mockupImage;
         
         // Apply color filter based on selected color
         this.applyColorFilter(baseEl, this.state.color);
-        
-        console.log('🔄 Updated mockup image:', mockupImage, 'for view:', this.state.view, 'color:', this.state.color);
       }
+    },
+
+    createFallbackMockup(originalEl, color) {
+      const canvas = document.getElementById(`nt-mockup-canvas-{{ section.id }}`);
+      if (!canvas) return;
+      
+      // Remove existing fallback
+      const existingFallback = canvas.querySelector('.fallback-mockup');
+      if (existingFallback) {
+        existingFallback.remove();
+      }
+      
+      // Create fallback mockup
+      const fallback = document.createElement('div');
+      fallback.className = 'fallback-mockup';
+      fallback.style.cssText = `
+        position: absolute;
+        inset: 0;
+        background: ${this.getColorValue(color)};
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 24px;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      `;
+      fallback.textContent = 'T-shirt Mockup';
+      
+      canvas.appendChild(fallback);
+    },
+
+    getColorValue(color) {
+      const colors = {
+        white: '#ffffff',
+        black: '#2d3748',
+        pink: '#f093fb',
+        blue: '#4299e1'
+      };
+      return colors[color] || '#ffffff';
     },
 
     applyColorFilter(element, color) {
