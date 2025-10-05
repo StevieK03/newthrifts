@@ -44,6 +44,12 @@ Enhanced Interactive Product Mockup
             <button class="nt-btn nt-btn--view" data-view="person2" aria-selected="false" style="padding: 8px 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
               👤 Model 2
             </button>
+            <button class="nt-btn nt-btn--view" data-view="left" aria-selected="false" style="padding: 8px 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              ⬅️ Left
+            </button>
+            <button class="nt-btn nt-btn--view" data-view="right" aria-selected="false" style="padding: 8px 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              ➡️ Right
+            </button>
           </div>
         </div>
 
@@ -158,18 +164,26 @@ Enhanced Interactive Product Mockup
       <div class="nt-mockup__stage" style="width: 100%; display: grid; place-items: center;">
         <div class="nt-mockup__canvas" 
              id="nt-mockup-canvas-{{ section.id }}"
-             style="position: relative; width: min(720px, 100%); aspect-ratio: 1 / 1; background: linear-gradient(180deg, #ffffff, #f6f7f9); border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.1); cursor: grab; --overlay-top: {{ section.settings.overlay_top }}%; --overlay-left: {{ section.settings.overlay_left }}%; --overlay-width: {{ section.settings.overlay_width }}%; --overlay-rotate: {{ section.settings.overlay_rotate }}deg;">
+             style="position: relative; width: min(720px, 100%); aspect-ratio: 1 / 1; background: linear-gradient(180deg, #ffffff, #f6f7f9); border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.1); cursor: grab; --overlay-top: {{ section.settings.overlay_top | default: 35 }}%; --overlay-left: {{ section.settings.overlay_left | default: 25 }}%; --overlay-width: {{ section.settings.overlay_width | default: 50 }}%; --overlay-rotate: {{ section.settings.overlay_rotate | default: 0 }}deg;">
           
           <!-- Base Mockup (swapped by JS) -->
           <img
             id="nt-base-{{ section.id }}"
             class="nt-mockup__base"
-            src="{{ section.settings.base_mockup | default: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&h=800&fit=crop&crop=center' | image_url: width: 800 }}"
+            src="{{ section.settings.base_mockup | default: 'WFront_t-shirt.png' | asset_url }}"
             alt="T-shirt mockup"
             loading="eager"
             decoding="async"
             style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none;"
+            onerror="console.error('❌ Failed to load base image:', this.src); this.style.display='none';"
+            onload="console.log('✅ Base image loaded:', this.src);"
           >
+          
+          <!-- Debug: Test direct asset access -->
+          <div id="debug-assets-{{ section.id }}" style="position: absolute; top: -100px; left: -100px; width: 1px; height: 1px; overflow: hidden;">
+            <img src="{{ 'WFront_t-shirt.png' | asset_url }}" onload="console.log('✅ Direct asset test - WFront_t-shirt.png loaded');" onerror="console.error('❌ Direct asset test - WFront_t-shirt.png failed');">
+            <img src="{{ 'Models/Women/Girl-Model.png' | asset_url }}" onload="console.log('✅ Direct asset test - Girl-Model.png loaded');" onerror="console.error('❌ Direct asset test - Girl-Model.png failed');">
+          </div>
           
           <!-- Dynamic Design Overlay -->
           <div
@@ -252,6 +266,23 @@ Enhanced Interactive Product Mockup
 
 .nt-mockup__canvas.dragging {
   cursor: grabbing !important;
+}
+
+/* Color Filter Effects for T-shirt Colors */
+.nt-mockup__base.color-white {
+  filter: none;
+}
+
+.nt-mockup__base.color-black {
+  filter: brightness(0.3) saturate(0.8) contrast(1.2);
+}
+
+.nt-mockup__base.color-pink {
+  filter: hue-rotate(320deg) saturate(1.3) brightness(1.1) contrast(0.9);
+}
+
+.nt-mockup__base.color-blue {
+  filter: hue-rotate(220deg) saturate(1.2) brightness(0.9) contrast(1.1);
 }
 
 .nt-placement-controls {
@@ -375,8 +406,54 @@ Enhanced Interactive Product Mockup
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const mockup = {
-    // Base mockup image
-    baseMockup: "{{ section.settings.base_mockup | default: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&h=800&fit=crop&crop=center' | image_url: width: 800 }}",
+    // Mockup images mapping
+    mockupImages: {
+      front: {
+        white: "{{ 'WFront_t-shirt.png' | asset_url }}",
+        black: "{{ 'WFront_t-shirt.png' | asset_url }}",
+        pink: "{{ 'WFront_t-shirt.png' | asset_url }}",
+        blue: "{{ 'WFront_t-shirt.png' | asset_url }}"
+      },
+      back: {
+        white: "{{ 'WBack_t-shirt.png' | asset_url }}",
+        black: "{{ 'WBack_t-shirt.png' | asset_url }}",
+        pink: "{{ 'WBack_t-shirt.png' | asset_url }}",
+        blue: "{{ 'WBack_t-shirt.png' | asset_url }}"
+      },
+      hanging: {
+        white: "{{ 'W3-D_t-shirt.png' | asset_url }}",
+        black: "{{ 'W3-D_t-shirt.png' | asset_url }}",
+        pink: "{{ 'W3-D_t-shirt.png' | asset_url }}",
+        blue: "{{ 'W3-D_t-shirt.png' | asset_url }}"
+      },
+      person1: {
+        white: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        black: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        pink: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        blue: "{{ 'Models/Women/Girl-Model.png' | asset_url }}"
+      },
+      person2: {
+        white: "{{ 'Models/Women/Women-side.png' | asset_url }}",
+        black: "{{ 'Models/Women/Women-side.png' | asset_url }}",
+        pink: "{{ 'Models/Women/Women-side.png' | asset_url }}",
+        blue: "{{ 'Models/Women/Women-side.png' | asset_url }}"
+      },
+      left: {
+        white: "{{ 'Wleft_t-shirt.png' | asset_url }}",
+        black: "{{ 'Wleft_t-shirt.png' | asset_url }}",
+        pink: "{{ 'Wleft_t-shirt.png' | asset_url }}",
+        blue: "{{ 'Wleft_t-shirt.png' | asset_url }}"
+      },
+      right: {
+        white: "{{ 'Wright_t-shirt.png' | asset_url }}",
+        black: "{{ 'Wright_t-shirt.png' | asset_url }}",
+        pink: "{{ 'Wright_t-shirt.png' | asset_url }}",
+        blue: "{{ 'Wright_t-shirt.png' | asset_url }}"
+      }
+    },
+    
+    // Current base mockup image
+    baseMockup: "{{ section.settings.base_mockup | default: 'WFront_t-shirt.png' | asset_url }}",
 
     // Current design state
     designState: {
@@ -393,10 +470,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Enhanced placement state
     placementState: {
-      topPct: {{ section.settings.overlay_top }},
-      leftPct: {{ section.settings.overlay_left }},
-      widthPct: {{ section.settings.overlay_width }},
-      rotateDeg: {{ section.settings.overlay_rotate }},
+      topPct: {{ section.settings.overlay_top | default: 35 }},
+      leftPct: {{ section.settings.overlay_left | default: 25 }},
+      widthPct: {{ section.settings.overlay_width | default: 50 }},
+      rotateDeg: {{ section.settings.overlay_rotate | default: 0 }},
       dragging: false,
       resizing: false,
       lastX: 0,
@@ -406,9 +483,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
     init() {
       console.log('🎯 Initializing Enhanced Interactive Mockup...');
+      console.log('📁 Available mockup images:', this.mockupImages);
+      console.log('🎨 Current state:', this.state);
+      console.log('🖼️ Base mockup:', this.baseMockup);
+      
+      // Test asset URL generation
+      console.log('🧪 Testing asset URLs:');
+      console.log('Front white:', this.mockupImages.front?.white);
+      console.log('Back white:', this.mockupImages.back?.white);
+      console.log('Person1 white:', this.mockupImages.person1?.white);
+      
       this.bindEvents();
       this.loadFromCustomizer();
-      this.updateBase();
+      
+      // Try to load the base image first
+      setTimeout(() => {
+        this.updateBase();
+        // If no image loads after 2 seconds, show fallback
+        setTimeout(() => {
+          const baseEl = document.getElementById("nt-base-{{ section.id }}");
+          if (baseEl && !baseEl.complete) {
+            console.log('⚠️ Image still loading, showing fallback...');
+            this.createFallbackMockup(baseEl, this.state.color);
+          }
+        }, 2000);
+      }, 100);
+      
       this.updateDesign();
       this.updatePlacementDisplay();
       
@@ -517,9 +617,132 @@ document.addEventListener('DOMContentLoaded', function() {
 
     updateBase() {
       const baseEl = document.getElementById("nt-base-{{ section.id }}");
-      if (baseEl && this.baseMockup) {
-        baseEl.src = this.baseMockup;
+      if (baseEl) {
+        // Get the appropriate mockup image based on current view and color
+        const mockupImage = this.mockupImages[this.state.view]?.[this.state.color] || 
+                           this.mockupImages[this.state.view]?.white ||
+                           this.mockupImages.front?.white ||
+                           this.baseMockup;
+        
+        console.log('🔄 Loading mockup image:', mockupImage, 'for view:', this.state.view, 'color:', this.state.color);
+        
+        // Add error handling for image loading
+        baseEl.onerror = () => {
+          console.error('❌ Failed to load image:', mockupImage);
+          // Fallback to a simple colored rectangle if image fails
+          baseEl.style.display = 'none';
+          this.createFallbackMockup(baseEl, this.state.color);
+        };
+        
+        baseEl.onload = () => {
+          console.log('✅ Successfully loaded image:', mockupImage);
+          baseEl.style.display = 'block';
+        };
+        
+        baseEl.src = mockupImage;
+        
+        // Apply color filter based on selected color
+        this.applyColorFilter(baseEl, this.state.color);
       }
+    },
+
+    createFallbackMockup(originalEl, color) {
+      const canvas = document.getElementById(`nt-mockup-canvas-{{ section.id }}`);
+      if (!canvas) return;
+      
+      // Remove existing fallback
+      const existingFallback = canvas.querySelector('.fallback-mockup');
+      if (existingFallback) {
+        existingFallback.remove();
+      }
+      
+      // Create fallback mockup with t-shirt shape
+      const fallback = document.createElement('div');
+      fallback.className = 'fallback-mockup';
+      fallback.style.cssText = `
+        position: absolute;
+        inset: 0;
+        background: ${this.getColorValue(color)};
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Bebas Neue', sans-serif;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      `;
+      
+      // Create a simple t-shirt shape using CSS
+      const tshirtShape = document.createElement('div');
+      tshirtShape.style.cssText = `
+        width: 60%;
+        height: 70%;
+        background: ${this.getColorValue(color)};
+        border: 3px solid white;
+        border-radius: 20px 20px 8px 8px;
+        position: relative;
+        margin-bottom: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      `;
+      
+      // Add sleeves
+      const leftSleeve = document.createElement('div');
+      leftSleeve.style.cssText = `
+        position: absolute;
+        left: -20px;
+        top: 20%;
+        width: 15px;
+        height: 40%;
+        background: ${this.getColorValue(color)};
+        border: 3px solid white;
+        border-radius: 0 8px 8px 0;
+      `;
+      
+      const rightSleeve = document.createElement('div');
+      rightSleeve.style.cssText = `
+        position: absolute;
+        right: -20px;
+        top: 20%;
+        width: 15px;
+        height: 40%;
+        background: ${this.getColorValue(color)};
+        border: 3px solid white;
+        border-radius: 8px 0 0 8px;
+      `;
+      
+      tshirtShape.appendChild(leftSleeve);
+      tshirtShape.appendChild(rightSleeve);
+      
+      const label = document.createElement('div');
+      label.style.cssText = `
+        font-size: 14px;
+        text-align: center;
+      `;
+      label.textContent = 'T-shirt Mockup';
+      
+      fallback.appendChild(tshirtShape);
+      fallback.appendChild(label);
+      
+      canvas.appendChild(fallback);
+    },
+
+    getColorValue(color) {
+      const colors = {
+        white: '#ffffff',
+        black: '#2d3748',
+        pink: '#f093fb',
+        blue: '#4299e1'
+      };
+      return colors[color] || '#ffffff';
+    },
+
+    applyColorFilter(element, color) {
+      // Remove any existing color filter classes
+      element.classList.remove('color-white', 'color-black', 'color-pink', 'color-blue');
+      
+      // Add the appropriate color filter class
+      element.classList.add(`color-${color}`);
     },
 
     updateDesign() {
@@ -827,10 +1050,10 @@ document.addEventListener('DOMContentLoaded', function() {
     },
 
     resetPlacement() {
-      this.placementState.topPct = {{ section.settings.overlay_top }};
-      this.placementState.leftPct = {{ section.settings.overlay_left }};
-      this.placementState.widthPct = {{ section.settings.overlay_width }};
-      this.placementState.rotateDeg = {{ section.settings.overlay_rotate }};
+      this.placementState.topPct = {{ section.settings.overlay_top | default: 35 }};
+      this.placementState.leftPct = {{ section.settings.overlay_left | default: 25 }};
+      this.placementState.widthPct = {{ section.settings.overlay_width | default: 50 }};
+      this.placementState.rotateDeg = {{ section.settings.overlay_rotate | default: 0 }};
 
       // Update sliders
       const topSlider = document.getElementById(`nt-top-{{ section.id }}`);
@@ -1266,7 +1489,7 @@ document.addEventListener('DOMContentLoaded', function() {
       "step": 1,
       "unit": "%",
       "label": "Top Position",
-      "default": 28
+      "default": 35
     },
     {
       "type": "range",
@@ -1276,7 +1499,7 @@ document.addEventListener('DOMContentLoaded', function() {
       "step": 1,
       "unit": "%",
       "label": "Left Position",
-      "default": 26
+      "default": 25
     },
     {
       "type": "range",
@@ -1286,7 +1509,7 @@ document.addEventListener('DOMContentLoaded', function() {
       "step": 1,
       "unit": "%",
       "label": "Design Width",
-      "default": 48
+      "default": 50
     },
     {
       "type": "range",
