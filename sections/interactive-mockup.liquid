@@ -1,0 +1,657 @@
+{% comment %}
+Enhanced Interactive Product Mockup
+- Dynamic rendering with custom text from customizer
+- Multiple views (Front, Back, Hanging, Person models)
+- Real-time design updates
+- Integration with existing customizer
+- Printify-style professional mockup system
+{% endcomment %}
+
+<section id="nt-mockup-{{ section.id }}" class="nt-mockup" style="padding: 40px 0; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);">
+  <div class="container">
+    
+    <!-- Section Header -->
+    <div class="mockup-header" style="text-align: center; margin-bottom: 40px;">
+      <h2 style="font-family: 'Bebas Neue', sans-serif; font-size: 42px; margin: 0 0 16px 0; background: linear-gradient(45deg, #27e1c1, #ff4fa3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+        🎨 Live Design Preview
+      </h2>
+      <p style="font-size: 18px; color: #64748b; margin: 0; max-width: 600px; margin: 0 auto;">
+        See your custom design come to life with our professional mockup system. Switch between different views and colors to see how your design looks in real-world scenarios.
+      </p>
+    </div>
+
+    <div class="nt-mockup__inner" style="display: grid; gap: 30px;">
+      
+      <!-- Enhanced Controls -->
+      <div class="nt-mockup__controls" style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: center; background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+        
+        <!-- View Controls -->
+        <div class="nt-mockup__group">
+          <span class="nt-mockup__label" style="font-weight: 600; font-size: 14px; color: #374151; margin-right: 12px;">View</span>
+          <div class="nt-mockup__buttons" role="tablist" aria-label="Mockup view" style="display: flex; gap: 8px;">
+            <button class="nt-btn nt-btn--view is-active" data-view="front" aria-selected="true" style="padding: 8px 16px; border: 2px solid #27e1c1; background: #27e1c1; color: white; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              👕 Front
+            </button>
+            <button class="nt-btn nt-btn--view" data-view="back" aria-selected="false" style="padding: 8px 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              👕 Back
+            </button>
+            <button class="nt-btn nt-btn--view" data-view="hanging" aria-selected="false" style="padding: 8px 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              🏷️ Hanging
+            </button>
+            <button class="nt-btn nt-btn--view" data-view="person1" aria-selected="false" style="padding: 8px 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              👤 Model 1
+            </button>
+            <button class="nt-btn nt-btn--view" data-view="person2" aria-selected="false" style="padding: 8px 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              👤 Model 2
+            </button>
+          </div>
+        </div>
+
+        <!-- Color Controls -->
+        <div class="nt-mockup__group">
+          <span class="nt-mockup__label" style="font-weight: 600; font-size: 14px; color: #374151; margin-right: 12px;">Color</span>
+          <div class="nt-mockup__buttons" role="tablist" aria-label="Shirt color" style="display: flex; gap: 8px;">
+            <button class="nt-btn nt-btn--color is-active" data-color="white" aria-selected="true" style="padding: 8px 16px; border: 2px solid #27e1c1; background: #27e1c1; color: white; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              ⚪ White
+            </button>
+            <button class="nt-btn nt-btn--color" data-color="black" aria-selected="false" style="padding: 8px 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              ⚫ Black
+            </button>
+            <button class="nt-btn nt-btn--color" data-color="pink" aria-selected="false" style="padding: 8px 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              🩷 Pink
+            </button>
+            <button class="nt-btn nt-btn--color" data-color="blue" aria-selected="false" style="padding: 8px 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              🔵 Blue
+            </button>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="nt-mockup__group">
+          {% if section.settings.allow_download %}
+          <button class="nt-btn nt-btn--primary" id="nt-download-{{ section.id }}" style="padding: 10px 20px; background: linear-gradient(45deg, #10b981, #059669); color: white; border: none; border-radius: 25px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+            📥 Download Mockup
+          </button>
+          {% endif %}
+          
+          <button class="nt-btn nt-btn--secondary" id="nt-edit-{{ section.id }}" style="padding: 10px 20px; background: linear-gradient(45deg, #8b5cf6, #a855f7); color: white; border: none; border-radius: 25px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+            ✏️ Edit Design
+          </button>
+        </div>
+      </div>
+
+      <!-- Enhanced Preview Stage -->
+      <div class="nt-mockup__stage" style="width: 100%; display: grid; place-items: center;">
+        <div class="nt-mockup__canvas" 
+             style="position: relative; width: min(720px, 100%); aspect-ratio: 1 / 1; background: linear-gradient(180deg, #ffffff, #f6f7f9); border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.1); --overlay-top: {{ section.settings.overlay_top }}%; --overlay-left: {{ section.settings.overlay_left }}%; --overlay-width: {{ section.settings.overlay_width }}%; --overlay-rotate: {{ section.settings.overlay_rotate }}deg;">
+          
+          <!-- Base Mockup (swapped by JS) -->
+          <img
+            id="nt-base-{{ section.id }}"
+            class="nt-mockup__base"
+            src="{{ section.settings.front_white | default: 'https://via.placeholder.com/800x800/f8f9fa/64748b?text=Front+White' | image_url }}"
+            alt="T-shirt mockup"
+            loading="eager"
+            decoding="async"
+            style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain;"
+          >
+          
+          <!-- Dynamic Design Overlay -->
+          <div
+            id="nt-overlay-{{ section.id }}"
+            class="nt-mockup__overlay"
+            style="position: absolute; width: var(--overlay-width); left: var(--overlay-left); top: var(--overlay-top); transform: rotate(var(--overlay-rotate)); height: auto; inset: auto; pointer-events: none; display: flex; align-items: center; justify-content: center;"
+          >
+            <span id="nt-design-text-{{ section.id }}" 
+                  style="font-family: 'Bebas Neue', sans-serif; font-size: 32px; font-weight: bold; color: #000000; text-align: center; white-space: nowrap; user-select: none; text-shadow: 1px 1px 2px rgba(255,255,255,0.8);">
+              Your Design Here
+            </span>
+          </div>
+        </div>
+        
+        <p class="nt-mockup__hint" style="color: #6b7280; font-size: 14px; margin-top: 16px; text-align: center;">
+          💡 Tip: Use the "Edit Design" button to customize your text, colors, and effects
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+/* Enhanced Button Styles */
+.nt-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.nt-btn--view:hover:not(.is-active),
+.nt-btn--color:hover:not(.is-active) {
+  border-color: #27e1c1 !important;
+  background: #f0fdfa !important;
+  color: #27e1c1 !important;
+}
+
+.nt-btn--primary:hover {
+  background: linear-gradient(45deg, #059669, #047857) !important;
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+}
+
+.nt-btn--secondary:hover {
+  background: linear-gradient(45deg, #a855f7, #9333ea) !important;
+  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .nt-mockup__controls {
+    flex-direction: column !important;
+    gap: 15px !important;
+  }
+  
+  .nt-mockup__group {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+  
+  .nt-mockup__buttons {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+  }
+  
+  .mockup-header h2 {
+    font-size: 32px !important;
+  }
+  
+  .nt-mockup__canvas {
+    width: 100% !important;
+    max-width: 500px !important;
+  }
+}
+
+/* Animation Classes */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mockup-header {
+  animation: fadeInUp 0.6s ease;
+}
+
+.nt-mockup__controls {
+  animation: fadeInUp 0.8s ease;
+}
+
+.nt-mockup__stage {
+  animation: fadeInUp 1s ease;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const mockup = {
+    // Enhanced mockup sources with more colors and views
+    sources: {
+      front: {
+        white: "{{ section.settings.front_white | default: 'https://via.placeholder.com/800x800/ffffff/000000?text=Front+White' | image_url }}",
+        black: "{{ section.settings.front_black | default: 'https://via.placeholder.com/800x800/000000/ffffff?text=Front+Black' | image_url }}",
+        pink: "{{ section.settings.front_pink | default: 'https://via.placeholder.com/800x800/ff69b4/ffffff?text=Front+Pink' | image_url }}",
+        blue: "{{ section.settings.front_blue | default: 'https://via.placeholder.com/800x800/0066cc/ffffff?text=Front+Blue' | image_url }}"
+      },
+      back: {
+        white: "{{ section.settings.back_white | default: 'https://via.placeholder.com/800x800/ffffff/000000?text=Back+White' | image_url }}",
+        black: "{{ section.settings.back_black | default: 'https://via.placeholder.com/800x800/000000/ffffff?text=Back+Black' | image_url }}",
+        pink: "{{ section.settings.back_pink | default: 'https://via.placeholder.com/800x800/ff69b4/ffffff?text=Back+Pink' | image_url }}",
+        blue: "{{ section.settings.back_blue | default: 'https://via.placeholder.com/800x800/0066cc/ffffff?text=Back+Blue' | image_url }}"
+      },
+      hanging: {
+        white: "{{ section.settings.hanging_white | default: 'https://via.placeholder.com/800x800/ffffff/000000?text=Hanging+White' | image_url }}",
+        black: "{{ section.settings.hanging_black | default: 'https://via.placeholder.com/800x800/000000/ffffff?text=Hanging+Black' | image_url }}",
+        pink: "{{ section.settings.hanging_pink | default: 'https://via.placeholder.com/800x800/ff69b4/ffffff?text=Hanging+Pink' | image_url }}",
+        blue: "{{ section.settings.hanging_blue | default: 'https://via.placeholder.com/800x800/0066cc/ffffff?text=Hanging+Blue' | image_url }}"
+      },
+      person1: {
+        white: "{{ section.settings.person1_white | default: 'https://via.placeholder.com/800x800/ffffff/000000?text=Model+1+White' | image_url }}",
+        black: "{{ section.settings.person1_black | default: 'https://via.placeholder.com/800x800/000000/ffffff?text=Model+1+Black' | image_url }}",
+        pink: "{{ section.settings.person1_pink | default: 'https://via.placeholder.com/800x800/ff69b4/ffffff?text=Model+1+Pink' | image_url }}",
+        blue: "{{ section.settings.person1_blue | default: 'https://via.placeholder.com/800x800/0066cc/ffffff?text=Model+1+Blue' | image_url }}"
+      },
+      person2: {
+        white: "{{ section.settings.person2_white | default: 'https://via.placeholder.com/800x800/ffffff/000000?text=Model+2+White' | image_url }}",
+        black: "{{ section.settings.person2_black | default: 'https://via.placeholder.com/800x800/000000/ffffff?text=Model+2+Black' | image_url }}",
+        pink: "{{ section.settings.person2_pink | default: 'https://via.placeholder.com/800x800/ff69b4/ffffff?text=Model+2+Pink' | image_url }}",
+        blue: "{{ section.settings.person2_blue | default: 'https://via.placeholder.com/800x800/0066cc/ffffff?text=Model+2+Blue' | image_url }}"
+      }
+    },
+
+    // Current design state
+    designState: {
+      text: 'Your Design Here',
+      fontSize: 32,
+      fontFamily: "'Bebas Neue', sans-serif",
+      textColor: '#000000',
+      shirtColor: 'white',
+      effect: 'none'
+    },
+
+    // Current view state
+    state: { view: "front", color: "white" },
+
+    init() {
+      this.bindEvents();
+      this.loadFromCustomizer();
+      this.updateBase();
+      this.updateDesign();
+    },
+
+    bindEvents() {
+      const rootId = "nt-mockup-{{ section.id }}";
+      
+      // Bind view buttons
+      const viewBtns = Array.from(document.querySelectorAll(`#${rootId} .nt-btn--view`));
+      viewBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          this.state.view = btn.dataset.view;
+          this.setActive(viewBtns, this.state.view);
+          this.updateBase();
+        });
+      });
+
+      // Bind color buttons
+      const colorBtns = Array.from(document.querySelectorAll(`#${rootId} .nt-btn--color`));
+      colorBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          this.state.color = btn.dataset.color;
+          this.setActive(colorBtns, this.state.color);
+          this.updateBase();
+        });
+      });
+
+      // Bind edit button
+      const editBtn = document.getElementById(`nt-edit-{{ section.id }}`);
+      if (editBtn) {
+        editBtn.addEventListener("click", () => {
+          this.scrollToCustomizer();
+        });
+      }
+
+      {% if section.settings.allow_download %}
+      // Bind download button
+      const downloadBtn = document.getElementById(`nt-download-{{ section.id }}`);
+      if (downloadBtn) {
+        downloadBtn.addEventListener("click", () => {
+          this.downloadComposite();
+        });
+      }
+      {% endif %}
+
+      // Listen for customizer updates
+      this.setupCustomizerListener();
+    },
+
+    setActive(buttons, active) {
+      buttons.forEach(b => {
+        const on = (b.dataset.view || b.dataset.color) === active;
+        if (on) {
+          b.classList.add("is-active");
+          b.style.borderColor = "#27e1c1";
+          b.style.background = "#27e1c1";
+          b.style.color = "white";
+        } else {
+          b.classList.remove("is-active");
+          b.style.borderColor = "#e2e8f0";
+          b.style.background = "white";
+          b.style.color = "#64748b";
+        }
+        b.setAttribute("aria-selected", on ? "true" : "false");
+      });
+    },
+
+    updateBase() {
+      const baseEl = document.getElementById("nt-base-{{ section.id }}");
+      const src = this.sources[this.state.view]?.[this.state.color];
+      if (src && baseEl) {
+        baseEl.src = src;
+      }
+    },
+
+    updateDesign() {
+      const designText = document.getElementById("nt-design-text-{{ section.id }}");
+      if (designText) {
+        designText.textContent = this.designState.text;
+        designText.style.fontFamily = this.designState.fontFamily;
+        designText.style.fontSize = this.designState.fontSize + 'px';
+        designText.style.color = this.designState.textColor;
+
+        // Apply text effects
+        switch (this.designState.effect) {
+          case 'outline':
+            designText.style.webkitTextStroke = `2px ${this.designState.textColor}`;
+            designText.style.webkitTextFillColor = 'transparent';
+            break;
+          case 'shadow':
+            designText.style.textShadow = '2px 2px 4px rgba(0,0,0,0.5)';
+            designText.style.webkitTextStroke = 'none';
+            designText.style.webkitTextFillColor = this.designState.textColor;
+            break;
+          case 'gradient':
+            designText.style.background = 'linear-gradient(45deg, #27e1c1, #ff4fa3)';
+            designText.style.webkitBackgroundClip = 'text';
+            designText.style.webkitTextFillColor = 'transparent';
+            designText.style.webkitTextStroke = 'none';
+            break;
+          default:
+            designText.style.textShadow = '1px 1px 2px rgba(255,255,255,0.8)';
+            designText.style.webkitTextStroke = 'none';
+            designText.style.webkitTextFillColor = this.designState.textColor;
+        }
+      }
+    },
+
+    loadFromCustomizer() {
+      // Try to load design from customizer if available
+      if (window.customizer && window.customizer.state) {
+        this.designState = { ...this.designState, ...window.customizer.state };
+        this.updateDesign();
+      }
+    },
+
+    setupCustomizerListener() {
+      // Listen for customizer updates
+      const originalUpdatePreview = window.customizer?.updatePreview;
+      if (originalUpdatePreview) {
+        window.customizer.updatePreview = () => {
+          originalUpdatePreview.call(window.customizer);
+          // Update mockup when customizer changes
+          setTimeout(() => {
+            this.loadFromCustomizer();
+            this.updateDesign();
+          }, 100);
+        };
+      }
+    },
+
+    scrollToCustomizer() {
+      const customizerSection = document.querySelector('.tshirt-customizer-section');
+      if (customizerSection) {
+        customizerSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    },
+
+    {% if section.settings.allow_download %}
+    downloadComposite() {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      
+      // Set canvas size
+      canvas.width = 2000;
+      canvas.height = 2000;
+
+      // Create base image
+      const baseImg = new Image();
+      baseImg.crossOrigin = "anonymous";
+      baseImg.src = document.getElementById("nt-base-{{ section.id }}").src;
+
+      baseImg.onload = () => {
+        // Draw base image
+        ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
+
+        // Draw design text
+        ctx.save();
+        ctx.font = `${this.designState.fontSize * 2}px ${this.designState.fontFamily}`;
+        ctx.fillStyle = this.designState.textColor;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+
+        // Calculate text position based on overlay settings
+        const stage = document.querySelector(`#nt-mockup-{{ section.id }} .nt-mockup__canvas`);
+        const topPct = parseFloat(getComputedStyle(stage).getPropertyValue('--overlay-top')) / 100;
+        const leftPct = parseFloat(getComputedStyle(stage).getPropertyValue('--overlay-left')) / 100;
+        const widthPct = parseFloat(getComputedStyle(stage).getPropertyValue('--overlay-width')) / 100;
+        const rotateDeg = parseFloat(getComputedStyle(stage).getPropertyValue('--overlay-rotate')) || 0;
+
+        const x = canvas.width * (leftPct + widthPct / 2);
+        const y = canvas.height * (topPct + 0.3); // Adjust for text positioning
+
+        ctx.translate(x, y);
+        ctx.rotate(rotateDeg * Math.PI / 180);
+        
+        // Apply text effects
+        switch (this.designState.effect) {
+          case 'outline':
+            ctx.strokeStyle = this.designState.textColor;
+            ctx.lineWidth = 4;
+            ctx.strokeText(this.designState.text, 0, 0);
+            ctx.fillStyle = 'transparent';
+            break;
+          case 'shadow':
+            ctx.shadowColor = 'rgba(0,0,0,0.5)';
+            ctx.shadowBlur = 8;
+            ctx.shadowOffsetX = 4;
+            ctx.shadowOffsetY = 4;
+            ctx.fillStyle = this.designState.textColor;
+            break;
+          default:
+            ctx.fillStyle = this.designState.textColor;
+        }
+        
+        ctx.fillText(this.designState.text, 0, 0);
+        ctx.restore();
+
+        // Download
+        const a = document.createElement('a');
+        a.download = `custom_mockup_${this.state.view}_${this.state.color}.png`;
+        a.href = canvas.toDataURL("image/png");
+        a.click();
+      };
+    }
+    {% endif %}
+  };
+
+  // Initialize mockup
+  mockup.init();
+
+  // Make globally available
+  window.mockup = mockup;
+
+  console.log('Enhanced Interactive Mockup initialized! 🎨');
+});
+</script>
+
+{% schema %}
+{
+  "name": "Interactive Mockup",
+  "class": "section-interactive-mockup",
+  "settings": [
+    {
+      "type": "header",
+      "content": "🖼 Base Mockups (Front/Back/Hanging × Colors)"
+    },
+    {
+      "type": "image_picker",
+      "id": "front_white",
+      "label": "Front • White"
+    },
+    {
+      "type": "image_picker",
+      "id": "front_black",
+      "label": "Front • Black"
+    },
+    {
+      "type": "image_picker",
+      "id": "front_pink",
+      "label": "Front • Pink"
+    },
+    {
+      "type": "image_picker",
+      "id": "front_blue",
+      "label": "Front • Blue"
+    },
+    {
+      "type": "image_picker",
+      "id": "back_white",
+      "label": "Back • White"
+    },
+    {
+      "type": "image_picker",
+      "id": "back_black",
+      "label": "Back • Black"
+    },
+    {
+      "type": "image_picker",
+      "id": "back_pink",
+      "label": "Back • Pink"
+    },
+    {
+      "type": "image_picker",
+      "id": "back_blue",
+      "label": "Back • Blue"
+    },
+    {
+      "type": "image_picker",
+      "id": "hanging_white",
+      "label": "Hanging • White"
+    },
+    {
+      "type": "image_picker",
+      "id": "hanging_black",
+      "label": "Hanging • Black"
+    },
+    {
+      "type": "image_picker",
+      "id": "hanging_pink",
+      "label": "Hanging • Pink"
+    },
+    {
+      "type": "image_picker",
+      "id": "hanging_blue",
+      "label": "Hanging • Blue"
+    },
+    {
+      "type": "image_picker",
+      "id": "person1_white",
+      "label": "Model 1 • White"
+    },
+    {
+      "type": "image_picker",
+      "id": "person1_black",
+      "label": "Model 1 • Black"
+    },
+    {
+      "type": "image_picker",
+      "id": "person1_pink",
+      "label": "Model 1 • Pink"
+    },
+    {
+      "type": "image_picker",
+      "id": "person1_blue",
+      "label": "Model 1 • Blue"
+    },
+    {
+      "type": "image_picker",
+      "id": "person2_white",
+      "label": "Model 2 • White"
+    },
+    {
+      "type": "image_picker",
+      "id": "person2_black",
+      "label": "Model 2 • Black"
+    },
+    {
+      "type": "image_picker",
+      "id": "person2_pink",
+      "label": "Model 2 • Pink"
+    },
+    {
+      "type": "image_picker",
+      "id": "person2_blue",
+      "label": "Model 2 • Blue"
+    },
+    {
+      "type": "header",
+      "content": "📐 Design Overlay Settings"
+    },
+    {
+      "type": "range",
+      "id": "overlay_top",
+      "min": 0,
+      "max": 90,
+      "step": 1,
+      "unit": "%",
+      "label": "Top Position",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "overlay_left",
+      "min": 0,
+      "max": 90,
+      "step": 1,
+      "unit": "%",
+      "label": "Left Position",
+      "default": 26
+    },
+    {
+      "type": "range",
+      "id": "overlay_width",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Design Width",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "overlay_rotate",
+      "min": -45,
+      "max": 45,
+      "step": 1,
+      "unit": "°",
+      "label": "Design Rotation",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "⚙️ Options"
+    },
+    {
+      "type": "checkbox",
+      "id": "allow_download",
+      "label": "Enable Download Feature",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 40
+    }
+  ],
+  "presets": [
+    {
+      "name": "Interactive Mockup"
+    }
+  ]
+}
+{% endschema %}
