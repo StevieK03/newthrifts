@@ -195,6 +195,12 @@ Enhanced Interactive Product Mockup
             <div id="nt-drag-handle-{{ section.id }}" 
                  style="position: absolute; top: -8px; right: -8px; width: 16px; height: 16px; background: #27e1c1; border: 2px solid white; border-radius: 50%; cursor: grab; display: none; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
             </div>
+            
+            <!-- Resize Handle -->
+            <div id="nt-resize-handle-{{ section.id }}" 
+                 style="position: absolute; bottom: -8px; right: -8px; width: 16px; height: 16px; background: #ff6b6b; border: 2px solid white; border-radius: 50%; cursor: nw-resize; display: block; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 10;"
+                 title="Drag to resize">
+            </div>
           </div>
 
           <!-- Resize Handle (only visible when hovering over design) -->
@@ -1107,10 +1113,14 @@ document.addEventListener('DOMContentLoaded', function() {
         if (this.placementState.dragging) {
           this.handleDrag(e);
         }
+        if (this.placementState.resizing) {
+          this.handleResizeDrag(e);
+        }
       });
 
       document.addEventListener('mouseup', () => {
         this.endDrag();
+        this.endResize();
       });
 
       // Touch events - Allow dragging on the entire overlay
@@ -1130,12 +1140,13 @@ document.addEventListener('DOMContentLoaded', function() {
         this.endDrag();
       });
 
-      // Scroll wheel for resize
+      // Scroll wheel for resize - Test if events are being detected
       canvas.addEventListener('wheel', (e) => {
-        console.log('🔄 Scroll wheel triggered, deltaY:', e.deltaY, 'hasUploadedDesign:', this.placementState.hasUploadedDesign);
+        console.log('🔄 SCROLL EVENT DETECTED! deltaY:', e.deltaY, 'target:', e.target);
         e.preventDefault();
+        e.stopPropagation();
         this.handleResize(e.deltaY);
-      }, { passive: false });
+      }, { passive: false, capture: true });
 
       // Alternative resize with Ctrl+scroll for more precise control
       canvas.addEventListener('wheel', (e) => {
@@ -1163,6 +1174,17 @@ document.addEventListener('DOMContentLoaded', function() {
       overlay.addEventListener('mouseleave', () => {
         this.hideDragHandles();
       });
+
+      // Resize handle functionality
+      const resizeHandle = document.getElementById(`nt-resize-handle-{{ section.id }}`);
+      if (resizeHandle) {
+        resizeHandle.addEventListener('mousedown', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          console.log('🔧 Resize handle clicked');
+          this.startResize(e);
+        });
+      }
     },
 
     startDrag(e) {
@@ -1218,6 +1240,45 @@ document.addEventListener('DOMContentLoaded', function() {
         const canvas = document.getElementById(`nt-mockup-canvas-{{ section.id }}`);
         canvas.classList.remove('dragging');
       }
+    },
+
+    endResize() {
+      if (this.placementState.resizing) {
+        this.placementState.resizing = false;
+        console.log('🔧 Resize ended');
+      }
+    },
+
+    startResize(e) {
+      console.log('🔧 Start resize triggered');
+      this.placementState.resizing = true;
+      this.placementState.lastX = e.clientX;
+      this.placementState.lastY = e.clientY;
+    },
+
+    handleResizeDrag(e) {
+      if (!this.placementState.resizing) return;
+      
+      const deltaX = e.clientX - this.placementState.lastX;
+      const deltaY = e.clientY - this.placementState.lastY;
+      
+      // Calculate resize based on diagonal movement
+      const delta = (deltaX + deltaY) / 2;
+      const resizeIncrement = delta * 0.5; // Adjust sensitivity
+      
+      const newWidth = this.placementState.widthPct + resizeIncrement;
+      this.placementState.widthPct = Math.max(10, Math.min(100, newWidth));
+      
+      console.log('🔧 Resizing to:', this.placementState.widthPct + '%');
+      
+      this.updatePlacementDisplay();
+      this.updateDesignPosition();
+      
+      const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
+      if (widthSlider) widthSlider.value = this.placementState.widthPct;
+      
+      this.placementState.lastX = e.clientX;
+      this.placementState.lastY = e.clientY;
     },
 
     handleResize(deltaY) {
