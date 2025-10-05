@@ -68,6 +68,26 @@ Enhanced Interactive Product Mockup
 
         <!-- Action Buttons -->
         <div class="nt-mockup__group">
+          <div class="upload-section" style="display: flex; flex-direction: column; gap: 8px; align-items: center;">
+            <button class="nt-btn nt-btn--upload" id="nt-upload-{{ section.id }}" style="padding: 10px 20px; background: linear-gradient(45deg, #f59e0b, #d97706); color: white; border: none; border-radius: 25px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden;">
+              📁 Upload Your Design
+              <input type="file" id="nt-file-input-{{ section.id }}" accept=".png,.jpg,.jpeg,.svg,.pdf,.ai,.psd" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
+            </button>
+            
+            <div class="file-info" style="display: flex; gap: 12px; align-items: center; font-size: 12px; color: #6b7280;">
+              <span>📄 Accepts:</span>
+              <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+                <span class="file-type" style="background: #e5e7eb; padding: 2px 6px; border-radius: 4px; font-size: 11px;">PNG</span>
+                <span class="file-type" style="background: #e5e7eb; padding: 2px 6px; border-radius: 4px; font-size: 11px;">JPG</span>
+                <span class="file-type" style="background: #e5e7eb; padding: 2px 6px; border-radius: 4px; font-size: 11px;">SVG</span>
+                <span class="file-type" style="background: #e5e7eb; padding: 2px 6px; border-radius: 4px; font-size: 11px;">PDF</span>
+              </div>
+              <button class="help-link" id="nt-help-{{ section.id }}" style="background: none; border: none; color: #3b82f6; cursor: pointer; font-size: 11px; text-decoration: underline;">
+                ℹ️ Help
+              </button>
+            </div>
+          </div>
+          
           {% if section.settings.allow_download %}
           <button class="nt-btn nt-btn--primary" id="nt-download-{{ section.id }}" style="padding: 10px 20px; background: linear-gradient(45deg, #10b981, #059669); color: white; border: none; border-radius: 25px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
             📥 Download Mockup
@@ -139,6 +159,19 @@ Enhanced Interactive Product Mockup
 .nt-btn--secondary:hover {
   background: linear-gradient(45deg, #a855f7, #9333ea) !important;
   box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
+}
+
+.nt-btn--upload:hover {
+  background: linear-gradient(45deg, #d97706, #b45309) !important;
+  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
+}
+
+.file-type:hover {
+  background: #d1d5db !important;
+}
+
+.help-link:hover {
+  color: #1d4ed8 !important;
 }
 
 /* Responsive Design */
@@ -281,6 +314,35 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       }
 
+      // Bind upload button and file input
+      const uploadBtn = document.getElementById(`nt-upload-{{ section.id }}`);
+      const fileInput = document.getElementById(`nt-file-input-{{ section.id }}`);
+      
+      if (uploadBtn && fileInput) {
+        // Click upload button triggers file input
+        uploadBtn.addEventListener("click", (e) => {
+          if (e.target === uploadBtn) {
+            fileInput.click();
+          }
+        });
+
+        // Handle file selection
+        fileInput.addEventListener("change", (e) => {
+          const file = e.target.files[0];
+          if (file) {
+            this.handleFileUpload(file);
+          }
+        });
+      }
+
+      // Bind help button
+      const helpBtn = document.getElementById(`nt-help-{{ section.id }}`);
+      if (helpBtn) {
+        helpBtn.addEventListener("click", () => {
+          this.showHelpModal();
+        });
+      }
+
       {% if section.settings.allow_download %}
       // Bind download button
       const downloadBtn = document.getElementById(`nt-download-{{ section.id }}`);
@@ -382,6 +444,318 @@ document.addEventListener('DOMContentLoaded', function() {
       if (customizerSection) {
         customizerSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
+    },
+
+    handleFileUpload(file) {
+      console.log('File uploaded:', file.name, file.type, file.size);
+      
+      // Validate file type
+      const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/svg+xml', 'application/pdf'];
+      const allowedExtensions = ['.png', '.jpg', '.jpeg', '.svg', '.pdf', '.ai', '.psd'];
+      
+      const fileExtension = file.name.toLowerCase().substring(file.name.lastIndexOf('.'));
+      const isValidType = allowedTypes.includes(file.type) || allowedExtensions.includes(fileExtension);
+      
+      if (!isValidType) {
+        this.showMessage('❌ Invalid file type. Please upload PNG, JPG, SVG, or PDF files.', 'error');
+        return;
+      }
+      
+      // Validate file size (10MB limit)
+      const maxSize = 10 * 1024 * 1024; // 10MB
+      if (file.size > maxSize) {
+        this.showMessage('❌ File too large. Please upload files smaller than 10MB.', 'error');
+        return;
+      }
+      
+      // Show processing message
+      this.showMessage('📁 Processing your design...', 'info');
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.previewUploadedDesign(e.target.result, file.name);
+      };
+      reader.readAsDataURL(file);
+    },
+
+    previewUploadedDesign(imageData, fileName) {
+      // Create preview overlay
+      const previewOverlay = document.createElement('div');
+      previewOverlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(10px);
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      `;
+
+      const previewContainer = document.createElement('div');
+      previewContainer.style.cssText = `
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        max-width: 600px;
+        width: 90vw;
+        text-align: center;
+        transform: scale(0.8);
+        transition: transform 0.3s ease;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      `;
+
+      previewContainer.innerHTML = `
+        <h3 style="margin: 0 0 20px 0; font-size: 24px; font-weight: 700; color: #374151;">
+          📁 Design Preview
+        </h3>
+        
+        <div style="width: 300px; height: 300px; margin: 0 auto 20px; border: 2px dashed #e5e7eb; border-radius: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+          <img src="${imageData}" alt="Uploaded design" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+        </div>
+        
+        <p style="margin: 0 0 20px 0; font-size: 16px; color: #6b7280;">
+          <strong>File:</strong> ${fileName}
+        </p>
+        
+        <div style="display: flex; gap: 12px; justify-content: center;">
+          <button id="apply-design-btn" style="padding: 12px 24px; background: linear-gradient(45deg, #27e1c1, #20b2aa); color: white; border: none; border-radius: 25px; font-weight: 600; cursor: pointer;">
+            ✨ Apply to Mockup
+          </button>
+          <button id="cancel-upload-btn" style="padding: 12px 24px; background: white; color: #6b7280; border: 2px solid #e2e8f0; border-radius: 25px; font-weight: 600; cursor: pointer;">
+            Cancel
+          </button>
+        </div>
+      `;
+
+      previewOverlay.appendChild(previewContainer);
+      document.body.appendChild(previewOverlay);
+
+      // Animate in
+      setTimeout(() => {
+        previewOverlay.style.opacity = '1';
+        previewContainer.style.transform = 'scale(1)';
+      }, 100);
+
+      // Bind events
+      document.getElementById('apply-design-btn').addEventListener('click', () => {
+        this.applyUploadedDesign(imageData);
+        this.closeUploadPreview();
+      });
+
+      document.getElementById('cancel-upload-btn').addEventListener('click', () => {
+        this.closeUploadPreview();
+      });
+
+      previewOverlay.addEventListener('click', (e) => {
+        if (e.target === previewOverlay) {
+          this.closeUploadPreview();
+        }
+      });
+
+      this.currentUploadPreview = previewOverlay;
+    },
+
+    applyUploadedDesign(imageData) {
+      // Replace text with uploaded image
+      const overlayDiv = document.getElementById(`nt-overlay-{{ section.id }}`);
+      const designText = document.getElementById(`nt-design-text-{{ section.id }}`);
+      
+      if (overlayDiv && designText) {
+        // Hide text
+        designText.style.display = 'none';
+        
+        // Create image element
+        const uploadedImg = document.createElement('img');
+        uploadedImg.src = imageData;
+        uploadedImg.style.cssText = `
+          max-width: 100%;
+          max-height: 100%;
+          object-fit: contain;
+          filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        `;
+        
+        overlayDiv.appendChild(uploadedImg);
+        
+        this.showMessage('✨ Uploaded design applied to mockup!', 'success');
+      }
+    },
+
+    closeUploadPreview() {
+      if (this.currentUploadPreview) {
+        this.currentUploadPreview.style.opacity = '0';
+        setTimeout(() => {
+          if (document.body.contains(this.currentUploadPreview)) {
+            document.body.removeChild(this.currentUploadPreview);
+          }
+          this.currentUploadPreview = null;
+        }, 300);
+      }
+    },
+
+    showHelpModal() {
+      const helpOverlay = document.createElement('div');
+      helpOverlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(10px);
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      `;
+
+      const helpContainer = document.createElement('div');
+      helpContainer.style.cssText = `
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        max-width: 700px;
+        width: 90vw;
+        max-height: 80vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      `;
+
+      helpContainer.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+          <h2 style="margin: 0; font-size: 28px; font-weight: 700; color: #374151;">
+            📁 File Upload Help
+          </h2>
+          <button id="close-help-btn" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #6b7280;">
+            ×
+          </button>
+        </div>
+
+        <div style="margin-bottom: 25px;">
+          <h3 style="margin: 0 0 12px 0; font-size: 20px; font-weight: 600; color: #374151;">
+            ✅ Accepted File Formats
+          </h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+            <div style="background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0;">
+              <div style="font-weight: 600; color: #059669; margin-bottom: 4px;">📄 PNG</div>
+              <div style="font-size: 14px; color: #6b7280;">Best for designs with transparency</div>
+            </div>
+            <div style="background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0;">
+              <div style="font-weight: 600; color: #059669; margin-bottom: 4px;">🖼️ JPG/JPEG</div>
+              <div style="font-size: 14px; color: #6b7280;">Standard photo format</div>
+            </div>
+            <div style="background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0;">
+              <div style="font-weight: 600; color: #059669; margin-bottom: 4px;">🎨 SVG</div>
+              <div style="font-size: 14px; color: #6b7280;">Vector graphics (scalable)</div>
+            </div>
+            <div style="background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0;">
+              <div style="font-weight: 600; color: #059669; margin-bottom: 4px;">📋 PDF</div>
+              <div style="font-size: 14px; color: #6b7280;">Document format</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 25px;">
+          <h3 style="margin: 0 0 12px 0; font-size: 20px; font-weight: 600; color: #374151;">
+            📏 File Requirements
+          </h3>
+          <ul style="margin: 0; padding-left: 20px; color: #6b7280; line-height: 1.6;">
+            <li><strong>Maximum file size:</strong> 10MB</li>
+            <li><strong>Recommended resolution:</strong> 2048x2048px or higher</li>
+            <li><strong>Color mode:</strong> RGB or CMYK</li>
+            <li><strong>Transparency:</strong> Supported for PNG files</li>
+          </ul>
+        </div>
+
+        <div style="margin-bottom: 25px;">
+          <h3 style="margin: 0 0 12px 0; font-size: 20px; font-weight: 600; color: #374151;">
+            💡 Design Tips
+          </h3>
+          <ul style="margin: 0; padding-left: 20px; color: #6b7280; line-height: 1.6;">
+            <li>Use high-resolution images for best print quality</li>
+            <li>Keep important design elements within the center area</li>
+            <li>PNG files with transparency work best for logos</li>
+            <li>Vector files (SVG) will scale perfectly at any size</li>
+            <li>Test your design on different t-shirt colors</li>
+          </ul>
+        </div>
+
+        <div style="background: linear-gradient(135deg, #f0fdfa, #ecfdf5); padding: 20px; border-radius: 12px; border: 1px solid #a7f3d0;">
+          <div style="font-weight: 600; color: #065f46; margin-bottom: 8px;">🚀 Pro Tip</div>
+          <div style="color: #047857; font-size: 14px;">
+            For best results, create your design in a square format (1:1 ratio) with a transparent background. This ensures your design will look great on any t-shirt color!
+          </div>
+        </div>
+      `;
+
+      helpOverlay.appendChild(helpContainer);
+      document.body.appendChild(helpOverlay);
+
+      // Animate in
+      setTimeout(() => {
+        helpOverlay.style.opacity = '1';
+      }, 100);
+
+      // Bind close event
+      document.getElementById('close-help-btn').addEventListener('click', () => {
+        helpOverlay.style.opacity = '0';
+        setTimeout(() => {
+          if (document.body.contains(helpOverlay)) {
+            document.body.removeChild(helpOverlay);
+          }
+        }, 300);
+      });
+
+      helpOverlay.addEventListener('click', (e) => {
+        if (e.target === helpOverlay) {
+          helpOverlay.style.opacity = '0';
+          setTimeout(() => {
+            if (document.body.contains(helpOverlay)) {
+              document.body.removeChild(helpOverlay);
+            }
+          }, 300);
+        }
+      });
+    },
+
+    showMessage(message, type = 'info') {
+      const messageEl = document.createElement('div');
+      messageEl.textContent = message;
+      Object.assign(messageEl.style, {
+        position: 'fixed',
+        top: '20px',
+        right: '20px',
+        background: type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#6b7280',
+        color: 'white',
+        padding: '12px 20px',
+        borderRadius: '8px',
+        fontSize: '14px',
+        fontWeight: '500',
+        zIndex: '10000',
+        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.15)',
+        transform: 'translateX(100%)',
+        transition: 'transform 0.3s ease'
+      });
+      
+      document.body.appendChild(messageEl);
+      
+      setTimeout(() => messageEl.style.transform = 'translateX(0)', 100);
+      setTimeout(() => {
+        messageEl.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+          if (document.body.contains(messageEl)) {
+            document.body.removeChild(messageEl);
+          }
+        }, 300);
+      }, 3000);
     },
 
     {% if section.settings.allow_download %}
