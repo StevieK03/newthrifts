@@ -1146,17 +1146,27 @@ document.addEventListener('DOMContentLoaded', function() {
       const baseImage = document.getElementById(`nt-base-{{ section.id }}`);
       
       if (canvas && baseImage) {
-        console.log('🔍 Scaling mockup to:', scale + '%');
+        console.log('🔍 Scaling t-shirt image to:', scale + '%');
         
-        // Apply scale to the canvas container
-        canvas.style.transform = `scale(${scale / 100})`;
-        canvas.style.transformOrigin = 'center center';
+        // Reset any previous transforms on the canvas
+        canvas.style.transform = 'none';
+        canvas.style.transformOrigin = 'unset';
         
-        // Update the base image size to maintain quality
-        baseImage.style.width = `${100 / (scale / 100)}%`;
-        baseImage.style.height = `${100 / (scale / 100)}%`;
+        // Scale only the t-shirt image, not the container
+        baseImage.style.transform = `scale(${scale / 100})`;
+        baseImage.style.transformOrigin = 'center center';
         
-        console.log('✅ Mockup scaled successfully');
+        // Keep the image centered in the container
+        baseImage.style.position = 'absolute';
+        baseImage.style.top = '50%';
+        baseImage.style.left = '50%';
+        baseImage.style.marginTop = `-${50 * (scale / 100)}%`;
+        baseImage.style.marginLeft = `-${50 * (scale / 100)}%`;
+        
+        // Update the design overlay to match the t-shirt scale
+        this.updateDesignPosition();
+        
+        console.log('✅ T-shirt image scaled successfully');
       }
     },
 
@@ -1172,11 +1182,16 @@ document.addEventListener('DOMContentLoaded', function() {
           rotate: this.placementState.rotateDeg + 'deg'
         });
         
+        // Get current t-shirt scale
+        const scaleSlider = document.getElementById(`nt-mockup-scale-{{ section.id }}`);
+        const currentScale = scaleSlider ? parseFloat(scaleSlider.value) : 100;
+        
         // Apply positioning directly to the element
         overlayDiv.style.top = this.placementState.topPct + '%';
         overlayDiv.style.left = this.placementState.leftPct + '%';
         overlayDiv.style.width = this.placementState.widthPct + '%';
-        overlayDiv.style.transform = `rotate(${this.placementState.rotateDeg}deg)`;
+        overlayDiv.style.transform = `rotate(${this.placementState.rotateDeg}deg) scale(${currentScale / 100})`;
+        overlayDiv.style.transformOrigin = 'center center';
         
         // Also update CSS variables for consistency
         overlayDiv.style.setProperty('--overlay-top', this.placementState.topPct + '%');
