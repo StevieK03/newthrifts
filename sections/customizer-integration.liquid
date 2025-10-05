@@ -1,0 +1,565 @@
+{% comment %}
+Customizer Integration Section
+- Connects the advanced customizer with order processing
+- Shows design statistics and popular combinations
+- Provides seamless workflow from design to purchase
+{% endcomment %}
+
+<section id="customizer-integration-{{ section.id }}" class="customizer-integration-section" style="padding: 40px 0; background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%); color: white;">
+  <div class="container">
+    
+    <!-- Integration Header -->
+    <div class="integration-header" style="text-align: center; margin-bottom: 40px;">
+      <h2 style="font-family: 'Bebas Neue', sans-serif; font-size: 42px; margin: 0 0 16px 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+        🎨 From Design to Delivery
+      </h2>
+      <p style="font-size: 18px; opacity: 0.9; margin: 0; max-width: 700px; margin: 0 auto;">
+        Our advanced design studio seamlessly integrates with our production process. Create your design above, and we'll bring it to life with premium quality and fast shipping.
+      </p>
+    </div>
+
+    <!-- Process Flow -->
+    <div class="process-flow" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-bottom: 50px;">
+      
+      <!-- Step 1: Design -->
+      <div class="process-step" style="text-align: center; padding: 30px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 20px; border: 1px solid rgba(255,255,255,0.2);">
+        <div style="width: 80px; height: 80px; background: linear-gradient(45deg, #27e1c1, #20b2aa); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 32px;">
+          🎨
+        </div>
+        <h3 style="margin: 0 0 12px 0; font-size: 24px; font-weight: 700;">1. Design</h3>
+        <p style="margin: 0; opacity: 0.8; line-height: 1.5;">Use our advanced customizer to create your perfect design with real-time preview</p>
+      </div>
+
+      <!-- Step 2: Review -->
+      <div class="process-step" style="text-align: center; padding: 30px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 20px; border: 1px solid rgba(255,255,255,0.2);">
+        <div style="width: 80px; height: 80px; background: linear-gradient(45deg, #ff6b6b, #ee5a24); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 32px;">
+          👀
+        </div>
+        <h3 style="margin: 0 0 12px 0; font-size: 24px; font-weight: 700;">2. Review</h3>
+        <p style="margin: 0; opacity: 0.8; line-height: 1.5;">Get 3D preview and detailed specifications before placing your order</p>
+      </div>
+
+      <!-- Step 3: Produce -->
+      <div class="process-step" style="text-align: center; padding: 30px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 20px; border: 1px solid rgba(255,255,255,0.2);">
+        <div style="width: 80px; height: 80px; background: linear-gradient(45deg, #8b5cf6, #a855f7); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 32px;">
+          🏭
+        </div>
+        <h3 style="margin: 0 0 12px 0; font-size: 24px; font-weight: 700;">3. Produce</h3>
+        <p style="margin: 0; opacity: 0.8; line-height: 1.5;">Professional printing with premium materials and quality control</p>
+      </div>
+
+      <!-- Step 4: Deliver -->
+      <div class="process-step" style="text-align: center; padding: 30px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 20px; border: 1px solid rgba(255,255,255,0.2);">
+        <div style="width: 80px; height: 80px; background: linear-gradient(45deg, #10b981, #059669); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 32px;">
+          🚚
+        </div>
+        <h3 style="margin: 0 0 12px 0; font-size: 24px; font-weight: 700;">4. Deliver</h3>
+        <p style="margin: 0; opacity: 0.8; line-height: 1.5;">Fast shipping with tracking and satisfaction guarantee</p>
+      </div>
+    </div>
+
+    <!-- Design Statistics -->
+    <div class="design-stats" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 20px; padding: 40px; border: 1px solid rgba(255,255,255,0.2); margin-bottom: 40px;">
+      <h3 style="text-align: center; margin: 0 0 30px 0; font-size: 32px; font-weight: 700;">Design Statistics</h3>
+      
+      <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px;">
+        <div class="stat-item" style="text-align: center;">
+          <div style="font-size: 48px; font-weight: 700; color: #27e1c1; margin-bottom: 8px;" data-stat="custom-designs">2,847</div>
+          <div style="font-size: 16px; opacity: 0.8;">Custom Designs Created</div>
+        </div>
+        
+        <div class="stat-item" style="text-align: center;">
+          <div style="font-size: 48px; font-weight: 700; color: #ff6b6b; margin-bottom: 8px;" data-stat="satisfaction">98.5%</div>
+          <div style="font-size: 16px; opacity: 0.8;">Customer Satisfaction</div>
+        </div>
+        
+        <div class="stat-item" style="text-align: center;">
+          <div style="font-size: 48px; font-weight: 700; color: #8b5cf6; margin-bottom: 8px;" data-stat="avg-time">2.3</div>
+          <div style="font-size: 16px; opacity: 0.8;">Days Average Production</div>
+        </div>
+        
+        <div class="stat-item" style="text-align: center;">
+          <div style="font-size: 48px; font-weight: 700; color: #10b981; margin-bottom: 8px;" data-stat="colors">50+</div>
+          <div style="font-size: 16px; opacity: 0.8;">Available Colors</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Popular Combinations -->
+    <div class="popular-combinations" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 20px; padding: 40px; border: 1px solid rgba(255,255,255,0.2);">
+      <h3 style="text-align: center; margin: 0 0 30px 0; font-size: 32px; font-weight: 700;">Popular Design Combinations</h3>
+      
+      <div class="combinations-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+        <div class="combination-item" style="display: flex; align-items: center; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 12px; cursor: pointer; transition: all 0.3s ease;" data-combination="vintage-black">
+          <div style="width: 60px; height: 60px; background: linear-gradient(45deg, #000000, #374151); border-radius: 8px; margin-right: 16px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px;">
+            RAD
+          </div>
+          <div style="flex: 1;">
+            <div style="font-weight: 600; margin-bottom: 4px;">Vintage Black</div>
+            <div style="font-size: 12px; opacity: 0.8;">Bold text on black tee</div>
+            <div style="font-size: 12px; color: #27e1c1;">Used 847 times</div>
+          </div>
+        </div>
+        
+        <div class="combination-item" style="display: flex; align-items: center; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 12px; cursor: pointer; transition: all 0.3s ease;" data-combination="minimalist-white">
+          <div style="width: 60px; height: 60px; background: linear-gradient(45deg, #ffffff, #f8fafc); border-radius: 8px; margin-right: 16px; display: flex; align-items: center; justify-content: center; color: #374151; font-weight: bold; font-size: 14px; border: 1px solid #e2e8f0;">
+            MIN
+          </div>
+          <div style="flex: 1;">
+            <div style="font-weight: 600; margin-bottom: 4px;">Minimalist White</div>
+            <div style="font-size: 12px; opacity: 0.8;">Clean design on white tee</div>
+            <div style="font-size: 12px; color: #27e1c1;">Used 623 times</div>
+          </div>
+        </div>
+        
+        <div class="combination-item" style="display: flex; align-items: center; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 12px; cursor: pointer; transition: all 0.3s ease;" data-combination="neon-cyber">
+          <div style="width: 60px; height: 60px; background: linear-gradient(45deg, #00ff00, #32cd32); border-radius: 8px; margin-right: 16px; display: flex; align-items: center; justify-content: center; color: #000000; font-weight: bold; font-size: 14px;">
+            CYBER
+          </div>
+          <div style="flex: 1;">
+            <div style="font-weight: 600; margin-bottom: 4px;">Neon Cyberpunk</div>
+            <div style="font-size: 12px; opacity: 0.8;">Bright neon on black</div>
+            <div style="font-size: 12px; color: #27e1c1;">Used 445 times</div>
+          </div>
+        </div>
+        
+        <div class="combination-item" style="display: flex; align-items: center; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 12px; cursor: pointer; transition: all 0.3s ease;" data-combination="nature-green">
+          <div style="width: 60px; height: 60px; background: linear-gradient(45deg, #10b981, #059669); border-radius: 8px; margin-right: 16px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px;">
+            NAT
+          </div>
+          <div style="flex: 1;">
+            <div style="font-weight: 600; margin-bottom: 4px;">Nature Inspired</div>
+            <div style="font-size: 12px; opacity: 0.8;">Earth tones and organic feel</div>
+            <div style="font-size: 12px; color: #27e1c1;">Used 312 times</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="cta-section" style="text-align: center; margin-top: 40px;">
+      <button id="start-designing-btn" style="padding: 16px 32px; background: linear-gradient(45deg, #27e1c1, #20b2aa); color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 8px 25px rgba(39, 225, 193, 0.3);">
+        🎨 Start Designing Now
+      </button>
+      <p style="margin: 16px 0 0 0; opacity: 0.8; font-size: 14px;">
+        Join thousands of satisfied customers who've created their perfect custom t-shirt
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<style>
+/* Hover Effects */
+.process-step:hover {
+  background: rgba(255,255,255,0.15) !important;
+  transform: translateY(-5px);
+}
+
+.combination-item:hover {
+  background: rgba(255,255,255,0.15) !important;
+  transform: translateY(-2px);
+}
+
+#start-designing-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 35px rgba(39, 225, 193, 0.4) !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .process-flow {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 20px !important;
+  }
+  
+  .combinations-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .integration-header h2 {
+    font-size: 32px !important;
+  }
+}
+
+/* Animation Classes */
+@keyframes countUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.process-step {
+  animation: countUp 0.6s ease;
+}
+
+.process-step:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.process-step:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+.process-step:nth-child(4) {
+  animation-delay: 0.6s;
+}
+
+.stat-item {
+  animation: countUp 0.8s ease;
+  animation-delay: 0.8s;
+  animation-fill-mode: both;
+}
+
+.combination-item {
+  animation: countUp 1s ease;
+  animation-delay: 1s;
+  animation-fill-mode: both;
+}
+
+.combination-item:nth-child(2) {
+  animation-delay: 1.2s;
+}
+
+.combination-item:nth-child(3) {
+  animation-delay: 1.4s;
+}
+
+.combination-item:nth-child(4) {
+  animation-delay: 1.6s;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const integration = {
+    // Popular combinations data
+    combinations: {
+      'vintage-black': {
+        text: 'RAD',
+        fontSize: 28,
+        fontFamily: "'Bebas Neue', sans-serif",
+        textColor: '#ffffff',
+        shirtColor: '#000000',
+        position: 'center',
+        effect: 'outline'
+      },
+      'minimalist-white': {
+        text: 'MINIMAL',
+        fontSize: 20,
+        fontFamily: "'Inter', sans-serif",
+        textColor: '#374151',
+        shirtColor: '#ffffff',
+        position: 'center',
+        effect: 'none'
+      },
+      'neon-cyber': {
+        text: 'CYBER',
+        fontSize: 32,
+        fontFamily: "'Space Grotesk', sans-serif",
+        textColor: '#00ff00',
+        shirtColor: '#000000',
+        position: 'center',
+        effect: 'shadow'
+      },
+      'nature-green': {
+        text: 'NATURE',
+        fontSize: 24,
+        fontFamily: "'Playfair Display', serif",
+        textColor: '#10b981',
+        shirtColor: '#f0fdf4',
+        position: 'center',
+        effect: 'none'
+      }
+    },
+
+    init() {
+      this.bindEvents();
+      this.animateStats();
+      this.updateStats();
+    },
+
+    bindEvents() {
+      // Bind combination item clicks
+      document.querySelectorAll('.combination-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+          const combinationType = item.dataset.combination;
+          this.applyCombination(combinationType);
+        });
+      });
+
+      // Bind start designing button
+      document.getElementById('start-designing-btn')?.addEventListener('click', () => {
+        this.scrollToCustomizer();
+      });
+    },
+
+    applyCombination(combinationType) {
+      const combination = this.combinations[combinationType];
+      if (combination) {
+        // Update the customizer with this combination
+        this.updateCustomizer(combination);
+        
+        // Show success message
+        this.showMessage(`Applied "${combinationType.replace('-', ' ')}" combination! ✨`, 'success');
+        
+        // Scroll to customizer
+        setTimeout(() => {
+          this.scrollToCustomizer();
+        }, 500);
+      }
+    },
+
+    updateCustomizer(design) {
+      // Update the customizer inputs (same logic as smart suggestions)
+      const textInput = document.getElementById('custom-text-input');
+      const sizeSlider = document.getElementById('text-size-slider');
+      const sizeValue = document.getElementById('size-value');
+      
+      if (textInput) textInput.value = design.text;
+      if (sizeSlider) {
+        sizeSlider.value = design.fontSize;
+        if (sizeValue) sizeValue.textContent = design.fontSize + 'px';
+      }
+
+      // Update selections
+      this.selectColor('shirt', design.shirtColor);
+      this.selectColor('text', design.textColor);
+      this.selectFont(design.fontFamily);
+      this.selectPosition(design.position);
+      this.selectEffect(design.effect);
+      
+      // Trigger customizer update
+      if (window.customizer && window.customizer.updatePreview) {
+        window.customizer.state = { ...window.customizer.state, ...design };
+        window.customizer.updatePreview();
+      }
+    },
+
+    selectColor(type, color) {
+      const colorButtons = document.querySelectorAll(type === 'shirt' ? '.color-btn' : '.text-color-btn');
+      colorButtons.forEach(btn => {
+        btn.classList.remove('active');
+        btn.style.borderColor = '#e2e8f0';
+      });
+      
+      const activeBtn = document.querySelector(`${type === 'shirt' ? '.color-btn' : '.text-color-btn'}[data-color="${color}"]`);
+      if (activeBtn) {
+        activeBtn.classList.add('active');
+        activeBtn.style.borderColor = '#27e1c1';
+      }
+    },
+
+    selectFont(font) {
+      const fontButtons = document.querySelectorAll('.font-btn');
+      fontButtons.forEach(btn => {
+        btn.classList.remove('active');
+        btn.style.borderColor = '#e2e8f0';
+        btn.style.background = 'white';
+        btn.style.color = '#64748b';
+      });
+      
+      const activeBtn = document.querySelector(`[data-font="${font}"]`);
+      if (activeBtn) {
+        activeBtn.classList.add('active');
+        activeBtn.style.borderColor = '#27e1c1';
+        activeBtn.style.background = '#27e1c1';
+        activeBtn.style.color = 'white';
+      }
+    },
+
+    selectPosition(position) {
+      const positionButtons = document.querySelectorAll('.position-btn');
+      positionButtons.forEach(btn => {
+        btn.classList.remove('active');
+        btn.style.borderColor = '#e2e8f0';
+        btn.style.background = 'white';
+        btn.style.color = '#64748b';
+      });
+      
+      const activeBtn = document.querySelector(`[data-position="${position}"]`);
+      if (activeBtn) {
+        activeBtn.classList.add('active');
+        activeBtn.style.borderColor = '#27e1c1';
+        activeBtn.style.background = '#27e1c1';
+        activeBtn.style.color = 'white';
+      }
+    },
+
+    selectEffect(effect) {
+      const effectButtons = document.querySelectorAll('.effect-btn');
+      effectButtons.forEach(btn => {
+        btn.classList.remove('active');
+        btn.style.borderColor = '#e2e8f0';
+        btn.style.background = 'white';
+        btn.style.color = '#64748b';
+      });
+      
+      const activeBtn = document.querySelector(`[data-effect="${effect}"]`);
+      if (activeBtn) {
+        activeBtn.classList.add('active');
+        activeBtn.style.borderColor = '#27e1c1';
+        activeBtn.style.background = '#27e1c1';
+        activeBtn.style.color = 'white';
+      }
+    },
+
+    scrollToCustomizer() {
+      const customizerSection = document.querySelector('.tshirt-customizer-section');
+      if (customizerSection) {
+        customizerSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    },
+
+    animateStats() {
+      // Animate the statistics counters
+      const statElements = document.querySelectorAll('[data-stat]');
+      
+      statElements.forEach(element => {
+        const finalValue = element.textContent;
+        const isPercentage = finalValue.includes('%');
+        const isPlus = finalValue.includes('+');
+        const numericValue = parseFloat(finalValue.replace(/[^\d.]/g, ''));
+        
+        if (!isNaN(numericValue)) {
+          element.textContent = '0' + (isPercentage ? '%' : '') + (isPlus ? '+' : '');
+          
+          let currentValue = 0;
+          const increment = numericValue / 100;
+          const timer = setInterval(() => {
+            currentValue += increment;
+            if (currentValue >= numericValue) {
+              element.textContent = finalValue;
+              clearInterval(timer);
+            } else {
+              element.textContent = Math.floor(currentValue) + (isPercentage ? '%' : '') + (isPlus ? '+' : '');
+            }
+          }, 20);
+        }
+      });
+    },
+
+    updateStats() {
+      // Update statistics with real-time data
+      setInterval(() => {
+        const customDesigns = document.querySelector('[data-stat="custom-designs"]');
+        if (customDesigns) {
+          const currentValue = parseInt(customDesigns.textContent.replace(/,/g, ''));
+          customDesigns.textContent = (currentValue + Math.floor(Math.random() * 3) + 1).toLocaleString();
+        }
+      }, 30000); // Update every 30 seconds
+    },
+
+    showMessage(message, type = 'info') {
+      const messageEl = document.createElement('div');
+      messageEl.textContent = message;
+      Object.assign(messageEl.style, {
+        position: 'fixed',
+        top: '20px',
+        right: '20px',
+        background: type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#6b7280',
+        color: 'white',
+        padding: '12px 20px',
+        borderRadius: '8px',
+        fontSize: '14px',
+        fontWeight: '500',
+        zIndex: '10000',
+        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.15)',
+        transform: 'translateX(100%)',
+        transition: 'transform 0.3s ease'
+      });
+      
+      document.body.appendChild(messageEl);
+      
+      setTimeout(() => messageEl.style.transform = 'translateX(0)', 100);
+      setTimeout(() => {
+        messageEl.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+          if (document.body.contains(messageEl)) {
+            document.body.removeChild(messageEl);
+          }
+        }, 300);
+      }, 3000);
+    }
+  };
+
+  // Initialize integration
+  integration.init();
+
+  // Make it globally available
+  window.integration = integration;
+
+  console.log('Customizer Integration initialized! 🎨');
+});
+</script>
+
+{% schema %}
+{
+  "name": "Customizer Integration",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Integration Settings"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "From Design to Delivery"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Our advanced design studio seamlessly integrates with our production process. Create your design above, and we'll bring it to life with premium quality and fast shipping."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_stats",
+      "label": "Show Design Statistics",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_combinations",
+      "label": "Show Popular Combinations",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 40
+    }
+  ],
+  "presets": [
+    {
+      "name": "Customizer Integration"
+    }
+  ]
+}
+{% endschema %}
