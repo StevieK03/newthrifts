@@ -173,6 +173,13 @@ Enhanced Interactive Product Mockup
             onload="console.log('✅ T-shirt image loaded:', this.src);"
           >
           
+          <!-- Debug: Test direct asset access -->
+          <div id="debug-assets-{{ section.id }}" style="position: absolute; top: -100px; left: -100px; width: 1px; height: 1px; overflow: hidden;">
+            <img src="{{ 'WFront_t-shirt.png' | asset_url }}" onload="console.log('✅ Direct asset test - WFront_t-shirt.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - WFront_t-shirt.png failed:', this.src);">
+            <img src="{{ 'WBack_t-shirt.png' | asset_url }}" onload="console.log('✅ Direct asset test - WBack_t-shirt.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - WBack_t-shirt.png failed:', this.src);">
+            <img src="{{ 'Models/Women/Girl-Model.png' | asset_url }}" onload="console.log('✅ Direct asset test - Girl-Model.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - Girl-Model.png failed:', this.src);">
+          </div>
+          
           <!-- Dynamic Design Overlay -->
           <div
             id="nt-overlay-{{ section.id }}"
@@ -607,8 +614,102 @@ document.addEventListener('DOMContentLoaded', function() {
                            this.baseMockup;
         
         console.log('🔄 Loading mockup image:', mockupImage, 'for view:', this.state.view, 'color:', this.state.color);
+        
+        // Add error handling
+        baseEl.onerror = () => {
+          console.error('❌ Failed to load mockup image:', mockupImage);
+          this.createFallbackTshirt();
+        };
+        
+        baseEl.onload = () => {
+          console.log('✅ Mockup image loaded successfully');
+        };
+        
         baseEl.src = mockupImage;
       }
+    },
+
+    createFallbackTshirt() {
+      const canvas = document.getElementById(`nt-mockup-canvas-{{ section.id }}`);
+      if (!canvas) return;
+      
+      // Remove existing fallback
+      const existingFallback = canvas.querySelector('.fallback-tshirt');
+      if (existingFallback) {
+        existingFallback.remove();
+      }
+      
+      // Create fallback t-shirt shape
+      const fallback = document.createElement('div');
+      fallback.className = 'fallback-tshirt';
+      fallback.style.cssText = `
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, #f8f9fa, #e9ecef);
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Bebas Neue', sans-serif;
+        color: #6c757d;
+        text-align: center;
+      `;
+      
+      // Create t-shirt shape
+      const tshirtShape = document.createElement('div');
+      tshirtShape.style.cssText = `
+        width: 60%;
+        height: 70%;
+        background: #ffffff;
+        border: 3px solid #dee2e6;
+        border-radius: 20px 20px 8px 8px;
+        position: relative;
+        margin-bottom: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      `;
+      
+      // Add sleeves
+      const leftSleeve = document.createElement('div');
+      leftSleeve.style.cssText = `
+        position: absolute;
+        left: -20px;
+        top: 20%;
+        width: 15px;
+        height: 40%;
+        background: #ffffff;
+        border: 3px solid #dee2e6;
+        border-radius: 0 8px 8px 0;
+      `;
+      
+      const rightSleeve = document.createElement('div');
+      rightSleeve.style.cssText = `
+        position: absolute;
+        right: -20px;
+        top: 20%;
+        width: 15px;
+        height: 40%;
+        background: #ffffff;
+        border: 3px solid #dee2e6;
+        border-radius: 8px 0 0 8px;
+      `;
+      
+      tshirtShape.appendChild(leftSleeve);
+      tshirtShape.appendChild(rightSleeve);
+      
+      const label = document.createElement('div');
+      label.style.cssText = `
+        font-size: 14px;
+        text-align: center;
+        color: #6c757d;
+      `;
+      label.textContent = 'T-shirt Mockup';
+      
+      fallback.appendChild(tshirtShape);
+      fallback.appendChild(label);
+      
+      canvas.appendChild(fallback);
+      console.log('🔄 Created fallback t-shirt shape');
     },
 
     updateDesign() {
