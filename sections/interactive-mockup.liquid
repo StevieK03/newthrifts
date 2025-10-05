@@ -25,10 +25,45 @@ Enhanced Interactive Product Mockup
       <!-- Enhanced Controls -->
       <div class="nt-mockup__controls" style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: center; background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
         
-        <!-- Multi-View Info -->
-        <div class="nt-mockup__group" style="text-align: center; flex: 1;">
-          <span style="font-weight: 600; font-size: 16px; color: #374151; margin-right: 12px;">🎯 Multi-View Preview</span>
-          <span style="font-size: 14px; color: #6b7280;">See your design on all T-shirt angles simultaneously</span>
+        <!-- View Controls -->
+        <div class="nt-mockup__group">
+          <span class="nt-mockup__label" style="font-weight: 600; font-size: 14px; color: #374151; margin-right: 12px;">View</span>
+          <div class="nt-mockup__buttons" role="tablist" aria-label="Mockup view" style="display: flex; gap: 8px;">
+            <button class="nt-btn nt-btn--view is-active" data-view="front" aria-selected="true" style="padding: 8px 16px; border: 2px solid #27e1c1; background: #27e1c1; color: white; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              👕 Front
+            </button>
+            <button class="nt-btn nt-btn--view" data-view="back" aria-selected="false" style="padding: 8px 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              👕 Back
+            </button>
+            <button class="nt-btn nt-btn--view" data-view="hanging" aria-selected="false" style="padding: 8px 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              🏷️ Hanging
+            </button>
+            <button class="nt-btn nt-btn--view" data-view="person1" aria-selected="false" style="padding: 8px 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              👤 Model 1
+            </button>
+            <button class="nt-btn nt-btn--view" data-view="person2" aria-selected="false" style="padding: 8px 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              👤 Model 2
+            </button>
+          </div>
+        </div>
+
+        <!-- Color Controls -->
+        <div class="nt-mockup__group">
+          <span class="nt-mockup__label" style="font-weight: 600; font-size: 14px; color: #374151; margin-right: 12px;">Color</span>
+          <div class="nt-mockup__buttons" role="tablist" aria-label="Shirt color" style="display: flex; gap: 8px;">
+            <button class="nt-btn nt-btn--color is-active" data-color="white" aria-selected="true" style="padding: 8px 16px; border: 2px solid #27e1c1; background: #27e1c1; color: white; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              ⚪ White
+            </button>
+            <button class="nt-btn nt-btn--color" data-color="black" aria-selected="false" style="padding: 8px 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              ⚫ Black
+            </button>
+            <button class="nt-btn nt-btn--color" data-color="pink" aria-selected="false" style="padding: 8px 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              🩷 Pink
+            </button>
+            <button class="nt-btn nt-btn--color" data-color="blue" aria-selected="false" style="padding: 8px 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              🔵 Blue
+            </button>
+          </div>
         </div>
 
         <!-- Action Buttons -->
@@ -119,141 +154,49 @@ Enhanced Interactive Product Mockup
         </div>
       </div>
 
-      <!-- Multi-View Mockup Stage -->
+      <!-- Enhanced Preview Stage -->
       <div class="nt-mockup__stage" style="width: 100%; display: grid; place-items: center;">
-        
-        <!-- Multiple T-shirt Views Grid -->
-        <div class="multi-mockup-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; width: 100%; max-width: 1200px;">
+        <div class="nt-mockup__canvas" 
+             id="nt-mockup-canvas-{{ section.id }}"
+             style="position: relative; width: min(720px, 100%); aspect-ratio: 1 / 1; background: linear-gradient(180deg, #ffffff, #f6f7f9); border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.1); cursor: grab; --overlay-top: {{ section.settings.overlay_top }}%; --overlay-left: {{ section.settings.overlay_left }}%; --overlay-width: {{ section.settings.overlay_width }}%; --overlay-rotate: {{ section.settings.overlay_rotate }}deg;">
           
-          <!-- Front View -->
-          <div class="mockup-view" style="text-align: center;">
-            <h4 style="margin: 0 0 12px 0; font-size: 16px; font-weight: 600; color: #374151;">👕 Front View</h4>
-            <div class="nt-mockup__canvas" 
-                 style="position: relative; width: 100%; aspect-ratio: 1 / 1; background: linear-gradient(180deg, #ffffff, #f6f7f9); border-radius: 16px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.1); --overlay-top: {{ section.settings.overlay_top }}%; --overlay-left: {{ section.settings.overlay_left }}%; --overlay-width: {{ section.settings.overlay_width }}%; --overlay-rotate: {{ section.settings.overlay_rotate }}deg;">
-              
-              <img
-                class="nt-mockup__base"
-                src="{{ 'WFront_t-shirt.png' | asset_url }}"
-                alt="Front T-shirt"
-                style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none;"
-              >
-              
-              <div
-                class="nt-mockup__overlay nt-overlay-front-{{ section.id }}"
-                style="position: absolute; width: var(--overlay-width); left: var(--overlay-left); top: var(--overlay-top); transform: rotate(var(--overlay-rotate)); height: auto; inset: auto; display: flex; align-items: center; justify-content: center; transition: all 0.1s ease;"
-              >
-                <span class="nt-design-text-front-{{ section.id }}" 
-                      style="font-family: 'Bebas Neue', sans-serif; font-size: 24px; font-weight: bold; color: #000000; text-align: center; white-space: nowrap; user-select: none; text-shadow: 1px 1px 2px rgba(255,255,255,0.8); pointer-events: none;">
-                  Your Design Here
-                </span>
-              </div>
+          <!-- Base Mockup (swapped by JS) -->
+          <img
+            id="nt-base-{{ section.id }}"
+            class="nt-mockup__base"
+            src="{{ section.settings.base_mockup | default: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&h=800&fit=crop&crop=center' | image_url: width: 800 }}"
+            alt="T-shirt mockup"
+            loading="eager"
+            decoding="async"
+            style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none;"
+          >
+          
+          <!-- Dynamic Design Overlay -->
+          <div
+            id="nt-overlay-{{ section.id }}"
+            class="nt-mockup__overlay"
+            style="position: absolute; width: var(--overlay-width); left: var(--overlay-left); top: var(--overlay-top); transform: rotate(var(--overlay-rotate)); height: auto; inset: auto; display: flex; align-items: center; justify-content: center; cursor: grab; transition: all 0.1s ease;"
+          >
+            <span id="nt-design-text-{{ section.id }}" 
+                  style="font-family: 'Bebas Neue', sans-serif; font-size: 32px; font-weight: bold; color: #000000; text-align: center; white-space: nowrap; user-select: none; text-shadow: 1px 1px 2px rgba(255,255,255,0.8); pointer-events: none;">
+              Your Design Here
+            </span>
+            
+            <!-- Drag Handle (only visible when dragging) -->
+            <div id="nt-drag-handle-{{ section.id }}" 
+                 style="position: absolute; top: -8px; right: -8px; width: 16px; height: 16px; background: #27e1c1; border: 2px solid white; border-radius: 50%; cursor: grab; display: none; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
             </div>
           </div>
 
-          <!-- Back View -->
-          <div class="mockup-view" style="text-align: center;">
-            <h4 style="margin: 0 0 12px 0; font-size: 16px; font-weight: 600; color: #374151;">👕 Back View</h4>
-            <div class="nt-mockup__canvas" 
-                 style="position: relative; width: 100%; aspect-ratio: 1 / 1; background: linear-gradient(180deg, #ffffff, #f6f7f9); border-radius: 16px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.1); --overlay-top: {{ section.settings.overlay_top }}%; --overlay-left: {{ section.settings.overlay_left }}%; --overlay-width: {{ section.settings.overlay_width }}%; --overlay-rotate: {{ section.settings.overlay_rotate }}deg;">
-              
-              <img
-                class="nt-mockup__base"
-                src="{{ 'WBack_t-shirt.png' | asset_url }}"
-                alt="Back T-shirt"
-                style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none;"
-              >
-              
-              <div
-                class="nt-mockup__overlay nt-overlay-back-{{ section.id }}"
-                style="position: absolute; width: var(--overlay-width); left: var(--overlay-left); top: var(--overlay-top); transform: rotate(var(--overlay-rotate)); height: auto; inset: auto; display: flex; align-items: center; justify-content: center; transition: all 0.1s ease;"
-              >
-                <span class="nt-design-text-back-{{ section.id }}" 
-                      style="font-family: 'Bebas Neue', sans-serif; font-size: 24px; font-weight: bold; color: #000000; text-align: center; white-space: nowrap; user-select: none; text-shadow: 1px 1px 2px rgba(255,255,255,0.8); pointer-events: none;">
-                  Your Design Here
-                </span>
-              </div>
-            </div>
+          <!-- Resize Handle (only visible when hovering over design) -->
+          <div id="nt-resize-handle-{{ section.id }}" 
+               style="position: absolute; bottom: -8px; right: -8px; width: 20px; height: 20px; background: #8b5cf6; border: 2px solid white; border-radius: 50%; cursor: nw-resize; display: none; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; border-right: 2px solid white; border-bottom: 2px solid white; transform: translate(-50%, -50%) rotate(45deg);"></div>
           </div>
-
-          <!-- 3D/Hanging View -->
-          <div class="mockup-view" style="text-align: center;">
-            <h4 style="margin: 0 0 12px 0; font-size: 16px; font-weight: 600; color: #374151;">🏷️ 3D View</h4>
-            <div class="nt-mockup__canvas" 
-                 style="position: relative; width: 100%; aspect-ratio: 1 / 1; background: linear-gradient(180deg, #ffffff, #f6f7f9); border-radius: 16px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.1); --overlay-top: {{ section.settings.overlay_top }}%; --overlay-left: {{ section.settings.overlay_left }}%; --overlay-width: {{ section.settings.overlay_width }}%; --overlay-rotate: {{ section.settings.overlay_rotate }}deg;">
-              
-              <img
-                class="nt-mockup__base"
-                src="{{ 'W3-D_t-shirt.png' | asset_url }}"
-                alt="3D T-shirt"
-                style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none;"
-              >
-              
-              <div
-                class="nt-mockup__overlay nt-overlay-3d-{{ section.id }}"
-                style="position: absolute; width: var(--overlay-width); left: var(--overlay-left); top: var(--overlay-top); transform: rotate(var(--overlay-rotate)); height: auto; inset: auto; display: flex; align-items: center; justify-content: center; transition: all 0.1s ease;"
-              >
-                <span class="nt-design-text-3d-{{ section.id }}" 
-                      style="font-family: 'Bebas Neue', sans-serif; font-size: 24px; font-weight: bold; color: #000000; text-align: center; white-space: nowrap; user-select: none; text-shadow: 1px 1px 2px rgba(255,255,255,0.8); pointer-events: none;">
-                  Your Design Here
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Model 1 (Left) View -->
-          <div class="mockup-view" style="text-align: center;">
-            <h4 style="margin: 0 0 12px 0; font-size: 16px; font-weight: 600; color: #374151;">👤 Model 1</h4>
-            <div class="nt-mockup__canvas" 
-                 style="position: relative; width: 100%; aspect-ratio: 1 / 1; background: linear-gradient(180deg, #ffffff, #f6f7f9); border-radius: 16px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.1); --overlay-top: {{ section.settings.overlay_top }}%; --overlay-left: {{ section.settings.overlay_left }}%; --overlay-width: {{ section.settings.overlay_width }}%; --overlay-rotate: {{ section.settings.overlay_rotate }}deg;">
-              
-              <img
-                class="nt-mockup__base"
-                src="{{ 'Wleft_t-shirt.png' | asset_url }}"
-                alt="Model 1 T-shirt"
-                style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none;"
-              >
-              
-              <div
-                class="nt-mockup__overlay nt-overlay-model1-{{ section.id }}"
-                style="position: absolute; width: var(--overlay-width); left: var(--overlay-left); top: var(--overlay-top); transform: rotate(var(--overlay-rotate)); height: auto; inset: auto; display: flex; align-items: center; justify-content: center; transition: all 0.1s ease;"
-              >
-                <span class="nt-design-text-model1-{{ section.id }}" 
-                      style="font-family: 'Bebas Neue', sans-serif; font-size: 24px; font-weight: bold; color: #000000; text-align: center; white-space: nowrap; user-select: none; text-shadow: 1px 1px 2px rgba(255,255,255,0.8); pointer-events: none;">
-                  Your Design Here
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Model 2 (Right) View -->
-          <div class="mockup-view" style="text-align: center;">
-            <h4 style="margin: 0 0 12px 0; font-size: 16px; font-weight: 600; color: #374151;">👤 Model 2</h4>
-            <div class="nt-mockup__canvas" 
-                 style="position: relative; width: 100%; aspect-ratio: 1 / 1; background: linear-gradient(180deg, #ffffff, #f6f7f9); border-radius: 16px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.1); --overlay-top: {{ section.settings.overlay_top }}%; --overlay-left: {{ section.settings.overlay_left }}%; --overlay-width: {{ section.settings.overlay_width }}%; --overlay-rotate: {{ section.settings.overlay_rotate }}deg;">
-              
-              <img
-                class="nt-mockup__base"
-                src="{{ 'Wright_t-shirt.png' | asset_url }}"
-                alt="Model 2 T-shirt"
-                style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none;"
-              >
-              
-              <div
-                class="nt-mockup__overlay nt-overlay-model2-{{ section.id }}"
-                style="position: absolute; width: var(--overlay-width); left: var(--overlay-left); top: var(--overlay-top); transform: rotate(var(--overlay-rotate)); height: auto; inset: auto; display: flex; align-items: center; justify-content: center; transition: all 0.1s ease;"
-              >
-                <span class="nt-design-text-model2-{{ section.id }}" 
-                      style="font-family: 'Bebas Neue', sans-serif; font-size: 24px; font-weight: bold; color: #000000; text-align: center; white-space: nowrap; user-select: none; text-shadow: 1px 1px 2px rgba(255,255,255,0.8); pointer-events: none;">
-                  Your Design Here
-                </span>
-              </div>
-            </div>
-          </div>
-
         </div>
         
-        <p class="nt-mockup__hint" style="color: #6b7280; font-size: 14px; margin-top: 20px; text-align: center;">
-          💡 Tip: Upload your design to see it on all T-shirt views simultaneously. Use the placement controls above to adjust position and size.
+        <p class="nt-mockup__hint" style="color: #6b7280; font-size: 14px; margin-top: 16px; text-align: center;">
+          💡 Tip: Drag the design to move it, use scroll wheel to resize, or use the precise controls above
         </p>
       </div>
     </div>
@@ -432,39 +375,8 @@ Enhanced Interactive Product Mockup
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const mockup = {
-    // T-shirt mockup sources using your local assets
-    sources: {
-      front: {
-        white: "{{ 'WFront_t-shirt.png' | asset_url }}",
-        black: "{{ 'WFront_t-shirt.png' | asset_url }}", // Using same image for now
-        pink: "{{ 'WFront_t-shirt.png' | asset_url }}",
-        blue: "{{ 'WFront_t-shirt.png' | asset_url }}"
-      },
-      back: {
-        white: "{{ 'WBack_t-shirt.png' | asset_url }}",
-        black: "{{ 'WBack_t-shirt.png' | asset_url }}",
-        pink: "{{ 'WBack_t-shirt.png' | asset_url }}",
-        blue: "{{ 'WBack_t-shirt.png' | asset_url }}"
-      },
-      hanging: {
-        white: "{{ 'W3-D_t-shirt.png' | asset_url }}",
-        black: "{{ 'W3-D_t-shirt.png' | asset_url }}",
-        pink: "{{ 'W3-D_t-shirt.png' | asset_url }}",
-        blue: "{{ 'W3-D_t-shirt.png' | asset_url }}"
-      },
-      person1: {
-        white: "{{ 'Wleft_t-shirt.png' | asset_url }}",
-        black: "{{ 'Wleft_t-shirt.png' | asset_url }}",
-        pink: "{{ 'Wleft_t-shirt.png' | asset_url }}",
-        blue: "{{ 'Wleft_t-shirt.png' | asset_url }}"
-      },
-      person2: {
-        white: "{{ 'Wright_t-shirt.png' | asset_url }}",
-        black: "{{ 'Wright_t-shirt.png' | asset_url }}",
-        pink: "{{ 'Wright_t-shirt.png' | asset_url }}",
-        blue: "{{ 'Wright_t-shirt.png' | asset_url }}"
-      }
-    },
+    // Base mockup image
+    baseMockup: "{{ section.settings.base_mockup | default: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&h=800&fit=crop&crop=center' | image_url: width: 800 }}",
 
     // Current design state
     designState: {
@@ -605,49 +517,42 @@ document.addEventListener('DOMContentLoaded', function() {
 
     updateBase() {
       const baseEl = document.getElementById("nt-base-{{ section.id }}");
-      const src = this.sources[this.state.view]?.[this.state.color];
-      if (src && baseEl) {
-        baseEl.src = src;
-        console.log('🔄 Updated base image:', src);
+      if (baseEl && this.baseMockup) {
+        baseEl.src = this.baseMockup;
       }
     },
 
     updateDesign() {
-      // Update all mockup views
-      const viewTypes = ['front', 'back', '3d', 'model1', 'model2'];
-      
-      viewTypes.forEach(viewType => {
-        const designText = document.getElementById(`nt-design-text-${viewType}-{{ section.id }}`);
-        if (designText) {
-          designText.textContent = this.designState.text;
-          designText.style.fontFamily = this.designState.fontFamily;
-          designText.style.fontSize = Math.min(this.designState.fontSize * 0.75, 24) + 'px'; // Smaller for multi-view
-          designText.style.color = this.designState.textColor;
+      const designText = document.getElementById("nt-design-text-{{ section.id }}");
+      if (designText) {
+        designText.textContent = this.designState.text;
+        designText.style.fontFamily = this.designState.fontFamily;
+        designText.style.fontSize = this.designState.fontSize + 'px';
+        designText.style.color = this.designState.textColor;
 
-          // Apply text effects
-          switch (this.designState.effect) {
-            case 'outline':
-              designText.style.webkitTextStroke = `2px ${this.designState.textColor}`;
-              designText.style.webkitTextFillColor = 'transparent';
-              break;
-            case 'shadow':
-              designText.style.textShadow = '2px 2px 4px rgba(0,0,0,0.5)';
-              designText.style.webkitTextStroke = 'none';
-              designText.style.webkitTextFillColor = this.designState.textColor;
-              break;
-            case 'gradient':
-              designText.style.background = 'linear-gradient(45deg, #27e1c1, #ff4fa3)';
-              designText.style.webkitBackgroundClip = 'text';
-              designText.style.webkitTextFillColor = 'transparent';
-              designText.style.webkitTextStroke = 'none';
-              break;
-            default:
-              designText.style.textShadow = '1px 1px 2px rgba(255,255,255,0.8)';
-              designText.style.webkitTextStroke = 'none';
-              designText.style.webkitTextFillColor = this.designState.textColor;
-          }
+        // Apply text effects
+        switch (this.designState.effect) {
+          case 'outline':
+            designText.style.webkitTextStroke = `2px ${this.designState.textColor}`;
+            designText.style.webkitTextFillColor = 'transparent';
+            break;
+          case 'shadow':
+            designText.style.textShadow = '2px 2px 4px rgba(0,0,0,0.5)';
+            designText.style.webkitTextStroke = 'none';
+            designText.style.webkitTextFillColor = this.designState.textColor;
+            break;
+          case 'gradient':
+            designText.style.background = 'linear-gradient(45deg, #27e1c1, #ff4fa3)';
+            designText.style.webkitBackgroundClip = 'text';
+            designText.style.webkitTextFillColor = 'transparent';
+            designText.style.webkitTextStroke = 'none';
+            break;
+          default:
+            designText.style.textShadow = '1px 1px 2px rgba(255,255,255,0.8)';
+            designText.style.webkitTextStroke = 'none';
+            designText.style.webkitTextFillColor = this.designState.textColor;
         }
-      });
+      }
     },
 
     loadFromCustomizer() {
@@ -797,39 +702,35 @@ document.addEventListener('DOMContentLoaded', function() {
     },
 
     applyUploadedDesign(imageData) {
-      // Replace text with uploaded image on all views
-      const viewTypes = ['front', 'back', '3d', 'model1', 'model2'];
+      // Replace text with uploaded image
+      const overlayDiv = document.getElementById(`nt-overlay-{{ section.id }}`);
+      const designText = document.getElementById(`nt-design-text-{{ section.id }}`);
       
-      viewTypes.forEach(viewType => {
-        const overlayDiv = document.getElementById(`nt-overlay-${viewType}-{{ section.id }}`);
-        const designText = document.getElementById(`nt-design-text-${viewType}-{{ section.id }}`);
+      if (overlayDiv && designText) {
+        // Hide text
+        designText.style.display = 'none';
         
-        if (overlayDiv && designText) {
-          // Hide text
-          designText.style.display = 'none';
-          
-          // Create image element
-          const uploadedImg = document.createElement('img');
-          uploadedImg.src = imageData;
-          uploadedImg.style.cssText = `
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
-            pointer-events: none;
-          `;
-          
-          overlayDiv.appendChild(uploadedImg);
-        }
-      });
-      
-      // Mark as uploaded design
-      this.placementState.hasUploadedDesign = true;
-      
-      // Show placement controls
-      this.showPlacementControls();
-      
-      this.showMessage('✨ Uploaded design applied to all mockup views!', 'success');
+        // Create image element
+        const uploadedImg = document.createElement('img');
+        uploadedImg.src = imageData;
+        uploadedImg.style.cssText = `
+          max-width: 100%;
+          max-height: 100%;
+          object-fit: contain;
+          filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+          pointer-events: none;
+        `;
+        
+        overlayDiv.appendChild(uploadedImg);
+        
+        // Mark as uploaded design
+        this.placementState.hasUploadedDesign = true;
+        
+        // Show placement controls
+        this.showPlacementControls();
+        
+        this.showMessage('✨ Uploaded design applied to mockup!', 'success');
+      }
     },
 
     showPlacementControls() {
@@ -916,18 +817,13 @@ document.addEventListener('DOMContentLoaded', function() {
     },
 
     updateDesignPosition() {
-      // Update all mockup views
-      const viewTypes = ['front', 'back', '3d', 'model1', 'model2'];
-      
-      viewTypes.forEach(viewType => {
-        const overlayDiv = document.getElementById(`nt-overlay-${viewType}-{{ section.id }}`);
-        if (overlayDiv) {
-          overlayDiv.style.setProperty('--overlay-top', this.placementState.topPct + '%');
-          overlayDiv.style.setProperty('--overlay-left', this.placementState.leftPct + '%');
-          overlayDiv.style.setProperty('--overlay-width', this.placementState.widthPct + '%');
-          overlayDiv.style.setProperty('--overlay-rotate', this.placementState.rotateDeg + 'deg');
-        }
-      });
+      const overlayDiv = document.getElementById(`nt-overlay-{{ section.id }}`);
+      if (overlayDiv) {
+        overlayDiv.style.setProperty('--overlay-top', this.placementState.topPct + '%');
+        overlayDiv.style.setProperty('--overlay-left', this.placementState.leftPct + '%');
+        overlayDiv.style.setProperty('--overlay-width', this.placementState.widthPct + '%');
+        overlayDiv.style.setProperty('--overlay-rotate', this.placementState.rotateDeg + 'deg');
+      }
     },
 
     resetPlacement() {
@@ -1350,11 +1246,13 @@ document.addEventListener('DOMContentLoaded', function() {
   "settings": [
     {
       "type": "header",
-      "content": "🖼 T-shirt Mockups"
+      "content": "🖼 Base T-shirt Mockup"
     },
     {
-      "type": "paragraph",
-      "content": "T-shirt mockup images are loaded from your Assets folder: WFront_t-shirt.png, WBack_t-shirt.png, W3-D_t-shirt.png, Wleft_t-shirt.png, Wright_t-shirt.png"
+      "type": "image_picker",
+      "id": "base_mockup",
+      "label": "Base T-shirt Image",
+      "info": "Upload a high-quality T-shirt mockup image. Recommended size: 800x800px or larger."
     },
     {
       "type": "header",
