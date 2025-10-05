@@ -158,7 +158,7 @@ Enhanced Interactive Product Mockup
       <div class="nt-mockup__stage" style="width: 100%; display: grid; place-items: center;">
         <div class="nt-mockup__canvas" 
              id="nt-mockup-canvas-{{ section.id }}"
-             style="position: relative; width: min(720px, 100%); aspect-ratio: 1 / 1; background: linear-gradient(180deg, #ffffff, #f6f7f9); border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.1); cursor: grab; --overlay-top: {{ section.settings.overlay_top | default: 40 }}%; --overlay-left: {{ section.settings.overlay_left | default: 30 }}%; --overlay-width: {{ section.settings.overlay_width | default: 50 }}%; --overlay-rotate: {{ section.settings.overlay_rotate | default: 0 }}deg;">
+             style="position: relative; width: min(720px, 100%); aspect-ratio: 1 / 1; background: linear-gradient(180deg, #ffffff, #f6f7f9); border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.1); cursor: grab; --overlay-top: 40%; --overlay-left: 30%; --overlay-width: 50%; --overlay-rotate: 0deg;">
           
           <!-- Base Mockup (swapped by JS) -->
           <img
@@ -391,12 +391,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Current view state
     state: { view: "front", color: "white" },
 
-    // Enhanced placement state
+    // Enhanced placement state - Force new centered values
     placementState: {
-      topPct: {{ section.settings.overlay_top | default: 40 }},
-      leftPct: {{ section.settings.overlay_left | default: 30 }},
-      widthPct: {{ section.settings.overlay_width | default: 50 }},
-      rotateDeg: {{ section.settings.overlay_rotate | default: 0 }},
+      topPct: 40,
+      leftPct: 30,
+      widthPct: 50,
+      rotateDeg: 0,
       dragging: false,
       resizing: false,
       lastX: 0,
@@ -406,6 +406,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     init() {
       console.log('🎯 Initializing Enhanced Interactive Mockup...');
+      console.log('📍 Current placement values:', {
+        top: this.placementState.topPct,
+        left: this.placementState.leftPct,
+        width: this.placementState.widthPct,
+        rotate: this.placementState.rotateDeg
+      });
       this.bindEvents();
       this.loadFromCustomizer();
       this.updateBase();
@@ -819,6 +825,12 @@ document.addEventListener('DOMContentLoaded', function() {
     updateDesignPosition() {
       const overlayDiv = document.getElementById(`nt-overlay-{{ section.id }}`);
       if (overlayDiv) {
+        console.log('🎯 Applying positioning:', {
+          top: this.placementState.topPct + '%',
+          left: this.placementState.leftPct + '%',
+          width: this.placementState.widthPct + '%',
+          rotate: this.placementState.rotateDeg + 'deg'
+        });
         overlayDiv.style.setProperty('--overlay-top', this.placementState.topPct + '%');
         overlayDiv.style.setProperty('--overlay-left', this.placementState.leftPct + '%');
         overlayDiv.style.setProperty('--overlay-width', this.placementState.widthPct + '%');
@@ -827,10 +839,10 @@ document.addEventListener('DOMContentLoaded', function() {
     },
 
     resetPlacement() {
-      this.placementState.topPct = {{ section.settings.overlay_top | default: 40 }};
-      this.placementState.leftPct = {{ section.settings.overlay_left | default: 30 }};
-      this.placementState.widthPct = {{ section.settings.overlay_width | default: 50 }};
-      this.placementState.rotateDeg = {{ section.settings.overlay_rotate | default: 0 }};
+      this.placementState.topPct = 40;
+      this.placementState.leftPct = 30;
+      this.placementState.widthPct = 50;
+      this.placementState.rotateDeg = 0;
 
       // Update sliders
       const topSlider = document.getElementById(`nt-top-{{ section.id }}`);
