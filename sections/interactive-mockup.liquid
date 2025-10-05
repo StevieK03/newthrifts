@@ -158,7 +158,7 @@ Enhanced Interactive Product Mockup
       <div class="nt-mockup__stage" style="width: 100%; display: grid; place-items: center;">
         <div class="nt-mockup__canvas" 
              id="nt-mockup-canvas-{{ section.id }}"
-             style="position: relative; width: min(720px, 100%); aspect-ratio: 1 / 1; background: linear-gradient(180deg, #ffffff, #f6f7f9); border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.1); cursor: grab; --overlay-top: {{ section.settings.overlay_top | default: 35 }}%; --overlay-left: {{ section.settings.overlay_left | default: 25 }}%; --overlay-width: {{ section.settings.overlay_width | default: 50 }}%; --overlay-rotate: {{ section.settings.overlay_rotate | default: 0 }}deg;">
+             style="position: relative; width: min(720px, 100%); aspect-ratio: 1 / 1; background: linear-gradient(180deg, #ffffff, #f6f7f9); border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.1); cursor: grab; --overlay-top: {{ section.settings.overlay_top | default: 40 }}%; --overlay-left: {{ section.settings.overlay_left | default: 30 }}%; --overlay-width: {{ section.settings.overlay_width | default: 50 }}%; --overlay-rotate: {{ section.settings.overlay_rotate | default: 0 }}deg;">
           
           <!-- Base Mockup (swapped by JS) -->
           <img
@@ -393,8 +393,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Enhanced placement state
     placementState: {
-      topPct: {{ section.settings.overlay_top | default: 35 }},
-      leftPct: {{ section.settings.overlay_left | default: 25 }},
+      topPct: {{ section.settings.overlay_top | default: 40 }},
+      leftPct: {{ section.settings.overlay_left | default: 30 }},
       widthPct: {{ section.settings.overlay_width | default: 50 }},
       rotateDeg: {{ section.settings.overlay_rotate | default: 0 }},
       dragging: false,
@@ -827,8 +827,8 @@ document.addEventListener('DOMContentLoaded', function() {
     },
 
     resetPlacement() {
-      this.placementState.topPct = {{ section.settings.overlay_top | default: 35 }};
-      this.placementState.leftPct = {{ section.settings.overlay_left | default: 25 }};
+      this.placementState.topPct = {{ section.settings.overlay_top | default: 40 }};
+      this.placementState.leftPct = {{ section.settings.overlay_left | default: 30 }};
       this.placementState.widthPct = {{ section.settings.overlay_width | default: 50 }};
       this.placementState.rotateDeg = {{ section.settings.overlay_rotate | default: 0 }};
 
@@ -1266,7 +1266,7 @@ document.addEventListener('DOMContentLoaded', function() {
       "step": 1,
       "unit": "%",
       "label": "Top Position",
-      "default": 35
+      "default": 40
     },
     {
       "type": "range",
@@ -1276,7 +1276,7 @@ document.addEventListener('DOMContentLoaded', function() {
       "step": 1,
       "unit": "%",
       "label": "Left Position",
-      "default": 25
+      "default": 30
     },
     {
       "type": "range",
