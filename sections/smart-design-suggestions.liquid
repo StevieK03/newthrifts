@@ -397,6 +397,9 @@ document.addEventListener('DOMContentLoaded', function() {
     applySuggestion(suggestionType) {
       const suggestion = this.suggestions[suggestionType];
       if (suggestion) {
+        // Show live preview effect
+        this.showLivePreview(suggestion, suggestionType);
+        
         // Find the customizer section and update it
         this.updateCustomizer(suggestion);
         
@@ -409,13 +412,16 @@ document.addEventListener('DOMContentLoaded', function() {
           if (customizerSection) {
             customizerSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
-        }, 500);
+        }, 1000);
       }
     },
 
     applyTemplate(templateType) {
       const template = this.templates[templateType];
       if (template) {
+        // Show live preview effect
+        this.showLivePreview(template, templateType);
+        
         // Find the customizer section and update it
         this.updateCustomizer(template);
         
@@ -428,7 +434,205 @@ document.addEventListener('DOMContentLoaded', function() {
           if (customizerSection) {
             customizerSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
-        }, 500);
+        }, 1000);
+      }
+    },
+
+    showLivePreview(design, type) {
+      // Create live preview overlay
+      const previewOverlay = document.createElement('div');
+      previewOverlay.id = 'live-preview-overlay';
+      previewOverlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(10px);
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      `;
+
+      // Create preview container
+      const previewContainer = document.createElement('div');
+      previewContainer.style.cssText = `
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        max-width: 600px;
+        width: 90vw;
+        text-align: center;
+        transform: scale(0.8);
+        transition: transform 0.3s ease;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      `;
+
+      // Create t-shirt preview
+      const tshirtPreview = document.createElement('div');
+      tshirtPreview.style.cssText = `
+        width: 300px;
+        height: 360px;
+        margin: 0 auto 20px;
+        background: ${design.shirtColor};
+        border-radius: 20px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+      `;
+
+      // Create design preview
+      const designPreview = document.createElement('div');
+      designPreview.style.cssText = `
+        font-family: ${design.fontFamily};
+        font-size: ${Math.min(design.fontSize * 1.5, 48)}px;
+        font-weight: bold;
+        color: ${design.textColor};
+        text-align: center;
+        white-space: nowrap;
+        user-select: none;
+        pointer-events: none;
+        z-index: 10;
+        position: relative;
+      `;
+
+      // Apply text effects
+      switch (design.effect) {
+        case 'outline':
+          designPreview.style.webkitTextStroke = `2px ${design.textColor}`;
+          designPreview.style.webkitTextFillColor = 'transparent';
+          break;
+        case 'shadow':
+          designPreview.style.textShadow = '3px 3px 6px rgba(0,0,0,0.5)';
+          designPreview.style.webkitTextStroke = 'none';
+          designPreview.style.webkitTextFillColor = design.textColor;
+          break;
+        case 'gradient':
+          designPreview.style.background = 'linear-gradient(45deg, #27e1c1, #ff4fa3)';
+          designPreview.style.webkitBackgroundClip = 'text';
+          designPreview.style.webkitTextFillColor = 'transparent';
+          designPreview.style.webkitTextStroke = 'none';
+          break;
+        default:
+          designPreview.style.textShadow = '2px 2px 4px rgba(255,255,255,0.8)';
+          designPreview.style.webkitTextStroke = 'none';
+          designPreview.style.webkitTextFillColor = design.textColor;
+      }
+
+      designPreview.textContent = design.text;
+
+      // Create preview title
+      const previewTitle = document.createElement('h3');
+      previewTitle.style.cssText = `
+        margin: 0 0 10px 0;
+        font-size: 24px;
+        font-weight: 700;
+        color: #374151;
+      `;
+      previewTitle.textContent = `Preview: ${type.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}`;
+
+      // Create preview details
+      const previewDetails = document.createElement('div');
+      previewDetails.style.cssText = `
+        margin: 0 0 20px 0;
+        font-size: 14px;
+        color: #6b7280;
+        line-height: 1.5;
+      `;
+      previewDetails.innerHTML = `
+        <div><strong>Text:</strong> "${design.text}"</div>
+        <div><strong>Color:</strong> ${design.textColor}</div>
+        <div><strong>Font:</strong> ${design.fontFamily.replace(/'/g, '').split(',')[0]}</div>
+        <div><strong>Effect:</strong> ${design.effect || 'None'}</div>
+      `;
+
+      // Create action buttons
+      const buttonContainer = document.createElement('div');
+      buttonContainer.style.cssText = `
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+      `;
+
+      const applyBtn = document.createElement('button');
+      applyBtn.style.cssText = `
+        padding: 12px 24px;
+        background: linear-gradient(45deg, #27e1c1, #20b2aa);
+        color: white;
+        border: none;
+        border-radius: 25px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      `;
+      applyBtn.textContent = '✨ Apply Design';
+      applyBtn.addEventListener('click', () => {
+        this.closeLivePreview();
+      });
+
+      const cancelBtn = document.createElement('button');
+      cancelBtn.style.cssText = `
+        padding: 12px 24px;
+        background: white;
+        color: #6b7280;
+        border: 2px solid #e2e8f0;
+        border-radius: 25px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      `;
+      cancelBtn.textContent = 'Cancel';
+      cancelBtn.addEventListener('click', () => {
+        this.closeLivePreview();
+        return false;
+      });
+
+      // Assemble preview
+      tshirtPreview.appendChild(designPreview);
+      previewContainer.appendChild(previewTitle);
+      previewContainer.appendChild(tshirtPreview);
+      previewContainer.appendChild(previewDetails);
+      buttonContainer.appendChild(applyBtn);
+      buttonContainer.appendChild(cancelBtn);
+      previewContainer.appendChild(buttonContainer);
+      previewOverlay.appendChild(previewContainer);
+
+      // Add to page
+      document.body.appendChild(previewOverlay);
+
+      // Animate in
+      setTimeout(() => {
+        previewOverlay.style.opacity = '1';
+        previewContainer.style.transform = 'scale(1)';
+      }, 100);
+
+      // Add click outside to close
+      previewOverlay.addEventListener('click', (e) => {
+        if (e.target === previewOverlay) {
+          this.closeLivePreview();
+        }
+      });
+
+      // Store reference for closing
+      this.currentPreview = previewOverlay;
+    },
+
+    closeLivePreview() {
+      if (this.currentPreview) {
+        this.currentPreview.style.opacity = '0';
+        setTimeout(() => {
+          if (document.body.contains(this.currentPreview)) {
+            document.body.removeChild(this.currentPreview);
+          }
+          this.currentPreview = null;
+        }, 300);
       }
     },
 
