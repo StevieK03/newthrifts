@@ -164,11 +164,13 @@ Enhanced Interactive Product Mockup
           <img
             id="nt-base-{{ section.id }}"
             class="nt-mockup__base"
-            src="{{ section.settings.base_mockup | default: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&h=800&fit=crop&crop=center' | image_url: width: 800 }}"
+            src="{{ section.settings.base_mockup | default: 'WFront_t-shirt.png' | asset_url }}"
             alt="T-shirt mockup"
             loading="eager"
             decoding="async"
             style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none;"
+            onerror="console.error('❌ Failed to load t-shirt image:', this.src);"
+            onload="console.log('✅ T-shirt image loaded:', this.src);"
           >
           
           <!-- Dynamic Design Overlay -->
@@ -376,8 +378,42 @@ Enhanced Interactive Product Mockup
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const mockup = {
-    // Base mockup image
-    baseMockup: "{{ section.settings.base_mockup | default: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&h=800&fit=crop&crop=center' | image_url: width: 800 }}",
+    // Mockup images mapping
+    mockupImages: {
+      front: {
+        white: "{{ 'WFront_t-shirt.png' | asset_url }}",
+        black: "{{ 'WFront_t-shirt.png' | asset_url }}",
+        pink: "{{ 'WFront_t-shirt.png' | asset_url }}",
+        blue: "{{ 'WFront_t-shirt.png' | asset_url }}"
+      },
+      back: {
+        white: "{{ 'WBack_t-shirt.png' | asset_url }}",
+        black: "{{ 'WBack_t-shirt.png' | asset_url }}",
+        pink: "{{ 'WBack_t-shirt.png' | asset_url }}",
+        blue: "{{ 'WBack_t-shirt.png' | asset_url }}"
+      },
+      hanging: {
+        white: "{{ 'W3-D_t-shirt.png' | asset_url }}",
+        black: "{{ 'W3-D_t-shirt.png' | asset_url }}",
+        pink: "{{ 'W3-D_t-shirt.png' | asset_url }}",
+        blue: "{{ 'W3-D_t-shirt.png' | asset_url }}"
+      },
+      person1: {
+        white: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        black: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        pink: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        blue: "{{ 'Models/Women/Girl-Model.png' | asset_url }}"
+      },
+      person2: {
+        white: "{{ 'Models/Women/Women-side.png' | asset_url }}",
+        black: "{{ 'Models/Women/Women-side.png' | asset_url }}",
+        pink: "{{ 'Models/Women/Women-side.png' | asset_url }}",
+        blue: "{{ 'Models/Women/Women-side.png' | asset_url }}"
+      }
+    },
+    
+    // Current base mockup image
+    baseMockup: "{{ section.settings.base_mockup | default: 'WFront_t-shirt.png' | asset_url }}",
 
     // Current design state
     designState: {
@@ -413,6 +449,9 @@ document.addEventListener('DOMContentLoaded', function() {
         width: this.placementState.widthPct,
         rotate: this.placementState.rotateDeg
       });
+      console.log('📁 Available mockup images:', this.mockupImages);
+      console.log('🖼️ Base mockup:', this.baseMockup);
+      
       this.bindEvents();
       this.loadFromCustomizer();
       this.updateBase();
@@ -560,8 +599,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     updateBase() {
       const baseEl = document.getElementById("nt-base-{{ section.id }}");
-      if (baseEl && this.baseMockup) {
-        baseEl.src = this.baseMockup;
+      if (baseEl) {
+        // Get the appropriate mockup image based on current view and color
+        const mockupImage = this.mockupImages[this.state.view]?.[this.state.color] || 
+                           this.mockupImages[this.state.view]?.white ||
+                           this.mockupImages.front?.white ||
+                           this.baseMockup;
+        
+        console.log('🔄 Loading mockup image:', mockupImage, 'for view:', this.state.view, 'color:', this.state.color);
+        baseEl.src = mockupImage;
       }
     },
 
