@@ -97,6 +97,10 @@ Enhanced Interactive Product Mockup
           <button class="nt-btn nt-btn--secondary" id="nt-edit-{{ section.id }}" style="padding: 10px 20px; background: linear-gradient(45deg, #8b5cf6, #a855f7); color: white; border: none; border-radius: 25px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
             ✏️ Edit Design
           </button>
+          
+          <button class="nt-btn nt-btn--danger" id="nt-remove-{{ section.id }}" style="padding: 10px 20px; background: linear-gradient(45deg, #ef4444, #dc2626); color: white; border: none; border-radius: 25px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; display: none;">
+            🗑️ Remove Design
+          </button>
         </div>
       </div>
 
@@ -606,6 +610,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       }
 
+      // Bind remove button
+      const removeBtn = document.getElementById(`nt-remove-{{ section.id }}`);
+      if (removeBtn) {
+        removeBtn.addEventListener("click", () => {
+          this.removeDesign();
+        });
+      }
+
       // Bind upload button and file input
       const uploadBtn = document.getElementById(`nt-upload-{{ section.id }}`);
       const fileInput = document.getElementById(`nt-file-input-{{ section.id }}`);
@@ -1016,6 +1028,12 @@ document.addEventListener('DOMContentLoaded', function() {
         // Mark as uploaded design
         this.placementState.hasUploadedDesign = true;
         
+        // Show the remove button
+        const removeBtn = document.getElementById(`nt-remove-{{ section.id }}`);
+        if (removeBtn) {
+          removeBtn.style.display = 'inline-block';
+        }
+        
         // Show placement controls
         this.showPlacementControls();
         
@@ -1198,6 +1216,49 @@ document.addEventListener('DOMContentLoaded', function() {
         this.updateDesignPosition();
         
         console.log('✅ T-shirt container scaled successfully to:', scale + '%');
+      }
+    },
+
+    removeDesign() {
+      console.log('🗑️ Removing design...');
+      
+      const overlayDiv = document.getElementById(`nt-overlay-{{ section.id }}`);
+      const designText = document.getElementById(`nt-design-text-{{ section.id }}`);
+      const removeBtn = document.getElementById(`nt-remove-{{ section.id }}`);
+      
+      if (overlayDiv && designText) {
+        // Remove any uploaded image
+        const uploadedImg = overlayDiv.querySelector('img[src^="data:"]');
+        if (uploadedImg) {
+          uploadedImg.remove();
+        }
+        
+        // Show the default text
+        designText.style.display = 'block';
+        designText.textContent = 'Your Design Here';
+        
+        // Reset placement state
+        this.placementState.hasUploadedDesign = false;
+        
+        // Hide the remove button
+        if (removeBtn) {
+          removeBtn.style.display = 'none';
+        }
+        
+        // Reset to default positioning
+        this.placementState.topPct = 45;
+        this.placementState.leftPct = 25;
+        this.placementState.widthPct = 60;
+        this.placementState.rotateDeg = 0;
+        
+        // Update the display
+        this.updatePlacementDisplay();
+        this.updateDesignPosition();
+        
+        // Show success message
+        this.showMessage('✅ Design removed successfully', 'success');
+        
+        console.log('✅ Design removed successfully');
       }
     },
 
