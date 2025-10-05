@@ -584,6 +584,29 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // Listen for customizer updates
       this.setupCustomizerListener();
+
+      // Add keyboard shortcuts for resizing
+      document.addEventListener('keydown', (e) => {
+        if (e.target.closest(`#nt-mockup-{{ section.id }}`)) {
+          if (e.key === '+' || e.key === '=') {
+            e.preventDefault();
+            this.placementState.widthPct = Math.min(100, this.placementState.widthPct + 5);
+            this.updatePlacementDisplay();
+            this.updateDesignPosition();
+            const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
+            if (widthSlider) widthSlider.value = this.placementState.widthPct;
+            console.log('⌨️ Keyboard resize +, new width:', this.placementState.widthPct + '%');
+          } else if (e.key === '-') {
+            e.preventDefault();
+            this.placementState.widthPct = Math.max(10, this.placementState.widthPct - 5);
+            this.updatePlacementDisplay();
+            this.updateDesignPosition();
+            const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
+            if (widthSlider) widthSlider.value = this.placementState.widthPct;
+            console.log('⌨️ Keyboard resize -, new width:', this.placementState.widthPct + '%');
+          }
+        }
+      });
     },
 
     setActive(buttons, active) {
@@ -1109,9 +1132,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // Scroll wheel for resize
       canvas.addEventListener('wheel', (e) => {
-        console.log('🔄 Scroll wheel triggered, hasUploadedDesign:', this.placementState.hasUploadedDesign);
+        console.log('🔄 Scroll wheel triggered, deltaY:', e.deltaY, 'hasUploadedDesign:', this.placementState.hasUploadedDesign);
         e.preventDefault();
         this.handleResize(e.deltaY);
+      }, { passive: false });
+
+      // Alternative resize with Ctrl+scroll for more precise control
+      canvas.addEventListener('wheel', (e) => {
+        if (e.ctrlKey) {
+          console.log('🔄 Ctrl+scroll for precise resize, deltaY:', e.deltaY);
+          e.preventDefault();
+          const delta = Math.sign(e.deltaY);
+          const increment = 1; // Smaller increment for precise control
+          const newWidth = this.placementState.widthPct - (delta * increment);
+          this.placementState.widthPct = Math.max(10, Math.min(100, newWidth));
+          
+          this.updatePlacementDisplay();
+          this.updateDesignPosition();
+          
+          const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
+          if (widthSlider) widthSlider.value = this.placementState.widthPct;
+        }
       }, { passive: false });
 
       // Hover effects
@@ -1180,8 +1221,15 @@ document.addEventListener('DOMContentLoaded', function() {
     },
 
     handleResize(deltaY) {
+      console.log('🔄 Resize triggered, deltaY:', deltaY);
       const delta = Math.sign(deltaY);
-      this.placementState.widthPct = Math.max(10, Math.min(100, this.placementState.widthPct - delta * 2));
+      const increment = 5; // Increased from 2 to 5 for more noticeable resizing
+      const newWidth = this.placementState.widthPct - (delta * increment);
+      
+      // Clamp between 10% and 100%
+      this.placementState.widthPct = Math.max(10, Math.min(100, newWidth));
+      
+      console.log('📏 New width:', this.placementState.widthPct + '%');
       
       this.updatePlacementDisplay();
       this.updateDesignPosition();
