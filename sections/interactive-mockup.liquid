@@ -1013,6 +1013,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     updateDesignPosition() {
       const overlayDiv = document.getElementById(`nt-overlay-{{ section.id }}`);
+      console.log('🔍 Looking for overlay element:', `nt-overlay-{{ section.id }}`, 'Found:', !!overlayDiv);
+      
       if (overlayDiv) {
         console.log('🎯 Applying positioning:', {
           top: this.placementState.topPct + '%',
@@ -1020,10 +1022,28 @@ document.addEventListener('DOMContentLoaded', function() {
           width: this.placementState.widthPct + '%',
           rotate: this.placementState.rotateDeg + 'deg'
         });
+        
+        // Apply positioning directly to the element
+        overlayDiv.style.top = this.placementState.topPct + '%';
+        overlayDiv.style.left = this.placementState.leftPct + '%';
+        overlayDiv.style.width = this.placementState.widthPct + '%';
+        overlayDiv.style.transform = `rotate(${this.placementState.rotateDeg}deg)`;
+        
+        // Also update CSS variables for consistency
         overlayDiv.style.setProperty('--overlay-top', this.placementState.topPct + '%');
         overlayDiv.style.setProperty('--overlay-left', this.placementState.leftPct + '%');
         overlayDiv.style.setProperty('--overlay-width', this.placementState.widthPct + '%');
         overlayDiv.style.setProperty('--overlay-rotate', this.placementState.rotateDeg + 'deg');
+        
+        console.log('✅ Positioning applied directly to element');
+        console.log('🔍 Current element styles:', {
+          top: overlayDiv.style.top,
+          left: overlayDiv.style.left,
+          width: overlayDiv.style.width,
+          transform: overlayDiv.style.transform
+        });
+      } else {
+        console.error('❌ Overlay element not found!');
       }
     },
 
