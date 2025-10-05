@@ -299,9 +299,17 @@ document.addEventListener('DOMContentLoaded', function() {
       });
 
       // Bind start designing button
-      document.getElementById('start-designing-btn')?.addEventListener('click', () => {
-        this.scrollToCustomizer();
-      });
+      const startDesigningBtn = document.getElementById('start-designing-btn');
+      if (startDesigningBtn) {
+        console.log('Start designing button found, adding event listener');
+        startDesigningBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          console.log('Start designing button clicked!');
+          this.scrollToCustomizer();
+        });
+      } else {
+        console.log('Start designing button not found');
+      }
     },
 
     applyCombination(combinationType) {
@@ -415,9 +423,26 @@ document.addEventListener('DOMContentLoaded', function() {
     },
 
     scrollToCustomizer() {
-      const customizerSection = document.querySelector('.tshirt-customizer-section');
+      console.log('scrollToCustomizer called');
+      
+      // Try multiple selectors to find the customizer section
+      let customizerSection = document.querySelector('.tshirt-customizer-section');
+      
+      if (!customizerSection) {
+        customizerSection = document.querySelector('#tshirt-customizer-advanced_tshirt_customizer');
+      }
+      
+      if (!customizerSection) {
+        customizerSection = document.querySelector('[id*="tshirt-customizer"]');
+      }
+      
       if (customizerSection) {
+        console.log('Found customizer section, scrolling...');
         customizerSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        console.log('Customizer section not found');
+        // Fallback: scroll to top of page
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     },
 
@@ -493,13 +518,21 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   };
 
-  // Initialize integration
-  integration.init();
+  // Initialize integration when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('DOM loaded, initializing integration...');
+      integration.init();
+    });
+  } else {
+    console.log('DOM already loaded, initializing integration...');
+    integration.init();
+  }
 
   // Make it globally available
   window.integration = integration;
 
-  console.log('Customizer Integration initialized! 🎨');
+  console.log('Customizer Integration script loaded! 🎨');
 });
 </script>
 
