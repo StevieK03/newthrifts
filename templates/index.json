@@ -118,6 +118,18 @@
         "padding_bottom": 40
       }
     },
+    "bar_63YyCy": {
+      "type": "bar",
+      "name": "Social Bar",
+      "settings": {
+        "heading": "",
+        "body": "",
+        "facebook_url": "",
+        "instagram_url": "",
+        "pad_y": 36,
+        "section_bg": "#f2f3f5"
+      }
+    },
     "visitor_counter_section": {
       "type": "visitor-counter",
       "name": "Visitor Counter",
@@ -192,30 +204,18 @@
         "collection": "entire-collection",
         "max_products": 12
       }
-    },
-    "bar_63YyCy": {
-      "type": "bar",
-      "name": "Social Bar",
-      "settings": {
-        "heading": "",
-        "body": "",
-        "facebook_url": "",
-        "instagram_url": "",
-        "pad_y": 36,
-        "section_bg": "#f2f3f5"
-      }
     }
   },
   "order": [
     "header",
     "quick_view_modal",
     "advanced_tshirt_customizer",
+    "bar_63YyCy",
     "halloween-countdown",
     "smart_design_suggestions",
     "customizer_integration",
     "interactive_mockup",
     "visitor_counter_section",
-    "bar_63YyCy",
     "product_poll_section",
     "marquee",
     "featured_collection_ETkhqA"
