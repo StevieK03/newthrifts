@@ -196,10 +196,54 @@ Enhanced Interactive Product Mockup
                  style="position: absolute; top: -8px; right: -8px; width: 16px; height: 16px; background: #27e1c1; border: 2px solid white; border-radius: 50%; cursor: grab; display: none; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
             </div>
             
-            <!-- Resize Handle -->
-            <div id="nt-resize-handle-{{ section.id }}" 
-                 style="position: absolute; bottom: -8px; right: -8px; width: 16px; height: 16px; background: #ff6b6b; border: 2px solid white; border-radius: 50%; cursor: nw-resize; display: block; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 10;"
-                 title="Drag to resize">
+            <!-- Resize Handles - All Directions -->
+            <!-- Top-Left -->
+            <div class="resize-handle" data-direction="nw" 
+                 style="position: absolute; top: -8px; left: -8px; width: 16px; height: 16px; background: #ff6b6b; border: 2px solid white; border-radius: 50%; cursor: nw-resize; display: block; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 10;"
+                 title="Resize from top-left">
+            </div>
+            
+            <!-- Top-Right -->
+            <div class="resize-handle" data-direction="ne" 
+                 style="position: absolute; top: -8px; right: -8px; width: 16px; height: 16px; background: #ff6b6b; border: 2px solid white; border-radius: 50%; cursor: ne-resize; display: block; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 10;"
+                 title="Resize from top-right">
+            </div>
+            
+            <!-- Bottom-Left -->
+            <div class="resize-handle" data-direction="sw" 
+                 style="position: absolute; bottom: -8px; left: -8px; width: 16px; height: 16px; background: #ff6b6b; border: 2px solid white; border-radius: 50%; cursor: sw-resize; display: block; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 10;"
+                 title="Resize from bottom-left">
+            </div>
+            
+            <!-- Bottom-Right -->
+            <div class="resize-handle" data-direction="se" 
+                 style="position: absolute; bottom: -8px; right: -8px; width: 16px; height: 16px; background: #ff6b6b; border: 2px solid white; border-radius: 50%; cursor: se-resize; display: block; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 10;"
+                 title="Resize from bottom-right">
+            </div>
+            
+            <!-- Side Handles -->
+            <!-- Top -->
+            <div class="resize-handle" data-direction="n" 
+                 style="position: absolute; top: -8px; left: 50%; transform: translateX(-50%); width: 16px; height: 16px; background: #4ecdc4; border: 2px solid white; border-radius: 50%; cursor: n-resize; display: block; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 10;"
+                 title="Resize from top">
+            </div>
+            
+            <!-- Bottom -->
+            <div class="resize-handle" data-direction="s" 
+                 style="position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); width: 16px; height: 16px; background: #4ecdc4; border: 2px solid white; border-radius: 50%; cursor: s-resize; display: block; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 10;"
+                 title="Resize from bottom">
+            </div>
+            
+            <!-- Left -->
+            <div class="resize-handle" data-direction="w" 
+                 style="position: absolute; left: -8px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; background: #4ecdc4; border: 2px solid white; border-radius: 50%; cursor: w-resize; display: block; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 10;"
+                 title="Resize from left">
+            </div>
+            
+            <!-- Right -->
+            <div class="resize-handle" data-direction="e" 
+                 style="position: absolute; right: -8px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; background: #4ecdc4; border: 2px solid white; border-radius: 50%; cursor: e-resize; display: block; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 10;"
+                 title="Resize from right">
             </div>
           </div>
 
@@ -449,6 +493,7 @@ document.addEventListener('DOMContentLoaded', function() {
       rotateDeg: 0,
       dragging: false,
       resizing: false,
+      resizeDirection: 'se',
       lastX: 0,
       lastY: 0,
       hasUploadedDesign: false
@@ -1175,16 +1220,17 @@ document.addEventListener('DOMContentLoaded', function() {
         this.hideDragHandles();
       });
 
-      // Resize handle functionality
-      const resizeHandle = document.getElementById(`nt-resize-handle-{{ section.id }}`);
-      if (resizeHandle) {
-        resizeHandle.addEventListener('mousedown', (e) => {
+      // Resize handles functionality - All directions
+      const resizeHandles = document.querySelectorAll('.resize-handle');
+      resizeHandles.forEach(handle => {
+        handle.addEventListener('mousedown', (e) => {
           e.preventDefault();
           e.stopPropagation();
-          console.log('🔧 Resize handle clicked');
-          this.startResize(e);
+          const direction = handle.dataset.direction;
+          console.log('🔧 Resize handle clicked, direction:', direction);
+          this.startResize(e, direction);
         });
-      }
+      });
     },
 
     startDrag(e) {
@@ -1249,9 +1295,10 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     },
 
-    startResize(e) {
-      console.log('🔧 Start resize triggered');
+    startResize(e, direction) {
+      console.log('🔧 Start resize triggered, direction:', direction);
       this.placementState.resizing = true;
+      this.placementState.resizeDirection = direction;
       this.placementState.lastX = e.clientX;
       this.placementState.lastY = e.clientY;
     },
@@ -1261,15 +1308,44 @@ document.addEventListener('DOMContentLoaded', function() {
       
       const deltaX = e.clientX - this.placementState.lastX;
       const deltaY = e.clientY - this.placementState.lastY;
+      const direction = this.placementState.resizeDirection;
       
-      // Calculate resize based on diagonal movement
-      const delta = (deltaX + deltaY) / 2;
-      const resizeIncrement = delta * 0.5; // Adjust sensitivity
+      let resizeIncrement = 0;
+      
+      // Calculate resize based on direction
+      switch(direction) {
+        case 'nw': // Top-left: both X and Y affect size
+          resizeIncrement = (deltaX + deltaY) * 0.3;
+          break;
+        case 'ne': // Top-right: X increases, Y decreases
+          resizeIncrement = (deltaX - deltaY) * 0.3;
+          break;
+        case 'sw': // Bottom-left: X decreases, Y increases
+          resizeIncrement = (-deltaX + deltaY) * 0.3;
+          break;
+        case 'se': // Bottom-right: both X and Y increase
+          resizeIncrement = (deltaX + deltaY) * 0.3;
+          break;
+        case 'n': // Top: Y affects size
+          resizeIncrement = deltaY * 0.3;
+          break;
+        case 's': // Bottom: Y affects size
+          resizeIncrement = deltaY * 0.3;
+          break;
+        case 'w': // Left: X affects size
+          resizeIncrement = deltaX * 0.3;
+          break;
+        case 'e': // Right: X affects size
+          resizeIncrement = deltaX * 0.3;
+          break;
+        default:
+          resizeIncrement = (deltaX + deltaY) * 0.3;
+      }
       
       const newWidth = this.placementState.widthPct + resizeIncrement;
       this.placementState.widthPct = Math.max(10, Math.min(100, newWidth));
       
-      console.log('🔧 Resizing to:', this.placementState.widthPct + '%');
+      console.log('🔧 Resizing to:', this.placementState.widthPct + '%', 'direction:', direction);
       
       this.updatePlacementDisplay();
       this.updateDesignPosition();
