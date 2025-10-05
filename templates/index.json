@@ -21,18 +21,6 @@
       "type": "quick-view-modal",
       "settings": {}
     },
-    "welcome_social_bar_YkCFUP": {
-      "type": "welcome-social-bar",
-      "name": "Welcome Bar",
-      "settings": {
-        "heading": "WELCOME TO NEW THRIFTS — FRESH DROPS, GREAT PRICES.",
-        "body": "<p>We keep your wardrobe fresh with <strong>new products weekly</strong>. From classic tees & hoodies to <strong>must-have hats, shorts, and gadgets</strong>—plus fun seasonal collections for everyone. Dive into the full catalog and find your next favorite fit today!</p>",
-        "facebook_url": "https://www.facebook.com/profile.php?id=61580618386334",
-        "instagram_url": "",
-        "pad_y": 36,
-        "section_bg": "#f8fafc"
-      }
-    },
     "advanced_tshirt_customizer": {
       "type": "advanced-tshirt-customizer",
       "name": "T-Shirt Customizer",
@@ -204,18 +192,30 @@
         "collection": "entire-collection",
         "max_products": 12
       }
+    },
+    "bar_63YyCy": {
+      "type": "bar",
+      "name": "Social Bar",
+      "settings": {
+        "heading": "",
+        "body": "",
+        "facebook_url": "",
+        "instagram_url": "",
+        "pad_y": 36,
+        "section_bg": "#f2f3f5"
+      }
     }
   },
   "order": [
     "header",
     "quick_view_modal",
-    "welcome_social_bar_YkCFUP",
     "advanced_tshirt_customizer",
     "halloween-countdown",
     "smart_design_suggestions",
     "customizer_integration",
     "interactive_mockup",
     "visitor_counter_section",
+    "bar_63YyCy",
     "product_poll_section",
     "marquee",
     "featured_collection_ETkhqA"
