@@ -304,6 +304,41 @@ Enhanced Interactive Product Mockup
             <div style="position: absolute; top: 15%; right: 15%; width: 12px; height: 12px; border: 2px solid #4ecdc4; border-radius: 50%; background: rgba(78, 205, 196, 0.3); box-shadow: 0 0 6px rgba(78, 205, 196, 0.5);"></div>
             <div style="position: absolute; bottom: 15%; left: 15%; width: 12px; height: 12px; border: 2px solid #4ecdc4; border-radius: 50%; background: rgba(78, 205, 196, 0.3); box-shadow: 0 0 6px rgba(78, 205, 196, 0.5);"></div>
             <div style="position: absolute; bottom: 15%; right: 15%; width: 12px; height: 12px; border: 2px solid #4ecdc4; border-radius: 50%; background: rgba(78, 205, 196, 0.3); box-shadow: 0 0 6px rgba(78, 205, 196, 0.5);"></div>
+            
+            <!-- Smart Centering Indicators -->
+            <div id="nt-centering-indicators-{{ section.id }}" style="position: absolute; inset: 0; pointer-events: none;">
+              
+              <!-- Perfect Center Indicator -->
+              <div id="nt-perfect-center-{{ section.id }}" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: none;">
+                <div style="width: 40px; height: 40px; border: 3px solid #10b981; border-radius: 50%; background: rgba(16, 185, 129, 0.2); box-shadow: 0 0 20px rgba(16, 185, 129, 0.8); animation: pulse 2s infinite;">
+                  <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #10b981; font-size: 16px; font-weight: bold;">✓</div>
+                </div>
+                <div style="position: absolute; top: -25px; left: 50%; transform: translateX(-50%); background: #10b981; color: white; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; white-space: nowrap;">
+                  PERFECT CENTER
+                </div>
+              </div>
+              
+              <!-- Horizontal Center Indicator -->
+              <div id="nt-horizontal-center-{{ section.id }}" style="position: absolute; top: 50%; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, #f59e0b, #f59e0b, transparent); transform: translateY(-50%); display: none; box-shadow: 0 0 8px rgba(245, 158, 11, 0.6);"></div>
+              
+              <!-- Vertical Center Indicator -->
+              <div id="nt-vertical-center-{{ section.id }}" style="position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, transparent, #f59e0b, #f59e0b, transparent); transform: translateX(-50%); display: none; box-shadow: 0 0 8px rgba(245, 158, 11, 0.6);"></div>
+              
+              <!-- Equidistant Indicators -->
+              <div id="nt-equidistant-{{ section.id }}" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: none;">
+                <div style="width: 60px; height: 60px; border: 2px dashed #8b5cf6; border-radius: 50%; background: rgba(139, 92, 246, 0.1); box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);">
+                  <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #8b5cf6; font-size: 14px; font-weight: bold;">⚖</div>
+                </div>
+                <div style="position: absolute; top: -20px; left: 50%; transform: translateX(-50%); background: #8b5cf6; color: white; padding: 3px 6px; border-radius: 3px; font-size: 9px; font-weight: 600; white-space: nowrap;">
+                  EQUIDISTANT
+                </div>
+              </div>
+              
+              <!-- Status Messages -->
+              <div id="nt-centering-status-{{ section.id }}" style="position: absolute; top: 10px; left: 10px; background: rgba(0, 0, 0, 0.8); color: white; padding: 8px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; display: none; max-width: 200px;">
+                <div id="nt-status-text-{{ section.id }}"></div>
+              </div>
+            </div>
           </div>
 
           <!-- Resize Handle (only visible when hovering over design) -->
@@ -385,6 +420,17 @@ Enhanced Interactive Product Mockup
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { 
+    transform: translate(-50%, -50%) scale(1); 
+    opacity: 1; 
+  }
+  50% { 
+    transform: translate(-50%, -50%) scale(1.1); 
+    opacity: 0.8; 
   }
 }
 
@@ -1361,6 +1407,84 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       } else {
         console.error('❌ Overlay element not found!');
+      }
+      
+      // Check for centering and show indicators
+      this.checkCentering();
+    },
+
+    checkCentering() {
+      const { topPct, leftPct, widthPct } = this.placementState;
+      
+      // Get indicator elements
+      const perfectCenter = document.getElementById(`nt-perfect-center-{{ section.id }}`);
+      const horizontalCenter = document.getElementById(`nt-horizontal-center-{{ section.id }}`);
+      const verticalCenter = document.getElementById(`nt-vertical-center-{{ section.id }}`);
+      const equidistant = document.getElementById(`nt-equidistant-{{ section.id }}`);
+      const statusDiv = document.getElementById(`nt-centering-status-{{ section.id }}`);
+      const statusText = document.getElementById(`nt-status-text-{{ section.id }}`);
+      
+      if (!perfectCenter || !horizontalCenter || !verticalCenter || !equidistant || !statusDiv || !statusText) return;
+      
+      // Hide all indicators first
+      perfectCenter.style.display = 'none';
+      horizontalCenter.style.display = 'none';
+      verticalCenter.style.display = 'none';
+      equidistant.style.display = 'none';
+      statusDiv.style.display = 'none';
+      
+      // Check for perfect center (within 2% tolerance)
+      const isHorizontallyCentered = Math.abs(leftPct - 25) <= 2; // 25% is center for 50% width
+      const isVerticallyCentered = Math.abs(topPct - 45) <= 2; // 45% is center for t-shirt
+      const isPerfectCenter = isHorizontallyCentered && isVerticallyCentered;
+      
+      // Check for equidistant positioning (equal distance from edges)
+      const leftDistance = leftPct;
+      const rightDistance = 100 - leftPct - widthPct;
+      const topDistance = topPct;
+      const bottomDistance = 100 - topPct - (widthPct * 0.8); // Approximate height
+      const isEquidistant = Math.abs(leftDistance - rightDistance) <= 3 && Math.abs(topDistance - bottomDistance) <= 3;
+      
+      // Show appropriate indicators
+      if (isPerfectCenter) {
+        perfectCenter.style.display = 'block';
+        statusText.textContent = '🎯 Perfect center achieved!';
+        statusDiv.style.display = 'block';
+        statusDiv.style.background = 'rgba(16, 185, 129, 0.9)';
+      } else if (isHorizontallyCentered && isVerticallyCentered) {
+        perfectCenter.style.display = 'block';
+        statusText.textContent = '🎯 Very close to center!';
+        statusDiv.style.display = 'block';
+        statusDiv.style.background = 'rgba(16, 185, 129, 0.9)';
+      } else {
+        if (isHorizontallyCentered) {
+          horizontalCenter.style.display = 'block';
+          statusText.textContent = '↔️ Horizontally centered';
+          statusDiv.style.display = 'block';
+          statusDiv.style.background = 'rgba(245, 158, 11, 0.9)';
+        }
+        if (isVerticallyCentered) {
+          verticalCenter.style.display = 'block';
+          statusText.textContent = '↕️ Vertically centered';
+          statusDiv.style.display = 'block';
+          statusDiv.style.background = 'rgba(245, 158, 11, 0.9)';
+        }
+      }
+      
+      if (isEquidistant && !isPerfectCenter) {
+        equidistant.style.display = 'block';
+        if (statusDiv.style.display === 'none') {
+          statusText.textContent = '⚖️ Equidistant positioning';
+          statusDiv.style.display = 'block';
+          statusDiv.style.background = 'rgba(139, 92, 246, 0.9)';
+        }
+      }
+      
+      // Auto-hide status after 3 seconds
+      if (statusDiv.style.display === 'block') {
+        setTimeout(() => {
+          statusDiv.style.display = 'none';
+        }, 3000);
       }
     },
 
