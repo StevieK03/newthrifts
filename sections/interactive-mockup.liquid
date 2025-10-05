@@ -254,13 +254,6 @@ Enhanced Interactive Product Mockup
   cursor: grabbing !important;
 }
 
-/* Force center positioning - override any cached values */
-#nt-overlay-{{ section.id }} {
-  top: 40% !important;
-  left: 30% !important;
-  width: 50% !important;
-  transform: rotate(0deg) !important;
-}
 
 .nt-placement-controls {
   animation: slideInUp 0.3s ease;
@@ -399,7 +392,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Current view state
     state: { view: "front", color: "white" },
 
-    // Enhanced placement state - Force new centered values
+    // Enhanced placement state - Initialize with centered values
     placementState: {
       topPct: 40,
       leftPct: 30,
@@ -437,28 +430,34 @@ document.addEventListener('DOMContentLoaded', function() {
     },
 
     forceCenterPositioning() {
-      console.log('🔧 Forcing center positioning...');
-      const overlayDiv = document.getElementById(`nt-overlay-{{ section.id }}`);
-      if (overlayDiv) {
-        // Force the CSS variables directly
-        overlayDiv.style.setProperty('--overlay-top', '40%', 'important');
-        overlayDiv.style.setProperty('--overlay-left', '30%', 'important');
-        overlayDiv.style.setProperty('--overlay-width', '50%', 'important');
-        overlayDiv.style.setProperty('--overlay-rotate', '0deg', 'important');
-        
-        // Also set the inline styles directly
-        overlayDiv.style.top = '40%';
-        overlayDiv.style.left = '30%';
-        overlayDiv.style.width = '50%';
-        overlayDiv.style.transform = 'rotate(0deg)';
-        
-        console.log('✅ Forced positioning applied:', {
-          top: '40%',
-          left: '30%',
-          width: '50%',
-          rotate: '0deg'
-        });
-      }
+      console.log('🔧 Applying centered positioning...');
+      // Update the placement state to centered values
+      this.placementState.topPct = 40;
+      this.placementState.leftPct = 30;
+      this.placementState.widthPct = 50;
+      this.placementState.rotateDeg = 0;
+      
+      // Update the display and position
+      this.updatePlacementDisplay();
+      this.updateDesignPosition();
+      
+      // Update the sliders to reflect the new values
+      const topSlider = document.getElementById(`nt-top-{{ section.id }}`);
+      const leftSlider = document.getElementById(`nt-left-{{ section.id }}`);
+      const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
+      const rotateSlider = document.getElementById(`nt-rotate-{{ section.id }}`);
+      
+      if (topSlider) topSlider.value = 40;
+      if (leftSlider) leftSlider.value = 30;
+      if (widthSlider) widthSlider.value = 50;
+      if (rotateSlider) rotateSlider.value = 0;
+      
+      console.log('✅ Centered positioning applied:', {
+        top: '40%',
+        left: '30%',
+        width: '50%',
+        rotate: '0deg'
+      });
     },
 
     bindEvents() {
