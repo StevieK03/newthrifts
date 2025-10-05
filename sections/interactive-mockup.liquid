@@ -1139,6 +1139,22 @@ document.addEventListener('DOMContentLoaded', function() {
           if (scaleValue) scaleValue.textContent = newScale + '%';
         });
       }
+
+      // Add reset to 100% button
+      const resetScaleBtn = document.createElement('button');
+      resetScaleBtn.textContent = '🔄 Reset Size';
+      resetScaleBtn.style.cssText = 'padding: 6px 12px; background: #6b7280; color: white; border: none; border-radius: 4px; font-size: 11px; cursor: pointer; margin-top: 8px;';
+      resetScaleBtn.addEventListener('click', () => {
+        if (scaleSlider) scaleSlider.value = 100;
+        this.updateMockupScale(100);
+        if (scaleValue) scaleValue.textContent = '100%';
+      });
+      
+      // Add reset button to the controls
+      const scaleContainer = scaleSlider?.parentElement;
+      if (scaleContainer) {
+        scaleContainer.appendChild(resetScaleBtn);
+      }
     },
 
     updateMockupScale(scale) {
@@ -1148,11 +1164,21 @@ document.addEventListener('DOMContentLoaded', function() {
       if (canvas && baseImage) {
         console.log('🔍 Scaling t-shirt image to:', scale + '%');
         
+        // Calculate new container size to accommodate the scaled t-shirt
+        const baseSize = 720; // Original container size
+        const newSize = baseSize * (scale / 100);
+        
+        // Update container size to fit the scaled t-shirt
+        canvas.style.width = `${newSize}px`;
+        canvas.style.height = `${newSize}px`;
+        canvas.style.maxWidth = '100%';
+        canvas.style.maxHeight = '100%';
+        
         // Reset any previous transforms on the canvas
         canvas.style.transform = 'none';
         canvas.style.transformOrigin = 'unset';
         
-        // Scale only the t-shirt image, not the container
+        // Scale the t-shirt image
         baseImage.style.transform = `scale(${scale / 100})`;
         baseImage.style.transformOrigin = 'center center';
         
@@ -1166,7 +1192,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Update the design overlay to match the t-shirt scale
         this.updateDesignPosition();
         
-        console.log('✅ T-shirt image scaled successfully');
+        console.log('✅ T-shirt image scaled successfully, container size:', newSize + 'px');
       }
     },
 
