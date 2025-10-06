@@ -190,8 +190,126 @@ Enhanced Interactive Product Mockup
         </div>
       </div>
 
+      <!-- Mockup View Grid -->
+      <div class="nt-mockup__grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin: 30px 0; padding: 0 20px;">
+        
+        <!-- Grid Item: Front -->
+        <div class="nt-mockup__grid-item is-active" data-view="front" style="background: white; border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.3s ease; border: 2px solid #27e1c1; box-shadow: 0 4px 12px rgba(39, 225, 193, 0.2);">
+          <div class="grid-mockup-preview" style="width: 100%; height: 120px; background: linear-gradient(135deg, #f8fafc, #e2e8f0); border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <img src="{{ 'WFront_t-shirt.png' | asset_url }}" alt="Front View" style="max-width: 80%; max-height: 80%; object-fit: contain;">
+          </div>
+          <div class="grid-label" style="font-weight: 600; font-size: 14px; color: #374151;">Front</div>
+        </div>
+
+        <!-- Grid Item: Back -->
+        <div class="nt-mockup__grid-item" data-view="back" style="background: white; border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.3s ease; border: 2px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <div class="grid-mockup-preview" style="width: 100%; height: 120px; background: linear-gradient(135deg, #f8fafc, #e2e8f0); border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <img src="{{ 'Wback_t-shirt.png' | asset_url }}" alt="Back View" style="max-width: 80%; max-height: 80%; object-fit: contain;">
+          </div>
+          <div class="grid-label" style="font-weight: 600; font-size: 14px; color: #374151;">Back</div>
+        </div>
+
+        <!-- Grid Item: Folded -->
+        <div class="nt-mockup__grid-item" data-view="folded" style="background: white; border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.3s ease; border: 2px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <div class="grid-mockup-preview" style="width: 100%; height: 120px; background: linear-gradient(135deg, #f8fafc, #e2e8f0); border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <img src="{{ 'W3-D_t-shirt.png' | asset_url }}" alt="Folded View" style="max-width: 80%; max-height: 80%; object-fit: contain;">
+          </div>
+          <div class="grid-label" style="font-weight: 600; font-size: 14px; color: #374151;">Folded</div>
+        </div>
+
+        <!-- Grid Item: Person 1 -->
+        <div class="nt-mockup__grid-item" data-view="person1" style="background: white; border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.3s ease; border: 2px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <div class="grid-mockup-preview" style="width: 100%; height: 120px; background: linear-gradient(135deg, #f8fafc, #e2e8f0); border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <img src="{{ 'Models/Women/Girl-Model.png' | asset_url }}" alt="Person 1" style="max-width: 80%; max-height: 80%; object-fit: contain;">
+          </div>
+          <div class="grid-label" style="font-weight: 600; font-size: 14px; color: #374151;">Person 1</div>
+        </div>
+
+        <!-- Grid Item: Person 2 -->
+        <div class="nt-mockup__grid-item" data-view="person2" style="background: white; border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.3s ease; border: 2px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <div class="grid-mockup-preview" style="width: 100%; height: 120px; background: linear-gradient(135deg, #f8fafc, #e2e8f0); border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <img src="{{ 'Models/Women/Women-side.png' | asset_url }}" alt="Person 2" style="max-width: 80%; max-height: 80%; object-fit: contain;">
+          </div>
+          <div class="grid-label" style="font-weight: 600; font-size: 14px; color: #374151;">Person 2</div>
+        </div>
+
+        <!-- Grid Item: Person 3 Front -->
+        <div class="nt-mockup__grid-item" data-view="person3_front" style="background: white; border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.3s ease; border: 2px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <div class="grid-mockup-preview" style="width: 100%; height: 120px; background: linear-gradient(135deg, #f8fafc, #e2e8f0); border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <img src="{{ 'Models/Women/Girl-Model.png' | asset_url }}" alt="Person 3 Front" style="max-width: 80%; max-height: 80%; object-fit: contain;">
+          </div>
+          <div class="grid-label" style="font-weight: 600; font-size: 14px; color: #374151;">Person 3 Front</div>
+        </div>
+
+        <!-- Grid Item: Person 3 Back -->
+        <div class="nt-mockup__grid-item" data-view="person3_back" style="background: white; border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.3s ease; border: 2px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <div class="grid-mockup-preview" style="width: 100%; height: 120px; background: linear-gradient(135deg, #f8fafc, #e2e8f0); border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <img src="{{ 'Models/Women/Girl-Model.png' | asset_url }}" alt="Person 3 Back" style="max-width: 80%; max-height: 80%; object-fit: contain;">
+          </div>
+          <div class="grid-label" style="font-weight: 600; font-size: 14px; color: #374151;">Person 3 Back</div>
+        </div>
+
+        <!-- Grid Item: Person 3 Left Sleeve -->
+        <div class="nt-mockup__grid-item" data-view="person3_left" style="background: white; border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.3s ease; border: 2px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <div class="grid-mockup-preview" style="width: 100%; height: 120px; background: linear-gradient(135deg, #f8fafc, #e2e8f0); border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <img src="{{ 'Models/Women/Women-side.png' | asset_url }}" alt="Person 3 Left" style="max-width: 80%; max-height: 80%; object-fit: contain;">
+          </div>
+          <div class="grid-label" style="font-weight: 600; font-size: 14px; color: #374151;">Person 3 Left</div>
+        </div>
+
+        <!-- Grid Item: Person 3 Context -->
+        <div class="nt-mockup__grid-item" data-view="person3_context" style="background: white; border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.3s ease; border: 2px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <div class="grid-mockup-preview" style="width: 100%; height: 120px; background: linear-gradient(135deg, #f8fafc, #e2e8f0); border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <img src="{{ 'Models/Women/Girl-Model.png' | asset_url }}" alt="Person 3 Context" style="max-width: 80%; max-height: 80%; object-fit: contain;">
+          </div>
+          <div class="grid-label" style="font-weight: 600; font-size: 14px; color: #374151;">Person 3 Context</div>
+        </div>
+
+        <!-- Grid Item: Person 4 Front -->
+        <div class="nt-mockup__grid-item" data-view="person4_front" style="background: white; border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.3s ease; border: 2px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <div class="grid-mockup-preview" style="width: 100%; height: 120px; background: linear-gradient(135deg, #f8fafc, #e2e8f0); border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <img src="{{ 'Models/Women/Girl-Model.png' | asset_url }}" alt="Person 4 Front" style="max-width: 80%; max-height: 80%; object-fit: contain;">
+          </div>
+          <div class="grid-label" style="font-weight: 600; font-size: 14px; color: #374151;">Person 4 Front</div>
+        </div>
+
+        <!-- Grid Item: Person 4 Back -->
+        <div class="nt-mockup__grid-item" data-view="person4_back" style="background: white; border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.3s ease; border: 2px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <div class="grid-mockup-preview" style="width: 100%; height: 120px; background: linear-gradient(135deg, #f8fafc, #e2e8f0); border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <img src="{{ 'Models/Women/Girl-Model.png' | asset_url }}" alt="Person 4 Back" style="max-width: 80%; max-height: 80%; object-fit: contain;">
+          </div>
+          <div class="grid-label" style="font-weight: 600; font-size: 14px; color: #374151;">Person 4 Back</div>
+        </div>
+
+        <!-- Grid Item: Person 4 Right Sleeve -->
+        <div class="nt-mockup__grid-item" data-view="person4_right" style="background: white; border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.3s ease; border: 2px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <div class="grid-mockup-preview" style="width: 100%; height: 120px; background: linear-gradient(135deg, #f8fafc, #e2e8f0); border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <img src="{{ 'Models/Women/Women-side.png' | asset_url }}" alt="Person 4 Right" style="max-width: 80%; max-height: 80%; object-fit: contain;">
+          </div>
+          <div class="grid-label" style="font-weight: 600; font-size: 14px; color: #374151;">Person 4 Right</div>
+        </div>
+
+        <!-- Grid Item: Person 4 Context -->
+        <div class="nt-mockup__grid-item" data-view="person4_context" style="background: white; border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.3s ease; border: 2px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <div class="grid-mockup-preview" style="width: 100%; height: 120px; background: linear-gradient(135deg, #f8fafc, #e2e8f0); border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <img src="{{ 'Models/Women/Girl-Model.png' | asset_url }}" alt="Person 4 Context" style="max-width: 80%; max-height: 80%; object-fit: contain;">
+          </div>
+          <div class="grid-label" style="font-weight: 600; font-size: 14px; color: #374151;">Person 4 Context</div>
+        </div>
+
+        <!-- Grid Item: Size Chart -->
+        <div class="nt-mockup__grid-item" data-view="size_chart" style="background: white; border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.3s ease; border: 2px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <div class="grid-mockup-preview" style="width: 100%; height: 120px; background: linear-gradient(135deg, #f8fafc, #e2e8f0); border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(45deg, #667eea, #764ba2); color: white; font-weight: bold; font-size: 16px; border-radius: 8px;">
+              📏 Size Chart
+            </div>
+          </div>
+          <div class="grid-label" style="font-weight: 600; font-size: 14px; color: #374151;">Size Chart</div>
+        </div>
+      </div>
+
       <!-- Enhanced Preview Stage -->
-        <div class="nt-mockup__stage" style="width: 100%; display: grid; place-items: center; margin-top: 60px !important; margin-bottom: 100px !important; padding: 0 20px;">
+        <div class="nt-mockup__stage" style="width: 100%; display: grid; place-items: center; margin-top: 20px !important; margin-bottom: 100px !important; padding: 0 20px;">
           <div class="nt-mockup__canvas" 
                id="nt-mockup-canvas-{{ section.id }}"
                style="position: relative; width: min(900px, 100%); max-width: 90vw; aspect-ratio: 1 / 1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; overflow: hidden; box-shadow: 0 25px 80px rgba(102, 126, 234, 0.3), 0 10px 30px rgba(0,0,0,0.2); cursor: grab; --overlay-top: 45%; --overlay-left: 25%; --overlay-width: 60%; --overlay-rotate: 0deg;">
@@ -479,6 +597,32 @@ Enhanced Interactive Product Mockup
   cursor: pointer;
 }
 
+/* Grid Styles */
+.nt-mockup__grid-item {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nt-mockup__grid-item:hover {
+  transform: translateY(-2px);
+}
+
+.nt-mockup__grid-item.is-active {
+  transform: translateY(0);
+  box-shadow: 0 8px 25px rgba(39, 225, 193, 0.3) !important;
+}
+
+.grid-mockup-preview img {
+  transition: transform 0.3s ease;
+}
+
+.nt-mockup__grid-item:hover .grid-mockup-preview img {
+  transform: scale(1.05);
+}
+
+.nt-mockup__grid-item.is-active .grid-mockup-preview img {
+  transform: scale(1.02);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .nt-mockup__controls {
@@ -512,6 +656,44 @@ Enhanced Interactive Product Mockup
 
   .placement-slider {
     margin-bottom: 12px !important;
+  }
+
+  .nt-mockup__grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)) !important;
+    gap: 12px !important;
+    margin: 20px 0 !important;
+    padding: 0 10px !important;
+  }
+
+  .nt-mockup__grid-item {
+    padding: 12px !important;
+  }
+
+  .grid-mockup-preview {
+    height: 100px !important;
+  }
+
+  .grid-label {
+    font-size: 12px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .nt-mockup__grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+  }
+
+  .nt-mockup__grid-item {
+    padding: 8px !important;
+  }
+
+  .grid-mockup-preview {
+    height: 80px !important;
+  }
+
+  .grid-label {
+    font-size: 11px !important;
   }
 }
 
@@ -557,6 +739,12 @@ document.addEventListener('DOMContentLoaded', function() {
         pink: "{{ 'Wback_t-shirt.png' | asset_url }}",
         blue: "{{ 'Wback_t-shirt.png' | asset_url }}"
       },
+      folded: {
+        white: "{{ 'W3-D_t-shirt.png' | asset_url }}",
+        black: "{{ 'W3-D_t-shirt.png' | asset_url }}",
+        pink: "{{ 'W3-D_t-shirt.png' | asset_url }}",
+        blue: "{{ 'W3-D_t-shirt.png' | asset_url }}"
+      },
       hanging: {
         white: "{{ 'W3-D_t-shirt.png' | asset_url }}",
         black: "{{ 'W3-D_t-shirt.png' | asset_url }}",
@@ -574,6 +762,60 @@ document.addEventListener('DOMContentLoaded', function() {
         black: "{{ 'Models/Women/Women-side.png' | asset_url }}",
         pink: "{{ 'Models/Women/Women-side.png' | asset_url }}",
         blue: "{{ 'Models/Women/Women-side.png' | asset_url }}"
+      },
+      person3_front: {
+        white: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        black: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        pink: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        blue: "{{ 'Models/Women/Girl-Model.png' | asset_url }}"
+      },
+      person3_back: {
+        white: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        black: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        pink: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        blue: "{{ 'Models/Women/Girl-Model.png' | asset_url }}"
+      },
+      person3_left: {
+        white: "{{ 'Models/Women/Women-side.png' | asset_url }}",
+        black: "{{ 'Models/Women/Women-side.png' | asset_url }}",
+        pink: "{{ 'Models/Women/Women-side.png' | asset_url }}",
+        blue: "{{ 'Models/Women/Women-side.png' | asset_url }}"
+      },
+      person3_context: {
+        white: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        black: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        pink: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        blue: "{{ 'Models/Women/Girl-Model.png' | asset_url }}"
+      },
+      person4_front: {
+        white: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        black: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        pink: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        blue: "{{ 'Models/Women/Girl-Model.png' | asset_url }}"
+      },
+      person4_back: {
+        white: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        black: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        pink: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        blue: "{{ 'Models/Women/Girl-Model.png' | asset_url }}"
+      },
+      person4_right: {
+        white: "{{ 'Models/Women/Women-side.png' | asset_url }}",
+        black: "{{ 'Models/Women/Women-side.png' | asset_url }}",
+        pink: "{{ 'Models/Women/Women-side.png' | asset_url }}",
+        blue: "{{ 'Models/Women/Women-side.png' | asset_url }}"
+      },
+      person4_context: {
+        white: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        black: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        pink: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        blue: "{{ 'Models/Women/Girl-Model.png' | asset_url }}"
+      },
+      size_chart: {
+        white: "{{ 'WFront_t-shirt.png' | asset_url }}",
+        black: "{{ 'WFront_t-shirt.png' | asset_url }}",
+        pink: "{{ 'WFront_t-shirt.png' | asset_url }}",
+        blue: "{{ 'WFront_t-shirt.png' | asset_url }}"
       }
     },
     
@@ -743,6 +985,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // Bind placement guide controls
       this.bindPlacementGuideControls();
+
+      // Bind grid interactions
+      this.bindGridInteractions();
 
       // Bind drag/resize functionality
       this.bindDragResize();
@@ -1305,6 +1550,260 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('🎯 Placement guide hidden');
           }
         });
+      }
+    },
+
+    bindGridInteractions() {
+      console.log('🎨 Binding grid interactions...');
+      
+      // Get all grid items
+      const gridItems = document.querySelectorAll(`#nt-mockup-{{ section.id }} .nt-mockup__grid-item`);
+      
+      gridItems.forEach(item => {
+        const viewType = item.dataset.view;
+        
+        // Add click event listener
+        item.addEventListener('click', () => {
+          console.log('🎯 Grid item clicked:', viewType);
+          
+          // Handle special cases
+          if (viewType === 'size_chart') {
+            this.showSizeChart();
+            return;
+          }
+          
+          // Update the active state
+          this.setActiveGridItem(gridItems, item);
+          
+          // Update the view state
+          this.state.view = viewType;
+          
+          // Update the mockup
+          this.updateBase();
+          
+          // Update the view buttons to match
+          this.updateViewButtons();
+          
+          console.log('✅ View changed to:', viewType);
+        });
+        
+        // Add hover effects
+        item.addEventListener('mouseenter', () => {
+          if (!item.classList.contains('is-active')) {
+            item.style.transform = 'translateY(-4px)';
+            item.style.boxShadow = '0 8px 25px rgba(0,0,0,0.15)';
+          }
+        });
+        
+        item.addEventListener('mouseleave', () => {
+          if (!item.classList.contains('is-active')) {
+            item.style.transform = 'translateY(0)';
+            item.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
+          }
+        });
+      });
+      
+      console.log('✅ Grid interactions bound successfully');
+    },
+
+    setActiveGridItem(gridItems, activeItem) {
+      gridItems.forEach(item => {
+        if (item === activeItem) {
+          item.classList.add('is-active');
+          item.style.borderColor = '#27e1c1';
+          item.style.boxShadow = '0 4px 12px rgba(39, 225, 193, 0.2)';
+          item.style.transform = 'translateY(0)';
+        } else {
+          item.classList.remove('is-active');
+          item.style.borderColor = '#e2e8f0';
+          item.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
+          item.style.transform = 'translateY(0)';
+        }
+      });
+    },
+
+    updateViewButtons() {
+      // Update the view buttons to match the grid selection
+      const viewBtns = Array.from(document.querySelectorAll(`#nt-mockup-{{ section.id }} .nt-btn--view`));
+      
+      // Map grid views to button views
+      const viewMapping = {
+        'person3_front': 'person1',
+        'person3_back': 'person1', 
+        'person3_left': 'person1',
+        'person3_context': 'person1',
+        'person4_front': 'person2',
+        'person4_back': 'person2',
+        'person4_right': 'person2',
+        'person4_context': 'person2',
+        'folded': 'hanging'
+      };
+      
+      const buttonView = viewMapping[this.state.view] || this.state.view;
+      
+      viewBtns.forEach(btn => {
+        const isActive = btn.dataset.view === buttonView;
+        if (isActive) {
+          btn.classList.add("is-active");
+          btn.style.borderColor = "#27e1c1";
+          btn.style.background = "#27e1c1";
+          btn.style.color = "white";
+        } else {
+          btn.classList.remove("is-active");
+          btn.style.borderColor = "#e2e8f0";
+          btn.style.background = "white";
+          btn.style.color = "#64748b";
+        }
+        btn.setAttribute("aria-selected", isActive ? "true" : "false");
+      });
+    },
+
+    showSizeChart() {
+      console.log('📏 Showing size chart...');
+      
+      // Create size chart modal
+      const sizeChartOverlay = document.createElement('div');
+      sizeChartOverlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(10px);
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      `;
+
+      const sizeChartContainer = document.createElement('div');
+      sizeChartContainer.style.cssText = `
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        max-width: 600px;
+        width: 90vw;
+        max-height: 80vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        transform: scale(0.8);
+        transition: transform 0.3s ease;
+      `;
+
+      sizeChartContainer.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+          <h2 style="margin: 0; font-size: 28px; font-weight: 700; color: #374151;">
+            📏 Size Chart
+          </h2>
+          <button id="close-size-chart-btn" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #6b7280;">
+            ×
+          </button>
+        </div>
+
+        <div style="margin-bottom: 25px;">
+          <h3 style="margin: 0 0 16px 0; font-size: 20px; font-weight: 600; color: #374151;">
+            T-Shirt Size Guide
+          </h3>
+          
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+              <thead>
+                <tr style="background: #f8fafc;">
+                  <th style="padding: 12px; border: 1px solid #e2e8f0; font-weight: 600; color: #374151;">Size</th>
+                  <th style="padding: 12px; border: 1px solid #e2e8f0; font-weight: 600; color: #374151;">Chest (inches)</th>
+                  <th style="padding: 12px; border: 1px solid #e2e8f0; font-weight: 600; color: #374151;">Length (inches)</th>
+                  <th style="padding: 12px; border: 1px solid #e2e8f0; font-weight: 600; color: #374151;">Sleeve (inches)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0; font-weight: 600; color: #27e1c1;">XS</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">32-34</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">26</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">7.5</td>
+                </tr>
+                <tr style="background: #f8fafc;">
+                  <td style="padding: 12px; border: 1px solid #e2e8f0; font-weight: 600; color: #27e1c1;">S</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">34-36</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">27</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">8</td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0; font-weight: 600; color: #27e1c1;">M</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">38-40</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">28</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">8.5</td>
+                </tr>
+                <tr style="background: #f8fafc;">
+                  <td style="padding: 12px; border: 1px solid #e2e8f0; font-weight: 600; color: #27e1c1;">L</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">42-44</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">29</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">9</td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0; font-weight: 600; color: #27e1c1;">XL</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">46-48</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">30</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">9.5</td>
+                </tr>
+                <tr style="background: #f8fafc;">
+                  <td style="padding: 12px; border: 1px solid #e2e8f0; font-weight: 600; color: #27e1c1;">XXL</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">50-52</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">31</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">10</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div style="background: linear-gradient(135deg, #f0fdfa, #ecfdf5); padding: 20px; border-radius: 12px; border: 1px solid #a7f3d0;">
+          <div style="font-weight: 600; color: #065f46; margin-bottom: 8px;">💡 Sizing Tips</div>
+          <div style="color: #047857; font-size: 14px; line-height: 1.6;">
+            • Measure your chest at the fullest point<br>
+            • Our t-shirts are designed for a relaxed fit<br>
+            • If between sizes, we recommend sizing up<br>
+            • All measurements are in inches and taken from the garment
+          </div>
+        </div>
+      `;
+
+      sizeChartOverlay.appendChild(sizeChartContainer);
+      document.body.appendChild(sizeChartOverlay);
+
+      // Animate in
+      setTimeout(() => {
+        sizeChartOverlay.style.opacity = '1';
+        sizeChartContainer.style.transform = 'scale(1)';
+      }, 100);
+
+      // Bind close event
+      document.getElementById('close-size-chart-btn').addEventListener('click', () => {
+        this.closeSizeChart(sizeChartOverlay);
+      });
+
+      sizeChartOverlay.addEventListener('click', (e) => {
+        if (e.target === sizeChartOverlay) {
+          this.closeSizeChart(sizeChartOverlay);
+        }
+      });
+
+      this.currentSizeChart = sizeChartOverlay;
+    },
+
+    closeSizeChart(overlay) {
+      if (overlay) {
+        overlay.style.opacity = '0';
+        const container = overlay.querySelector('div');
+        if (container) container.style.transform = 'scale(0.8)';
+        setTimeout(() => {
+          if (document.body.contains(overlay)) {
+            document.body.removeChild(overlay);
+          }
+        }, 300);
       }
     },
 
