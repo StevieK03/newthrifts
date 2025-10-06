@@ -1,189 +1,435 @@
 {% comment %}
-Enhanced Interactive Product Mockup - Optimized Version (Fixed Liquid Syntax Error)
-Key Improvements:
-- Fixed Liquid syntax error in getViewImage method by moving JavaScript logic outside Liquid tags.
-- Separated CSS into a dedicated <style> block with CSS variables.
-- Modularized JavaScript into classes (InteractiveMockup, LayerManager).
-- Optimized performance: throttled/debounced events, lazy-loaded images, OffscreenCanvas.
-- Added accessibility: ARIA roles, keyboard navigation, focus states, live regions.
-- New features: auto-center, design flip (horizontal/vertical), multiple design layers (up to 3).
-- Improved error handling for image loading and file uploads.
-- Added progressive enhancement with <noscript> fallback.
-- Reduced DOM queries with caching and batched updates.
-- Integrated basic analytics for user interactions.
-- Optimized mobile experience with larger touch targets and enhanced pinch-to-zoom.
+Enhanced Interactive Product Mockup
+- Dynamic rendering with custom text from customizer
+- Multiple views (Front, Back, Hanging, Person models)
+- Real-time design updates
+- Integration with existing customizer
+- Printify-style professional mockup system
 {% endcomment %}
 
-<section id="nt-mockup-{{ section.id }}" class="nt-mockup" style="padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px 0; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);">
+<section id="nt-mockup-{{ section.id }}" class="nt-mockup" style="padding: 40px 0; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);">
   <div class="container">
-    <!-- No-JS Fallback -->
-    <noscript>
-      <div style="text-align: center; padding: 20px; background: #f8d7da; color: #721c24; border-radius: 8px;">
-        Please enable JavaScript to use the interactive mockup. Here's a static preview:
-        <img src="{{ 'WFront_t-shirt.png' | asset_url }}" alt="Static T-shirt Preview" style="max-width: 300px;">
-      </div>
-    </noscript>
-
+    
     <!-- Section Header -->
     <div class="mockup-header" style="text-align: center; margin-bottom: 40px;">
-      <h2 style="font-family: 'Bebas Neue', sans-serif; font-size: 42px; margin: 0 0 16px 0; background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+      <h2 style="font-family: 'Bebas Neue', sans-serif; font-size: 42px; margin: 0 0 16px 0; background: linear-gradient(45deg, #27e1c1, #ff4fa3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
         🎨 Live Design Preview
       </h2>
       <p style="font-size: 18px; color: #64748b; margin: 0; max-width: 600px; margin: 0 auto;">
-        Customize your t-shirt with real-time previews. Switch views, colors, and add up to 3 design layers!
+        See your custom design come to life with our professional mockup system. Switch between different views and colors to see how your design looks in real-world scenarios.
       </p>
     </div>
 
     <div class="nt-mockup__inner" style="display: grid; gap: 20px;">
-      <!-- Controls -->
+      
+      <!-- Enhanced Controls -->
       <div class="nt-mockup__controls" style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: center; background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+        
         <!-- View Controls -->
         <div class="nt-mockup__group">
-          <span class="nt-mockup__label" style="font-weight: 600; font-size: 14px; color: var(--text-color); margin-right: 12px;">View</span>
-          <div class="nt-mockup__buttons" role="tablist" aria-label="Mockup view">
-            <button class="nt-btn nt-btn--view is-active" data-view="front" aria-selected="true" tabindex="0">👕 Front</button>
-            <button class="nt-btn nt-btn--view" data-view="back" aria-selected="false" tabindex="0">👕 Back</button>
-            <button class="nt-btn nt-btn--view" data-view="hanging" aria-selected="false" tabindex="0">🏷️ Hanging</button>
-            <button class="nt-btn nt-btn--view" data-view="person1" aria-selected="false" tabindex="0">👤 Model 1</button>
-            <button class="nt-btn nt-btn--view" data-view="person2" aria-selected="false" tabindex="0">👤 Model 2</button>
+          <span class="nt-mockup__label" style="font-weight: 600; font-size: 14px; color: #374151; margin-right: 12px;">View</span>
+          <div class="nt-mockup__buttons" role="tablist" aria-label="Mockup view" style="display: flex; gap: 8px;">
+            <button class="nt-btn nt-btn--view is-active" data-view="front" aria-selected="true" style="padding: 8px 16px; border: 2px solid #27e1c1; background: #27e1c1; color: white; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              👕 Front
+            </button>
+            <button class="nt-btn nt-btn--view" data-view="back" aria-selected="false" style="padding: 8px 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              👕 Back
+            </button>
+            <button class="nt-btn nt-btn--view" data-view="hanging" aria-selected="false" style="padding: 8px 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              🏷️ Hanging
+            </button>
+            <button class="nt-btn nt-btn--view" data-view="person1" aria-selected="false" style="padding: 8px 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              👤 Model 1
+            </button>
+            <button class="nt-btn nt-btn--view" data-view="person2" aria-selected="false" style="padding: 8px 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              👤 Model 2
+            </button>
           </div>
         </div>
 
         <!-- Color Controls -->
         <div class="nt-mockup__group">
-          <span class="nt-mockup__label" style="font-weight: 600; font-size: 14px; color: var(--text-color); margin-right: 12px;">Color</span>
-          <div class="nt-mockup__buttons" role="tablist" aria-label="Shirt color">
-            <button class="nt-btn nt-btn--color is-active" data-color="white" aria-selected="true" tabindex="0">⚪ White</button>
-            <button class="nt-btn nt-btn--color" data-color="black" aria-selected="false" tabindex="0">⚫ Black</button>
-            <button class="nt-btn nt-btn--color" data-color="pink" aria-selected="false" tabindex="0">🩷 Pink</button>
-            <button class="nt-btn nt-btn--color" data-color="blue" aria-selected="false" tabindex="0">🔵 Blue</button>
+          <span class="nt-mockup__label" style="font-weight: 600; font-size: 14px; color: #374151; margin-right: 12px;">Color</span>
+          <div class="nt-mockup__buttons" role="tablist" aria-label="Shirt color" style="display: flex; gap: 8px;">
+            <button class="nt-btn nt-btn--color is-active" data-color="white" aria-selected="true" style="padding: 8px 16px; border: 2px solid #27e1c1; background: #27e1c1; color: white; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              ⚪ White
+            </button>
+            <button class="nt-btn nt-btn--color" data-color="black" aria-selected="false" style="padding: 8px 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              ⚫ Black
+            </button>
+            <button class="nt-btn nt-btn--color" data-color="pink" aria-selected="false" style="padding: 8px 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              🩷 Pink
+            </button>
+            <button class="nt-btn nt-btn--color" data-color="blue" aria-selected="false" style="padding: 8px 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              🔵 Blue
+            </button>
           </div>
         </div>
 
         <!-- Action Buttons -->
         <div class="nt-mockup__group">
           <div class="upload-section" style="display: flex; flex-direction: column; gap: 8px; align-items: center;">
-            <button class="nt-btn nt-btn--upload" id="nt-upload-{{ section.id }}" style="position: relative; overflow: hidden;">
+            <button class="nt-btn nt-btn--upload" id="nt-upload-{{ section.id }}" style="padding: 10px 20px; background: linear-gradient(45deg, #f59e0b, #d97706); color: white; border: none; border-radius: 25px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden;">
               📁 Upload Your Design
-              <input type="file" id="nt-file-input-{{ section.id }}" accept=".png,.jpg,.jpeg,.svg,.pdf" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
+              <input type="file" id="nt-file-input-{{ section.id }}" accept=".png,.jpg,.jpeg,.svg,.pdf,.ai,.psd" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
             </button>
+            
             <div class="file-info" style="display: flex; gap: 12px; align-items: center; font-size: 12px; color: #6b7280;">
               <span>📄 Accepts:</span>
               <div style="display: flex; gap: 4px; flex-wrap: wrap;">
-                <span class="file-type">PNG</span>
-                <span class="file-type">JPG</span>
-                <span class="file-type">SVG</span>
-                <span class="file-type">PDF</span>
+                <span class="file-type" style="background: #e5e7eb; padding: 2px 6px; border-radius: 4px; font-size: 11px;">PNG</span>
+                <span class="file-type" style="background: #e5e7eb; padding: 2px 6px; border-radius: 4px; font-size: 11px;">JPG</span>
+                <span class="file-type" style="background: #e5e7eb; padding: 2px 6px; border-radius: 4px; font-size: 11px;">SVG</span>
+                <span class="file-type" style="background: #e5e7eb; padding: 2px 6px; border-radius: 4px; font-size: 11px;">PDF</span>
               </div>
-              <button class="help-link" id="nt-help-{{ section.id }}">ℹ️ Help</button>
+              <button class="help-link" id="nt-help-{{ section.id }}" style="background: none; border: none; color: #3b82f6; cursor: pointer; font-size: 11px; text-decoration: underline;">
+                ℹ️ Help
+              </button>
             </div>
           </div>
+          
           {% if section.settings.allow_download %}
-          <button class="nt-btn nt-btn--primary" id="nt-download-{{ section.id }}" tabindex="0">📥 Download Mockup</button>
+          <button class="nt-btn nt-btn--primary" id="nt-download-{{ section.id }}" style="padding: 10px 20px; background: linear-gradient(45deg, #10b981, #059669); color: white; border: none; border-radius: 25px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin-top: 16px;">
+            📥 Download Mockup
+          </button>
           {% endif %}
-          <button class="nt-btn nt-btn--secondary" id="nt-edit-{{ section.id }}" tabindex="0">✏️ Edit Design</button>
-          <button class="nt-btn nt-btn--danger" id="nt-remove-{{ section.id }}" style="display: none;" tabindex="0">🗑️ Remove Design</button>
+          
+          <button class="nt-btn nt-btn--secondary" id="nt-edit-{{ section.id }}" style="padding: 10px 20px; background: linear-gradient(45deg, #8b5cf6, #a855f7); color: white; border: none; border-radius: 25px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin-top: 16px;">
+            ✏️ Edit Design
+          </button>
+          
+          <button class="nt-btn nt-btn--danger" id="nt-remove-{{ section.id }}" style="padding: 10px 20px; background: linear-gradient(45deg, #ef4444, #dc2626); color: white; border: none; border-radius: 25px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; display: none; margin-top: 16px;">
+            🗑️ Remove Design
+          </button>
         </div>
       </div>
 
       <!-- Advanced Placement Controls -->
       <div id="nt-placement-controls-{{ section.id }}" class="nt-placement-controls" style="display: block; background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin: 10px 0 40px 0;">
         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
-          <span style="font-weight: 600; font-size: 16px; color: var(--text-color);">🎯 Precise Placement Controls</span>
-          <button id="nt-auto-equidistant-{{ section.id }}">⚖️ Auto-Equidistant</button>
-          <button id="nt-auto-center-{{ section.id }}">🎯 Auto-Center</button>
-          {% if section.settings.enable_flip %}
-          <button id="nt-flip-horizontal-{{ section.id }}">↔️ Flip Horizontal</button>
-          <button id="nt-flip-vertical-{{ section.id }}">↕️ Flip Vertical</button>
-          {% endif %}
-          <button id="nt-reset-placement-{{ section.id }}">🔄 Reset</button>
+          <span style="font-weight: 600; font-size: 16px; color: #374151;">🎯 Precise Placement Controls</span>
+          <button id="nt-auto-equidistant-{{ section.id }}" style="padding: 6px 12px; background: linear-gradient(45deg, #8b5cf6, #7c3aed); color: white; border: none; border-radius: 8px; font-size: 12px; cursor: pointer; font-weight: 500; display: flex; align-items: center; gap: 4px;">
+            ⚖️ Auto-Equidistant
+          </button>
+          <button id="nt-reset-placement-{{ section.id }}" style="padding: 6px 12px; background: #f3f4f6; color: #6b7280; border: 1px solid #d1d5db; border-radius: 8px; font-size: 12px; cursor: pointer;">
+            🔄 Reset
+          </button>
         </div>
+        
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+          <!-- Top Position -->
           <div class="placement-slider">
-            <label style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: var(--text-color);">
+            <label style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: #374151;">
               <span>📐 Top Position</span>
-              <span id="nt-top-val-{{ section.id }}" style="font-weight: 600; color: var(--primary-color);">{{ section.settings.overlay_top }}%</span>
+              <span id="nt-top-val-{{ section.id }}" style="font-weight: 600; color: #27e1c1;">{{ section.settings.overlay_top }}%</span>
             </label>
-            <input type="range" id="nt-top-{{ section.id }}" min="0" max="90" step="0.5" value="{{ section.settings.overlay_top }}" aria-label="Top Position">
+            <input type="range" id="nt-top-{{ section.id }}" min="0" max="90" step="0.5" value="{{ section.settings.overlay_top }}" style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; outline: none; cursor: pointer;">
           </div>
+
+          <!-- Left Position -->
           <div class="placement-slider">
-            <label style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: var(--text-color);">
+            <label style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: #374151;">
               <span>📐 Left Position</span>
-              <span id="nt-left-val-{{ section.id }}" style="font-weight: 600; color: var(--primary-color);">{{ section.settings.overlay_left }}%</span>
+              <span id="nt-left-val-{{ section.id }}" style="font-weight: 600; color: #27e1c1;">{{ section.settings.overlay_left }}%</span>
             </label>
-            <input type="range" id="nt-left-{{ section.id }}" min="0" max="90" step="0.5" value="{{ section.settings.overlay_left }}" aria-label="Left Position">
+            <input type="range" id="nt-left-{{ section.id }}" min="0" max="90" step="0.5" value="{{ section.settings.overlay_left }}" style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; outline: none; cursor: pointer;">
           </div>
+
+          <!-- Width -->
           <div class="placement-slider">
-            <label style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: var(--text-color);">
+            <label style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: #374151;">
               <span>📏 Design Width</span>
-              <span id="nt-width-val-{{ section.id }}" style="font-weight: 600; color: var(--primary-color);">{{ section.settings.overlay_width }}%</span>
+              <span id="nt-width-val-{{ section.id }}" style="font-weight: 600; color: #27e1c1;">{{ section.settings.overlay_width }}%</span>
             </label>
-            <input type="range" id="nt-width-{{ section.id }}" min="10" max="100" step="1" value="{{ section.settings.overlay_width }}" aria-label="Design Width">
+            <input type="range" id="nt-width-{{ section.id }}" min="10" max="100" step="1" value="{{ section.settings.overlay_width }}" style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; outline: none; cursor: pointer;">
           </div>
+
+          <!-- Rotation -->
           <div class="placement-slider">
-            <label style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: var(--text-color);">
+            <label style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: #374151;">
               <span>🔄 Rotation</span>
-              <span id="nt-rotate-val-{{ section.id }}" style="font-weight: 600; color: var(--primary-color);">{{ section.settings.overlay_rotate }}°</span>
+              <span id="nt-rotate-val-{{ section.id }}" style="font-weight: 600; color: #27e1c1;">{{ section.settings.overlay_rotate }}°</span>
             </label>
-            <input type="range" id="nt-rotate-{{ section.id }}" min="-45" max="45" step="0.5" value="{{ section.settings.overlay_rotate }}" aria-label="Design Rotation">
+            <input type="range" id="nt-rotate-{{ section.id }}" min="-45" max="45" step="0.5" value="{{ section.settings.overlay_rotate }}" style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; outline: none; cursor: pointer;">
           </div>
         </div>
+
+        <!-- Placement Guide Controls -->
         <div style="margin-top: 20px; padding: 16px; background: #fef3c7; border-radius: 12px; border: 1px solid #fbbf24;">
           <h5 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #92400e;">🎯 Placement Guide</h5>
           <div style="display: flex; align-items: center; gap: 12px;">
-            <button id="nt-toggle-guide-{{ section.id }}">📐 Show Placement Guide</button>
+            <button id="nt-toggle-guide-{{ section.id }}" style="padding: 8px 16px; background: linear-gradient(45deg, #f59e0b, #d97706); color: white; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 500;">
+              📐 Show Placement Guide
+            </button>
             <span style="font-size: 12px; color: #92400e;">Toggle crosshairs and placement area</span>
           </div>
         </div>
+
+        <!-- Mockup Size Controls -->
         <div style="margin-top: 20px; padding: 16px; background: #f0fdf4; border-radius: 12px; border: 1px solid #bbf7d0;">
           <h5 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #166534;">🔍 Mockup Size Controls</h5>
           <div style="display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: end;">
             <div>
-              <label style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: var(--text-color);">
+              <label style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: #374151;">
                 <span>📏 T-shirt Scale</span>
-                <span id="nt-mockup-scale-val-{{ section.id }}" style="font-weight: 600; color: var(--primary-color);">100%</span>
+                <span id="nt-mockup-scale-val-{{ section.id }}" style="font-weight: 600; color: #27e1c1;">100%</span>
               </label>
-              <input type="range" id="nt-mockup-scale-{{ section.id }}" min="50" max="130" step="5" value="100" aria-label="T-shirt Scale">
+              <input type="range" id="nt-mockup-scale-{{ section.id }}" min="50" max="130" step="5" value="100" style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; outline: none; cursor: pointer;">
             </div>
             <div style="display: flex; flex-direction: column; gap: 6px;">
-              <button id="nt-zoom-in-{{ section.id }}">🔍 Zoom In</button>
-              <button id="nt-zoom-out-{{ section.id }}">🔍 Zoom Out</button>
+              <button id="nt-zoom-in-{{ section.id }}" style="padding: 8px 12px; background: #4299e1; color: white; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 500;">🔍 Zoom In</button>
+              <button id="nt-zoom-out-{{ section.id }}" style="padding: 8px 12px; background: #ed8936; color: white; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 500;">🔍 Zoom Out</button>
             </div>
           </div>
         </div>
+
         <div style="margin-top: 16px; padding: 12px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
           <div style="font-size: 12px; color: #6b7280; text-align: center;">
-            💡 <strong>Pro Tip:</strong> Drag the design to move it, use scroll wheel to resize, or add up to 3 design layers!
+            💡 <strong>Pro Tip:</strong> You can also drag the design directly on the mockup to move it, or use scroll wheel to resize!
           </div>
         </div>
       </div>
 
-      <!-- Layer Management UI -->
-      {% if section.settings.enable_multi_layers %}
-      <div class="nt-mockup__layers" style="display: flex; flex-wrap: wrap; gap: 10px; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-        <span style="font-weight: 600; font-size: 14px; color: var(--text-color);">🖼️ Design Layers</span>
-        <div id="nt-layers-list-{{ section.id }}" style="display: flex; gap: 8px;"></div>
-      </div>
-      {% endif %}
-
       <!-- Mockup View Grid -->
-      <div class="nt-mockup__grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin: 30px 0; padding: 0 20px;"></div>
+      <div class="nt-mockup__grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin: 30px 0; padding: 0 20px;">
+        
+        <!-- Grid Item: Front -->
+        <div class="nt-mockup__grid-item is-active" data-view="front" style="background: white; border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.3s ease; border: 2px solid #27e1c1; box-shadow: 0 4px 12px rgba(39, 225, 193, 0.2);">
+          <div class="grid-mockup-preview" style="width: 100%; height: 120px; background: linear-gradient(135deg, #f8fafc, #e2e8f0); border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <img src="{{ 'WFront_t-shirt.png' | asset_url }}" alt="Front View" style="max-width: 80%; max-height: 80%; object-fit: contain;">
+          </div>
+          <div class="grid-label" style="font-weight: 600; font-size: 14px; color: #374151;">Front</div>
+        </div>
 
-      <!-- Preview Stage -->
-      <div class="nt-mockup__stage" style="width: 100%; display: grid; place-items: center; margin-top: 20px; margin-bottom: 100px; padding: 0 20px;">
-        <div class="nt-mockup__canvas" id="nt-mockup-canvas-{{ section.id }}" style="position: relative; width: min(900px, 100%); max-width: 90vw; aspect-ratio: 1 / 1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; overflow: hidden; box-shadow: 0 25px 80px rgba(102, 126, 234, 0.3), 0 10px 30px rgba(0,0,0,0.2); cursor: grab;">
-          <img id="nt-base-{{ section.id }}" class="nt-mockup__base" src="{{ 'WFront_t-shirt.png' | asset_url }}" alt="T-shirt mockup" loading="lazy" decoding="async" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none;">
-          <div class="nt-mockup__overlays"></div>
-          <div id="nt-placement-guide-{{ section.id }}" style="position: absolute; inset: 0; pointer-events: none; z-index: 6; display: none;">
+        <!-- Grid Item: Back -->
+        <div class="nt-mockup__grid-item" data-view="back" style="background: white; border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.3s ease; border: 2px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <div class="grid-mockup-preview" style="width: 100%; height: 120px; background: linear-gradient(135deg, #f8fafc, #e2e8f0); border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <img src="{{ 'Wback_t-shirt.png' | asset_url }}" alt="Back View" style="max-width: 80%; max-height: 80%; object-fit: contain;">
+          </div>
+          <div class="grid-label" style="font-weight: 600; font-size: 14px; color: #374151;">Back</div>
+        </div>
+
+        <!-- Grid Item: Folded -->
+        <div class="nt-mockup__grid-item" data-view="folded" style="background: white; border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.3s ease; border: 2px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <div class="grid-mockup-preview" style="width: 100%; height: 120px; background: linear-gradient(135deg, #f8fafc, #e2e8f0); border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <img src="{{ 'W3-D_t-shirt.png' | asset_url }}" alt="Folded View" style="max-width: 80%; max-height: 80%; object-fit: contain;">
+          </div>
+          <div class="grid-label" style="font-weight: 600; font-size: 14px; color: #374151;">Folded</div>
+        </div>
+
+        <!-- Grid Item: Person 1 -->
+        <div class="nt-mockup__grid-item" data-view="person1" style="background: white; border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.3s ease; border: 2px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <div class="grid-mockup-preview" style="width: 100%; height: 120px; background: linear-gradient(135deg, #f8fafc, #e2e8f0); border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <img src="{{ 'Models/Women/Girl-Model.png' | asset_url }}" alt="Person 1" style="max-width: 80%; max-height: 80%; object-fit: contain;">
+          </div>
+          <div class="grid-label" style="font-weight: 600; font-size: 14px; color: #374151;">Person 1</div>
+        </div>
+
+        <!-- Grid Item: Person 2 -->
+        <div class="nt-mockup__grid-item" data-view="person2" style="background: white; border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.3s ease; border: 2px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <div class="grid-mockup-preview" style="width: 100%; height: 120px; background: linear-gradient(135deg, #f8fafc, #e2e8f0); border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <img src="{{ 'Models/Women/Women-side.png' | asset_url }}" alt="Person 2" style="max-width: 80%; max-height: 80%; object-fit: contain;">
+          </div>
+          <div class="grid-label" style="font-weight: 600; font-size: 14px; color: #374151;">Person 2</div>
+        </div>
+
+        <!-- Grid Item: Person 3 Front -->
+        <div class="nt-mockup__grid-item" data-view="person3_front" style="background: white; border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.3s ease; border: 2px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <div class="grid-mockup-preview" style="width: 100%; height: 120px; background: linear-gradient(135deg, #f8fafc, #e2e8f0); border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <img src="{{ 'Models/Women/Girl-Model.png' | asset_url }}" alt="Person 3 Front" style="max-width: 80%; max-height: 80%; object-fit: contain;">
+          </div>
+          <div class="grid-label" style="font-weight: 600; font-size: 14px; color: #374151;">Person 3 Front</div>
+        </div>
+
+        <!-- Grid Item: Person 3 Back -->
+        <div class="nt-mockup__grid-item" data-view="person3_back" style="background: white; border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.3s ease; border: 2px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <div class="grid-mockup-preview" style="width: 100%; height: 120px; background: linear-gradient(135deg, #f8fafc, #e2e8f0); border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <img src="{{ 'Models/Women/Girl-Model.png' | asset_url }}" alt="Person 3 Back" style="max-width: 80%; max-height: 80%; object-fit: contain;">
+          </div>
+          <div class="grid-label" style="font-weight: 600; font-size: 14px; color: #374151;">Person 3 Back</div>
+        </div>
+
+        <!-- Grid Item: Person 3 Left Sleeve -->
+        <div class="nt-mockup__grid-item" data-view="person3_left" style="background: white; border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.3s ease; border: 2px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <div class="grid-mockup-preview" style="width: 100%; height: 120px; background: linear-gradient(135deg, #f8fafc, #e2e8f0); border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <img src="{{ 'Models/Women/Women-side.png' | asset_url }}" alt="Person 3 Left" style="max-width: 80%; max-height: 80%; object-fit: contain;">
+          </div>
+          <div class="grid-label" style="font-weight: 600; font-size: 14px; color: #374151;">Person 3 Left</div>
+        </div>
+
+        <!-- Grid Item: Person 3 Context -->
+        <div class="nt-mockup__grid-item" data-view="person3_context" style="background: white; border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.3s ease; border: 2px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <div class="grid-mockup-preview" style="width: 100%; height: 120px; background: linear-gradient(135deg, #f8fafc, #e2e8f0); border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <img src="{{ 'Models/Women/Girl-Model.png' | asset_url }}" alt="Person 3 Context" style="max-width: 80%; max-height: 80%; object-fit: contain;">
+          </div>
+          <div class="grid-label" style="font-weight: 600; font-size: 14px; color: #374151;">Person 3 Context</div>
+        </div>
+
+        <!-- Grid Item: Person 4 Front -->
+        <div class="nt-mockup__grid-item" data-view="person4_front" style="background: white; border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.3s ease; border: 2px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <div class="grid-mockup-preview" style="width: 100%; height: 120px; background: linear-gradient(135deg, #f8fafc, #e2e8f0); border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <img src="{{ 'Models/Women/Girl-Model.png' | asset_url }}" alt="Person 4 Front" style="max-width: 80%; max-height: 80%; object-fit: contain;">
+          </div>
+          <div class="grid-label" style="font-weight: 600; font-size: 14px; color: #374151;">Person 4 Front</div>
+        </div>
+
+        <!-- Grid Item: Person 4 Back -->
+        <div class="nt-mockup__grid-item" data-view="person4_back" style="background: white; border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.3s ease; border: 2px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <div class="grid-mockup-preview" style="width: 100%; height: 120px; background: linear-gradient(135deg, #f8fafc, #e2e8f0); border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <img src="{{ 'Models/Women/Girl-Model.png' | asset_url }}" alt="Person 4 Back" style="max-width: 80%; max-height: 80%; object-fit: contain;">
+          </div>
+          <div class="grid-label" style="font-weight: 600; font-size: 14px; color: #374151;">Person 4 Back</div>
+        </div>
+
+        <!-- Grid Item: Person 4 Right Sleeve -->
+        <div class="nt-mockup__grid-item" data-view="person4_right" style="background: white; border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.3s ease; border: 2px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <div class="grid-mockup-preview" style="width: 100%; height: 120px; background: linear-gradient(135deg, #f8fafc, #e2e8f0); border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <img src="{{ 'Models/Women/Women-side.png' | asset_url }}" alt="Person 4 Right" style="max-width: 80%; max-height: 80%; object-fit: contain;">
+          </div>
+          <div class="grid-label" style="font-weight: 600; font-size: 14px; color: #374151;">Person 4 Right</div>
+        </div>
+
+        <!-- Grid Item: Person 4 Context -->
+        <div class="nt-mockup__grid-item" data-view="person4_context" style="background: white; border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.3s ease; border: 2px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <div class="grid-mockup-preview" style="width: 100%; height: 120px; background: linear-gradient(135deg, #f8fafc, #e2e8f0); border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <img src="{{ 'Models/Women/Girl-Model.png' | asset_url }}" alt="Person 4 Context" style="max-width: 80%; max-height: 80%; object-fit: contain;">
+          </div>
+          <div class="grid-label" style="font-weight: 600; font-size: 14px; color: #374151;">Person 4 Context</div>
+        </div>
+
+        <!-- Grid Item: Size Chart -->
+        <div class="nt-mockup__grid-item" data-view="size_chart" style="background: white; border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.3s ease; border: 2px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <div class="grid-mockup-preview" style="width: 100%; height: 120px; background: linear-gradient(135deg, #f8fafc, #e2e8f0); border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(45deg, #667eea, #764ba2); color: white; font-weight: bold; font-size: 16px; border-radius: 8px;">
+              📏 Size Chart
+            </div>
+          </div>
+          <div class="grid-label" style="font-weight: 600; font-size: 14px; color: #374151;">Size Chart</div>
+        </div>
+      </div>
+
+      <!-- Enhanced Preview Stage -->
+        <div class="nt-mockup__stage" style="width: 100%; display: grid; place-items: center; margin-top: 20px !important; margin-bottom: 100px !important; padding: 0 20px;">
+          <div class="nt-mockup__canvas" 
+               id="nt-mockup-canvas-{{ section.id }}"
+               style="position: relative; width: min(900px, 100%); max-width: 90vw; aspect-ratio: 1 / 1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; overflow: hidden; box-shadow: 0 25px 80px rgba(102, 126, 234, 0.3), 0 10px 30px rgba(0,0,0,0.2); cursor: grab; --overlay-top: 45%; --overlay-left: 25%; --overlay-width: 60%; --overlay-rotate: 0deg;">
+          
+      <!-- Base Mockup (swapped by JS) -->
+      <img
+        id="nt-base-{{ section.id }}"
+        class="nt-mockup__base"
+        src="{{ 'WFront_t-shirt.png' | asset_url }}"
+        alt="T-shirt mockup"
+        loading="eager"
+        decoding="async"
+        style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none;"
+        onerror="console.error('❌ Failed to load t-shirt image:', this.src);"
+        onload="console.log('✅ T-shirt image loaded:', this.src);"
+      >
+          
+          <!-- Debug: Test direct asset access -->
+          <div id="debug-assets-{{ section.id }}" style="position: absolute; top: -100px; left: -100px; width: 1px; height: 1px; overflow: hidden;">
+            <img src="{{ 'WFront_t-shirt.png' | asset_url }}" onload="console.log('✅ Direct asset test - WFront_t-shirt.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - WFront_t-shirt.png failed:', this.src);">
+            <img src="{{ 'Wback_t-shirt.png' | asset_url }}" onload="console.log('✅ Direct asset test - Wback_t-shirt.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - Wback_t-shirt.png failed:', this.src);">
+            <img src="{{ 'Models/Women/Girl-Model.png' | asset_url }}" onload="console.log('✅ Direct asset test - Girl-Model.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - Girl-Model.png failed:', this.src);">
+          </div>
+          
+          <!-- Dynamic Design Overlay -->
+          <div
+            id="nt-overlay-{{ section.id }}"
+            class="nt-mockup__overlay"
+            style="position: absolute; width: var(--overlay-width); left: var(--overlay-left); top: var(--overlay-top); transform: rotate(var(--overlay-rotate)); height: auto; inset: auto; display: flex; align-items: center; justify-content: center; cursor: grab; transition: all 0.1s ease; border: 2px dashed rgba(39, 225, 193, 0.3); border-radius: 8px; background: rgba(39, 225, 193, 0.05);"
+          >
+            <span id="nt-design-text-{{ section.id }}" 
+                  style="font-family: 'Bebas Neue', sans-serif; font-size: 32px; font-weight: bold; color: #000000; text-align: center; white-space: nowrap; user-select: none; text-shadow: 1px 1px 2px rgba(255,255,255,0.8); pointer-events: none;">
+              Your Design Here
+            </span>
+            
+            <!-- Drag Handle (only visible when dragging) -->
+            <div id="nt-drag-handle-{{ section.id }}" 
+                 style="position: absolute; top: -8px; right: -8px; width: 16px; height: 16px; background: #27e1c1; border: 2px solid white; border-radius: 50%; cursor: grab; display: none; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
+            </div>
+            
+            <!-- Resize Handles - All Directions (Mobile Optimized) -->
+            <!-- Top-Left -->
+            <div class="resize-handle" data-direction="nw" 
+                 style="position: absolute; top: -12px; left: -12px; width: 24px; height: 24px; background: #ff6b6b; border: 3px solid white; border-radius: 50%; cursor: nw-resize; display: block; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 10; touch-action: none;"
+                 title="Resize from top-left">
+            </div>
+            
+            <!-- Top-Right -->
+            <div class="resize-handle" data-direction="ne" 
+                 style="position: absolute; top: -12px; right: -12px; width: 24px; height: 24px; background: #ff6b6b; border: 3px solid white; border-radius: 50%; cursor: ne-resize; display: block; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 10; touch-action: none;"
+                 title="Resize from top-right">
+            </div>
+            
+            <!-- Bottom-Left -->
+            <div class="resize-handle" data-direction="sw" 
+                 style="position: absolute; bottom: -12px; left: -12px; width: 24px; height: 24px; background: #ff6b6b; border: 3px solid white; border-radius: 50%; cursor: sw-resize; display: block; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 10; touch-action: none;"
+                 title="Resize from bottom-left">
+            </div>
+            
+            <!-- Bottom-Right -->
+            <div class="resize-handle" data-direction="se" 
+                 style="position: absolute; bottom: -12px; right: -12px; width: 24px; height: 24px; background: #ff6b6b; border: 3px solid white; border-radius: 50%; cursor: se-resize; display: block; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 10; touch-action: none;"
+                 title="Resize from bottom-right">
+            </div>
+            
+            <!-- Side Handles (Mobile Optimized) -->
+            <!-- Top -->
+            <div class="resize-handle" data-direction="n" 
+                 style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); width: 24px; height: 24px; background: #4ecdc4; border: 3px solid white; border-radius: 50%; cursor: n-resize; display: block; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 10; touch-action: none;"
+                 title="Resize from top">
+            </div>
+            
+            <!-- Bottom -->
+            <div class="resize-handle" data-direction="s" 
+                 style="position: absolute; bottom: -12px; left: 50%; transform: translateX(-50%); width: 24px; height: 24px; background: #4ecdc4; border: 3px solid white; border-radius: 50%; cursor: s-resize; display: block; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 10; touch-action: none;"
+                 title="Resize from bottom">
+            </div>
+            
+            <!-- Left -->
+            <div class="resize-handle" data-direction="w" 
+                 style="position: absolute; left: -12px; top: 50%; transform: translateY(-50%); width: 24px; height: 24px; background: #4ecdc4; border: 3px solid white; border-radius: 50%; cursor: w-resize; display: block; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 10; touch-action: none;"
+                 title="Resize from left">
+            </div>
+            
+            <!-- Right -->
+            <div class="resize-handle" data-direction="e" 
+                 style="position: absolute; right: -12px; top: 50%; transform: translateY(-50%); width: 24px; height: 24px; background: #4ecdc4; border: 3px solid white; border-radius: 50%; cursor: e-resize; display: block; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 10; touch-action: none;"
+                 title="Resize from right">
+            </div>
+            
+          </div>
+          
+          <!-- Interactive Placement Guide (positioned above design when active) -->
+          <div id="nt-placement-guide-{{ section.id }}" 
+               style="position: absolute; inset: 0; pointer-events: none; z-index: 6; display: none;">
+            
+            <!-- Crosshairs with better visibility -->
             <div style="position: absolute; top: 50%; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, #ff6b6b, #ff6b6b, transparent); transform: translateY(-50%); box-shadow: 0 0 4px rgba(255, 107, 107, 0.5);"></div>
             <div style="position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, transparent, #ff6b6b, #ff6b6b, transparent); transform: translateX(-50%); box-shadow: 0 0 4px rgba(255, 107, 107, 0.5);"></div>
+            
+            <!-- Center circle with better visibility -->
             <div style="position: absolute; top: 50%; left: 50%; width: 24px; height: 24px; border: 3px solid #ff6b6b; border-radius: 50%; transform: translate(-50%, -50%); background: rgba(255, 107, 107, 0.2); box-shadow: 0 0 8px rgba(255, 107, 107, 0.6);"></div>
+            
+            <!-- Placement area indicator with better styling -->
             <div style="position: absolute; top: 20%; left: 20%; right: 20%; bottom: 20%; border: 3px dashed #4ecdc4; border-radius: 12px; background: rgba(78, 205, 196, 0.1); box-shadow: 0 0 12px rgba(78, 205, 196, 0.3);">
               <div style="position: absolute; top: 8px; left: 50%; transform: translateX(-50%); background: linear-gradient(45deg, #4ecdc4, #44a08d); color: white; padding: 6px 16px; border-radius: 8px; font-size: 13px; font-weight: 700; white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
                 🎯 Place Design Here
               </div>
             </div>
+            
+            <!-- Corner guides with better visibility -->
+            <div style="position: absolute; top: 15%; left: 15%; width: 12px; height: 12px; border: 2px solid #4ecdc4; border-radius: 50%; background: rgba(78, 205, 196, 0.3); box-shadow: 0 0 6px rgba(78, 205, 196, 0.5);"></div>
+            <div style="position: absolute; top: 15%; right: 15%; width: 12px; height: 12px; border: 2px solid #4ecdc4; border-radius: 50%; background: rgba(78, 205, 196, 0.3); box-shadow: 0 0 6px rgba(78, 205, 196, 0.5);"></div>
+            <div style="position: absolute; bottom: 15%; left: 15%; width: 12px; height: 12px; border: 2px solid #4ecdc4; border-radius: 50%; background: rgba(78, 205, 196, 0.3); box-shadow: 0 0 6px rgba(78, 205, 196, 0.5);"></div>
+            <div style="position: absolute; bottom: 15%; right: 15%; width: 12px; height: 12px; border: 2px solid #4ecdc4; border-radius: 50%; background: rgba(78, 205, 196, 0.3); box-shadow: 0 0 6px rgba(78, 205, 196, 0.5);"></div>
+            
+            <!-- Smart Centering Indicators -->
             <div id="nt-centering-indicators-{{ section.id }}" style="position: absolute; inset: 0; pointer-events: none;">
+              
+              <!-- Perfect Center Indicator -->
               <div id="nt-perfect-center-{{ section.id }}" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: none;">
                 <div style="width: 40px; height: 40px; border: 3px solid #10b981; border-radius: 50%; background: rgba(16, 185, 129, 0.2); box-shadow: 0 0 20px rgba(16, 185, 129, 0.8); animation: pulse 2s infinite;">
                   <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #10b981; font-size: 16px; font-weight: bold;">✓</div>
@@ -192,8 +438,14 @@ Key Improvements:
                   PERFECT CENTER
                 </div>
               </div>
+              
+              <!-- Horizontal Center Indicator -->
               <div id="nt-horizontal-center-{{ section.id }}" style="position: absolute; top: 50%; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, #f59e0b, #f59e0b, transparent); transform: translateY(-50%); display: none; box-shadow: 0 0 8px rgba(245, 158, 11, 0.6);"></div>
+              
+              <!-- Vertical Center Indicator -->
               <div id="nt-vertical-center-{{ section.id }}" style="position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, transparent, #f59e0b, #f59e0b, transparent); transform: translateX(-50%); display: none; box-shadow: 0 0 8px rgba(245, 158, 11, 0.6);"></div>
+              
+              <!-- Equidistant Indicators -->
               <div id="nt-equidistant-{{ section.id }}" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: none;">
                 <div style="width: 60px; height: 60px; border: 2px dashed #8b5cf6; border-radius: 50%; background: rgba(139, 92, 246, 0.1); box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);">
                   <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #8b5cf6; font-size: 14px; font-weight: bold;">⚖</div>
@@ -202,14 +454,23 @@ Key Improvements:
                   EQUIDISTANT
                 </div>
               </div>
-              <div id="nt-centering-status-{{ section.id }}" style="position: absolute; top: 10px; left: 10px; background: rgba(0, 0, 0, 0.8); color: white; padding: 8px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; display: none; max-width: 200px;" aria-live="polite">
+              
+              <!-- Status Messages -->
+              <div id="nt-centering-status-{{ section.id }}" style="position: absolute; top: 10px; left: 10px; background: rgba(0, 0, 0, 0.8); color: white; padding: 8px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; display: none; max-width: 200px;">
                 <div id="nt-status-text-{{ section.id }}"></div>
               </div>
             </div>
           </div>
+
+          <!-- Resize Handle (only visible when hovering over design) -->
+          <div id="nt-resize-handle-{{ section.id }}" 
+               style="position: absolute; bottom: -8px; right: -8px; width: 20px; height: 20px; background: #8b5cf6; border: 2px solid white; border-radius: 50%; cursor: nw-resize; display: none; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; border-right: 2px solid white; border-bottom: 2px solid white; transform: translate(-50%, -50%) rotate(45deg);"></div>
+          </div>
         </div>
+        
         <p class="nt-mockup__hint" style="color: #6b7280; font-size: 14px; margin-top: 16px; text-align: center;">
-          💡 Tip: Drag the design, use scroll wheel to resize, or use precise controls above. Add multiple layers!
+          💡 Tip: Drag the design to move it, use scroll wheel to resize, or use the precise controls above
         </p>
       </div>
     </div>
@@ -217,670 +478,1503 @@ Key Improvements:
 </section>
 
 <style>
-  :root {
-    --primary-color: #27e1c1;
-    --secondary-color: #ff4fa3;
-    --text-color: #374151;
-    --accent-color: #8b5cf6;
-    --transition-duration: 0.3s;
-    --shadow-sm: 0 2px 8px rgba(0,0,0,0.1);
-    --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
-    --shadow-lg: 0 8px 25px rgba(0,0,0,0.15);
+/* Enhanced Button Styles */
+.nt-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.nt-btn--view:hover:not(.is-active),
+.nt-btn--color:hover:not(.is-active) {
+  border-color: #27e1c1 !important;
+  background: #f0fdfa !important;
+  color: #27e1c1 !important;
+}
+
+.nt-btn--primary:hover {
+  background: linear-gradient(45deg, #059669, #047857) !important;
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+}
+
+.nt-btn--secondary:hover {
+  background: linear-gradient(45deg, #a855f7, #9333ea) !important;
+  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
+}
+
+.nt-btn--upload:hover {
+  background: linear-gradient(45deg, #d97706, #b45309) !important;
+  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
+}
+
+.file-type:hover {
+  background: #d1d5db !important;
+}
+
+.help-link:hover {
+  color: #1d4ed8 !important;
+}
+
+/* Enhanced Interactive Styles */
+.nt-mockup__overlay:hover {
+  cursor: grab !important;
+  box-shadow: 0 0 0 2px rgba(39, 225, 193, 0.3) !important;
+}
+
+.nt-mockup__overlay:active {
+  cursor: grabbing !important;
+}
+
+.nt-mockup__canvas.dragging {
+  cursor: grabbing !important;
+}
+
+
+.nt-placement-controls {
+  animation: slideInUp 0.3s ease;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { 
+    transform: translate(-50%, -50%) scale(1); 
+    opacity: 1; 
+  }
+  50% { 
+    transform: translate(-50%, -50%) scale(1.1); 
+    opacity: 0.8; 
+  }
+}
+
+.placement-slider input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.placement-slider input[type="range"]::-webkit-slider-track {
+  background: #e5e7eb;
+  height: 6px;
+  border-radius: 3px;
+}
+
+.placement-slider input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  background: #27e1c1;
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  cursor: pointer;
+}
+
+.placement-slider input[type="range"]::-moz-range-track {
+  background: #e5e7eb;
+  height: 6px;
+  border-radius: 3px;
+  border: none;
+}
+
+.placement-slider input[type="range"]::-moz-range-thumb {
+  background: #27e1c1;
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  cursor: pointer;
+}
+
+/* Grid Styles */
+.nt-mockup__grid-item {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nt-mockup__grid-item:hover {
+  transform: translateY(-2px);
+}
+
+.nt-mockup__grid-item.is-active {
+  transform: translateY(0);
+  box-shadow: 0 8px 25px rgba(39, 225, 193, 0.3) !important;
+}
+
+.grid-mockup-preview img {
+  transition: transform 0.3s ease;
+}
+
+.nt-mockup__grid-item:hover .grid-mockup-preview img {
+  transform: scale(1.05);
+}
+
+.nt-mockup__grid-item.is-active .grid-mockup-preview img {
+  transform: scale(1.02);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .nt-mockup__controls {
+    flex-direction: column !important;
+    gap: 15px !important;
+  }
+  
+  .nt-mockup__group {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+  
+  .nt-mockup__buttons {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+  }
+  
+  .mockup-header h2 {
+    font-size: 32px !important;
+  }
+  
+  .nt-mockup__canvas {
+    width: 100% !important;
+    max-width: 500px !important;
   }
 
-  .nt-btn {
-    padding: 12px 24px;
-    border: 2px solid var(--primary-color);
-    background: var(--primary-color);
-    color: white;
-    border-radius: 20px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all var(--transition-duration) ease;
-    touch-action: manipulation;
+  .nt-placement-controls {
+    margin: 10px 0 !important;
+    padding: 16px !important;
   }
 
-  .nt-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
+  .placement-slider {
+    margin-bottom: 12px !important;
   }
 
-  .nt-btn:focus {
-    outline: 3px solid var(--primary-color);
-    outline-offset: 2px;
-  }
-
-  .nt-btn--view:not(.is-active), .nt-btn--color:not(.is-active) {
-    border: 2px solid #e2e8f0;
-    background: white;
-    color: #64748b;
-  }
-
-  .nt-btn--view:hover:not(.is-active), .nt-btn--color:hover:not(.is-active) {
-    border-color: var(--primary-color);
-    background: #f0fdfa;
-    color: var(--primary-color);
-  }
-
-  .nt-btn--primary {
-    background: linear-gradient(45deg, #10b981, #059669);
-  }
-
-  .nt-btn--primary:hover {
-    background: linear-gradient(45deg, #059669, #047857);
-  }
-
-  .nt-btn--secondary {
-    background: linear-gradient(45deg, var(--accent-color), #a855f7);
-  }
-
-  .nt-btn--secondary:hover {
-    background: linear-gradient(45deg, #a855f7, #9333ea);
-  }
-
-  .nt-btn--upload {
-    background: linear-gradient(45deg, #f59e0b, #d97706);
-  }
-
-  .nt-btn--upload:hover {
-    background: linear-gradient(45deg, #d97706, #b45309);
-  }
-
-  .nt-btn--danger {
-    background: linear-gradient(45deg, #ef4444, #dc2626);
-  }
-
-  .file-type {
-    background: #e5e7eb;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 11px;
-  }
-
-  .file-type:hover {
-    background: #d1d5db;
-  }
-
-  .help-link {
-    background: none;
-    border: none;
-    color: #3b82f6;
-    cursor: pointer;
-    font-size: 11px;
-    text-decoration: underline;
-  }
-
-  .help-link:hover {
-    color: #1d4ed8;
-  }
-
-  .nt-mockup__overlay:hover {
-    box-shadow: 0 0 0 2px rgba(39, 225, 193, 0.3);
-  }
-
-  .nt-mockup__overlay:active {
-    cursor: grabbing;
-  }
-
-  .nt-mockup__canvas.dragging {
-    cursor: grabbing;
-  }
-
-  .placement-slider input[type="range"] {
-    -webkit-appearance: none;
-    appearance: none;
-    background: transparent;
-    cursor: pointer;
-    width: 100%;
-    height: 6px;
-  }
-
-  .placement-slider input[type="range"]::-webkit-slider-track {
-    background: #e5e7eb;
-    height: 6px;
-    border-radius: 3px;
-  }
-
-  .placement-slider input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    background: var(--primary-color);
-    height: 18px;
-    width: 18px;
-    border-radius: 50%;
-    border: 2px solid white;
-    box-shadow: var(--shadow-sm);
-  }
-
-  .placement-slider input[type="range"]:focus {
-    outline: 3px solid var(--primary-color);
-    outline-offset: 2px;
+  .nt-mockup__grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)) !important;
+    gap: 12px !important;
+    margin: 20px 0 !important;
+    padding: 0 10px !important;
   }
 
   .nt-mockup__grid-item {
-    background: white;
-    border-radius: 12px;
-    padding: 16px;
-    text-align: center;
-    cursor: pointer;
-    transition: all var(--transition-duration) cubic-bezier(0.4, 0, 0.2, 1);
-    border: 2px solid #e2e8f0;
-    box-shadow: var(--shadow-sm);
-  }
-
-  .nt-mockup__grid-item:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-  }
-
-  .nt-mockup__grid-item.is-active {
-    border-color: var(--primary-color);
-    box-shadow: 0 8px 25px rgba(39, 225, 193, 0.3);
+    padding: 12px !important;
   }
 
   .grid-mockup-preview {
-    width: 100%;
-    height: 120px;
-    background: linear-gradient(135deg, #f8fafc, #e2e8f0);
-    border-radius: 8px;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
+    height: 100px !important;
   }
 
-  .grid-mockup-preview img {
-    max-width: 80%;
-    max-height: 80%;
-    object-fit: contain;
-    transition: transform var(--transition-duration) ease;
+  .grid-label {
+    font-size: 12px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .nt-mockup__grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
   }
 
-  .nt-mockup__grid-item:hover .grid-mockup-preview img {
-    transform: scale(1.05);
+  .nt-mockup__grid-item {
+    padding: 8px !important;
   }
 
-  .nt-mockup__grid-item.is-active .grid-mockup-preview img {
-    transform: scale(1.02);
+  .grid-mockup-preview {
+    height: 80px !important;
   }
 
-  @media (max-width: 768px) {
-    .nt-mockup__controls {
-      flex-direction: column;
-      gap: 15px;
-    }
-
-    .nt-mockup__group {
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .nt-mockup__buttons {
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .mockup-header h2 {
-      font-size: 32px;
-    }
-
-    .nt-mockup__canvas {
-      width: 100%;
-      max-width: 500px;
-    }
-
-    .nt-btn {
-      padding: 12px 24px;
-    }
+  .grid-label {
+    font-size: 11px !important;
   }
+}
 
-  @keyframes pulse {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.1); opacity: 0.8; }
+/* Animation Classes */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mockup-header {
+  animation: fadeInUp 0.6s ease;
+}
+
+.nt-mockup__controls {
+  animation: fadeInUp 0.8s ease;
+}
+
+.nt-mockup__stage {
+  animation: fadeInUp 1s ease;
+}
 </style>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-  class LayerManager {
-    constructor(mockup) {
-      this.mockup = mockup;
-      this.layers = [];
-      this.maxLayers = 3;
-    }
-
-    addLayer(type, data) {
-      if (this.layers.length >= this.maxLayers) {
-        this.mockup.showMessage('Maximum 3 layers reached', 'error');
-        return false;
+document.addEventListener('DOMContentLoaded', function() {
+  const mockup = {
+    // Mockup images mapping
+    mockupImages: {
+      front: {
+        white: "{{ 'WFront_t-shirt.png' | asset_url }}",
+        black: "{{ 'WFront_t-shirt.png' | asset_url }}",
+        pink: "{{ 'WFront_t-shirt.png' | asset_url }}",
+        blue: "{{ 'WFront_t-shirt.png' | asset_url }}"
+      },
+      back: {
+        white: "{{ 'Wback_t-shirt.png' | asset_url }}",
+        black: "{{ 'Wback_t-shirt.png' | asset_url }}",
+        pink: "{{ 'Wback_t-shirt.png' | asset_url }}",
+        blue: "{{ 'Wback_t-shirt.png' | asset_url }}"
+      },
+      folded: {
+        white: "{{ 'W3-D_t-shirt.png' | asset_url }}",
+        black: "{{ 'W3-D_t-shirt.png' | asset_url }}",
+        pink: "{{ 'W3-D_t-shirt.png' | asset_url }}",
+        blue: "{{ 'W3-D_t-shirt.png' | asset_url }}"
+      },
+      hanging: {
+        white: "{{ 'W3-D_t-shirt.png' | asset_url }}",
+        black: "{{ 'W3-D_t-shirt.png' | asset_url }}",
+        pink: "{{ 'W3-D_t-shirt.png' | asset_url }}",
+        blue: "{{ 'W3-D_t-shirt.png' | asset_url }}"
+      },
+      person1: {
+        white: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        black: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        pink: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        blue: "{{ 'Models/Women/Girl-Model.png' | asset_url }}"
+      },
+      person2: {
+        white: "{{ 'Models/Women/Women-side.png' | asset_url }}",
+        black: "{{ 'Models/Women/Women-side.png' | asset_url }}",
+        pink: "{{ 'Models/Women/Women-side.png' | asset_url }}",
+        blue: "{{ 'Models/Women/Women-side.png' | asset_url }}"
+      },
+      person3_front: {
+        white: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        black: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        pink: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        blue: "{{ 'Models/Women/Girl-Model.png' | asset_url }}"
+      },
+      person3_back: {
+        white: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        black: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        pink: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        blue: "{{ 'Models/Women/Girl-Model.png' | asset_url }}"
+      },
+      person3_left: {
+        white: "{{ 'Models/Women/Women-side.png' | asset_url }}",
+        black: "{{ 'Models/Women/Women-side.png' | asset_url }}",
+        pink: "{{ 'Models/Women/Women-side.png' | asset_url }}",
+        blue: "{{ 'Models/Women/Women-side.png' | asset_url }}"
+      },
+      person3_context: {
+        white: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        black: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        pink: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        blue: "{{ 'Models/Women/Girl-Model.png' | asset_url }}"
+      },
+      person4_front: {
+        white: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        black: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        pink: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        blue: "{{ 'Models/Women/Girl-Model.png' | asset_url }}"
+      },
+      person4_back: {
+        white: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        black: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        pink: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        blue: "{{ 'Models/Women/Girl-Model.png' | asset_url }}"
+      },
+      person4_right: {
+        white: "{{ 'Models/Women/Women-side.png' | asset_url }}",
+        black: "{{ 'Models/Women/Women-side.png' | asset_url }}",
+        pink: "{{ 'Models/Women/Women-side.png' | asset_url }}",
+        blue: "{{ 'Models/Women/Women-side.png' | asset_url }}"
+      },
+      person4_context: {
+        white: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        black: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        pink: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        blue: "{{ 'Models/Women/Girl-Model.png' | asset_url }}"
+      },
+      size_chart: {
+        white: "{{ 'WFront_t-shirt.png' | asset_url }}",
+        black: "{{ 'WFront_t-shirt.png' | asset_url }}",
+        pink: "{{ 'WFront_t-shirt.png' | asset_url }}",
+        blue: "{{ 'WFront_t-shirt.png' | asset_url }}"
       }
-      const layer = {
-        id: `layer-${Date.now()}`,
-        type,
-        topPct: this.mockup.placementState.topPct,
-        leftPct: this.mockup.placementState.leftPct,
-        widthPct: this.mockup.placementState.widthPct,
-        rotateDeg: this.mockup.placementState.rotateDeg,
-        flipHorizontal: this.mockup.placementState.flipHorizontal,
-        flipVertical: this.mockup.placementState.flipVertical,
-        ...data
-      };
-      this.layers.push(layer);
-      this.mockup.renderLayer(layer);
-      this.mockup.logInteraction(`Layer Added: ${layer.id}`);
-      return true;
-    }
+    },
+    
+      // Current base mockup image
+      baseMockup: "{{ 'WFront_t-shirt.png' | asset_url }}",
 
-    removeLayer(layerId) {
-      const overlay = document.getElementById(`nt-overlay-${layerId}-${this.mockup.sectionId}`);
-      if (overlay) overlay.remove();
-      this.layers = this.layers.filter(layer => layer.id !== layerId);
-      this.mockup.updateLayersUI();
-      this.mockup.logInteraction(`Layer Removed: ${layerId}`);
-    }
+    // Current design state
+    designState: {
+      text: 'Your Design Here',
+      fontSize: 32,
+      fontFamily: "'Bebas Neue', sans-serif",
+      textColor: '#000000',
+      shirtColor: 'white',
+      effect: 'none'
+    },
 
-    updateLayer(layerId, updates) {
-      const layer = this.layers.find(l => l.id === layerId);
-      if (layer) {
-        Object.assign(layer, updates);
-        this.mockup.renderLayer(layer);
-      }
-    }
-  }
+    // Current view state
+    state: { view: "front", color: "white" },
 
-  class InteractiveMockup {
-    constructor(sectionId) {
-      this.sectionId = sectionId;
-      this.layerManager = new LayerManager(this);
-      this.state = {
-        view: 'front',
-        color: 'white'
-      };
-      this.placementState = {
-        topPct: {{ section.settings.overlay_top }},
-        leftPct: {{ section.settings.overlay_left }},
-        widthPct: {{ section.settings.overlay_width }},
-        rotateDeg: {{ section.settings.overlay_rotate }},
-        scalePct: 100,
-        flipHorizontal: false,
-        flipVertical: false,
-        dragging: false,
-        resizing: false,
-        pinching: false,
-        hasUploadedDesign: false,
-        activeLayer: null
-      };
-      this.elements = this.cacheElements();
-      this.currentUploadPreview = null;
-      this.currentSizeChart = null;
-      this.init();
-    }
-
-    cacheElements() {
-      return {
-        canvas: document.getElementById(`nt-mockup-canvas-${this.sectionId}`),
-        baseImg: document.getElementById(`nt-base-${this.sectionId}`),
-        overlaysContainer: document.querySelector(`#nt-mockup-${this.sectionId} .nt-mockup__overlays`),
-        grid: document.querySelector(`#nt-mockup-${this.sectionId} .nt-mockup__grid`),
-        layersList: document.getElementById(`nt-layers-list-${this.sectionId}`),
-        viewButtons: document.querySelectorAll(`#nt-mockup-${this.sectionId} .nt-btn--view`),
-        colorButtons: document.querySelectorAll(`#nt-mockup-${this.sectionId} .nt-btn--color`),
-        sliders: {
-          top: document.getElementById(`nt-top-${this.sectionId}`),
-          left: document.getElementById(`nt-left-${this.sectionId}`),
-          width: document.getElementById(`nt-width-${this.sectionId}`),
-          rotate: document.getElementById(`nt-rotate-${this.sectionId}`),
-          scale: document.getElementById(`nt-mockup-scale-${this.sectionId}`)
-        },
-        actions: {
-          upload: document.getElementById(`nt-upload-${this.sectionId}`),
-          fileInput: document.getElementById(`nt-file-input-${this.sectionId}`),
-          download: document.getElementById(`nt-download-${this.sectionId}`),
-          edit: document.getElementById(`nt-edit-${this.sectionId}`),
-          remove: document.getElementById(`nt-remove-${this.sectionId}`),
-          help: document.getElementById(`nt-help-${this.sectionId}`),
-          autoEquidistant: document.getElementById(`nt-auto-equidistant-${this.sectionId}`),
-          autoCenter: document.getElementById(`nt-auto-center-${this.sectionId}`),
-          flipHorizontal: document.getElementById(`nt-flip-horizontal-${this.sectionId}`),
-          flipVertical: document.getElementById(`nt-flip-vertical-${this.sectionId}`),
-          reset: document.getElementById(`nt-reset-placement-${this.sectionId}`),
-          toggleGuide: document.getElementById(`nt-toggle-guide-${this.sectionId}`),
-          zoomIn: document.getElementById(`nt-zoom-in-${this.sectionId}`),
-          zoomOut: document.getElementById(`nt-zoom-out-${this.sectionId}`)
-        }
-      };
-    }
+    // Enhanced placement state - Initialize with centered values
+    placementState: {
+      topPct: 45,
+      leftPct: 25,
+      widthPct: 60,
+      rotateDeg: 0,
+      dragging: false,
+      resizing: false,
+      resizeDirection: 'se',
+      lastX: 0,
+      lastY: 0,
+      hasUploadedDesign: false
+    },
 
     init() {
-      this.generateGridItems();
+      console.log('🎯 Initializing Enhanced Interactive Mockup...');
+      console.log('📍 Current placement values:', {
+        top: this.placementState.topPct,
+        left: this.placementState.leftPct,
+        width: this.placementState.widthPct,
+        rotate: this.placementState.rotateDeg
+      });
+      console.log('📁 Available mockup images:', this.mockupImages);
+      console.log('🖼️ Base mockup:', this.baseMockup);
+      
       this.bindEvents();
-      this.lazyLoadImages();
+      this.loadFromCustomizer();
+      this.updateBase();
+      this.updateDesign();
+      this.updatePlacementDisplay();
+      
+      // Force override positioning after a short delay
+      setTimeout(() => {
+        this.forceCenterPositioning();
+      }, 100);
+      
+      // Show placement controls by default for testing
+      this.showPlacementControls();
+      console.log('✅ Mockup initialized with placement controls visible');
+    },
+
+    forceCenterPositioning() {
+      console.log('🔧 Applying centered positioning...');
+      // Update the placement state to centered values
+      this.placementState.topPct = 45;
+      this.placementState.leftPct = 25;
+      this.placementState.widthPct = 60;
+      this.placementState.rotateDeg = 0;
+      
+      // Update the display and position
+      this.updatePlacementDisplay();
       this.updateDesignPosition();
-      this.updateLayersUI();
-      this.logInteraction('Mockup Initialized');
-    }
+      
+      // Update the sliders to reflect the new values
+      const topSlider = document.getElementById(`nt-top-{{ section.id }}`);
+      const leftSlider = document.getElementById(`nt-left-{{ section.id }}`);
+      const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
+      const rotateSlider = document.getElementById(`nt-rotate-{{ section.id }}`);
+      
+      if (topSlider) topSlider.value = 40;
+      if (leftSlider) leftSlider.value = 30;
+      if (widthSlider) widthSlider.value = 50;
+      if (rotateSlider) rotateSlider.value = 0;
+      
+      console.log('✅ Centered positioning applied:', {
+        top: '40%',
+        left: '30%',
+        width: '50%',
+        rotate: '0deg'
+      });
+    },
 
     bindEvents() {
-      this.elements.viewButtons.forEach(btn => {
-        btn.addEventListener('click', () => this.changeView(btn.dataset.view));
-        btn.addEventListener('keydown', e => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            this.changeView(btn.dataset.view);
-          }
-        });
-      });
-      this.elements.colorButtons.forEach(btn => {
-        btn.addEventListener('click', () => this.changeColor(btn.dataset.color));
-        btn.addEventListener('keydown', e => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            this.changeColor(btn.dataset.color);
-          }
+      const rootId = "nt-mockup-{{ section.id }}";
+      
+      // Bind view buttons
+      const viewBtns = Array.from(document.querySelectorAll(`#${rootId} .nt-btn--view`));
+      viewBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          console.log('🖱️ View button clicked:', btn.dataset.view);
+          this.state.view = btn.dataset.view;
+          console.log('🔄 State updated to:', this.state);
+          this.setActive(viewBtns, this.state.view);
+          this.updateBase();
         });
       });
 
-      this.elements.actions.fileInput?.addEventListener('change', this.handleUpload.bind(this));
-      this.elements.actions.download?.addEventListener('click', this.downloadComposite.bind(this));
-      this.elements.actions.help?.addEventListener('click', this.showHelpModal.bind(this));
-      this.elements.actions.remove?.addEventListener('click', this.removeDesign.bind(this));
-      this.elements.actions.autoEquidistant?.addEventListener('click', this.autoEquidistant.bind(this));
-      this.elements.actions.autoCenter?.addEventListener('click', this.autoCenter.bind(this));
-      this.elements.actions.flipHorizontal?.addEventListener('click', () => this.flipDesign('horizontal'));
-      this.elements.actions.flipVertical?.addEventListener('click', () => this.flipDesign('vertical'));
-      this.elements.actions.reset?.addEventListener('click', this.resetPlacement.bind(this));
-      this.elements.actions.toggleGuide?.addEventListener('click', this.togglePlacementGuide.bind(this));
-      this.elements.actions.zoomIn?.addEventListener('click', () => this.updateMockupScale(this.placementState.scalePct + 5));
-      this.elements.actions.zoomOut?.addEventListener('click', () => this.updateMockupScale(this.placementState.scalePct - 5));
-
-      Object.entries(this.elements.sliders).forEach(([key, slider]) => {
-        slider.addEventListener('input', this.debounce(e => {
-          this.placementState[key + 'Pct'] = parseFloat(e.target.value);
-          this.updatePlacementDisplay();
-          this.updateDesignPosition();
-        }, 100));
-        slider.addEventListener('keydown', e => {
-          if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
-            slider.value = parseFloat(slider.value) - slider.step;
-          } else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
-            slider.value = parseFloat(slider.value) + slider.step;
-          }
-          this.placementState[key + 'Pct'] = parseFloat(slider.value);
-          this.updatePlacementDisplay();
-          this.updateDesignPosition();
+      // Bind color buttons
+      const colorBtns = Array.from(document.querySelectorAll(`#${rootId} .nt-btn--color`));
+      colorBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          this.state.color = btn.dataset.color;
+          this.setActive(colorBtns, this.state.color);
+          this.updateBase();
         });
       });
 
+      // Bind edit button
+      const editBtn = document.getElementById(`nt-edit-{{ section.id }}`);
+      if (editBtn) {
+        editBtn.addEventListener("click", () => {
+          this.scrollToCustomizer();
+        });
+      }
+
+      // Bind remove button
+      const removeBtn = document.getElementById(`nt-remove-{{ section.id }}`);
+      if (removeBtn) {
+        removeBtn.addEventListener("click", () => {
+          this.removeDesign();
+        });
+      }
+
+      // Bind upload button and file input
+      const uploadBtn = document.getElementById(`nt-upload-{{ section.id }}`);
+      const fileInput = document.getElementById(`nt-file-input-{{ section.id }}`);
+      
+      if (uploadBtn && fileInput) {
+        // Click upload button triggers file input
+        uploadBtn.addEventListener("click", (e) => {
+          if (e.target === uploadBtn) {
+            fileInput.click();
+          }
+        });
+
+        // Handle file selection
+        fileInput.addEventListener("change", (e) => {
+          const file = e.target.files[0];
+          if (file) {
+            this.handleFileUpload(file);
+          }
+        });
+      }
+
+      // Bind help button
+      const helpBtn = document.getElementById(`nt-help-{{ section.id }}`);
+      if (helpBtn) {
+        helpBtn.addEventListener("click", () => {
+          this.showHelpModal();
+        });
+      }
+
+      // Bind placement controls
+      this.bindPlacementControls();
+
+      // Bind mockup size controls
+      this.bindMockupSizeControls();
+
+      // Bind placement guide controls
+      this.bindPlacementGuideControls();
+
+      // Bind grid interactions
+      this.bindGridInteractions();
+
+      // Bind drag/resize functionality
       this.bindDragResize();
-    }
 
-    generateGridItems() {
-      const views = [
-        { view: 'front', img: 'WFront_t-shirt.png', label: 'Front' },
-        { view: 'back', img: 'Wback_t-shirt.png', label: 'Back' },
-        { view: 'hanging', img: 'W3-D_t-shirt.png', label: 'Folded' },
-        { view: 'person1', img: 'Models/Women/Girl-Model.png', label: 'Person 1' },
-        { view: 'person2', img: 'Models/Women/Women-side.png', label: 'Person 2' },
-        { view: 'person3_front', img: 'Models/Women/Girl-Model.png', label: 'Person 3 Front' },
-        { view: 'person3_back', img: 'Models/Women/Girl-Model.png', label: 'Person 3 Back' },
-        { view: 'person3_left', img: 'Models/Women/Women-side.png', label: 'Person 3 Left' },
-        { view: 'person3_context', img: 'Models/Women/Girl-Model.png', label: 'Person 3 Context' },
-        { view: 'person4_front', img: 'Models/Women/Girl-Model.png', label: 'Person 4 Front' },
-        { view: 'person4_back', img: 'Models/Women/Girl-Model.png', label: 'Person 4 Back' },
-        { view: 'person4_right', img: 'Models/Women/Women-side.png', label: 'Person 4 Right' },
-        { view: 'person4_context', img: 'Models/Women/Girl-Model.png', label: 'Person 4 Context' },
-        { view: 'size_chart', img: null, label: 'Size Chart', isPlaceholder: true }
-      ];
-      views.forEach(({ view, img, label, isPlaceholder }) => {
-        const item = document.createElement('div');
-        item.classList.add('nt-mockup__grid-item');
-        item.dataset.view = view;
-        item.setAttribute('tabindex', '0');
-        item.innerHTML = `
-          <div class="grid-mockup-preview">
-            ${isPlaceholder ? 
-              `<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(45deg, #667eea, #764ba2); color: white; font-weight: bold; font-size: 16px; border-radius: 8px;">📏 Size Chart</div>` :
-              `<img data-src="{{ img | asset_url }}" alt="${label}" loading="lazy">`
-            }
-          </div>
-          <div class="grid-label">${label}</div>
-        `;
-        item.addEventListener('click', () => this.changeView(view));
-        item.addEventListener('keydown', e => {
-          if (e.key === 'Enter' || e.key === ' ') {
+      {% if section.settings.allow_download %}
+      // Bind download button
+      const downloadBtn = document.getElementById(`nt-download-{{ section.id }}`);
+      if (downloadBtn) {
+        downloadBtn.addEventListener("click", () => {
+          this.downloadComposite();
+        });
+      }
+      {% endif %}
+
+      // Listen for customizer updates
+      this.setupCustomizerListener();
+
+      // Add keyboard shortcuts for resizing
+      document.addEventListener('keydown', (e) => {
+        if (e.target.closest(`#nt-mockup-{{ section.id }}`)) {
+          if (e.key === '+' || e.key === '=') {
             e.preventDefault();
-            this.changeView(view);
+            this.placementState.widthPct = Math.min(100, this.placementState.widthPct + 5);
+            this.updatePlacementDisplay();
+            this.updateDesignPosition();
+            const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
+            if (widthSlider) widthSlider.value = this.placementState.widthPct;
+            console.log('⌨️ Keyboard resize +, new width:', this.placementState.widthPct + '%');
+          } else if (e.key === '-') {
+            e.preventDefault();
+            this.placementState.widthPct = Math.max(10, this.placementState.widthPct - 5);
+            this.updatePlacementDisplay();
+            this.updateDesignPosition();
+            const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
+            if (widthSlider) widthSlider.value = this.placementState.widthPct;
+            console.log('⌨️ Keyboard resize -, new width:', this.placementState.widthPct + '%');
           }
-        });
-        this.elements.grid.appendChild(item);
-      });
-      this.setActiveGridItem(this.elements.grid.querySelector(`[data-view="${this.state.view}"]`));
-    }
-
-    lazyLoadImages() {
-      const images = this.elements.grid.querySelectorAll('img[data-src]');
-      const observer = new IntersectionObserver((entries, obs) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const img = entry.target;
-            img.src = img.dataset.src;
-            img.onload = () => this.logInteraction(`Image Loaded: ${img.src}`);
-            img.onerror = () => this.handleImageError(img);
-            obs.unobserve(img);
-          }
-        });
-      }, { rootMargin: '100px' });
-      images.forEach(img => observer.observe(img));
-    }
-
-    handleImageError(img) {
-      img.src = '{{ 'fallback_t-shirt.png' | asset_url }}';
-      this.showMessage('Failed to load image, using fallback', 'error');
-    }
-
-    changeView(view) {
-      if (view === 'size_chart') {
-        this.showSizeChart();
-        return;
-      }
-      this.state.view = view;
-      this.elements.baseImg.src = this.getViewImage(view);
-      this.updateViewButtons();
-      this.setActiveGridItem(this.elements.grid.querySelector(`[data-view="${view}"]`));
-      this.logInteraction(`View Changed: ${view}`);
-    }
-
-    getViewImage(view) {
-      const viewImages = {
-        front: '{{ 'WFront_t-shirt.png' | asset_url }}',
-        back: '{{ 'Wback_t-shirt.png' | asset_url }}',
-        hanging: '{{ 'W3-D_t-shirt.png' | asset_url }}',
-        person1: '{{ 'Models/Women/Girl-Model.png' | asset_url }}',
-        person2: '{{ 'Models/Women/Women-side.png' | asset_url }}',
-        person3_front: '{{ 'Models/Women/Girl-Model.png' | asset_url }}',
-        person3_back: '{{ 'Models/Women/Girl-Model.png' | asset_url }}',
-        person3_left: '{{ 'Models/Women/Women-side.png' | asset_url }}',
-        person3_context: '{{ 'Models/Women/Girl-Model.png' | asset_url }}',
-        person4_front: '{{ 'Models/Women/Girl-Model.png' | asset_url }}',
-        person4_back: '{{ 'Models/Women/Girl-Model.png' | asset_url }}',
-        person4_right: '{{ 'Models/Women/Women-side.png' | asset_url }}',
-        person4_context: '{{ 'Models/Women/Girl-Model.png' | asset_url }}'
-      };
-      const imagePath = viewImages[view] || 'WFront_t-shirt.png';
-      return viewImages[view] || '{{ 'WFront_t-shirt.png' | asset_url }}';
-    }
-
-    changeColor(color) {
-      this.state.color = color;
-      this.elements.colorButtons.forEach(btn => {
-        const isActive = btn.dataset.color === color;
-        btn.classList.toggle('is-active', isActive);
-        btn.style.borderColor = isActive ? '#27e1c1' : '#e2e8f0';
-        btn.style.background = isActive ? '#27e1c1' : 'white';
-        btn.style.color = isActive ? 'white' : '#64748b';
-        btn.setAttribute('aria-selected', isActive);
-      });
-      this.logInteraction(`Color Changed: ${color}`);
-    }
-
-    updateViewButtons() {
-      const viewMapping = {
-        person3_front: 'person1', person3_back: 'person1', person3_left: 'person1', person3_context: 'person1',
-        person4_front: 'person2', person4_back: 'person2', person4_right: 'person2', person4_context: 'person2',
-        folded: 'hanging'
-      };
-      const buttonView = viewMapping[this.state.view] || this.state.view;
-      this.elements.viewButtons.forEach(btn => {
-        const isActive = btn.dataset.view === buttonView;
-        btn.classList.toggle('is-active', isActive);
-        btn.style.borderColor = isActive ? '#27e1c1' : '#e2e8f0';
-        btn.style.background = isActive ? '#27e1c1' : 'white';
-        btn.style.color = isActive ? 'white' : '#64748b';
-        btn.setAttribute('aria-selected', isActive);
-      });
-    }
-
-    setActiveGridItem(activeItem) {
-      this.elements.grid.querySelectorAll('.nt-mockup__grid-item').forEach(item => {
-        const isActive = item === activeItem;
-        item.classList.toggle('is-active', isActive);
-        item.style.borderColor = isActive ? '#27e1c1' : '#e2e8f0';
-        item.style.boxShadow = isActive ? '0 8px 25px rgba(39, 225, 193, 0.3)' : '0 2px 8px rgba(0,0,0,0.1)';
-      });
-    }
-
-    handleUpload(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      if (!['image/png', 'image/jpeg', 'image/svg+xml', 'application/pdf'].includes(file.type)) {
-        this.showMessage('Unsupported file type', 'error');
-        return;
-      }
-      if (file.size > 10 * 1024 * 1024) {
-        this.showMessage('File too large (max 10MB)', 'error');
-        return;
-      }
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (this.layerManager.addLayer('image', { src: reader.result })) {
-          this.placementState.hasUploadedDesign = true;
-          this.elements.actions.remove.style.display = 'block';
-          this.updateLayersUI();
         }
-      };
-      reader.onerror = () => this.showMessage('Failed to read file', 'error');
-      reader.readAsDataURL(file);
-      this.logInteraction('File Uploaded');
-    }
+      });
+    },
 
-    renderLayer(layer) {
-      let overlay = document.getElementById(`nt-overlay-${layer.id}-${this.sectionId}`);
-      if (!overlay) {
-        overlay = document.createElement('div');
-        overlay.id = `nt-overlay-${layer.id}-${this.sectionId}`;
-        overlay.classList.add('nt-mockup__overlay');
-        this.elements.overlaysContainer.appendChild(overlay);
+    setActive(buttons, active) {
+      buttons.forEach(b => {
+        const on = (b.dataset.view || b.dataset.color) === active;
+        if (on) {
+          b.classList.add("is-active");
+          b.style.borderColor = "#27e1c1";
+          b.style.background = "#27e1c1";
+          b.style.color = "white";
+        } else {
+          b.classList.remove("is-active");
+          b.style.borderColor = "#e2e8f0";
+          b.style.background = "white";
+          b.style.color = "#64748b";
+        }
+        b.setAttribute("aria-selected", on ? "true" : "false");
+      });
+    },
+
+    updateBase() {
+      const baseEl = document.getElementById("nt-base-{{ section.id }}");
+      if (baseEl) {
+        // Get the appropriate mockup image based on current view and color
+        const mockupImage = this.mockupImages[this.state.view]?.[this.state.color] || 
+                           this.mockupImages[this.state.view]?.white ||
+                           this.mockupImages.front?.white ||
+                           this.baseMockup;
+        
+        console.log('🔄 Loading mockup image:', mockupImage, 'for view:', this.state.view, 'color:', this.state.color);
+        console.log('🔍 Available mockup images:', this.mockupImages);
+        console.log('🔍 Current state:', this.state);
+        
+        // Add error handling
+        baseEl.onerror = () => {
+          console.error('❌ Failed to load mockup image:', mockupImage);
+          console.error('❌ Image URL:', baseEl.src);
+          this.createFallbackTshirt();
+        };
+        
+        baseEl.onload = () => {
+          console.log('✅ Mockup image loaded successfully:', baseEl.src);
+          // Remove any existing fallback when real image loads
+          const existingFallback = document.querySelector('.fallback-tshirt');
+          if (existingFallback) {
+            existingFallback.remove();
+          }
+        };
+        
+        // Force reload by setting src to empty first
+        baseEl.src = '';
+        setTimeout(() => {
+          baseEl.src = mockupImage;
+        }, 10);
+      } else {
+        console.error('❌ Base element not found:', "nt-base-{{ section.id }}");
       }
-      overlay.innerHTML = layer.type === 'image' && layer.src ?
-        `<img src="${layer.src}" alt="Uploaded design" style="width: 100%; height: auto; object-fit: contain; pointer-events: none;">` :
-        `<span style="font-family: 'Bebas Neue', sans-serif; font-size: 32px; font-weight: bold; color: #000000; text-align: center; white-space: nowrap; user-select: none; text-shadow: 1px 1px 2px rgba(255,255,255,0.8); pointer-events: none;">Your Design Here</span>`;
-      Object.assign(overlay.style, {
-        position: 'absolute',
-        width: `${layer.widthPct}%`,
-        left: `${layer.leftPct}%`,
-        top: `${layer.topPct}%`,
-        transform: `rotate(${layer.rotateDeg}deg) ${layer.flipHorizontal ? 'scaleX(-1)' : ''} ${layer.flipVertical ? 'scaleY(-1)' : ''}`,
-        height: 'auto',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        cursor: 'grab',
-        transition: 'all 0.1s ease',
-        border: '2px dashed rgba(39, 225, 193, 0.3)',
-        borderRadius: '8px',
-        background: 'rgba(39, 225, 193, 0.05)'
-      });
-      overlay.addEventListener('mousedown', e => this.startDrag(e, layer.id));
-      overlay.addEventListener('touchstart', e => {
-        e.preventDefault();
-        if (e.touches.length === 1) this.startDrag(e.touches[0], layer.id);
-        else if (e.touches.length === 2) this.startPinch(e, layer.id);
-      }, { passive: false });
-    }
+    },
 
-    updateLayersUI() {
-      if (!this.elements.layersList) return;
-      this.elements.layersList.innerHTML = '';
-      this.layerManager.layers.forEach(layer => {
-        const layerItem = document.createElement('div');
-        layerItem.style.cssText = 'display: flex; gap: 4px; align-items: center;';
-        layerItem.innerHTML = `
-          <span style="font-size: 12px; color: var(--text-color);">${layer.id}</span>
-          <button style="padding: 4px 8px; font-size: 12px; background: #ef4444; color: white; border: none; border-radius: 4px;">Remove</button>
-        `;
-        layerItem.querySelector('button').addEventListener('click', () => this.layerManager.removeLayer(layer.id));
-        this.elements.layersList.appendChild(layerItem);
+    createFallbackTshirt() {
+      const canvas = document.getElementById(`nt-mockup-canvas-{{ section.id }}`);
+      if (!canvas) return;
+      
+      // Remove existing fallback
+      const existingFallback = canvas.querySelector('.fallback-tshirt');
+      if (existingFallback) {
+        existingFallback.remove();
+      }
+      
+      // Create fallback t-shirt shape
+      const fallback = document.createElement('div');
+      fallback.className = 'fallback-tshirt';
+      fallback.style.cssText = `
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, #f8f9fa, #e9ecef);
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Bebas Neue', sans-serif;
+        color: #6c757d;
+        text-align: center;
+      `;
+      
+      // Create t-shirt shape
+      const tshirtShape = document.createElement('div');
+      tshirtShape.style.cssText = `
+        width: 60%;
+        height: 70%;
+        background: #ffffff;
+        border: 3px solid #dee2e6;
+        border-radius: 20px 20px 8px 8px;
+        position: relative;
+        margin-bottom: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      `;
+      
+      // Add sleeves
+      const leftSleeve = document.createElement('div');
+      leftSleeve.style.cssText = `
+        position: absolute;
+        left: -20px;
+        top: 20%;
+        width: 15px;
+        height: 40%;
+        background: #ffffff;
+        border: 3px solid #dee2e6;
+        border-radius: 0 8px 8px 0;
+      `;
+      
+      const rightSleeve = document.createElement('div');
+      rightSleeve.style.cssText = `
+        position: absolute;
+        right: -20px;
+        top: 20%;
+        width: 15px;
+        height: 40%;
+        background: #ffffff;
+        border: 3px solid #dee2e6;
+        border-radius: 8px 0 0 8px;
+      `;
+      
+      tshirtShape.appendChild(leftSleeve);
+      tshirtShape.appendChild(rightSleeve);
+      
+      const label = document.createElement('div');
+      label.style.cssText = `
+        font-size: 14px;
+        text-align: center;
+        color: #6c757d;
+      `;
+      label.textContent = 'T-shirt Mockup';
+      
+      fallback.appendChild(tshirtShape);
+      fallback.appendChild(label);
+      
+      canvas.appendChild(fallback);
+      console.log('🔄 Created fallback t-shirt shape');
+    },
+
+    updateDesign() {
+      const designText = document.getElementById("nt-design-text-{{ section.id }}");
+      if (designText) {
+        designText.textContent = this.designState.text;
+        designText.style.fontFamily = this.designState.fontFamily;
+        designText.style.fontSize = this.designState.fontSize + 'px';
+        designText.style.color = this.designState.textColor;
+
+        // Apply text effects
+        switch (this.designState.effect) {
+          case 'outline':
+            designText.style.webkitTextStroke = `2px ${this.designState.textColor}`;
+            designText.style.webkitTextFillColor = 'transparent';
+            break;
+          case 'shadow':
+            designText.style.textShadow = '2px 2px 4px rgba(0,0,0,0.5)';
+            designText.style.webkitTextStroke = 'none';
+            designText.style.webkitTextFillColor = this.designState.textColor;
+            break;
+          case 'gradient':
+            designText.style.background = 'linear-gradient(45deg, #27e1c1, #ff4fa3)';
+            designText.style.webkitBackgroundClip = 'text';
+            designText.style.webkitTextFillColor = 'transparent';
+            designText.style.webkitTextStroke = 'none';
+            break;
+          default:
+            designText.style.textShadow = '1px 1px 2px rgba(255,255,255,0.8)';
+            designText.style.webkitTextStroke = 'none';
+            designText.style.webkitTextFillColor = this.designState.textColor;
+        }
+      }
+    },
+
+    loadFromCustomizer() {
+      // Try to load design from customizer if available
+      if (window.customizer && window.customizer.state) {
+        this.designState = { ...this.designState, ...window.customizer.state };
+        this.updateDesign();
+      }
+    },
+
+    setupCustomizerListener() {
+      // Listen for customizer updates
+      const originalUpdatePreview = window.customizer?.updatePreview;
+      if (originalUpdatePreview) {
+        window.customizer.updatePreview = () => {
+          originalUpdatePreview.call(window.customizer);
+          // Update mockup when customizer changes
+          setTimeout(() => {
+            this.loadFromCustomizer();
+            this.updateDesign();
+          }, 100);
+        };
+      }
+    },
+
+    scrollToCustomizer() {
+      const customizerSection = document.querySelector('.tshirt-customizer-section');
+      if (customizerSection) {
+        customizerSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    },
+
+    handleFileUpload(file) {
+      console.log('File uploaded:', file.name, file.type, file.size);
+      
+      // Validate file type
+      const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/svg+xml', 'application/pdf'];
+      const allowedExtensions = ['.png', '.jpg', '.jpeg', '.svg', '.pdf', '.ai', '.psd'];
+      
+      const fileExtension = file.name.toLowerCase().substring(file.name.lastIndexOf('.'));
+      const isValidType = allowedTypes.includes(file.type) || allowedExtensions.includes(fileExtension);
+      
+      if (!isValidType) {
+        this.showMessage('❌ Invalid file type. Please upload PNG, JPG, SVG, or PDF files.', 'error');
+        return;
+      }
+      
+      // Validate file size (10MB limit)
+      const maxSize = 10 * 1024 * 1024; // 10MB
+      if (file.size > maxSize) {
+        this.showMessage('❌ File too large. Please upload files smaller than 10MB.', 'error');
+        return;
+      }
+      
+      // Show processing message
+      this.showMessage('📁 Processing your design...', 'info');
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.previewUploadedDesign(e.target.result, file.name);
+      };
+      reader.readAsDataURL(file);
+    },
+
+    previewUploadedDesign(imageData, fileName) {
+      // Create preview overlay
+      const previewOverlay = document.createElement('div');
+      previewOverlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(10px);
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      `;
+
+      const previewContainer = document.createElement('div');
+      previewContainer.style.cssText = `
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        max-width: 600px;
+        width: 90vw;
+        text-align: center;
+        transform: scale(0.8);
+        transition: transform 0.3s ease;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      `;
+
+      previewContainer.innerHTML = `
+        <h3 style="margin: 0 0 20px 0; font-size: 24px; font-weight: 700; color: #374151;">
+          📁 Design Preview
+        </h3>
+        
+        <div style="width: 300px; height: 300px; margin: 0 auto 20px; border: 2px dashed #e5e7eb; border-radius: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+          <img src="${imageData}" alt="Uploaded design" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+        </div>
+        
+        <p style="margin: 0 0 20px 0; font-size: 16px; color: #6b7280;">
+          <strong>File:</strong> ${fileName}
+        </p>
+        
+        <div style="display: flex; gap: 12px; justify-content: center;">
+          <button id="apply-design-btn" style="padding: 12px 24px; background: linear-gradient(45deg, #27e1c1, #20b2aa); color: white; border: none; border-radius: 25px; font-weight: 600; cursor: pointer;">
+            ✨ Apply to Mockup
+          </button>
+          <button id="cancel-upload-btn" style="padding: 12px 24px; background: white; color: #6b7280; border: 2px solid #e2e8f0; border-radius: 25px; font-weight: 600; cursor: pointer;">
+            Cancel
+          </button>
+        </div>
+      `;
+
+      previewOverlay.appendChild(previewContainer);
+      document.body.appendChild(previewOverlay);
+
+      // Animate in
+      setTimeout(() => {
+        previewOverlay.style.opacity = '1';
+        previewContainer.style.transform = 'scale(1)';
+      }, 100);
+
+      // Bind events
+      document.getElementById('apply-design-btn').addEventListener('click', () => {
+        this.applyUploadedDesign(imageData);
+        this.closeUploadPreview();
       });
-    }
+
+      document.getElementById('cancel-upload-btn').addEventListener('click', () => {
+        this.closeUploadPreview();
+      });
+
+      previewOverlay.addEventListener('click', (e) => {
+        if (e.target === previewOverlay) {
+          this.closeUploadPreview();
+        }
+      });
+
+      this.currentUploadPreview = previewOverlay;
+    },
+
+    applyUploadedDesign(imageData) {
+      // Replace text with uploaded image
+      const overlayDiv = document.getElementById(`nt-overlay-{{ section.id }}`);
+      const designText = document.getElementById(`nt-design-text-{{ section.id }}`);
+      
+      if (overlayDiv && designText) {
+        // Hide text
+        designText.style.display = 'none';
+        
+        // Create image element
+        const uploadedImg = document.createElement('img');
+        uploadedImg.src = imageData;
+        uploadedImg.style.cssText = `
+          max-width: 100%;
+          max-height: 100%;
+          object-fit: contain;
+          filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+          pointer-events: none;
+        `;
+        
+        overlayDiv.appendChild(uploadedImg);
+        
+        // Mark as uploaded design
+        this.placementState.hasUploadedDesign = true;
+        
+        // Show the remove button
+        const removeBtn = document.getElementById(`nt-remove-{{ section.id }}`);
+        if (removeBtn) {
+          removeBtn.style.display = 'inline-block';
+        }
+        
+        // Show placement controls
+        this.showPlacementControls();
+        
+        this.showMessage('✨ Uploaded design applied to mockup!', 'success');
+      }
+    },
+
+    showPlacementControls() {
+      const placementControls = document.getElementById(`nt-placement-controls-{{ section.id }}`);
+      if (placementControls) {
+        placementControls.style.display = 'block';
+        // Animate in
+        setTimeout(() => {
+          placementControls.style.opacity = '1';
+          placementControls.style.transform = 'translateY(0)';
+        }, 100);
+      }
+    },
+
+    bindPlacementControls() {
+      console.log('🎛️ Binding placement controls...');
+      // Get placement control elements
+      const topSlider = document.getElementById(`nt-top-{{ section.id }}`);
+      const leftSlider = document.getElementById(`nt-left-{{ section.id }}`);
+      const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
+      const rotateSlider = document.getElementById(`nt-rotate-{{ section.id }}`);
+      const resetBtn = document.getElementById(`nt-reset-placement-{{ section.id }}`);
+
+      console.log('Placement controls found:', {
+        topSlider: !!topSlider,
+        leftSlider: !!leftSlider,
+        widthSlider: !!widthSlider,
+        rotateSlider: !!rotateSlider,
+        resetBtn: !!resetBtn
+      });
+
+      // Bind slider events
+      if (topSlider) {
+        topSlider.addEventListener('input', () => {
+          this.placementState.topPct = parseFloat(topSlider.value);
+          this.updatePlacementDisplay();
+          this.updateDesignPosition();
+        });
+      }
+
+      if (leftSlider) {
+        leftSlider.addEventListener('input', () => {
+          this.placementState.leftPct = parseFloat(leftSlider.value);
+          this.updatePlacementDisplay();
+          this.updateDesignPosition();
+        });
+      }
+
+      if (widthSlider) {
+        widthSlider.addEventListener('input', () => {
+          this.placementState.widthPct = parseFloat(widthSlider.value);
+          this.updatePlacementDisplay();
+          this.updateDesignPosition();
+        });
+      }
+
+      if (rotateSlider) {
+        rotateSlider.addEventListener('input', () => {
+          this.placementState.rotateDeg = parseFloat(rotateSlider.value);
+          this.updatePlacementDisplay();
+          this.updateDesignPosition();
+        });
+      }
+
+      // Bind reset button
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          this.resetPlacement();
+        });
+      }
+
+      // Bind auto-equidistant button
+      const autoEquidistantBtn = document.getElementById(`nt-auto-equidistant-{{ section.id }}`);
+      if (autoEquidistantBtn) {
+        autoEquidistantBtn.addEventListener('click', () => {
+          this.autoEquidistant();
+        });
+      }
+    },
 
     updatePlacementDisplay() {
-      Object.entries(this.elements.sliders).forEach(([key, slider]) => {
-        const value = this.placementState[key + 'Pct'];
-        if (slider) {
-          slider.value = value;
-          const valDisplay = document.getElementById(`nt-${key}-val-${this.sectionId}`);
-          if (valDisplay) valDisplay.textContent = key === 'rotate' ? `${value}°` : `${value}%`;
+      // Update value displays
+      const topVal = document.getElementById(`nt-top-val-{{ section.id }}`);
+      const leftVal = document.getElementById(`nt-left-val-{{ section.id }}`);
+      const widthVal = document.getElementById(`nt-width-val-{{ section.id }}`);
+      const rotateVal = document.getElementById(`nt-rotate-val-{{ section.id }}`);
+
+      if (topVal) topVal.textContent = this.placementState.topPct.toFixed(1) + '%';
+      if (leftVal) leftVal.textContent = this.placementState.leftPct.toFixed(1) + '%';
+      if (widthVal) widthVal.textContent = this.placementState.widthPct.toFixed(0) + '%';
+      if (rotateVal) rotateVal.textContent = this.placementState.rotateDeg.toFixed(1) + '°';
+    },
+
+    bindMockupSizeControls() {
+      const scaleSlider = document.getElementById(`nt-mockup-scale-{{ section.id }}`);
+      const scaleValue = document.getElementById(`nt-mockup-scale-val-{{ section.id }}`);
+      const zoomInBtn = document.getElementById(`nt-zoom-in-{{ section.id }}`);
+      const zoomOutBtn = document.getElementById(`nt-zoom-out-{{ section.id }}`);
+
+      if (scaleSlider) {
+        scaleSlider.addEventListener('input', () => {
+          const scale = parseFloat(scaleSlider.value);
+          this.updateMockupScale(scale);
+          if (scaleValue) scaleValue.textContent = scale + '%';
+        });
+      }
+
+      if (zoomInBtn) {
+        zoomInBtn.addEventListener('click', () => {
+          const currentScale = parseFloat(scaleSlider?.value || 100);
+          const newScale = Math.min(130, currentScale + 10);
+          if (scaleSlider) scaleSlider.value = newScale;
+          this.updateMockupScale(newScale);
+          if (scaleValue) scaleValue.textContent = newScale + '%';
+        });
+      }
+
+      if (zoomOutBtn) {
+        zoomOutBtn.addEventListener('click', () => {
+          const currentScale = parseFloat(scaleSlider?.value || 100);
+          const newScale = Math.max(50, currentScale - 10);
+          if (scaleSlider) scaleSlider.value = newScale;
+          this.updateMockupScale(newScale);
+          if (scaleValue) scaleValue.textContent = newScale + '%';
+        });
+      }
+
+      // Add reset to 100% button
+      const resetScaleBtn = document.createElement('button');
+      resetScaleBtn.textContent = '🔄 Reset Size';
+      resetScaleBtn.style.cssText = 'padding: 6px 12px; background: #6b7280; color: white; border: none; border-radius: 4px; font-size: 11px; cursor: pointer; margin-top: 8px;';
+      resetScaleBtn.addEventListener('click', () => {
+        if (scaleSlider) scaleSlider.value = 100;
+        this.updateMockupScale(100);
+        if (scaleValue) scaleValue.textContent = '100%';
+      });
+      
+      // Add reset button to the controls
+      const scaleContainer = scaleSlider?.parentElement;
+      if (scaleContainer) {
+        scaleContainer.appendChild(resetScaleBtn);
+      }
+    },
+
+    bindPlacementGuideControls() {
+      const toggleBtn = document.getElementById(`nt-toggle-guide-{{ section.id }}`);
+      const guide = document.getElementById(`nt-placement-guide-{{ section.id }}`);
+      
+      if (toggleBtn && guide) {
+        let isVisible = false;
+        
+        toggleBtn.addEventListener('click', () => {
+          isVisible = !isVisible;
+          
+          if (isVisible) {
+            guide.style.display = 'block';
+            toggleBtn.textContent = '📐 Hide Placement Guide';
+            toggleBtn.style.background = 'linear-gradient(45deg, #ef4444, #dc2626)';
+            console.log('🎯 Placement guide shown');
+          } else {
+            guide.style.display = 'none';
+            toggleBtn.textContent = '📐 Show Placement Guide';
+            toggleBtn.style.background = 'linear-gradient(45deg, #f59e0b, #d97706)';
+            console.log('🎯 Placement guide hidden');
+          }
+        });
+      }
+    },
+
+    bindGridInteractions() {
+      console.log('🎨 Binding grid interactions...');
+      
+      // Get all grid items
+      const gridItems = document.querySelectorAll(`#nt-mockup-{{ section.id }} .nt-mockup__grid-item`);
+      
+      gridItems.forEach(item => {
+        const viewType = item.dataset.view;
+        
+        // Add click event listener
+        item.addEventListener('click', () => {
+          console.log('🎯 Grid item clicked:', viewType);
+          
+          // Handle special cases
+          if (viewType === 'size_chart') {
+            this.showSizeChart();
+            return;
+          }
+          
+          // Update the active state
+          this.setActiveGridItem(gridItems, item);
+          
+          // Update the view state
+          this.state.view = viewType;
+          
+          // Update the mockup
+          this.updateBase();
+          
+          // Update the view buttons to match
+          this.updateViewButtons();
+          
+          console.log('✅ View changed to:', viewType);
+        });
+        
+        // Add hover effects
+        item.addEventListener('mouseenter', () => {
+          if (!item.classList.contains('is-active')) {
+            item.style.transform = 'translateY(-4px)';
+            item.style.boxShadow = '0 8px 25px rgba(0,0,0,0.15)';
+          }
+        });
+        
+        item.addEventListener('mouseleave', () => {
+          if (!item.classList.contains('is-active')) {
+            item.style.transform = 'translateY(0)';
+            item.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
+          }
+        });
+      });
+      
+      console.log('✅ Grid interactions bound successfully');
+    },
+
+    setActiveGridItem(gridItems, activeItem) {
+      gridItems.forEach(item => {
+        if (item === activeItem) {
+          item.classList.add('is-active');
+          item.style.borderColor = '#27e1c1';
+          item.style.boxShadow = '0 4px 12px rgba(39, 225, 193, 0.2)';
+          item.style.transform = 'translateY(0)';
+        } else {
+          item.classList.remove('is-active');
+          item.style.borderColor = '#e2e8f0';
+          item.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
+          item.style.transform = 'translateY(0)';
         }
       });
-    }
+    },
+
+    updateViewButtons() {
+      // Update the view buttons to match the grid selection
+      const viewBtns = Array.from(document.querySelectorAll(`#nt-mockup-{{ section.id }} .nt-btn--view`));
+      
+      // Map grid views to button views
+      const viewMapping = {
+        'person3_front': 'person1',
+        'person3_back': 'person1', 
+        'person3_left': 'person1',
+        'person3_context': 'person1',
+        'person4_front': 'person2',
+        'person4_back': 'person2',
+        'person4_right': 'person2',
+        'person4_context': 'person2',
+        'folded': 'hanging'
+      };
+      
+      const buttonView = viewMapping[this.state.view] || this.state.view;
+      
+      viewBtns.forEach(btn => {
+        const isActive = btn.dataset.view === buttonView;
+        if (isActive) {
+          btn.classList.add("is-active");
+          btn.style.borderColor = "#27e1c1";
+          btn.style.background = "#27e1c1";
+          btn.style.color = "white";
+        } else {
+          btn.classList.remove("is-active");
+          btn.style.borderColor = "#e2e8f0";
+          btn.style.background = "white";
+          btn.style.color = "#64748b";
+        }
+        btn.setAttribute("aria-selected", isActive ? "true" : "false");
+      });
+    },
+
+    showSizeChart() {
+      console.log('📏 Showing size chart...');
+      
+      // Create size chart modal
+      const sizeChartOverlay = document.createElement('div');
+      sizeChartOverlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(10px);
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      `;
+
+      const sizeChartContainer = document.createElement('div');
+      sizeChartContainer.style.cssText = `
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        max-width: 600px;
+        width: 90vw;
+        max-height: 80vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        transform: scale(0.8);
+        transition: transform 0.3s ease;
+      `;
+
+      sizeChartContainer.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+          <h2 style="margin: 0; font-size: 28px; font-weight: 700; color: #374151;">
+            📏 Size Chart
+          </h2>
+          <button id="close-size-chart-btn" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #6b7280;">
+            ×
+          </button>
+        </div>
+
+        <div style="margin-bottom: 25px;">
+          <h3 style="margin: 0 0 16px 0; font-size: 20px; font-weight: 600; color: #374151;">
+            T-Shirt Size Guide
+          </h3>
+          
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+              <thead>
+                <tr style="background: #f8fafc;">
+                  <th style="padding: 12px; border: 1px solid #e2e8f0; font-weight: 600; color: #374151;">Size</th>
+                  <th style="padding: 12px; border: 1px solid #e2e8f0; font-weight: 600; color: #374151;">Chest (inches)</th>
+                  <th style="padding: 12px; border: 1px solid #e2e8f0; font-weight: 600; color: #374151;">Length (inches)</th>
+                  <th style="padding: 12px; border: 1px solid #e2e8f0; font-weight: 600; color: #374151;">Sleeve (inches)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0; font-weight: 600; color: #27e1c1;">XS</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">32-34</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">26</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">7.5</td>
+                </tr>
+                <tr style="background: #f8fafc;">
+                  <td style="padding: 12px; border: 1px solid #e2e8f0; font-weight: 600; color: #27e1c1;">S</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">34-36</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">27</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">8</td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0; font-weight: 600; color: #27e1c1;">M</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">38-40</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">28</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">8.5</td>
+                </tr>
+                <tr style="background: #f8fafc;">
+                  <td style="padding: 12px; border: 1px solid #e2e8f0; font-weight: 600; color: #27e1c1;">L</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">42-44</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">29</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">9</td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0; font-weight: 600; color: #27e1c1;">XL</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">46-48</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">30</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">9.5</td>
+                </tr>
+                <tr style="background: #f8fafc;">
+                  <td style="padding: 12px; border: 1px solid #e2e8f0; font-weight: 600; color: #27e1c1;">XXL</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">50-52</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">31</td>
+                  <td style="padding: 12px; border: 1px solid #e2e8f0;">10</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div style="background: linear-gradient(135deg, #f0fdfa, #ecfdf5); padding: 20px; border-radius: 12px; border: 1px solid #a7f3d0;">
+          <div style="font-weight: 600; color: #065f46; margin-bottom: 8px;">💡 Sizing Tips</div>
+          <div style="color: #047857; font-size: 14px; line-height: 1.6;">
+            • Measure your chest at the fullest point<br>
+            • Our t-shirts are designed for a relaxed fit<br>
+            • If between sizes, we recommend sizing up<br>
+            • All measurements are in inches and taken from the garment
+          </div>
+        </div>
+      `;
+
+      sizeChartOverlay.appendChild(sizeChartContainer);
+      document.body.appendChild(sizeChartOverlay);
+
+      // Animate in
+      setTimeout(() => {
+        sizeChartOverlay.style.opacity = '1';
+        sizeChartContainer.style.transform = 'scale(1)';
+      }, 100);
+
+      // Bind close event
+      document.getElementById('close-size-chart-btn').addEventListener('click', () => {
+        this.closeSizeChart(sizeChartOverlay);
+      });
+
+      sizeChartOverlay.addEventListener('click', (e) => {
+        if (e.target === sizeChartOverlay) {
+          this.closeSizeChart(sizeChartOverlay);
+        }
+      });
+
+      this.currentSizeChart = sizeChartOverlay;
+    },
+
+    closeSizeChart(overlay) {
+      if (overlay) {
+        overlay.style.opacity = '0';
+        const container = overlay.querySelector('div');
+        if (container) container.style.transform = 'scale(0.8)';
+        setTimeout(() => {
+          if (document.body.contains(overlay)) {
+            document.body.removeChild(overlay);
+          }
+        }, 300);
+      }
+    },
+
+    updateMockupScale(scale) {
+      const canvas = document.getElementById(`nt-mockup-canvas-{{ section.id }}`);
+      const baseImage = document.getElementById(`nt-base-{{ section.id }}`);
+      
+      if (canvas && baseImage) {
+        console.log('🔍 Scaling t-shirt container to:', scale + '%');
+        
+        // Reset container to original size
+        canvas.style.width = '900px';
+        canvas.style.height = '900px';
+        canvas.style.maxWidth = '100%';
+        canvas.style.maxHeight = '100%';
+        
+        // Reset image positioning
+        baseImage.style.position = 'absolute';
+        baseImage.style.top = '0';
+        baseImage.style.left = '0';
+        baseImage.style.width = '100%';
+        baseImage.style.height = '100%';
+        baseImage.style.marginTop = '0';
+        baseImage.style.marginLeft = '0';
+        baseImage.style.transform = 'none';
+        baseImage.style.transformOrigin = 'unset';
+        
+        // Scale the entire container using CSS transform
+        canvas.style.transform = `scale(${scale / 100})`;
+        canvas.style.transformOrigin = 'center center';
+        
+        // Add visual feedback for maximum scale
+        if (scale >= 130) {
+          canvas.style.border = '3px solid #f59e0b';
+          canvas.style.boxShadow = '0 20px 60px rgba(245, 158, 11, 0.3)';
+        } else {
+          canvas.style.border = 'none';
+          canvas.style.boxShadow = '0 20px 60px rgba(0,0,0,0.1)';
+        }
+        
+        // Update the design overlay to match the container scale
+        this.updateDesignPosition();
+        
+        console.log('✅ T-shirt container scaled successfully to:', scale + '%');
+      }
+    },
+
+    removeDesign() {
+      console.log('🗑️ Removing design...');
+      
+      const overlayDiv = document.getElementById(`nt-overlay-{{ section.id }}`);
+      const designText = document.getElementById(`nt-design-text-{{ section.id }}`);
+      const removeBtn = document.getElementById(`nt-remove-{{ section.id }}`);
+      
+      if (overlayDiv && designText) {
+        // Remove any uploaded image
+        const uploadedImg = overlayDiv.querySelector('img[src^="data:"]');
+        if (uploadedImg) {
+          uploadedImg.remove();
+        }
+        
+        // Show the default text
+        designText.style.display = 'block';
+        designText.textContent = 'Your Design Here';
+        
+        // Reset placement state
+        this.placementState.hasUploadedDesign = false;
+        
+        // Hide the remove button
+        if (removeBtn) {
+          removeBtn.style.display = 'none';
+        }
+        
+        // Reset to default positioning
+        this.placementState.topPct = 45;
+        this.placementState.leftPct = 25;
+        this.placementState.widthPct = 60;
+        this.placementState.rotateDeg = 0;
+        
+        // Update the display
+        this.updatePlacementDisplay();
+        this.updateDesignPosition();
+        
+        // Show success message
+        this.showMessage('✅ Design removed successfully', 'success');
+        
+        console.log('✅ Design removed successfully');
+      }
+    },
 
     updateDesignPosition() {
-      requestAnimationFrame(() => {
-        this.layerManager.layers.forEach(layer => {
-          this.layerManager.updateLayer(layer.id, {
-            topPct: this.placementState.topPct,
-            leftPct: this.placementState.leftPct,
-            widthPct: this.placementState.widthPct,
-            rotateDeg: this.placementState.rotateDeg,
-            flipHorizontal: this.placementState.flipHorizontal,
-            flipVertical: this.placementState.flipVertical
-          });
+      const overlayDiv = document.getElementById(`nt-overlay-{{ section.id }}`);
+      console.log('🔍 Looking for overlay element:', `nt-overlay-{{ section.id }}`, 'Found:', !!overlayDiv);
+      
+      if (overlayDiv) {
+        console.log('🎯 Applying positioning:', {
+          top: this.placementState.topPct + '%',
+          left: this.placementState.leftPct + '%',
+          width: this.placementState.widthPct + '%',
+          rotate: this.placementState.rotateDeg + 'deg'
         });
-        this.checkCentering();
-      });
-    }
+        
+        // Apply positioning directly to the element
+        overlayDiv.style.top = this.placementState.topPct + '%';
+        overlayDiv.style.left = this.placementState.leftPct + '%';
+        overlayDiv.style.width = this.placementState.widthPct + '%';
+        overlayDiv.style.transform = `rotate(${this.placementState.rotateDeg}deg)`;
+        overlayDiv.style.transformOrigin = 'center center';
+        
+        // Also update CSS variables for consistency
+        overlayDiv.style.setProperty('--overlay-top', this.placementState.topPct + '%');
+        overlayDiv.style.setProperty('--overlay-left', this.placementState.leftPct + '%');
+        overlayDiv.style.setProperty('--overlay-width', this.placementState.widthPct + '%');
+        overlayDiv.style.setProperty('--overlay-rotate', this.placementState.rotateDeg + 'deg');
+        
+        console.log('✅ Positioning applied directly to element');
+        console.log('🔍 Current element styles:', {
+          top: overlayDiv.style.top,
+          left: overlayDiv.style.left,
+          width: overlayDiv.style.width,
+          transform: overlayDiv.style.transform
+        });
+      } else {
+        console.error('❌ Overlay element not found!');
+      }
+      
+      // Check for centering and show indicators
+      this.checkCentering();
+    },
 
     checkCentering() {
       const { topPct, leftPct, widthPct } = this.placementState;
-      const perfectCenter = document.getElementById(`nt-perfect-center-${this.sectionId}`);
-      const horizontalCenter = document.getElementById(`nt-horizontal-center-${this.sectionId}`);
-      const verticalCenter = document.getElementById(`nt-vertical-center-${this.sectionId}`);
-      const equidistant = document.getElementById(`nt-equidistant-${this.sectionId}`);
-      const statusDiv = document.getElementById(`nt-centering-status-${this.sectionId}`);
-      const statusText = document.getElementById(`nt-status-text-${this.sectionId}`);
-
+      
+      // Get indicator elements
+      const perfectCenter = document.getElementById(`nt-perfect-center-{{ section.id }}`);
+      const horizontalCenter = document.getElementById(`nt-horizontal-center-{{ section.id }}`);
+      const verticalCenter = document.getElementById(`nt-vertical-center-{{ section.id }}`);
+      const equidistant = document.getElementById(`nt-equidistant-{{ section.id }}`);
+      const statusDiv = document.getElementById(`nt-centering-status-{{ section.id }}`);
+      const statusText = document.getElementById(`nt-status-text-{{ section.id }}`);
+      
       if (!perfectCenter || !horizontalCenter || !verticalCenter || !equidistant || !statusDiv || !statusText) return;
-
+      
+      // Hide all indicators first
       perfectCenter.style.display = 'none';
       horizontalCenter.style.display = 'none';
       verticalCenter.style.display = 'none';
       equidistant.style.display = 'none';
       statusDiv.style.display = 'none';
-
-      const isHorizontallyCentered = Math.abs(leftPct - (100 - widthPct) / 2) <= 2;
-      const isVerticallyCentered = Math.abs(topPct - 45) <= 2;
+      
+      // Check for perfect center (within 2% tolerance)
+      const isHorizontallyCentered = Math.abs(leftPct - 25) <= 2; // 25% is center for 50% width
+      const isVerticallyCentered = Math.abs(topPct - 45) <= 2; // 45% is center for t-shirt
       const isPerfectCenter = isHorizontallyCentered && isVerticallyCentered;
+      
+      // Check for equidistant positioning (equal distance from edges)
       const leftDistance = leftPct;
       const rightDistance = 100 - leftPct - widthPct;
       const topDistance = topPct;
-      const bottomDistance = 100 - topPct - (widthPct * 0.8);
+      const bottomDistance = 100 - topPct - (widthPct * 0.8); // Approximate height
       const isEquidistant = Math.abs(leftDistance - rightDistance) <= 3 && Math.abs(topDistance - bottomDistance) <= 3;
-
+      
+      // Show appropriate indicators
       if (isPerfectCenter) {
         perfectCenter.style.display = 'block';
         statusText.textContent = '🎯 Perfect center achieved!';
+        statusDiv.style.display = 'block';
+        statusDiv.style.background = 'rgba(16, 185, 129, 0.9)';
+      } else if (isHorizontallyCentered && isVerticallyCentered) {
+        perfectCenter.style.display = 'block';
+        statusText.textContent = '🎯 Very close to center!';
         statusDiv.style.display = 'block';
         statusDiv.style.background = 'rgba(16, 185, 129, 0.9)';
       } else {
@@ -897,6 +1991,7 @@ document.addEventListener('DOMContentLoaded', () => {
           statusDiv.style.background = 'rgba(245, 158, 11, 0.9)';
         }
       }
+      
       if (isEquidistant && !isPerfectCenter) {
         equidistant.style.display = 'block';
         if (statusDiv.style.display === 'none') {
@@ -905,260 +2000,769 @@ document.addEventListener('DOMContentLoaded', () => {
           statusDiv.style.background = 'rgba(139, 92, 246, 0.9)';
         }
       }
+      
+      // Auto-hide status after 3 seconds
       if (statusDiv.style.display === 'block') {
-        setTimeout(() => statusDiv.style.display = 'none', 3000);
+        setTimeout(() => {
+          statusDiv.style.display = 'none';
+        }, 3000);
       }
-    }
+    },
 
     autoEquidistant() {
+      console.log('⚖️ Auto-equidistant positioning activated');
+      
+      // Calculate equidistant positioning
+      // For a design to be equidistant, it should have equal margins on all sides
+      // Assuming the design should be centered with equal margins
       const currentWidth = this.placementState.widthPct;
-      this.placementState.leftPct = (100 - currentWidth) / 2;
-      this.placementState.topPct = 35;
+      
+      // Calculate the optimal position for equidistant placement
+      // Left margin = Right margin, Top margin = Bottom margin
+      const optimalLeft = (100 - currentWidth) / 2;
+      const optimalTop = 35; // Position higher on t-shirt for better visual balance
+      
+      // Apply the equidistant positioning
+      this.placementState.leftPct = Math.max(5, Math.min(95 - currentWidth, optimalLeft));
+      this.placementState.topPct = Math.max(10, Math.min(80, optimalTop));
+      
+      // Update the display and position
       this.updatePlacementDisplay();
       this.updateDesignPosition();
-      this.showMessage('⚖️ Design positioned equidistant!', 'success');
-      this.logInteraction('Auto-Equidistant Applied');
-    }
-
-    autoCenter() {
-      this.placementState.leftPct = (100 - this.placementState.widthPct) / 2;
-      this.placementState.topPct = 20;
-      this.updatePlacementDisplay();
-      this.updateDesignPosition();
-      this.showMessage('🎯 Design auto-centered!', 'success');
-      this.logInteraction('Auto-Center Applied');
-    }
-
-    flipDesign(direction) {
-      this.placementState[`flip${direction.charAt(0).toUpperCase() + direction.slice(1)}`] = !this.placementState[`flip${direction.charAt(0).toUpperCase() + direction.slice(1)}`];
-      this.updateDesignPosition();
-      this.showMessage(`↔️ Design flipped ${direction}!`, 'success');
-      this.logInteraction(`Design Flipped: ${direction}`);
-    }
+      
+      // Update the sliders to reflect the new values
+      const topSlider = document.getElementById(`nt-top-{{ section.id }}`);
+      const leftSlider = document.getElementById(`nt-left-{{ section.id }}`);
+      
+      if (topSlider) topSlider.value = this.placementState.topPct;
+      if (leftSlider) leftSlider.value = this.placementState.leftPct;
+      
+      // Show success message
+      this.showMessage('⚖️ Design positioned equidistant from edges!', 'success');
+      
+      console.log('✅ Auto-equidistant positioning applied:', {
+        left: this.placementState.leftPct + '%',
+        top: this.placementState.topPct + '%',
+        width: this.placementState.widthPct + '%'
+      });
+    },
 
     resetPlacement() {
-      this.placementState.topPct = {{ section.settings.overlay_top }};
-      this.placementState.leftPct = {{ section.settings.overlay_left }};
-      this.placementState.widthPct = {{ section.settings.overlay_width }};
-      this.placementState.rotateDeg = {{ section.settings.overlay_rotate }};
-      this.placementState.flipHorizontal = false;
-      this.placementState.flipVertical = false;
+      this.placementState.topPct = 45;
+      this.placementState.leftPct = 25;
+      this.placementState.widthPct = 60;
+      this.placementState.rotateDeg = 0;
+
+      // Update sliders
+      const topSlider = document.getElementById(`nt-top-{{ section.id }}`);
+      const leftSlider = document.getElementById(`nt-left-{{ section.id }}`);
+      const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
+      const rotateSlider = document.getElementById(`nt-rotate-{{ section.id }}`);
+
+      if (topSlider) topSlider.value = this.placementState.topPct;
+      if (leftSlider) leftSlider.value = this.placementState.leftPct;
+      if (widthSlider) widthSlider.value = this.placementState.widthPct;
+      if (rotateSlider) rotateSlider.value = this.placementState.rotateDeg;
+
       this.updatePlacementDisplay();
       this.updateDesignPosition();
-      this.showMessage('🔄 Placement reset!', 'success');
-      this.logInteraction('Placement Reset');
-    }
+    },
 
     bindDragResize() {
-      this.elements.overlaysContainer.addEventListener('mousedown', e => {
-        const overlay = e.target.closest('.nt-mockup__overlay');
-        if (overlay) this.startDrag(e, overlay.id.split('-')[2]);
-      });
-      this.elements.overlaysContainer.addEventListener('touchstart', e => {
-        e.preventDefault();
-        const overlay = e.target.closest('.nt-mockup__overlay');
-        if (overlay && e.touches.length === 1) this.startDrag(e.touches[0], overlay.id.split('-')[2]);
-        else if (overlay && e.touches.length === 2) this.startPinch(e, overlay.id.split('-')[2]);
-      }, { passive: false });
-      document.addEventListener('mousemove', this.throttle(this.handleDrag.bind(this), 16));
-      document.addEventListener('touchmove', this.throttle(this.handleDrag.bind(this), 16), { passive: false });
-      document.addEventListener('mouseup', this.endDrag.bind(this));
-      document.addEventListener('touchend', this.endDrag.bind(this));
-      this.elements.canvas.addEventListener('wheel', this.debounce(this.handleResize.bind(this), 50), { passive: false });
-    }
+      const canvas = document.getElementById(`nt-mockup-canvas-{{ section.id }}`);
+      const overlay = document.getElementById(`nt-overlay-{{ section.id }}`);
+      
+      if (!canvas || !overlay) return;
 
-    startDrag(e, layerId) {
+      // Mouse events - Allow dragging on the entire overlay
+      overlay.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        this.startDrag(e);
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (this.placementState.dragging) {
+          this.handleDrag(e);
+        }
+        if (this.placementState.resizing) {
+          this.handleResizeDrag(e);
+        }
+      });
+
+      document.addEventListener('mouseup', () => {
+        this.endDrag();
+        this.endResize();
+      });
+
+      // Touch events - Enhanced for mobile
+      overlay.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        // Check if it's a single touch (not pinch)
+        if (e.touches.length === 1) {
+          this.startDrag(e.touches[0]);
+        } else if (e.touches.length === 2) {
+          // Handle pinch-to-zoom for mobile
+          this.startPinch(e);
+        }
+      }, { passive: false });
+
+      document.addEventListener('touchmove', (e) => {
+        if (this.placementState.dragging) {
+          e.preventDefault();
+          this.handleDrag(e.touches[0]);
+        }
+        if (this.placementState.resizing) {
+          e.preventDefault();
+          this.handleResizeDrag(e.touches[0]);
+        }
+        if (this.placementState.pinching) {
+          e.preventDefault();
+          this.handlePinch(e);
+        }
+      }, { passive: false });
+
+      document.addEventListener('touchend', () => {
+        this.endDrag();
+        this.endResize();
+        this.endPinch();
+      });
+
+      // Scroll wheel for resize - Test if events are being detected
+      canvas.addEventListener('wheel', (e) => {
+        console.log('🔄 SCROLL EVENT DETECTED! deltaY:', e.deltaY, 'target:', e.target);
+        e.preventDefault();
+        e.stopPropagation();
+        this.handleResize(e.deltaY);
+      }, { passive: false, capture: true });
+
+      // Alternative resize with Ctrl+scroll for more precise control
+      canvas.addEventListener('wheel', (e) => {
+        if (e.ctrlKey) {
+          console.log('🔄 Ctrl+scroll for precise resize, deltaY:', e.deltaY);
+          e.preventDefault();
+          const delta = Math.sign(e.deltaY);
+          const increment = 1; // Smaller increment for precise control
+          const newWidth = this.placementState.widthPct - (delta * increment);
+          this.placementState.widthPct = Math.max(10, Math.min(100, newWidth));
+          
+          this.updatePlacementDisplay();
+          this.updateDesignPosition();
+          
+          const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
+          if (widthSlider) widthSlider.value = this.placementState.widthPct;
+        }
+      }, { passive: false });
+
+      // Hover effects
+      overlay.addEventListener('mouseenter', () => {
+        this.showDragHandles();
+      });
+
+      overlay.addEventListener('mouseleave', () => {
+        this.hideDragHandles();
+      });
+
+      // Resize handles functionality - All directions
+      const resizeHandles = document.querySelectorAll('.resize-handle');
+      resizeHandles.forEach(handle => {
+        handle.addEventListener('mousedown', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const direction = handle.dataset.direction;
+          console.log('🔧 Resize handle clicked, direction:', direction);
+          this.startResize(e, direction);
+        });
+      });
+    },
+
+    startDrag(e) {
+      console.log('🖱️ Start drag triggered');
       this.placementState.dragging = true;
-      this.placementState.activeLayer = layerId;
-      const rect = this.elements.canvas.getBoundingClientRect();
+      const canvas = document.getElementById(`nt-mockup-canvas-{{ section.id }}`);
+      const rect = canvas.getBoundingClientRect();
+      
       this.placementState.lastX = e.clientX - rect.left;
       this.placementState.lastY = e.clientY - rect.top;
-      this.elements.canvas.classList.add('dragging');
+      
+      canvas.classList.add('dragging');
       this.showMessage('🎯 Drag to move design', 'info');
-    }
+    },
 
     handleDrag(e) {
       if (!this.placementState.dragging) return;
-      requestAnimationFrame(() => {
-        const rect = this.elements.canvas.getBoundingClientRect();
-        const currentX = e.clientX - rect.left;
-        const currentY = e.clientY - rect.top;
-        const deltaXPercent = ((currentX - this.placementState.lastX) / rect.width) * 100;
-        const deltaYPercent = ((currentY - this.placementState.lastY) / rect.height) * 100;
-        this.placementState.leftPct = Math.max(0, Math.min(90, this.placementState.leftPct + deltaXPercent));
-        this.placementState.topPct = Math.max(0, Math.min(90, this.placementState.topPct + deltaYPercent));
-        this.updatePlacementDisplay();
-        this.updateDesignPosition();
-        this.placementState.lastX = currentX;
-        this.placementState.lastY = currentY;
-      });
-    }
+      
+      const canvas = document.getElementById(`nt-mockup-canvas-{{ section.id }}`);
+      const rect = canvas.getBoundingClientRect();
+      
+      const currentX = e.clientX - rect.left;
+      const currentY = e.clientY - rect.top;
+      
+      const deltaX = currentX - this.placementState.lastX;
+      const deltaY = currentY - this.placementState.lastY;
+      
+      // Convert pixel deltas to percentages
+      const deltaXPercent = (deltaX / rect.width) * 100;
+      const deltaYPercent = (deltaY / rect.height) * 100;
+      
+      // Update position
+      this.placementState.leftPct = Math.max(0, Math.min(90, this.placementState.leftPct + deltaXPercent));
+      this.placementState.topPct = Math.max(0, Math.min(90, this.placementState.topPct + deltaYPercent));
+      
+      // Update display
+      this.updatePlacementDisplay();
+      this.updateDesignPosition();
+      
+      // Update sliders
+      const leftSlider = document.getElementById(`nt-left-{{ section.id }}`);
+      const topSlider = document.getElementById(`nt-top-{{ section.id }}`);
+      if (leftSlider) leftSlider.value = this.placementState.leftPct;
+      if (topSlider) topSlider.value = this.placementState.topPct;
+      
+      this.placementState.lastX = currentX;
+      this.placementState.lastY = currentY;
+    },
 
     endDrag() {
       if (this.placementState.dragging) {
         this.placementState.dragging = false;
-        this.elements.canvas.classList.remove('dragging');
-        this.placementState.activeLayer = null;
+        const canvas = document.getElementById(`nt-mockup-canvas-{{ section.id }}`);
+        canvas.classList.remove('dragging');
       }
-    }
+    },
 
-    startPinch(e, layerId) {
+    endResize() {
+      if (this.placementState.resizing) {
+        this.placementState.resizing = false;
+        console.log('🔧 Resize ended');
+      }
+    },
+
+    startPinch(e) {
       if (e.touches.length === 2) {
         this.placementState.pinching = true;
-        this.placementState.activeLayer = layerId;
         const touch1 = e.touches[0];
         const touch2 = e.touches[1];
         this.placementState.initialDistance = Math.sqrt(
-          Math.pow(touch2.clientX - touch1.clientX, 2) +
+          Math.pow(touch2.clientX - touch1.clientX, 2) + 
           Math.pow(touch2.clientY - touch1.clientY, 2)
         );
         this.placementState.initialWidth = this.placementState.widthPct;
+        console.log('📱 Pinch started, initial distance:', this.placementState.initialDistance);
       }
-    }
+    },
 
     handlePinch(e) {
       if (!this.placementState.pinching || e.touches.length !== 2) return;
+      
       const touch1 = e.touches[0];
       const touch2 = e.touches[1];
       const currentDistance = Math.sqrt(
-        Math.pow(touch2.clientX - touch1.clientX, 2) +
+        Math.pow(touch2.clientX - touch1.clientX, 2) + 
         Math.pow(touch2.clientY - touch1.clientY, 2)
       );
+      
       const scale = currentDistance / this.placementState.initialDistance;
-      this.placementState.widthPct = Math.max(10, Math.min(100, this.placementState.initialWidth * scale));
+      const newWidth = Math.max(10, Math.min(100, this.placementState.initialWidth * scale));
+      
+      this.placementState.widthPct = newWidth;
       this.updatePlacementDisplay();
       this.updateDesignPosition();
-      this.elements.sliders.width.value = this.placementState.widthPct;
-    }
+      
+      const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
+      if (widthSlider) widthSlider.value = this.placementState.widthPct;
+      
+      console.log('📱 Pinch resize:', newWidth.toFixed(1) + '%');
+    },
 
     endPinch() {
       if (this.placementState.pinching) {
         this.placementState.pinching = false;
-        this.placementState.activeLayer = null;
+        console.log('📱 Pinch ended');
       }
-    }
+    },
 
-    handleResize(e) {
-      e.preventDefault();
-      const delta = Math.sign(e.deltaY);
-      this.placementState.widthPct = Math.max(10, Math.min(100, this.placementState.widthPct - delta * 5));
+    startResize(e, direction) {
+      console.log('🔧 Start resize triggered, direction:', direction);
+      this.placementState.resizing = true;
+      this.placementState.resizeDirection = direction;
+      this.placementState.lastX = e.clientX;
+      this.placementState.lastY = e.clientY;
+    },
+
+    handleResizeDrag(e) {
+      if (!this.placementState.resizing) return;
+      
+      const deltaX = e.clientX - this.placementState.lastX;
+      const deltaY = e.clientY - this.placementState.lastY;
+      const direction = this.placementState.resizeDirection;
+      
+      let resizeIncrement = 0;
+      
+      // Calculate resize based on direction
+      switch(direction) {
+        case 'nw': // Top-left: both X and Y affect size
+          resizeIncrement = (deltaX + deltaY) * 0.3;
+          break;
+        case 'ne': // Top-right: X increases, Y decreases
+          resizeIncrement = (deltaX - deltaY) * 0.3;
+          break;
+        case 'sw': // Bottom-left: X decreases, Y increases
+          resizeIncrement = (-deltaX + deltaY) * 0.3;
+          break;
+        case 'se': // Bottom-right: both X and Y increase
+          resizeIncrement = (deltaX + deltaY) * 0.3;
+          break;
+        case 'n': // Top: Y affects size
+          resizeIncrement = deltaY * 0.3;
+          break;
+        case 's': // Bottom: Y affects size
+          resizeIncrement = deltaY * 0.3;
+          break;
+        case 'w': // Left: X affects size
+          resizeIncrement = deltaX * 0.3;
+          break;
+        case 'e': // Right: X affects size
+          resizeIncrement = deltaX * 0.3;
+          break;
+        default:
+          resizeIncrement = (deltaX + deltaY) * 0.3;
+      }
+      
+      const newWidth = this.placementState.widthPct + resizeIncrement;
+      this.placementState.widthPct = Math.max(10, Math.min(100, newWidth));
+      
+      console.log('🔧 Resizing to:', this.placementState.widthPct + '%', 'direction:', direction);
+      
       this.updatePlacementDisplay();
       this.updateDesignPosition();
-      this.elements.sliders.width.value = this.placementState.widthPct;
-      this.logInteraction('Resized via Scroll');
-    }
+      
+      const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
+      if (widthSlider) widthSlider.value = this.placementState.widthPct;
+      
+      this.placementState.lastX = e.clientX;
+      this.placementState.lastY = e.clientY;
+    },
 
-    togglePlacementGuide() {
-      const guide = document.getElementById(`nt-placement-guide-${this.sectionId}`);
-      guide.style.display = guide.style.display === 'none' ? 'block' : 'none';
-      this.logInteraction(`Placement Guide ${guide.style.display === 'block' ? 'Shown' : 'Hidden'}`);
-    }
+    handleResize(deltaY) {
+      console.log('🔄 Resize triggered, deltaY:', deltaY);
+      const delta = Math.sign(deltaY);
+      const increment = 5; // Increased from 2 to 5 for more noticeable resizing
+      const newWidth = this.placementState.widthPct - (delta * increment);
+      
+      // Clamp between 10% and 100%
+      this.placementState.widthPct = Math.max(10, Math.min(100, newWidth));
+      
+      console.log('📏 New width:', this.placementState.widthPct + '%');
+      
+      this.updatePlacementDisplay();
+      this.updateDesignPosition();
+      
+      const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
+      if (widthSlider) widthSlider.value = this.placementState.widthPct;
+    },
 
-    updateMockupScale(scale) {
-      this.placementState.scalePct = Math.max(50, Math.min(130, scale));
-      this.elements.canvas.style.transform = `scale(${this.placementState.scalePct / 100})`;
-      this.elements.canvas.style.transformOrigin = 'center center';
-      this.elements.sliders.scale.value = this.placementState.scalePct;
-      document.getElementById(`nt-mockup-scale-val-${this.sectionId}`).textContent = `${this.placementState.scalePct}%`;
-      this.logInteraction(`Scaled to ${this.placementState.scalePct}%`);
-    }
+    showDragHandles() {
+      const dragHandle = document.getElementById(`nt-drag-handle-{{ section.id }}`);
+      const resizeHandle = document.getElementById(`nt-resize-handle-{{ section.id }}`);
+      
+      if (dragHandle) dragHandle.style.display = 'block';
+      if (resizeHandle && this.placementState.hasUploadedDesign) {
+        resizeHandle.style.display = 'block';
+      }
+    },
 
-    removeDesign() {
-      this.layerManager.layers = [];
-      this.elements.overlaysContainer.innerHTML = '';
-      this.placementState.hasUploadedDesign = false;
-      this.elements.actions.remove.style.display = 'none';
-      this.updateLayersUI();
-      this.showMessage('🗑️ All designs removed', 'success');
-      this.logInteraction('Design Removed');
-    }
+    hideDragHandles() {
+      const dragHandle = document.getElementById(`nt-drag-handle-{{ section.id }}`);
+      const resizeHandle = document.getElementById(`nt-resize-handle-{{ section.id }}`);
+      
+      if (dragHandle) dragHandle.style.display = 'none';
+      if (resizeHandle) resizeHandle.style.display = 'none';
+    },
 
-    showSizeChart() {
-      if (this.currentSizeChart) return;
-      const overlay = document.createElement('div');
-      overlay.style.cssText = `
-        position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.8);
-        backdrop-filter: blur(10px); z-index: 10000; display: flex; align-items: center;
-        justify-content: center; opacity: 0; transition: opacity 0.3s ease;
+    closeUploadPreview() {
+      if (this.currentUploadPreview) {
+        this.currentUploadPreview.style.opacity = '0';
+        setTimeout(() => {
+          if (document.body.contains(this.currentUploadPreview)) {
+            document.body.removeChild(this.currentUploadPreview);
+          }
+          this.currentUploadPreview = null;
+        }, 300);
+      }
+    },
+
+    showHelpModal() {
+      const helpOverlay = document.createElement('div');
+      helpOverlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(10px);
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
       `;
-      overlay.innerHTML = `
-        <div style="background: white; border-radius: 20px; padding: 40px; max-width: 600px; width: 90vw; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); transform: scale(0.8); transition: transform 0.3s ease;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-            <h2 style="margin: 0; font-size: 28px; font-weight: 700; color: var(--text-color);">📏 Size Chart</h2>
-            <button id="close-size-chart-btn" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #6b7280;">×</button>
-          </div>
-          <div style="margin-bottom: 25px;">
-            <h3 style="margin: 0 0 16px 0; font-size: 20px; font-weight: 600; color: var(--text-color);">T-Shirt Size Guide</h3>
-            <div style="overflow-x: auto;">
-              <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
-                <thead>
-                  <tr style="background: #f8fafc;">
-                    <th style="padding: 12px; border: 1px solid #e2e8f0; font-weight: 600;">Size</th>
-                    <th style="padding: 12px; border: 1px solid #e2e8f0; font-weight: 600;">Chest (inches)</th>
-                    <th style="padding: 12px; border: 1px solid #e2e8f0; font-weight: 600;">Length (inches)</th>
-                    <th style="padding: 12px; border: 1px solid #e2e8f0; font-weight: 600;">Sleeve (inches)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr><td style="padding: 12px; border: 1px solid #e2e8f0; font-weight: 600; color: var(--primary-color);">XS</td><td style="padding: 12px; border: 1px solid #e2e8f0;">32-34</td><td style="padding: 12px; border: 1px solid #e2e8f0;">26</td><td style="padding: 12px; border: 1px solid #e2e8f0;">7.5</td></tr>
-                  <tr style="background: #f8fafc;"><td style="padding: 12px; border: 1px solid #e2e8f0; font-weight: 600; color: var(--primary-color);">S</td><td style="padding: 12px; border: 1px solid #e2e8f0;">34-36</td><td style="padding: 12px; border: 1px solid #e2e8f0;">27</td><td style="padding: 12px; border: 1px solid #e2e8f0;">8</td></tr>
-                  <tr><td style="padding: 12px; border: 1px solid #e2e8f0; font-weight: 600; color: var(--primary-color);">M</td><td style="padding: 12px; border: 1px solid #e2e8f0;">38-40</td><td style="padding: 12px; border: 1px solid #e2e8f0;">28</td><td style="padding: 12px; border: 1px solid #e2e8f0;">8.5</td></tr>
-                  <tr style="background: #f8fafc;"><td style="padding: 12px; border: 1px solid #e2e8f0; font-weight: 600; color: var(--primary-color);">L</td><td style="padding: 12px; border: 1px solid #e2e8f0;">42-44</td><td style="padding: 12px; border: 1px solid #e2e8f0;">29</td><td style="padding: 12px; border: 1px solid #e2e8f0;">9</td></tr>
-                  <tr><td style="padding: 12px; border: 1px solid #e2e8f0; font-weight: 600; color: var(--primary-color);">XL</td><td style="padding: 12px; border: 1px solid #e2e8f0;">46-48</td><td style="padding: 12px; border: 1px solid #e2e8f0;">30</td><td style="padding: 12px; border: 1px solid #e2e8f0;">9.5</td></tr>
-                  <tr style="background: #f8fafc;"><td style="padding: 12px; border: 1px solid #e2e8f0; font-weight: 600; color: var(--primary-color);">XXL</td><td style="padding: 12px; border: 1px solid #e2e8f0;">50-52</td><td style="padding: 12px; border: 1px solid #e2e8f0;">31</td><td style="padding: 12px; border: 1px solid #e2e8f0;">10</td></tr>
-                </tbody>
-              </table>
+
+      const helpContainer = document.createElement('div');
+      helpContainer.style.cssText = `
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        max-width: 700px;
+        width: 90vw;
+        max-height: 80vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      `;
+
+      helpContainer.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+          <h2 style="margin: 0; font-size: 28px; font-weight: 700; color: #374151;">
+            📁 File Upload Help
+          </h2>
+          <button id="close-help-btn" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #6b7280;">
+            ×
+          </button>
+        </div>
+
+        <div style="margin-bottom: 25px;">
+          <h3 style="margin: 0 0 12px 0; font-size: 20px; font-weight: 600; color: #374151;">
+            ✅ Accepted File Formats
+          </h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+            <div style="background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0;">
+              <div style="font-weight: 600; color: #059669; margin-bottom: 4px;">📄 PNG</div>
+              <div style="font-size: 14px; color: #6b7280;">Best for designs with transparency</div>
             </div>
-          </div>
-          <div style="background: linear-gradient(135deg, #f0fdfa, #ecfdf5); padding: 20px; border-radius: 12px; border: 1px solid #a7f3d0;">
-            <div style="font-weight: 600; color: #065f46; margin-bottom: 8px;">💡 Sizing Tips</div>
-            <div style="color: #047857; font-size: 14px; line-height: 1.6;">
-              • Measure your chest at the fullest point<br>
-              • Our t-shirts are designed for a relaxed fit<br>
-              • If between sizes, we recommend sizing up<br>
-              • All measurements are in inches and taken from the garment
+            <div style="background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0;">
+              <div style="font-weight: 600; color: #059669; margin-bottom: 4px;">🖼️ JPG/JPEG</div>
+              <div style="font-size: 14px; color: #6b7280;">Standard photo format</div>
+            </div>
+            <div style="background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0;">
+              <div style="font-weight: 600; color: #059669; margin-bottom: 4px;">🎨 SVG</div>
+              <div style="font-size: 14px; color: #6b7280;">Vector graphics (scalable)</div>
+            </div>
+            <div style="background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0;">
+              <div style="font-weight: 600; color: #059669; margin-bottom: 4px;">📋 PDF</div>
+              <div style="font-size: 14px; color: #6b7280;">Document format</div>
             </div>
           </div>
         </div>
-      `;
-      document.body.appendChild(overlay);
-      setTimeout(() => {
-        overlay.style.opacity = '1';
-        overlay.querySelector('div').style.transform = 'scale(1)';
-      }, 100);
-      const closeBtn = overlay.querySelector('#close-size-chart-btn');
-      closeBtn.addEventListener('click', () => this.closeSizeChart(overlay));
-      overlay.addEventListener('click', e => {
-        if (e.target === overlay) this.closeSizeChart(overlay);
-      });
-      this.currentSizeChart = overlay;
-      this.logInteraction('Size Chart Opened');
-    }
 
-    closeSizeChart(overlay) {
-      if (overlay) {
-        overlay.style.opacity = '0';
-        overlay.querySelector('div').style.transform = 'scale(0.8)';
-        setTimeout(() => {
-          if (document.body.contains(overlay)) document.body.removeChild(overlay);
-        }, 300);
-        this.currentSizeChart = null;
-        this.logInteraction('Size Chart Closed');
-      }
-    }
+        <div style="margin-bottom: 25px;">
+          <h3 style="margin: 0 0 12px 0; font-size: 20px; font-weight: 600; color: #374151;">
+            📏 File Requirements
+          </h3>
+          <ul style="margin: 0; padding-left: 20px; color: #6b7280; line-height: 1.6;">
+            <li><strong>Maximum file size:</strong> 10MB</li>
+            <li><strong>Recommended resolution:</strong> 2048x2048px or higher</li>
+            <li><strong>Color mode:</strong> RGB or CMYK</li>
+            <li><strong>Transparency:</strong> Supported for PNG files</li>
+          </ul>
+        </div>
 
-    showHelpModal() {
-      const overlay = document.createElement('div');
-      overlay.style.cssText = `
-        position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.8);
-        backdrop-filter: blur(10px); z-index: 10000; display: flex; align-items: center;
-        justify-content: center; opacity: 0; transition: opacity 0.3s ease;
-      `;
-      overlay.innerHTML = `
-        <div style="background: white; border-radius: 20px; padding: 40px; max-width: 700px; width: 90vw; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-            <h2 style="margin: 0; font-size: 28px; font-weight: 700; color: var(--text-color);">📁 File Upload Help</h2>
-            <button id="close-help-btn" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #6b7280;">×</button>
+        <div style="margin-bottom: 25px;">
+          <h3 style="margin: 0 0 12px 0; font-size: 20px; font-weight: 600; color: #374151;">
+            💡 Design Tips
+          </h3>
+          <ul style="margin: 0; padding-left: 20px; color: #6b7280; line-height: 1.6;">
+            <li>Use high-resolution images for best print quality</li>
+            <li>Keep important design elements within the center area</li>
+            <li>PNG files with transparency work best for logos</li>
+            <li>Vector files (SVG) will scale perfectly at any size</li>
+            <li>Test your design on different t-shirt colors</li>
+          </ul>
+        </div>
+
+        <div style="background: linear-gradient(135deg, #f0fdfa, #ecfdf5); padding: 20px; border-radius: 12px; border: 1px solid #a7f3d0;">
+          <div style="font-weight: 600; color: #065f46; margin-bottom: 8px;">🚀 Pro Tip</div>
+          <div style="color: #047857; font-size: 14px;">
+            For best results, create your design in a square format (1:1 ratio) with a transparent background. This ensures your design will look great on any t-shirt color!
           </div>
-          <div style="margin-bottom: 25px;">
-            <h3 style="margin: 0 0 12px 0; font-size: 20px; font-weight: 600; color: var(--text-color);">✅ Accepted File
+        </div>
+      `;
+
+      helpOverlay.appendChild(helpContainer);
+      document.body.appendChild(helpOverlay);
+
+      // Animate in
+      setTimeout(() => {
+        helpOverlay.style.opacity = '1';
+      }, 100);
+
+      // Bind close event
+      document.getElementById('close-help-btn').addEventListener('click', () => {
+        helpOverlay.style.opacity = '0';
+        setTimeout(() => {
+          if (document.body.contains(helpOverlay)) {
+            document.body.removeChild(helpOverlay);
+          }
+        }, 300);
+      });
+
+      helpOverlay.addEventListener('click', (e) => {
+        if (e.target === helpOverlay) {
+          helpOverlay.style.opacity = '0';
+          setTimeout(() => {
+            if (document.body.contains(helpOverlay)) {
+              document.body.removeChild(helpOverlay);
+            }
+          }, 300);
+        }
+      });
+    },
+
+    showMessage(message, type = 'info') {
+      const messageEl = document.createElement('div');
+      messageEl.textContent = message;
+      Object.assign(messageEl.style, {
+        position: 'fixed',
+        top: '20px',
+        right: '20px',
+        background: type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#6b7280',
+        color: 'white',
+        padding: '12px 20px',
+        borderRadius: '8px',
+        fontSize: '14px',
+        fontWeight: '500',
+        zIndex: '10000',
+        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.15)',
+        transform: 'translateX(100%)',
+        transition: 'transform 0.3s ease'
+      });
+      
+      document.body.appendChild(messageEl);
+      
+      setTimeout(() => messageEl.style.transform = 'translateX(0)', 100);
+      setTimeout(() => {
+        messageEl.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+          if (document.body.contains(messageEl)) {
+            document.body.removeChild(messageEl);
+          }
+        }, 300);
+      }, 3000);
+    },
+
+    {% if section.settings.allow_download %}
+    downloadComposite() {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      
+      // Set canvas size
+      canvas.width = 2000;
+      canvas.height = 2000;
+
+      // Create base image
+      const baseImg = new Image();
+      baseImg.crossOrigin = "anonymous";
+      baseImg.src = document.getElementById("nt-base-{{ section.id }}").src;
+
+      baseImg.onload = () => {
+        // Draw base image
+        ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
+
+        // Check if there's an uploaded design image
+        const overlayImg = document.querySelector(`#nt-overlay-{{ section.id }} img`);
+        
+        if (overlayImg && overlayImg.src && !overlayImg.src.includes('data:image/svg+xml')) {
+          // Draw uploaded design image
+          const designImg = new Image();
+          designImg.crossOrigin = "anonymous";
+          designImg.src = overlayImg.src;
+          
+          designImg.onload = () => {
+            // Use the exact placement state values that match the preview
+            const topPct = this.placementState.topPct / 100;
+            const leftPct = this.placementState.leftPct / 100;
+            const widthPct = this.placementState.widthPct / 100;
+            const rotateDeg = this.placementState.rotate || 0;
+
+            // Calculate design position and size on canvas (matching the visual positioning exactly)
+            const designX = canvas.width * leftPct;
+            const designY = canvas.height * topPct;
+            const designWidth = canvas.width * widthPct;
+            const designHeight = (designImg.height / designImg.width) * designWidth;
+
+            // Save context for rotation
+            ctx.save();
+            ctx.translate(designX + designWidth / 2, designY + designHeight / 2);
+            ctx.rotate(rotateDeg * Math.PI / 180);
+            
+            // Draw the design image
+            ctx.drawImage(designImg, -designWidth / 2, -designHeight / 2, designWidth, designHeight);
+            ctx.restore();
+
+            // Download
+            const a = document.createElement('a');
+            a.download = `custom_mockup_${this.state.view}_${this.state.color}.png`;
+            a.href = canvas.toDataURL("image/png");
+            a.click();
+          };
+        } else {
+          // Fallback to text if no image uploaded
+          ctx.save();
+          ctx.font = `${this.designState.fontSize * 2}px ${this.designState.fontFamily}`;
+          ctx.fillStyle = this.designState.textColor;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+
+          // Calculate text position based on overlay settings
+          const stage = document.querySelector(`#nt-mockup-{{ section.id }} .nt-mockup__canvas`);
+          const topPct = parseFloat(getComputedStyle(stage).getPropertyValue('--overlay-top')) / 100;
+          const leftPct = parseFloat(getComputedStyle(stage).getPropertyValue('--overlay-left')) / 100;
+          const widthPct = parseFloat(getComputedStyle(stage).getPropertyValue('--overlay-width')) / 100;
+          const rotateDeg = parseFloat(getComputedStyle(stage).getPropertyValue('--overlay-rotate')) || 0;
+
+          const x = canvas.width * (leftPct + widthPct / 2);
+          const y = canvas.height * (topPct + 0.3); // Adjust for text positioning
+
+          ctx.translate(x, y);
+          ctx.rotate(rotateDeg * Math.PI / 180);
+          
+          // Apply text effects
+          switch (this.designState.effect) {
+            case 'outline':
+              ctx.strokeStyle = this.designState.textColor;
+              ctx.lineWidth = 4;
+              ctx.strokeText(this.designState.text, 0, 0);
+              ctx.fillStyle = 'transparent';
+              break;
+            case 'shadow':
+              ctx.shadowColor = 'rgba(0,0,0,0.5)';
+              ctx.shadowBlur = 8;
+              ctx.shadowOffsetX = 4;
+              ctx.shadowOffsetY = 4;
+              ctx.fillStyle = this.designState.textColor;
+              break;
+            default:
+              ctx.fillStyle = this.designState.textColor;
+          }
+          
+          ctx.fillText(this.designState.text, 0, 0);
+          ctx.restore();
+
+          // Download
+          const a = document.createElement('a');
+          a.download = `custom_mockup_${this.state.view}_${this.state.color}.png`;
+          a.href = canvas.toDataURL("image/png");
+          a.click();
+        }
+      };
+    }
+    {% endif %}
+  };
+
+  // Initialize mockup
+  mockup.init();
+
+  // Make globally available
+  window.mockup = mockup;
+
+  console.log('Enhanced Interactive Mockup initialized! 🎨');
+});
+</script>
+
+{% schema %}
+{
+  "name": "Interactive Mockup",
+  "class": "section-interactive-mockup",
+  "settings": [
+    {
+      "type": "header",
+      "content": "🖼 Base T-shirt Mockup"
+    },
+    {
+      "type": "image_picker",
+      "id": "base_mockup",
+      "label": "Base T-shirt Image",
+      "info": "Upload a high-quality T-shirt mockup image. Recommended size: 800x800px or larger."
+    },
+    {
+      "type": "header",
+      "content": "📐 Design Overlay Settings"
+    },
+    {
+      "type": "range",
+      "id": "overlay_top",
+      "min": 0,
+      "max": 90,
+      "step": 1,
+      "unit": "%",
+      "label": "Top Position",
+      "default": 45
+    },
+    {
+      "type": "range",
+      "id": "overlay_left",
+      "min": 0,
+      "max": 90,
+      "step": 1,
+      "unit": "%",
+      "label": "Left Position",
+      "default": 25
+    },
+    {
+      "type": "range",
+      "id": "overlay_width",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Design Width",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "overlay_rotate",
+      "min": -45,
+      "max": 45,
+      "step": 1,
+      "unit": "°",
+      "label": "Design Rotation",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "⚙️ Options"
+    },
+    {
+      "type": "checkbox",
+      "id": "allow_download",
+      "label": "Enable Download Feature",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 40
+    }
+  ],
+  "presets": [
+    {
+      "name": "Interactive Mockup"
+    }
+  ]
+}
+{% endschema %}
