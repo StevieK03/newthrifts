@@ -18,7 +18,7 @@ Welcome / Social Bar — Monochrome
 
         <div class="welcome-buttons">
           {% if section.settings.facebook_url != blank %}
-            <a class="pill-btn" href="{{ section.settings.facebook_url }}" target="_blank" rel="noopener noreferrer">
+            <a class="pill-btn facebook-btn" href="{{ section.settings.facebook_url }}" target="_blank" rel="noopener noreferrer">
               <!-- Facebook icon -->
               <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M13.5 9H15V6h-1.5C11.57 6 10 7.57 10 9.5V11H8v3h2v7h3v-7h2.1l.4-3H13v-1.3c0-.45.36-.7.8-.7Z"/></svg>
               <span>Follow us on <strong>Facebook</strong></span>
@@ -26,10 +26,34 @@ Welcome / Social Bar — Monochrome
           {% endif %}
 
           {% if section.settings.instagram_url != blank %}
-            <a class="pill-btn" href="{{ section.settings.instagram_url }}" target="_blank" rel="noopener noreferrer">
+            <a class="pill-btn instagram-btn" href="{{ section.settings.instagram_url }}" target="_blank" rel="noopener noreferrer">
               <!-- Instagram icon -->
               <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm10 2H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3Zm-5 4.5A5.5 5.5 0 1 1 6.5 14 5.5 5.5 0 0 1 12 8.5Zm0 2A3.5 3.5 0 1 0 15.5 14 3.5 3.5 0 0 0 12 10.5Zm5.75-3.25a1.25 1.25 0 1 1-1.25 1.25 1.25 1.25 0 0 1 1.25-1.25Z"/></svg>
               <span>Follow us on <strong>Instagram</strong></span>
+            </a>
+          {% endif %}
+
+          {% if section.settings.twitter_url != blank %}
+            <a class="pill-btn twitter-btn" href="{{ section.settings.twitter_url }}" target="_blank" rel="noopener noreferrer">
+              <!-- Twitter icon -->
+              <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              <span>Follow us on <strong>Twitter</strong></span>
+            </a>
+          {% endif %}
+
+          {% if section.settings.tiktok_url != blank %}
+            <a class="pill-btn tiktok-btn" href="{{ section.settings.tiktok_url }}" target="_blank" rel="noopener noreferrer">
+              <!-- TikTok icon -->
+              <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
+              <span>Follow us on <strong>TikTok</strong></span>
+            </a>
+          {% endif %}
+
+          {% if section.settings.youtube_url != blank %}
+            <a class="pill-btn youtube-btn" href="{{ section.settings.youtube_url }}" target="_blank" rel="noopener noreferrer">
+              <!-- YouTube icon -->
+              <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+              <span>Subscribe on <strong>YouTube</strong></span>
             </a>
           {% endif %}
         </div>
@@ -131,31 +155,107 @@ Welcome / Social Bar — Monochrome
     }
 
     #welcome-{{ section.id }} .welcome-buttons {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      width: 100%;
+      max-width: 800px;
+    }
+
+    @media (max-width: 768px) {
+      #welcome-{{ section.id }} .welcome-buttons {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
     }
 
     #welcome-{{ section.id }} .pill-btn {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 12px 20px;
-      border-radius: 9999px;
+      justify-content: center;
+      gap: 10px;
+      padding: 16px 24px;
+      border-radius: 12px;
       background: #0f172a;
       color: #ffffff;
-      border: 1px solid #0f172a;
+      border: 2px solid transparent;
       text-decoration: none;
       font-weight: 600;
       font-size: 14px;
-      box-shadow: 0 4px 12px rgba(15,23,42,.2);
-      transition: all .2s ease;
+      box-shadow: 0 4px 16px rgba(15,23,42,.15);
+      transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #welcome-{{ section.id }} .pill-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.2), transparent);
+      transition: left .5s;
+    }
+
+    #welcome-{{ section.id }} .pill-btn:hover::before {
+      left: 100%;
     }
 
     #welcome-{{ section.id }} .pill-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(15,23,42,.3);
-      background: #1e293b;
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 8px 25px rgba(15,23,42,.25);
+    }
+
+    #welcome-{{ section.id }} .pill-btn:active {
+      transform: translateY(-1px) scale(0.98);
+    }
+
+    /* Platform-specific button styles */
+    #welcome-{{ section.id }} .facebook-btn {
+      background: linear-gradient(135deg, #1877f2, #42a5f5);
+    }
+
+    #welcome-{{ section.id }} .facebook-btn:hover {
+      background: linear-gradient(135deg, #166fe5, #1976d2);
+      box-shadow: 0 8px 25px rgba(24,119,242,.3);
+    }
+
+    #welcome-{{ section.id }} .instagram-btn {
+      background: linear-gradient(135deg, #e4405f, #fd1d1d, #fcb045);
+    }
+
+    #welcome-{{ section.id }} .instagram-btn:hover {
+      background: linear-gradient(135deg, #d63031, #e84393, #fdcb6e);
+      box-shadow: 0 8px 25px rgba(228,64,95,.3);
+    }
+
+    #welcome-{{ section.id }} .twitter-btn {
+      background: linear-gradient(135deg, #1da1f2, #0d8bd9);
+    }
+
+    #welcome-{{ section.id }} .twitter-btn:hover {
+      background: linear-gradient(135deg, #0d8bd9, #0a6bb3);
+      box-shadow: 0 8px 25px rgba(29,161,242,.3);
+    }
+
+    #welcome-{{ section.id }} .tiktok-btn {
+      background: linear-gradient(135deg, #000000, #ff0050);
+    }
+
+    #welcome-{{ section.id }} .tiktok-btn:hover {
+      background: linear-gradient(135deg, #ff0050, #000000);
+      box-shadow: 0 8px 25px rgba(255,0,80,.3);
+    }
+
+    #welcome-{{ section.id }} .youtube-btn {
+      background: linear-gradient(135deg, #ff0000, #cc0000);
+    }
+
+    #welcome-{{ section.id }} .youtube-btn:hover {
+      background: linear-gradient(135deg, #cc0000, #990000);
+      box-shadow: 0 8px 25px rgba(255,0,0,.3);
     }
 
     #welcome-{{ section.id }} .welcome-visual {
@@ -311,6 +411,9 @@ Welcome / Social Bar — Monochrome
       { "type": "richtext", "id": "body", "label": "Body" },
       { "type": "url", "id": "facebook_url", "label": "Facebook URL" },
       { "type": "url", "id": "instagram_url", "label": "Instagram URL" },
+      { "type": "url", "id": "twitter_url", "label": "Twitter URL" },
+      { "type": "url", "id": "tiktok_url", "label": "TikTok URL" },
+      { "type": "url", "id": "youtube_url", "label": "YouTube URL" },
       { "type": "range", "id": "pad_y", "label": "Top/Bottom padding (px)", "min": 0, "max": 120, "step": 4, "default": 36 },
       { "type": "color", "id": "section_bg", "label": "Section background", "default": "#f2f3f5" }
     ],
