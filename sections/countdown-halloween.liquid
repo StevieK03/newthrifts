@@ -102,98 +102,142 @@
       visibility:visible;
     }
     
-    /* Bright Moon Core */
-    #hween-{{ section.id }} .moon-core{ 
-      position:absolute; 
-      top:50%; 
-      left:50%; 
+    /* Enhanced Moon Container */
+    #hween-{{ section.id }} .moon-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 5rem;
+      height: 5rem;
       transform: translate(-50%, -50%);
-      width:3.5rem; 
-      height:3.5rem; 
-      background: radial-gradient(circle at 25% 25%, #ffffff, #f0f8ff, #e6f3ff); 
-      border-radius:50%; 
+      border-radius: 50%;
+      overflow: hidden;
+    }
+
+    /* Moon Surface with Realistic Texture */
+    #hween-{{ section.id }} .moon-surface {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 30% 30%, #fff 0%, #f5f5f5 40%, #e8e8e8 70%, #d0d0d0 100%);
+      border-radius: 50%;
       box-shadow: 
-        0 0 30px rgba(255,255,255,1),
-        0 0 60px rgba(255,255,255,0.8),
-        0 0 90px rgba(255,255,255,0.6),
-        0 0 120px rgba(255,255,255,0.4),
-        inset 0 0 30px rgba(255,255,255,0.5);
-      clip-path: var(--moon-phase, circle());
-      transition: all 0.4s ease;
+        inset -10px -10px 20px rgba(0,0,0,0.1),
+        inset 10px 10px 20px rgba(255,255,255,0.3);
     }
-    
-    /* Bright Glow Ring 1 - Inner */
-    #hween-{{ section.id }} .moon-glow-1{ 
-      position:absolute; 
-      top:50%; 
-      left:50%; 
-      transform: translate(-50%, -50%);
-      width:4.5rem; 
-      height:4.5rem; 
-      border-radius:50%; 
-      background: radial-gradient(circle, rgba(255,255,255,0.6), rgba(255,255,255,0.2) 60%, transparent 80%);
-      animation: moonPulse 2.5s ease-in-out infinite;
+
+    /* Moon Craters */
+    #hween-{{ section.id }} .moon-craters {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
     }
-    
-    /* Bright Glow Ring 2 - Middle */
-    #hween-{{ section.id }} .moon-glow-2{ 
-      position:absolute; 
-      top:50%; 
-      left:50%; 
-      transform: translate(-50%, -50%);
-      width:6rem; 
-      height:6rem; 
-      border-radius:50%; 
-      background: radial-gradient(circle, rgba(255,255,255,0.4), rgba(255,255,255,0.1) 50%, transparent 70%);
-      animation: moonPulse 2.5s ease-in-out infinite 0.3s;
+
+    #hween-{{ section.id }} .crater {
+      position: absolute;
+      background: radial-gradient(circle, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.05) 50%, transparent 100%);
+      border-radius: 50%;
     }
-    
-    /* Bright Glow Ring 3 - Outer */
-    #hween-{{ section.id }} .moon-glow-3{ 
-      position:absolute; 
-      top:50%; 
-      left:50%; 
-      transform: translate(-50%, -50%);
-      width:7.5rem; 
-      height:7.5rem; 
-      border-radius:50%; 
-      background: radial-gradient(circle, rgba(255,255,255,0.25), rgba(255,255,255,0.05) 40%, transparent 60%);
-      animation: moonPulse 2.5s ease-in-out infinite 0.6s;
+
+    #hween-{{ section.id }} .crater-1 {
+      width: 0.8rem;
+      height: 0.8rem;
+      top: 20%;
+      left: 25%;
     }
-    
-    /* Bright Shimmer Effect */
-    #hween-{{ section.id }} .moon-shimmer{ 
-      position:absolute; 
-      top:50%; 
-      left:50%; 
-      transform: translate(-50%, -50%);
-      width:4rem; 
-      height:4rem; 
-      border-radius:50%; 
-      background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.8), rgba(255,255,255,0.4), transparent);
-      animation: moonShimmer 3s linear infinite;
-      mix-blend-mode: screen;
+
+    #hween-{{ section.id }} .crater-2 {
+      width: 0.6rem;
+      height: 0.6rem;
+      top: 60%;
+      left: 70%;
     }
-    
-    /* Enhanced Pulse Animation */
-    @keyframes moonPulse {
-      0%, 100% { 
-        transform: translate(-50%, -50%) scale(1); 
-        opacity: 0.7; 
-      }
-      50% { 
-        transform: translate(-50%, -50%) scale(1.15); 
-        opacity: 1; 
-      }
+
+    #hween-{{ section.id }} .crater-3 {
+      width: 0.4rem;
+      height: 0.4rem;
+      top: 40%;
+      left: 15%;
     }
-    
-    /* Enhanced Shimmer Animation */
-    @keyframes moonShimmer {
-      0% { transform: translate(-50%, -50%) rotate(0deg); opacity: 0.6; }
-      25% { opacity: 1; }
-      50% { transform: translate(-50%, -50%) rotate(180deg); opacity: 0.8; }
-      75% { opacity: 1; }
-      100% { transform: translate(-50%, -50%) rotate(360deg); opacity: 0.6; }
+
+    #hween-{{ section.id }} .crater-4 {
+      width: 0.5rem;
+      height: 0.5rem;
+      top: 75%;
+      left: 40%;
+    }
+
+    /* Moon Phase Shadow */
+    #hween-{{ section.id }} .moon-phase-shadow {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--moon-phase-shadow, transparent);
+      border-radius: 50%;
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+    }
+
+    /* Moon Atmosphere Glow */
+    #hween-{{ section.id }} .moon-atmosphere {
+      position: absolute;
+      top: -20%;
+      left: -20%;
+      width: 140%;
+      height: 140%;
+      background: radial-gradient(circle, 
+        rgba(255,255,255,0.1) 0%, 
+        rgba(255,255,255,0.05) 30%, 
+        transparent 70%);
+      border-radius: 50%;
+      animation: atmosphere-pulse 4s ease-in-out infinite;
+    }
+
+    /* Moon Shine Effect */
+    #hween-{{ section.id }} .moon-shine {
+      position: absolute;
+      top: 15%;
+      left: 15%;
+      width: 35%;
+      height: 35%;
+      background: radial-gradient(ellipse at center, 
+        rgba(255,255,255,0.8) 0%, 
+        rgba(255,255,255,0.4) 50%, 
+        transparent 100%);
+      border-radius: 50%;
+      animation: moon-shine 6s ease-in-out infinite;
+    }
+
+    /* Moon Phase Label */
+    #hween-{{ section.id }} .moon-phase-label {
+      position: absolute;
+      top: 120%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.7rem;
+      color: var(--text);
+      text-align: center;
+      font-weight: 600;
+      text-shadow: 0 0 10px rgba(0,0,0,0.5);
+      opacity: 0.8;
+      white-space: nowrap;
+    }
+
+    /* Animations */
+    @keyframes atmosphere-pulse {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.1); }
+    }
+
+    @keyframes moon-shine {
+      0%, 100% { opacity: 0.6; transform: scale(1) rotate(0deg); }
+      50% { opacity: 1; transform: scale(1.1) rotate(180deg); }
     }
     
     /* Enhanced Fog effect */
@@ -340,25 +384,33 @@
         top: 6%; 
         right: 6%; 
       }
-      #hween-{{ section.id }} .moon-core{ 
-        width: 2.8rem; 
-        height: 2.8rem; 
+      #hween-{{ section.id }} .moon-container{ 
+        width: 4rem; 
+        height: 4rem; 
       }
-      #hween-{{ section.id }} .moon-glow-1{ 
-        width: 3.5rem; 
-        height: 3.5rem; 
+      
+      #hween-{{ section.id }} .crater-1 {
+        width: 0.6rem;
+        height: 0.6rem;
       }
-      #hween-{{ section.id }} .moon-glow-2{ 
-        width: 4.5rem; 
-        height: 4.5rem; 
+      
+      #hween-{{ section.id }} .crater-2 {
+        width: 0.4rem;
+        height: 0.4rem;
       }
-      #hween-{{ section.id }} .moon-glow-3{ 
-        width: 5.5rem; 
-        height: 5.5rem; 
+      
+      #hween-{{ section.id }} .crater-3 {
+        width: 0.3rem;
+        height: 0.3rem;
       }
-      #hween-{{ section.id }} .moon-shimmer{ 
-        width: 3.2rem; 
-        height: 3.2rem; 
+      
+      #hween-{{ section.id }} .crater-4 {
+        width: 0.4rem;
+        height: 0.4rem;
+      }
+      
+      #hween-{{ section.id }} .moon-phase-label {
+        font-size: 0.6rem;
       }
       #hween-{{ section.id }} .pumpkin{ 
         font-size: 1.8rem; 
@@ -418,11 +470,30 @@
   <div class="shooting-stars" aria-hidden="true"></div>
   {% if section.settings.show_moon %}
     <div class="moon" id="moon-{{ section.id }}" aria-hidden="true">
-      <div class="moon-glow-3"></div>
-      <div class="moon-glow-2"></div>
-      <div class="moon-glow-1"></div>
-      <div class="moon-core"></div>
-      <div class="moon-shimmer"></div>
+      <!-- Enhanced Moon with Realistic Phases -->
+      <div class="moon-container">
+        <!-- Moon Surface -->
+        <div class="moon-surface">
+          <div class="moon-craters">
+            <div class="crater crater-1"></div>
+            <div class="crater crater-2"></div>
+            <div class="crater crater-3"></div>
+            <div class="crater crater-4"></div>
+          </div>
+        </div>
+        
+        <!-- Phase Shadow (changes based on moon phase) -->
+        <div class="moon-phase-shadow"></div>
+        
+        <!-- Atmospheric Glow -->
+        <div class="moon-atmosphere"></div>
+        
+        <!-- Moon Shine Effect -->
+        <div class="moon-shine"></div>
+      </div>
+      
+      <!-- Moon Phase Label -->
+      <div class="moon-phase-label"></div>
     </div>
   {% endif %}
   <div class="bats" id="bats-{{ section.id }}" aria-hidden="true"></div>
@@ -526,32 +597,54 @@ document.addEventListener('DOMContentLoaded', function(){
       return;
     }
     
-    var diff = target.getTime() - Date.now();
-    var daysLeft = Math.max(0, Math.floor(diff / (1000*60*60*24)));
-    var phaseCycle = 29.5;
-    var phaseProgress = ((phaseCycle - (daysLeft % phaseCycle)) / phaseCycle);
-    var phases = ['circle()','inset(0 15% 0 0)','inset(0 40% 0 0)','inset(0 70% 0 0)','inset(0 100% 0 0)','inset(0 0 0 70%)','inset(0 0 0 40%)','inset(0 0 0 15%)'];
-    var idx = Math.min(7, Math.max(0, Math.floor(phaseProgress * phases.length)));
+    // Calculate realistic moon phase based on current date
+    var now = new Date();
+    var moonPhase = getMoonPhase(now);
     
-    // Apply moon phase to the moon-core element with smooth transition
-    var moonCore = moonEl.querySelector('.moon-core');
-    if (moonCore) {
-      moonCore.style.setProperty('--moon-phase', phases[idx]);
+    // Get moon elements
+    var phaseShadow = moonEl.querySelector('.moon-phase-shadow');
+    var phaseLabel = moonEl.querySelector('.moon-phase-label');
+    
+    if (phaseShadow && phaseLabel) {
+      // Apply realistic moon phase shadow
+      var shadowStyles = {
+        'new': 'radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 100%)',
+        'waxing-crescent': 'radial-gradient(circle at 25% 50%, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 40%, transparent 70%)',
+        'first-quarter': 'linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.8) 50%, transparent 50%)',
+        'waxing-gibbous': 'radial-gradient(circle at 75% 50%, transparent 0%, rgba(0,0,0,0.4) 30%, rgba(0,0,0,0.8) 100%)',
+        'full': 'transparent',
+        'waning-gibbous': 'radial-gradient(circle at 25% 50%, transparent 0%, rgba(0,0,0,0.4) 30%, rgba(0,0,0,0.8) 100%)',
+        'last-quarter': 'linear-gradient(to left, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.8) 50%, transparent 50%)',
+        'waning-crescent': 'radial-gradient(circle at 75% 50%, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 40%, transparent 70%)'
+      };
+      
+      phaseShadow.style.background = shadowStyles[moonPhase.name] || shadowStyles['full'];
+      phaseLabel.textContent = moonPhase.name.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
+      
       // Ensure moon is visible and properly positioned
       moonEl.style.display = 'block';
       moonEl.style.opacity = '1';
       moonEl.style.visibility = 'visible';
-      
-      // Debug info (remove in production)
-      console.log('Moon phase updated:', {
-        daysLeft: daysLeft,
-        phaseProgress: phaseProgress,
-        phaseIndex: idx,
-        phase: phases[idx]
-      });
-    } else {
-      console.warn('Moon core element not found');
     }
+  }
+  
+  // Calculate realistic moon phase based on date
+  function getMoonPhase(date) {
+    // Known new moon date (approximate)
+    var knownNewMoon = new Date('2000-01-06T18:14:00Z');
+    var lunarCycle = 29.53059; // days
+    
+    var daysSinceKnown = (date - knownNewMoon) / (1000 * 60 * 60 * 24);
+    var currentAge = ((daysSinceKnown % lunarCycle) + lunarCycle) % lunarCycle;
+    
+    var phaseNames = ['new', 'waxing-crescent', 'first-quarter', 'waxing-gibbous', 'full', 'waning-gibbous', 'last-quarter', 'waning-crescent'];
+    var phaseIndex = Math.floor((currentAge / lunarCycle) * 8);
+    
+    return {
+      name: phaseNames[phaseIndex] || 'full',
+      age: currentAge,
+      illumination: Math.abs(Math.cos(2 * Math.PI * currentAge / lunarCycle))
+    };
   }
 
   function tick(){
@@ -596,7 +689,7 @@ document.addEventListener('DOMContentLoaded', function(){
       // Force initial moon phase update
       updateMoonPhase();
       
-      console.log('Moon initialized for section {{ section.id }}');
+      console.log('Enhanced moon initialized for section {{ section.id }}');
     }
   }
   
