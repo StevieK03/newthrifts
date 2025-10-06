@@ -424,11 +424,17 @@ Enhanced Interactive Product Mockup
 /* Resize Handle Animations */
 .resize-handle {
   transition: all 0.2s ease;
+  display: none !important; /* Force hide by default */
 }
 
 .resize-handle:hover {
   transform: scale(1.1);
   box-shadow: 0 6px 16px rgba(0,0,0,0.4) !important;
+}
+
+/* Show handles only when explicitly set to block */
+.resize-handle.show-handle {
+  display: block !important;
 }
 
 
@@ -653,6 +659,10 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // Show placement controls by default for testing
       this.showPlacementControls();
+      
+      // Ensure design starts unselected
+      this.deselectDesign();
+      
       console.log('✅ Mockup initialized with placement controls visible');
     },
 
@@ -1928,31 +1938,15 @@ document.addEventListener('DOMContentLoaded', function() {
       if (widthSlider) widthSlider.value = this.placementState.widthPct;
     },
 
-    showDragHandles() {
-      const dragHandle = document.getElementById(`nt-drag-handle-{{ section.id }}`);
-      const resizeHandle = document.getElementById(`nt-resize-handle-{{ section.id }}`);
-      
-      if (dragHandle) dragHandle.style.display = 'block';
-      if (resizeHandle && this.placementState.hasUploadedDesign) {
-        resizeHandle.style.display = 'block';
-      }
-    },
 
-    hideDragHandles() {
-      const dragHandle = document.getElementById(`nt-drag-handle-{{ section.id }}`);
-      const resizeHandle = document.getElementById(`nt-resize-handle-{{ section.id }}`);
-      
-      if (dragHandle) dragHandle.style.display = 'none';
-      if (resizeHandle) resizeHandle.style.display = 'none';
-    },
 
     selectDesign() {
       console.log('🎯 Design selected - showing handles');
       
-      // Show all resize handles
+      // Show all resize handles using CSS class
       const resizeHandles = document.querySelectorAll(`#nt-mockup-canvas-{{ section.id }} .resize-handle`);
       resizeHandles.forEach(handle => {
-        handle.style.display = 'block';
+        handle.classList.add('show-handle');
       });
       
       // Show drag handle
@@ -1978,10 +1972,10 @@ document.addEventListener('DOMContentLoaded', function() {
     deselectDesign() {
       console.log('🎯 Design deselected - hiding handles');
       
-      // Hide all resize handles
+      // Hide all resize handles by removing CSS class
       const resizeHandles = document.querySelectorAll(`#nt-mockup-canvas-{{ section.id }} .resize-handle`);
       resizeHandles.forEach(handle => {
-        handle.style.display = 'none';
+        handle.classList.remove('show-handle');
       });
       
       // Hide drag handle
