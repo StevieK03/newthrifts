@@ -183,9 +183,27 @@ Enhanced Interactive Product Mockup
           </div>
         </div>
 
+        <!-- Design Size Presets -->
+        <div style="margin-top: 20px; padding: 16px; background: #fef3c7; border-radius: 12px; border: 1px solid #fbbf24;">
+          <h5 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #92400e;">⚡ Quick Size Presets</h5>
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px;">
+            <button class="size-preset" data-size="25" style="padding: 8px 12px; background: #f3f4f6; color: #374151; border: 1px solid #d1d5db; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 500; transition: all 0.2s ease;">25%</button>
+            <button class="size-preset" data-size="50" style="padding: 8px 12px; background: #f3f4f6; color: #374151; border: 1px solid #d1d5db; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 500; transition: all 0.2s ease;">50%</button>
+            <button class="size-preset" data-size="75" style="padding: 8px 12px; background: #f3f4f6; color: #374151; border: 1px solid #d1d5db; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 500; transition: all 0.2s ease;">75%</button>
+            <button class="size-preset" data-size="100" style="padding: 8px 12px; background: #f3f4f6; color: #374151; border: 1px solid #d1d5db; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 500; transition: all 0.2s ease;">100%</button>
+          </div>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <button id="nt-reset-size-{{ section.id }}" style="padding: 6px 12px; background: #6b7280; color: white; border: none; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: 500;">🔄 Reset</button>
+            <span style="font-size: 11px; color: #6b7280;">Double-click design to reset size</span>
+          </div>
+        </div>
+
         <div style="margin-top: 16px; padding: 12px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
-          <div style="font-size: 12px; color: #6b7280; text-align: center;">
-            💡 <strong>Pro Tip:</strong> You can also drag the design directly on the mockup to move it, or use scroll wheel to resize!
+          <div style="font-size: 12px; color: #6b7280; text-align: center; line-height: 1.4;">
+            💡 <strong>Pro Tips:</strong><br>
+            • Drag design to move • Scroll wheel to resize • Ctrl+scroll for precise control<br>
+            • Shift+scroll for large steps • Double-click to reset • Use keyboard arrows for fine control<br>
+            • Ctrl+1/2/3/4 for quick presets (25%, 50%, 75%, 100%)
           </div>
         </div>
       </div>
@@ -779,6 +797,9 @@ document.addEventListener('DOMContentLoaded', function() {
       // Bind drag/resize functionality
       this.bindDragResize();
 
+      // Bind preset size buttons
+      this.bindPresetButtons();
+
       {% if section.settings.allow_download %}
       // Bind download button
       const downloadBtn = document.getElementById(`nt-download-{{ section.id }}`);
@@ -792,25 +813,50 @@ document.addEventListener('DOMContentLoaded', function() {
       // Listen for customizer updates
       this.setupCustomizerListener();
 
-      // Add keyboard shortcuts for resizing
+      // Enhanced keyboard shortcuts for resizing
       document.addEventListener('keydown', (e) => {
         if (e.target.closest(`#nt-mockup-{{ section.id }}`)) {
-          if (e.key === '+' || e.key === '=') {
+          let increment = 5; // Default increment
+          
+          // Adjust increment based on modifier keys
+          if (e.shiftKey) increment = 10; // Larger steps with Shift
+          if (e.ctrlKey) increment = 1;   // Smaller steps with Ctrl
+          if (e.altKey) increment = 2.5;  // Medium steps with Alt
+          
+          if (e.key === '+' || e.key === '=' || e.key === 'ArrowUp') {
             e.preventDefault();
-            this.placementState.widthPct = Math.min(100, this.placementState.widthPct + 5);
+            this.placementState.widthPct = Math.min(120, this.placementState.widthPct + increment);
             this.updatePlacementDisplay();
             this.updateDesignPosition();
-            const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
-            if (widthSlider) widthSlider.value = this.placementState.widthPct;
+            this.updateWidthSlider();
             console.log('⌨️ Keyboard resize +, new width:', this.placementState.widthPct + '%');
-          } else if (e.key === '-') {
+          } else if (e.key === '-' || e.key === 'ArrowDown') {
             e.preventDefault();
-            this.placementState.widthPct = Math.max(10, this.placementState.widthPct - 5);
+            this.placementState.widthPct = Math.max(5, this.placementState.widthPct - increment);
             this.updatePlacementDisplay();
             this.updateDesignPosition();
-            const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
-            if (widthSlider) widthSlider.value = this.placementState.widthPct;
+            this.updateWidthSlider();
             console.log('⌨️ Keyboard resize -, new width:', this.placementState.widthPct + '%');
+          } else if (e.key === '0' && e.ctrlKey) {
+            e.preventDefault();
+            this.resetToDefaultSize();
+            console.log('⌨️ Reset to default size');
+          } else if (e.key === '1' && e.ctrlKey) {
+            e.preventDefault();
+            this.setPresetSize(25);
+            console.log('⌨️ Set to 25%');
+          } else if (e.key === '2' && e.ctrlKey) {
+            e.preventDefault();
+            this.setPresetSize(50);
+            console.log('⌨️ Set to 50%');
+          } else if (e.key === '3' && e.ctrlKey) {
+            e.preventDefault();
+            this.setPresetSize(75);
+            console.log('⌨️ Set to 75%');
+          } else if (e.key === '4' && e.ctrlKey) {
+            e.preventDefault();
+            this.setPresetSize(100);
+            console.log('⌨️ Set to 100%');
           }
         }
       });
@@ -1343,6 +1389,61 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     },
 
+    bindPresetButtons() {
+      console.log('⚡ Binding preset size buttons...');
+      
+      // Bind preset size buttons
+      const presetButtons = document.querySelectorAll(`#nt-mockup-{{ section.id }} .size-preset`);
+      presetButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const size = parseInt(button.dataset.size);
+          this.setPresetSize(size);
+          
+          // Visual feedback
+          presetButtons.forEach(btn => {
+            btn.style.background = '#f3f4f6';
+            btn.style.borderColor = '#d1d5db';
+            btn.style.color = '#374151';
+          });
+          button.style.background = '#27e1c1';
+          button.style.borderColor = '#27e1c1';
+          button.style.color = 'white';
+        });
+
+        // Hover effects
+        button.addEventListener('mouseenter', () => {
+          if (button.style.background !== 'rgb(39, 225, 193)') {
+            button.style.background = '#e5e7eb';
+            button.style.borderColor = '#9ca3af';
+          }
+        });
+
+        button.addEventListener('mouseleave', () => {
+          if (button.style.background !== 'rgb(39, 225, 193)') {
+            button.style.background = '#f3f4f6';
+            button.style.borderColor = '#d1d5db';
+          }
+        });
+      });
+
+      // Bind reset button
+      const resetBtn = document.getElementById(`nt-reset-size-{{ section.id }}`);
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          this.resetToDefaultSize();
+          
+          // Reset preset button styles
+          presetButtons.forEach(btn => {
+            btn.style.background = '#f3f4f6';
+            btn.style.borderColor = '#d1d5db';
+            btn.style.color = '#374151';
+          });
+        });
+      }
+      
+      console.log('✅ Preset buttons bound successfully');
+    },
+
     updateMockupScale(scale) {
       const canvas = document.getElementById(`nt-mockup-canvas-{{ section.id }}`);
       const baseImage = document.getElementById(`nt-base-{{ section.id }}`);
@@ -1619,6 +1720,13 @@ document.addEventListener('DOMContentLoaded', function() {
         this.selectDesign();
       });
 
+      // Double-click to reset size
+      overlay.addEventListener('dblclick', (e) => {
+        e.stopPropagation();
+        this.resetToDefaultSize();
+        console.log('🔄 Double-click reset size');
+      });
+
       // Click on canvas (outside design) to deselect
       canvas.addEventListener('click', (e) => {
         if (e.target === canvas || e.target.classList.contains('nt-mockup__base')) {
@@ -1696,30 +1804,40 @@ document.addEventListener('DOMContentLoaded', function() {
         this.endPinch();
       });
 
-      // Scroll wheel for resize - Test if events are being detected
+      // Enhanced scroll wheel for resize with multiple sensitivity levels
       canvas.addEventListener('wheel', (e) => {
-        console.log('🔄 SCROLL EVENT DETECTED! deltaY:', e.deltaY, 'target:', e.target);
         e.preventDefault();
         e.stopPropagation();
-        this.handleResize(e.deltaY);
-      }, { passive: false, capture: true });
-
-      // Alternative resize with Ctrl+scroll for more precise control
-      canvas.addEventListener('wheel', (e) => {
+        
+        // Different sensitivity based on modifier keys
+        let sensitivity = 3; // Default sensitivity
+        let increment = 1;
+        
         if (e.ctrlKey) {
-          console.log('🔄 Ctrl+scroll for precise resize, deltaY:', e.deltaY);
-          e.preventDefault();
-          const delta = Math.sign(e.deltaY);
-          const increment = 1; // Smaller increment for precise control
-          const newWidth = this.placementState.widthPct - (delta * increment);
-          this.placementState.widthPct = Math.max(10, Math.min(100, newWidth));
-          
-          this.updatePlacementDisplay();
-          this.updateDesignPosition();
-          
-          const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
-          if (widthSlider) widthSlider.value = this.placementState.widthPct;
+          // Ultra-precise control with Ctrl
+          sensitivity = 0.5;
+          increment = 0.5;
+        } else if (e.shiftKey) {
+          // Coarse control with Shift
+          sensitivity = 8;
+          increment = 2;
+        } else if (e.altKey) {
+          // Medium control with Alt
+          sensitivity = 2;
+          increment = 1;
         }
+        
+        const delta = Math.sign(e.deltaY);
+        const newWidth = this.placementState.widthPct - (delta * increment);
+        this.placementState.widthPct = Math.max(5, Math.min(120, newWidth));
+        
+        this.updatePlacementDisplay();
+        this.updateDesignPosition();
+        
+        const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
+        if (widthSlider) widthSlider.value = this.placementState.widthPct;
+        
+        console.log('🔄 Resize with sensitivity:', sensitivity, 'new width:', this.placementState.widthPct + '%');
       }, { passive: false });
 
       // Hover effects - only show if design is not selected
@@ -1810,6 +1928,7 @@ document.addEventListener('DOMContentLoaded', function() {
     endResize() {
       if (this.placementState.resizing) {
         this.placementState.resizing = false;
+        this.placementState.resizeMomentum = 0; // Clear momentum
         console.log('🔧 Resize ended');
       }
     },
@@ -1873,51 +1992,85 @@ document.addEventListener('DOMContentLoaded', function() {
       const deltaY = e.clientY - this.placementState.lastY;
       const direction = this.placementState.resizeDirection;
       
+      // Calculate distance moved for better sensitivity control
+      const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+      let sensitivity = 0.5; // Base sensitivity
+      
+      // Adjust sensitivity based on movement speed (helps with touchpads)
+      if (distance > 20) sensitivity = 0.8; // Faster movement = higher sensitivity
+      else if (distance < 5) sensitivity = 0.2; // Slower movement = lower sensitivity
+      
       let resizeIncrement = 0;
       
-      // Calculate resize based on direction
+      // Calculate resize based on direction with improved sensitivity
       switch(direction) {
         case 'nw': // Top-left: both X and Y affect size
-          resizeIncrement = (deltaX + deltaY) * 0.3;
+          resizeIncrement = (deltaX + deltaY) * sensitivity;
           break;
         case 'ne': // Top-right: X increases, Y decreases
-          resizeIncrement = (deltaX - deltaY) * 0.3;
+          resizeIncrement = (deltaX - deltaY) * sensitivity;
           break;
         case 'sw': // Bottom-left: X decreases, Y increases
-          resizeIncrement = (-deltaX + deltaY) * 0.3;
+          resizeIncrement = (-deltaX + deltaY) * sensitivity;
           break;
         case 'se': // Bottom-right: both X and Y increase
-          resizeIncrement = (deltaX + deltaY) * 0.3;
+          resizeIncrement = (deltaX + deltaY) * sensitivity;
           break;
         case 'n': // Top: Y affects size
-          resizeIncrement = deltaY * 0.3;
+          resizeIncrement = deltaY * sensitivity;
           break;
         case 's': // Bottom: Y affects size
-          resizeIncrement = deltaY * 0.3;
+          resizeIncrement = deltaY * sensitivity;
           break;
         case 'w': // Left: X affects size
-          resizeIncrement = deltaX * 0.3;
+          resizeIncrement = deltaX * sensitivity;
           break;
         case 'e': // Right: X affects size
-          resizeIncrement = deltaX * 0.3;
+          resizeIncrement = deltaX * sensitivity;
           break;
         default:
-          resizeIncrement = (deltaX + deltaY) * 0.3;
+          resizeIncrement = (deltaX + deltaY) * sensitivity;
       }
       
-      const newWidth = this.placementState.widthPct + resizeIncrement;
-      this.placementState.widthPct = Math.max(10, Math.min(100, newWidth));
+      // Apply momentum for smoother touchpad experience
+      const momentum = this.placementState.resizeMomentum || 0;
+      const finalIncrement = resizeIncrement + (momentum * 0.3);
       
-      console.log('🔧 Resizing to:', this.placementState.widthPct + '%', 'direction:', direction);
+      const newWidth = this.placementState.widthPct + finalIncrement;
+      this.placementState.widthPct = Math.max(5, Math.min(120, newWidth));
+      
+      // Store momentum for next frame
+      this.placementState.resizeMomentum = resizeIncrement * 0.7;
+      
+      console.log('🔧 Resizing to:', this.placementState.widthPct + '%', 'direction:', direction, 'sensitivity:', sensitivity);
       
       this.updatePlacementDisplay();
       this.updateDesignPosition();
-      
-      const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
-      if (widthSlider) widthSlider.value = this.placementState.widthPct;
+      this.updateWidthSlider();
       
       this.placementState.lastX = e.clientX;
       this.placementState.lastY = e.clientY;
+    },
+
+    updateWidthSlider() {
+      const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
+      if (widthSlider) widthSlider.value = this.placementState.widthPct;
+    },
+
+    resetToDefaultSize() {
+      this.placementState.widthPct = 60; // Default size
+      this.updatePlacementDisplay();
+      this.updateDesignPosition();
+      this.updateWidthSlider();
+      this.showMessage('📏 Reset to default size (60%)', 'success');
+    },
+
+    setPresetSize(size) {
+      this.placementState.widthPct = size;
+      this.updatePlacementDisplay();
+      this.updateDesignPosition();
+      this.updateWidthSlider();
+      this.showMessage(`📏 Set to ${size}%`, 'success');
     },
 
     handleResize(deltaY) {
@@ -1926,16 +2079,14 @@ document.addEventListener('DOMContentLoaded', function() {
       const increment = 5; // Increased from 2 to 5 for more noticeable resizing
       const newWidth = this.placementState.widthPct - (delta * increment);
       
-      // Clamp between 10% and 100%
-      this.placementState.widthPct = Math.max(10, Math.min(100, newWidth));
+      // Clamp between 5% and 120% for more flexibility
+      this.placementState.widthPct = Math.max(5, Math.min(120, newWidth));
       
       console.log('📏 New width:', this.placementState.widthPct + '%');
       
       this.updatePlacementDisplay();
       this.updateDesignPosition();
-      
-      const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
-      if (widthSlider) widthSlider.value = this.placementState.widthPct;
+      this.updateWidthSlider();
     },
 
 
