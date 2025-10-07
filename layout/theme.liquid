@@ -991,14 +991,22 @@
                         return v.options[colorIndex] === color && 
                                (sizeIndex === -1 || v.options[sizeIndex] === defaultSize);
                       });
+                      
+                      // Get the variant image for this color
+                      const variantImage = variant?.featured_image || product.images[0];
+                      const imageUrl = variantImage ? variantImage.replace(/\.(jpg|jpeg|png|gif|webp)/i, '_80x80.$1') : '';
+                      
                       const colorClass = color.toLowerCase().replace(/\s+/g, '-');
                       return `
                         <button class="quick-view-swatch ${index === 0 ? 'selected' : ''}" 
                                 data-color="${color}" 
                                 data-variant-id="${variant?.id}"
-                                style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid ${index === 0 ? '#27e1c1' : '#e5e7eb'}; cursor: pointer; transition: all 0.2s ease;"
+                                data-img="${variantImage || ''}"
+                                data-price="${variant?.price || product.price}"
+                                style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid ${index === 0 ? '#27e1c1' : '#e5e7eb'}; cursor: pointer; transition: all 0.2s ease; position: relative; overflow: hidden;"
                                 title="${color}">
-                          <div style="width: 100%; height: 100%; border-radius: 50%; background: ${getSwatchColor(color)};"></div>
+                          <span class="swatch__chip" style="width: 100%; height: 100%; border-radius: 50%; background-image: url('${imageUrl}'); background-size: cover; background-position: center; display: block;"></span>
+                          <span class="swatch__label" style="position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); font-size: 10px; color: #374151; white-space: nowrap;">${color}</span>
                         </button>
                       `;
                     }).join('')}
@@ -1216,49 +1224,50 @@
             this.style.border = '2px solid #27e1c1';
             this.classList.add('selected');
             
-            // Find matching variant using all selected options
+            // Get the variant data from the swatch (same as home page)
             const color = this.dataset.color;
-            const quickViewSelects = document.querySelectorAll('.quick-view-option-select');
-            const selectedOptions = [];
+            const variantId = this.dataset.variantId;
+            const variantImage = this.dataset.img;
+            const variantPrice = this.dataset.price;
             
-            // Get all selected options by index
-            quickViewSelects.forEach(select => {
-              const optionIndex = parseInt(select.dataset.optionIndex);
-              selectedOptions[optionIndex] = select.value;
-            });
-            
-            // Set color option
-            const colorOptionIndex = product.options.findIndex(opt => opt.name.toLowerCase() === 'color');
-            if (colorOptionIndex >= 0) {
-              selectedOptions[colorOptionIndex] = color;
-            }
-            
-            const variant = product.variants.find(v => 
-              v.options.every((optVal, index) => optVal === selectedOptions[index])
-            );
+            // Find the matching variant
+            const variant = product.variants.find(v => v.id == variantId);
             
             if (variant) {
               // Update price
-              quickViewPrice.textContent = new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD'
-              }).format(variant.price / 100);
+              if (quickViewPrice) {
+                quickViewPrice.textContent = new Intl.NumberFormat('en-US', {
+                  style: 'currency',
+                  currency: 'USD'
+                }).format(variant.price / 100);
+              }
               
-              // Update image if variant has image
-              const variantImage = product.images.find(img => img.alt && img.alt.toLowerCase().includes(color.toLowerCase()));
+              // Update image with smooth transition (same as home page)
               if (variantImage && quickViewImage) {
                 quickViewImage.style.opacity = '0.5';
                 setTimeout(() => {
                   quickViewImage.src = variantImage;
+                  quickViewImage.alt = `${product.title} - ${color}`;
                   quickViewImage.style.opacity = '1';
                 }, 150);
               }
               
               // Update add to cart button
-              addToCartBtn.onclick = () => addToCartFromQuickView(variant.id);
-              addToCartBtn.disabled = !variant.available;
-              addToCartBtn.textContent = variant.available ? 'Add to Cart' : 'Sold Out';
-              addToCartBtn.style.background = variant.available ? '#27e1c1' : '#6b7280';
+              if (addToCartBtn) {
+                addToCartBtn.onclick = () => addToCartFromQuickView(variant.id);
+                addToCartBtn.disabled = !variant.available;
+                addToCartBtn.textContent = variant.available ? 'Add to Cart' : 'Sold Out';
+                addToCartBtn.style.background = variant.available ? '#27e1c1' : '#6b7280';
+              }
+              
+              // Update other option selects to match this variant
+              const quickViewSelects = document.querySelectorAll('.quick-view-option-select');
+              quickViewSelects.forEach(select => {
+                const optionIndex = parseInt(select.dataset.optionIndex);
+                if (variant.options[optionIndex]) {
+                  select.value = variant.options[optionIndex];
+                }
+              });
             }
           });
         });
