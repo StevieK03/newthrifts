@@ -4,25 +4,32 @@
   {% if collection.description != blank %}<p style="opacity:.85;">{{ collection.description }}</p>{% endif %}
   <div class="grid grid--3">
     {% for product in collection.products %}
-      <article class="product-card enhanced-card" data-product-id="{{ product.id }}" data-product-handle="{{ product.handle }}">
+      <article class="product-card enhanced-product-card" data-product-id="{{ product.id }}" data-product-handle="{{ product.handle }}" data-filters="{{ product.tags | join: ',' }}">
+        <!-- Cool Effects Elements -->
         <div class="card-glow"></div>
         <div class="card-shine"></div>
-        <a href="{{ product.url }}" class="card-link">
-          <div class="image-container">
-            <img id="ProductImage-{{ product.id }}" class="product-card__img"
+        <div class="card-particles"></div>
+        
+        <a href="{{ product.url }}" class="product-card__link">
+          <div class="product-card__image">
+            <img id="ProductImage-{{ product.id }}" 
                  src="{{ product.featured_image | image_url: width: 720 }}"
-                 alt="{{ product.title | escape }}">
-            <div class="image-overlay">
+                 alt="{{ product.title | escape }}"
+                 loading="lazy"
+                 class="product-card__img">
+            
+            <!-- Hover Overlay with Actions -->
+            <div class="product-overlay">
               <div class="product-actions">
                 <button class="action-btn quick-view-btn" data-product-handle="{{ product.handle }}" aria-label="Quick view {{ product.title }}">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                     <path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z" stroke="currentColor" stroke-width="2"/>
                     <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
                   </svg>
                   Quick View
                 </button>
                 <button class="action-btn wishlist-btn" data-product-id="{{ product.id }}" aria-label="Add to wishlist">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                     <path d="M20.84 4.61C20.32 4.09 19.69 3.69 19 3.44C18.31 3.19 17.58 3.09 16.85 3.15C16.12 3.21 15.42 3.42 14.78 3.78C14.14 4.14 13.58 4.64 13.14 5.25L12 6.75L10.86 5.25C10.42 4.64 9.86 4.14 9.22 3.78C8.58 3.42 7.88 3.21 7.15 3.15C6.42 3.09 5.69 3.19 5 3.44C4.31 3.69 3.68 4.09 3.16 4.61C2.11 5.66 1.5 7.13 1.5 8.66C1.5 10.19 2.11 11.66 3.16 12.71L12 21.55L20.84 12.71C21.89 11.66 22.5 10.19 22.5 8.66C22.5 7.13 21.89 5.66 20.84 4.61Z" stroke="currentColor" stroke-width="2"/>
                   </svg>
                   Wishlist
@@ -32,8 +39,35 @@
           </div>
         </a>
 
-        <div class="product-card__body">
-          <h3 style="margin:0; font-size:1.05rem;">{{ product.title }}</h3>
+        <div class="product-card__content">
+          <h3 class="product-card__title">
+            {%- comment -%} Shorten product names and remove brand info {%- endcomment -%}
+            {%- assign short_title = product.title -%}
+            {%- if product.title contains 'Boo-tiful Ghost Toddler Long Sleeve Tee' -%}
+              {%- assign short_title = 'Boo-tiful Ghost Toddler Tee' -%}
+            {%- elsif product.title contains 'Baby T-Shirt Cutest Pumpkin' -%}
+              {%- assign short_title = 'Cutest Pumpkin Baby Tee' -%}
+            {%- elsif product.title contains 'Butterfly Floral Boxy Tee' -%}
+              {%- assign short_title = 'Butterfly Floral Boxy Tee' -%}
+            {%- elsif product.title contains 'Miami Nights Boxy Tee for Women' -%}
+              {%- assign short_title = 'Miami Nights Boxy Tee' -%}
+            {%- elsif product.title contains 'BABY T-SHIRT' -%}
+              {%- assign short_title = product.title | replace: 'BABY T-SHIRT', 'BABY TEE' -%}
+            {%- elsif product.title contains 'TODDLER LONG SLEEVE TEE' -%}
+              {%- assign short_title = product.title | replace: 'TODDLER LONG SLEEVE TEE, HALLOWEEN SHIRT, CUTE KIDS TEE, SPOOKY SEASON APPAREL, TODDLER HALLOWEEN CLOTHING', 'TODDLER TEE' -%}
+            {%- elsif product.title contains 'HALLOWEEN' -%}
+              {%- assign short_title = product.title | split: 'HALLOWEEN' | first | append: 'HALLOWEEN' -%}
+            {%- endif -%}
+            
+            {%- comment -%} Remove brand/vendor info like "Gildan 5200" {%- endcomment -%}
+            {%- assign short_title = short_title | replace: 'Gildan 5200', '' -%}
+            {%- assign short_title = short_title | replace: 'Gildan', '' -%}
+            {%- assign short_title = short_title | replace: '5200', '' -%}
+            {%- assign short_title = short_title | replace: '  ', ' ' -%}
+            {%- assign short_title = short_title | strip -%}
+            
+            {{ short_title }}
+          </h3>
 
           <!-- optional badge -->
           {% if product.compare_at_price_max > product.price_min %}
