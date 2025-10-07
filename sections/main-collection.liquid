@@ -618,22 +618,22 @@ document.addEventListener('DOMContentLoaded', function() {
   opacity: 0.9;
 }
 
-/* Product cards dark mode - Match featured collection exactly */
+/* Product cards dark mode - Match header color exactly */
 [data-theme="dark"] #collection-{{ collection.id }} .enhanced-card {
-  background: var(--bg-secondary, #1e293b) !important;
+  background: var(--bg-primary, #0f172a) !important; /* Same as header */
   border: 1px solid var(--border-primary, #334155) !important;
   color: var(--text-primary, #f8fafc) !important;
 }
 
-/* Additional selectors to ensure navy background is applied */
+/* Additional selectors to ensure header color is applied */
 [data-theme="dark"] #collection-{{ collection.id }} .product-card {
-  background: var(--bg-secondary, #1e293b) !important;
+  background: var(--bg-primary, #0f172a) !important; /* Same as header */
   border: 1px solid var(--border-primary, #334155) !important;
   color: var(--text-primary, #f8fafc) !important;
 }
 
 [data-theme="dark"] #collection-{{ collection.id }} article {
-  background: var(--bg-secondary, #1e293b) !important;
+  background: var(--bg-primary, #0f172a) !important; /* Same as header */
   border: 1px solid var(--border-primary, #334155) !important;
   color: var(--text-primary, #f8fafc) !important;
 }
@@ -654,14 +654,14 @@ document.addEventListener('DOMContentLoaded', function() {
   border-color: var(--button-primary, #3b82f6) !important;
 }
 
-/* Product card content - Match featured collection */
+/* Product card content - Match header color */
 [data-theme="dark"] #collection-{{ collection.id }} .product-card__content {
-  background: var(--bg-secondary, #1e293b) !important;
+  background: var(--bg-primary, #0f172a) !important; /* Same as header */
   color: var(--text-primary, #f8fafc) !important;
 }
 
 [data-theme="dark"] #collection-{{ collection.id }} .product-card__body {
-  background: var(--bg-secondary, #1e293b) !important;
+  background: var(--bg-primary, #0f172a) !important; /* Same as header */
   color: var(--text-primary, #f8fafc) !important;
 }
 
