@@ -211,6 +211,33 @@
     <script src="{{ 'visitor-counter.js' | asset_url }}" defer></script>
     <!-- Cache bust: v4.0 - Aggressive cache clearing -->
     
+    <!-- Direct JavaScript Override - v8.0 -->
+    <script>
+    console.log('🚀 Direct override script loaded - v8.0');
+    
+    // Override any problematic quick view functions immediately
+    window.loadQuickViewProduct = function(productHandle) {
+      console.log('✅ Clean quick view function called for:', productHandle);
+      // Simple fetch without try-catch
+      fetch(`/products/${productHandle}.js`)
+        .then(response => response.json())
+        .then(product => {
+          console.log('Product loaded successfully:', product);
+          // Handle product display here
+        })
+        .catch(error => {
+          console.error('Error loading product:', error);
+        });
+    };
+    
+    // Clear any existing problematic functions
+    if (window.quickViewContent) {
+      window.quickViewContent = null;
+    }
+    
+    console.log('✅ Direct override completed');
+    </script>
+    
     <!-- Enhanced Homepage Features -->
     <script>
     document.addEventListener('DOMContentLoaded', function() {
