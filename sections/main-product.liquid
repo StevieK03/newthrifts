@@ -260,15 +260,30 @@ Main product section — safe + styled + correct add-to-cart
       if(!form) return;
 
       var productData = {{ product | json }};
-      var selectors   = form.querySelectorAll('.single-option-selector');
+      var card        = form.closest('.card') || document;
+      var selectors   = card.querySelectorAll('.single-option-selector');
       var idInput     = document.getElementById('VariantId-{{ section.id }}');
-      var priceEl     = form.closest('.card').querySelector('[data-product-price]');
+      var priceEl     = card.querySelector('[data-product-price]');
       var submitBtn   = form.querySelector('button[type="submit"]');
 
       function syncVariant(){
-        if(!selectors.length) return; // single-variant products
-        var chosen  = Array.from(selectors).map(function(s){ return s.value; }).join(' / ');
-        var variant = productData.variants.find(function(v){ return v.options.join(' / ') === chosen; });
+        // Determine values for each option index
+        var selectedValues = productData.options.map(function(optionName, idx){
+          var sel = card.querySelector('.single-option-selector[data-index="option'+ (idx+1) +'"]');
+          if (sel) return sel.value;
+          // If no select (e.g., Color hidden), try active swatch in same group
+          var group = document.querySelector('[data-swatch-group][data-option-index="'+ (idx) +'"]');
+          var activeBtn = group ? group.querySelector('[data-swatch].is-selected, [data-swatch].selected') : null;
+          if (activeBtn) return activeBtn.getAttribute('data-value');
+          // Fallback: currently selected variant by hidden id
+          var currentVariant = productData.variants.find(function(v){ return String(v.id) === String(idInput.value); });
+          return currentVariant ? currentVariant.options[idx] : null;
+        });
+
+        // Find variant whose options exactly match
+        var variant = productData.variants.find(function(v){
+          return v.options.every(function(opt, i){ return !selectedValues[i] || opt === selectedValues[i]; });
+        });
 
         if(variant){
           idInput.value = String(variant.id);
@@ -289,7 +304,15 @@ Main product section — safe + styled + correct add-to-cart
         }
       }
 
+      // When any size select changes, recompute based on current color (from idInput)
       selectors.forEach(function(s){ s.addEventListener('change', syncVariant); });
+      // As a safeguard, recompute immediately before submit
+      form.addEventListener('submit', function(){
+        try { syncVariant(); } catch(e) {}
+      });
+
+      // Ensure hidden id reflects initial UI state on load
+      syncVariant();
     })();
 
     // Collapsible sections functionality
