@@ -432,6 +432,214 @@
       }
     }
 
+    /* Animated Black Cats */
+    #hween-{{ section.id }} .halloween-cats {
+      position: absolute;
+      inset: 0;
+    }
+
+    #hween-{{ section.id }} .cat {
+      position: absolute;
+      font-size: 2rem;
+      filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 30px rgba(0, 0, 0, 0.4));
+      animation: cat-slink 8s ease-in-out infinite;
+      opacity: 0.9;
+    }
+
+    #hween-{{ section.id }} .cat-1 {
+      top: 25%;
+      left: 5%;
+      animation-delay: 0s;
+      animation-duration: 10s;
+    }
+
+    #hween-{{ section.id }} .cat-2 {
+      top: 70%;
+      right: 8%;
+      animation-delay: 3s;
+      animation-duration: 12s;
+    }
+
+    #hween-{{ section.id }} .cat-3 {
+      bottom: 30%;
+      left: 15%;
+      animation-delay: 6s;
+      animation-duration: 9s;
+    }
+
+    #hween-{{ section.id }} .cat-4 {
+      top: 50%;
+      right: 20%;
+      animation-delay: 9s;
+      animation-duration: 11s;
+    }
+
+    @keyframes cat-slink {
+      0%, 100% { 
+        transform: translateX(0) translateY(0) rotate(0deg) scale(1); 
+        opacity: 0.7; 
+      }
+      25% { 
+        transform: translateX(20px) translateY(-10px) rotate(5deg) scale(1.1); 
+        opacity: 0.9; 
+      }
+      50% { 
+        transform: translateX(40px) translateY(5px) rotate(-3deg) scale(0.9); 
+        opacity: 0.8; 
+      }
+      75% { 
+        transform: translateX(60px) translateY(-5px) rotate(8deg) scale(1.05); 
+        opacity: 0.95; 
+      }
+    }
+
+    /* Candy Corn */
+    #hween-{{ section.id }} .candy-corn {
+      position: absolute;
+      inset: 0;
+    }
+
+    #hween-{{ section.id }} .candy {
+      position: absolute;
+      font-size: 1.5rem;
+      filter: drop-shadow(0 0 10px rgba(255, 255, 0, 0.6)) drop-shadow(0 0 20px rgba(255, 165, 0, 0.4));
+      animation: candy-bounce 6s ease-in-out infinite;
+      opacity: 0.8;
+    }
+
+    #hween-{{ section.id }} .candy-1 {
+      top: 20%;
+      left: 10%;
+      animation-delay: 0s;
+      animation-duration: 7s;
+    }
+
+    #hween-{{ section.id }} .candy-2 {
+      top: 60%;
+      right: 15%;
+      animation-delay: 1.5s;
+      animation-duration: 8s;
+    }
+
+    #hween-{{ section.id }} .candy-3 {
+      bottom: 25%;
+      left: 25%;
+      animation-delay: 3s;
+      animation-duration: 6s;
+    }
+
+    #hween-{{ section.id }} .candy-4 {
+      top: 40%;
+      right: 30%;
+      animation-delay: 4.5s;
+      animation-duration: 9s;
+    }
+
+    #hween-{{ section.id }} .candy-5 {
+      bottom: 10%;
+      right: 10%;
+      animation-delay: 6s;
+      animation-duration: 7s;
+    }
+
+    @keyframes candy-bounce {
+      0%, 100% { 
+        transform: translateY(0px) rotate(0deg) scale(1); 
+        opacity: 0.6; 
+      }
+      25% { 
+        transform: translateY(-15px) rotate(10deg) scale(1.1); 
+        opacity: 0.9; 
+      }
+      50% { 
+        transform: translateY(-8px) rotate(-5deg) scale(0.95); 
+        opacity: 0.8; 
+      }
+      75% { 
+        transform: translateY(-20px) rotate(15deg) scale(1.05); 
+        opacity: 1; 
+      }
+    }
+
+    /* Cat Glowing Eyes Effect */
+    #hween-{{ section.id }} .cat::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 130%;
+      height: 130%;
+      background: radial-gradient(circle, rgba(0, 255, 0, 0.2) 0%, transparent 70%);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      animation: cat-eyes-glow 4s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes cat-eyes-glow {
+      0%, 100% { 
+        opacity: 0.2; 
+        transform: translate(-50%, -50%) scale(1); 
+      }
+      50% { 
+        opacity: 0.6; 
+        transform: translate(-50%, -50%) scale(1.3); 
+      }
+    }
+
+    /* Candy Sparkle Effect */
+    #hween-{{ section.id }} .candy::after {
+      content: '✨';
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      font-size: 0.8rem;
+      animation: candy-sparkle 3s ease-in-out infinite;
+      opacity: 0.7;
+    }
+
+    @keyframes candy-sparkle {
+      0%, 100% { 
+        opacity: 0.3; 
+        transform: scale(1) rotate(0deg); 
+      }
+      50% { 
+        opacity: 1; 
+        transform: scale(1.2) rotate(180deg); 
+      }
+    }
+
+    /* Mobile Responsive for Cats and Candy */
+    @media (max-width: 768px) {
+      #hween-{{ section.id }} .cat {
+        font-size: 1.5rem;
+      }
+      
+      #hween-{{ section.id }} .candy {
+        font-size: 1.2rem;
+      }
+      
+      #hween-{{ section.id }} .cat-1 {
+        top: 20%;
+        left: 3%;
+      }
+      
+      #hween-{{ section.id }} .cat-2 {
+        top: 75%;
+        right: 5%;
+      }
+      
+      #hween-{{ section.id }} .cat-3 {
+        bottom: 25%;
+        left: 10%;
+      }
+      
+      #hween-{{ section.id }} .cat-4 {
+        top: 45%;
+        right: 15%;
+      }
+    }
+
     /* Halloween Title Animation */
     #hween-{{ section.id }} .halloween-title {
       position: relative;
@@ -809,6 +1017,27 @@
         <div class="particle particle-5">💨</div>
         <div class="particle particle-6">🌪️</div>
       </div>
+      
+      <!-- Animated Black Cats -->
+      {% if section.settings.show_cats %}
+        <div class="halloween-cats">
+          <div class="cat cat-1">🐈‍⬛</div>
+          <div class="cat cat-2">🐈‍⬛</div>
+          <div class="cat cat-3">🐈‍⬛</div>
+          <div class="cat cat-4">🐈‍⬛</div>
+        </div>
+      {% endif %}
+      
+      <!-- Candy Corn -->
+      {% if section.settings.show_candy %}
+        <div class="candy-corn">
+          <div class="candy candy-1">🍬</div>
+          <div class="candy candy-2">🍬</div>
+          <div class="candy candy-3">🍬</div>
+          <div class="candy candy-4">🍬</div>
+          <div class="candy candy-5">🍬</div>
+        </div>
+      {% endif %}
       
     </div>
   {% endif %}
@@ -1504,6 +1733,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
     { "type": "header", "content": "Wind Effects" },
     { "type": "checkbox", "id": "show_wind", "label": "Show wind effects and particles", "default": true },
+    { "type": "checkbox", "id": "show_cats", "label": "Show animated black cats", "default": true },
+    { "type": "checkbox", "id": "show_candy", "label": "Show candy corn", "default": true },
 
     { "type": "header", "content": "Lightning flash" },
     { "type": "checkbox", "id": "show_lightning", "label": "Enable lightning flashes", "default": false },
