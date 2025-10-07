@@ -89,6 +89,24 @@ Main product section — safe + styled + correct add-to-cart
         {% comment %} Add to Cart Button - positioned to the right of size with equal spacing {% endcomment %}
         <div class="add-to-cart-container" style="flex: 1; max-width: 200px;">
           {% form 'product', product, id: product_form_id, class: 'product-form', action: routes.cart_add_url %}
+            {%- comment -%} Hidden Color select to keep option indices aligned and allow JS sync {%- endcomment -%}
+            {%- for option in product.options_with_values -%}
+              {%- assign opt_lc = option.name | downcase -%}
+              {%- if opt_lc == 'color' -%}
+                <select
+                  id="Option{{ forloop.index }}"
+                  class="single-option-selector nice-select is-color"
+                  data-index="option{{ forloop.index }}"
+                  name="options[{{ option.name | escape }}]"
+                  aria-hidden="true"
+                  tabindex="-1"
+                  style="position:absolute; width:1px; height:1px; padding:0; margin:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; clip-path:inset(50%); border:0;">
+                  {%- for value in option.values -%}
+                    <option value="{{ value | escape }}" {% if option.selected_value == value %}selected{% endif %}>{{ value }}</option>
+                  {%- endfor -%}
+                </select>
+              {%- endif -%}
+            {%- endfor -%}
             <!-- Hidden variant id Shopify reads on submit -->
             <input type="hidden"
                    name="id"
@@ -260,30 +278,44 @@ Main product section — safe + styled + correct add-to-cart
       if(!form) return;
 
       var productData = {{ product | json }};
-      var selectors   = form.querySelectorAll('.single-option-selector');
+      var scope       = form.closest('.card') || form; // include selects outside the form
+      var selectors   = scope.querySelectorAll('.single-option-selector');
       var idInput     = document.getElementById('VariantId-{{ section.id }}');
-      var priceEl     = form.closest('.card').querySelector('[data-product-price]');
+      var priceEl     = scope.querySelector('[data-product-price]');
       var submitBtn   = form.querySelector('button[type="submit"]');
+
+      function getSelectedOptionsAligned(){
+        // Align selected values by their option index (option1, option2, ...)
+        var selectedByIndex = [];
+        Array.from(selectors).forEach(function(sel){
+          var idxAttr = sel.getAttribute('data-index') || '';
+          var m = idxAttr.match(/option(\d+)/i);
+          if(m){
+            var idx = parseInt(m[1], 10) - 1;
+            selectedByIndex[idx] = sel.value;
+          }
+        });
+        return selectedByIndex;
+      }
 
       function syncVariant(){
         if(!selectors.length) return; // single-variant products
         
-        // Get selected values from all selectors
-        var selectedOptions = Array.from(selectors).map(function(s){ return s.value; });
+        var selectedOptions = getSelectedOptionsAligned();
         
         console.log('=== VARIANT SYNC DEBUG ===');
         console.log('Selectors found:', selectors.length);
-        console.log('Selected options:', selectedOptions);
+        console.log('Selected options (aligned):', selectedOptions);
         console.log('Product options:', productData.options);
         console.log('Available variants:', productData.variants.map(v => ({ id: v.id, options: v.options, available: v.available })));
         
-        // Find variant that matches ALL selected options
+        // Find variant that matches ALL selected options by index
         var variant = productData.variants.find(function(v){ 
           console.log('Checking variant:', v.id, 'options:', v.options);
-          // Check if all options match (order-independent)
-          var matches = selectedOptions.every(function(selectedValue, index) {
-            var optionMatches = v.options[index] === selectedValue;
-            console.log(`  Option ${index}: selected="${selectedValue}" vs variant="${v.options[index]}" = ${optionMatches}`);
+          var matches = v.options.every(function(optVal, index){
+            var selectedValue = selectedOptions[index];
+            var optionMatches = optVal === selectedValue;
+            console.log(`  Option ${index}: selected="${selectedValue}" vs variant="${optVal}" = ${optionMatches}`);
             return optionMatches;
           });
           console.log('  Variant matches:', matches);
