@@ -202,10 +202,11 @@
 
     <!-- Global Interactive Elements - Removed cursor trail and floating particles -->
     
-    <script src="{{ 'test-script.js' | asset_url }}" defer></script>
-    <script src="{{ 'error-fix.js' | asset_url }}" defer></script>
-    <script src="{{ 'cache-buster.js' | asset_url }}" defer></script>
-    <script src="{{ 'theme.js' | asset_url }}" defer></script>
+    <script src="{{ 'force-refresh.js' | asset_url }}?v=7.0"></script>
+    <script src="{{ 'test-script.js' | asset_url }}?v=6.0" defer></script>
+    <script src="{{ 'error-fix.js' | asset_url }}?v=5.0" defer></script>
+    <script src="{{ 'cache-buster.js' | asset_url }}?v=4.0" defer></script>
+    <script src="{{ 'theme.js' | asset_url }}?v=3.0" defer></script>
     <script src="{{ 'swatch.js' | asset_url }}" defer></script>
     <script src="{{ 'visitor-counter.js' | asset_url }}" defer></script>
     <!-- Cache bust: v4.0 - Aggressive cache clearing -->
