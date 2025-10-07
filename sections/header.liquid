@@ -502,6 +502,65 @@
     opacity: 1;
     transform: scale(1);
   }
+  
+  /* Dark mode improvements for better text contrast */
+  @media (prefers-color-scheme: dark) {
+    #Header-{{ section.id }} {
+      background: rgba(15, 23, 42, 0.95) !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+      backdrop-filter: blur(15px) saturate(150%) !important;
+      -webkit-backdrop-filter: blur(15px) saturate(150%) !important;
+    }
+    
+    #Header-{{ section.id }} .nt-header__logo-text {
+      color: #f8fafc !important;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+    }
+    
+    #Header-{{ section.id }} .nt-header__link {
+      color: #f8fafc !important;
+      background: rgba(255, 255, 255, 0.1) !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+    }
+    
+    #Header-{{ section.id }} .nt-header__link:hover {
+      background: rgba(255, 255, 255, 0.2) !important;
+      color: #ffffff !important;
+      border-color: rgba(255, 255, 255, 0.3) !important;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5) !important;
+    }
+    
+    #Header-{{ section.id }} .nt-header__cart-link {
+      color: #f8fafc !important;
+      background: rgba(255, 255, 255, 0.1) !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    }
+    
+    #Header-{{ section.id }} .nt-header__cart-link:hover {
+      background: rgba(255, 255, 255, 0.2) !important;
+      color: #ffffff !important;
+      border-color: rgba(255, 255, 255, 0.3) !important;
+    }
+    
+    #Header-{{ section.id }} .nt-header__cart-icon {
+      color: #f8fafc !important;
+    }
+    
+    #Header-{{ section.id }} .wishlist-toggle {
+      background: rgba(255, 255, 255, 0.1) !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    }
+    
+    #Header-{{ section.id }} .wishlist-toggle:hover {
+      background: rgba(255, 255, 255, 0.2) !important;
+      border-color: rgba(255, 255, 255, 0.3) !important;
+    }
+    
+    #Header-{{ section.id }} .wishlist-icon {
+      color: #f8fafc !important;
+    }
+  }
 </style>
 
 <script>

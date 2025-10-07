@@ -13,6 +13,9 @@
   --size: {{ section.settings.size }};
   padding: {{ section.settings.pad_y }} {{ section.settings.pad_x }};
   {% if section.settings.sticky %} position:sticky; top:0; z-index:40; {% endif %}
+  /* Force Halloween banner to maintain its original colors in dark mode */
+  filter: none !important;
+  -webkit-filter: none !important;
 ">
 
   <style>
@@ -24,6 +27,25 @@
         0 0 0 1px color-mix(in srgb, var(--ring) 35%, transparent),
         0 10px 30px color-mix(in srgb, var(--accent) 18%, transparent),
         inset 0 0 40px color-mix(in srgb, var(--accent-2) 12%, transparent);
+      /* Protect from dark mode effects */
+      filter: none !important;
+      -webkit-filter: none !important;
+      isolation: isolate;
+    }
+    
+    /* Ensure Halloween banner maintains its colors in dark mode */
+    @media (prefers-color-scheme: dark) {
+      #hween-{{ section.id }} {
+        filter: none !important;
+        -webkit-filter: none !important;
+        background: radial-gradient(80% 120% at 50% -10%, var(--bg-2), var(--bg)) !important;
+        color: var(--text) !important;
+      }
+      
+      #hween-{{ section.id }} * {
+        filter: none !important;
+        -webkit-filter: none !important;
+      }
     }
     #hween-{{ section.id }}:before{
       content:""; position:absolute; inset:0;
