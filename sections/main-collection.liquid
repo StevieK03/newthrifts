@@ -665,6 +665,52 @@ document.addEventListener('DOMContentLoaded', function() {
   color: var(--text-primary, #f8fafc) !important;
 }
 
+/* Aggressive targeting for white backgrounds */
+[data-theme="dark"] #collection-{{ collection.id }} .card {
+  background: var(--bg-primary, #0f172a) !important;
+  color: var(--text-primary, #f8fafc) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .product-info {
+  background: var(--bg-primary, #0f172a) !important;
+  color: var(--text-primary, #f8fafc) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .product-details {
+  background: var(--bg-primary, #0f172a) !important;
+  color: var(--text-primary, #f8fafc) !important;
+}
+
+/* Override any white backgrounds */
+[data-theme="dark"] #collection-{{ collection.id }} * {
+  background-color: var(--bg-primary, #0f172a) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .enhanced-card * {
+  background-color: var(--bg-primary, #0f172a) !important;
+}
+
+/* Specific targeting for product card content areas */
+[data-theme="dark"] #collection-{{ collection.id }} .product-card__body > * {
+  background: var(--bg-primary, #0f172a) !important;
+  color: var(--text-primary, #f8fafc) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .product-card__body div {
+  background: var(--bg-primary, #0f172a) !important;
+  color: var(--text-primary, #f8fafc) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .product-card__body p {
+  background: var(--bg-primary, #0f172a) !important;
+  color: var(--text-primary, #f8fafc) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .product-card__body span {
+  background: var(--bg-primary, #0f172a) !important;
+  color: var(--text-primary, #f8fafc) !important;
+}
+
 [data-theme="dark"] #collection-{{ collection.id }} .product-card__title {
   color: var(--text-primary, #f8fafc) !important;
 }
