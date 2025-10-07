@@ -199,13 +199,13 @@
     <!-- Mobile Navigation -->
 
     {%- comment -%} ✅ Halloween script (global include, non-module) {%- endcomment -%}
-    {{ 'halloween.js' | asset_url | script_tag }}
+    {{ 'halloween.js' | asset_url | append: '?v=' | append: 'now' | date: '%s' | script_tag }}
 
     <!-- Global Interactive Elements - Removed cursor trail and floating particles -->
     
-    <script src="{{ 'theme.js' | asset_url }}" defer></script>
-    <script src="{{ 'swatch.js' | asset_url }}" defer></script>
-    <script src="{{ 'visitor-counter.js' | asset_url }}" defer></script>
+    <script src="{{ 'theme.js' | asset_url }}?v={{ 'now' | date: '%s' }}" defer></script>
+    <script src="{{ 'swatch.js' | asset_url }}?v={{ 'now' | date: '%s' }}" defer></script>
+    <script src="{{ 'visitor-counter.js' | asset_url }}?v={{ 'now' | date: '%s' }}" defer></script>
     
     <!-- Enhanced Homepage Features -->
     <script>
