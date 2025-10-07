@@ -266,8 +266,20 @@ Main product section — safe + styled + correct add-to-cart
 
       function syncVariant(){
         if(!selectors.length) return; // single-variant products
-        var chosen  = Array.from(selectors).map(function(s){ return s.value; }).join(' / ');
-        var variant = productData.variants.find(function(v){ return v.options.join(' / ') === chosen; });
+        
+        // Get selected values from all selectors
+        var selectedOptions = Array.from(selectors).map(function(s){ return s.value; });
+        
+        // Find variant that matches ALL selected options
+        var variant = productData.variants.find(function(v){ 
+          // Check if all options match (order-independent)
+          return selectedOptions.every(function(selectedValue, index) {
+            return v.options[index] === selectedValue;
+          });
+        });
+
+        console.log('Selected options:', selectedOptions);
+        console.log('Found variant:', variant);
 
         if(variant){
           idInput.value = String(variant.id);
@@ -285,10 +297,15 @@ Main product section — safe + styled + correct add-to-cart
           var url = new URL(window.location.href);
           url.searchParams.set('variant', variant.id);
           history.replaceState({}, '', url);
+        } else {
+          console.log('No matching variant found for options:', selectedOptions);
         }
       }
 
       selectors.forEach(function(s){ s.addEventListener('change', syncVariant); });
+      
+      // Force sync on page load to ensure correct variant is selected
+      setTimeout(syncVariant, 100);
     })();
 
     // Collapsible sections functionality
