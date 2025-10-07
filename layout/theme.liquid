@@ -1154,7 +1154,29 @@
         const quickViewImage = document.getElementById('quick-view-image');
         const quickViewPrice = document.getElementById('quick-view-price');
         const addToCartBtn = document.getElementById('quick-view-add-to-cart');
-        
+
+        const colorIndex = (product.options || []).findIndex(o => (o.name || '').toLowerCase() === 'color');
+
+        function getSelectedOptions() {
+          const selectedOptions = [];
+          // collect non-color selects
+          document.querySelectorAll('.quick-view-option-select').forEach(sel => {
+            const idx = parseInt(sel.dataset.optionIndex, 10);
+            if (!isNaN(idx)) selectedOptions[idx] = sel.value;
+          });
+          // collect color from selected swatch
+          const activeSwatch = document.querySelector('.quick-view-swatch.selected');
+          if (activeSwatch && colorIndex >= 0) {
+            selectedOptions[colorIndex] = activeSwatch.dataset.color;
+          }
+          return selectedOptions;
+        }
+
+        function findVariantFromSelections() {
+          const selectedOptions = getSelectedOptions();
+          return product.variants.find(v => v.options.every((opt, i) => selectedOptions[i] ? opt === selectedOptions[i] : true));
+        }
+
         swatches.forEach(swatch => {
           swatch.addEventListener('click', function() {
             // Remove selected state from all swatches
@@ -1162,32 +1184,34 @@
               s.style.border = '2px solid #e5e7eb';
               s.classList.remove('selected');
             });
-            
+
             // Add selected state to clicked swatch
             this.style.border = '2px solid #27e1c1';
             this.classList.add('selected');
-            
-            // Find matching variant
-            const color = this.dataset.color;
-            const variant = product.variants.find(v => v.options.includes(color));
-            
+
+            // Recompute full variant from all options
+            const variant = findVariantFromSelections();
+
             if (variant) {
               // Update price
               quickViewPrice.textContent = new Intl.NumberFormat('en-US', {
                 style: 'currency',
                 currency: 'USD'
               }).format(variant.price / 100);
-              
-              // Update image if variant has image
-              const variantImage = product.images.find(img => img.alt && img.alt.toLowerCase().includes(color.toLowerCase()));
-              if (variantImage && quickViewImage) {
-                quickViewImage.style.opacity = '0.5';
-                setTimeout(() => {
-                  quickViewImage.src = variantImage;
-                  quickViewImage.style.opacity = '1';
-                }, 150);
+
+              // Update image if variant has image (by color alt match)
+              const color = (product.options && colorIndex >= 0) ? this.dataset.color : undefined;
+              if (color) {
+                const variantImage = product.images.find(img => img.alt && img.alt.toLowerCase().includes(color.toLowerCase()));
+                if (variantImage && quickViewImage) {
+                  quickViewImage.style.opacity = '0.5';
+                  setTimeout(() => {
+                    quickViewImage.src = variantImage;
+                    quickViewImage.style.opacity = '1';
+                  }, 150);
+                }
               }
-              
+
               // Update add to cart button
               addToCartBtn.onclick = () => addToCartFromQuickView(variant.id);
               addToCartBtn.disabled = !variant.available;
@@ -1201,28 +1225,40 @@
       // Initialize Quick View dropdown options
       function initQuickViewOptions(product) {
         const optionSelects = document.querySelectorAll('.quick-view-option-select');
+        const addToCartBtn = document.getElementById('quick-view-add-to-cart');
+        const priceElement = document.getElementById('quick-view-price');
+        const colorIndex = (product.options || []).findIndex(o => (o.name || '').toLowerCase() === 'color');
+
+        function getSelectedOptions() {
+          const selectedOptions = [];
+          // collect color from swatch
+          const activeSwatch = document.querySelector('.quick-view-swatch.selected');
+          if (activeSwatch && colorIndex >= 0) {
+            selectedOptions[colorIndex] = activeSwatch.dataset.color;
+          }
+          // collect other dropdowns
+          optionSelects.forEach(sel => {
+            const idx = parseInt(sel.dataset.optionIndex, 10);
+            if (!isNaN(idx)) selectedOptions[idx] = sel.value;
+          });
+          return selectedOptions;
+        }
+
+        function findVariantFromSelections() {
+          const selectedOptions = getSelectedOptions();
+          return product.variants.find(v => v.options.every((opt, i) => selectedOptions[i] ? opt === selectedOptions[i] : true));
+        }
+
         optionSelects.forEach(select => {
           select.addEventListener('change', function() {
-            const optionIndex = parseInt(this.dataset.optionIndex);
-            const selectedValue = this.value;
-            
-            // Find matching variant
-            const matchingVariant = product.variants.find(variant => 
-              variant.options[optionIndex] === selectedValue
-            );
-            
+            const matchingVariant = findVariantFromSelections();
             if (matchingVariant) {
-              // Update price
-              const priceElement = document.getElementById('quick-view-price');
               if (priceElement) {
                 priceElement.textContent = new Intl.NumberFormat('en-US', { 
                   style: 'currency', 
                   currency: 'USD' 
                 }).format(matchingVariant.price / 100);
               }
-              
-              // Update add to cart button
-              const addToCartBtn = document.getElementById('quick-view-add-to-cart');
               if (addToCartBtn) {
                 addToCartBtn.onclick = () => addToCartFromQuickView(matchingVariant.id);
                 addToCartBtn.disabled = !matchingVariant.available;
