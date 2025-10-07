@@ -595,6 +595,135 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 });
+
+/* ========================================
+   DARK MODE STYLING FOR COLLECTION PAGE
+   ======================================== */
+
+/* Collection page container */
+[data-theme="dark"] #collection-{{ collection.id }} {
+  background: var(--bg-primary, #0f172a) !important;
+  color: var(--text-primary, #f8fafc) !important;
+}
+
+/* Collection title and description */
+[data-theme="dark"] #collection-{{ collection.id }} h1 {
+  color: var(--text-primary, #f8fafc) !important;
+  text-shadow: 0 0 10px rgba(96, 165, 250, 0.3);
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} p {
+  color: var(--text-secondary, #e2e8f0) !important;
+  opacity: 0.9;
+}
+
+/* Product cards dark mode */
+[data-theme="dark"] #collection-{{ collection.id }} .enhanced-card {
+  background: var(--bg-secondary, #1e293b) !important;
+  border: 1px solid var(--border-primary, #334155) !important;
+  box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.4)) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .enhanced-card:hover {
+  box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.5)) !important;
+  border-color: var(--button-primary, #3b82f6) !important;
+}
+
+/* Product card content */
+[data-theme="dark"] #collection-{{ collection.id }} .product-card__title {
+  color: var(--text-primary, #f8fafc) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .product-card__price {
+  color: var(--text-primary, #f8fafc) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .price {
+  color: #e53935 !important; /* Keep red prices */
+}
+
+/* Swatch styling */
+[data-theme="dark"] #collection-{{ collection.id }} .swatch {
+  border: 2px solid var(--border-primary, #334155) !important;
+  background: var(--bg-tertiary, #334155) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .swatch:hover {
+  border-color: var(--button-primary, #3b82f6) !important;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.3) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .swatch.is-selected {
+  border-color: var(--button-primary, #3b82f6) !important;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.5) !important;
+}
+
+/* Swatch legend */
+[data-theme="dark"] #collection-{{ collection.id }} .vp-legend {
+  color: var(--text-secondary, #e2e8f0) !important;
+  font-weight: 600;
+}
+
+/* Quick View and Wishlist buttons */
+[data-theme="dark"] #collection-{{ collection.id }} .quick-view-btn {
+  background: var(--bg-tertiary, #334155) !important;
+  border: 1px solid var(--border-primary, #334155) !important;
+  color: var(--text-primary, #f8fafc) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .quick-view-btn:hover {
+  background: var(--button-primary, #3b82f6) !important;
+  border-color: var(--button-primary, #3b82f6) !important;
+  color: white !important;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.3) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .wishlist-btn {
+  background: var(--bg-tertiary, #334155) !important;
+  border: 1px solid var(--border-primary, #334155) !important;
+  color: var(--text-primary, #f8fafc) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .wishlist-btn:hover {
+  background: var(--error, #ef4444) !important;
+  border-color: var(--error, #ef4444) !important;
+  color: white !important;
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.3) !important;
+}
+
+/* Image overlay dark mode */
+[data-theme="dark"] #collection-{{ collection.id }} .image-overlay {
+  background: rgba(15, 23, 42, 0.9) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+/* Card glow effect for dark mode */
+[data-theme="dark"] #collection-{{ collection.id }} .card-glow {
+  background: linear-gradient(45deg, rgba(59, 130, 246, 0.1), rgba(96, 165, 250, 0.2)) !important;
+}
+
+/* Badge styling */
+[data-theme="dark"] #collection-{{ collection.id }} .badge {
+  background: var(--error, #ef4444) !important;
+  color: white !important;
+  border: 1px solid var(--error, #ef4444) !important;
+}
+
+/* Mobile responsive dark mode */
+@media (max-width: 768px) {
+  [data-theme="dark"] #collection-{{ collection.id }} {
+    padding: 1rem 0 !important;
+  }
+  
+  [data-theme="dark"] #collection-{{ collection.id }} h1 {
+    font-size: 2rem !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  [data-theme="dark"] #collection-{{ collection.id }} .enhanced-card {
+    margin-bottom: 1rem !important;
+  }
+}
 </script>
 
 {% schema %}
