@@ -1249,7 +1249,7 @@
         });
       }
       
-      // Add to cart from quick view
+      // Add to cart from quick view - v2.0
       window.addToCartFromQuickView = async function(variantId) {
         try {
           const response = await fetch('/cart/add.js', {
@@ -1261,6 +1261,8 @@
           if (response.ok) {
             showMessage('Added to cart!', 'success');
             hideQuickViewModal();
+            // Trigger cart count update
+            if (window.updateCartCount) window.updateCartCount();
           } else {
             showMessage('Failed to add to cart', 'error');
           }
