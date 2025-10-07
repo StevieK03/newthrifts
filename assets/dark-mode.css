@@ -181,12 +181,79 @@
   border: 1px solid var(--border-primary);
   box-shadow: var(--shadow-md);
   transition: all 0.3s ease;
+  overflow: hidden;
 }
 
 [data-theme="dark"] .card:hover,
 [data-theme="dark"] .product-card:hover {
   box-shadow: var(--shadow-lg);
   transform: translateY(-2px);
+}
+
+/* Dark mode product card images */
+[data-theme="dark"] .product-card .product-image,
+[data-theme="dark"] .product-card img,
+[data-theme="dark"] .product-image {
+  background: var(--bg-tertiary) !important;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .product-card:hover .product-image,
+[data-theme="dark"] .product-card:hover img {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Dark mode product card content areas */
+[data-theme="dark"] .product-card .product-info,
+[data-theme="dark"] .product-card .product-details,
+[data-theme="dark"] .product-card .card-content {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  padding: 16px;
+  border-radius: 0 0 8px 8px;
+}
+
+/* Dark mode product titles and text */
+[data-theme="dark"] .product-card .product-title,
+[data-theme="dark"] .product-card .product-name,
+[data-theme="dark"] .product-card h3,
+[data-theme="dark"] .product-card h4 {
+  color: var(--text-primary) !important;
+  font-weight: 600;
+}
+
+[data-theme="dark"] .product-card .product-price,
+[data-theme="dark"] .product-card .price {
+  color: var(--success) !important;
+  font-weight: 700;
+  font-size: 1.1em;
+}
+
+/* Dark mode product swatches/options */
+[data-theme="dark"] .product-card .swatch,
+[data-theme="dark"] .product-card .color-option,
+[data-theme="dark"] .product-card .size-option {
+  background: var(--bg-tertiary);
+  border: 2px solid var(--border-primary);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .product-card .swatch:hover,
+[data-theme="dark"] .product-card .color-option:hover,
+[data-theme="dark"] .product-card .size-option:hover {
+  border-color: var(--button-primary);
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.3);
+}
+
+[data-theme="dark"] .product-card .swatch.selected,
+[data-theme="dark"] .product-card .color-option.selected,
+[data-theme="dark"] .product-card .size-option.selected {
+  border-color: var(--button-primary);
+  background: rgba(59, 130, 246, 0.2);
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
 }
 
 [data-theme="dark"] .container {
@@ -511,4 +578,171 @@
   color: var(--info);
   background: rgba(59, 130, 246, 0.1);
   border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+/* Enhanced dark mode improvements */
+
+/* Dark mode collection sections */
+[data-theme="dark"] .collection-section,
+[data-theme="dark"] .featured-collection {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .collection-section h2,
+[data-theme="dark"] .featured-collection h2 {
+  color: var(--text-primary);
+  text-shadow: 0 0 20px rgba(96, 165, 250, 0.3);
+}
+
+/* Dark mode grid layouts */
+[data-theme="dark"] .product-grid,
+[data-theme="dark"] .collection-grid {
+  background: transparent;
+}
+
+[data-theme="dark"] .product-grid .product-card,
+[data-theme="dark"] .collection-grid .product-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .product-grid .product-card:hover,
+[data-theme="dark"] .collection-grid .product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl);
+  border-color: var(--button-primary);
+}
+
+/* Dark mode image containers */
+[data-theme="dark"] .product-image-container,
+[data-theme="dark"] .image-container {
+  background: var(--bg-tertiary);
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+[data-theme="dark"] .product-image-container::before,
+[data-theme="dark"] .image-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(59, 130, 246, 0.1) 0%, 
+    rgba(96, 165, 250, 0.05) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Dark mode product overlays */
+[data-theme="dark"] .product-overlay,
+[data-theme="dark"] .quick-view-overlay {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-backdrop);
+  border: 1px solid var(--glass-border);
+}
+
+/* Dark mode loading states */
+[data-theme="dark"] .loading,
+[data-theme="dark"] .spinner {
+  color: var(--text-accent);
+}
+
+[data-theme="dark"] .loading::after {
+  border-color: var(--text-accent) transparent transparent transparent;
+}
+
+/* Dark mode badges and labels */
+[data-theme="dark"] .badge,
+[data-theme="dark"] .label,
+[data-theme="dark"] .tag {
+  background: var(--bg-accent);
+  color: var(--text-primary);
+  border: 1px solid var(--border-primary);
+}
+
+[data-theme="dark"] .badge.sale,
+[data-theme="dark"] .badge.discount {
+  background: var(--error);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .badge.new {
+  background: var(--success);
+  color: var(--text-primary);
+}
+
+/* Dark mode tooltips */
+[data-theme="dark"] .tooltip {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-primary);
+  box-shadow: var(--shadow-lg);
+}
+
+[data-theme="dark"] .tooltip::before {
+  border-top-color: var(--bg-tertiary);
+}
+
+/* Dark mode dividers and separators */
+[data-theme="dark"] hr,
+[data-theme="dark"] .divider {
+  border-color: var(--border-primary);
+  background: var(--border-primary);
+}
+
+/* Dark mode code blocks */
+[data-theme="dark"] code,
+[data-theme="dark"] pre {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-primary);
+}
+
+/* Dark mode blockquotes */
+[data-theme="dark"] blockquote {
+  background: var(--bg-secondary);
+  border-left: 4px solid var(--button-primary);
+  color: var(--text-secondary);
+}
+
+/* Dark mode progress bars */
+[data-theme="dark"] .progress-bar {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-primary);
+}
+
+[data-theme="dark"] .progress-fill {
+  background: var(--button-primary);
+}
+
+/* Dark mode notifications */
+[data-theme="dark"] .notification {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-lg);
+}
+
+[data-theme="dark"] .notification.success {
+  border-left: 4px solid var(--success);
+}
+
+[data-theme="dark"] .notification.warning {
+  border-left: 4px solid var(--warning);
+}
+
+[data-theme="dark"] .notification.error {
+  border-left: 4px solid var(--error);
+}
+
+[data-theme="dark"] .notification.info {
+  border-left: 4px solid var(--info);
 }
