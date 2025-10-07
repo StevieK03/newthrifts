@@ -624,6 +624,19 @@ document.addEventListener('DOMContentLoaded', function() {
   color: var(--text-primary, #f8fafc) !important;
 }
 
+/* Additional selectors to ensure navy background is applied */
+[data-theme="dark"] #collection-{{ collection.id }} .product-card {
+  background: var(--bg-secondary, #1e293b) !important;
+  border: 1px solid var(--border-primary, #334155) !important;
+  color: var(--text-primary, #f8fafc) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} article {
+  background: var(--bg-secondary, #1e293b) !important;
+  border: 1px solid var(--border-primary, #334155) !important;
+  color: var(--text-primary, #f8fafc) !important;
+}
+
 [data-theme="dark"] #collection-{{ collection.id }} .enhanced-card:hover {
   box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.5)) !important;
   border-color: var(--button-primary, #3b82f6) !important;
@@ -631,6 +644,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 /* Product card content - Match featured collection */
 [data-theme="dark"] #collection-{{ collection.id }} .product-card__content {
+  background: var(--bg-secondary, #1e293b) !important;
+  color: var(--text-primary, #f8fafc) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .product-card__body {
   background: var(--bg-secondary, #1e293b) !important;
   color: var(--text-primary, #f8fafc) !important;
 }
