@@ -13,6 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     {{ 'base.css' | asset_url | stylesheet_tag }}
+    {{ 'dark-mode.css' | asset_url | stylesheet_tag }}
 
     {%- comment -%} ✅ Halloween styles (global include) {%- endcomment -%}
     {{ 'halloween.css' | asset_url | stylesheet_tag }}
@@ -26,6 +27,7 @@
       /* Higher specificity + !important so it beats any earlier .brand-line rules */
       html body header.header .brand-title .brand-line{
         color: var(--brand-teal) !important;
+      }
 
       /* Make sure pills stay red-glow too (even if --accent is pink) */
       html body header.header .nav a{
@@ -197,7 +199,9 @@
     {%- comment -%} ✅ Halloween script (global include, non-module) {%- endcomment -%}
     {{ 'halloween.js' | asset_url | script_tag }}
 
-    <!-- Global Interactive Elements - Removed cursor trail and floating particles -->
+    <!-- Global Interactive Elements -->
+    <div id="cursor-trail"></div>
+    <div id="floating-particles"></div>
     
     <script src="{{ 'theme.js' | asset_url }}" defer></script>
     <script src="{{ 'swatch.js' | asset_url }}" defer></script>
@@ -822,9 +826,19 @@
               <h4 style="margin: 0 0 4px 0; font-size: 14px; color: #111827;">${item.title}</h4>
               <div style="font-size: 14px; color: #dc2626; font-weight: 600;">${item.price}</div>
             </div>
-            <button onclick="removeFromWishlist('${item.id}')" style="background: none; border: none; color: #6b7280; cursor: pointer; padding: 4px;">×</button>
+            <button data-action="remove-wishlist" data-product-id="${String(item.id).replace(/"/g, '&quot;')}" style="background: none; border: none; color: #6b7280; cursor: pointer; padding: 4px;">×</button>
           </div>
         `).join('');
+
+        // Wire up remove buttons
+        wishlistItems.querySelectorAll('[data-action="remove-wishlist"]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const pid = btn.getAttribute('data-product-id');
+            if (pid) {
+              window.removeFromWishlist(pid);
+            }
+          });
+        });
       }
       
       // Add to wishlist function
@@ -1051,7 +1065,7 @@
                     </div>
                   </div>
                 </div>
-                <button id="quick-view-add-to-cart" onclick="addToCartFromQuickView('${firstVariant.id}')" 
+                <button id="quick-view-add-to-cart"
                         style="width: 100%; padding: 16px; background: #27e1c1; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;"
                         ${!firstVariant.available ? 'disabled' : ''}>
                   ${firstVariant.available ? 'Add to Cart' : 'Sold Out'}
@@ -1069,6 +1083,16 @@
           
           // Initialize collapsible sections
           initQuickViewSections();
+
+          // Set initial Add to Cart handler for default variant
+          const initialAddBtn = document.getElementById('quick-view-add-to-cart');
+          if (initialAddBtn && firstVariant?.id && firstVariant.available) {
+            initialAddBtn.addEventListener('click', () => addToCartFromQuickView(firstVariant.id));
+          }
+        } catch (error) {
+          console.error('Error loading product:', error);
+          quickViewContent.innerHTML = '<div class="quick-view-loading">Error loading product</div>';
+        }
       }
       
       // Generate dropdown options for Quick View
@@ -1088,7 +1112,7 @@
                   data-option-index="${index}"
                   style="width: 100%; padding: 8px 12px; border: 2px solid #e5e7eb; border-radius: 6px; background: white; font-size: 14px; cursor: pointer;">
                   ${option.values.map(value => 
-                    `<option value="${value}" ${selectedVariant.options[index] === value ? 'selected' : ''}>${value}</option>`
+                    '<option value="' + value + '"' + (selectedVariant.options[index] === value ? ' selected' : '') + '>' + value + '</option>'
                   ).join('')}
                 </select>
               </div>

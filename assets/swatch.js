@@ -13,8 +13,10 @@ document.documentElement.classList.add('swatch-ready');
   const $  = (s, c) => (c || document).querySelector(s);
   const $$ = (s, c) => Array.from((c || document).querySelectorAll(s));
 
-  function setSelectValueForOptionIndex(form, optIndex, value) {
-    const sel = form.querySelector(`.single-option-selector[data-index="option${optIndex + 1}"]`);
+  function setSelectValueForOptionIndex(scopeEl, optIndex, value) {
+    // Scope searches to the nearest product card so homepage cards don't collide
+    const root = scopeEl || document;
+    const sel = root.querySelector(`.single-option-selector[data-index="option${optIndex + 1}"]`);
     if (!sel) return;
     sel.value = value;
     sel.dispatchEvent(new Event('change', { bubbles: true }));
@@ -32,6 +34,7 @@ document.documentElement.classList.add('swatch-ready');
     console.log('[swatch] handleSwatchClick called');
     const btn = evt.currentTarget;
     const form = btn.closest('form');
+    const card = btn.closest('.card');
     
     const optIndex  = parseInt(btn.getAttribute('data-option-index'), 10);
     const value     = btn.getAttribute('data-value');
@@ -44,28 +47,25 @@ document.documentElement.classList.add('swatch-ready');
     console.log('[swatch] Swatch data:', { value, variantId, available, thumb, priceStr, hasForm: !!form });
 
     // Handle form-based swatches (product pages)
-    if (form) {
-      // 1) Drive the native select (triggers existing inline handler)
-      setSelectValueForOptionIndex(form, optIndex, value);
+    // Drive the native select for this option (if present)
+    setSelectValueForOptionIndex(card || form, optIndex, value);
 
-      // 2) Ensure the hidden variant id is correct immediately
-      const idInput = form.querySelector('input[name="id"]');
-      if (idInput && variantId) idInput.value = String(variantId);
+    // Do NOT set hidden variant id directly here; let form's change handler compute
 
-      // 3) Update price/button right away
-      const priceEl  = form.closest('.card')?.querySelector('[data-product-price]');
-      const submitBtn = form.querySelector('button[type="submit"]');
-      if (priceEl && priceStr) priceEl.textContent = priceStr;
-      if (submitBtn) {
-        submitBtn.disabled = !available;
-        submitBtn.textContent = available ? 'Add to cart' : 'Sold out';
-      }
-    } else {
-      // Handle homepage swatches (no form context)
-      // Update price in the same product card
-      const card = btn.closest('.product-card');
-      if (card) {
-        const priceEl = card.querySelector('[data-product-price]');
+    // Update price/button right away within the same card
+    const priceEl  = (card || form)?.querySelector('[data-product-price]');
+    const submitBtn = (card || form)?.querySelector('button[type="submit"]');
+    if (priceEl && priceStr) priceEl.textContent = priceStr;
+    if (submitBtn) {
+      submitBtn.disabled = !available;
+      submitBtn.textContent = available ? 'Add to cart' : 'Sold out';
+    }
+
+    // For collection cards without forms, still update price in card context
+    if (!card) {
+      const productCard = btn.closest('.product-card');
+      if (productCard) {
+        const priceEl = productCard.querySelector('[data-product-price]');
         if (priceEl && priceStr) priceEl.textContent = priceStr;
       }
     }
@@ -120,7 +120,8 @@ document.documentElement.classList.add('swatch-ready');
     }
 
     // 5) Update URL (?variant=…) - only for product pages with forms
-    if (form && variantId) {
+    // Only update URL on product pages (presence of MainProductImage is a good signal)
+    if (document.getElementById('MainProductImage') && variantId) {
       const url = new URL(window.location.href);
       url.searchParams.set('variant', variantId);
       history.replaceState({}, '', url);
