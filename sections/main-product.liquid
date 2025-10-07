@@ -314,10 +314,29 @@ Main product section — safe + styled + correct add-to-cart
         }
       }
 
-      selectors.forEach(function(s){ s.addEventListener('change', syncVariant); });
+      console.log('Setting up event listeners for', selectors.length, 'selectors');
+      selectors.forEach(function(s){ 
+        console.log('Adding change listener to selector:', s.id, s.value);
+        s.addEventListener('change', function() {
+          console.log('Selector changed:', this.id, 'new value:', this.value);
+          syncVariant();
+        });
+      });
+      
+      // Add form submission debugging
+      form.addEventListener('submit', function(e) {
+        console.log('=== FORM SUBMISSION DEBUG ===');
+        console.log('Form submitting with variant ID:', idInput.value);
+        console.log('Selected options at submission:', Array.from(selectors).map(s => s.value));
+        console.log('=== END FORM SUBMISSION DEBUG ===');
+      });
       
       // Force sync on page load to ensure correct variant is selected
-      setTimeout(syncVariant, 100);
+      console.log('Running initial syncVariant in 100ms');
+      setTimeout(function() {
+        console.log('Running delayed syncVariant');
+        syncVariant();
+      }, 100);
     })();
 
     // Collapsible sections functionality
