@@ -714,10 +714,15 @@ document.addEventListener('DOMContentLoaded', function() {
         group.querySelectorAll('.variant-option').forEach(opt => opt.classList.remove('selected'));
         this.classList.add('selected');
         
-        // Find matching variant
-        const selectedOptions = Array.from(content.querySelectorAll('.variant-option.selected')).map(opt => opt.dataset.value);
+        // Find matching variant using option indices
+        const selectedByIndex = [];
+        content.querySelectorAll('.variant-option.selected').forEach(opt => {
+          const g = opt.closest('.variant-options');
+          const idx = parseInt(g?.dataset.optionIndex, 10);
+          if (!isNaN(idx)) selectedByIndex[idx] = opt.dataset.value;
+        });
         const matchingVariant = currentProduct.variants.find(variant => 
-          variant.options.every((option, index) => option === selectedOptions[index])
+          variant.options.every((optVal, index) => selectedByIndex[index] ? optVal === selectedByIndex[index] : true)
         );
         
         if (matchingVariant) {
@@ -774,6 +779,17 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Add to cart button
     addToCartBtn?.addEventListener('click', function() {
+      // Reconfirm selectedVariant using current selections to avoid stale size/color
+      const selectedByIndex = [];
+      content.querySelectorAll('.variant-option.selected').forEach(opt => {
+        const g = opt.closest('.variant-options');
+        const idx = parseInt(g?.dataset.optionIndex, 10);
+        if (!isNaN(idx)) selectedByIndex[idx] = opt.dataset.value;
+      });
+      const freshVariant = currentProduct.variants.find(variant => 
+        variant.options.every((optVal, index) => selectedByIndex[index] ? optVal === selectedByIndex[index] : true)
+      );
+      if (freshVariant) selectedVariant = freshVariant;
       if (selectedVariant && selectedVariant.available) {
         addToCartFromModal();
       }
