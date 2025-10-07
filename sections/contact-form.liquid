@@ -1,15 +1,15 @@
 <section class="contact-form-section" style="max-width: 600px; margin: 40px auto; padding: 20px;">
-  <div class="contact-form-container" style="background: #f8fafc; border-radius: 12px; padding: 30px; border: 1px solid #e2e8f0;">
-    <h2 style="font-family: 'Bebas Neue', sans-serif; font-size: 32px; margin-bottom: 20px; text-align: center; color: #0f172a;">
+  <div class="contact-form-wrapper" style="background: var(--bg-secondary); border-radius: 12px; padding: 30px; border: 1px solid var(--border-primary);">
+    <h2 style="font-family: 'Bebas Neue', sans-serif; font-size: 32px; margin-bottom: 20px; text-align: center; color: var(--text-primary);">
       Send us a Message
     </h2>
-    <p style="text-align: center; color: #64748b; margin-bottom: 30px;">
+    <p style="text-align: center; color: var(--text-secondary); margin-bottom: 30px;">
       We'd love to hear from you! Send us a message and we'll respond as soon as possible.
     </p>
     
     <form id="contact-form" style="display: flex; flex-direction: column; gap: 20px;">
       <div class="form-group">
-        <label for="contact-name" style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151;">
+        <label for="contact-name" style="display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-secondary);">
           Name *
         </label>
         <input 
@@ -17,14 +17,14 @@
           id="contact-name" 
           name="name" 
           required 
-          style="width: 100%; padding: 12px 16px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 16px; transition: border-color 0.2s;"
-          onfocus="this.style.borderColor='#3b82f6'"
-          onblur="this.style.borderColor='#d1d5db'"
+          style="width: 100%; padding: 12px 16px; border: 2px solid var(--border-primary); border-radius: 8px; font-size: 16px; transition: border-color 0.2s; background: var(--bg-primary); color: var(--text-primary);"
+          onfocus="this.style.borderColor='var(--accent-primary)'"
+          onblur="this.style.borderColor='var(--border-primary)'"
         >
       </div>
       
       <div class="form-group">
-        <label for="contact-message" style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151;">
+        <label for="contact-message" style="display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-secondary);">
           Message *
         </label>
         <textarea 
@@ -32,9 +32,9 @@
           name="message" 
           required 
           rows="5"
-          style="width: 100%; padding: 12px 16px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 16px; resize: vertical; transition: border-color 0.2s;"
-          onfocus="this.style.borderColor='#3b82f6'"
-          onblur="this.style.borderColor='#d1d5db'"
+          style="width: 100%; padding: 12px 16px; border: 2px solid var(--border-primary); border-radius: 8px; font-size: 16px; resize: vertical; transition: border-color 0.2s; background: var(--bg-primary); color: var(--text-primary);"
+          onfocus="this.style.borderColor='var(--accent-primary)'"
+          onblur="this.style.borderColor='var(--border-primary)'"
           placeholder="Tell us how we can help you..."
         ></textarea>
       </div>
@@ -42,15 +42,15 @@
       <button 
         type="submit" 
         id="submit-btn"
-        style="background: #0f172a; color: white; border: none; padding: 14px 24px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background-color 0.2s; margin-top: 10px;"
-        onmouseover="this.style.backgroundColor='#1e293b'"
-        onmouseout="this.style.backgroundColor='#0f172a'"
+        style="background: var(--button-primary-bg); color: var(--button-primary-text); border: none; padding: 14px 24px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background-color 0.2s; margin-top: 10px;"
+        onmouseover="this.style.backgroundColor='var(--bg-tertiary)'"
+        onmouseout="this.style.backgroundColor='var(--button-primary-bg)'"
       >
         Send Message
       </button>
     </form>
     
-    <div id="form-status" style="margin-top: 20px; padding: 12px; border-radius: 8px; display: none;"></div>
+    <div id="form-status" class="form-status" style="margin-top: 20px; padding: 12px; border-radius: 8px; display: none;"></div>
   </div>
 </section>
 

@@ -31,6 +31,19 @@
       
     </nav>
 
+    <!-- Dark Mode Toggle -->
+    <div class="nt-header__dark-mode">
+      <button class="dark-mode-toggle" id="dark-mode-toggle" aria-label="Toggle dark mode">
+        <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
+          <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2"/>
+        </svg>
+      </button>
+    </div>
+
     <!-- Cart Button -->
     <div class="nt-header__cart">
       <a href="{{ routes.cart_url }}" class="nt-header__cart-link" aria-label="View cart">
@@ -70,6 +83,71 @@
     flex-wrap: nowrap;
   }
   
+  /* Dark Mode Toggle Styling */
+  #Header-{{ section.id }} .nt-header__dark-mode {
+    display: flex;
+    align-items: center;
+    margin-right: 12px;
+  }
+  
+  #Header-{{ section.id }} .dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 12px;
+    border-radius: 50%;
+    text-decoration: none;
+    color: #1f2937 !important;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    transition: all 0.3s ease;
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    cursor: pointer;
+    overflow: hidden;
+  }
+  
+  #Header-{{ section.id }} .dark-mode-toggle:hover {
+    background: rgba(255, 255, 255, 0.25);
+    color: #1f2937 !important;
+    transform: translateY(-1px) scale(1.05);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+  
+  #Header-{{ section.id }} .dark-mode-toggle:active {
+    transform: translateY(0) scale(0.95);
+  }
+  
+  #Header-{{ section.id }} .dark-mode-toggle svg {
+    position: absolute;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  #Header-{{ section.id }} .dark-mode-toggle .sun-icon {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+  
+  #Header-{{ section.id }} .dark-mode-toggle .moon-icon {
+    opacity: 0;
+    transform: rotate(180deg) scale(0.8);
+  }
+  
+  /* Dark mode state */
+  [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle .sun-icon {
+    opacity: 0;
+    transform: rotate(180deg) scale(0.8);
+  }
+  
+  [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle .moon-icon {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+
   /* Cart Button Styling - Matches navigation buttons */
   #Header-{{ section.id }} .nt-header__cart {
     display: flex;
@@ -235,6 +313,25 @@
       flex-shrink: 0;
     }
     
+    /* Mobile dark mode toggle adjustments */
+    #Header-{{ section.id }} .nt-header__dark-mode {
+      flex-shrink: 0;
+      margin-right: 8px;
+    }
+    
+    #Header-{{ section.id }} .dark-mode-toggle {
+      width: 40px;
+      height: 40px;
+      padding: 10px;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    #Header-{{ section.id }} .dark-mode-toggle svg {
+      width: 18px;
+      height: 18px;
+    }
+
     /* Mobile cart button adjustments */
     #Header-{{ section.id }} .nt-header__cart {
       flex-shrink: 0;
@@ -481,6 +578,63 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Global function to trigger cart count update
 window.updateCartCount = updateCartCount;
+
+// Dark Mode Functionality
+class DarkMode {
+  constructor() {
+    this.toggle = document.getElementById('dark-mode-toggle');
+    this.currentTheme = this.getStoredTheme() || this.getSystemTheme();
+    this.init();
+  }
+
+  init() {
+    this.applyTheme(this.currentTheme);
+    this.toggle?.addEventListener('click', () => this.toggleTheme());
+    
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (!this.getStoredTheme()) {
+        this.applyTheme(e.matches ? 'dark' : 'light');
+      }
+    });
+  }
+
+  getSystemTheme() {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+
+  getStoredTheme() {
+    return localStorage.getItem('theme');
+  }
+
+  setStoredTheme(theme) {
+    localStorage.setItem('theme', theme);
+  }
+
+  applyTheme(theme) {
+    this.currentTheme = theme;
+    document.documentElement.setAttribute('data-theme', theme);
+    this.setStoredTheme(theme);
+  }
+
+  toggleTheme() {
+    const newTheme = this.currentTheme === 'dark' ? 'light' : 'dark';
+    this.applyTheme(newTheme);
+    
+    // Add a subtle animation feedback
+    if (this.toggle) {
+      this.toggle.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        this.toggle.style.transform = '';
+      }, 150);
+    }
+  }
+}
+
+// Initialize dark mode when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  new DarkMode();
+});
 </script>
 
 {% schema %}
