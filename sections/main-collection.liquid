@@ -627,6 +627,27 @@ document.addEventListener('DOMContentLoaded', function() {
   color: var(--text-primary, #f8fafc) !important;
 }
 
+/* Center product titles and content - Match homepage */
+#collection-{{ collection.id }} .product-card__content {
+  text-align: center !important;
+}
+
+#collection-{{ collection.id }} .product-card__title {
+  text-align: center !important;
+}
+
+#collection-{{ collection.id }} .product-card__price {
+  text-align: center !important;
+}
+
+/* Fix swatch overflow and center them - Match homepage */
+#collection-{{ collection.id }} .swatch-list {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  gap: 6px !important;
+}
+
 /* Collection title and description */
 [data-theme="dark"] #collection-{{ collection.id }} h1 {
   color: var(--text-primary, #f8fafc) !important;
