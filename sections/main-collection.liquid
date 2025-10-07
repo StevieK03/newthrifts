@@ -598,9 +598,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 /* ========================================
    DARK MODE STYLING FOR COLLECTION PAGE
+   Cache-busting: {{ 'now' | date: '%s' }}
    ======================================== */
 
-/* Collection page container */
+/* Collection page container - Force refresh {{ 'now' | date: '%Y%m%d%H%M%S' }} */
 [data-theme="dark"] #collection-{{ collection.id }} {
   background: var(--bg-primary, #0f172a) !important;
   color: var(--text-primary, #f8fafc) !important;
