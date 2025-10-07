@@ -330,6 +330,17 @@
     color: var(--text-primary, #f8fafc) !important;
   }
 
+  /* Dark mode logo styling */
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__logo-img {
+    filter: brightness(0) invert(1) !important; /* Makes logo white */
+    transition: filter 0.3s ease !important;
+  }
+
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__logo-text {
+    color: var(--text-primary, #f8fafc) !important;
+    transition: color 0.3s ease !important;
+  }
+
   /* Mobile header adjustments */
   @media (max-width: 768px) {
     #Header-{{ section.id }} {
