@@ -18,21 +18,19 @@ Welcome / Social Bar — Modern Redesign
         </div>
 
         <div class="welcome-buttons">
-          {% if section.settings.facebook_url != blank %}
-            <a class="pill-btn facebook-btn" href="{{ section.settings.facebook_url }}" target="_blank" rel="noopener noreferrer">
-              <!-- Facebook icon -->
-              <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M13.5 9H15V6h-1.5C11.57 6 10 7.57 10 9.5V11H8v3h2v7h3v-7h2.1l.4-3H13v-1.3c0-.45.36-.7.8-.7Z"/></svg>
-              <span>Follow us on <strong>Facebook</strong></span>
-            </a>
-          {% endif %}
+          <!-- Facebook Button -->
+          <a class="pill-btn facebook-btn" href="https://www.facebook.com/profile.php?id=61580618386334" target="_blank" rel="noopener noreferrer">
+            <!-- Facebook icon -->
+            <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M13.5 9H15V6h-1.5C11.57 6 10 7.57 10 9.5V11H8v3h2v7h3v-7h2.1l.4-3H13v-1.3c0-.45.36-.7.8-.7Z"/></svg>
+            <span>Follow us on <strong>Facebook</strong></span>
+          </a>
 
-          {% if section.settings.instagram_url != blank %}
-            <a class="pill-btn instagram-btn" href="{{ section.settings.instagram_url }}" target="_blank" rel="noopener noreferrer">
-              <!-- Instagram icon -->
-              <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm10 2H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3Zm-5 4.5A5.5 5.5 0 1 1 6.5 14 5.5 5.5 0 0 1 12 8.5Zm0 2A3.5 3.5 0 1 0 15.5 14 3.5 3.5 0 0 0 12 10.5Zm5.75-3.25a1.25 1.25 0 1 1-1.25 1.25 1.25 1.25 0 0 1 1.25-1.25Z"/></svg>
-              <span>Follow us on <strong>Instagram</strong></span>
-            </a>
-          {% endif %}
+          <!-- Instagram Button -->
+          <a class="pill-btn instagram-btn" href="https://www.instagram.com/newthriftsclothing" target="_blank" rel="noopener noreferrer">
+            <!-- Instagram icon -->
+            <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm10 2H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3Zm-5 4.5A5.5 5.5 0 1 1 6.5 14 5.5 5.5 0 0 1 12 8.5Zm0 2A3.5 3.5 0 1 0 15.5 14 3.5 3.5 0 0 0 12 10.5Zm5.75-3.25a1.25 1.25 0 1 1-1.25 1.25 1.25 1.25 0 0 1 1.25-1.25Z"/></svg>
+            <span>Follow us on <strong>Instagram</strong></span>
+          </a>
 
           {% if section.settings.twitter_url != blank %}
             <a class="pill-btn twitter-btn" href="{{ section.settings.twitter_url }}" target="_blank" rel="noopener noreferrer">
