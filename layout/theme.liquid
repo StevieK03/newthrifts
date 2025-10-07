@@ -826,7 +826,7 @@
               <h4 style="margin: 0 0 4px 0; font-size: 14px; color: #111827;">${item.title}</h4>
               <div style="font-size: 14px; color: #dc2626; font-weight: 600;">${item.price}</div>
             </div>
-            <button onclick="removeFromWishlist('${item.id}')" style="background: none; border: none; color: #6b7280; cursor: pointer; padding: 4px;">×</button>
+            <button data-remove-wishlist="${item.id}" class="wishlist-remove-btn" style="background: none; border: none; color: #6b7280; cursor: pointer; padding: 4px;">×</button>
           </div>
         `).join('');
       }
@@ -913,6 +913,27 @@
       updateWishlistUI();
       
       console.log('Global wishlist initialized with', wishlist.length, 'items');
+      
+      // Event listeners for refactored inline handlers
+      // Wishlist remove button event listener
+      document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('wishlist-remove-btn')) {
+          const itemId = e.target.getAttribute('data-remove-wishlist');
+          if (itemId) {
+            removeFromWishlist(itemId);
+          }
+        }
+      });
+      
+      // Quick View Add to Cart button event listener
+      document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('quick-view-add-btn')) {
+          const variantId = e.target.getAttribute('data-variant-id');
+          if (variantId) {
+            addToCartFromQuickView(variantId);
+          }
+        }
+      });
       
       // Global Quick View functionality
       const quickViewModal = document.getElementById('quick-view-modal');
@@ -1055,7 +1076,7 @@
                     </div>
                   </div>
                 </div>
-                <button id="quick-view-add-to-cart" onclick="addToCartFromQuickView('${firstVariant.id}')" 
+                <button id="quick-view-add-to-cart" data-variant-id="${firstVariant.id}" class="quick-view-add-btn"
                         style="width: 100%; padding: 16px; background: #27e1c1; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;"
                         ${!firstVariant.available ? 'disabled' : ''}>
                   ${firstVariant.available ? 'Add to Cart' : 'Sold Out'}
