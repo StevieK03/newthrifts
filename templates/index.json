@@ -17,18 +17,6 @@
       "type": "quick-view-modal",
       "settings": {}
     },
-    "welcome_social_bar_YkCFUP": {
-      "type": "welcome-social-bar",
-      "name": "Welcome / Social Bar",
-      "settings": {
-        "heading": "Welcome to New Thrifts — fresh drops, great prices.",
-        "body": "<p>We keep your wardrobe fresh with <strong>new products weekly</strong>. From classic tees & hoodies to <strong>must-have hats, shorts, and gadgets</strong>—plus fun seasonal collections for everyone. Dive into the full catalog and find your next favorite fit today!</p>",
-        "facebook_url": "https://www.facebook.com/profile.php?id=61580618386334",
-        "instagram_url": "",
-        "pad_y": 36,
-        "section_bg": "#f2f3f5"
-      }
-    },
     "halloween-countdown": {
       "type": "countdown-halloween",
       "settings": {
@@ -39,13 +27,13 @@
         "emoji_left": "🧟‍♂️",
         "emoji_right": "👻",
         "size": "lg",
-        "bg_color": "#000000",
-        "bg_color_2": "#000000",
-        "text_color": "#DC143C",
-        "muted_color": "#B22222",
-        "accent_color": "#8B0000",
-        "accent2_color": "#4B0000",
-        "ring_color": "#DC143C",
+        "bg_color": "#FFF5E6",
+        "bg_color_2": "#FFE5B4",
+        "text_color": "#8B4513",
+        "muted_color": "#D2691E",
+        "accent_color": "#FF6B35",
+        "accent2_color": "#E67E22",
+        "ring_color": "#FF8C00",
         "pad_y": 18,
         "pad_x": 18,
         "sticky": true,
@@ -74,7 +62,7 @@
         "lightning_debug": true,
         "lightning_min_gap": 10,
         "lightning_max_gap": 28,
-        "lightning_color": "#DC143C",
+        "lightning_color": "#FF8C00",
         "lightning_intensity": 85,
         "thunder_url": "",
         "thunder_volume_pct": 35,
@@ -90,7 +78,7 @@
     },
     "featured_collection_ETkhqA": {
       "type": "featured-collection",
-      "name": "Featured collection",
+      "name": "Featured Products",
       "settings": {
         "heading": "Featured Collection",
         "subheading": "",
@@ -157,12 +145,64 @@
         "product_2",
         "product_3"
       ]
+    },
+    "advanced_tshirt_customizer": {
+      "type": "advanced-tshirt-customizer",
+      "name": "T-Shirt Customizer",
+      "settings": {
+        "heading": "Design Your Perfect Tee",
+        "description": "Create personalized t-shirts with our advanced design studio. Choose colors, add custom text, and see your design come to life in real-time!",
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
+    "smart_design_suggestions": {
+      "type": "smart-design-suggestions",
+      "name": "AI Suggestions",
+      "settings": {
+        "heading": "AI-Powered Design Suggestions",
+        "description": "Let our AI help you create the perfect design! Get personalized suggestions based on trending styles, your preferences, and popular combinations.",
+        "show_trending": true,
+        "show_personalized": true,
+        "show_templates": true,
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
+    "customizer_integration": {
+      "type": "customizer-integration",
+      "name": "Design Process",
+      "settings": {
+        "heading": "From Design to Delivery",
+        "description": "Our advanced design studio seamlessly integrates with our production process. Create your design above, and we'll bring it to life with premium quality and fast shipping.",
+        "show_stats": true,
+        "show_combinations": true,
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
+    "interactive_mockup": {
+      "type": "interactive-mockup",
+      "name": "Live Preview",
+      "settings": {
+        "allow_download": true,
+        "overlay_top": 45,
+        "overlay_left": 25,
+        "overlay_width": 60,
+        "overlay_rotate": 0,
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
     }
   },
   "order": [
     "header",
     "quick_view_modal",
     "welcome_social_bar_YkCFUP",
+    "advanced_tshirt_customizer",
+    "smart_design_suggestions",
+    "customizer_integration",
+    "interactive_mockup",
     "visitor_counter_section",
     "halloween-countdown",
     "product_poll_section",

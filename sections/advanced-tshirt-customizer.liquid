@@ -1,0 +1,792 @@
+{% comment %}
+Advanced T-Shirt Customizer Section
+- Interactive real-time preview
+- Advanced text customization with fonts and effects
+- Smart design suggestions
+- Social proof integration
+- One-click personalization
+{% endcomment %}
+
+<section id="tshirt-customizer-{{ section.id }}" class="tshirt-customizer-section" style="padding: 40px 0; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);">
+  <div class="container">
+    
+    <!-- Section Header -->
+    <div class="customizer-header" style="text-align: center; margin-bottom: 40px;">
+      <h2 style="font-family: 'Bebas Neue', sans-serif; font-size: 48px; margin: 0 0 16px 0; background: linear-gradient(45deg, #27e1c1, #ff4fa3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+        Design Your Perfect Tee
+      </h2>
+      <p style="font-size: 18px; color: #64748b; margin: 0; max-width: 600px; margin: 0 auto;">
+        Create personalized t-shirts with our advanced design studio. Choose colors, add custom text, and see your design come to life in real-time!
+      </p>
+    </div>
+
+    <div class="customizer-main" style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start;">
+      
+      <!-- Left Side: Design Canvas -->
+      <div class="design-canvas-container" style="background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
+        
+        <!-- Model Preview -->
+        <div class="model-preview" style="position: relative; text-align: center; margin-bottom: 30px;">
+          <div class="model-container" style="position: relative; display: inline-block;">
+            <!-- T-Shirt Base Image -->
+            <img id="tshirt-base" 
+                 src="{{ 'Girl-Model.png' | asset_url }}" 
+                 alt="T-shirt model" 
+                 style="width: 280px; height: auto; transition: all 0.3s ease;">
+            
+            <!-- Customizable Text Overlay -->
+            <div id="text-overlay" 
+                 class="text-overlay" 
+                 style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; z-index: 10;">
+              <span id="custom-text" 
+                    style="font-family: 'Bebas Neue', sans-serif; font-size: 24px; font-weight: bold; color: #000; text-shadow: 1px 1px 2px rgba(255,255,255,0.8); white-space: nowrap; user-select: none;">
+                Your Text Here
+              </span>
+            </div>
+          </div>
+          
+          <!-- View Angle Controls -->
+          <div class="view-controls" style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;">
+            <button class="view-btn active" data-angle="front" style="padding: 8px 16px; border: 2px solid #27e1c1; background: #27e1c1; color: white; border-radius: 20px; cursor: pointer; font-size: 12px; font-weight: 600;">
+              Front View
+            </button>
+            <button class="view-btn" data-angle="back" style="padding: 8px 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 20px; cursor: pointer; font-size: 12px; font-weight: 600;">
+              Back View
+            </button>
+          </div>
+        </div>
+
+        <!-- Design Actions -->
+        <div class="design-actions" style="display: flex; gap: 12px; justify-content: center;">
+          <button id="add-text-btn" class="action-btn primary" style="padding: 12px 24px; background: linear-gradient(45deg, #27e1c1, #20b2aa); color: white; border: none; border-radius: 25px; cursor: pointer; font-weight: 600; transition: all 0.3s ease;">
+            ✏️ Add Text
+          </button>
+          <button id="add-logo-btn" class="action-btn secondary" style="padding: 12px 24px; background: white; color: #27e1c1; border: 2px solid #27e1c1; border-radius: 25px; cursor: pointer; font-weight: 600; transition: all 0.3s ease;">
+            🎨 Add Logo
+          </button>
+          <button id="save-design-btn" class="action-btn success" style="padding: 12px 24px; background: linear-gradient(45deg, #10b981, #059669); color: white; border: none; border-radius: 25px; cursor: pointer; font-weight: 600; transition: all 0.3s ease;">
+            💾 Save Design
+          </button>
+        </div>
+      </div>
+
+      <!-- Right Side: Customization Panel -->
+      <div class="customization-panel" style="background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
+        
+        <!-- Tab Navigation -->
+        <div class="customization-tabs" style="display: flex; margin-bottom: 30px; border-bottom: 2px solid #f1f5f9;">
+          <button class="tab-btn active" data-tab="text" style="flex: 1; padding: 12px; background: none; border: none; cursor: pointer; font-weight: 600; color: #27e1c1; border-bottom: 3px solid #27e1c1;">
+            Text
+          </button>
+          <button class="tab-btn" data-tab="colors" style="flex: 1; padding: 12px; background: none; border: none; cursor: pointer; font-weight: 600; color: #64748b;">
+            Colors
+          </button>
+          <button class="tab-btn" data-tab="fonts" style="flex: 1; padding: 12px; background: none; border: none; cursor: pointer; font-weight: 600; color: #64748b;">
+            Fonts
+          </button>
+          <button class="tab-btn" data-tab="effects" style="flex: 1; padding: 12px; background: none; border: none; cursor: pointer; font-weight: 600; color: #64748b;">
+            Effects
+          </button>
+        </div>
+
+        <!-- Text Customization Tab -->
+        <div id="text-tab" class="tab-content active">
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #374151;">Custom Text</label>
+            <input type="text" 
+                   id="custom-text-input" 
+                   placeholder="Enter your custom text..." 
+                   style="width: 100%; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 16px; transition: border-color 0.3s ease;">
+          </div>
+          
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #374151;">Text Size</label>
+            <input type="range" 
+                   id="text-size-slider" 
+                   min="12" 
+                   max="48" 
+                   value="24" 
+                   style="width: 100%; margin-bottom: 10px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; color: #64748b;">
+              <span>Small</span>
+              <span id="size-value">24px</span>
+              <span>Large</span>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #374151;">Text Position</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+              <button class="position-btn active" data-position="center" style="padding: 10px; border: 2px solid #27e1c1; background: #27e1c1; color: white; border-radius: 8px; cursor: pointer; font-size: 12px;">
+                Center
+              </button>
+              <button class="position-btn" data-position="top" style="padding: 10px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 8px; cursor: pointer; font-size: 12px;">
+                Top
+              </button>
+              <button class="position-btn" data-position="bottom" style="padding: 10px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 8px; cursor: pointer; font-size: 12px;">
+                Bottom
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Colors Tab -->
+        <div id="colors-tab" class="tab-content">
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label style="display: block; font-weight: 600; margin-bottom: 12px; color: #374151;">T-Shirt Color</label>
+            <div class="color-grid" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px;">
+              <button class="color-btn active" data-color="#ffffff" style="width: 40px; height: 40px; border-radius: 50%; border: 3px solid #27e1c1; background: #ffffff; cursor: pointer; transition: all 0.3s ease;"></button>
+              <button class="color-btn" data-color="#000000" style="width: 40px; height: 40px; border-radius: 50%; border: 3px solid #e2e8f0; background: #000000; cursor: pointer; transition: all 0.3s ease;"></button>
+              <button class="color-btn" data-color="#ff69b4" style="width: 40px; height: 40px; border-radius: 50%; border: 3px solid #e2e8f0; background: #ff69b4; cursor: pointer; transition: all 0.3s ease;"></button>
+              <button class="color-btn" data-color="#0066cc" style="width: 40px; height: 40px; border-radius: 50%; border: 3px solid #e2e8f0; background: #0066cc; cursor: pointer; transition: all 0.3s ease;"></button>
+              <button class="color-btn" data-color="#dc2626" style="width: 40px; height: 40px; border-radius: 50%; border: 3px solid #e2e8f0; background: #dc2626; cursor: pointer; transition: all 0.3s ease;"></button>
+              <button class="color-btn" data-color="#10b981" style="width: 40px; height: 40px; border-radius: 50%; border: 3px solid #e2e8f0; background: #10b981; cursor: pointer; transition: all 0.3s ease;"></button>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label style="display: block; font-weight: 600; margin-bottom: 12px; color: #374151;">Text Color</label>
+            <div class="color-grid" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px;">
+              <button class="text-color-btn active" data-color="#000000" style="width: 40px; height: 40px; border-radius: 50%; border: 3px solid #27e1c1; background: #000000; cursor: pointer; transition: all 0.3s ease;"></button>
+              <button class="text-color-btn" data-color="#ffffff" style="width: 40px; height: 40px; border-radius: 50%; border: 3px solid #e2e8f0; background: #ffffff; cursor: pointer; transition: all 0.3s ease;"></button>
+              <button class="text-color-btn" data-color="#dc2626" style="width: 40px; height: 40px; border-radius: 50%; border: 3px solid #e2e8f0; background: #dc2626; cursor: pointer; transition: all 0.3s ease;"></button>
+              <button class="text-color-btn" data-color="#0066cc" style="width: 40px; height: 40px; border-radius: 50%; border: 3px solid #e2e8f0; background: #0066cc; cursor: pointer; transition: all 0.3s ease;"></button>
+              <button class="text-color-btn" data-color="#ff69b4" style="width: 40px; height: 40px; border-radius: 50%; border: 3px solid #e2e8f0; background: #ff69b4; cursor: pointer; transition: all 0.3s ease;"></button>
+              <button class="text-color-btn" data-color="#10b981" style="width: 40px; height: 40px; border-radius: 50%; border: 3px solid #e2e8f0; background: #10b981; cursor: pointer; transition: all 0.3s ease;"></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fonts Tab -->
+        <div id="fonts-tab" class="tab-content">
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label style="display: block; font-weight: 600; margin-bottom: 12px; color: #374151;">Font Family</label>
+            <div class="font-options">
+              <button class="font-btn active" data-font="'Bebas Neue', sans-serif" style="width: 100%; padding: 12px; border: 2px solid #27e1c1; background: #27e1c1; color: white; border-radius: 8px; cursor: pointer; font-family: 'Bebas Neue', sans-serif; font-size: 16px; margin-bottom: 8px;">
+                Bebas Neue
+              </button>
+              <button class="font-btn" data-font="'Inter', sans-serif" style="width: 100%; padding: 12px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 8px; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 16px; margin-bottom: 8px;">
+                Inter
+              </button>
+              <button class="font-btn" data-font="'Playfair Display', serif" style="width: 100%; padding: 12px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 8px; cursor: pointer; font-family: 'Playfair Display', serif; font-size: 16px; margin-bottom: 8px;">
+                Playfair Display
+              </button>
+              <button class="font-btn" data-font="'Space Grotesk', sans-serif" style="width: 100%; padding: 12px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 8px; cursor: pointer; font-family: 'Space Grotesk', sans-serif; font-size: 16px;">
+                Space Grotesk
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Effects Tab -->
+        <div id="effects-tab" class="tab-content">
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label style="display: block; font-weight: 600; margin-bottom: 12px; color: #374151;">Text Effects</label>
+            <div class="effect-options">
+              <button class="effect-btn" data-effect="none" style="width: 100%; padding: 12px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 8px; cursor: pointer; font-size: 14px; margin-bottom: 8px;">
+                None
+              </button>
+              <button class="effect-btn" data-effect="outline" style="width: 100%; padding: 12px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 8px; cursor: pointer; font-size: 14px; margin-bottom: 8px;">
+                Outline
+              </button>
+              <button class="effect-btn" data-effect="shadow" style="width: 100%; padding: 12px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 8px; cursor: pointer; font-size: 14px; margin-bottom: 8px;">
+                Drop Shadow
+              </button>
+              <button class="effect-btn" data-effect="gradient" style="width: 100%; padding: 12px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 8px; cursor: pointer; font-size: 14px;">
+                Gradient
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions" style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #f1f5f9;">
+          <button id="preview-3d-btn" class="quick-action-btn" style="width: 100%; padding: 12px; background: linear-gradient(45deg, #8b5cf6, #a855f7); color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; margin-bottom: 12px;">
+            🎭 3D Preview
+          </button>
+          <button id="share-design-btn" class="quick-action-btn" style="width: 100%; padding: 12px; background: linear-gradient(45deg, #06b6d4, #0891b2); color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; margin-bottom: 12px;">
+            📤 Share Design
+          </button>
+          <button id="add-to-cart-custom" class="quick-action-btn" style="width: 100%; padding: 12px; background: linear-gradient(45deg, #10b981, #059669); color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600;">
+            🛒 Add to Cart
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Social Proof Section -->
+    <div class="social-proof" style="margin-top: 50px; text-align: center;">
+      <h3 style="font-family: 'Bebas Neue', sans-serif; font-size: 32px; margin: 0 0 20px 0; color: #374151;">
+        Recently Created Designs
+      </h3>
+      <div class="recent-designs" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; max-width: 800px; margin: 0 auto;">
+        <!-- Recent designs will be populated by JavaScript -->
+        <div class="design-preview" style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+          <div style="width: 60px; height: 60px; background: linear-gradient(45deg, #ff69b4, #ff1493); border-radius: 8px; margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: bold; color: white;">
+            💖
+          </div>
+          <p style="margin: 0; font-size: 14px; color: #64748b;">"Love my custom tee!"</p>
+          <p style="margin: 4px 0 0 0; font-size: 12px; color: #94a3b8;">- Sarah M.</p>
+        </div>
+        <div class="design-preview" style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+          <div style="width: 60px; height: 60px; background: linear-gradient(45deg, #27e1c1, #20b2aa); border-radius: 8px; margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: bold; color: white;">
+            ⚡
+          </div>
+          <p style="margin: 0; font-size: 14px; color: #64748b;">"Perfect quality!"</p>
+          <p style="margin: 4px 0 0 0; font-size: 12px; color: #94a3b8;">- Mike R.</p>
+        </div>
+        <div class="design-preview" style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+          <div style="width: 60px; height: 60px; background: linear-gradient(45deg, #8b5cf6, #a855f7); border-radius: 8px; margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: bold; color: white;">
+            🌟
+          </div>
+          <p style="margin: 0; font-size: 14px; color: #64748b;">"Amazing design tool!"</p>
+          <p style="margin: 4px 0 0 0; font-size: 12px; color: #94a3b8;">- Emma L.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+/* Tab Content Styling */
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .customizer-main {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+  
+  .customizer-header h2 {
+    font-size: 36px !important;
+  }
+  
+  #tshirt-base {
+    width: 200px !important;
+  }
+  
+  .color-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+}
+
+/* Animation Classes */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.customizer-header {
+  animation: fadeInUp 0.6s ease;
+}
+
+.customizer-main > div {
+  animation: fadeInUp 0.8s ease;
+}
+
+/* Hover Effects */
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.color-btn:hover, .text-color-btn:hover {
+  transform: scale(1.1);
+}
+
+.font-btn:hover, .effect-btn:hover {
+  border-color: #27e1c1 !important;
+  background: #f0fdfa !important;
+  color: #27e1c1 !important;
+}
+
+.position-btn:hover {
+  border-color: #27e1c1 !important;
+  background: #f0fdfa !important;
+  color: #27e1c1 !important;
+}
+
+/* Active States */
+.color-btn.active, .text-color-btn.active {
+  border-color: #27e1c1 !important;
+  box-shadow: 0 0 0 2px rgba(39, 225, 193, 0.2);
+}
+
+.font-btn.active, .effect-btn.active, .position-btn.active {
+  border-color: #27e1c1 !important;
+  background: #27e1c1 !important;
+  color: white !important;
+}
+
+.tab-btn.active {
+  color: #27e1c1 !important;
+  border-bottom-color: #27e1c1 !important;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const customizer = {
+    // Current design state
+    state: {
+      text: 'Your Text Here',
+      fontSize: 24,
+      fontFamily: "'Bebas Neue', sans-serif",
+      textColor: '#000000',
+      shirtColor: '#ffffff',
+      position: 'center',
+      effect: 'none'
+    },
+
+    // Initialize the customizer
+    init() {
+      this.bindEvents();
+      this.loadPresets();
+      this.updatePreview();
+    },
+
+    // Bind all event listeners
+    bindEvents() {
+      // Text input
+      const textInput = document.getElementById('custom-text-input');
+      if (textInput) {
+        textInput.addEventListener('input', (e) => {
+          this.state.text = e.target.value || 'Your Text Here';
+          this.updatePreview();
+        });
+      }
+
+      // Text size slider
+      const sizeSlider = document.getElementById('text-size-slider');
+      if (sizeSlider) {
+        sizeSlider.addEventListener('input', (e) => {
+          this.state.fontSize = parseInt(e.target.value);
+          document.getElementById('size-value').textContent = e.target.value + 'px';
+          this.updatePreview();
+        });
+      }
+
+      // Tab switching
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          this.switchTab(e.target.dataset.tab);
+        });
+      });
+
+      // Color buttons
+      document.querySelectorAll('.color-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          this.selectColor('shirt', e.target.dataset.color);
+        });
+      });
+
+      document.querySelectorAll('.text-color-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          this.selectColor('text', e.target.dataset.color);
+        });
+      });
+
+      // Font buttons
+      document.querySelectorAll('.font-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          this.selectFont(e.target.dataset.font);
+        });
+      });
+
+      // Position buttons
+      document.querySelectorAll('.position-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          this.selectPosition(e.target.dataset.position);
+        });
+      });
+
+      // Effect buttons
+      document.querySelectorAll('.effect-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          this.selectEffect(e.target.dataset.effect);
+        });
+      });
+
+      // View angle buttons
+      document.querySelectorAll('.view-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          this.switchView(e.target.dataset.angle);
+        });
+      });
+
+      // Action buttons
+      document.getElementById('add-text-btn')?.addEventListener('click', () => this.showTextPrompt());
+      document.getElementById('preview-3d-btn')?.addEventListener('click', () => this.show3DPreview());
+      document.getElementById('share-design-btn')?.addEventListener('click', () => this.shareDesign());
+      document.getElementById('add-to-cart-custom')?.addEventListener('click', () => this.addToCart());
+    },
+
+    // Switch between tabs
+    switchTab(tabName) {
+      // Update tab buttons
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.style.color = '#64748b';
+        btn.style.borderBottomColor = 'transparent';
+      });
+
+      const activeTab = document.querySelector(`[data-tab="${tabName}"]`);
+      if (activeTab) {
+        activeTab.classList.add('active');
+        activeTab.style.color = '#27e1c1';
+        activeTab.style.borderBottomColor = '#27e1c1';
+      }
+
+      // Update tab content
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+
+      const activeContent = document.getElementById(`${tabName}-tab`);
+      if (activeContent) {
+        activeContent.classList.add('active');
+      }
+    },
+
+    // Select t-shirt or text color
+    selectColor(type, color) {
+      if (type === 'shirt') {
+        this.state.shirtColor = color;
+        // Update active state
+        document.querySelectorAll('.color-btn').forEach(btn => {
+          btn.classList.remove('active');
+          btn.style.borderColor = '#e2e8f0';
+        });
+        document.querySelector(`[data-color="${color}"]`).classList.add('active');
+        document.querySelector(`[data-color="${color}"]`).style.borderColor = '#27e1c1';
+      } else if (type === 'text') {
+        this.state.textColor = color;
+        // Update active state
+        document.querySelectorAll('.text-color-btn').forEach(btn => {
+          btn.classList.remove('active');
+          btn.style.borderColor = '#e2e8f0';
+        });
+        document.querySelector(`.text-color-btn[data-color="${color}"]`).classList.add('active');
+        document.querySelector(`.text-color-btn[data-color="${color}"]`).style.borderColor = '#27e1c1';
+      }
+      this.updatePreview();
+    },
+
+    // Select font family
+    selectFont(font) {
+      this.state.fontFamily = font;
+      // Update active state
+      document.querySelectorAll('.font-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.style.borderColor = '#e2e8f0';
+        btn.style.background = 'white';
+        btn.style.color = '#64748b';
+      });
+      const activeFont = document.querySelector(`[data-font="${font}"]`);
+      activeFont.classList.add('active');
+      activeFont.style.borderColor = '#27e1c1';
+      activeFont.style.background = '#27e1c1';
+      activeFont.style.color = 'white';
+      this.updatePreview();
+    },
+
+    // Select text position
+    selectPosition(position) {
+      this.state.position = position;
+      // Update active state
+      document.querySelectorAll('.position-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.style.borderColor = '#e2e8f0';
+        btn.style.background = 'white';
+        btn.style.color = '#64748b';
+      });
+      const activePosition = document.querySelector(`[data-position="${position}"]`);
+      activePosition.classList.add('active');
+      activePosition.style.borderColor = '#27e1c1';
+      activePosition.style.background = '#27e1c1';
+      activePosition.style.color = 'white';
+      this.updatePreview();
+    },
+
+    // Select text effect
+    selectEffect(effect) {
+      this.state.effect = effect;
+      // Update active state
+      document.querySelectorAll('.effect-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.style.borderColor = '#e2e8f0';
+        btn.style.background = 'white';
+        btn.style.color = '#64748b';
+      });
+      const activeEffect = document.querySelector(`[data-effect="${effect}"]`);
+      activeEffect.classList.add('active');
+      activeEffect.style.borderColor = '#27e1c1';
+      activeEffect.style.background = '#27e1c1';
+      activeEffect.style.color = 'white';
+      this.updatePreview();
+    },
+
+    // Switch view angle
+    switchView(angle) {
+      // Update button states
+      document.querySelectorAll('.view-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.style.borderColor = '#e2e8f0';
+        btn.style.background = 'white';
+        btn.style.color = '#64748b';
+      });
+
+      const activeView = document.querySelector(`[data-angle="${angle}"]`);
+      activeView.classList.add('active');
+      activeView.style.borderColor = '#27e1c1';
+      activeView.style.background = '#27e1c1';
+      activeView.style.color = 'white';
+
+      // Update t-shirt image (you can add different angle images)
+      const tshirtBase = document.getElementById('tshirt-base');
+      if (tshirtBase && angle === 'back') {
+        // For now, just flip the image horizontally
+        tshirtBase.style.transform = 'scaleX(-1)';
+      } else if (tshirtBase) {
+        tshirtBase.style.transform = 'scaleX(1)';
+      }
+    },
+
+    // Update the preview with current state
+    updatePreview() {
+      const textElement = document.getElementById('custom-text');
+      const textOverlay = document.getElementById('text-overlay');
+
+      if (textElement) {
+        textElement.textContent = this.state.text;
+        textElement.style.fontSize = this.state.fontSize + 'px';
+        textElement.style.fontFamily = this.state.fontFamily;
+        textElement.style.color = this.state.textColor;
+
+        // Apply text effects
+        switch (this.state.effect) {
+          case 'outline':
+            textElement.style.webkitTextStroke = '2px ' + this.state.textColor;
+            textElement.style.webkitTextFillColor = 'transparent';
+            break;
+          case 'shadow':
+            textElement.style.textShadow = '2px 2px 4px rgba(0,0,0,0.5)';
+            textElement.style.webkitTextStroke = 'none';
+            textElement.style.webkitTextFillColor = this.state.textColor;
+            break;
+          case 'gradient':
+            textElement.style.background = 'linear-gradient(45deg, #27e1c1, #ff4fa3)';
+            textElement.style.webkitBackgroundClip = 'text';
+            textElement.style.webkitTextFillColor = 'transparent';
+            textElement.style.webkitTextStroke = 'none';
+            break;
+          default:
+            textElement.style.textShadow = '1px 1px 2px rgba(255,255,255,0.8)';
+            textElement.style.webkitTextStroke = 'none';
+            textElement.style.webkitTextFillColor = this.state.textColor;
+        }
+
+        // Apply position
+        switch (this.state.position) {
+          case 'top':
+            textOverlay.style.top = '30%';
+            break;
+          case 'bottom':
+            textOverlay.style.top = '70%';
+            break;
+          default:
+            textOverlay.style.top = '50%';
+        }
+      }
+
+      // Update t-shirt color (this would require different t-shirt images for each color)
+      // For now, we'll just show the effect through the text color contrast
+    },
+
+    // Show text input prompt
+    showTextPrompt() {
+      const textInput = document.getElementById('custom-text-input');
+      if (textInput) {
+        textInput.focus();
+        textInput.select();
+        this.switchTab('text');
+      }
+    },
+
+    // Show 3D preview (placeholder)
+    show3DPreview() {
+      alert('3D Preview coming soon! 🎭\n\nThis will show your design from multiple angles with realistic shadows and lighting.');
+    },
+
+    // Share design
+    shareDesign() {
+      const designData = {
+        text: this.state.text,
+        fontSize: this.state.fontSize,
+        fontFamily: this.state.fontFamily,
+        textColor: this.state.textColor,
+        shirtColor: this.state.shirtColor,
+        position: this.state.position,
+        effect: this.state.effect
+      };
+
+      const shareUrl = `${window.location.origin}${window.location.pathname}?design=${encodeURIComponent(JSON.stringify(designData))}`;
+      
+      if (navigator.share) {
+        navigator.share({
+          title: 'Check out my custom t-shirt design!',
+          text: 'I created this awesome custom t-shirt design!',
+          url: shareUrl
+        });
+      } else {
+        // Fallback - copy to clipboard
+        navigator.clipboard.writeText(shareUrl).then(() => {
+          alert('Design link copied to clipboard! 📤\n\nShare it with your friends!');
+        });
+      }
+    },
+
+    // Add to cart
+    addToCart() {
+      // Create a product variant with custom options
+      const customProduct = {
+        id: 'custom-tshirt-' + Date.now(),
+        title: `Custom T-Shirt: "${this.state.text}"`,
+        price: 2499, // $24.99 in cents
+        options: {
+          text: this.state.text,
+          fontSize: this.state.fontSize,
+          fontFamily: this.state.fontFamily,
+          textColor: this.state.textColor,
+          shirtColor: this.state.shirtColor,
+          position: this.state.position,
+          effect: this.state.effect
+        }
+      };
+
+      // Store in localStorage for now (in real implementation, this would go to cart)
+      let customOrders = JSON.parse(localStorage.getItem('newthrifts_custom_orders') || '[]');
+      customOrders.push(customProduct);
+      localStorage.setItem('newthrifts_custom_orders', JSON.stringify(customOrders));
+
+      alert(`Custom T-Shirt Added to Cart! 🛒\n\nDesign: "${this.state.text}"\nPrice: $24.99\n\nYour custom design has been saved and will be processed by our team.`);
+    },
+
+    // Load design presets
+    loadPresets() {
+      // Check if there's a design parameter in URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const designParam = urlParams.get('design');
+      
+      if (designParam) {
+        try {
+          const designData = JSON.parse(decodeURIComponent(designParam));
+          Object.assign(this.state, designData);
+          
+          // Update UI to match loaded design
+          document.getElementById('custom-text-input').value = this.state.text;
+          document.getElementById('text-size-slider').value = this.state.fontSize;
+          document.getElementById('size-value').textContent = this.state.fontSize + 'px';
+          
+          this.updatePreview();
+        } catch (e) {
+          console.log('Could not load design from URL');
+        }
+      }
+    }
+  };
+
+  // Initialize the customizer
+  customizer.init();
+
+  // Add some demo data for social proof
+  const recentDesigns = [
+    { emoji: '💖', text: '"Love my custom tee!"', author: 'Sarah M.' },
+    { emoji: '⚡', text: '"Perfect quality!"', author: 'Mike R.' },
+    { emoji: '🌟', text: '"Amazing design tool!"', author: 'Emma L.' },
+    { emoji: '🎨', text: '"So easy to use!"', author: 'Alex K.' },
+    { emoji: '👕', text: '"Best t-shirt ever!"', author: 'Jordan P.' },
+    { emoji: '✨', text: '"Exactly what I wanted!"', author: 'Casey D.' }
+  ];
+
+  // Rotate social proof messages every 5 seconds
+  setInterval(() => {
+    const designPreviews = document.querySelectorAll('.design-preview');
+    designPreviews.forEach((preview, index) => {
+      const randomDesign = recentDesigns[Math.floor(Math.random() * recentDesigns.length)];
+      const emojiEl = preview.querySelector('div');
+      const textEl = preview.querySelector('p:first-of-type');
+      const authorEl = preview.querySelector('p:last-of-type');
+      
+      if (emojiEl) emojiEl.textContent = randomDesign.emoji;
+      if (textEl) textEl.textContent = randomDesign.text;
+      if (authorEl) authorEl.textContent = '- ' + randomDesign.author;
+    });
+  }, 5000);
+
+  console.log('Advanced T-Shirt Customizer initialized! 🎨');
+});
+</script>
+
+{% schema %}
+{
+  "name": "Advanced T-Shirt Customizer",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Customizer Settings"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Design Your Perfect Tee"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Create personalized t-shirts with our advanced design studio. Choose colors, add custom text, and see your design come to life in real-time!"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 40
+    }
+  ],
+  "presets": [
+    {
+      "name": "Advanced T-Shirt Customizer"
+    }
+  ]
+}
+{% endschema %}

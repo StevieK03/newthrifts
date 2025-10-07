@@ -9,17 +9,17 @@ Main product section — safe + styled + correct add-to-cart
   assign product_form_id = 'product-form-' | append: section.id
 %}
 
-<section class="container" style="padding: 28px 0;">
-  <div class="product-layout" style="display: grid; grid-template-columns: 1fr 1fr; gap: 48px; max-width: 1400px; margin: 0 auto; align-items: start;">
+<section class="container" style="padding: 28px 0; width: 95vw; max-width: 1800px;">
+  <div class="product-layout" style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 48px; max-width: 1800px; margin: 0 auto; align-items: start;">
     
     <!-- Product Image -->
     <div class="product-image-container">
       {% if product.featured_image %}
         <img
           id="MainProductImage"
-          src="{{ product.featured_image | img_url: '800x' }}"
+          src="{{ product.featured_image | img_url: '1600x' }}"
           alt="{{ product.title | escape }}"
-          style="width:100%; max-width: 700px; border-radius: var(--radius-xl); border:1px solid rgba(0,0,0,.08);">
+          style="width:100%; max-width: 1400px; border-radius: var(--radius-xl); border:1px solid rgba(0,0,0,.08);">
       {% endif %}
     </div>
 
@@ -51,6 +51,10 @@ Main product section — safe + styled + correct add-to-cart
       <span class="short-title">{{ short_title }}</span>
     </h1>
 
+    <div class="product__price" data-product-price style="font-size:1.1rem; margin:8px 0 16px 0; color: #dc2626; font-weight: 600;">
+      {{ product.selected_or_first_available_variant.price | money }}
+    </div>
+
     {% comment %} Create a vertical container with color swatches and size selector stacked {% endcomment %}
     <div class="product-options-container" style="display: flex; flex-direction: column; gap: 16px; margin: 16px 0;">
       {% comment %} Color swatches at the top {% endcomment %}
@@ -58,32 +62,47 @@ Main product section — safe + styled + correct add-to-cart
         {% render 'swatch', product: product, option_name: 'Color', section_id: section.id %}
       </div>
       
-      {% comment %} Size selector directly under color {% endcomment %}
-      <div class="size-container">
-        {%- unless product.has_only_default_variant -%}
-          {%- for option in product.options_with_values -%}
-            {%- assign opt_lc = option.name | downcase -%}
-            {%- unless opt_lc == 'color' -%}
-              <label for="Option{{ forloop.index }}" class="vp-legend" style="font-weight:700; display:block; margin:0 0 8px;">
-                {{ option.name }}
-              </label>
-              <select
-                id="Option{{ forloop.index }}"
-                class="single-option-selector nice-select"
-                data-index="option{{ forloop.index }}">
-                {%- for value in option.values -%}
-                  <option value="{{ value | escape }}" {% if option.selected_value == value %}selected{% endif %}>{{ value }}</option>
-                {%- endfor -%}
-              </select>
-            {%- endunless -%}
-          {%- endfor -%}
-        {%- endunless -%}
-      </div>
-    </div>
+      {% comment %} Size selector and Add to Cart in horizontal container {% endcomment %}
+      <div class="size-and-cart-container" style="display: flex; align-items: end; gap: 20px; justify-content: flex-start;">
+        <div class="size-container" style="flex: 1; max-width: 200px;">
+          {%- unless product.has_only_default_variant -%}
+            {%- for option in product.options_with_values -%}
+              {%- assign opt_lc = option.name | downcase -%}
+              {%- unless opt_lc == 'color' -%}
+                <label for="Option{{ forloop.index }}" class="vp-legend">
+                  {{ option.name }}
+                </label>
+                <select
+                  id="Option{{ forloop.index }}"
+                  class="single-option-selector nice-select"
+                  data-index="option{{ forloop.index }}">
+                  {%- for value in option.values -%}
+                    <option value="{{ value | escape }}" {% if option.selected_value == value %}selected{% endif %}>{{ value }}</option>
+                  {%- endfor -%}
+                </select>
+              {%- endunless -%}
+            {%- endfor -%}
+          {%- endunless -%}
+        </div>
+        
+        {% comment %} Add to Cart Button - positioned to the right of size with equal spacing {% endcomment %}
+        <div class="add-to-cart-container" style="flex: 1; max-width: 200px;">
+          {% form 'product', product, id: product_form_id, class: 'product-form' %}
+            <!-- Hidden variant id Shopify reads on submit -->
+            <input type="hidden"
+                   name="id"
+                   id="VariantId-{{ section.id }}"
+                   value="{{ product.selected_or_first_available_variant.id }}">
 
-    <div class="product__price" data-product-price style="font-size:1.1rem; margin:8px 0 16px 0; color: #dc2626; font-weight: 600;">
-      {{ product.selected_or_first_available_variant.price | money }}
-    </div>
+            <button class="button button--primary btn-glow" type="submit"
+              {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}
+              style="width: 100%;">
+              {% if product.selected_or_first_available_variant.available %}Add to cart{% else %}Sold out{% endif %}
+            </button>
+          {% endform %}
+        </div>
+      </div>
+      </div>
 
     {% comment %} Extract main product description for collapsible section {% endcomment %}
     {% assign description_parts = product.description | split: 'Product features' %}
@@ -233,24 +252,6 @@ Main product section — safe + styled + correct add-to-cart
 
     </div>
 
-    {%- comment -%} ONE valid product form only {%- endcomment -%}
-    {% form 'product', product, id: product_form_id, action: routes.cart_add_url %}
-
-      {% comment %} Swatches moved to top - removed from form section {% endcomment %}
-
-      {% comment %} All options (Color and Size) moved to top - removed from form {% endcomment %}
-
-      <!-- Hidden variant id Shopify reads on submit -->
-      <input type="hidden"
-             name="id"
-             id="VariantId-{{ section.id }}"
-             value="{{ product.selected_or_first_available_variant.id }}">
-
-      <button class="button button--primary btn-glow" type="submit"
-        {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
-        {% if product.selected_or_first_available_variant.available %}Add to cart{% else %}Sold out{% endif %}
-      </button>
-    {% endform %}
 
     <script>
     (function(){
@@ -334,6 +335,12 @@ Main product section — safe + styled + correct add-to-cart
   .template-product [data-product-price],
   .template-product .product__price { color:#ff0000 !important; }
 
+  /* Override container constraints for product page */
+  .template-product .container {
+    width: 95vw !important;
+    max-width: 1800px !important;
+  }
+
   /* Hide ONLY the Color select, and ONLY after JS is ready */
   html.swatch-ready .single-option-selector.is-color {
     position: absolute !important;
@@ -357,6 +364,7 @@ Main product section — safe + styled + correct add-to-cart
   background: #fff !important;
   pointer-events: auto !important;
   opacity: 1 !important;
+  text-align: center !important;
 }
 
   /* --- Fancy selects (kept if JS disabled) --- */
@@ -371,6 +379,7 @@ Main product section — safe + styled + correct add-to-cart
     box-shadow: 0 6px 18px rgba(0,0,0,.06);
     transition: box-shadow .2s ease, transform .12s ease, border-color .2s ease;
     position:relative;
+    text-align:center;
   }
   .nice-select:hover{ box-shadow: 0 10px 26px rgba(0,0,0,.08); transform: translateY(-1px); }
   .nice-select:focus{ outline:none; border-color: rgba(39,225,193,.55); box-shadow: 0 0 0 4px rgba(39,225,193,.20); }
@@ -398,7 +407,20 @@ Main product section — safe + styled + correct add-to-cart
   }
   
   .size-container {
-    width: 100%;
+    flex: 1;
+    max-width: 200px;
+  }
+  
+  .add-to-cart-container {
+    flex: 1;
+    max-width: 200px;
+  }
+  
+  .size-and-cart-container {
+    display: flex !important;
+    align-items: end !important;
+    gap: 20px !important;
+    justify-content: flex-start !important;
   }
   
   /* Ensure both sections start at the same level */
@@ -739,16 +761,16 @@ Main product section — safe + styled + correct add-to-cart
   /* Product layout responsive design */
   .product-layout {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.5fr 1fr;
     gap: 48px;
-    max-width: 1400px;
+    max-width: 1800px;
     margin: 0 auto;
     align-items: start;
   }
 
   .product-image-container img {
     width: 100%;
-    max-width: 600px;
+    max-width: 1400px;
     height: auto;
     object-fit: cover;
   }
@@ -758,27 +780,289 @@ Main product section — safe + styled + correct add-to-cart
     flex-direction: column;
   }
 
-  /* Mobile layout - stack vertically */
+  /* Mobile layout - simple and effective */
   @media (max-width: 768px) {
+    .container {
+      padding: 16px !important;
+    }
+    
     .product-layout {
-      grid-template-columns: 1fr;
-      gap: 20px;
-      padding: 0 16px;
+      display: block !important;
+      grid-template-columns: none !important;
+      gap: 0 !important;
+      padding: 0 !important;
+      max-width: 100% !important;
+      margin: 0 !important;
     }
     
+    /* Product Image - Full width at top */
     .product-image-container {
-      order: 1;
+      width: 100% !important;
+      margin-bottom: 20px !important;
+      text-align: center !important;
     }
     
+    .product-image-container img,
+    #MainProductImage {
+      width: 100% !important;
+      max-width: 100% !important;
+      height: auto !important;
+      display: block !important;
+      margin: 0 auto !important;
+      border-radius: 12px !important;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1) !important;
+    }
+    
+    /* Product Details - Clean card below image */
     .product-details-container {
-      order: 2;
+      width: 100% !important;
     }
     
-    .product-image-container img {
-      max-width: 100%;
-      max-height: 500px;
-      object-fit: contain;
+    .card {
+      padding: 20px !important;
+      min-width: unset !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+      background: white !important;
+      border-radius: 12px !important;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08) !important;
+      margin: 0 !important;
     }
+    
+    /* Title and Price - Centered */
+    .product-title,
+    h1.product-title {
+      font-size: 22px !important;
+      text-align: center !important;
+      margin-bottom: 16px !important;
+      color: #1f2937 !important;
+      line-height: 1.2 !important;
+    }
+    
+    .product__price {
+      font-size: 18px !important;
+      text-align: center !important;
+      margin-bottom: 16px !important;
+      color: #dc2626 !important;
+      font-weight: 600 !important;
+    }
+    
+    
+    /* Swatches - Perfectly centered */
+    .swatches-container {
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+      width: 100% !important;
+      margin-bottom: 16px !important;
+    }
+    
+    .swatch-block {
+      width: 100% !important;
+      text-align: center !important;
+      margin: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+    }
+    
+    .swatch-block .vp-legend {
+      font-size: 16px !important;
+      font-weight: 700 !important;
+      margin-bottom: 10px !important;
+      color: #374151 !important;
+      text-transform: uppercase !important;
+      text-align: center !important;
+      width: 100% !important;
+    }
+    
+    .swatch-list {
+      display: flex !important;
+      flex-wrap: wrap !important;
+      justify-content: center !important;
+      gap: 6px !important;
+      margin: 8px 0 !important;
+      overflow: visible !important;
+    }
+    
+    .swatch {
+      border: 2px solid transparent !important;
+      border-radius: 9999px !important;
+      transition: all 0.2s ease !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      padding: 6px 8px 6px 6px !important;
+      background: white !important;
+      cursor: pointer !important;
+      position: relative !important;
+      overflow: hidden !important;
+      margin: 2px !important;
+    }
+    
+    .swatch:hover {
+      transform: scale(1.1) !important;
+      border-color: #666 !important;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+    }
+    
+    .swatch[data-available="true"] {
+      border-color: #666 !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
+    }
+    
+    .swatch__chip {
+      width: 34px !important;
+      height: 34px !important;
+      border-radius: 9999px !important;
+      background-size: cover !important;
+      background-position: center !important;
+      display: inline-block !important;
+      border: 1px solid #d1d5db !important;
+      outline: none !important;
+      box-shadow: none !important;
+    }
+    
+    /* AGGRESSIVELY Remove ALL inner borders, outlines, circles from swatches */
+    .swatch *,
+    .swatch *:before,
+    .swatch *:after {
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+    }
+    
+    .swatch img,
+    .swatch .swatch__chip,
+    .swatch .swatch__chip img,
+    .swatch [class*="chip"],
+    .swatch [class*="image"] {
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+      border-radius: 10px !important;
+    }
+    
+    /* Force remove any pseudo-elements */
+    .swatch::before,
+    .swatch::after,
+    .swatch *::before,
+    .swatch *::after {
+      display: none !important;
+    }
+    
+    .swatch__label {
+      position: absolute !important;
+      bottom: -22px !important;
+      left: 50% !important;
+      transform: translateX(-50%) !important;
+      font-size: 10px !important;
+      color: #6b7280 !important;
+      white-space: nowrap !important;
+      font-weight: 500 !important;
+      background: white !important;
+      padding: 2px 4px !important;
+      border-radius: 3px !important;
+    }
+    
+    /* Size Selector and Add to Cart - Horizontal layout */
+    .size-and-cart-container {
+      display: flex !important;
+      justify-content: center !important;
+      align-items: end !important;
+      gap: 16px !important;
+      margin-bottom: 16px !important;
+      flex-wrap: nowrap !important;
+      width: 100% !important;
+    }
+    
+    .size-container,
+    .add-to-cart-container {
+      flex: 1 !important;
+      max-width: 140px !important;
+      min-width: 120px !important;
+    }
+    
+    .size-container {
+      display: flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      justify-content: center !important;
+    }
+    
+    .size-container .vp-legend {
+      font-size: 16px !important;
+      font-weight: 700 !important;
+      color: #374151 !important;
+      text-transform: uppercase !important;
+      margin: 0 !important;
+      text-align: center !important;
+    }
+    
+    .single-option-selector {
+      padding: 6px 12px !important;
+      border-radius: 6px !important;
+      border: 2px solid #e5e7eb !important;
+      background: white !important;
+      font-size: 14px !important;
+      min-width: 60px !important;
+      text-align: center !important;
+    }
+    
+    .product-form {
+      margin: 0 !important;
+    }
+    
+    .btn-glow {
+      padding: 8px 16px !important;
+      font-size: 14px !important;
+      border-radius: 6px !important;
+      min-width: 120px !important;
+    }
+    
+    /* Add to Cart Button */
+    .product-form__buttons {
+      text-align: center !important;
+    }
+    
+    .btn {
+      width: 100% !important;
+      padding: 16px 24px !important;
+      font-size: 16px !important;
+      font-weight: 600 !important;
+      border-radius: 8px !important;
+      background: #3b82f6 !important;
+      color: white !important;
+      border: none !important;
+      cursor: pointer !important;
+    }
+    
+    .btn:hover {
+      background: #2563eb !important;
+    }
+    
+    /* Info Sections */
+    .info-section {
+      margin-bottom: 12px !important;
+    }
+    
+    .info-section-toggle {
+      width: 100% !important;
+      padding: 12px !important;
+      font-size: 14px !important;
+      text-align: left !important;
+      background: #f9fafb !important;
+      border: 1px solid #e5e7eb !important;
+      border-radius: 6px !important;
+    }
+    
+    .section-content {
+      padding: 12px !important;
+      font-size: 14px !important;
+      line-height: 1.5 !important;
+    }
+  }
     .product-title {
       font-size: 20px !important;
       line-height: 1.1;

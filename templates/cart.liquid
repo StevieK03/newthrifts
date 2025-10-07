@@ -36,7 +36,28 @@ Simple Cart template — drop-in
                       style="width:60px; height:60px; object-fit:cover; border-radius:10px;">
                   {% endif %}
                   <span>
-                    {{ item.product.title }}{% unless item.variant.title == 'Default Title' %} — {{ item.variant.title }}{% endunless %}
+                    {% comment %} Shorten product title to match homepage {% endcomment %}
+                    {% assign full_title = item.product.title %}
+                    {% assign short_title = full_title %}
+                    
+                    {% comment %} Handle specific long product names {% endcomment %}
+                    {% if full_title contains 'Boo-tiful Ghost Toddler Long Sleeve Tee' %}
+                      {% assign short_title = 'Boo-tiful Ghost Toddler Tee' %}
+                    {% elsif full_title contains 'Baby T-Shirt Cutest Pumpkin' %}
+                      {% assign short_title = 'Cutest Pumpkin Baby Tee' %}
+                    {% elsif full_title contains 'Butterfly Floral Boxy Tee' %}
+                      {% assign short_title = 'Butterfly Floral Boxy Tee' %}
+                    {% elsif full_title contains 'Miami Nights Boxy Tee for Women' %}
+                      {% assign short_title = 'Miami Nights Boxy Tee' %}
+                    {% elsif full_title contains 'BABY T-SHIRT' %}
+                      {% assign short_title = full_title | replace: 'BABY T-SHIRT', 'BABY TEE' %}
+                    {% elsif full_title contains 'TODDLER LONG SLEEVE TEE' %}
+                      {% assign short_title = full_title | replace: 'TODDLER LONG SLEEVE TEE, HALLOWEEN SHIRT, CUTE KIDS TEE, SPOOKY SEASON APPAREL, TODDLER HALLOWEEN CLOTHING', 'TODDLER TEE' %}
+                    {% elsif full_title contains 'HALLOWEEN' %}
+                      {% assign short_title = full_title | split: 'HALLOWEEN' | first | append: 'HALLOWEEN' %}
+                    {% endif %}
+                    
+                    {{ short_title }}{% unless item.variant.title == 'Default Title' %} — {{ item.variant.title }}{% endunless %}
                   </span>
                 </a>
 

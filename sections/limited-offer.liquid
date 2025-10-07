@@ -1,0 +1,368 @@
+{% comment %}
+Limited Time Offer Section
+- Creates urgency and exclusivity
+- Countdown timer
+- Limited quantity indicators
+{% endcomment %}
+
+<section id="limited-offer-{{ section.id }}" class="limited-offer-section">
+  <div class="limited-offer-container">
+    <div class="offer-header">
+      <div class="offer-badge">🔥 LIMITED TIME</div>
+      <h2 class="offer-title">{{ section.settings.title | default: "Exclusive Drop - Only 24 Hours Left!" }}</h2>
+      <p class="offer-subtitle">{{ section.settings.subtitle | default: "Don't miss out on our most popular items at unbeatable prices" }}</p>
+    </div>
+    
+    <div class="offer-timer">
+      <div class="timer-label">Offer Ends In:</div>
+      <div class="timer-display" id="countdown-{{ section.id }}">
+        <div class="timer-unit">
+          <span class="timer-number" id="hours-{{ section.id }}">23</span>
+          <span class="timer-label-small">Hours</span>
+        </div>
+        <div class="timer-unit">
+          <span class="timer-number" id="minutes-{{ section.id }}">59</span>
+          <span class="timer-label-small">Minutes</span>
+        </div>
+        <div class="timer-unit">
+          <span class="timer-number" id="seconds-{{ section.id }}">59</span>
+          <span class="timer-label-small">Seconds</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="offer-stats">
+      <div class="stat">
+        <span class="stat-number" id="viewers-{{ section.id }}">247</span>
+        <span class="stat-label">People viewing</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number" id="sold-{{ section.id }}">89</span>
+        <span class="stat-label">Items sold today</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number" id="left-{{ section.id }}">11</span>
+        <span class="stat-label">Left in stock</span>
+      </div>
+    </div>
+    
+    <div class="offer-actions">
+      <button class="offer-btn primary" onclick="scrollToProducts()">
+        Shop Limited Collection
+      </button>
+      <button class="offer-btn secondary" onclick="notifyMe()">
+        Notify Me When Back in Stock
+      </button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .limited-offer-section {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+    padding: 40px 20px;
+    margin: 30px 0;
+    border-radius: 16px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .limited-offer-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+  }
+  
+  .limited-offer-container {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+  }
+  
+  .offer-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.3);
+  }
+  
+  .offer-title {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 800;
+    margin: 0 0 12px 0;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  }
+  
+  .offer-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin: 0 0 30px 0;
+    line-height: 1.5;
+  }
+  
+  .offer-timer {
+    margin: 30px 0;
+  }
+  
+  .timer-label {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+    opacity: 0.9;
+  }
+  
+  .timer-display {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .timer-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(255,255,255,0.15);
+    padding: 16px 12px;
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+    min-width: 80px;
+  }
+  
+  .timer-number {
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  
+  .timer-label-small {
+    font-size: 0.8rem;
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .offer-stats {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 30px 0;
+    flex-wrap: wrap;
+  }
+  
+  .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .stat-number {
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  
+  .stat-label {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    text-align: center;
+  }
+  
+  .offer-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 30px;
+  }
+  
+  .offer-btn {
+    padding: 16px 32px;
+    border: none;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    min-width: 200px;
+  }
+  
+  .offer-btn.primary {
+    background: white;
+    color: #ee5a24;
+  }
+  
+  .offer-btn.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255,255,255,0.3);
+  }
+  
+  .offer-btn.secondary {
+    background: transparent;
+    color: white;
+    border: 2px solid rgba(255,255,255,0.5);
+  }
+  
+  .offer-btn.secondary:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: white;
+  }
+  
+  /* Mobile responsive */
+  @media (max-width: 768px) {
+    .timer-display {
+      gap: 12px;
+    }
+    
+    .timer-unit {
+      padding: 12px 8px;
+      min-width: 60px;
+    }
+    
+    .timer-number {
+      font-size: 1.5rem;
+    }
+    
+    .offer-stats {
+      gap: 20px;
+    }
+    
+    .offer-actions {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .offer-btn {
+      width: 100%;
+      max-width: 300px;
+    }
+  }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const sectionId = '{{ section.id }}';
+  
+  // Initialize countdown timer
+  function initCountdown() {
+    const hoursEl = document.getElementById(`hours-${sectionId}`);
+    const minutesEl = document.getElementById(`minutes-${sectionId}`);
+    const secondsEl = document.getElementById(`seconds-${sectionId}`);
+    
+    if (!hoursEl || !minutesEl || !secondsEl) return;
+    
+    // Set countdown to 24 hours from now (or use stored end time)
+    let endTime = localStorage.getItem('offer_end_time');
+    if (!endTime) {
+      endTime = new Date().getTime() + (24 * 60 * 60 * 1000); // 24 hours
+      localStorage.setItem('offer_end_time', endTime);
+    } else {
+      endTime = parseInt(endTime);
+    }
+    
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = endTime - now;
+      
+      if (distance < 0) {
+        // Offer expired, reset for next day
+        endTime = new Date().getTime() + (24 * 60 * 60 * 1000);
+        localStorage.setItem('offer_end_time', endTime);
+        return;
+      }
+      
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      
+      hoursEl.textContent = hours.toString().padStart(2, '0');
+      minutesEl.textContent = minutes.toString().padStart(2, '0');
+      secondsEl.textContent = seconds.toString().padStart(2, '0');
+    }
+    
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  }
+  
+  // Animate viewer count
+  function animateViewerCount() {
+    const viewersEl = document.getElementById(`viewers-${sectionId}`);
+    if (!viewersEl) return;
+    
+    let count = 200;
+    const interval = setInterval(() => {
+      count += Math.floor(Math.random() * 5);
+      viewersEl.textContent = count;
+      
+      if (count > 300) {
+        clearInterval(interval);
+      }
+    }, 3000);
+  }
+  
+  // Initialize everything
+  initCountdown();
+  animateViewerCount();
+});
+
+// Global functions
+function scrollToProducts() {
+  const productsSection = document.querySelector('.featured-collection-enhanced, .grid--3');
+  if (productsSection) {
+    productsSection.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+function notifyMe() {
+  const email = prompt('Enter your email to get notified when items are back in stock:');
+  if (email && email.includes('@')) {
+    localStorage.setItem('notify_email', email);
+    alert('Thanks! We\'ll notify you when these items are back in stock.');
+  }
+}
+</script>
+
+{% schema %}
+{
+  "name": "Limited Time Offer",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Offer Title",
+      "default": "Exclusive Drop - Only 24 Hours Left!"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Offer Subtitle",
+      "default": "Don't miss out on our most popular items at unbeatable prices"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Limited Time Offer"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,380 @@
+{% comment %}
+Loyalty Program Section
+- Simple points-based system
+- Tier-based benefits
+- Customer engagement features
+{% endcomment %}
+
+<section id="loyalty-{{ section.id }}" class="loyalty-section">
+  <div class="loyalty-container">
+    <div class="loyalty-header">
+      <h2 class="loyalty-title">VIP Rewards Program</h2>
+      <p class="loyalty-subtitle">Earn points with every purchase and unlock exclusive benefits</p>
+    </div>
+    
+    <div class="loyalty-tiers">
+      <div class="tier-card bronze">
+        <div class="tier-icon">🥉</div>
+        <h3>Bronze</h3>
+        <p class="tier-requirement">0-499 points</p>
+        <ul class="tier-benefits">
+          <li>1 point per $1 spent</li>
+          <li>Birthday discount</li>
+          <li>Early access to sales</li>
+        </ul>
+      </div>
+      
+      <div class="tier-card silver">
+        <div class="tier-icon">🥈</div>
+        <h3>Silver</h3>
+        <p class="tier-requirement">500-999 points</p>
+        <ul class="tier-benefits">
+          <li>1.25 points per $1 spent</li>
+          <li>Free shipping on all orders</li>
+          <li>Exclusive product previews</li>
+          <li>Birthday discount + gift</li>
+        </ul>
+      </div>
+      
+      <div class="tier-card gold">
+        <div class="tier-icon">🥇</div>
+        <h3>Gold</h3>
+        <p class="tier-requirement">1000+ points</p>
+        <ul class="tier-benefits">
+          <li>1.5 points per $1 spent</li>
+          <li>Priority customer service</li>
+          <li>Limited edition access</li>
+          <li>VIP events invitation</li>
+          <li>Personal styling consultation</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="loyalty-actions">
+      <button class="loyalty-signup-btn" onclick="showLoyaltySignup()">
+        Join VIP Program
+      </button>
+      <button class="loyalty-check-btn" onclick="checkLoyaltyStatus()">
+        Check My Status
+      </button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .loyalty-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 60px 20px;
+    margin: 40px 0;
+    border-radius: 20px;
+    color: white;
+  }
+  
+  .loyalty-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .loyalty-header {
+    text-align: center;
+    margin-bottom: 50px;
+  }
+  
+  .loyalty-title {
+    font-size: 3rem;
+    font-weight: 800;
+    margin: 0 0 16px 0;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  }
+  
+  .loyalty-subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin: 0;
+  }
+  
+  .loyalty-tiers {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+  }
+  
+  .tier-card {
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 16px;
+    padding: 30px;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .tier-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    transition: left 0.5s ease;
+  }
+  
+  .tier-card:hover::before {
+    left: 100%;
+  }
+  
+  .tier-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  }
+  
+  .tier-icon {
+    font-size: 3rem;
+    margin-bottom: 16px;
+  }
+  
+  .tier-card h3 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+  }
+  
+  .tier-requirement {
+    color: rgba(255,255,255,0.8);
+    font-weight: 600;
+    margin: 0 0 20px 0;
+  }
+  
+  .tier-benefits {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .tier-benefits li {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    position: relative;
+    padding-left: 20px;
+  }
+  
+  .tier-benefits li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: #2ed573;
+    font-weight: bold;
+  }
+  
+  .tier-benefits li:last-child {
+    border-bottom: none;
+  }
+  
+  .loyalty-actions {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .loyalty-signup-btn,
+  .loyalty-check-btn {
+    padding: 16px 32px;
+    border: none;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .loyalty-signup-btn {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    color: white;
+  }
+  
+  .loyalty-signup-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255,107,107,0.4);
+  }
+  
+  .loyalty-check-btn {
+    background: transparent;
+    color: white;
+    border: 2px solid rgba(255,255,255,0.5);
+  }
+  
+  .loyalty-check-btn:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: white;
+  }
+  
+  /* Mobile responsive */
+  @media (max-width: 768px) {
+    .loyalty-title {
+      font-size: 2rem;
+    }
+    
+    .loyalty-tiers {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    
+    .tier-card {
+      padding: 20px;
+    }
+    
+    .loyalty-actions {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .loyalty-signup-btn,
+    .loyalty-check-btn {
+      width: 100%;
+      max-width: 300px;
+    }
+  }
+</style>
+
+<script>
+// Simple loyalty program functionality
+let customerPoints = parseInt(localStorage.getItem('loyalty_points') || '0');
+let customerTier = 'bronze';
+
+function updateCustomerTier() {
+  if (customerPoints >= 1000) {
+    customerTier = 'gold';
+  } else if (customerPoints >= 500) {
+    customerTier = 'silver';
+  } else {
+    customerTier = 'bronze';
+  }
+}
+
+function showLoyaltySignup() {
+  // Simple email collection for loyalty program
+  const email = prompt('Enter your email to join our VIP program:');
+  if (email && email.includes('@')) {
+    localStorage.setItem('loyalty_email', email);
+    localStorage.setItem('loyalty_joined', 'true');
+    alert('Welcome to the VIP program! You\'ve earned 100 bonus points!');
+    customerPoints += 100;
+    localStorage.setItem('loyalty_points', customerPoints.toString());
+    updateCustomerTier();
+  }
+}
+
+function checkLoyaltyStatus() {
+  updateCustomerTier();
+  const isJoined = localStorage.getItem('loyalty_joined');
+  
+  if (!isJoined) {
+    showLoyaltySignup();
+    return;
+  }
+  
+  const tierNames = {
+    'bronze': '🥉 Bronze',
+    'silver': '🥈 Silver', 
+    'gold': '🥇 Gold'
+  };
+  
+  alert(`Your VIP Status:\n\nTier: ${tierNames[customerTier]}\nPoints: ${customerPoints}\n\nKeep shopping to unlock more benefits!`);
+}
+
+// Award points on purchase (this would integrate with your checkout)
+function awardPoints(amount) {
+  const multiplier = customerTier === 'gold' ? 1.5 : customerTier === 'silver' ? 1.25 : 1;
+  const pointsEarned = Math.floor(amount * multiplier);
+  customerPoints += pointsEarned;
+  localStorage.setItem('loyalty_points', customerPoints.toString());
+  updateCustomerTier();
+  
+  // Show points earned notification
+  showPointsNotification(pointsEarned, customerTier);
+}
+
+function showPointsNotification(points, tier) {
+  const notification = document.createElement('div');
+  notification.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    z-index: 10000;
+    animation: slideIn 0.3s ease;
+  `;
+  
+  notification.innerHTML = `
+    <div style="font-weight: 700; font-size: 1.1rem; margin-bottom: 8px;">
+      🎉 Points Earned!
+    </div>
+    <div style="font-size: 0.9rem;">
+      +${points} points<br>
+      Tier: ${tier.toUpperCase()}
+    </div>
+  `;
+  
+  document.body.appendChild(notification);
+  
+  setTimeout(() => {
+    notification.style.animation = 'slideOut 0.3s ease';
+    setTimeout(() => document.body.removeChild(notification), 300);
+  }, 3000);
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+  updateCustomerTier();
+  
+  // Add CSS for animations
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOut {
+      from { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(100%); opacity: 0; }
+    }
+  `;
+  document.head.appendChild(style);
+});
+</script>
+
+{% schema %}
+{
+  "name": "Loyalty Program",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "VIP Rewards Program"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Section Subtitle",
+      "default": "Earn points with every purchase and unlock exclusive benefits"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Loyalty Program"
+    }
+  ]
+}
+{% endschema %}

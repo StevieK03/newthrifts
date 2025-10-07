@@ -353,7 +353,9 @@
     }
 
     .quick-view-main-image {
-      height: 300px;
+      height: 350px;
+      object-fit: cover;
+      object-position: center top;
     }
 
     .quick-view-product-title {
@@ -395,6 +397,128 @@
 
     .variant-option {
       padding: 6px 12px;
+      font-size: 13px;
+    }
+  }
+  
+  /* Match Homepage Swatch Styling */
+  .quick-view-variants .swatch {
+    border: 2px solid transparent !important;
+    border-radius: 9999px !important;
+    transition: all 0.2s ease !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 6px 8px 6px 6px !important;
+  }
+  
+  .quick-view-variants .swatch:hover {
+    transform: scale(1.1) !important;
+    border-color: #666 !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+  }
+  
+  .quick-view-variants .swatch__chip {
+    width: 34px !important;
+    height: 34px !important;
+    border-radius: 9999px !important;
+    background-size: cover !important;
+    background-position: center !important;
+    border: 1px solid #d1d5db !important;
+  }
+  
+  .quick-view-variants .swatch-list {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    margin: 8px 0 !important;
+  }
+  
+  /* Feature icons styling to match product page */
+  .feature-icon {
+    color: #10b981;
+    font-weight: bold;
+    margin-right: 8px;
+  }
+  
+  /* Collapsible Sections Styling */
+  .quick-view-info-sections {
+    margin: 20px 0;
+  }
+  
+  .info-section {
+    margin-bottom: 12px;
+  }
+  
+  .info-section-toggle {
+    width: 100%;
+    padding: 12px 16px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    transition: all 0.3s ease;
+  }
+  
+  .info-section-toggle:hover {
+    background: #f3f4f6;
+    border-color: #d1d5db;
+  }
+  
+  .section-title {
+    font-weight: 600;
+    color: #374151;
+    font-size: 14px;
+  }
+  
+  .toggle-icon {
+    transition: transform 0.3s ease;
+    font-size: 12px;
+    color: #6b7280;
+  }
+  
+  .section-content {
+    padding: 16px;
+    background: #f9fafb;
+    border-radius: 8px;
+    color: #6b7280;
+    line-height: 1.6;
+    display: none;
+    margin-bottom: 8px;
+  }
+  
+  .section-content ul {
+    margin: 0;
+    padding-left: 20px;
+  }
+  
+  .section-content li {
+    margin-bottom: 4px;
+  }
+  
+  /* Mobile Responsive for Dropdowns */
+  @media (max-width: 768px) {
+    .quick-view-info-sections {
+      margin: 16px 0;
+    }
+    
+    .info-section-toggle {
+      padding: 10px 12px;
+      font-size: 14px;
+    }
+    
+    .section-title {
+      font-size: 13px;
+    }
+    
+    .section-content {
+      padding: 12px;
       font-size: 13px;
     }
   }
@@ -472,12 +596,98 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
   }
   
+  // Parse product description like the product page does
+  function parseProductDescription(description) {
+    if (!description) return { main: '', features: '', care: '' };
+    
+    // Extract main description (before "Product features")
+    const mainParts = description.split('Product features');
+    const mainDescription = mainParts[0].split('Care instructions')[0].split('Size Chart')[0].split('Size chart')[0].split('SIZE CHART')[0].split('Sizing Chart')[0].split('Sizing chart')[0].trim();
+    
+    // Extract features section
+    const featuresSection = description.split('Product features')[1];
+    let features = '';
+    if (featuresSection) {
+      const featuresText = featuresSection.split('Care instructions')[0];
+      if (featuresText) {
+        const featuresLines = featuresText.split('\n');
+        const featuresList = featuresLines
+          .map(line => {
+            const cleanLine = line.trim();
+            if (cleanLine && cleanLine.includes('-')) {
+              const featureText = cleanLine.replace(/^-/, '').trim();
+              return featureText ? `<li><span class="feature-icon">✓</span>${featureText}</li>` : '';
+            }
+            return '';
+          })
+          .filter(item => item)
+          .join('');
+        features = featuresList ? `<ul>${featuresList}</ul>` : '';
+      }
+    }
+    
+    // Extract care instructions
+    const careSection = description.split('Care instructions')[1];
+    let care = '';
+    if (careSection) {
+      const careLines = careSection.split('\n');
+      const careList = careLines
+        .map(line => {
+          const cleanLine = line.trim();
+          if (cleanLine && cleanLine.includes('-')) {
+            const careText = cleanLine.replace(/^-/, '').trim();
+            return careText ? `<li>${careText}</li>` : '';
+          }
+          return '';
+        })
+        .filter(item => item)
+        .join('');
+      care = careList ? `<ul>${careList}</ul>` : '';
+    }
+    
+    return { main: mainDescription, features, care };
+  }
+
+  // Parse product title to shorten it like homepage
+  function shortenProductTitle(fullTitle) {
+    if (!fullTitle) return '';
+    
+    // Handle specific long product names
+    if (fullTitle.includes('Boo-tiful Ghost Toddler Long Sleeve Tee')) {
+      return 'Boo-tiful Ghost Toddler Tee';
+    }
+    if (fullTitle.includes('Baby T-Shirt Cutest Pumpkin')) {
+      return 'Cutest Pumpkin Baby Tee';
+    }
+    if (fullTitle.includes('Butterfly Floral Boxy Tee')) {
+      return 'Butterfly Floral Boxy Tee';
+    }
+    if (fullTitle.includes('Miami Nights Boxy Tee for Women')) {
+      return 'Miami Nights Boxy Tee';
+    }
+    if (fullTitle.includes('BABY T-SHIRT')) {
+      return fullTitle.replace('BABY T-SHIRT', 'BABY TEE');
+    }
+    if (fullTitle.includes('TODDLER LONG SLEEVE TEE')) {
+      return fullTitle.replace('TODDLER LONG SLEEVE TEE, HALLOWEEN SHIRT, CUTE KIDS TEE, SPOOKY SEASON APPAREL, TODDLER HALLOWEEN CLOTHING', 'TODDLER TEE');
+    }
+    if (fullTitle.includes('HALLOWEEN')) {
+      return fullTitle.split('HALLOWEEN')[0] + 'HALLOWEEN';
+    }
+    
+    return fullTitle;
+  }
+
   // Render product
   function renderProduct(product) {
-    title.textContent = product.title;
+    // Keep header as "Quick View" instead of product title
+    title.textContent = 'Quick View';
     
     const firstVariant = product.variants[0];
     const hasMultipleImages = product.images.length > 1;
+    
+    // Parse product description like the product page
+    const { main: mainDescription, features: featuresHTML, care: careHTML } = parseProductDescription(product.description);
     
     // Generate thumbnails HTML
     const thumbnailsHTML = hasMultipleImages ? `
@@ -503,13 +713,58 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
         
         <div class="quick-view-info">
-          <h3 class="quick-view-product-title">${product.title}</h3>
+          <h3 class="quick-view-product-title">${shortenProductTitle(product.title)}</h3>
           <div class="quick-view-product-price" id="quick-view-price">
             ${formatPrice(firstVariant.price)}
           </div>
           
-          <div class="quick-view-product-description">
-            ${product.description || 'No description available.'}
+          <!-- Collapsible Product Information Sections -->
+          <div class="quick-view-info-sections">
+            ${mainDescription ? `
+            <div class="info-section">
+              <button class="info-section-toggle">
+                <span class="section-title">Product Description</span>
+                <span class="toggle-icon">▼</span>
+              </button>
+              <div class="section-content">
+                ${mainDescription}
+              </div>
+            </div>
+            ` : ''}
+            
+            ${featuresHTML ? `
+            <div class="info-section">
+              <button class="info-section-toggle">
+                <span class="section-title">Product Features</span>
+                <span class="toggle-icon">▼</span>
+              </button>
+              <div class="section-content">
+                ${featuresHTML}
+              </div>
+            </div>
+            ` : ''}
+
+            ${careHTML ? `
+            <div class="info-section">
+              <button class="info-section-toggle">
+                <span class="section-title">Care Instructions</span>
+                <span class="toggle-icon">▼</span>
+              </button>
+              <div class="section-content">
+                ${careHTML}
+              </div>
+            </div>
+            ` : ''}
+
+            <div class="info-section">
+              <button class="info-section-toggle">
+                <span class="section-title">Size Chart</span>
+                <span class="toggle-icon">▼</span>
+              </button>
+              <div class="section-content">
+                <p>Please refer to our size chart for accurate measurements.</p>
+              </div>
+            </div>
           </div>
           
           ${variantsHTML}
@@ -590,6 +845,32 @@ document.addEventListener('DOMContentLoaded', function() {
         thumbnails.forEach(t => t.classList.remove('active'));
         this.classList.add('active');
         mainImage.src = this.src;
+      });
+    });
+    
+    // Initialize collapsible sections
+    const toggleButtons = content.querySelectorAll('.info-section-toggle');
+    
+    toggleButtons.forEach(button => {
+      button.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const section = this.closest('.info-section');
+        const sectionContent = section.querySelector('.section-content');
+        const icon = this.querySelector('.toggle-icon');
+        
+        if (sectionContent.style.display === 'none' || !sectionContent.style.display) {
+          sectionContent.style.display = 'block';
+          icon.style.transform = 'rotate(180deg)';
+          this.style.background = '#e9ecef';
+          this.style.borderColor = '#dee2e6';
+        } else {
+          sectionContent.style.display = 'none';
+          icon.style.transform = 'rotate(0deg)';
+          this.style.background = '#f9fafb';
+          this.style.borderColor = '#e5e7eb';
+        }
       });
     });
     

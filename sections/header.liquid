@@ -29,66 +29,336 @@
         </ul>
       {% endif %}
       
-      <!-- Wishlist Toggle -->
-      <div class="header-wishlist">
-        <div class="wishlist-toggle" id="header-wishlist-toggle" aria-label="Toggle wishlist">
-          <svg class="wishlist-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path class="heart-outline" d="M20.84 4.61C20.32 4.09 19.69 3.69 19 3.44C18.31 3.19 17.58 3.09 16.85 3.15C16.12 3.21 15.42 3.42 14.78 3.78C14.14 4.14 13.58 4.64 13.14 5.25L12 6.75L10.86 5.25C10.42 4.64 9.86 4.14 9.22 3.78C8.58 3.42 7.88 3.21 7.15 3.15C6.42 3.09 5.69 3.19 5 3.44C4.31 3.69 3.68 4.09 3.16 4.61C2.11 5.66 1.5 7.13 1.5 8.66C1.5 10.19 2.11 11.66 3.16 12.71L12 21.55L20.84 12.71C21.89 11.66 22.5 10.19 22.5 8.66C22.5 7.13 21.89 5.66 20.84 4.61Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path class="heart-filled" d="M20.84 4.61C20.32 4.09 19.69 3.69 19 3.44C18.31 3.19 17.58 3.09 16.85 3.15C16.12 3.21 15.42 3.42 14.78 3.78C14.14 4.14 13.58 4.64 13.14 5.25L12 6.75L10.86 5.25C10.42 4.64 9.86 4.14 9.22 3.78C8.58 3.42 7.88 3.21 7.15 3.15C6.42 3.09 5.69 3.19 5 3.44C4.31 3.69 3.68 4.09 3.16 4.61C2.11 5.66 1.5 7.13 1.5 8.66C1.5 10.19 2.11 11.66 3.16 12.71L12 21.55L20.84 12.71C21.89 11.66 22.5 10.19 22.5 8.66C22.5 7.13 21.89 5.66 20.84 4.61Z" fill="currentColor" style="display: none;"/>
-          </svg>
-          <span class="wishlist-count" id="header-wishlist-count">0</span>
-        </div>
-      </div>
     </nav>
+
+    <!-- Cart Button -->
+    <div class="nt-header__cart">
+      <a href="{{ routes.cart_url }}" class="nt-header__cart-link" aria-label="View cart">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="nt-header__cart-icon">
+          <path d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.5 5.1 16.5H17M17 13V17C17 17.6 16.6 18 16 18H8C7.4 18 7 17.6 7 17V13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="nt-header__cart-count" id="cart-count">{{ cart.item_count }}</span>
+      </a>
+    </div>
   </div>
 </header>
 
 <style>
-  /* ===== Clean white header that matches the gap area ===== */
+  /* ===== Clean Modern Header ===== */
   #Header-{{ section.id }}{
-    background: #f2f3f5 !important;
-    position:relative;
-    z-index:50;
-    box-shadow: 0 2px 15px rgba(0,0,0,.08);
-    border-bottom: 1px solid rgba(0,0,0,.06);
+    background: #ffffff !important;
+    position: relative;
+    z-index: 50;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+    border-bottom: 1px solid #f1f5f9;
   }
   #Header-{{ section.id }} *{ box-sizing:border-box }
   #Header-{{ section.id }} .nt-header__wrap{
-    display:flex; align-items:center; justify-content:center;
-    padding:15px 40px;
-    backdrop-filter:none !important; -webkit-backdrop-filter:none !important;
-    gap: 60px;
-    max-width: 1200px;
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between;
+    padding: 20px 30px;
+    backdrop-filter: none !important; 
+    -webkit-backdrop-filter: none !important;
+    gap: 20px;
+    max-width: 1400px;
     margin: 0 auto;
+    position: relative;
+    flex-wrap: nowrap;
+  }
+  
+  /* Cart Button Styling - Matches navigation buttons */
+  #Header-{{ section.id }} .nt-header__cart {
+    display: flex;
+    align-items: center;
+  }
+  
+  #Header-{{ section.id }} .nt-header__cart-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 12px 20px;
+    border-radius: 50px;
+    text-decoration: none;
+    color: #1f2937 !important;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    transition: all 0.3s ease;
+    min-width: 56px;
+    height: 48px;
+    flex-shrink: 0;
+  }
+  
+  #Header-{{ section.id }} .nt-header__cart-link:hover {
+    background: rgba(255, 255, 255, 0.25);
+    color: #1f2937 !important;
+    transform: translateY(-1px);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+  
+  #Header-{{ section.id }} .nt-header__cart-icon {
+    color: #1f2937;
+    transition: all 0.3s ease;
+  }
+  
+  #Header-{{ section.id }} .nt-header__cart-link:hover .nt-header__cart-icon {
+    transform: scale(1.05);
+    color: #374151;
+  }
+  
+  #Header-{{ section.id }} .nt-header__cart-count {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: #dc2626;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    min-width: 20px;
+  }
+  
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+  
+  /* Mobile touch improvements */
+  @media (max-width: 768px) {
+    #Header-{{ section.id }} .nt-header__link:active {
+      transform: scale(0.95);
+      transition: transform 0.1s ease;
+    }
+    
+    #Header-{{ section.id }} .nt-header__cart-link:active {
+      transform: scale(0.95);
+      transition: transform 0.1s ease;
+    }
+    
+    #Header-{{ section.id }} .wishlist-toggle:active {
+      transform: scale(0.95);
+      transition: transform 0.1s ease;
+    }
+    
+    /* Improved scrollbar for navigation */
+    #Header-{{ section.id }} .nt-header__nav::-webkit-scrollbar {
+      height: 2px;
+    }
+    
+    #Header-{{ section.id }} .nt-header__nav::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 1px;
+    }
+    
+    #Header-{{ section.id }} .nt-header__nav::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 1px;
+    }
+  }
+  
+  #Header-{{ section.id }} .nt-header__cart-count:empty {
+    display: none;
+  }
+
+  /* Mobile header adjustments */
+  @media (max-width: 768px) {
+    #Header-{{ section.id }} {
+      border-radius: 0 0 15px 15px;
+      backdrop-filter: blur(15px) saturate(150%);
+      -webkit-backdrop-filter: blur(15px) saturate(150%);
+    }
+    
+    #Header-{{ section.id }} .nt-header__wrap {
+      justify-content: space-between;
+      gap: 8px;
+      padding: 12px 16px;
+      flex-wrap: nowrap;
+      min-height: 60px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    #Header-{{ section.id }} .nt-header__logo {
+      margin-left: 0;
+      flex-shrink: 0;
+    }
+    
+    #Header-{{ section.id }} .nt-header__logo-img { 
+      max-height: 50px; 
+      width: auto;
+    }
+    
+    #Header-{{ section.id }} .nt-header__logo-text {
+      font-size: 1.4rem;
+      line-height: 1.2;
+    }
+    
+    #Header-{{ section.id }} .nt-header__nav {
+      flex-shrink: 1;
+      min-width: 0;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      flex: 1;
+    }
+    
+    #Header-{{ section.id }} .nt-header__list {
+      gap: 6px;
+      flex-wrap: nowrap;
+      padding: 0 4px;
+      display: flex;
+      align-items: center;
+    }
+    
+    #Header-{{ section.id }} .nt-header__link {
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      border-radius: 25px;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      flex-shrink: 0;
+    }
+    
+    /* Mobile cart button adjustments */
+    #Header-{{ section.id }} .nt-header__cart {
+      flex-shrink: 0;
+    }
+    
+    #Header-{{ section.id }} .nt-header__cart-link {
+      padding: 10px 14px;
+      min-width: 48px;
+      height: 40px;
+      border-radius: 25px;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      flex-shrink: 0;
+    }
+    
+    #Header-{{ section.id }} .nt-header__cart-icon {
+      width: 18px;
+      height: 18px;
+    }
+    
+    #Header-{{ section.id }} .nt-header__cart-count {
+      width: 18px;
+      height: 18px;
+      font-size: 10px;
+      top: -4px;
+      right: -4px;
+      min-width: 18px;
+    }
+    
+    #Header-{{ section.id }} .header-wishlist {
+      margin-left: 12px;
+    }
+    
+    #Header-{{ section.id }} .wishlist-toggle {
+      width: 40px;
+      height: 40px;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      flex-shrink: 0;
+    }
+  }
+  
+  /* Extra small mobile screens */
+  @media (max-width: 480px) {
+    #Header-{{ section.id }} .nt-header__wrap {
+      padding: 10px 12px;
+      gap: 8px;
+      min-height: 56px;
+    }
+    
+    #Header-{{ section.id }} .nt-header__logo-text {
+      font-size: 1.2rem;
+    }
+    
+    #Header-{{ section.id }} .nt-header__logo-img { 
+      max-height: 45px; 
+    }
+    
+    #Header-{{ section.id }} .nt-header__link {
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      min-height: 40px;
+    }
+    
+    #Header-{{ section.id }} .nt-header__cart-link {
+      padding: 10px 12px;
+      min-width: 48px;
+      height: 40px;
+    }
+    
+    #Header-{{ section.id }} .nt-header__cart-icon {
+      width: 18px;
+      height: 18px;
+    }
+    
+    #Header-{{ section.id }} .wishlist-toggle {
+      width: 40px;
+      height: 40px;
+    }
   }
   #Header-{{ section.id }} .nt-header__logo-img{ max-height:80px; display:block }
   #Header-{{ section.id }} .nt-header__logo-text{
-    font-weight:800; text-decoration:none;
-    color:#0f172a !important; /* dark text on light background */
-    font-size:1.8rem;
+    font-weight: 800; 
+    text-decoration: none;
+    color: #1f2937 !important;
+    font-size: 2rem;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    letter-spacing: -0.02em;
+    transition: all 0.3s ease;
+  }
+  
+  #Header-{{ section.id }} .nt-header__logo-text:hover {
+    transform: scale(1.05);
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   }
   #Header-{{ section.id }} .nt-header__list{
-    display:flex; gap:8px; list-style:none; margin:0; padding:0;
+    display: flex; 
+    gap: 8px; 
+    list-style: none; 
+    margin: 0; 
+    padding: 0;
+    flex-shrink: 1;
+    min-width: 0;
   }
   #Header-{{ section.id }} .nt-header__link{
-    text-decoration:none; 
-    color:#0f172a !important; 
-    font-weight:600;
+    text-decoration: none; 
+    color: #1f2937 !important; 
+    font-weight: 600;
     padding: 12px 20px;
-    border-radius: 25px;
+    border-radius: 50px;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
-    background: rgba(0,0,0,.05);
-    border: 1px solid rgba(0,0,0,.1);
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    font-size: 0.9rem;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
   
   #Header-{{ section.id }} .nt-header__link:hover{
-    background: rgba(0,0,0,.08);
-    color: #0f172a !important;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,.1);
-    border-color: rgba(0,0,0,.15);
+    background: rgba(255, 255, 255, 0.25);
+    color: #1f2937 !important;
+    transform: translateY(-1px);
+    border-color: rgba(255, 255, 255, 0.4);
   }
   
   /* Removed shine effect to clean up header */
@@ -103,30 +373,33 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 44px;
-    height: 44px;
-    background: white;
-    border: 2px solid #e5e7eb;
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 50%;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
   }
   
   #Header-{{ section.id }} .wishlist-toggle:hover {
     border-color: #dc2626;
-    transform: scale(1.05);
-    box-shadow: 0 4px 16px rgba(220, 38, 38, 0.2);
+    transform: scale(1.05) translateY(-2px);
+    box-shadow: 0 8px 25px rgba(220, 38, 38, 0.25);
+    background: rgba(255, 255, 255, 0.3);
   }
   
   #Header-{{ section.id }} .wishlist-toggle.has-items {
     border-color: #dc2626;
-    background: #fef2f2;
+    background: rgba(254, 242, 242, 0.3);
+    box-shadow: 0 4px 16px rgba(220, 38, 38, 0.2);
   }
   
   #Header-{{ section.id }} .wishlist-icon {
-    color: #6b7280;
-    transition: color 0.3s ease;
+    color: #1f2937;
+    transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   #Header-{{ section.id }} .wishlist-toggle:hover .wishlist-icon,
@@ -164,6 +437,48 @@
     transform: scale(1);
   }
 </style>
+
+<script>
+// Update cart count dynamically
+function updateCartCount() {
+  fetch('/cart.js')
+    .then(response => response.json())
+    .then(cart => {
+      const cartCountElement = document.getElementById('cart-count');
+      if (cartCountElement) {
+        cartCountElement.textContent = cart.item_count;
+        
+        // Hide count badge if cart is empty
+        if (cart.item_count === 0) {
+          cartCountElement.style.display = 'none';
+        } else {
+          cartCountElement.style.display = 'flex';
+        }
+      }
+    })
+    .catch(error => console.error('Error updating cart count:', error));
+}
+
+// Listen for cart updates
+document.addEventListener('DOMContentLoaded', function() {
+  // Update cart count on page load
+  updateCartCount();
+  
+  // Listen for custom cart update events
+  document.addEventListener('cart:updated', updateCartCount);
+  
+  // Listen for cart form submissions
+  document.addEventListener('submit', function(e) {
+    if (e.target.classList.contains('product-form') || 
+        e.target.querySelector('input[name="add"]')) {
+      setTimeout(updateCartCount, 1000); // Update after form submission
+    }
+  });
+});
+
+// Global function to trigger cart count update
+window.updateCartCount = updateCartCount;
+</script>
 
 {% schema %}
 {

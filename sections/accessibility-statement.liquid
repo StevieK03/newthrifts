@@ -1,0 +1,485 @@
+{% comment %}
+Accessibility Statement Section
+- WCAG 2.1 compliance information
+- Accessibility features
+- Contact information for accessibility issues
+{% endcomment %}
+
+<section id="accessibility-{{ section.id }}" class="accessibility-section">
+  <div class="accessibility-container">
+    <h2 class="accessibility-title">Accessibility Statement</h2>
+    
+    <div class="accessibility-content">
+      <div class="accessibility-intro">
+        <p>New Thrifts is committed to ensuring digital accessibility for all users, including those with disabilities. We are continuously improving the user experience for everyone and applying the relevant accessibility standards.</p>
+      </div>
+      
+      <div class="accessibility-standards">
+        <h3>Conformance Status</h3>
+        <p>We aim to conform to the Web Content Accessibility Guidelines (WCAG) 2.1, Level A and AA standards. This website is partially conformant with WCAG 2.1 Level AA.</p>
+        
+        <div class="compliance-badges">
+          <div class="badge-item">
+            <span class="badge-icon">♿</span>
+            <span class="badge-text">WCAG 2.1 AA</span>
+          </div>
+          <div class="badge-item">
+            <span class="badge-icon">⌨️</span>
+            <span class="badge-text">Keyboard Navigation</span>
+          </div>
+          <div class="badge-item">
+            <span class="badge-icon">🔍</span>
+            <span class="badge-text">Screen Reader Compatible</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="accessibility-features">
+        <h3>Accessibility Features</h3>
+        <div class="features-grid">
+          <div class="feature-item">
+            <h4>Keyboard Navigation</h4>
+            <p>All interactive elements can be accessed using keyboard navigation. Use Tab to move forward, Shift+Tab to move backward, and Enter or Space to activate.</p>
+          </div>
+          
+          <div class="feature-item">
+            <h4>Screen Reader Support</h4>
+            <p>Our website is optimized for screen readers with proper heading structure, alt text for images, and ARIA labels where needed.</p>
+          </div>
+          
+          <div class="feature-item">
+            <h4>Color Contrast</h4>
+            <p>We maintain sufficient color contrast ratios (4.5:1 for normal text, 3:1 for large text) to ensure readability.</p>
+          </div>
+          
+          <div class="feature-item">
+            <h4>Text Scaling</h4>
+            <p>Text can be scaled up to 200% without loss of functionality or content. Use your browser's zoom feature or text scaling options.</p>
+          </div>
+          
+          <div class="feature-item">
+            <h4>Focus Indicators</h4>
+            <p>Clear focus indicators are provided for all interactive elements to help users navigate with keyboard or assistive technologies.</p>
+          </div>
+          
+          <div class="feature-item">
+            <h4>Alternative Text</h4>
+            <p>All images include descriptive alternative text to provide context for users who cannot see the images.</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="accessibility-tools">
+        <h3>Accessibility Tools</h3>
+        <div class="tools-section">
+          <div class="tool-item">
+            <button class="tool-btn" onclick="toggleHighContrast()" aria-label="Toggle high contrast mode">
+              <span class="tool-icon">🌓</span>
+              <span>High Contrast</span>
+            </button>
+          </div>
+          
+          <div class="tool-item">
+            <button class="tool-btn" onclick="toggleLargeText()" aria-label="Toggle large text mode">
+              <span class="tool-icon">🔍</span>
+              <span>Large Text</span>
+            </button>
+          </div>
+          
+          <div class="tool-item">
+            <button class="tool-btn" onclick="toggleReducedMotion()" aria-label="Toggle reduced motion">
+              <span class="tool-icon">🎬</span>
+              <span>Reduce Motion</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="accessibility-feedback">
+        <h3>Feedback & Contact</h3>
+        <p>We welcome your feedback on the accessibility of New Thrifts. Please let us know if you encounter accessibility barriers:</p>
+        
+        <div class="contact-methods">
+          <div class="contact-item">
+            <strong>Email:</strong> accessibility@newthrifts.com
+          </div>
+          <div class="contact-item">
+            <strong>Phone:</strong> 1-800-NEW-THRIFTS (1-800-639-8474)
+          </div>
+          <div class="contact-item">
+            <strong>Response Time:</strong> We typically respond within 2 business days.
+          </div>
+        </div>
+      </div>
+      
+      <div class="accessibility-updates">
+        <h3>Recent Updates</h3>
+        <ul class="updates-list">
+          <li>Added keyboard navigation support for all interactive elements</li>
+          <li>Improved color contrast ratios throughout the site</li>
+          <li>Enhanced screen reader compatibility</li>
+          <li>Added focus indicators for better navigation</li>
+          <li>Implemented ARIA labels for dynamic content</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .accessibility-section {
+    background: #f8f9fa;
+    padding: 60px 20px;
+    margin: 40px 0;
+  }
+  
+  .accessibility-container {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  
+  .accessibility-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    text-align: center;
+    margin: 0 0 40px 0;
+    color: #2c3e50;
+  }
+  
+  .accessibility-content {
+    background: white;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+  
+  .accessibility-intro {
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #e9ecef;
+  }
+  
+  .accessibility-intro p {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #495057;
+    margin: 0;
+  }
+  
+  .accessibility-standards {
+    margin-bottom: 40px;
+  }
+  
+  .accessibility-standards h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0 0 16px 0;
+  }
+  
+  .compliance-badges {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .badge-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border-radius: 25px;
+    font-weight: 600;
+  }
+  
+  .badge-icon {
+    font-size: 1.2rem;
+  }
+  
+  .accessibility-features {
+    margin-bottom: 40px;
+  }
+  
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    margin-top: 20px;
+  }
+  
+  .feature-item {
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border-left: 4px solid #667eea;
+  }
+  
+  .feature-item h4 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0 0 8px 0;
+  }
+  
+  .feature-item p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #6c757d;
+    margin: 0;
+  }
+  
+  .accessibility-tools {
+    margin-bottom: 40px;
+    padding: 30px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 16px;
+    color: white;
+  }
+  
+  .accessibility-tools h3 {
+    margin: 0 0 20px 0;
+    color: white;
+  }
+  
+  .tools-section {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  
+  .tool-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 25px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+  }
+  
+  .tool-btn:hover {
+    background: rgba(255,255,255,0.3);
+    transform: translateY(-2px);
+  }
+  
+  .accessibility-feedback {
+    margin-bottom: 40px;
+  }
+  
+  .contact-methods {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 12px;
+    margin-top: 16px;
+  }
+  
+  .contact-item {
+    margin-bottom: 8px;
+    font-size: 1rem;
+  }
+  
+  .contact-item:last-child {
+    margin-bottom: 0;
+  }
+  
+  .accessibility-updates {
+    padding-top: 20px;
+    border-top: 2px solid #e9ecef;
+  }
+  
+  .updates-list {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0 0 0;
+  }
+  
+  .updates-list li {
+    padding: 8px 0;
+    padding-left: 24px;
+    position: relative;
+    color: #495057;
+  }
+  
+  .updates-list li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: #28a745;
+    font-weight: bold;
+  }
+  
+  /* High contrast mode */
+  .high-contrast {
+    filter: contrast(150%) brightness(120%);
+  }
+  
+  /* Large text mode */
+  .large-text {
+    font-size: 1.2em;
+  }
+  
+  .large-text h1, .large-text h2, .large-text h3 {
+    font-size: 1.3em;
+  }
+  
+  /* Reduced motion */
+  .reduced-motion * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  /* Mobile responsive */
+  @media (max-width: 768px) {
+    .accessibility-content {
+      padding: 20px;
+    }
+    
+    .accessibility-title {
+      font-size: 2rem;
+    }
+    
+    .compliance-badges {
+      flex-direction: column;
+    }
+    
+    .features-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .tools-section {
+      flex-direction: column;
+    }
+    
+    .tool-btn {
+      justify-content: center;
+    }
+  }
+</style>
+
+<script>
+// Accessibility tools functionality
+let highContrastEnabled = false;
+let largeTextEnabled = false;
+let reducedMotionEnabled = false;
+
+function toggleHighContrast() {
+  highContrastEnabled = !highContrastEnabled;
+  document.body.classList.toggle('high-contrast', highContrastEnabled);
+  localStorage.setItem('highContrast', highContrastEnabled);
+  
+  // Update button state
+  const btn = event.target.closest('.tool-btn');
+  btn.style.background = highContrastEnabled ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.2)';
+}
+
+function toggleLargeText() {
+  largeTextEnabled = !largeTextEnabled;
+  document.body.classList.toggle('large-text', largeTextEnabled);
+  localStorage.setItem('largeText', largeTextEnabled);
+  
+  // Update button state
+  const btn = event.target.closest('.tool-btn');
+  btn.style.background = largeTextEnabled ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.2)';
+}
+
+function toggleReducedMotion() {
+  reducedMotionEnabled = !reducedMotionEnabled;
+  document.body.classList.toggle('reduced-motion', reducedMotionEnabled);
+  localStorage.setItem('reducedMotion', reducedMotionEnabled);
+  
+  // Update button state
+  const btn = event.target.closest('.tool-btn');
+  btn.style.background = reducedMotionEnabled ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.2)';
+}
+
+// Load saved preferences
+document.addEventListener('DOMContentLoaded', function() {
+  if (localStorage.getItem('highContrast') === 'true') {
+    document.body.classList.add('high-contrast');
+  }
+  if (localStorage.getItem('largeText') === 'true') {
+    document.body.classList.add('large-text');
+  }
+  if (localStorage.getItem('reducedMotion') === 'true') {
+    document.body.classList.add('reduced-motion');
+  }
+});
+
+// Keyboard navigation enhancements
+document.addEventListener('keydown', function(e) {
+  // Skip links for keyboard users
+  if (e.key === 'Tab' && !e.shiftKey) {
+    document.body.classList.add('keyboard-navigation');
+  }
+  
+  // Escape key to close modals
+  if (e.key === 'Escape') {
+    const modals = document.querySelectorAll('.modal.active, .quick-view-modal.active');
+    modals.forEach(modal => modal.classList.remove('active'));
+  }
+});
+
+// Remove keyboard navigation class on mouse use
+document.addEventListener('mousedown', function() {
+  document.body.classList.remove('keyboard-navigation');
+});
+
+// Focus management for screen readers
+function announceToScreenReader(message) {
+  const announcement = document.createElement('div');
+  announcement.setAttribute('aria-live', 'polite');
+  announcement.setAttribute('aria-atomic', 'true');
+  announcement.className = 'sr-only';
+  announcement.textContent = message;
+  
+  document.body.appendChild(announcement);
+  
+  setTimeout(() => {
+    document.body.removeChild(announcement);
+  }, 1000);
+}
+
+// Add screen reader only class
+const srOnlyCSS = `
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  
+  .keyboard-navigation *:focus {
+    outline: 3px solid #667eea !important;
+    outline-offset: 2px !important;
+  }
+`;
+
+const styleSheet = document.createElement('style');
+styleSheet.textContent = srOnlyCSS;
+document.head.appendChild(styleSheet);
+</script>
+
+{% schema %}
+{
+  "name": "Accessibility Statement",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Accessibility Statement"
+    }
+  ]
+}
+{% endschema %}

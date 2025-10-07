@@ -88,9 +88,21 @@
             </h3>
             
 
-            <!-- optional badge -->
+            <!-- Premium badges for exclusivity -->
             {% if product.compare_at_price_max > product.price_min %}
-              <small class="badge">On sale</small>
+              <small class="badge sale-badge">SALE</small>
+            {% endif %}
+            
+            <!-- Add "NEW" badge for recent products -->
+            {% assign product_created = product.created_at | date: '%s' %}
+            {% assign days_since_created = 'now' | date: '%s' | minus: product_created | divided_by: 86400 %}
+            {% if days_since_created <= 30 %}
+              <small class="badge new-badge">NEW</small>
+            {% endif %}
+            
+            <!-- Add "LIMITED" badge for exclusive products -->
+            {% if product.tags contains 'limited' or product.tags contains 'exclusive' %}
+              <small class="badge limited-badge">LIMITED</small>
             {% endif %}
 
             <div class="product-card__price">
@@ -264,9 +276,10 @@
     box-shadow: 0 4px 20px rgba(0,0,0,0.08);
   }
   
-  #sec-{{ section.id }} .enhanced-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  /* Remove hover effects from entire card - only apply to image area */
+  #sec-{{ section.id }} .enhanced-product-card:hover {
+    transform: none;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
   }
   
   /* Card Glow Effect - Removed neon colors */
@@ -281,7 +294,7 @@
     filter: blur(8px);
   }
   
-  #sec-{{ section.id }} .enhanced-card:hover .card-glow {
+  #sec-{{ section.id }} .enhanced-product-card:hover .card-glow {
     opacity: 0.3;
   }
   
@@ -298,17 +311,18 @@
     pointer-events: none;
   }
   
-  #sec-{{ section.id }} .enhanced-card:hover .card-shine {
+  #sec-{{ section.id }} .enhanced-product-card:hover .card-shine {
     left: 100%;
   }
   
-  /* Image Container */
-  #sec-{{ section.id }} .image-container {
+  /* Image Container with Enhanced Hover Effects */
+  #sec-{{ section.id }} .product-card__image {
     position: relative;
     overflow: hidden;
     border-radius: 12px 12px 0 0;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
-  
+
   #sec-{{ section.id }} .product-card__img {
     width: 100%;
     height: auto;
@@ -317,9 +331,26 @@
     transition: transform 0.4s ease;
     display: block;
   }
-  
-  #sec-{{ section.id }} .enhanced-card:hover .product-card__img {
-    transform: scale(1.1);
+
+  /* Enhanced hover effects on image area only */
+  #sec-{{ section.id }} .enhanced-product-card:hover .product-card__image {
+    transform: translateY(-8px) !important;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15) !important;
+    transition: all 0.3s ease !important;
+  }
+
+  #sec-{{ section.id }} .enhanced-product-card:hover .product-card__img {
+    transform: scale(1.1) !important;
+    transition: all 0.3s ease !important;
+  }
+
+  /* Force hover effects with higher specificity */
+  #sec-{{ section.id }} .enhanced-product-card .product-card__image {
+    transition: all 0.3s ease !important;
+  }
+
+  #sec-{{ section.id }} .enhanced-product-card .product-card__img {
+    transition: all 0.3s ease !important;
   }
   
   /* Image Overlay */
@@ -335,7 +366,7 @@
     z-index: 1;
   }
   
-  #sec-{{ section.id }} .enhanced-card:hover .image-overlay {
+  #sec-{{ section.id }} .enhanced-product-card:hover .image-overlay {
     opacity: 1;
   }
   
@@ -352,18 +383,19 @@
     transition: color 0.3s ease;
   }
   
-  #sec-{{ section.id }} .enhanced-card:hover .product-card__body h3 {
+  #sec-{{ section.id }} .enhanced-product-card:hover .product-card__body h3 {
     color: #333;
   }
   
-  /* Swatch Enhancements */
+  /* Swatch Enhancements - No hover interference */
   #sec-{{ section.id }} .swatch-block {
     margin-top: 12px;
-    transition: all 0.3s ease;
+    transition: none; /* Remove transitions that might interfere with swatch clicks */
   }
-  
-  #sec-{{ section.id }} .enhanced-card:hover .swatch-block {
-    transform: translateY(-2px);
+
+  /* Remove hover effects from swatch area to keep them fully interactive */
+  #sec-{{ section.id }} .enhanced-product-card:hover .swatch-block {
+    transform: none;
   }
   
   #sec-{{ section.id }} .swatch {
@@ -398,13 +430,13 @@
     font-weight: 700;
   }
   
-  /* Price Animation */
+  /* Price Animation - Removed to avoid interference with swatches */
   #sec-{{ section.id }} .product-card__price {
-    transition: all 0.3s ease;
+    transition: none;
   }
-  
-  #sec-{{ section.id }} .enhanced-card:hover .product-card__price {
-    transform: translateX(4px);
+
+  #sec-{{ section.id }} .enhanced-product-card:hover .product-card__price {
+    transform: none;
   }
   
   /* Floating Animation */
@@ -427,8 +459,15 @@
 
   /* Responsive */
   @media (max-width: 768px) {
-    #sec-{{ section.id }} .enhanced-card:hover {
-      transform: translateY(-4px) scale(1.01);
+    /* Remove mobile hover effects from entire card */
+    #sec-{{ section.id }} .enhanced-product-card:hover {
+      transform: none;
+    }
+    
+    /* Keep image hover effects on mobile */
+    #sec-{{ section.id }} .enhanced-product-card:hover .product-card__image {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
     }
     
     /* Mobile quick view button styles handled by action-btn class */
@@ -628,6 +667,42 @@
 <style id="price-override-{{ section.id }}">
   #sec-{{ section.id }} .product-card__price .price {
     color:#e53935 !important;
+  }
+  
+  /* Premium Badge Styling */
+  #sec-{{ section.id }} .badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  
+  #sec-{{ section.id }} .sale-badge {
+    background: linear-gradient(135deg, #ff4757, #ff3838);
+    color: white;
+  }
+  
+  #sec-{{ section.id }} .new-badge {
+    background: linear-gradient(135deg, #2ed573, #1e90ff);
+    color: white;
+  }
+  
+  #sec-{{ section.id }} .limited-badge {
+    background: linear-gradient(135deg, #ffa502, #ff6348);
+    color: white;
+    animation: pulse-glow 2s infinite;
+  }
+  
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 2px 8px rgba(255, 165, 2, 0.3); }
+    50% { box-shadow: 0 2px 12px rgba(255, 165, 2, 0.6); }
   }
 </style>
 
