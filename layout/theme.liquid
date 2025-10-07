@@ -198,7 +198,9 @@
     {%- comment -%} ✅ Halloween script (global include, non-module) {%- endcomment -%}
     {{ 'halloween.js' | asset_url | script_tag }}
 
-    <!-- Global Interactive Elements - Removed cursor trail and floating particles -->
+    <!-- Global Interactive Elements -->
+    <div id="cursor-trail"></div>
+    <div id="floating-particles"></div>
     
     <script src="{{ 'theme.js' | asset_url }}" defer></script>
     <script src="{{ 'swatch.js' | asset_url }}" defer></script>
@@ -221,32 +223,38 @@
         trailX += (mouseX - trailX) * 0.1;
         trailY += (mouseY - trailY) * 0.1;
         
-        cursorTrail.style.left = trailX + 'px';
-        cursorTrail.style.top = trailY + 'px';
+        if (cursorTrail) {
+          cursorTrail.style.left = trailX + 'px';
+          cursorTrail.style.top = trailY + 'px';
+        }
         
         requestAnimationFrame(animateTrail);
       }
-      animateTrail();
+      if (cursorTrail) {
+        animateTrail();
+      }
       
       // Floating Particles System
       const particlesContainer = document.getElementById('floating-particles');
       const particleCount = 10;
       
-      for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'floating-particle';
-        particle.style.position = 'fixed';
-        particle.style.width = Math.random() * 4 + 2 + 'px';
-        particle.style.height = particle.style.width;
-        particle.style.background = Math.random() > 0.5 ? 'rgba(0,0,0,0.1)' : 'rgba(0,0,0,0.05)';
-        particle.style.borderRadius = '50%';
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.top = Math.random() * 100 + '%';
-        particle.style.pointerEvents = 'none';
-        particle.style.zIndex = '1';
-        particle.style.animation = `particleFloat ${Math.random() * 20 + 10}s linear infinite`;
-        particle.style.animationDelay = Math.random() * 10 + 's';
-        particlesContainer.appendChild(particle);
+      if (particlesContainer) {
+        for (let i = 0; i < particleCount; i++) {
+          const particle = document.createElement('div');
+          particle.className = 'floating-particle';
+          particle.style.position = 'fixed';
+          particle.style.width = Math.random() * 4 + 2 + 'px';
+          particle.style.height = particle.style.width;
+          particle.style.background = Math.random() > 0.5 ? 'rgba(0,0,0,0.1)' : 'rgba(0,0,0,0.05)';
+          particle.style.borderRadius = '50%';
+          particle.style.left = Math.random() * 100 + '%';
+          particle.style.top = Math.random() * 100 + '%';
+          particle.style.pointerEvents = 'none';
+          particle.style.zIndex = '1';
+          particle.style.animation = `particleFloat ${Math.random() * 20 + 10}s linear infinite`;
+          particle.style.animationDelay = Math.random() * 10 + 's';
+          particlesContainer.appendChild(particle);
+        }
       }
       
       // Parallax Scrolling Effect
