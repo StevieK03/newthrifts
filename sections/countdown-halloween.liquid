@@ -432,7 +432,134 @@
       }
     }
 
-    
+    /* Halloween Title Animation */
+    #hween-{{ section.id }} .halloween-title {
+      position: relative;
+      font-family: 'Bebas Neue', 'Anton', 'Creepster', cursive, sans-serif !important;
+      font-size: clamp(1.8rem, 4vw, 2.5rem) !important;
+      font-weight: 900 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.1em !important;
+      text-align: center !important;
+      margin-bottom: 1rem !important;
+      animation: halloween-title-glow 3s ease-in-out infinite !important;
+      text-shadow: 
+        0 0 10px rgba(255, 69, 0, 0.8),
+        0 0 20px rgba(255, 140, 0, 0.6),
+        0 0 30px rgba(220, 20, 60, 0.4),
+        0 0 40px rgba(255, 69, 0, 0.3) !important;
+      background: linear-gradient(45deg, 
+        #ff4500, #ff8c00, #dc143c, #ff6347, #ff1493, #ff4500) !important;
+      background-size: 400% 400% !important;
+      -webkit-background-clip: text !important;
+      background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+      animation: 
+        halloween-title-glow 3s ease-in-out infinite,
+        halloween-gradient-shift 4s ease-in-out infinite,
+        halloween-title-pulse 2s ease-in-out infinite !important;
+    }
+
+    #hween-{{ section.id }} .halloween-title::before {
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      right: -5px;
+      bottom: -5px;
+      background: linear-gradient(45deg, 
+        rgba(255, 69, 0, 0.3), 
+        rgba(255, 140, 0, 0.3), 
+        rgba(220, 20, 60, 0.3), 
+        rgba(255, 99, 71, 0.3)) !important;
+      border-radius: 10px !important;
+      filter: blur(8px) !important;
+      z-index: -1 !important;
+      animation: halloween-title-aura 3s ease-in-out infinite !important;
+    }
+
+    #hween-{{ section.id }} .halloween-title::after {
+      content: '🎃 👻 🧙‍♀️ 🦇';
+      position: absolute;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.2rem;
+      animation: halloween-emojis-float 6s ease-in-out infinite;
+      opacity: 0.8;
+    }
+
+    /* Halloween Title Animations */
+    @keyframes halloween-title-glow {
+      0%, 100% { 
+        text-shadow: 
+          0 0 10px rgba(255, 69, 0, 0.8),
+          0 0 20px rgba(255, 140, 0, 0.6),
+          0 0 30px rgba(220, 20, 60, 0.4),
+          0 0 40px rgba(255, 69, 0, 0.3);
+      }
+      50% { 
+        text-shadow: 
+          0 0 20px rgba(255, 140, 0, 1),
+          0 0 30px rgba(255, 69, 0, 0.8),
+          0 0 40px rgba(220, 20, 60, 0.6),
+          0 0 50px rgba(255, 99, 71, 0.4);
+      }
+    }
+
+    @keyframes halloween-gradient-shift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    @keyframes halloween-title-pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    @keyframes halloween-title-aura {
+      0%, 100% { 
+        opacity: 0.3; 
+        transform: scale(1); 
+      }
+      50% { 
+        opacity: 0.6; 
+        transform: scale(1.1); 
+      }
+    }
+
+    @keyframes halloween-emojis-float {
+      0%, 100% { 
+        transform: translateX(-50%) translateY(0px) rotate(0deg); 
+        opacity: 0.6; 
+      }
+      25% { 
+        transform: translateX(-50%) translateY(-10px) rotate(5deg); 
+        opacity: 0.8; 
+      }
+      50% { 
+        transform: translateX(-50%) translateY(-5px) rotate(-3deg); 
+        opacity: 1; 
+      }
+      75% { 
+        transform: translateX(-50%) translateY(-15px) rotate(8deg); 
+        opacity: 0.9; 
+      }
+    }
+
+    /* Mobile Responsive for Halloween Title */
+    @media (max-width: 768px) {
+      #hween-{{ section.id }} .halloween-title {
+        font-size: clamp(1.5rem, 5vw, 2rem) !important;
+        letter-spacing: 0.05em !important;
+      }
+      
+      #hween-{{ section.id }} .halloween-title::after {
+        font-size: 1rem;
+        top: -25px;
+      }
+    }
+
     /* Enhanced Fog effect */
     #hween-{{ section.id }} .fog{ 
       position:absolute; 
@@ -724,7 +851,7 @@
     <button type="button" class="lt-test" id="lt-test-{{ section.id }}" aria-label="Flash test">⚡ Flash test</button>
   {%- endif -%}
 
-  {% if section.settings.show_label %}<div class="hdr">{{ section.settings.label }}</div>{% endif %}
+  {% if section.settings.show_label %}<div class="hdr halloween-title">{{ section.settings.label }}</div>{% endif %}
 
   <!-- Internal actor container (swarm renders here) -->
   <div id="hween-root" aria-hidden="true"></div>
