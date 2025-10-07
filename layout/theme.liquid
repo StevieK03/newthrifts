@@ -951,27 +951,43 @@
           quickViewContent.innerHTML = '<div class="quick-view-loading">Loading product...</div>';
           
           const response = await fetch(`/products/${productHandle}.js`);
+          
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          
           const product = await response.json();
           
+          // Validate product data
+          if (!product || !product.title) {
+            throw new Error('Invalid product data received');
+          }
+          
           quickViewTitle.textContent = product.title;
+          
+          // Ensure variants exist
+          if (!product.variants || product.variants.length === 0) {
+            throw new Error('No variants available for this product');
+          }
           
           const firstVariant = product.variants[0];
           
           // Generate swatches HTML
           let swatchesHTML = '';
           if (product.options && product.options.length > 0) {
-            const colorOption = product.options.find(opt => opt.name.toLowerCase() === 'color');
-            if (colorOption && colorOption.values.length > 1) {
+            const colorOption = product.options.find(opt => opt.name && opt.name.toLowerCase() === 'color');
+            if (colorOption && colorOption.values && colorOption.values.length > 1) {
               swatchesHTML = `
                 <div style="margin-bottom: 20px;">
                   <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #374151;">Color:</label>
                   <div class="quick-view-swatches" style="display: flex; gap: 8px; flex-wrap: wrap;">
                     ${colorOption.values.map((color, index) => {
                       // Find variant that matches this color with default size
-                      const defaultSize = product.options.find(opt => opt.name.toLowerCase() !== 'color')?.values[0];
+                      const defaultSize = product.options.find(opt => opt.name && opt.name.toLowerCase() !== 'color')?.values?.[0];
                       const variant = product.variants.find(v => {
-                        const colorIndex = product.options.findIndex(opt => opt.name.toLowerCase() === 'color');
-                        const sizeIndex = product.options.findIndex(opt => opt.name.toLowerCase() !== 'color');
+                        if (!v.options) return false;
+                        const colorIndex = product.options.findIndex(opt => opt.name && opt.name.toLowerCase() === 'color');
+                        const sizeIndex = product.options.findIndex(opt => opt.name && opt.name.toLowerCase() !== 'color');
                         return v.options[colorIndex] === color && 
                                (sizeIndex === -1 || v.options[sizeIndex] === defaultSize);
                       });
@@ -1097,9 +1113,18 @@
       function generateQuickViewOptions(product, selectedVariant) {
         let optionsHTML = '';
         
+        // Check if product and options exist
+        if (!product || !product.options) {
+          console.error('Product or options not available:', product);
+          return optionsHTML;
+        }
+        
+        // Use options_with_values if available, otherwise fall back to options
+        const options = product.options_with_values || product.options || [];
+        
         // Skip Color option (already handled by swatches)
-        product.options_with_values.forEach((option, index) => {
-          if (option.name.toLowerCase() !== 'color') {
+        options.forEach((option, index) => {
+          if (option.name && option.name.toLowerCase() !== 'color') {
             optionsHTML += `
               <div style="margin-bottom: 12px;">
                 <label style="display: block; font-weight: 600; color: #374151; margin-bottom: 6px; font-size: 14px;">
