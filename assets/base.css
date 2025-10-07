@@ -322,6 +322,34 @@ header,
   border: 1px solid #3b82f6 !important;
 }
 
+/* Override inline styles for footer email input in dark mode */
+[data-theme="dark"] .footer input[type="email"][style*="background:#fff"] {
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+  color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] .footer input[type="email"][style*="background:#fff"]::placeholder {
+  color: #64748b !important;
+}
+
+/* Additional dark mode overrides for any remaining white elements */
+[data-theme="dark"] * {
+  background-color: inherit !important;
+}
+
+[data-theme="dark"] .footer * {
+  background-color: transparent !important;
+}
+
+[data-theme="dark"] .footer {
+  background: #0f172a !important;
+}
+
+[data-theme="dark"] .footer .container {
+  background: transparent !important;
+}
+
 /* === Halloween Countdown — mobile hardening === */
 @media (max-width: 768px){
   [id^="hween-"] .row{
