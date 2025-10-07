@@ -578,6 +578,12 @@ Main product section — safe + styled + correct add-to-cart
     color: #374151 !important;
     white-space: nowrap !important;
   }
+
+  /* Dark mode styling for swatch labels */
+  [data-theme="dark"] .swatches-container .swatch__label {
+    color: #f8fafc !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important;
+  }
   
   /* Override any existing swatch layout */
   .product-options-container .swatch-list {
@@ -1044,6 +1050,13 @@ Main product section — safe + styled + correct add-to-cart
       background: white !important;
       padding: 2px 4px !important;
       border-radius: 3px !important;
+    }
+
+    /* Dark mode styling for mobile swatch labels */
+    [data-theme="dark"] .swatch__label {
+      color: #f8fafc !important;
+      background: rgba(15, 23, 42, 0.9) !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
     }
     
     /* Size Selector and Add to Cart - Horizontal layout */
