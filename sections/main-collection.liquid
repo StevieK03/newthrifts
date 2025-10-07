@@ -617,11 +617,11 @@ document.addEventListener('DOMContentLoaded', function() {
   opacity: 0.9;
 }
 
-/* Product cards dark mode */
+/* Product cards dark mode - Match featured collection exactly */
 [data-theme="dark"] #collection-{{ collection.id }} .enhanced-card {
   background: var(--bg-secondary, #1e293b) !important;
   border: 1px solid var(--border-primary, #334155) !important;
-  box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.4)) !important;
+  color: var(--text-primary, #f8fafc) !important;
 }
 
 [data-theme="dark"] #collection-{{ collection.id }} .enhanced-card:hover {
@@ -629,33 +629,41 @@ document.addEventListener('DOMContentLoaded', function() {
   border-color: var(--button-primary, #3b82f6) !important;
 }
 
-/* Product card content */
+/* Product card content - Match featured collection */
+[data-theme="dark"] #collection-{{ collection.id }} .product-card__content {
+  background: var(--bg-secondary, #1e293b) !important;
+  color: var(--text-primary, #f8fafc) !important;
+}
+
 [data-theme="dark"] #collection-{{ collection.id }} .product-card__title {
   color: var(--text-primary, #f8fafc) !important;
 }
 
 [data-theme="dark"] #collection-{{ collection.id }} .product-card__price {
-  color: var(--text-primary, #f8fafc) !important;
+  color: var(--success, #10b981) !important; /* Match featured collection green prices */
 }
 
 [data-theme="dark"] #collection-{{ collection.id }} .price {
-  color: #e53935 !important; /* Keep red prices */
+  color: var(--success, #10b981) !important; /* Match featured collection green prices */
 }
 
-/* Swatch styling */
+/* Swatch styling - Match featured collection exactly */
 [data-theme="dark"] #collection-{{ collection.id }} .swatch {
-  border: 2px solid var(--border-primary, #334155) !important;
   background: var(--bg-tertiary, #334155) !important;
+  border: 2px solid var(--border-primary, #334155) !important;
+  color: var(--text-primary, #f8fafc) !important;
 }
 
 [data-theme="dark"] #collection-{{ collection.id }} .swatch:hover {
   border-color: var(--button-primary, #3b82f6) !important;
-  box-shadow: 0 0 10px rgba(59, 130, 246, 0.3) !important;
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.3) !important;
 }
 
+[data-theme="dark"] #collection-{{ collection.id }} .swatch.selected,
 [data-theme="dark"] #collection-{{ collection.id }} .swatch.is-selected {
   border-color: var(--button-primary, #3b82f6) !important;
-  box-shadow: 0 0 15px rgba(59, 130, 246, 0.5) !important;
+  background: rgba(59, 130, 246, 0.2) !important;
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.4) !important;
 }
 
 /* Swatch legend */
