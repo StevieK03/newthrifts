@@ -53,6 +53,13 @@ document.documentElement.classList.add('swatch-ready');
       
       // 3) Update price/button will be handled by syncVariant function
       console.log('[swatch] Color selected:', value, 'Letting syncVariant handle variant matching');
+      
+      // 4) Trigger a custom event to ensure syncVariant runs
+      setTimeout(() => {
+        const changeEvent = new Event('change', { bubbles: true });
+        const selectors = form.querySelectorAll('.single-option-selector');
+        selectors.forEach(sel => sel.dispatchEvent(changeEvent));
+      }, 50);
     } else {
       // Handle homepage swatches (no form context)
       // Update price in the same product card

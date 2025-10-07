@@ -270,17 +270,27 @@ Main product section — safe + styled + correct add-to-cart
         // Get selected values from all selectors
         var selectedOptions = Array.from(selectors).map(function(s){ return s.value; });
         
+        console.log('=== VARIANT SYNC DEBUG ===');
+        console.log('Selectors found:', selectors.length);
+        console.log('Selected options:', selectedOptions);
+        console.log('Product options:', productData.options);
+        console.log('Available variants:', productData.variants.map(v => ({ id: v.id, options: v.options, available: v.available })));
+        
         // Find variant that matches ALL selected options
         var variant = productData.variants.find(function(v){ 
+          console.log('Checking variant:', v.id, 'options:', v.options);
           // Check if all options match (order-independent)
-          return selectedOptions.every(function(selectedValue, index) {
-            return v.options[index] === selectedValue;
+          var matches = selectedOptions.every(function(selectedValue, index) {
+            var optionMatches = v.options[index] === selectedValue;
+            console.log(`  Option ${index}: selected="${selectedValue}" vs variant="${v.options[index]}" = ${optionMatches}`);
+            return optionMatches;
           });
+          console.log('  Variant matches:', matches);
+          return matches;
         });
 
-        console.log('Selected options:', selectedOptions);
-        console.log('Available variants:', productData.variants.map(v => ({ id: v.id, options: v.options })));
         console.log('Found variant:', variant);
+        console.log('=== END VARIANT SYNC DEBUG ===');
 
         if(variant){
           idInput.value = String(variant.id);
