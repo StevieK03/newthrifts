@@ -279,6 +279,7 @@ Main product section — safe + styled + correct add-to-cart
         });
 
         console.log('Selected options:', selectedOptions);
+        console.log('Available variants:', productData.variants.map(v => ({ id: v.id, options: v.options })));
         console.log('Found variant:', variant);
 
         if(variant){

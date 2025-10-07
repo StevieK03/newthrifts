@@ -48,18 +48,11 @@ document.documentElement.classList.add('swatch-ready');
       // 1) Drive the native select (triggers existing inline handler)
       setSelectValueForOptionIndex(form, optIndex, value);
 
-      // 2) Ensure the hidden variant id is correct immediately
-      const idInput = form.querySelector('input[name="id"]');
-      if (idInput && variantId) idInput.value = String(variantId);
-
-      // 3) Update price/button right away
-      const priceEl  = form.closest('.card')?.querySelector('[data-product-price]');
-      const submitBtn = form.querySelector('button[type="submit"]');
-      if (priceEl && priceStr) priceEl.textContent = priceStr;
-      if (submitBtn) {
-        submitBtn.disabled = !available;
-        submitBtn.textContent = available ? 'Add to cart' : 'Sold out';
-      }
+      // 2) Let the syncVariant function handle variant ID selection
+      // (Don't override variant ID here - let the proper variant matching logic work)
+      
+      // 3) Update price/button will be handled by syncVariant function
+      console.log('[swatch] Color selected:', value, 'Letting syncVariant handle variant matching');
     } else {
       // Handle homepage swatches (no form context)
       // Update price in the same product card
