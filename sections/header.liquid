@@ -643,8 +643,8 @@ document.addEventListener('DOMContentLoaded', function() {
   const darkModeToggle = document.getElementById('dark-mode-toggle');
   const html = document.documentElement;
   
-  // Check for saved theme preference or default to 'light'
-  const currentTheme = localStorage.getItem('theme') || 'light';
+  // Check for saved theme preference or default to 'dark'
+  const currentTheme = localStorage.getItem('theme') || 'dark';
   
   // Apply the current theme
   html.setAttribute('data-theme', currentTheme);
@@ -685,7 +685,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Only apply system preference if no manual preference is set
     if (!localStorage.getItem('theme')) {
-      const systemTheme = mediaQuery.matches ? 'dark' : 'light';
+      const systemTheme = mediaQuery.matches ? 'dark' : 'dark';
       html.setAttribute('data-theme', systemTheme);
       
       if (systemTheme === 'dark') {
