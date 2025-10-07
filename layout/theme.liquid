@@ -964,7 +964,14 @@
                   <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #374151;">Color:</label>
                   <div class="quick-view-swatches" style="display: flex; gap: 8px; flex-wrap: wrap;">
                     ${colorOption.values.map((color, index) => {
-                      const variant = product.variants.find(v => v.options.includes(color));
+                      // Find variant that matches this color with default size
+                      const defaultSize = product.options.find(opt => opt.name.toLowerCase() !== 'color')?.values[0];
+                      const variant = product.variants.find(v => {
+                        const colorIndex = product.options.findIndex(opt => opt.name.toLowerCase() === 'color');
+                        const sizeIndex = product.options.findIndex(opt => opt.name.toLowerCase() !== 'color');
+                        return v.options[colorIndex] === color && 
+                               (sizeIndex === -1 || v.options[sizeIndex] === defaultSize);
+                      });
                       const colorClass = color.toLowerCase().replace(/\s+/g, '-');
                       return `
                         <button class="quick-view-swatch ${index === 0 ? 'selected' : ''}" 
@@ -1167,9 +1174,26 @@
             this.style.border = '2px solid #27e1c1';
             this.classList.add('selected');
             
-            // Find matching variant
+            // Find matching variant using all selected options
             const color = this.dataset.color;
-            const variant = product.variants.find(v => v.options.includes(color));
+            const quickViewSelects = document.querySelectorAll('.quick-view-option-select');
+            const selectedOptions = [];
+            
+            // Get all selected options by index
+            quickViewSelects.forEach(select => {
+              const optionIndex = parseInt(select.dataset.optionIndex);
+              selectedOptions[optionIndex] = select.value;
+            });
+            
+            // Set color option
+            const colorOptionIndex = product.options.findIndex(opt => opt.name.toLowerCase() === 'color');
+            if (colorOptionIndex >= 0) {
+              selectedOptions[colorOptionIndex] = color;
+            }
+            
+            const variant = product.variants.find(v => 
+              v.options.every((optVal, index) => optVal === selectedOptions[index])
+            );
             
             if (variant) {
               // Update price
@@ -1206,9 +1230,21 @@
             const optionIndex = parseInt(this.dataset.optionIndex);
             const selectedValue = this.value;
             
-            // Find matching variant
+            // Find matching variant using all selected options
+            const quickViewSelects = document.querySelectorAll('.quick-view-option-select');
+            const selectedOptions = [];
+            
+            // Get all selected options by index
+            quickViewSelects.forEach(select => {
+              const optIndex = parseInt(select.dataset.optionIndex);
+              selectedOptions[optIndex] = select.value;
+            });
+            
+            // Update the changed option
+            selectedOptions[optionIndex] = selectedValue;
+            
             const matchingVariant = product.variants.find(variant => 
-              variant.options[optionIndex] === selectedValue
+              variant.options.every((optVal, index) => optVal === selectedOptions[index])
             );
             
             if (matchingVariant) {
