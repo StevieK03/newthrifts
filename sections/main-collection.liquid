@@ -637,6 +637,17 @@ document.addEventListener('DOMContentLoaded', function() {
   color: var(--text-primary, #f8fafc) !important;
 }
 
+/* Image container styling to match featured collection */
+[data-theme="dark"] #collection-{{ collection.id }} .image-container {
+  background: var(--bg-tertiary, #334155) !important;
+  border-radius: 8px !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .product-card__img {
+  background: var(--bg-tertiary, #334155) !important;
+  border-radius: 8px !important;
+}
+
 [data-theme="dark"] #collection-{{ collection.id }} .enhanced-card:hover {
   box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.5)) !important;
   border-color: var(--button-primary, #3b82f6) !important;
@@ -679,6 +690,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
 [data-theme="dark"] #collection-{{ collection.id }} .swatch.selected,
 [data-theme="dark"] #collection-{{ collection.id }} .swatch.is-selected {
+  border-color: var(--button-primary, #3b82f6) !important;
+  background: rgba(59, 130, 246, 0.2) !important;
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.4) !important;
+}
+
+/* Size/option buttons to match featured collection */
+[data-theme="dark"] #collection-{{ collection.id }} .size-option,
+[data-theme="dark"] #collection-{{ collection.id }} .option-button {
+  background: var(--bg-tertiary, #334155) !important;
+  border: 2px solid var(--border-primary, #334155) !important;
+  color: var(--text-primary, #f8fafc) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .size-option:hover,
+[data-theme="dark"] #collection-{{ collection.id }} .option-button:hover {
+  border-color: var(--button-primary, #3b82f6) !important;
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.3) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .size-option.selected,
+[data-theme="dark"] #collection-{{ collection.id }} .option-button.selected {
   border-color: var(--button-primary, #3b82f6) !important;
   background: rgba(59, 130, 246, 0.2) !important;
   box-shadow: 0 0 12px rgba(59, 130, 246, 0.4) !important;
