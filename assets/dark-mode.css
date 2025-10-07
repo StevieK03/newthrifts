@@ -746,3 +746,184 @@
 [data-theme="dark"] .notification.info {
   border-left: 4px solid var(--info);
 }
+
+/* ========================================
+   FOOTER DARK MODE STYLING
+   ======================================== */
+
+/* Footer container */
+[data-theme="dark"] .footer {
+  background: var(--bg-primary) !important;
+  border-top: 1px solid var(--border-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Footer headings */
+[data-theme="dark"] .footer h4 {
+  color: var(--text-primary) !important;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+/* Footer text and paragraphs */
+[data-theme="dark"] .footer p {
+  color: var(--text-secondary) !important;
+  opacity: 0.9;
+  line-height: 1.6;
+}
+
+/* Footer links */
+[data-theme="dark"] .footer a {
+  color: var(--text-accent) !important;
+  text-decoration: none;
+  transition: color 0.3s ease, opacity 0.3s ease;
+  opacity: 0.9;
+}
+
+[data-theme="dark"] .footer a:hover {
+  color: var(--button-primary) !important;
+  opacity: 1;
+  text-decoration: underline;
+}
+
+/* Footer copyright text */
+[data-theme="dark"] .footer small {
+  color: var(--text-muted) !important;
+  opacity: 0.8;
+}
+
+/* Footer newsletter form */
+[data-theme="dark"] .footer input[type="email"] {
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border-primary) !important;
+  color: var(--text-primary) !important;
+  padding: 12px !important;
+  border-radius: 12px !important;
+  width: 100% !important;
+  margin-bottom: 10px !important;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+[data-theme="dark"] .footer input[type="email"]:focus {
+  border-color: var(--button-primary) !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+  outline: none;
+}
+
+[data-theme="dark"] .footer input[type="email"]::placeholder {
+  color: var(--text-muted) !important;
+  opacity: 0.7;
+}
+
+/* Footer subscribe button */
+[data-theme="dark"] .footer .button--primary {
+  background: var(--button-primary) !important;
+  color: white !important;
+  border: none !important;
+  padding: 12px 24px !important;
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
+  cursor: pointer !important;
+}
+
+[data-theme="dark"] .footer .button--primary:hover {
+  background: var(--button-primary-hover) !important;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+[data-theme="dark"] .footer .button--primary:active {
+  transform: translateY(0);
+}
+
+/* Footer grid layout */
+[data-theme="dark"] .footer .grid--3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+/* Footer container spacing */
+[data-theme="dark"] .footer .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Footer section dividers */
+[data-theme="dark"] .footer .container:first-child {
+  border-bottom: 1px solid var(--border-primary);
+  padding-bottom: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Footer menu styling */
+[data-theme="dark"] .footer .menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+[data-theme="dark"] .footer .menu li {
+  margin-bottom: 8px;
+}
+
+[data-theme="dark"] .footer .menu a {
+  display: block;
+  padding: 4px 0;
+  color: var(--text-secondary) !important;
+  transition: color 0.3s ease, padding-left 0.3s ease;
+}
+
+[data-theme="dark"] .footer .menu a:hover {
+  color: var(--button-primary) !important;
+  padding-left: 8px;
+}
+
+/* Footer responsive design */
+@media (max-width: 768px) {
+  [data-theme="dark"] .footer {
+    padding: 2rem 0 !important;
+  }
+  
+  [data-theme="dark"] .footer .grid--3 {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  [data-theme="dark"] .footer h4 {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+  }
+  
+  [data-theme="dark"] .footer p {
+    font-size: 0.9rem;
+  }
+  
+  [data-theme="dark"] .footer input[type="email"] {
+    font-size: 16px !important; /* Prevents zoom on iOS */
+  }
+}
+
+/* Footer glassmorphism effect */
+[data-theme="dark"] .footer {
+  backdrop-filter: var(--glass-backdrop);
+  -webkit-backdrop-filter: var(--glass-backdrop);
+}
+
+/* Footer enhanced shadows */
+[data-theme="dark"] .footer {
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Footer accent elements */
+[data-theme="dark"] .footer h4::after {
+  content: '';
+  display: block;
+  width: 30px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--button-primary), var(--text-accent));
+  margin-top: 8px;
+  border-radius: 1px;
+}
