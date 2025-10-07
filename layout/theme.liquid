@@ -27,6 +27,7 @@
       /* Higher specificity + !important so it beats any earlier .brand-line rules */
       html body header.header .brand-title .brand-line{
         color: var(--brand-teal) !important;
+      }
 
       /* Make sure pills stay red-glow too (even if --accent is pink) */
       html body header.header .nav a{
@@ -1255,11 +1256,6 @@
           });
         });
       }
-          
-        } catch (error) {
-          console.error('Error loading product:', error);
-          quickViewContent.innerHTML = '<div class="quick-view-loading">Error loading product</div>';
-        }
       
       // Add to cart from quick view
       window.addToCartFromQuickView = async function(variantId) {
