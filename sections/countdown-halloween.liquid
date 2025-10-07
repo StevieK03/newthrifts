@@ -33,18 +33,48 @@
       isolation: isolate;
     }
     
-    /* Ensure Halloween banner maintains its colors in dark mode */
+    /* Enhanced Halloween banner dark mode protection */
     @media (prefers-color-scheme: dark) {
       #hween-{{ section.id }} {
         filter: none !important;
         -webkit-filter: none !important;
         background: radial-gradient(80% 120% at 50% -10%, var(--bg-2), var(--bg)) !important;
         color: var(--text) !important;
+        /* Force original Halloween colors */
+        background-color: transparent !important;
+        isolation: isolate !important;
+        position: relative !important;
+        z-index: 1 !important;
       }
       
       #hween-{{ section.id }} * {
         filter: none !important;
         -webkit-filter: none !important;
+        /* Ensure all child elements maintain original colors */
+        color: inherit !important;
+        background: inherit !important;
+      }
+      
+      /* Specific protection for Halloween elements */
+      #hween-{{ section.id }} .hween-text,
+      #hween-{{ section.id }} .hween-countdown,
+      #hween-{{ section.id }} .hween-button {
+        filter: none !important;
+        -webkit-filter: none !important;
+        color: var(--text) !important;
+        background: transparent !important;
+      }
+      
+      /* Moon and Halloween graphics protection */
+      #hween-{{ section.id }} .moon-container,
+      #hween-{{ section.id }} .moon-core,
+      #hween-{{ section.id }} .moon-glow-1,
+      #hween-{{ section.id }} .moon-glow-2,
+      #hween-{{ section.id }} .moon-glow-3,
+      #hween-{{ section.id }} .moon-shimmer {
+        filter: none !important;
+        -webkit-filter: none !important;
+        isolation: isolate !important;
       }
     }
     #hween-{{ section.id }}:before{
