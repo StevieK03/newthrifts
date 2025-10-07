@@ -51,8 +51,6 @@
         </div>
       {% endif %}
 
-      <!-- Dynamic Status Message Container -->
-      <div id="dynamic-status-message" style="display: none; margin-bottom: 25px;"></div>
 
       <!-- Shopify Native Contact Form -->
       {% form 'contact', id: 'ContactForm', class: 'contact-form', style: 'display: flex; flex-direction: column; gap: 25px;' %}
@@ -265,63 +263,4 @@
   }
 </style>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const form = document.getElementById('ContactForm');
-  const statusContainer = document.getElementById('dynamic-status-message');
-  
-  if (form) {
-    form.addEventListener('submit', function(e) {
-      // Show loading state immediately
-      const submitBtn = form.querySelector('button[type="submit"]');
-      const originalText = submitBtn.textContent;
-      submitBtn.textContent = 'Sending...';
-      submitBtn.disabled = true;
-      submitBtn.style.opacity = '0.7';
-      
-      // Show success message after a short delay
-      // This will show regardless of Shopify's response
-      setTimeout(function() {
-        showSuccessMessage();
-        
-        // Reset button state
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
-        submitBtn.style.opacity = '1';
-        
-        // Reset form
-        form.reset();
-      }, 1500);
-      
-      // Let the form submit normally to Shopify
-      // Don't prevent default - let Shopify handle the actual submission
-    });
-  }
-  
-  function showSuccessMessage() {
-    const successHTML = `
-      <div class="success-message" style="padding: 20px; border-radius: 12px; background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); color: #065f46; border: 2px solid #10b981; text-align: center; font-weight: 600; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2); animation: slideInDown 0.5s ease-out; position: relative;">
-        <button onclick="this.parentElement.parentElement.style.display='none'" style="position: absolute; top: 10px; right: 10px; background: none; border: none; color: #065f46; font-size: 20px; cursor: pointer; opacity: 0.7; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">×</button>
-        <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 8px;">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="color: #10b981;">
-            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <span style="font-size: 18px; font-weight: 700;">Message Sent Successfully!</span>
-        </div>
-        <p style="margin: 0; font-size: 16px; opacity: 0.9;">Thanks! We'll get back to you within 24 hours.</p>
-      </div>
-    `;
-    
-    statusContainer.innerHTML = successHTML;
-    statusContainer.style.display = 'block';
-    
-    // Scroll to the message
-    statusContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    
-    // Hide message after 15 seconds
-    setTimeout(function() {
-      statusContainer.style.display = 'none';
-    }, 15000);
-  }
-});
-</script>
+
