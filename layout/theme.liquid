@@ -3,6 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>{% if page_title %}{{ page_title }} – {% endif %}{{ shop.name }}</title>
 
     {%- comment -%} Use Primary accent for browser UI color (falls back if not set) {%- endcomment -%}
@@ -199,6 +202,7 @@
 
     <!-- Global Interactive Elements - Removed cursor trail and floating particles -->
     
+    <script src="{{ 'error-fix.js' | asset_url }}" defer></script>
     <script src="{{ 'cache-buster.js' | asset_url }}" defer></script>
     <script src="{{ 'theme.js' | asset_url }}" defer></script>
     <script src="{{ 'swatch.js' | asset_url }}" defer></script>
