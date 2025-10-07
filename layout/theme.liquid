@@ -1111,20 +1111,31 @@
       
       // Generate dropdown options for Quick View
       function generateQuickViewOptions(product, selectedVariant) {
+        console.log('generateQuickViewOptions called with:', { product, selectedVariant });
         let optionsHTML = '';
         
         // Check if product and options exist
-        if (!product || !product.options) {
-          console.error('Product or options not available:', product);
+        if (!product) {
+          console.error('Product is null or undefined');
           return optionsHTML;
         }
         
+        if (!product.options) {
+          console.error('Product.options is null or undefined');
+          return optionsHTML;
+        }
+        
+        console.log('Product options:', product.options);
+        console.log('Product options_with_values:', product.options_with_values);
+        
         // Use options_with_values if available, otherwise fall back to options
         const options = product.options_with_values || product.options || [];
+        console.log('Using options:', options);
         
         // Skip Color option (already handled by swatches)
-        options.forEach((option, index) => {
-          if (option.name && option.name.toLowerCase() !== 'color') {
+        if (Array.isArray(options)) {
+          options.forEach((option, index) => {
+            if (option.name && option.name.toLowerCase() !== 'color') {
             optionsHTML += `
               <div style="margin-bottom: 12px;">
                 <label style="display: block; font-weight: 600; color: #374151; margin-bottom: 6px; font-size: 14px;">
@@ -1140,8 +1151,11 @@
                 </select>
               </div>
             `;
-          }
-        });
+            }
+          });
+        } else {
+          console.error('Options is not an array:', options);
+        }
         
         return optionsHTML;
       }
