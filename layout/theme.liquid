@@ -438,6 +438,208 @@
       padding: 40px;
       color: #6b7280;
     }
+    
+    /* Mobile Quick View - Fits phone frame perfectly */
+    @media (max-width: 768px) {
+      .quick-view-container {
+        width: 100vw !important;
+        height: 100vh !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        max-width: none !important;
+        max-height: none !important;
+        top: 0 !important;
+        left: 0 !important;
+        transform: none !important;
+        display: flex !important;
+        flex-direction: column !important;
+      }
+      
+      .quick-view-header {
+        flex-shrink: 0 !important;
+        padding: 15px 20px !important;
+        background: white !important;
+        border-bottom: 1px solid #e5e7eb !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+      }
+      
+      .quick-view-content {
+        flex: 1 !important;
+        padding: 15px !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        display: flex !important;
+        flex-direction: column !important;
+      }
+      
+      .quick-view-product {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 12px !important;
+        flex: 1 !important;
+      }
+      
+      .quick-view-image-section {
+        flex-shrink: 0 !important;
+        text-align: center !important;
+      }
+      
+      .quick-view-details-section {
+        flex: 1 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        min-height: 0 !important;
+      }
+      
+      #quick-view-image {
+        max-width: 100% !important;
+        max-height: 200px !important;
+        width: auto !important;
+        height: auto !important;
+        object-fit: contain !important;
+        border-radius: 8px !important;
+      }
+      
+      #quick-view-title {
+        font-size: 18px !important;
+        margin-bottom: 6px !important;
+        line-height: 1.2 !important;
+        text-align: center !important;
+      }
+      
+      #quick-view-price {
+        font-size: 16px !important;
+        margin-bottom: 10px !important;
+        text-align: center !important;
+      }
+      
+      .quick-view-swatches {
+        justify-content: center !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+        margin-bottom: 10px !important;
+      }
+      
+      .quick-view-swatch {
+        width: 36px !important;
+        height: 36px !important;
+        border-radius: 6px !important;
+        border: 2px solid #e5e7eb !important;
+        position: relative !important;
+      }
+      
+      .quick-view-swatch:hover {
+        border-color: #3b82f6 !important;
+        transform: scale(1.05) !important;
+      }
+      
+      .quick-view-swatch.active {
+        border-color: #3b82f6 !important;
+        box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3) !important;
+      }
+      
+      .quick-view-swatch img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        border-radius: 4px !important;
+      }
+      
+      .quick-view-options {
+        margin-bottom: 10px !important;
+      }
+      
+      .quick-view-option-select {
+        width: 100% !important;
+        padding: 8px 12px !important;
+        font-size: 14px !important;
+        margin-bottom: 8px !important;
+      }
+      
+      .quick-view-info-sections {
+        flex: 1 !important;
+        overflow-y: auto !important;
+        margin-bottom: 10px !important;
+        max-height: 200px !important;
+      }
+      
+      .info-section {
+        margin-bottom: 8px !important;
+      }
+      
+      .info-section-toggle {
+        width: 100% !important;
+        padding: 10px 12px !important;
+        font-size: 14px !important;
+        margin-bottom: 4px !important;
+        background: #f8f9fa !important;
+        border: 1px solid #e9ecef !important;
+        border-radius: 6px !important;
+        text-align: left !important;
+        cursor: pointer !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        transition: all 0.3s ease !important;
+      }
+      
+      .info-section-toggle:hover {
+        background: #e9ecef !important;
+        border-color: #dee2e6 !important;
+      }
+      
+      .section-title {
+        font-weight: 600 !important;
+        color: #374151 !important;
+        font-size: 14px !important;
+      }
+      
+      .toggle-icon {
+        transition: transform 0.3s ease !important;
+        font-size: 12px !important;
+        color: #6b7280 !important;
+      }
+      
+      .section-content {
+        padding: 10px 12px !important;
+        font-size: 13px !important;
+        line-height: 1.4 !important;
+        margin-bottom: 6px !important;
+        background: #f9fafb !important;
+        border-radius: 6px !important;
+        color: #4b5563 !important;
+        border: 1px solid #e5e7eb !important;
+        display: none !important;
+      }
+      
+      .section-content[style*="block"] {
+        display: block !important;
+      }
+      
+      #quick-view-add-to-cart {
+        width: 100% !important;
+        padding: 12px 16px !important;
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        border-radius: 6px !important;
+        margin-bottom: 8px !important;
+        flex-shrink: 0 !important;
+      }
+      
+      .quick-view-close {
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 20px !important;
+        background: white !important;
+        border: 1px solid #e5e7eb !important;
+        border-radius: 50% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+    }
 
     /* Global Wishlist Dropdown Styles */
     .wishlist-dropdown {
@@ -772,17 +974,31 @@
             }
           }
           
+          // Clean product title - remove vendor info
+          let cleanTitle = product.title;
+          // Remove common vendor patterns
+          cleanTitle = cleanTitle.replace(/\s*\|\s*[A-Z0-9\s]+$/, ''); // Remove | M&O 4800 type patterns
+          cleanTitle = cleanTitle.replace(/\s*-\s*[A-Z0-9\s]+$/, ''); // Remove - VENDOR patterns
+          cleanTitle = cleanTitle.replace(/\s*by\s+[A-Za-z0-9\s]+$/i, ''); // Remove by VENDOR patterns
+          cleanTitle = cleanTitle.replace(/\s*\([^)]*\)\s*$/, ''); // Remove (VENDOR) patterns
+          
           quickViewContent.innerHTML = `
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
-              <div>
-                <img id="quick-view-image" src="${product.images[0]}" alt="${product.title}" style="width: 100%; border-radius: 8px;">
+            <div class="quick-view-product" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+              <div class="quick-view-image-section">
+                <img id="quick-view-image" src="${product.images[0]}" alt="${cleanTitle}" style="width: 100%; border-radius: 8px;">
               </div>
-              <div>
-                <h3 style="margin: 0 0 12px 0; font-size: 24px;">${product.title}</h3>
+              <div class="quick-view-details-section">
+                <h3 id="quick-view-title" style="margin: 0 0 12px 0; font-size: 24px;">${cleanTitle}</h3>
                 <div id="quick-view-price" style="font-size: 20px; color: #dc2626; font-weight: 600; margin-bottom: 16px;">
                   ${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(firstVariant.price / 100)}
                 </div>
                 ${swatchesHTML}
+                
+                <!-- Size and Options Dropdowns -->
+                <div class="quick-view-options" style="margin-bottom: 16px;">
+                  ${generateQuickViewOptions(product, firstVariant)}
+                </div>
+                
                 <!-- Collapsible Product Information Sections -->
                 <div class="quick-view-info-sections" style="margin-bottom: 24px;">
                   <div class="info-section">
@@ -849,9 +1065,38 @@
           
           // Initialize swatch functionality in quick view
           initQuickViewSwatches(product);
+          initQuickViewOptions(product);
           
           // Initialize collapsible sections
           initQuickViewSections();
+      }
+      
+      // Generate dropdown options for Quick View
+      function generateQuickViewOptions(product, selectedVariant) {
+        let optionsHTML = '';
+        
+        // Skip Color option (already handled by swatches)
+        product.options_with_values.forEach((option, index) => {
+          if (option.name.toLowerCase() !== 'color') {
+            optionsHTML += `
+              <div style="margin-bottom: 12px;">
+                <label style="display: block; font-weight: 600; color: #374151; margin-bottom: 6px; font-size: 14px;">
+                  ${option.name}
+                </label>
+                <select 
+                  class="quick-view-option-select" 
+                  data-option-index="${index}"
+                  style="width: 100%; padding: 8px 12px; border: 2px solid #e5e7eb; border-radius: 6px; background: white; font-size: 14px; cursor: pointer;">
+                  ${option.values.map(value => 
+                    `<option value="${value}" ${selectedVariant.options[index] === value ? 'selected' : ''}>${value}</option>`
+                  ).join('')}
+                </select>
+              </div>
+            `;
+          }
+        });
+        
+        return optionsHTML;
       }
       
       // Swatch color mapping function
@@ -876,7 +1121,15 @@
           'chalky mint': '#a7f3d0',
           'orchid': '#d946ef',
           'peachy': '#fed7aa',
-          'ivory': '#fffbeb'
+          'ivory': '#fffbeb',
+          'new york': '#2563eb',
+          'heather': '#9ca3af',
+          'charcoal': '#374151',
+          'forest': '#065f46',
+          'maroon': '#7f1d1d',
+          'cream': '#fef7ed',
+          'sand': '#fbbf24',
+          'slate': '#475569'
         };
         
         const normalizedColor = colorName.toLowerCase().trim();
@@ -933,12 +1186,50 @@
         });
       }
       
+      // Initialize Quick View dropdown options
+      function initQuickViewOptions(product) {
+        const optionSelects = document.querySelectorAll('.quick-view-option-select');
+        optionSelects.forEach(select => {
+          select.addEventListener('change', function() {
+            const optionIndex = parseInt(this.dataset.optionIndex);
+            const selectedValue = this.value;
+            
+            // Find matching variant
+            const matchingVariant = product.variants.find(variant => 
+              variant.options[optionIndex] === selectedValue
+            );
+            
+            if (matchingVariant) {
+              // Update price
+              const priceElement = document.getElementById('quick-view-price');
+              if (priceElement) {
+                priceElement.textContent = new Intl.NumberFormat('en-US', { 
+                  style: 'currency', 
+                  currency: 'USD' 
+                }).format(matchingVariant.price / 100);
+              }
+              
+              // Update add to cart button
+              const addToCartBtn = document.getElementById('quick-view-add-to-cart');
+              if (addToCartBtn) {
+                addToCartBtn.onclick = () => addToCartFromQuickView(matchingVariant.id);
+                addToCartBtn.disabled = !matchingVariant.available;
+                addToCartBtn.textContent = matchingVariant.available ? 'Add to Cart' : 'Sold Out';
+              }
+            }
+          });
+        });
+      }
+      
       // Initialize collapsible sections in Quick View
       function initQuickViewSections() {
         const toggleButtons = document.querySelectorAll('.info-section-toggle');
         
         toggleButtons.forEach(button => {
-          button.addEventListener('click', function() {
+          button.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
             const section = this.closest('.info-section');
             const content = section.querySelector('.section-content');
             const icon = this.querySelector('.toggle-icon');
@@ -946,20 +1237,16 @@
             if (content.style.display === 'none' || !content.style.display) {
               content.style.display = 'block';
               icon.style.transform = 'rotate(180deg)';
-              this.style.background = '#e5e7eb';
+              this.style.background = '#e9ecef';
+              this.style.borderColor = '#dee2e6';
             } else {
               content.style.display = 'none';
               icon.style.transform = 'rotate(0deg)';
-              this.style.background = '#f9fafb';
+              this.style.background = '#f8f9fa';
+              this.style.borderColor = '#e9ecef';
             }
           });
         });
-      }
-          
-        } catch (error) {
-          console.error('Error loading product:', error);
-          quickViewContent.innerHTML = '<div class="quick-view-loading">Error loading product</div>';
-        }
       }
       
       // Add to cart from quick view
@@ -1002,5 +1289,7 @@
       console.log('Global Quick View initialized');
     });
     </script>
+    <!-- Mobile Enhancements -->
+    <script src="{{ 'mobile-enhancements.js' | asset_url }}" defer></script>
   </body>
 </html>
