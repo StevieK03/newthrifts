@@ -30,12 +30,24 @@
       
       <!-- Form Status Messages -->
       {% if form.posted_successfully? %}
-        <div style="margin-bottom: 25px; padding: 16px; border-radius: 12px; background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; text-align: center; font-weight: 500;">
-          Thanks! We'll get back to you within 24 hours.
+        <div class="success-message" style="margin-bottom: 25px; padding: 20px; border-radius: 12px; background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); color: #065f46; border: 2px solid #10b981; text-align: center; font-weight: 600; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2); animation: slideInDown 0.5s ease-out;">
+          <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 8px;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="color: #10b981;">
+              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span style="font-size: 18px; font-weight: 700;">Message Sent Successfully!</span>
+          </div>
+          <p style="margin: 0; font-size: 16px; opacity: 0.9;">Thanks! We'll get back to you within 24 hours.</p>
         </div>
       {% elsif form.errors %}
-        <div style="margin-bottom: 25px; padding: 16px; border-radius: 12px; background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5;">
-          {{ form.errors | default_errors }}
+        <div class="error-message" style="margin-bottom: 25px; padding: 20px; border-radius: 12px; background: linear-gradient(135deg, #fee2e2 0%, #fca5a5 100%); color: #991b1b; border: 2px solid #ef4444; text-align: center; font-weight: 600; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2); animation: slideInDown 0.5s ease-out;">
+          <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 8px;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="color: #ef4444;">
+              <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.268 19.5c-.77.833.192 2.5 1.732 2.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span style="font-size: 18px; font-weight: 700;">Please Fix the Following Issues:</span>
+          </div>
+          <div style="margin: 0; font-size: 16px; opacity: 0.9;">{{ form.errors | default_errors }}</div>
         </div>
       {% endif %}
 
@@ -142,6 +154,41 @@
 </div>
 
 <style>
+  /* Success/Error Message Animations */
+  @keyframes slideInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+  }
+
+  /* Success message hover effect */
+  .success-message:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3) !important;
+    transition: all 0.3s ease;
+  }
+
+  /* Error message hover effect */
+  .error-message:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3) !important;
+    transition: all 0.3s ease;
+  }
+
   /* Dark mode styling for form fields */
   [data-theme="dark"] #ContactForm-name,
   [data-theme="dark"] #ContactForm-email,
@@ -168,6 +215,19 @@
     color: #64748b !important;
   }
 
+  /* Dark mode styling for success/error messages */
+  [data-theme="dark"] .success-message {
+    background: linear-gradient(135deg, #064e3b 0%, #065f46 100%) !important;
+    border-color: #10b981 !important;
+    color: #d1fae5 !important;
+  }
+
+  [data-theme="dark"] .error-message {
+    background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%) !important;
+    border-color: #ef4444 !important;
+    color: #fecaca !important;
+  }
+
   /* Mobile responsiveness */
   @media (max-width: 768px) {
     .contact-page-wrapper {
@@ -186,6 +246,18 @@
     .contact-info > div {
       flex-direction: column !important;
       gap: 20px !important;
+    }
+
+    .success-message,
+    .error-message {
+      padding: 16px !important;
+      margin-bottom: 20px !important;
+    }
+
+    .success-message div,
+    .error-message div {
+      flex-direction: column !important;
+      gap: 8px !important;
     }
   }
 </style>
