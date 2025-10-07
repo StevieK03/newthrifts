@@ -354,47 +354,6 @@
       overflow: hidden;
     }
 
-    /* Wind Streams */
-    #hween-{{ section.id }} .wind-stream {
-      position: absolute;
-      width: 200%;
-      height: 1px;
-      background: linear-gradient(90deg, 
-        transparent 0%, 
-        rgba(255,255,255,0.05) 20%, 
-        rgba(255,255,255,0.1) 50%, 
-        rgba(255,255,255,0.05) 80%, 
-        transparent 100%);
-      animation: wind-stream-flow 8s linear infinite;
-    }
-
-    #hween-{{ section.id }} .wind-stream-1 {
-      top: 20%;
-      left: -100%;
-      animation-delay: 0s;
-      animation-duration: 6s;
-    }
-
-    #hween-{{ section.id }} .wind-stream-2 {
-      top: 60%;
-      left: -100%;
-      animation-delay: 2s;
-      animation-duration: 8s;
-    }
-
-    #hween-{{ section.id }} .wind-stream-3 {
-      top: 80%;
-      left: -100%;
-      animation-delay: 4s;
-      animation-duration: 7s;
-    }
-
-    @keyframes wind-stream-flow {
-      0% { transform: translateX(0); opacity: 0; }
-      10% { opacity: 1; }
-      90% { opacity: 1; }
-      100% { transform: translateX(100vw); opacity: 0; }
-    }
 
     /* Wind Particles */
     #hween-{{ section.id }} .wind-particles {
@@ -713,10 +672,6 @@
   <!-- Wind Effects -->
   {% if section.settings.show_wind %}
     <div class="wind-effects" id="wind-{{ section.id }}" aria-hidden="true">
-      <!-- Wind Streams -->
-      <div class="wind-stream wind-stream-1"></div>
-      <div class="wind-stream wind-stream-2"></div>
-      <div class="wind-stream wind-stream-3"></div>
       
       <!-- Floating Particles -->
       <div class="wind-particles">
