@@ -12,13 +12,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    {{ 'base.css' | asset_url | stylesheet_tag }}
+    {{ 'base.css' | asset_url | append: '?v=' | append: 'now' | date: '%s' | stylesheet_tag }}
 
     {%- comment -%} ✅ Dark Mode styles {%- endcomment -%}
-    {{ 'dark-mode.css' | asset_url | stylesheet_tag }}
+    {{ 'dark-mode.css' | asset_url | append: '?v=' | append: 'now' | date: '%s' | stylesheet_tag }}
 
     {%- comment -%} ✅ Halloween styles (global include) {%- endcomment -%}
-    {{ 'halloween.css' | asset_url | stylesheet_tag }}
+    {{ 'halloween.css' | asset_url | append: '?v=' | append: 'now' | date: '%s' | stylesheet_tag }}
 
     {%- comment -%}
       Moved the “force-brand-teal” block into <head> (valid HTML)
