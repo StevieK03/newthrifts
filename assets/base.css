@@ -224,9 +224,15 @@ a:hover{ text-shadow: var(--shadow-hard); }
   display: none !important;
 }
 
-/* Force white background site-wide */
+/* Force white background site-wide for light mode only */
 body, html {
   background-color: #ffffff !important;
+}
+
+/* Dark mode body background */
+[data-theme="dark"] body,
+[data-theme="dark"] html {
+  background-color: #0f172a !important;
 }
 
 <style>

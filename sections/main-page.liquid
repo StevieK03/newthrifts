@@ -4,6 +4,27 @@
   <div>{{ page.content }}</div>
 </section>
 
+<style>
+/* Dark mode styling for main page content */
+[data-theme="dark"] .container.card {
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+  color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] .container.card h1 {
+  color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] .container.card p {
+  color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] .container.card strong {
+  color: #f1f5f9 !important;
+}
+</style>
+
 {% schema %}
 {
   "name": "Main page",
