@@ -544,6 +544,154 @@ Welcome / Social Bar — Modern Redesign
         padding: 20px;
       }
     }
+
+    /* Dark Mode Styling for Social Bar */
+    [data-theme="dark"] #welcome-{{ section.id }} {
+      background: var(--bg-primary, #0f172a) !important;
+    }
+
+    [data-theme="dark"] #welcome-{{ section.id }} .welcome-text {
+      background: var(--bg-secondary, #1e293b) !important;
+      border: 1px solid var(--border-primary, #334155) !important;
+      box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.5)) !important;
+    }
+
+    [data-theme="dark"] #welcome-{{ section.id }} .welcome-headline {
+      color: var(--text-primary, #f8fafc) !important;
+      text-shadow: 0 0 20px rgba(96, 165, 250, 0.3);
+    }
+
+    [data-theme="dark"] #welcome-{{ section.id }} .welcome-copy {
+      color: var(--text-secondary, #e2e8f0) !important;
+    }
+
+    [data-theme="dark"] #welcome-{{ section.id }} .welcome-copy strong {
+      color: var(--text-primary, #f8fafc) !important;
+    }
+
+    [data-theme="dark"] #welcome-{{ section.id }} .pill-btn {
+      background: var(--bg-tertiary, #334155) !important;
+      color: var(--text-primary, #f8fafc) !important;
+      border: 1px solid var(--border-primary, #334155) !important;
+      box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.4)) !important;
+    }
+
+    [data-theme="dark"] #welcome-{{ section.id }} .pill-btn:hover {
+      background: var(--button-primary, #3b82f6) !important;
+      border-color: var(--button-primary, #3b82f6) !important;
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.4) !important;
+      transform: translateY(-3px) scale(1.02) !important;
+    }
+
+    /* Dark mode platform-specific button styles */
+    [data-theme="dark"] #welcome-{{ section.id }} .facebook-btn {
+      background: linear-gradient(135deg, #1877f2, #42a5f5) !important;
+    }
+
+    [data-theme="dark"] #welcome-{{ section.id }} .facebook-btn:hover {
+      background: linear-gradient(135deg, #166fe5, #1976d2) !important;
+      box-shadow: 0 8px 25px rgba(24,119,242,.4) !important;
+    }
+
+    [data-theme="dark"] #welcome-{{ section.id }} .instagram-btn {
+      background: linear-gradient(135deg, #e4405f, #fd1d1d, #fcb045) !important;
+    }
+
+    [data-theme="dark"] #welcome-{{ section.id }} .instagram-btn:hover {
+      background: linear-gradient(135deg, #d63031, #e84393, #fdcb6e) !important;
+      box-shadow: 0 8px 25px rgba(228,64,95,.4) !important;
+    }
+
+    [data-theme="dark"] #welcome-{{ section.id }} .twitter-btn {
+      background: linear-gradient(135deg, #1da1f2, #0d8bd9) !important;
+    }
+
+    [data-theme="dark"] #welcome-{{ section.id }} .twitter-btn:hover {
+      background: linear-gradient(135deg, #0d8bd9, #0a6bb3) !important;
+      box-shadow: 0 8px 25px rgba(29,161,242,.4) !important;
+    }
+
+    [data-theme="dark"] #welcome-{{ section.id }} .tiktok-btn {
+      background: linear-gradient(135deg, #000000, #ff0050) !important;
+    }
+
+    [data-theme="dark"] #welcome-{{ section.id }} .tiktok-btn:hover {
+      background: linear-gradient(135deg, #ff0050, #000000) !important;
+      box-shadow: 0 8px 25px rgba(255,0,80,.4) !important;
+    }
+
+    [data-theme="dark"] #welcome-{{ section.id }} .youtube-btn {
+      background: linear-gradient(135deg, #ff0000, #cc0000) !important;
+    }
+
+    [data-theme="dark"] #welcome-{{ section.id }} .youtube-btn:hover {
+      background: linear-gradient(135deg, #cc0000, #990000) !important;
+      box-shadow: 0 8px 25px rgba(255,0,0,.4) !important;
+    }
+
+    [data-theme="dark"] #welcome-{{ section.id }} .feature-highlights {
+      background: var(--bg-secondary, #1e293b) !important;
+      border: 1px solid var(--border-primary, #334155) !important;
+      box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.5)) !important;
+    }
+
+    [data-theme="dark"] #welcome-{{ section.id }} .highlight-item {
+      border-bottom: 1px solid var(--border-primary, #334155) !important;
+    }
+
+    [data-theme="dark"] #welcome-{{ section.id }} .highlight-icon {
+      background: var(--bg-tertiary, #334155) !important;
+    }
+
+    [data-theme="dark"] #welcome-{{ section.id }} .highlight-item span {
+      color: var(--text-primary, #f8fafc) !important;
+    }
+
+    [data-theme="dark"] #welcome-{{ section.id }} .floating-shape {
+      background: linear-gradient(135deg, rgba(96, 165, 250, 0.1), rgba(59, 130, 246, 0.05)) !important;
+    }
+
+    [data-theme="dark"] #welcome-{{ section.id }} .floating-dot {
+      background: rgba(96, 165, 250, 0.3) !important;
+    }
+
+    [data-theme="dark"] #welcome-{{ section.id }} .newsletter-signup {
+      background: linear-gradient(135deg, var(--button-primary, #3b82f6) 0%, var(--bg-tertiary, #334155) 100%) !important;
+      border: 1px solid var(--border-primary, #334155) !important;
+      box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.5)) !important;
+    }
+
+    [data-theme="dark"] #welcome-{{ section.id }} .newsletter-title {
+      color: var(--text-primary, #f8fafc) !important;
+    }
+
+    [data-theme="dark"] #welcome-{{ section.id }} .newsletter-description {
+      color: var(--text-secondary, #e2e8f0) !important;
+    }
+
+    [data-theme="dark"] #welcome-{{ section.id }} .email-input-group {
+      background: rgba(255, 255, 255, 0.1) !important;
+      border: 1px solid var(--border-primary, #334155) !important;
+    }
+
+    [data-theme="dark"] #welcome-{{ section.id }} .email-input {
+      color: var(--text-primary, #f8fafc) !important;
+    }
+
+    [data-theme="dark"] #welcome-{{ section.id }} .email-input::placeholder {
+      color: var(--text-muted, #94a3b8) !important;
+    }
+
+    [data-theme="dark"] #welcome-{{ section.id }} .subscribe-btn {
+      background: var(--text-primary, #f8fafc) !important;
+      color: var(--button-primary, #3b82f6) !important;
+    }
+
+    [data-theme="dark"] #welcome-{{ section.id }} .subscribe-btn:hover {
+      background: var(--bg-tertiary, #334155) !important;
+      color: var(--text-primary, #f8fafc) !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+    }
   </style>
 
   {% schema %}
