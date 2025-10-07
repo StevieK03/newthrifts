@@ -64,6 +64,13 @@ a:hover{ text-shadow: var(--shadow-hard); }
   box-shadow: var(--shadow-soft);
 }
 
+/* Dark mode styling for cards */
+[data-theme="dark"] .card {
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+  color: #f1f5f9 !important;
+}
+
 .header{
   position: sticky; top:0; z-index: 40;
   background: rgba(15,23,42,.65);
@@ -273,10 +280,40 @@ body, html {
 
 /* Make header and footer backgrounds white */
 header,
-.site-header,
-.footer,
-.site-footer {
+.site-header {
   background-color: #ffffff !important;
+}
+
+/* Dark mode footer styling */
+[data-theme="dark"] .footer,
+[data-theme="dark"] .site-footer {
+  background: #0f172a !important;
+  color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] .footer a {
+  color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] .footer small {
+  color: #94a3b8 !important;
+}
+
+/* Dark mode styling for footer input fields */
+[data-theme="dark"] .footer input[type="email"] {
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+  color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] .footer input[type="email"]::placeholder {
+  color: #64748b !important;
+}
+
+[data-theme="dark"] .footer .button {
+  background: #3b82f6 !important;
+  color: white !important;
+  border: 1px solid #3b82f6 !important;
 }
 
 /* === Halloween Countdown — mobile hardening === */
