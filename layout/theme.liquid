@@ -1072,6 +1072,10 @@
           
           // Initialize collapsible sections
           initQuickViewSections();
+        } catch (error) {
+          console.error('Error loading product:', error);
+          quickViewContent.innerHTML = '<div class="quick-view-loading">Error loading product</div>';
+        }
       }
       
       // Generate dropdown options for Quick View
