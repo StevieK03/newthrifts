@@ -826,9 +826,19 @@
               <h4 style="margin: 0 0 4px 0; font-size: 14px; color: #111827;">${item.title}</h4>
               <div style="font-size: 14px; color: #dc2626; font-weight: 600;">${item.price}</div>
             </div>
-            <button onclick="removeFromWishlist('${item.id}')" style="background: none; border: none; color: #6b7280; cursor: pointer; padding: 4px;">×</button>
+            <button data-action="remove-wishlist" data-product-id="${String(item.id).replace(/"/g, '&quot;')}" style="background: none; border: none; color: #6b7280; cursor: pointer; padding: 4px;">×</button>
           </div>
         `).join('');
+
+        // Wire up remove buttons
+        wishlistItems.querySelectorAll('[data-action="remove-wishlist"]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const pid = btn.getAttribute('data-product-id');
+            if (pid) {
+              window.removeFromWishlist(pid);
+            }
+          });
+        });
       }
       
       // Add to wishlist function
@@ -1055,7 +1065,7 @@
                     </div>
                   </div>
                 </div>
-                <button id="quick-view-add-to-cart" onclick="addToCartFromQuickView('${firstVariant.id}')" 
+                <button id="quick-view-add-to-cart"
                         style="width: 100%; padding: 16px; background: #27e1c1; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;"
                         ${!firstVariant.available ? 'disabled' : ''}>
                   ${firstVariant.available ? 'Add to Cart' : 'Sold Out'}
@@ -1073,6 +1083,12 @@
           
           // Initialize collapsible sections
           initQuickViewSections();
+
+          // Set initial Add to Cart handler for default variant
+          const initialAddBtn = document.getElementById('quick-view-add-to-cart');
+          if (initialAddBtn && firstVariant?.id && firstVariant.available) {
+            initialAddBtn.addEventListener('click', () => addToCartFromQuickView(firstVariant.id));
+          }
         } catch (error) {
           console.error('Error loading product:', error);
           quickViewContent.innerHTML = '<div class="quick-view-loading">Error loading product</div>';
