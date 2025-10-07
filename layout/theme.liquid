@@ -1095,7 +1095,7 @@
                   data-option-index="${index}"
                   style="width: 100%; padding: 8px 12px; border: 2px solid #e5e7eb; border-radius: 6px; background: white; font-size: 14px; cursor: pointer;">
                   ${option.values.map(value => 
-                    `<option value="${value}" ${selectedVariant.options[index] === value ? 'selected' : ''}>${value}</option>`
+                    '<option value="' + value + '"' + (selectedVariant.options[index] === value ? ' selected' : '') + '>' + value + '</option>'
                   ).join('')}
                 </select>
               </div>
