@@ -260,6 +260,76 @@
     transform: translate(-50%, -50%) rotate(0deg);
   }
 
+  /* Dark Mode Header Styling */
+  [data-theme="dark"] #Header-{{ section.id }} {
+    background: var(--glass-bg, rgba(15, 23, 42, 0.8)) !important;
+    backdrop-filter: var(--glass-backdrop, blur(20px)) !important;
+    -webkit-backdrop-filter: var(--glass-backdrop, blur(20px)) !important;
+    border: 1px solid var(--border-primary, #334155) !important;
+    box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.5)) !important;
+  }
+
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__logo-text {
+    color: var(--text-primary, #f8fafc) !important;
+    text-shadow: 0 0 10px rgba(96, 165, 250, 0.3);
+  }
+
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__link {
+    color: var(--text-primary, #f8fafc) !important;
+    background: rgba(71, 85, 105, 0.2) !important;
+    border: 1px solid var(--border-primary, #334155) !important;
+    transition: all 0.3s ease;
+  }
+
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__link:hover {
+    background: rgba(59, 130, 246, 0.2) !important;
+    border-color: var(--button-primary, #3b82f6) !important;
+    color: var(--text-accent, #60a5fa) !important;
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.3) !important;
+  }
+
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__cart-link {
+    color: var(--text-primary, #f8fafc) !important;
+    background: rgba(71, 85, 105, 0.2) !important;
+    border: 1px solid var(--border-primary, #334155) !important;
+  }
+
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__cart-link:hover {
+    background: rgba(59, 130, 246, 0.2) !important;
+    border-color: var(--button-primary, #3b82f6) !important;
+    color: var(--text-accent, #60a5fa) !important;
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.3) !important;
+  }
+
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__cart-icon {
+    color: var(--text-primary, #f8fafc) !important;
+  }
+
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__cart-link:hover .nt-header__cart-icon {
+    color: var(--text-accent, #60a5fa) !important;
+  }
+
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__cart-count {
+    background: var(--error, #ef4444) !important;
+    color: var(--text-primary, #f8fafc) !important;
+    border: 2px solid var(--border-primary, #334155) !important;
+  }
+
+  [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle {
+    background: rgba(71, 85, 105, 0.2) !important;
+    border: 1px solid var(--border-primary, #334155) !important;
+  }
+
+  [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle:hover {
+    background: rgba(59, 130, 246, 0.2) !important;
+    border-color: var(--button-primary, #3b82f6) !important;
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.3) !important;
+  }
+
+  [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle .toggle-icon {
+    color: var(--text-primary, #f8fafc) !important;
+  }
+
   /* Mobile header adjustments */
   @media (max-width: 768px) {
     #Header-{{ section.id }} {
@@ -267,6 +337,33 @@
       backdrop-filter: blur(15px) saturate(150%);
       -webkit-backdrop-filter: blur(15px) saturate(150%);
     }
+    
+    /* Mobile Dark Mode Header */
+    [data-theme="dark"] #Header-{{ section.id }} {
+      background: var(--glass-bg, rgba(15, 23, 42, 0.9)) !important;
+      backdrop-filter: var(--glass-backdrop, blur(20px)) !important;
+      -webkit-backdrop-filter: var(--glass-backdrop, blur(20px)) !important;
+    }
+    
+    [data-theme="dark"] #Header-{{ section.id }} .nt-header__wrap {
+      background: transparent !important;
+    }
+    
+    [data-theme="dark"] #Header-{{ section.id }} .mobile-menu {
+      background: var(--bg-secondary, #1e293b) !important;
+      border: 1px solid var(--border-primary, #334155) !important;
+    }
+    
+    [data-theme="dark"] #Header-{{ section.id }} .mobile-menu a {
+      color: var(--text-primary, #f8fafc) !important;
+      border-bottom: 1px solid var(--border-primary, #334155) !important;
+    }
+    
+    [data-theme="dark"] #Header-{{ section.id }} .mobile-menu a:hover {
+      background: var(--bg-tertiary, #334155) !important;
+      color: var(--text-accent, #60a5fa) !important;
+    }
+  }
     
     #Header-{{ section.id }} .nt-header__wrap {
       justify-content: space-between;
