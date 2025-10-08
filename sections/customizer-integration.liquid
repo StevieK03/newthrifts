@@ -350,6 +350,8 @@ document.addEventListener('DOMContentLoaded', function() {
     },
 
     showLivePreview(design, type) {
+      console.log('🚀 ENHANCED Live Design Preview Loading...', design, type);
+      
       // Create enhanced live preview overlay
       const previewOverlay = document.createElement('div');
       previewOverlay.id = 'live-preview-overlay';
@@ -718,15 +720,22 @@ document.addEventListener('DOMContentLoaded', function() {
       customizationToolbar.appendChild(fontSelector);
       customizationToolbar.appendChild(effectSelector);
 
-      // Create preview title
+      // Create preview title with enhanced indicator
       const previewTitle = document.createElement('h3');
       previewTitle.style.cssText = `
         margin: 0 0 10px 0;
         font-size: 24px;
         font-weight: 700;
         color: #374151;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
       `;
-      previewTitle.textContent = `Preview: ${type.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}`;
+      previewTitle.innerHTML = `
+        <span>🚀 Enhanced Preview:</span>
+        <span>${type.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
+      `;
 
       // Create preview details
       const previewDetails = document.createElement('div');
