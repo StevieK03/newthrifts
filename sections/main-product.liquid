@@ -371,6 +371,58 @@ Main product section — safe + styled + correct add-to-cart
       }, 100);
     })();
 
+    // Handle swatch clicks and sync with hidden selects
+    (function() {
+      console.log('Setting up swatch event handlers');
+      
+      // Wait for DOM to be ready
+      function setupSwatchHandlers() {
+        var swatches = document.querySelectorAll('[data-swatch]');
+        console.log('Found swatches:', swatches.length);
+        
+        swatches.forEach(function(swatch) {
+          swatch.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Swatch clicked:', this.dataset.value, 'option index:', this.dataset.optionIndex);
+            
+            // Update the hidden select for this option
+            var optionIndex = this.dataset.optionIndex;
+            var value = this.dataset.value;
+            var hiddenSelect = document.querySelector('select[data-index="option' + (parseInt(optionIndex) + 1) + '"]');
+            
+            if (hiddenSelect) {
+              console.log('Updating hidden select:', hiddenSelect.id, 'to value:', value);
+              hiddenSelect.value = value;
+              
+              // Trigger change event to sync variant
+              var changeEvent = new Event('change', { bubbles: true });
+              hiddenSelect.dispatchEvent(changeEvent);
+            } else {
+              console.error('Could not find hidden select for option index:', optionIndex);
+            }
+            
+            // Update visual selection
+            var allSwatches = document.querySelectorAll('[data-option-index="' + optionIndex + '"]');
+            allSwatches.forEach(function(s) {
+              s.classList.remove('selected', 'is-selected');
+            });
+            this.classList.add('selected', 'is-selected');
+          });
+        });
+        
+        // Mark swatch system as ready
+        document.documentElement.classList.add('swatch-ready');
+        console.log('Swatch handlers setup complete');
+      }
+      
+      // Setup immediately if DOM is ready, otherwise wait
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setupSwatchHandlers);
+      } else {
+        setupSwatchHandlers();
+      }
+    })();
+
     // Collapsible sections functionality
     document.addEventListener('DOMContentLoaded', function() {
       const toggles = document.querySelectorAll('.info-section-toggle');
