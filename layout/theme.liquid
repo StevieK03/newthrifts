@@ -1411,6 +1411,12 @@
       async function trackPageView() {
         try {
           if (window.supabaseClient) {
+            // Ensure Supabase client is initialized
+            const client = await window.supabaseClient.getClient();
+            if (!client) {
+              console.log('📊 Supabase client not ready, skipping tracking');
+              return;
+            }
             // Get additional context
             const isProductPage = window.location.pathname.includes('/products/');
             const isCollectionPage = window.location.pathname.includes('/collections/');
@@ -1430,7 +1436,8 @@
               };
             }
             
-            await window.supabaseClient.trackEvent('page_view', {
+            // Build tracking data object
+            const trackingData = {
               page: window.location.pathname,
               page_title: document.title,
               referrer: document.referrer,
@@ -1438,9 +1445,15 @@
               screen_resolution: `${screen.width}x${screen.height}`,
               viewport_size: `${window.innerWidth}x${window.innerHeight}`,
               timestamp: new Date().toISOString(),
-              page_type: isProductPage ? 'product' : isCollectionPage ? 'collection' : isCartPage ? 'cart' : isCheckoutPage ? 'checkout' : 'other',
-              ...productInfo
-            });
+              page_type: isProductPage ? 'product' : isCollectionPage ? 'collection' : isCartPage ? 'cart' : isCheckoutPage ? 'checkout' : 'other'
+            };
+            
+            // Add product info if available
+            if (productInfo.product_title) trackingData.product_title = productInfo.product_title;
+            if (productInfo.product_price) trackingData.product_price = productInfo.product_price;
+            if (productInfo.image_count) trackingData.image_count = productInfo.image_count;
+            
+            await window.supabaseClient.trackEvent('page_view', trackingData);
             console.log('📊 Page view tracked:', window.location.pathname);
           }
         } catch (error) {
