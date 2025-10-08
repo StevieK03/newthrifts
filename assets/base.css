@@ -561,3 +561,20 @@ button.button.button--primary[type="submit"]:hover {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4) !important;
   transform: translateY(-2px);
 }
+
+/* Dark theme style for Update Cart button */
+[data-theme="dark"] button.button[name="update"] {
+  background: #334155 !important;
+  border: 1px solid #475569 !important;
+  color: #f8fafc !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+[data-theme="dark"] button.button[name="update"]:hover {
+  background: #475569 !important;
+  border-color: #64748b !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4) !important;
+  transform: translateY(-2px);
+}
