@@ -1,0 +1,117 @@
+<section class="simple-contact-form" style="max-width: 600px; margin: 40px auto; padding: 20px;">
+  <div style="background: #f8fafc; border-radius: 12px; padding: 30px; border: 1px solid #e2e8f0;">
+    <h2 style="font-family: 'Bebas Neue', sans-serif; font-size: 32px; margin-bottom: 20px; text-align: center; color: #0f172a;">
+      {{ section.settings.title | default: "Get in Touch" }}
+    </h2>
+    <p style="text-align: center; color: #64748b; margin-bottom: 30px;">
+      {{ section.settings.description | default: "Have a question or feedback? We'd love to hear from you!" }}
+    </p>
+    
+    <!-- Form Status Messages -->
+    {% if form.posted_successfully? %}
+      <div style="margin-bottom: 20px; padding: 12px; border-radius: 8px; background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; text-align: center;">
+        Thanks! We'll get back to you within 24 hours.
+      </div>
+    {% elsif form.errors %}
+      <div style="margin-bottom: 20px; padding: 12px; border-radius: 8px; background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5;">
+        {{ form.errors | default_errors }}
+      </div>
+    {% endif %}
+    
+    {% form 'contact', id: 'ContactForm', class: 'contact-form', style: 'display: flex; flex-direction: column; gap: 20px;' %}
+      <div class="field">
+        <label for="ContactForm-name" style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151;">
+          Your Name *
+        </label>
+        <input 
+          id="ContactForm-name" 
+          type="text" 
+          name="contact[name]" 
+          required 
+          style="width: 100%; padding: 12px 16px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 16px; box-sizing: border-box;"
+        >
+      </div>
+      
+      <div class="field">
+        <label for="ContactForm-email" style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151;">
+          Email Address *
+        </label>
+        <input 
+          id="ContactForm-email" 
+          type="email" 
+          name="contact[email]" 
+          required 
+          style="width: 100%; padding: 12px 16px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 16px; box-sizing: border-box;"
+        >
+      </div>
+      
+      <div class="field">
+        <label for="ContactForm-subject" style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151;">
+          Subject
+        </label>
+        <input 
+          id="ContactForm-subject" 
+          type="text" 
+          name="contact[subject]" 
+          style="width: 100%; padding: 12px 16px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 16px; box-sizing: border-box;"
+        >
+      </div>
+      
+      <div class="field">
+        <label for="ContactForm-body" style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151;">
+          Your Message *
+        </label>
+        <textarea 
+          id="ContactForm-body" 
+          name="contact[body]" 
+          rows="5" 
+          required 
+          style="width: 100%; padding: 12px 16px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 16px; resize: vertical; box-sizing: border-box;"
+          placeholder="Tell us how we can help you..."
+        ></textarea>
+      </div>
+      
+      <button 
+        type="submit"
+        style="background: #0f172a; color: white; border: none; padding: 14px 24px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 10px;"
+      >
+        Send Message
+      </button>
+    {% endform %}
+    
+    <div style="margin-top: 30px; padding: 20px; background: #f1f5f9; border-radius: 8px; text-align: center;">
+      <p style="margin: 0; color: #64748b; font-size: 14px;">
+        Or email us directly at: 
+        <a href="mailto:shopping@newthrifts.com" style="color: #3b82f6; text-decoration: none; font-weight: 600;">
+          shopping@newthrifts.com
+        </a>
+      </p>
+    </div>
+  </div>
+</section>
+
+
+{% schema %}
+{
+  "name": "Simple Contact Form",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Form Title",
+      "default": "Get in Touch"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Form Description",
+      "default": "Have a question or feedback? We'd love to hear from you!"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Simple Contact Form"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,1629 @@
+{% comment %}
+  Custom T-Shirt Request Section - DISABLED
+  This section has been disabled and will not render
+{% endcomment %}
+
+{% comment %}
+  SECTION DISABLED - NOTHING TO RENDER
+{% endcomment %}
+
+{% comment %}
+  SECTION DISABLED - NOTHING TO RENDER
+{% endcomment %}
+
+{% comment %}
+<section id="custom-tshirt-{{ section.id }}" class="custom-tshirt-section" style="
+  --bg-color: {{ section.settings.bg_color | default: '#f8f9fa' }};
+  --text-color: {{ section.settings.text_color | default: '#333' }};
+  --accent-color: {{ section.settings.accent_color | default: '#DC143C' }};
+  --border-color: {{ section.settings.border_color | default: '#ddd' }};
+  padding: {{ section.settings.pad_y }} {{ section.settings.pad_x }};
+  background: var(--bg-color);
+  color: var(--text-color);
+">
+{% endcomment %}
+
+  <div class="container" style="max-width: 800px; margin: 0 auto;">
+    
+    {% comment %}Heading removed to avoid duplication with Shopify's section heading{% endcomment %}
+
+    <!-- Live Preview Section -->
+    <div class="preview-section" style="
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      border: 1px solid var(--border-color);
+    ">
+      <h3 style="font-size: 1.3rem; font-weight: 600; margin-bottom: 1rem; color: var(--accent-color); text-align: center;">
+        Live Preview
+      </h3>
+           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start;">
+             
+             <!-- Preview Canvas -->
+             <div class="preview-canvas-container" style="text-align: center;">
+               <!-- Model View Toggle -->
+               <div class="model-view-toggle" style="
+                 display: flex;
+                 justify-content: center;
+                 gap: 0.5rem;
+                 margin-bottom: 1rem;
+               ">
+                 <button type="button" id="flat-view-btn" class="view-btn" style="
+                   padding: 0.5rem 1rem;
+                   border: 2px solid #ddd;
+                   background: white;
+                   color: #666;
+                   border-radius: 4px;
+                   cursor: pointer;
+                   font-size: 0.9rem;
+                   transition: all 0.2s ease;
+                 ">Flat View</button>
+                 <button type="button" id="model-view-btn" class="view-btn active" style="
+                   padding: 0.5rem 1rem;
+                   border: 2px solid var(--accent-color);
+                   background: var(--accent-color);
+                   color: white;
+                   border-radius: 4px;
+                   cursor: pointer;
+                   font-size: 0.9rem;
+                   transition: all 0.2s ease;
+                 ">Model View</button>
+               </div>
+               
+               <!-- Flat T-Shirt View -->
+               <div class="flat-view" id="flat-view" style="display: none;">
+                 <div class="preview-canvas" style="
+                   position: relative;
+                   display: inline-block;
+                   background: #f8f9fa;
+                   border-radius: 8px;
+                   padding: 1rem;
+                   border: 2px solid var(--border-color);
+                 ">
+                   <canvas id="tshirt-preview" width="300" height="400" style="
+                     max-width: 100%;
+                     height: auto;
+                     border-radius: 4px;
+                     background: white;
+                     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                   "></canvas>
+                 </div>
+                 <p style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">
+                   Flat t-shirt preview
+                 </p>
+               </div>
+               
+               <!-- Model View -->
+               <div class="model-view" id="model-view">
+                 <!-- Model View Toggle (Front/Side) -->
+                 <div class="model-angle-toggle" style="
+                   display: flex;
+                   justify-content: center;
+                   gap: 0.5rem;
+                   margin-bottom: 1rem;
+                 ">
+                   <button type="button" id="front-model-btn" class="angle-btn active" style="
+                     padding: 0.4rem 0.8rem;
+                     border: 2px solid var(--accent-color);
+                     background: var(--accent-color);
+                     color: white;
+                     border-radius: 4px;
+                     cursor: pointer;
+                     font-size: 0.8rem;
+                     transition: all 0.2s ease;
+                   ">Front</button>
+                   <button type="button" id="side-model-btn" class="angle-btn" style="
+                     padding: 0.4rem 0.8rem;
+                     border: 2px solid #ddd;
+                     background: white;
+                     color: #666;
+                     border-radius: 4px;
+                     cursor: pointer;
+                     font-size: 0.8rem;
+                     transition: all 0.2s ease;
+                   ">Side</button>
+                 </div>
+                 
+                 <!-- Front Model View -->
+                 <div class="model-container front-model" id="front-model">
+                   <div style="
+                     position: relative;
+                     display: inline-block;
+                     background: #f8f9fa;
+                     border-radius: 8px;
+                     padding: 1rem;
+                     border: 2px solid var(--border-color);
+                   ">
+                     <canvas id="model-front-preview" width="300" height="400" style="
+                       max-width: 100%;
+                       height: auto;
+                       border-radius: 4px;
+                       background: white;
+                       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                     "></canvas>
+                   </div>
+                   <p style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">
+                     Front view on model
+                   </p>
+                 </div>
+                 
+                 <!-- Side Model View -->
+                 <div class="model-container side-model" id="side-model" style="display: none;">
+                   <div style="
+                     position: relative;
+                     display: inline-block;
+                     background: #f8f9fa;
+                     border-radius: 8px;
+                     padding: 1rem;
+                     border: 2px solid var(--border-color);
+                   ">
+                     <canvas id="model-side-preview" width="300" height="400" style="
+                       max-width: 100%;
+                       height: auto;
+                       border-radius: 4px;
+                       background: white;
+                       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                     "></canvas>
+                   </div>
+                   <p style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">
+                     Side view on model
+                   </p>
+                 </div>
+               </div>
+             </div>
+
+        <!-- Preview Controls -->
+        <div class="preview-controls" style="
+          background: #f8f9fa;
+          border-radius: 8px;
+          padding: 1.5rem;
+        ">
+          <h4 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; color: var(--accent-color);">
+            Preview Options
+          </h4>
+          
+          <div style="margin-bottom: 1rem;">
+            <label style="display: block; font-weight: 500; margin-bottom: 0.5rem;">T-Shirt Color:</label>
+            <div class="tshirt-color-swatches" style="
+              display: grid;
+              grid-template-columns: repeat(6, 1fr);
+              gap: 0.5rem;
+              margin-bottom: 0.5rem;
+            ">
+              <!-- Color swatches will be generated by JavaScript -->
+            </div>
+            <div id="selected-color-name" style="
+              font-size: 0.9rem;
+              color: var(--accent-color);
+              font-weight: 500;
+              text-align: center;
+            ">White</div>
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <label style="display: block; font-weight: 500; margin-bottom: 0.5rem;">Design Position:</label>
+            <select id="preview-position" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px;">
+              <option value="center">Center Chest</option>
+              <option value="left">Left Chest</option>
+              <option value="right">Right Chest</option>
+              <option value="back">Back</option>
+              <option value="sleeve">Sleeve</option>
+            </select>
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <label style="display: block; font-weight: 500; margin-bottom: 0.5rem;">Design Size:</label>
+            <input type="range" id="preview-size" min="20" max="80" value="40" style="width: 100%;">
+            <span id="size-value" style="font-size: 0.9rem; color: #666;">40px</span>
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <label style="display: block; font-weight: 500; margin-bottom: 0.5rem;">Upload Design:</label>
+            <input type="file" id="preview-upload" accept="image/*" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px;">
+          </div>
+
+          <div>
+            <button type="button" id="clear-preview" style="
+              background: #dc3545;
+              color: white;
+              border: none;
+              padding: 0.5rem 1rem;
+              border-radius: 4px;
+              cursor: pointer;
+              font-size: 0.9rem;
+            ">Clear Preview</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="request-form-container" style="
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      padding: 2rem;
+      border: 1px solid var(--border-color);
+    ">
+      
+      {% form 'contact', id: 'custom-tshirt-form' %}
+        <input type="hidden" name="contact[tags]" value="custom-tshirt-request">
+        
+        <div class="form-grid" style="display: grid; gap: 1.5rem;">
+          
+          <!-- Personal Information -->
+          <div class="form-section">
+            <h3 style="font-size: 1.3rem; font-weight: 600; margin-bottom: 1rem; color: var(--accent-color);">
+              Contact Information
+            </h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div>
+                <label for="contact_name" style="display: block; font-weight: 500; margin-bottom: 0.5rem;">
+                  Full Name *
+                </label>
+                <input type="text" id="contact_name" name="contact[name]" required
+                       style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;">
+              </div>
+              <div>
+                <label for="contact_email" style="display: block; font-weight: 500; margin-bottom: 0.5rem;">
+                  Email Address *
+                </label>
+                <input type="email" id="contact_email" name="contact[email]" required
+                       style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;">
+              </div>
+            </div>
+          </div>
+
+          <!-- T-Shirt Specifications -->
+          <div class="form-section">
+            <h3 style="font-size: 1.3rem; font-weight: 600; margin-bottom: 1rem; color: var(--accent-color);">
+              T-Shirt Specifications
+            </h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+              <div>
+                <label for="tshirt_size" style="display: block; font-weight: 500; margin-bottom: 0.5rem;">
+                  Size *
+                </label>
+                <select id="tshirt_size" name="contact[tshirt_size]" required
+                        style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;">
+                  <option value="">Select Size</option>
+                  <option value="XS">XS</option>
+                  <option value="S">S</option>
+                  <option value="M">M</option>
+                  <option value="L">L</option>
+                  <option value="XL">XL</option>
+                  <option value="2XL">2XL</option>
+                  <option value="3XL">3XL</option>
+                </select>
+              </div>
+              <div>
+                <label for="tshirt_color" style="display: block; font-weight: 500; margin-bottom: 0.5rem;">
+                  Preferred Color
+                </label>
+                <input type="text" id="tshirt_color" name="contact[tshirt_color]" placeholder="e.g., Black, White, Navy"
+                       style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;">
+              </div>
+              <div>
+                <label for="tshirt_brand" style="display: block; font-weight: 500; margin-bottom: 0.5rem;">
+                  Brand Preference
+                </label>
+                <select id="tshirt_brand" name="contact[tshirt_brand]"
+                        style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;">
+                  <option value="">Any Brand</option>
+                  <option value="Gildan">Gildan</option>
+                  <option value="Bella+Canvas">Bella+Canvas</option>
+                  <option value="American Apparel">American Apparel</option>
+                  <option value="Comfort Colors">Comfort Colors</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Custom Design Details -->
+          <div class="form-section">
+            <h3 style="font-size: 1.3rem; font-weight: 600; margin-bottom: 1rem; color: var(--accent-color);">
+              Custom Design Details
+            </h3>
+            
+            <div style="margin-bottom: 1rem;">
+              <label for="design_type" style="display: block; font-weight: 500; margin-bottom: 0.5rem;">
+                What would you like? *
+              </label>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                <label style="display: flex; align-items: center; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">
+                  <input type="radio" name="contact[design_type]" value="text" required style="margin-right: 0.5rem;">
+                  Custom Text
+                </label>
+                <label style="display: flex; align-items: center; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">
+                  <input type="radio" name="contact[design_type]" value="design" required style="margin-right: 0.5rem;">
+                  Custom Design/Logo
+                </label>
+                <label style="display: flex; align-items: center; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">
+                  <input type="radio" name="contact[design_type]" value="both" required style="margin-right: 0.5rem;">
+                  Both Text & Design
+                </label>
+                <label style="display: flex; align-items: center; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">
+                  <input type="radio" name="contact[design_type]" value="other" required style="margin-right: 0.5rem;">
+                  Other
+                </label>
+              </div>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+              <label for="custom_text" style="display: block; font-weight: 500; margin-bottom: 0.5rem;">
+                Custom Text (if applicable)
+              </label>
+              <textarea id="custom_text" name="contact[custom_text]" rows="3" placeholder="Enter the text you'd like on your t-shirt..."
+                        style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem; resize: vertical;"></textarea>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+              <label for="design_description" style="display: block; font-weight: 500; margin-bottom: 0.5rem;">
+                Design Description
+              </label>
+              <textarea id="design_description" name="contact[design_description]" rows="4" 
+                        placeholder="Describe your design idea, colors, style, placement, etc. Be as detailed as possible..."
+                        style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem; resize: vertical;"></textarea>
+            </div>
+
+            <div>
+              <label for="design_upload" style="display: block; font-weight: 500; margin-bottom: 0.5rem;">
+                Upload Design Files (optional)
+              </label>
+              <input type="file" id="design_upload" name="contact[design_files]" multiple accept="image/*,.pdf,.ai,.eps"
+                     style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;">
+              <small style="color: #666; font-size: 0.9rem;">
+                Accepted formats: JPG, PNG, PDF, AI, EPS. Max file size: 10MB per file.
+              </small>
+            </div>
+          </div>
+
+          <!-- Additional Information -->
+          <div class="form-section">
+            <h3 style="font-size: 1.3rem; font-weight: 600; margin-bottom: 1rem; color: var(--accent-color);">
+              Additional Information
+            </h3>
+            
+            <div style="margin-bottom: 1rem;">
+              <label for="quantity" style="display: block; font-weight: 500; margin-bottom: 0.5rem;">
+                Quantity Needed
+              </label>
+              <select id="quantity" name="contact[quantity]"
+                      style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;">
+                <option value="1">1 shirt</option>
+                <option value="2-5">2-5 shirts</option>
+                <option value="6-10">6-10 shirts</option>
+                <option value="11-25">11-25 shirts</option>
+                <option value="25+">25+ shirts</option>
+              </select>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+              <label for="timeline" style="display: block; font-weight: 500; margin-bottom: 0.5rem;">
+                When do you need this?
+              </label>
+              <select id="timeline" name="contact[timeline]"
+                      style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;">
+                <option value="no-rush">No rush</option>
+                <option value="1-week">Within 1 week</option>
+                <option value="2-weeks">Within 2 weeks</option>
+                <option value="1-month">Within 1 month</option>
+                <option value="custom">Custom timeline</option>
+              </select>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+              <label for="budget" style="display: block; font-weight: 500; margin-bottom: 0.5rem;">
+                Budget Range
+              </label>
+              <select id="budget" name="contact[budget]"
+                      style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;">
+                <option value="under-25">Under $25</option>
+                <option value="25-50">$25 - $50</option>
+                <option value="50-100">$50 - $100</option>
+                <option value="100-200">$100 - $200</option>
+                <option value="200+">$200+</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="additional_notes" style="display: block; font-weight: 500; margin-bottom: 0.5rem;">
+                Additional Notes or Special Requests
+              </label>
+              <textarea id="additional_notes" name="contact[additional_notes]" rows="3" 
+                        placeholder="Any other details, special requests, or questions..."
+                        style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem; resize: vertical;"></textarea>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <div style="text-align: center; margin-top: 2rem;">
+            <button type="submit" style="
+              background: linear-gradient(135deg, var(--accent-color), #B22222);
+              color: white;
+              border: none;
+              padding: 1rem 2rem;
+              font-size: 1.1rem;
+              font-weight: 600;
+              border-radius: 8px;
+              cursor: pointer;
+              transition: transform 0.2s ease, box-shadow 0.2s ease;
+              box-shadow: 0 4px 15px rgba(220, 20, 60, 0.3);
+            " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(220, 20, 60, 0.4)'" 
+               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(220, 20, 60, 0.3)'">
+              {{ section.settings.button_text | default: 'Submit Request' }}
+            </button>
+          </div>
+
+        </div>
+      {% endform %}
+
+    </div>
+
+    <!-- Information Section -->
+    {% if section.settings.show_info %}
+      <div class="info-section" style="margin-top: 2rem; padding: 1.5rem; background: rgba(220, 20, 60, 0.05); border-radius: 8px; border-left: 4px solid var(--accent-color);">
+        <h4 style="font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem; color: var(--accent-color);">
+          What happens next?
+        </h4>
+        <ul style="list-style: none; padding: 0; margin: 0;">
+          <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative;">
+            <span style="position: absolute; left: 0; color: var(--accent-color);">1.</span>
+            We'll review your request and get back to you within 24 hours
+          </li>
+          <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative;">
+            <span style="position: absolute; left: 0; color: var(--accent-color);">2.</span>
+            We'll provide a quote and timeline for your custom t-shirt
+          </li>
+          <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative;">
+            <span style="position: absolute; left: 0; color: var(--accent-color);">3.</span>
+            Once approved, we'll create and ship your custom design
+          </li>
+        </ul>
+      </div>
+    {% endif %}
+
+  </div>
+
+  <script>
+  // CACHE BUSTER - VERSION 3.0 - COMPLETE REWRITE
+  console.log('=== CUSTOM T-SHIRT REQUEST SCRIPT v3.0 ===');
+  console.log('Complete rewrite - NO external images');
+  
+  // Clear any existing timers or intervals
+  if (window.customTShirtTimer) {
+    clearTimeout(window.customTShirtTimer);
+  }
+  
+  document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded - starting v3.0 initialization...');
+    const canvas = document.getElementById('tshirt-preview');
+    const ctx = canvas.getContext('2d');
+    const modelFrontCanvas = document.getElementById('model-front-preview');
+    const modelFrontCtx = modelFrontCanvas.getContext('2d');
+    const modelSideCanvas = document.getElementById('model-side-preview');
+    const modelSideCtx = modelSideCanvas.getContext('2d');
+    
+    let uploadedImage = null;
+    let previewText = 'Your Text Here';
+    let currentView = 'flat'; // 'flat', 'model'
+    let currentModelAngle = 'front'; // 'front', 'side'
+    
+    // Old loadModelImages function removed - using direct custom model drawing
+
+    // Enhanced color palette with realistic t-shirt colors
+    const tshirtColors = [
+      { name: 'White', value: '#FFFFFF', gradient: 'linear-gradient(135deg, #FFFFFF 0%, #F8F9FA 100%)' },
+      { name: 'Black', value: '#000000', gradient: 'linear-gradient(135deg, #000000 0%, #1A1A1A 100%)' },
+      { name: 'Heather Grey', value: '#9CA3AF', gradient: 'linear-gradient(135deg, #9CA3AF 0%, #6B7280 100%)' },
+      { name: 'Dark Heather', value: '#374151', gradient: 'linear-gradient(135deg, #374151 0%, #1F2937 100%)' },
+      { name: 'Navy', value: '#1E3A8A', gradient: 'linear-gradient(135deg, #1E3A8A 0%, #1E40AF 100%)' },
+      { name: 'Royal Blue', value: '#2563EB', gradient: 'linear-gradient(135deg, #2563EB 0%, #3B82F6 100%)' },
+      { name: 'Red', value: '#DC2626', gradient: 'linear-gradient(135deg, #DC2626 0%, #EF4444 100%)' },
+      { name: 'Maroon', value: '#7F1D1D', gradient: 'linear-gradient(135deg, #7F1D1D 0%, #991B1B 100%)' },
+      { name: 'Forest Green', value: '#166534', gradient: 'linear-gradient(135deg, #166534 0%, #16A34A 100%)' },
+      { name: 'Purple', value: '#7C2D12', gradient: 'linear-gradient(135deg, #7C2D12 0%, #9333EA 100%)' },
+      { name: 'Orange', value: '#EA580C', gradient: 'linear-gradient(135deg, #EA580C 0%, #FB923C 100%)' },
+      { name: 'Pink', value: '#BE185D', gradient: 'linear-gradient(135deg, #BE185D 0%, #EC4899 100%)' },
+      { name: 'Brown', value: '#92400E', gradient: 'linear-gradient(135deg, #92400E 0%, #D97706 100%)' },
+      { name: 'Yellow', value: '#FDE047', gradient: 'linear-gradient(135deg, #FDE047 0%, #FBBF24 100%)' },
+      { name: 'Ice Grey', value: '#F3F4F6', gradient: 'linear-gradient(135deg, #F3F4F6 0%, #E5E7EB 100%)' },
+      { name: 'Charcoal', value: '#1F2937', gradient: 'linear-gradient(135deg, #1F2937 0%, #111827 100%)' },
+      { name: 'Heather Navy', value: '#1E40AF', gradient: 'linear-gradient(135deg, #1E40AF 0%, #1D4ED8 100%)' },
+      { name: 'Heather Red', value: '#DC2626', gradient: 'linear-gradient(135deg, #DC2626 0%, #F87171 100%)' },
+      { name: 'Military Green', value: '#365314', gradient: 'linear-gradient(135deg, #365314 0%, #4D7C0F 100%)' },
+      { name: 'Heather Purple', value: '#7C3AED', gradient: 'linear-gradient(135deg, #7C3AED 0%, #A855F7 100%)' },
+      { name: 'Cardinal Red', value: '#B91C1C', gradient: 'linear-gradient(135deg, #B91C1C 0%, #DC2626 100%)' },
+      { name: 'Dark Chocolate', value: '#451A03', gradient: 'linear-gradient(135deg, #451A03 0%, #92400E 100%)' },
+      { name: 'Heather Royal', value: '#1D4ED8', gradient: 'linear-gradient(135deg, #1D4ED8 0%, #2563EB 100%)' },
+      { name: 'Graphite Heather', value: '#4B5563', gradient: 'linear-gradient(135deg, #4B5563 0%, #6B7280 100%)' }
+    ];
+
+    let selectedColor = tshirtColors[0]; // Default to White
+
+    // Create color swatches
+    function createColorSwatches() {
+      const swatchContainer = document.querySelector('.tshirt-color-swatches');
+      swatchContainer.innerHTML = '';
+
+      tshirtColors.forEach((color, index) => {
+        const swatch = document.createElement('div');
+        swatch.className = 'color-swatch';
+        swatch.dataset.color = color.value;
+        swatch.dataset.name = color.name;
+        swatch.title = color.name;
+        
+        // Add active class to first swatch (White)
+        if (index === 0) {
+          swatch.classList.add('active');
+        }
+
+        swatch.style.cssText = `
+          width: 40px;
+          height: 48px;
+          background: ${color.gradient};
+          border: 2px solid ${index === 0 ? 'var(--accent-color)' : '#ddd'};
+          cursor: pointer;
+          transition: all 0.2s ease;
+          position: relative;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+          clip-path: polygon(15% 0%, 85% 0%, 95% 15%, 95% 25%, 85% 30%, 95% 35%, 95% 45%, 85% 50%, 95% 55%, 95% 65%, 85% 70%, 95% 75%, 95% 85%, 85% 100%, 15% 100%, 5% 85%, 5% 75%, 15% 70%, 5% 65%, 5% 55%, 15% 50%, 5% 45%, 5% 35%, 15% 30%, 5% 25%, 5% 15%);
+        `;
+
+        // Add hover effects
+        swatch.addEventListener('mouseenter', function() {
+          this.style.transform = 'scale(1.1)';
+          this.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+        });
+
+        swatch.addEventListener('mouseleave', function() {
+          if (!this.classList.contains('active')) {
+            this.style.transform = 'scale(1)';
+            this.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+          }
+        });
+
+        // Add click handler
+        swatch.addEventListener('click', function() {
+          // Remove active class from all swatches
+          document.querySelectorAll('.color-swatch').forEach(s => {
+            s.classList.remove('active');
+            s.style.border = '2px solid #ddd';
+          });
+
+          // Add active class to clicked swatch
+          this.classList.add('active');
+          this.style.border = '2px solid var(--accent-color)';
+          this.style.transform = 'scale(1.05)';
+          this.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+
+          // Update selected color
+          selectedColor = tshirtColors.find(c => c.name === this.dataset.name);
+          document.getElementById('selected-color-name').textContent = selectedColor.name;
+
+          // Update form field
+          const tshirtColorInput = document.querySelector('input[name="contact[tshirt_color]"]');
+          if (tshirtColorInput) {
+            tshirtColorInput.value = selectedColor.name;
+          }
+
+          // Redraw t-shirt
+          drawTShirt();
+          if (currentView === 'model') {
+            drawSimpleModel(modelFrontCtx, modelFrontCanvas, 'front');
+            drawSimpleModel(modelSideCtx, modelSideCanvas, 'side');
+          }
+        });
+
+        swatchContainer.appendChild(swatch);
+      });
+    }
+
+    // Initialize canvas
+    function drawTShirt() {
+      const position = document.getElementById('preview-position').value;
+      const size = parseInt(document.getElementById('preview-size').value);
+
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw t-shirt silhouette with selected color using better shape
+      ctx.fillStyle = selectedColor.value;
+      
+      // Main body (rounded rectangle)
+      ctx.beginPath();
+      ctx.roundRect(50, 80, 200, 280, 15);
+      ctx.fill();
+      
+      // Left sleeve
+      ctx.beginPath();
+      ctx.roundRect(30, 100, 40, 120, 8);
+      ctx.fill();
+      
+      // Right sleeve
+      ctx.beginPath();
+      ctx.roundRect(230, 100, 40, 120, 8);
+      ctx.fill();
+      
+      // Neck area
+      ctx.beginPath();
+      ctx.roundRect(60, 60, 180, 40, 10);
+      ctx.fill();
+
+      // Draw neck opening (more realistic)
+      ctx.fillStyle = '#f8f9fa';
+      ctx.beginPath();
+      ctx.roundRect(75, 75, 150, 25, 12);
+      ctx.fill();
+      
+      // Add subtle shadow to t-shirt
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.1)';
+      ctx.shadowBlur = 8;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 4;
+      
+      // Redraw t-shirt with shadow
+      ctx.fillStyle = selectedColor.value;
+      ctx.beginPath();
+      ctx.roundRect(50, 84, 200, 280, 15);
+      ctx.fill();
+      
+      ctx.beginPath();
+      ctx.roundRect(30, 104, 40, 120, 8);
+      ctx.fill();
+      
+      ctx.beginPath();
+      ctx.roundRect(230, 104, 40, 120, 8);
+      ctx.fill();
+      
+      ctx.beginPath();
+      ctx.roundRect(60, 64, 180, 40, 10);
+      ctx.fill();
+      
+      // Reset shadow
+      ctx.shadowColor = 'transparent';
+      ctx.shadowBlur = 0;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 0;
+
+      // Draw design based on position and type
+      if (uploadedImage) {
+        drawImage(position, size);
+      } else {
+        drawText(position, size);
+      }
+    }
+
+    function drawText(position, size) {
+      // Use a better font and add stroke for visibility
+      ctx.font = `bold ${size}px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      let x, y;
+      switch (position) {
+        case 'center':
+          x = canvas.width / 2;
+          y = 220;
+          break;
+        case 'left':
+          x = 120;
+          y = 200;
+          break;
+        case 'right':
+          x = 180;
+          y = 200;
+          break;
+        case 'back':
+          x = canvas.width / 2;
+          y = 280;
+          break;
+        case 'sleeve':
+          x = 50;
+          y = 180;
+          break;
+        default:
+          x = canvas.width / 2;
+          y = 220;
+      }
+
+      // Add stroke for better visibility on all t-shirt colors
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 3;
+      ctx.strokeText(previewText, x, y);
+      
+      // Add fill
+      ctx.fillStyle = '#000000';
+      ctx.fillText(previewText, x, y);
+      
+      // Reset stroke
+      ctx.strokeStyle = 'transparent';
+      ctx.lineWidth = 0;
+    }
+
+    function drawImage(position, size) {
+      if (!uploadedImage) return;
+
+      // Calculate aspect ratio to maintain image proportions
+      const aspectRatio = uploadedImage.width / uploadedImage.height;
+      let drawWidth, drawHeight;
+      
+      if (aspectRatio > 1) {
+        // Landscape image
+        drawWidth = size;
+        drawHeight = size / aspectRatio;
+      } else {
+        // Portrait or square image
+        drawHeight = size;
+        drawWidth = size * aspectRatio;
+      }
+
+      let x, y;
+      switch (position) {
+        case 'center':
+          x = (canvas.width - drawWidth) / 2;
+          y = 180 - drawHeight / 2;
+          break;
+        case 'left':
+          x = 100 - drawWidth / 2;
+          y = 160 - drawHeight / 2;
+          break;
+        case 'right':
+          x = 180 - drawWidth / 2;
+          y = 160 - drawHeight / 2;
+          break;
+        case 'back':
+          x = (canvas.width - drawWidth) / 2;
+          y = 250 - drawHeight / 2;
+          break;
+        case 'sleeve':
+          x = 50 - drawWidth / 2;
+          y = 160 - drawHeight / 2;
+          break;
+        default:
+          x = (canvas.width - drawWidth) / 2;
+          y = 180 - drawHeight / 2;
+      }
+
+      // Enable image smoothing for better quality
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+      
+      // Add a subtle shadow for better visibility
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+      ctx.shadowBlur = 4;
+      ctx.shadowOffsetX = 2;
+      ctx.shadowOffsetY = 2;
+      
+      ctx.drawImage(uploadedImage, x, y, drawWidth, drawHeight);
+      
+      // Reset shadow
+      ctx.shadowColor = 'transparent';
+      ctx.shadowBlur = 0;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 0;
+    }
+
+    // Event listeners
+    document.getElementById('preview-position').addEventListener('change', function() {
+      drawTShirt();
+      if (currentView === 'model') {
+        drawSimpleModel(modelFrontCtx, modelFrontCanvas, 'front');
+        drawSimpleModel(modelSideCtx, modelSideCanvas, 'side');
+      }
+    });
+    
+    document.getElementById('preview-size').addEventListener('input', function() {
+      document.getElementById('size-value').textContent = this.value + 'px';
+      drawTShirt();
+      if (currentView === 'model') {
+        drawSimpleModel(modelFrontCtx, modelFrontCanvas, 'front');
+        drawSimpleModel(modelSideCtx, modelSideCanvas, 'side');
+      }
+    });
+
+    document.getElementById('preview-upload').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          uploadedImage = new Image();
+          uploadedImage.onload = function() {
+            drawTShirt();
+            if (currentView === 'model') {
+              drawSimpleModel(modelFrontCtx, modelFrontCanvas, 'front');
+              drawSimpleModel(modelSideCtx, modelSideCanvas, 'side');
+            }
+          };
+          uploadedImage.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    document.getElementById('clear-preview').addEventListener('click', function() {
+      uploadedImage = null;
+      document.getElementById('preview-upload').value = '';
+      drawTShirt();
+      if (currentView === 'model') {
+        drawSimpleModel(modelFrontCtx, modelFrontCanvas, 'front');
+        drawSimpleModel(modelSideCtx, modelSideCanvas, 'side');
+      }
+    });
+
+    // Sync with form fields
+    const textInput = document.getElementById('custom_text');
+    if (textInput) {
+      textInput.addEventListener('input', function() {
+        previewText = this.value || 'Your Text Here';
+        if (!uploadedImage) {
+          drawTShirt();
+          if (currentView === 'model') {
+            drawSimpleModel(modelFrontCtx, modelFrontCanvas, 'front');
+            drawSimpleModel(modelSideCtx, modelSideCanvas, 'side');
+          }
+        }
+      });
+    }
+
+
+    // Old model functions removed - using custom drawn models instead
+    
+    // View toggle functionality
+    document.getElementById('flat-view-btn').addEventListener('click', function() {
+      console.log('Switching to flat view');
+      currentView = 'flat';
+      document.getElementById('flat-view').style.display = 'block';
+      document.getElementById('model-view').style.display = 'none';
+      
+      // Update button styles
+      document.querySelectorAll('.view-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.style.background = 'white';
+        btn.style.color = '#666';
+        btn.style.border = '2px solid #ddd';
+      });
+      this.classList.add('active');
+      this.style.background = 'var(--accent-color)';
+      this.style.color = 'white';
+      this.style.border = '2px solid var(--accent-color)';
+    });
+    
+    document.getElementById('model-view-btn').addEventListener('click', function() {
+      console.log('Switching to model view');
+      currentView = 'model';
+      document.getElementById('flat-view').style.display = 'none';
+      document.getElementById('model-view').style.display = 'block';
+      
+      // Ensure custom models are drawn when switching to model view
+      setTimeout(function() {
+        console.log('Drawing models for model view...');
+        drawSimpleModel(modelFrontCtx, modelFrontCanvas, 'front');
+        drawSimpleModel(modelSideCtx, modelSideCanvas, 'side');
+      }, 100);
+      
+      // Update button styles
+      document.querySelectorAll('.view-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.style.background = 'white';
+        btn.style.color = '#666';
+        btn.style.border = '2px solid #ddd';
+      });
+      this.classList.add('active');
+      this.style.background = 'var(--accent-color)';
+      this.style.color = 'white';
+      this.style.border = '2px solid var(--accent-color)';
+    });
+    
+    // Model angle toggle functionality
+    document.getElementById('front-model-btn').addEventListener('click', function() {
+      currentModelAngle = 'front';
+      document.getElementById('front-model').style.display = 'block';
+      document.getElementById('side-model').style.display = 'none';
+      
+      // Update button styles
+      document.querySelectorAll('.angle-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.style.background = 'white';
+        btn.style.color = '#666';
+        btn.style.border = '2px solid #ddd';
+      });
+      this.classList.add('active');
+      this.style.background = 'var(--accent-color)';
+      this.style.color = 'white';
+      this.style.border = '2px solid var(--accent-color)';
+    });
+    
+    document.getElementById('side-model-btn').addEventListener('click', function() {
+      currentModelAngle = 'side';
+      document.getElementById('front-model').style.display = 'none';
+      document.getElementById('side-model').style.display = 'block';
+      
+      // Update button styles
+      document.querySelectorAll('.angle-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.style.background = 'white';
+        btn.style.color = '#666';
+        btn.style.border = '2px solid #ddd';
+      });
+      this.classList.add('active');
+      this.style.background = 'var(--accent-color)';
+      this.style.color = 'white';
+      this.style.border = '2px solid var(--accent-color)';
+    });
+    
+    // Old initializeModelViews function removed - using direct custom model drawing
+    
+    function tryAlternativeImageLoading() {
+      console.log('Trying alternative image loading method...');
+      // Create a simple model silhouette using canvas drawing
+      drawSimpleModel(modelFrontCtx, modelFrontCanvas, 'front');
+      drawSimpleModel(modelSideCtx, modelSideCanvas, 'side');
+    }
+    
+    function drawSimpleModel(ctx, canvas, view) {
+      console.log('Drawing simple model for', view, 'view');
+      
+      if (!ctx || !canvas) {
+        console.error('Canvas or context not available, trying basic t-shirt');
+        drawBasicTShirt(ctx, canvas, view);
+        return;
+      }
+      
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Set background
+      ctx.fillStyle = '#f8f9fa';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw a simple model silhouette
+      ctx.fillStyle = '#e9ecef';
+      ctx.strokeStyle = '#dee2e6';
+      ctx.lineWidth = 2;
+      
+      if (view === 'front') {
+        // Draw front view model silhouette
+        // Head
+        ctx.beginPath();
+        ctx.arc(canvas.width/2, 80, 30, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.stroke();
+        
+        // Body
+        ctx.beginPath();
+        ctx.roundRect(canvas.width/2 - 60, 110, 120, 200, 10);
+        ctx.fill();
+        ctx.stroke();
+        
+        // Arms
+        ctx.beginPath();
+        ctx.roundRect(canvas.width/2 - 90, 120, 30, 150, 8);
+        ctx.fill();
+        ctx.stroke();
+        
+        ctx.beginPath();
+        ctx.roundRect(canvas.width/2 + 60, 120, 30, 150, 8);
+        ctx.fill();
+        ctx.stroke();
+        
+        // T-shirt area (where design goes)
+        ctx.fillStyle = selectedColor.value;
+        ctx.beginPath();
+        ctx.roundRect(canvas.width/2 - 50, 130, 100, 120, 8);
+        ctx.fill();
+        
+        // Draw design on t-shirt
+        drawDesignOnSimpleModel(ctx, canvas.width/2, 190, 80, view);
+        
+        // Add label
+        ctx.fillStyle = '#6c757d';
+        ctx.font = '14px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Front Model View', canvas.width/2, canvas.height - 10);
+        
+      } catch (error) {
+        console.error('Error drawing front model:', error);
+        // Simple fallback
+        drawBasicTShirt(ctx, canvas, 'front');
+      }
+        
+      } else {
+        // Draw side view model silhouette
+        // Head (side profile)
+        ctx.beginPath();
+        ctx.ellipse(canvas.width/2, 80, 25, 30, 0, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.stroke();
+        
+        // Body (side profile)
+        ctx.beginPath();
+        ctx.roundRect(canvas.width/2 - 40, 110, 80, 200, 10);
+        ctx.fill();
+        ctx.stroke();
+        
+        // Arms (side profile)
+        ctx.beginPath();
+        ctx.roundRect(canvas.width/2 + 40, 120, 20, 150, 8);
+        ctx.fill();
+        ctx.stroke();
+        
+        // T-shirt area (where design goes)
+        ctx.fillStyle = selectedColor.value;
+        ctx.beginPath();
+        ctx.roundRect(canvas.width/2 - 30, 130, 60, 120, 8);
+        ctx.fill();
+        
+        // Draw design on t-shirt
+        drawDesignOnSimpleModel(ctx, canvas.width/2, 190, 60, view);
+        
+        // Add label
+        ctx.fillStyle = '#6c757d';
+        ctx.font = '14px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Side Model View', canvas.width/2, canvas.height - 10);
+        
+      } catch (error) {
+        console.error('Error drawing side model:', error);
+        // Simple fallback
+        drawBasicTShirt(ctx, canvas, 'side');
+      }
+      }
+    }
+    
+    function drawBasicTShirt(ctx, canvas, view) {
+      console.log('Drawing basic t-shirt for', view);
+      
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Set background
+      ctx.fillStyle = '#f8f9fa';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw simple t-shirt
+      ctx.fillStyle = selectedColor.value;
+      ctx.fillRect(50, 80, 200, 280); // Main body
+      ctx.fillRect(30, 100, 40, 120); // Left sleeve
+      ctx.fillRect(230, 100, 40, 120); // Right sleeve
+      
+      // Draw neck opening
+      ctx.fillStyle = '#f0f0f0';
+      ctx.fillRect(70, 70, 160, 30);
+      
+      // Draw design
+      if (uploadedImage) {
+        const size = parseInt(document.getElementById('preview-size').value);
+        const aspectRatio = uploadedImage.width / uploadedImage.height;
+        let drawWidth, drawHeight;
+        
+        if (aspectRatio > 1) {
+          drawWidth = size;
+          drawHeight = size / aspectRatio;
+        } else {
+          drawHeight = size;
+          drawWidth = size * aspectRatio;
+        }
+        
+        ctx.drawImage(uploadedImage, (canvas.width - drawWidth) / 2, 180, drawWidth, drawHeight);
+      } else {
+        ctx.fillStyle = '#000000';
+        ctx.font = `bold 24px Arial`;
+        ctx.textAlign = 'center';
+        ctx.fillText(previewText, canvas.width / 2, 200);
+      }
+      
+      // Add label
+      ctx.fillStyle = '#6c757d';
+      ctx.font = '14px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText(view.charAt(0).toUpperCase() + view.slice(1) + ' Model View', canvas.width/2, canvas.height - 10);
+    }
+    
+    function drawDesignOnSimpleModel(ctx, x, y, size, view) {
+      const designSize = parseInt(document.getElementById('preview-size').value);
+      const scaledSize = (designSize / 100) * size;
+      
+      if (uploadedImage) {
+        // Calculate aspect ratio
+        const aspectRatio = uploadedImage.width / uploadedImage.height;
+        let drawWidth, drawHeight;
+        
+        if (aspectRatio > 1) {
+          drawWidth = scaledSize;
+          drawHeight = scaledSize / aspectRatio;
+        } else {
+          drawHeight = scaledSize;
+          drawWidth = scaledSize * aspectRatio;
+        }
+        
+        // Enable image smoothing
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        
+        // Add subtle shadow
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+        ctx.shadowBlur = 4;
+        ctx.shadowOffsetX = 2;
+        ctx.shadowOffsetY = 2;
+        
+        ctx.drawImage(uploadedImage, x - drawWidth / 2, y - drawHeight / 2, drawWidth, drawHeight);
+        
+        // Reset shadow
+        ctx.shadowColor = 'transparent';
+        ctx.shadowBlur = 0;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+      } else {
+        // Draw text
+        ctx.font = `bold ${scaledSize * 0.8}px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        
+        // Add stroke for visibility
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2;
+        ctx.strokeText(previewText, x, y);
+        
+        // Add fill
+        ctx.fillStyle = '#000000';
+        ctx.fillText(previewText, x, y);
+        
+        // Reset stroke
+        ctx.strokeStyle = 'transparent';
+        ctx.lineWidth = 0;
+      }
+    }
+    
+    // V3.0 INITIALIZATION - COMPLETE REWRITE
+    console.log('=== V3.0 INITIALIZATION START ===');
+    
+    // Create color swatches first
+    createColorSwatches();
+    
+    // Draw flat t-shirt
+    drawTShirt();
+    
+    // FORCE CUSTOM MODEL DRAWING - NO DELAYS
+    console.log('Drawing custom models IMMEDIATELY...');
+    drawSimpleModel(modelFrontCtx, modelFrontCanvas, 'front');
+    drawSimpleModel(modelSideCtx, modelSideCanvas, 'side');
+    console.log('Custom models drawn - should be visible now!');
+    
+    // Verify elements exist
+    console.log('Verifying elements...');
+    console.log('Flat view button exists:', !!document.getElementById('flat-view-btn'));
+    console.log('Model view button exists:', !!document.getElementById('model-view-btn'));
+    console.log('Model view div exists:', !!document.getElementById('model-view'));
+    console.log('=== V3.0 INITIALIZATION COMPLETE ===');
+  });
+  </script>
+  
+  <!-- CACHE BUSTER SCRIPT - VERSION 3.0 -->
+  <script>
+  console.log('=== CACHE BUSTER SCRIPT v3.0 LOADED ===');
+  
+  // Override any existing model loading functions
+  window.loadModelImages = function() {
+    console.log('OVERRIDE: loadModelImages called - doing nothing');
+  };
+  
+  window.drawModelFront = function() {
+    console.log('OVERRIDE: drawModelFront called - doing nothing');
+  };
+  
+  window.drawModelSide = function() {
+    console.log('OVERRIDE: drawModelSide called - doing nothing');
+  };
+  
+  // Clear any existing image loading attempts
+  if (window.modelFrontImage) {
+    window.modelFrontImage = null;
+  }
+  if (window.modelSideImage) {
+    window.modelSideImage = null;
+  }
+  
+  console.log('=== CACHE BUSTER OVERRIDES COMPLETE ===');
+  </script>
+  
+  <!-- NUCLEAR OPTION - COMPLETELY NEW SCRIPT -->
+  <script>
+  console.log('=== NUCLEAR OPTION SCRIPT v4.0 ===');
+  
+  // Completely override any existing functionality
+  window.addEventListener('load', function() {
+    console.log('=== NUCLEAR SCRIPT v4.0 LOADING ===');
+    
+    // Get canvas elements
+    const flatCanvas = document.getElementById('tshirt-preview');
+    const frontCanvas = document.getElementById('model-front-preview');
+    const sideCanvas = document.getElementById('model-side-preview');
+    
+    if (flatCanvas && frontCanvas && sideCanvas) {
+      console.log('All canvas elements found - drawing custom models');
+      
+      // Draw custom models immediately
+      drawCustomModel(frontCanvas, 'front');
+      drawCustomModel(sideCanvas, 'side');
+      
+      console.log('Custom models drawn successfully');
+    } else {
+      console.log('Canvas elements not found');
+    }
+  });
+  
+  function drawCustomModel(canvas, view) {
+    console.log('Drawing custom model for', view, 'on canvas:', canvas);
+    
+    if (!canvas) {
+      console.error('Canvas not found for', view);
+      return;
+    }
+    
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+      console.error('Canvas context not found for', view);
+      return;
+    }
+    
+    console.log('Canvas dimensions:', canvas.width, 'x', canvas.height);
+    
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Set background
+    ctx.fillStyle = '#f8f9fa';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    console.log('Background drawn for', view);
+    
+    // Test drawing - simple rectangle first
+    ctx.fillStyle = '#ff0000';
+    ctx.fillRect(10, 10, 50, 50);
+    console.log('Test rectangle drawn for', view);
+    
+    // Draw simple model silhouette
+    ctx.fillStyle = '#e9ecef';
+    ctx.strokeStyle = '#dee2e6';
+    ctx.lineWidth = 2;
+    
+    if (view === 'front') {
+      // Draw front view model
+      ctx.beginPath();
+      ctx.arc(canvas.width/2, 80, 30, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.stroke();
+      
+      // Body
+      ctx.beginPath();
+      ctx.rect(canvas.width/2 - 60, 110, 120, 200);
+      ctx.fill();
+      ctx.stroke();
+      
+      // Arms
+      ctx.beginPath();
+      ctx.rect(canvas.width/2 - 90, 120, 30, 150);
+      ctx.fill();
+      ctx.stroke();
+      
+      ctx.beginPath();
+      ctx.rect(canvas.width/2 + 60, 120, 30, 150);
+      ctx.fill();
+      ctx.stroke();
+      
+      // T-shirt area
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.rect(canvas.width/2 - 50, 130, 100, 120);
+      ctx.fill();
+      
+      // Add text
+      ctx.fillStyle = '#000000';
+      ctx.font = 'bold 16px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText('Your Text Here', canvas.width/2, 190);
+      
+      // Label
+      ctx.fillStyle = '#6c757d';
+      ctx.font = '14px Arial';
+      ctx.fillText('Front Model View', canvas.width/2, canvas.height - 10);
+      
+    } else {
+      // Draw side view model
+      ctx.beginPath();
+      ctx.ellipse(canvas.width/2, 80, 25, 30, 0, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.stroke();
+      
+      // Body
+      ctx.beginPath();
+      ctx.rect(canvas.width/2 - 40, 110, 80, 200);
+      ctx.fill();
+      ctx.stroke();
+      
+      // Arm
+      ctx.beginPath();
+      ctx.rect(canvas.width/2 + 40, 120, 20, 150);
+      ctx.fill();
+      ctx.stroke();
+      
+      // T-shirt area
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.rect(canvas.width/2 - 30, 130, 60, 120);
+      ctx.fill();
+      
+      // Add text
+      ctx.fillStyle = '#000000';
+      ctx.font = 'bold 14px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText('Your Text Here', canvas.width/2, 190);
+      
+      // Label
+      ctx.fillStyle = '#6c757d';
+      ctx.font = '14px Arial';
+      ctx.fillText('Side Model View', canvas.width/2, canvas.height - 10);
+    }
+  }
+  
+  console.log('=== NUCLEAR SCRIPT v4.0 LOADED ===');
+  </script>
+  
+  <!-- DISABLE IMAGE LOADING COMPLETELY -->
+  <script>
+  console.log('=== DISABLING IMAGE LOADING ===');
+  
+  // Override Image constructor to prevent any image loading
+  const OriginalImage = window.Image;
+  window.Image = function() {
+    console.log('Image loading blocked by v4.0');
+    const fakeImage = {
+      onload: null,
+      onerror: null,
+      src: '',
+      width: 0,
+      height: 0
+    };
+    
+    // Simulate immediate error
+    setTimeout(() => {
+      if (fakeImage.onerror) {
+        fakeImage.onerror();
+      }
+    }, 1);
+    
+    return fakeImage;
+  };
+  
+  // Copy static properties
+  Object.setPrototypeOf(window.Image, OriginalImage);
+  
+  console.log('=== IMAGE LOADING DISABLED ===');
+  </script>
+
+  <style>
+    /* Enhanced color swatch styling */
+    .tshirt-color-swatches {
+      display: grid !important;
+      grid-template-columns: repeat(6, 1fr) !important;
+      gap: 0.5rem !important;
+      margin-bottom: 0.5rem !important;
+    }
+
+    .color-swatch {
+      width: 40px !important;
+      height: 48px !important;
+      border: 2px solid #ddd !important;
+      cursor: pointer !important;
+      transition: all 0.2s ease !important;
+      position: relative !important;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      clip-path: polygon(15% 0%, 85% 0%, 95% 15%, 95% 25%, 85% 30%, 95% 35%, 95% 45%, 85% 50%, 95% 55%, 95% 65%, 85% 70%, 95% 75%, 95% 85%, 85% 100%, 15% 100%, 5% 85%, 5% 75%, 15% 70%, 5% 65%, 5% 55%, 15% 50%, 5% 45%, 5% 35%, 15% 30%, 5% 25%, 5% 15%) !important;
+    }
+
+    .color-swatch:hover {
+      transform: scale(1.1) !important;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
+    }
+
+    .color-swatch.active {
+      border: 2px solid var(--accent-color) !important;
+      transform: scale(1.05) !important;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
+    }
+
+    .color-swatch::before {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      right: 2px;
+      bottom: 2px;
+      background: rgba(255, 255, 255, 0.1);
+      clip-path: polygon(15% 0%, 85% 0%, 95% 15%, 95% 25%, 85% 30%, 95% 35%, 95% 45%, 85% 50%, 95% 55%, 95% 65%, 85% 70%, 95% 75%, 95% 85%, 85% 100%, 15% 100%, 5% 85%, 5% 75%, 15% 70%, 5% 65%, 5% 55%, 15% 50%, 5% 45%, 5% 35%, 15% 30%, 5% 25%, 5% 15%);
+      pointer-events: none;
+    }
+
+    .color-swatch::after {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      border: 2px solid transparent;
+      transition: border-color 0.2s ease;
+      clip-path: polygon(15% 0%, 85% 0%, 95% 15%, 95% 25%, 85% 30%, 95% 35%, 95% 45%, 85% 50%, 95% 55%, 95% 65%, 85% 70%, 95% 75%, 95% 85%, 85% 100%, 15% 100%, 5% 85%, 5% 75%, 15% 70%, 5% 65%, 5% 55%, 15% 50%, 5% 45%, 5% 35%, 15% 30%, 5% 25%, 5% 15%);
+      pointer-events: none;
+    }
+
+    .color-swatch.active::after {
+      border-color: var(--accent-color);
+    }
+
+    /* View toggle buttons */
+    .view-btn, .angle-btn {
+      transition: all 0.2s ease !important;
+    }
+    
+    .view-btn:hover, .angle-btn:hover {
+      transform: translateY(-1px) !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
+    }
+    
+    .model-view {
+      transition: all 0.3s ease;
+    }
+    
+    .model-container {
+      transition: all 0.3s ease;
+    }
+
+    @media (max-width: 768px) {
+      .preview-section .preview-canvas-container {
+        margin-bottom: 1rem;
+      }
+      
+      .preview-section > div:first-child {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+      }
+      
+      #tshirt-preview, #model-front-preview, #model-side-preview {
+        width: 250px !important;
+        height: 320px !important;
+      }
+      
+      .view-btn, .angle-btn {
+        padding: 0.4rem 0.8rem !important;
+        font-size: 0.8rem !important;
+      }
+      
+      .model-view-toggle, .model-angle-toggle {
+        gap: 0.3rem !important;
+      }
+
+      .tshirt-color-swatches {
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 0.3rem !important;
+      }
+      
+      .color-swatch {
+        width: 35px !important;
+        height: 42px !important;
+      }
+
+      .color-swatch {
+        width: 28px !important;
+        height: 28px !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .tshirt-color-swatches {
+        grid-template-columns: repeat(4, 1fr) !important;
+      }
+
+      .color-swatch {
+        width: 24px !important;
+        height: 24px !important;
+      }
+    }
+  </style>
+
+</section>
+
+{% schema %}
+{
+  "name": "🎨 Custom T-Shirt Request",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Request a Custom T-Shirt"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Get a personalized t-shirt with your own text or design. We'll help bring your vision to life!"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Submit Button Text",
+      "default": "Submit Request"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_info",
+      "label": "Show process information",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#f8f9fa"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#333"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#DC143C"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border color",
+      "default": "#ddd"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "pad_y",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Vertical padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "pad_x",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Horizontal padding",
+      "default": 20
+    }
+  ],
+  "presets": [
+    {
+      "name": "🎨 Custom T-Shirt Request"
+    }
+  ]
+}
+{% endschema %}

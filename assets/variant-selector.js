@@ -280,3 +280,4 @@
   window.VariantSelector = VariantSelector;
 
 })();
+

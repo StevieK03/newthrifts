@@ -6,8 +6,8 @@
 class SupabaseClient {
   constructor() {
     // Replace with your actual Supabase project URL and anon key
-    this.supabaseUrl = 'YOUR_SUPABASE_URL';
-    this.supabaseKey = 'YOUR_SUPABASE_ANON_KEY';
+    this.supabaseUrl = 'https://hcoujifzjntwfdnxtnxx.supabase.co';
+    this.supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhjb3VqaWZ6am50d2Zkbnh0bnh4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5NDQ3MDYsImV4cCI6MjA3NTUyMDcwNn0.UMV8SUQxL8tHXlORIh8H2dYfO2cm8K9o-lJXcaPyYZE';
     this.client = null;
     this.initialized = false;
   }
@@ -308,3 +308,4 @@ document.addEventListener('DOMContentLoaded', () => {
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = SupabaseClient;
 }
+

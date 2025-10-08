@@ -1,9 +1,6 @@
 -- Supabase Database Schema for Shopify Integration
 -- Run these SQL commands in your Supabase SQL Editor
 
--- Enable Row Level Security
-ALTER DATABASE postgres SET "app.jwt_secret" TO 'your-jwt-secret';
-
 -- Create analytics_events table for tracking user behavior
 CREATE TABLE IF NOT EXISTS analytics_events (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -292,3 +289,4 @@ BEGIN
   RETURN FOUND;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
+

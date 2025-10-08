@@ -19,3 +19,4 @@ document.addEventListener('click', function (e) {
   .catch(() => { window.location.href = el.getAttribute('href'); });
 });
 
+

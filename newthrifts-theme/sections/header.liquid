@@ -1,0 +1,775 @@
+<header id="Header-{{ section.id }}" class="nt-header" role="banner">
+  <div class="nt-header__wrap">
+    <!-- Logo -->
+    <div class="nt-header__logo">
+      {% if section.settings.logo != blank %}
+        <a href="{{ routes.root_url }}" class="nt-header__logo-link">
+          <img src="{{ section.settings.logo | img_url: '200x' }}" alt="{{ shop.name }}" class="nt-header__logo-img">
+        </a>
+      {% else %}
+        <a href="{{ routes.root_url }}" class="nt-header__logo-text">{{ section.settings.logo_text }}</a>
+      {% endif %}
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nt-header__nav" aria-label="Main navigation">
+      {% assign menu = section.settings.menu %}
+      {% if menu != blank %}
+        <ul class="nt-header__list">
+          {% for link in menu.links %}
+            <li><a href="{{ link.url }}" class="nt-header__link">{{ link.title }}</a></li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <!-- Fallback links if no menu chosen in settings -->
+        <ul class="nt-header__list">
+          <li><a href="/collections/all" class="nt-header__link">Shop</a></li>
+          <li><a href="/pages/about" class="nt-header__link">About</a></li>
+          <li><a href="/pages/contact" class="nt-header__link">Contact Us</a></li>
+        </ul>
+      {% endif %}
+      
+    </nav>
+
+    <!-- Dark Mode Toggle -->
+    <div class="nt-header__dark-mode">
+      <button class="dark-mode-toggle" id="dark-mode-toggle" aria-label="Toggle dark mode">
+        <span class="toggle-icon sun-icon">☀️</span>
+        <span class="toggle-icon moon-icon">🌙</span>
+      </button>
+    </div>
+
+    <!-- Cart Button -->
+    <div class="nt-header__cart">
+      <a href="{{ routes.cart_url }}" class="nt-header__cart-link" aria-label="View cart">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="nt-header__cart-icon">
+          <path d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.5 5.1 16.5H17M17 13V17C17 17.6 16.6 18 16 18H8C7.4 18 7 17.6 7 17V13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="nt-header__cart-count" id="cart-count">{{ cart.item_count }}</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<style>
+  /* ===== Modern Glassmorphism Header ===== */
+  #Header-{{ section.id }}{
+    background: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    position: relative;
+    z-index: 50;
+    box-shadow: none;
+    border: none;
+    border-radius: 0;
+  }
+  #Header-{{ section.id }} *{ box-sizing:border-box }
+  #Header-{{ section.id }} .nt-header__wrap{
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between;
+    padding: 20px 30px;
+    backdrop-filter: none !important; 
+    -webkit-backdrop-filter: none !important;
+    gap: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
+    flex-wrap: nowrap;
+  }
+  
+  /* Cart Button Styling - Matches navigation buttons */
+  #Header-{{ section.id }} .nt-header__cart {
+    display: flex;
+    align-items: center;
+  }
+  
+  #Header-{{ section.id }} .nt-header__cart-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 12px 20px;
+    border-radius: 50px;
+    text-decoration: none;
+    color: #1f2937 !important;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    transition: all 0.3s ease;
+    min-width: 56px;
+    height: 48px;
+    flex-shrink: 0;
+  }
+  
+  #Header-{{ section.id }} .nt-header__cart-link:hover {
+    background: rgba(255, 255, 255, 0.25);
+    color: #1f2937 !important;
+    transform: translateY(-1px);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+  
+  #Header-{{ section.id }} .nt-header__cart-icon {
+    color: #1f2937;
+    transition: all 0.3s ease;
+  }
+  
+  #Header-{{ section.id }} .nt-header__cart-link:hover .nt-header__cart-icon {
+    transform: scale(1.05);
+    color: #374151;
+  }
+  
+  #Header-{{ section.id }} .nt-header__cart-count {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: #dc2626;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    min-width: 20px;
+  }
+  
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+  
+  /* Mobile touch improvements */
+  @media (max-width: 768px) {
+    #Header-{{ section.id }} .nt-header__link:active {
+      transform: scale(0.95);
+      transition: transform 0.1s ease;
+    }
+    
+    #Header-{{ section.id }} .nt-header__cart-link:active {
+      transform: scale(0.95);
+      transition: transform 0.1s ease;
+    }
+    
+    #Header-{{ section.id }} .wishlist-toggle:active {
+      transform: scale(0.95);
+      transition: transform 0.1s ease;
+    }
+    
+    /* Improved scrollbar for navigation */
+    #Header-{{ section.id }} .nt-header__nav::-webkit-scrollbar {
+      height: 2px;
+    }
+    
+    #Header-{{ section.id }} .nt-header__nav::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 1px;
+    }
+    
+    #Header-{{ section.id }} .nt-header__nav::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 1px;
+    }
+  }
+  
+  #Header-{{ section.id }} .nt-header__cart-count:empty {
+    display: none;
+  }
+
+  /* Dark Mode Toggle Styling */
+  #Header-{{ section.id }} .nt-header__dark-mode {
+    display: flex;
+    align-items: center;
+    margin-right: 16px;
+  }
+
+  #Header-{{ section.id }} .dark-mode-toggle {
+    position: relative;
+    width: 50px;
+    height: 26px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 13px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+  }
+
+  #Header-{{ section.id }} .dark-mode-toggle::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 22px;
+    height: 22px;
+    background: #1f2937;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  #Header-{{ section.id }} .dark-mode-toggle.active {
+    background: rgba(59, 130, 246, 0.3);
+    border-color: rgba(59, 130, 246, 0.5);
+  }
+
+  #Header-{{ section.id }} .dark-mode-toggle.active::before {
+    transform: translateX(24px);
+    background: #1f2937;
+  }
+
+  #Header-{{ section.id }} .dark-mode-toggle:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+  }
+
+  #Header-{{ section.id }} .dark-mode-toggle .toggle-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 12px;
+    color: #1f2937;
+    transition: all 0.3s ease;
+    z-index: 1;
+  }
+
+  #Header-{{ section.id }} .dark-mode-toggle .sun-icon {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  #Header-{{ section.id }} .dark-mode-toggle .moon-icon {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(180deg);
+  }
+
+  #Header-{{ section.id }} .dark-mode-toggle.active .sun-icon {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(180deg);
+  }
+
+  #Header-{{ section.id }} .dark-mode-toggle.active .moon-icon {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  /* Dark Mode Header Styling */
+  [data-theme="dark"] #Header-{{ section.id }} {
+    background: var(--bg-primary, #0f172a) !important; /* Same solid color as footer */
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid var(--border-primary, #334155) !important;
+    box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.5)) !important;
+  }
+
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__logo-text {
+    color: var(--text-primary, #f8fafc) !important;
+    text-shadow: 0 0 10px rgba(96, 165, 250, 0.3);
+  }
+
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__link {
+    color: var(--text-primary, #f8fafc) !important;
+    background: rgba(71, 85, 105, 0.2) !important;
+    border: 1px solid var(--border-primary, #334155) !important;
+    transition: all 0.3s ease;
+  }
+
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__link:hover {
+    background: rgba(59, 130, 246, 0.2) !important;
+    border-color: var(--button-primary, #3b82f6) !important;
+    color: var(--text-accent, #60a5fa) !important;
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.3) !important;
+  }
+
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__cart-link {
+    color: var(--text-primary, #f8fafc) !important;
+    background: rgba(71, 85, 105, 0.2) !important;
+    border: 1px solid var(--border-primary, #334155) !important;
+  }
+
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__cart-link:hover {
+    background: rgba(59, 130, 246, 0.2) !important;
+    border-color: var(--button-primary, #3b82f6) !important;
+    color: var(--text-accent, #60a5fa) !important;
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.3) !important;
+  }
+
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__cart-icon {
+    color: var(--text-primary, #f8fafc) !important;
+  }
+
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__cart-link:hover .nt-header__cart-icon {
+    color: var(--text-accent, #60a5fa) !important;
+  }
+
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__cart-count {
+    background: var(--error, #ef4444) !important;
+    color: var(--text-primary, #f8fafc) !important;
+    border: 2px solid var(--border-primary, #334155) !important;
+  }
+
+  [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle {
+    background: rgba(71, 85, 105, 0.2) !important;
+    border: 1px solid var(--border-primary, #334155) !important;
+  }
+
+  [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle:hover {
+    background: rgba(59, 130, 246, 0.2) !important;
+    border-color: var(--button-primary, #3b82f6) !important;
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.3) !important;
+  }
+
+  [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle .toggle-icon {
+    color: var(--text-primary, #f8fafc) !important;
+  }
+
+  /* Dark mode logo styling */
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__logo-img {
+    filter: brightness(0) invert(1) !important; /* Makes logo white */
+    transition: filter 0.3s ease !important;
+  }
+
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__logo-text {
+    color: var(--text-primary, #f8fafc) !important;
+    transition: color 0.3s ease !important;
+  }
+
+  /* Mobile header adjustments */
+  @media (max-width: 768px) {
+    #Header-{{ section.id }} {
+      border-radius: 0 0 15px 15px;
+      backdrop-filter: blur(15px) saturate(150%);
+      -webkit-backdrop-filter: blur(15px) saturate(150%);
+    }
+    
+    /* Mobile Dark Mode Header */
+    [data-theme="dark"] #Header-{{ section.id }} {
+      background: var(--bg-primary, #0f172a) !important; /* Same solid color as footer */
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+    
+    [data-theme="dark"] #Header-{{ section.id }} .nt-header__wrap {
+      background: transparent !important;
+    }
+    
+    [data-theme="dark"] #Header-{{ section.id }} .mobile-menu {
+      background: var(--bg-secondary, #1e293b) !important;
+      border: 1px solid var(--border-primary, #334155) !important;
+    }
+    
+    [data-theme="dark"] #Header-{{ section.id }} .mobile-menu a {
+      color: var(--text-primary, #f8fafc) !important;
+      border-bottom: 1px solid var(--border-primary, #334155) !important;
+    }
+    
+    [data-theme="dark"] #Header-{{ section.id }} .mobile-menu a:hover {
+      background: var(--bg-tertiary, #334155) !important;
+      color: var(--text-accent, #60a5fa) !important;
+    }
+  }
+    
+    #Header-{{ section.id }} .nt-header__wrap {
+      justify-content: space-between;
+      gap: 8px;
+      padding: 12px 16px;
+      flex-wrap: nowrap;
+      min-height: 60px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    #Header-{{ section.id }} .nt-header__logo {
+      margin-left: 0;
+      flex-shrink: 0;
+    }
+    
+    #Header-{{ section.id }} .nt-header__logo-img { 
+      max-height: 50px; 
+      width: auto;
+    }
+    
+    #Header-{{ section.id }} .nt-header__logo-text {
+      font-size: 1.4rem;
+      line-height: 1.2;
+    }
+    
+    #Header-{{ section.id }} .nt-header__nav {
+      flex-shrink: 1;
+      min-width: 0;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      flex: 1;
+    }
+    
+    #Header-{{ section.id }} .nt-header__list {
+      gap: 6px;
+      flex-wrap: nowrap;
+      padding: 0 4px;
+      display: flex;
+      align-items: center;
+    }
+    
+    #Header-{{ section.id }} .nt-header__link {
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      border-radius: 25px;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      flex-shrink: 0;
+    }
+    
+    /* Mobile cart button adjustments */
+    #Header-{{ section.id }} .nt-header__cart {
+      flex-shrink: 0;
+    }
+    
+    #Header-{{ section.id }} .nt-header__cart-link {
+      padding: 10px 14px;
+      min-width: 48px;
+      height: 40px;
+      border-radius: 25px;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      flex-shrink: 0;
+    }
+    
+    #Header-{{ section.id }} .nt-header__cart-icon {
+      width: 18px;
+      height: 18px;
+    }
+    
+    #Header-{{ section.id }} .nt-header__cart-count {
+      width: 18px;
+      height: 18px;
+      font-size: 10px;
+      top: -4px;
+      right: -4px;
+      min-width: 18px;
+    }
+    
+    #Header-{{ section.id }} .header-wishlist {
+      margin-left: 12px;
+    }
+    
+    #Header-{{ section.id }} .wishlist-toggle {
+      width: 40px;
+      height: 40px;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      flex-shrink: 0;
+    }
+  }
+  
+  /* Extra small mobile screens */
+  @media (max-width: 480px) {
+    #Header-{{ section.id }} .nt-header__wrap {
+      padding: 10px 12px;
+      gap: 8px;
+      min-height: 56px;
+    }
+    
+    #Header-{{ section.id }} .nt-header__logo-text {
+      font-size: 1.2rem;
+    }
+    
+    #Header-{{ section.id }} .nt-header__logo-img { 
+      max-height: 45px; 
+    }
+    
+    #Header-{{ section.id }} .nt-header__link {
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      min-height: 40px;
+    }
+    
+    #Header-{{ section.id }} .nt-header__cart-link {
+      padding: 10px 12px;
+      min-width: 48px;
+      height: 40px;
+    }
+    
+    #Header-{{ section.id }} .nt-header__cart-icon {
+      width: 18px;
+      height: 18px;
+    }
+    
+    #Header-{{ section.id }} .wishlist-toggle {
+      width: 40px;
+      height: 40px;
+    }
+  }
+  #Header-{{ section.id }} .nt-header__logo-img{ max-height:80px; display:block }
+  #Header-{{ section.id }} .nt-header__logo-text{
+    font-weight: 800; 
+    text-decoration: none;
+    color: #1f2937 !important;
+    font-size: 2rem;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    letter-spacing: -0.02em;
+    transition: all 0.3s ease;
+  }
+  
+  #Header-{{ section.id }} .nt-header__logo-text:hover {
+    transform: scale(1.05);
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  #Header-{{ section.id }} .nt-header__list{
+    display: flex; 
+    gap: 8px; 
+    list-style: none; 
+    margin: 0; 
+    padding: 0;
+    flex-shrink: 1;
+    min-width: 0;
+  }
+  #Header-{{ section.id }} .nt-header__link{
+    text-decoration: none; 
+    color: #1f2937 !important; 
+    font-weight: 600;
+    padding: 12px 20px;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    font-size: 0.9rem;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  
+  #Header-{{ section.id }} .nt-header__link:hover{
+    background: rgba(255, 255, 255, 0.25);
+    color: #1f2937 !important;
+    transform: translateY(-1px);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+  
+  /* Removed shine effect to clean up header */
+  
+  /* Header Wishlist Styling */
+  #Header-{{ section.id }} .header-wishlist {
+    margin-left: 20px;
+  }
+  
+  #Header-{{ section.id }} .wishlist-toggle {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+  }
+  
+  #Header-{{ section.id }} .wishlist-toggle:hover {
+    border-color: #dc2626;
+    transform: scale(1.05) translateY(-2px);
+    box-shadow: 0 8px 25px rgba(220, 38, 38, 0.25);
+    background: rgba(255, 255, 255, 0.3);
+  }
+  
+  #Header-{{ section.id }} .wishlist-toggle.has-items {
+    border-color: #dc2626;
+    background: rgba(254, 242, 242, 0.3);
+    box-shadow: 0 4px 16px rgba(220, 38, 38, 0.2);
+  }
+  
+  #Header-{{ section.id }} .wishlist-icon {
+    color: #1f2937;
+    transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  #Header-{{ section.id }} .wishlist-toggle:hover .wishlist-icon,
+  #Header-{{ section.id }} .wishlist-toggle.has-items .wishlist-icon {
+    color: #dc2626;
+  }
+  
+  #Header-{{ section.id }} .wishlist-toggle.has-items .heart-outline {
+    display: none;
+  }
+  
+  #Header-{{ section.id }} .wishlist-toggle.has-items .heart-filled {
+    display: block !important;
+  }
+  
+  #Header-{{ section.id }} .wishlist-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #dc2626;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 10px;
+    min-width: 18px;
+    text-align: center;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.3s ease;
+  }
+  
+  #Header-{{ section.id }} .wishlist-count.visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+</style>
+
+<script>
+// Dark Mode Functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const darkModeToggle = document.getElementById('dark-mode-toggle');
+  const html = document.documentElement;
+  
+  // Check for saved theme preference or default to 'dark'
+  const currentTheme = localStorage.getItem('theme') || 'dark';
+  
+  // Apply the current theme
+  html.setAttribute('data-theme', currentTheme);
+  
+  // Update toggle state
+  if (currentTheme === 'dark') {
+    darkModeToggle.classList.add('active');
+  }
+  
+  // Toggle dark mode
+  darkModeToggle.addEventListener('click', function() {
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    const newTheme = isDark ? 'light' : 'dark';
+    
+    // Update theme
+    html.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    
+    // Update toggle state
+    if (newTheme === 'dark') {
+      darkModeToggle.classList.add('active');
+    } else {
+      darkModeToggle.classList.remove('active');
+    }
+    
+    // Add smooth transition effect
+    html.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+    
+    // Remove transition after animation
+    setTimeout(() => {
+      html.style.transition = '';
+    }, 300);
+  });
+  
+  // Listen for system theme changes
+  if (window.matchMedia) {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    
+    // Only apply system preference if no manual preference is set
+    if (!localStorage.getItem('theme')) {
+      const systemTheme = mediaQuery.matches ? 'dark' : 'dark';
+      html.setAttribute('data-theme', systemTheme);
+      
+      if (systemTheme === 'dark') {
+        darkModeToggle.classList.add('active');
+      }
+    }
+    
+    // Listen for system theme changes
+    mediaQuery.addEventListener('change', function(e) {
+      if (!localStorage.getItem('theme')) {
+        const systemTheme = e.matches ? 'dark' : 'light';
+        html.setAttribute('data-theme', systemTheme);
+        
+        if (systemTheme === 'dark') {
+          darkModeToggle.classList.add('active');
+        } else {
+          darkModeToggle.classList.remove('active');
+        }
+      }
+    });
+  }
+});
+</script>
+
+<script>
+// Update cart count dynamically
+function updateCartCount() {
+  fetch('/cart.js')
+    .then(response => response.json())
+    .then(cart => {
+      const cartCountElement = document.getElementById('cart-count');
+      if (cartCountElement) {
+        cartCountElement.textContent = cart.item_count;
+        
+        // Hide count badge if cart is empty
+        if (cart.item_count === 0) {
+          cartCountElement.style.display = 'none';
+        } else {
+          cartCountElement.style.display = 'flex';
+        }
+      }
+    })
+    .catch(error => console.error('Error updating cart count:', error));
+}
+
+// Listen for cart updates
+document.addEventListener('DOMContentLoaded', function() {
+  // Update cart count on page load
+  updateCartCount();
+  
+  // Listen for custom cart update events
+  document.addEventListener('cart:updated', updateCartCount);
+  
+  // Listen for cart form submissions
+  document.addEventListener('submit', function(e) {
+    if (e.target.classList.contains('product-form') || 
+        e.target.querySelector('input[name="add"]')) {
+      setTimeout(updateCartCount, 1000); // Update after form submission
+    }
+  });
+});
+
+// Global function to trigger cart count update
+window.updateCartCount = updateCartCount;
+</script>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    { 
+      "type": "image_picker", 
+      "id": "logo", 
+      "label": "Upload Your Logo",
+      "info": "Recommended size: 400px wide. PNG with transparent background works best."
+    },
+    { 
+      "type": "text", 
+      "id": "logo_text", 
+      "label": "Logo text (fallback)", 
+      "default": "New Thrifts",
+      "info": "Used when no logo image is uploaded"
+    },
+    { "type": "link_list", "id": "menu", "label": "Main menu" }
+  ]
+}
+{% endschema %}
