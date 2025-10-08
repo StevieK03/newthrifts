@@ -13,32 +13,6 @@ window.trackPageView = function trackPageView(meta = {}) {
       // Log-and-forget; the function itself will report success/failure
       trackSupabasePageView(meta);
     }
-
-    // -------- Example integrations (uncomment the ones you use) --------
-    // GA4 via gtag
-    // if (typeof gtag === 'function') {
-    //   gtag('event', 'page_view', {
-    //     page_location: location.href,
-    //     page_path: location.pathname + location.search,
-    //     page_title: document.title
-    //   });
-    // }
-
-    // Meta Pixel
-    // if (typeof fbq === 'function') {
-    //   fbq('track', 'PageView');
-    // }
-
-    // TikTok
-    // if (typeof ttq !== 'undefined' && ttq.track) {
-    //   ttq.track('ViewContent');
-    // }
-
-    // Pinterest
-    // if (typeof pintrk === 'function') {
-    //   pintrk('track', 'pagevisit');
-    // }
-
   } catch (e) {
     console.warn('[trackPageView] error', e);
   }
