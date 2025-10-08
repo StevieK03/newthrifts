@@ -80,20 +80,6 @@ Welcome / Social Bar — Modern Redesign
           <div class="floating-dot dot-2"></div>
           <div class="floating-dot dot-3"></div>
         </div>
-        <div class="feature-highlights">
-          <div class="highlight-item">
-            <div class="highlight-icon">🛍️</div>
-            <span>New Products Weekly</span>
-          </div>
-          <div class="highlight-item">
-            <div class="highlight-icon">👕</div>
-            <span>Classic Tees & Hoodies</span>
-          </div>
-          <div class="highlight-item">
-            <div class="highlight-icon">🎃</div>
-            <span>Seasonal Collections</span>
-          </div>
-        </div>
 
         <!-- Newsletter Signup -->
         <div class="newsletter-signup">
@@ -406,58 +392,6 @@ Welcome / Social Bar — Modern Redesign
       animation-delay: 5s;
     }
 
-    #welcome-{{ section.id }} .feature-highlights {
-      background: #ffffff;
-      padding: 24px;
-      border-radius: 16px;
-      box-shadow: 0 8px 32px rgba(0,0,0,.08);
-      border: 1px solid rgba(0,0,0,.06);
-      position: relative;
-      z-index: 2;
-      width: 100%;
-      max-width: 500px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-    }
-
-    @media (min-width: 768px) {
-      #welcome-{{ section.id }} .feature-highlights {
-        max-width: 600px;
-        flex: 1;
-      }
-    }
-
-    #welcome-{{ section.id }} .highlight-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 0;
-      border-bottom: 1px solid rgba(0,0,0,.06);
-    }
-
-    #welcome-{{ section.id }} .highlight-item:last-child {
-      border-bottom: none;
-    }
-
-    #welcome-{{ section.id }} .highlight-icon {
-      font-size: 20px;
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(15,23,42,.05);
-      border-radius: 8px;
-    }
-
-    #welcome-{{ section.id }} .highlight-item span {
-      font-weight: 600;
-      color: #0f172a;
-      font-size: 14px;
-    }
 
     /* Newsletter Signup Styles */
     #welcome-{{ section.id }} .newsletter-signup {
@@ -573,9 +507,6 @@ Welcome / Social Bar — Modern Redesign
         margin-top: 24px;
       }
       
-      #welcome-{{ section.id }} .feature-highlights {
-        padding: 20px;
-      }
     }
 
     /* Dark Mode Styling for Social Bar */
@@ -671,23 +602,6 @@ Welcome / Social Bar — Modern Redesign
       box-shadow: 0 8px 25px rgba(241,101,33,.4) !important;
     }
 
-    [data-theme="dark"] #welcome-{{ section.id }} .feature-highlights {
-      background: var(--bg-secondary, #1e293b) !important;
-      border: 1px solid var(--border-primary, #334155) !important;
-      box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.5)) !important;
-    }
-
-    [data-theme="dark"] #welcome-{{ section.id }} .highlight-item {
-      border-bottom: 1px solid var(--border-primary, #334155) !important;
-    }
-
-    [data-theme="dark"] #welcome-{{ section.id }} .highlight-icon {
-      background: var(--bg-tertiary, #334155) !important;
-    }
-
-    [data-theme="dark"] #welcome-{{ section.id }} .highlight-item span {
-      color: var(--text-primary, #f8fafc) !important;
-    }
 
     [data-theme="dark"] #welcome-{{ section.id }} .floating-shape {
       background: linear-gradient(135deg, rgba(96, 165, 250, 0.1), rgba(59, 130, 246, 0.05)) !important;
