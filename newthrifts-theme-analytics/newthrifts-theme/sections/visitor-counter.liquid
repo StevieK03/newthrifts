@@ -1,0 +1,355 @@
+{% comment %}
+  Visitor Counter Section
+  Displays the number of visitors to the site
+{% endcomment %}
+
+<section class="visitor-counter-section" style="
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+  padding: 60px 0;
+  margin: 20px 0;
+  border-radius: 16px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+">
+  
+  {% comment %} Background decoration {% endcomment %}
+  <div class="visitor-counter-bg" style="
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 20% 80%, {{ section.settings.accent_color | default: 'rgba(39,225,193,0.1)' }}, transparent 50%),
+                radial-gradient(circle at 80% 20%, {{ section.settings.accent_color_2 | default: 'rgba(255,79,163,0.1)' }}, transparent 50%);
+    pointer-events: none;
+  "></div>
+  
+  <div class="container" style="position: relative; z-index: 2;">
+    
+    {% if section.settings.show_heading %}
+      <h2 class="visitor-counter-heading" style="
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 32px;
+        color: #f8fafc !important;
+        margin: 0 0 16px 0;
+        letter-spacing: 0.05em;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      ">
+        {{ section.settings.heading | default: 'Site Visitors' }}
+      </h2>
+    {% endif %}
+    
+    {% if section.settings.show_subheading %}
+      <p class="visitor-counter-subheading" style="
+        color: #cbd5e1 !important;
+        margin: 0 0 24px 0;
+        font-size: 16px;
+      ">
+        {{ section.settings.subheading | default: 'Join thousands of visitors exploring our collection' }}
+      </p>
+    {% endif %}
+    
+    <div class="visitor-counter-display" style="
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    ">
+      
+      {% comment %} Total Visitors Counter {% endcomment %}
+      <div class="counter-item" style="
+        background: #334155 !important;
+        padding: 20px 24px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        border: 1px solid #475569 !important;
+        min-width: 120px;
+      ">
+        <div class="counter-number" id="total-visitors" style="
+          font-family: 'Bebas Neue', sans-serif;
+          font-size: {{ section.settings.counter_size | default: 36 }}px;
+          color: {{ section.settings.counter_color | default: '#27e1c1' }};
+          line-height: 1;
+          margin-bottom: 4px;
+        ">
+          <span class="loading-dots">•••</span>
+        </div>
+        <div class="counter-label" style="
+          font-size: {{ section.settings.label_size | default: 14 }}px;
+          color: #f8fafc !important;
+          opacity: 0.7;
+          font-weight: 600;
+        ">
+          Total Visitors
+        </div>
+      </div>
+      
+      {% comment %} Unique Visitors Counter {% endcomment %}
+      <div class="counter-item" style="
+        background: #334155 !important;
+        padding: 20px 24px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        border: 1px solid #475569 !important;
+        min-width: 120px;
+      ">
+        <div class="counter-number" id="unique-visitors" style="
+          font-family: 'Bebas Neue', sans-serif;
+          font-size: {{ section.settings.counter_size | default: 36 }}px;
+          color: {{ section.settings.counter_color_2 | default: '#ff4fa3' }};
+          line-height: 1;
+          margin-bottom: 4px;
+        ">
+          <span class="loading-dots">•••</span>
+        </div>
+        <div class="counter-label" style="
+          font-size: {{ section.settings.label_size | default: 14 }}px;
+          color: #f8fafc !important;
+          opacity: 0.7;
+          font-weight: 600;
+        ">
+          Unique Visitors
+        </div>
+      </div>
+      
+    </div>
+    
+    {% if section.settings.show_last_updated %}
+      <div class="last-updated" style="
+        margin-top: 16px;
+        font-size: 12px;
+        color: {{ section.settings.text_color | default: '#0f172a' }};
+        opacity: 0.6;
+      ">
+        Last updated: <span id="last-updated">Just now</span>
+      </div>
+    {% endif %}
+    
+  </div>
+</section>
+
+{% comment %} Include the visitor counter JavaScript {% endcomment %}
+<script src="{{ 'visitor-counter.js' | asset_url }}" defer></script>
+
+{% comment %} Loading animation styles {% endcomment %}
+<style>
+.loading-dots {
+  animation: loadingPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes loadingPulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+.visitor-counter-section {
+  transition: all 0.3s ease;
+}
+
+.visitor-counter-section:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+}
+
+.counter-item {
+  transition: all 0.3s ease;
+}
+
+.counter-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+@media (max-width: 768px) {
+  .visitor-counter-display {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .counter-item {
+    width: 100%;
+    max-width: 200px;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Visitor Counter",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_heading",
+      "label": "Show heading",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Site Visitors"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "default": 32,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_subheading",
+      "label": "Show subheading",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Join thousands of visitors exploring our collection"
+    },
+    {
+      "type": "range",
+      "id": "subheading_size",
+      "label": "Subheading size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "default": 16,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#f8fafc"
+    },
+    {
+      "type": "color",
+      "id": "bg_color_2",
+      "label": "Background color 2",
+      "default": "#e2e8f0"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#0f172a"
+    },
+    {
+      "type": "color",
+      "id": "counter_bg",
+      "label": "Counter background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "counter_border",
+      "label": "Counter border",
+      "default": "rgba(0,0,0,0.1)"
+    },
+    {
+      "type": "color",
+      "id": "counter_color",
+      "label": "Total visitors color",
+      "default": "#27e1c1"
+    },
+    {
+      "type": "color",
+      "id": "counter_color_2",
+      "label": "Unique visitors color",
+      "default": "#ff4fa3"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "rgba(39,225,193,0.1)"
+    },
+    {
+      "type": "color",
+      "id": "accent_color_2",
+      "label": "Accent color 2",
+      "default": "rgba(255,79,163,0.1)"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "pad_y",
+      "label": "Vertical padding",
+      "min": 20,
+      "max": 80,
+      "step": 4,
+      "default": 40,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "margin_y",
+      "label": "Vertical margin",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "default": 20,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "default": 16,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "counter_size",
+      "label": "Counter number size",
+      "min": 24,
+      "max": 60,
+      "step": 2,
+      "default": 36,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "label_size",
+      "label": "Label size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "default": 14,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_last_updated",
+      "label": "Show last updated time",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Visitor Counter"
+    }
+  ]
+}
+{% endschema %}

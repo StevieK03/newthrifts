@@ -274,7 +274,10 @@ class SupabaseClient {
    */
   async trackEvent(eventName, properties = {}) {
     const client = await this.getClient();
-    if (!client) return { error: 'Client not initialized' };
+    if (!client) {
+      console.error('📊 trackEvent: Client not initialized');
+      return { error: 'Client not initialized' };
+    }
 
     try {
       const { data, error } = await client
@@ -288,8 +291,22 @@ class SupabaseClient {
           page_url: window.location.href,
           user_agent: navigator.userAgent
         });
+      
+      if (error) {
+        console.error('📊 trackEvent: Insert failed', {
+          error,
+          eventName,
+          properties
+        });
+      }
+      
       return { data, error };
     } catch (error) {
+      console.error('📊 trackEvent: Exception', {
+        error: error.message,
+        stack: error.stack,
+        eventName
+      });
       return { error: error.message };
     }
   }
