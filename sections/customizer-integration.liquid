@@ -350,7 +350,7 @@ document.addEventListener('DOMContentLoaded', function() {
     },
 
     showLivePreview(design, type) {
-      // Create live preview overlay
+      // Create enhanced live preview overlay
       const previewOverlay = document.createElement('div');
       previewOverlay.id = 'live-preview-overlay';
       previewOverlay.style.cssText = `
@@ -359,48 +359,157 @@ document.addEventListener('DOMContentLoaded', function() {
         left: 0;
         right: 0;
         bottom: 0;
-        background: rgba(0, 0, 0, 0.8);
-        backdrop-filter: blur(10px);
+        background: rgba(0, 0, 0, 0.9);
+        backdrop-filter: blur(15px);
         z-index: 10000;
         display: flex;
         align-items: center;
         justify-content: center;
         opacity: 0;
-        transition: opacity 0.3s ease;
+        transition: opacity 0.4s ease;
+        overflow: hidden;
       `;
 
-      // Create preview container
+      // Create enhanced preview container
       const previewContainer = document.createElement('div');
       previewContainer.style.cssText = `
-        background: white;
-        border-radius: 20px;
-        padding: 40px;
-        max-width: 600px;
-        width: 90vw;
+        background: linear-gradient(135deg, #ffffff, #f8fafc);
+        border-radius: 24px;
+        padding: 0;
+        max-width: 900px;
+        width: 95vw;
+        max-height: 90vh;
         text-align: center;
         transform: scale(0.8);
-        transition: transform 0.3s ease;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        transition: transform 0.4s ease;
+        box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+        position: relative;
       `;
 
-      // Create t-shirt preview
+      // Create 3D t-shirt preview with rotation controls
       const tshirtPreview = document.createElement('div');
+      tshirtPreview.id = 'enhanced-tshirt-preview';
       tshirtPreview.style.cssText = `
-        width: 300px;
-        height: 360px;
-        margin: 0 auto 20px;
+        width: 400px;
+        height: 480px;
+        margin: 20px auto;
         background: ${design.shirtColor};
-        border-radius: 20px;
+        border-radius: 24px;
         position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        box-shadow: 
+          0 15px 40px rgba(0, 0, 0, 0.3),
+          inset 0 2px 4px rgba(255, 255, 255, 0.2);
         overflow: hidden;
+        transform-style: preserve-3d;
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: grab;
+        user-select: none;
       `;
 
-      // Create design preview
+      // Add 3D rotation controls
+      const rotationControls = document.createElement('div');
+      rotationControls.style.cssText = `
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        display: flex;
+        gap: 8px;
+        z-index: 20;
+      `;
+
+      // Create view angle buttons
+      const viewAngles = [
+        { name: 'Front', icon: '👤', rotation: '0deg' },
+        { name: 'Back', icon: '👥', rotation: '180deg' },
+        { name: 'Side', icon: '👤', rotation: '90deg' },
+        { name: '3/4', icon: '👤', rotation: '45deg' }
+      ];
+
+      viewAngles.forEach((angle, index) => {
+        const angleBtn = document.createElement('button');
+        angleBtn.style.cssText = `
+          width: 40px;
+          height: 40px;
+          border: none;
+          border-radius: 12px;
+          background: rgba(255, 255, 255, 0.9);
+          backdrop-filter: blur(10px);
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 16px;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        `;
+        angleBtn.innerHTML = angle.icon;
+        angleBtn.title = angle.name;
+        
+        angleBtn.addEventListener('click', () => {
+          tshirtPreview.style.transform = `rotateY(${angle.rotation})`;
+          // Update active button
+          rotationControls.querySelectorAll('button').forEach(btn => {
+            btn.style.background = 'rgba(255, 255, 255, 0.9)';
+          });
+          angleBtn.style.background = 'rgba(39, 225, 193, 0.9)';
+        });
+        
+        rotationControls.appendChild(angleBtn);
+      });
+
+      // Add mobile gesture support
+      let isDragging = false;
+      let startX = 0;
+      let currentRotation = 0;
+
+      tshirtPreview.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.clientX;
+        tshirtPreview.style.cursor = 'grabbing';
+      });
+
+      tshirtPreview.addEventListener('mousemove', (e) => {
+        if (isDragging) {
+          const deltaX = e.clientX - startX;
+          currentRotation += deltaX * 0.5;
+          tshirtPreview.style.transform = `rotateY(${currentRotation}deg)`;
+          startX = e.clientX;
+        }
+      });
+
+      tshirtPreview.addEventListener('mouseup', () => {
+        isDragging = false;
+        tshirtPreview.style.cursor = 'grab';
+      });
+
+      // Touch support for mobile
+      tshirtPreview.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        startX = e.touches[0].clientX;
+      });
+
+      tshirtPreview.addEventListener('touchmove', (e) => {
+        if (isDragging) {
+          e.preventDefault();
+          const deltaX = e.touches[0].clientX - startX;
+          currentRotation += deltaX * 0.5;
+          tshirtPreview.style.transform = `rotateY(${currentRotation}deg)`;
+          startX = e.touches[0].clientX;
+        }
+      });
+
+      tshirtPreview.addEventListener('touchend', () => {
+        isDragging = false;
+      });
+
+      // Create enhanced design preview with real-time editing
       const designPreview = document.createElement('div');
+      designPreview.id = 'live-design-preview';
+      designPreview.contentEditable = true;
       designPreview.style.cssText = `
         font-family: ${design.fontFamily};
         font-size: ${Math.min(design.fontSize * 1.5, 48)}px;
@@ -408,11 +517,40 @@ document.addEventListener('DOMContentLoaded', function() {
         color: ${design.textColor};
         text-align: center;
         white-space: nowrap;
-        user-select: none;
-        pointer-events: none;
+        user-select: text;
+        pointer-events: auto;
         z-index: 10;
         position: relative;
+        outline: none;
+        border: 2px dashed transparent;
+        transition: all 0.3s ease;
+        padding: 8px;
+        border-radius: 8px;
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       `;
+
+      // Add focus/blur effects for real-time editing
+      designPreview.addEventListener('focus', () => {
+        designPreview.style.border = '2px dashed rgba(39, 225, 193, 0.6)';
+        designPreview.style.background = 'rgba(39, 225, 193, 0.1)';
+      });
+
+      designPreview.addEventListener('blur', () => {
+        designPreview.style.border = '2px dashed transparent';
+        designPreview.style.background = 'transparent';
+      });
+
+      // Real-time text editing
+      designPreview.addEventListener('input', (e) => {
+        const newText = e.target.textContent;
+        // Update the design object
+        design.text = newText;
+        // Trigger validation
+        this.validateDesign(design);
+      });
 
       // Apply text effects
       switch (design.effect) {
@@ -438,6 +576,147 @@ document.addEventListener('DOMContentLoaded', function() {
       }
 
       designPreview.textContent = design.text;
+
+      // Add design validation indicator
+      const validationIndicator = document.createElement('div');
+      validationIndicator.id = 'design-validation';
+      validationIndicator.style.cssText = `
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        padding: 8px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        z-index: 15;
+        transition: all 0.3s ease;
+      `;
+
+      // Advanced customization toolbar
+      const customizationToolbar = document.createElement('div');
+      customizationToolbar.style.cssText = `
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 16px;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        justify-content: center;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      `;
+
+      // Color picker
+      const colorPicker = document.createElement('input');
+      colorPicker.type = 'color';
+      colorPicker.value = design.textColor;
+      colorPicker.style.cssText = `
+        width: 40px;
+        height: 40px;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      `;
+      colorPicker.addEventListener('change', (e) => {
+        design.textColor = e.target.value;
+        designPreview.style.color = e.target.value;
+        this.validateDesign(design);
+      });
+
+      // Font size slider
+      const fontSizeSlider = document.createElement('input');
+      fontSizeSlider.type = 'range';
+      fontSizeSlider.min = '12';
+      fontSizeSlider.max = '72';
+      fontSizeSlider.value = design.fontSize;
+      fontSizeSlider.style.cssText = `
+        flex: 1;
+        min-width: 120px;
+        height: 6px;
+        border-radius: 3px;
+        background: #e2e8f0;
+        outline: none;
+        cursor: pointer;
+      `;
+      fontSizeSlider.addEventListener('input', (e) => {
+        const newSize = parseInt(e.target.value);
+        design.fontSize = newSize;
+        designPreview.style.fontSize = `${Math.min(newSize * 1.5, 48)}px`;
+        this.validateDesign(design);
+      });
+
+      // Font family selector
+      const fontSelector = document.createElement('select');
+      fontSelector.style.cssText = `
+        padding: 8px 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        background: white;
+        cursor: pointer;
+        font-size: 14px;
+      `;
+      const fonts = [
+        'Arial, sans-serif',
+        'Helvetica, sans-serif',
+        'Georgia, serif',
+        'Times New Roman, serif',
+        'Courier New, monospace',
+        'Impact, sans-serif',
+        'Comic Sans MS, cursive',
+        'Verdana, sans-serif'
+      ];
+      fonts.forEach(font => {
+        const option = document.createElement('option');
+        option.value = font;
+        option.textContent = font.split(',')[0];
+        if (font === design.fontFamily) option.selected = true;
+        fontSelector.appendChild(option);
+      });
+      fontSelector.addEventListener('change', (e) => {
+        design.fontFamily = e.target.value;
+        designPreview.style.fontFamily = e.target.value;
+        this.validateDesign(design);
+      });
+
+      // Effect selector
+      const effectSelector = document.createElement('select');
+      effectSelector.style.cssText = `
+        padding: 8px 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        background: white;
+        cursor: pointer;
+        font-size: 14px;
+      `;
+      const effects = [
+        { value: 'none', label: 'Normal' },
+        { value: 'outline', label: 'Outline' },
+        { value: 'shadow', label: 'Shadow' },
+        { value: 'gradient', label: 'Gradient' }
+      ];
+      effects.forEach(effect => {
+        const option = document.createElement('option');
+        option.value = effect.value;
+        option.textContent = effect.label;
+        if (effect.value === design.effect) option.selected = true;
+        effectSelector.appendChild(option);
+      });
+      effectSelector.addEventListener('change', (e) => {
+        design.effect = e.target.value;
+        this.applyTextEffect(designPreview, design);
+        this.validateDesign(design);
+      });
+
+      // Add tools to toolbar
+      customizationToolbar.appendChild(colorPicker);
+      customizationToolbar.appendChild(fontSizeSlider);
+      customizationToolbar.appendChild(fontSelector);
+      customizationToolbar.appendChild(effectSelector);
 
       // Create preview title
       const previewTitle = document.createElement('h3');
@@ -505,15 +784,21 @@ document.addEventListener('DOMContentLoaded', function() {
         return false;
       });
 
-      // Assemble preview
+      // Assemble enhanced preview
       tshirtPreview.appendChild(designPreview);
+      tshirtPreview.appendChild(validationIndicator);
+      tshirtPreview.appendChild(rotationControls);
       previewContainer.appendChild(previewTitle);
       previewContainer.appendChild(tshirtPreview);
+      previewContainer.appendChild(customizationToolbar);
       previewContainer.appendChild(previewDetails);
       buttonContainer.appendChild(applyBtn);
       buttonContainer.appendChild(cancelBtn);
       previewContainer.appendChild(buttonContainer);
       previewOverlay.appendChild(previewContainer);
+
+      // Initialize validation
+      this.validateDesign(design);
 
       // Add to page
       document.body.appendChild(previewOverlay);
@@ -544,6 +829,119 @@ document.addEventListener('DOMContentLoaded', function() {
           }
           this.currentPreview = null;
         }, 300);
+      }
+    },
+
+    // Design validation function
+    validateDesign(design) {
+      const validationIndicator = document.getElementById('design-validation');
+      if (!validationIndicator) return;
+
+      const issues = [];
+      let score = 100;
+
+      // Text length validation
+      if (design.text.length < 2) {
+        issues.push('Text too short');
+        score -= 30;
+      } else if (design.text.length > 50) {
+        issues.push('Text too long');
+        score -= 20;
+      }
+
+      // Font size validation
+      if (design.fontSize < 12) {
+        issues.push('Font too small');
+        score -= 25;
+      } else if (design.fontSize > 60) {
+        issues.push('Font too large');
+        score -= 15;
+      }
+
+      // Color contrast validation
+      const contrast = this.calculateContrast(design.textColor, design.shirtColor);
+      if (contrast < 3) {
+        issues.push('Poor contrast');
+        score -= 40;
+      }
+
+      // Update validation indicator
+      if (issues.length === 0) {
+        validationIndicator.style.background = 'rgba(16, 185, 129, 0.9)';
+        validationIndicator.style.color = 'white';
+        validationIndicator.textContent = '✓ Perfect Design';
+      } else if (score >= 70) {
+        validationIndicator.style.background = 'rgba(245, 158, 11, 0.9)';
+        validationIndicator.style.color = 'white';
+        validationIndicator.textContent = `⚠ ${issues[0]}`;
+      } else {
+        validationIndicator.style.background = 'rgba(239, 68, 68, 0.9)';
+        validationIndicator.style.color = 'white';
+        validationIndicator.textContent = `✗ ${issues[0]}`;
+      }
+    },
+
+    // Calculate color contrast ratio
+    calculateContrast(color1, color2) {
+      const rgb1 = this.hexToRgb(color1);
+      const rgb2 = this.hexToRgb(color2);
+      
+      const lum1 = this.getLuminance(rgb1);
+      const lum2 = this.getLuminance(rgb2);
+      
+      const brightest = Math.max(lum1, lum2);
+      const darkest = Math.min(lum1, lum2);
+      
+      return (brightest + 0.05) / (darkest + 0.05);
+    },
+
+    hexToRgb(hex) {
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+      } : null;
+    },
+
+    getLuminance(rgb) {
+      const { r, g, b } = rgb;
+      const [rs, gs, bs] = [r, g, b].map(c => {
+        c = c / 255;
+        return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+      });
+      return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs;
+    },
+
+    // Apply text effects
+    applyTextEffect(element, design) {
+      // Reset all effects
+      element.style.webkitTextStroke = 'none';
+      element.style.webkitTextFillColor = design.textColor;
+      element.style.textShadow = 'none';
+      element.style.background = 'none';
+      element.style.webkitBackgroundClip = 'unset';
+
+      switch (design.effect) {
+        case 'outline':
+          element.style.webkitTextStroke = `2px ${design.textColor}`;
+          element.style.webkitTextFillColor = 'transparent';
+          break;
+        case 'shadow':
+          element.style.textShadow = '3px 3px 6px rgba(0,0,0,0.5)';
+          element.style.webkitTextStroke = 'none';
+          element.style.webkitTextFillColor = design.textColor;
+          break;
+        case 'gradient':
+          element.style.background = 'linear-gradient(45deg, #27e1c1, #ff4fa3)';
+          element.style.webkitBackgroundClip = 'text';
+          element.style.webkitTextFillColor = 'transparent';
+          element.style.webkitTextStroke = 'none';
+          break;
+        default:
+          element.style.textShadow = '2px 2px 4px rgba(255,255,255,0.8)';
+          element.style.webkitTextStroke = 'none';
+          element.style.webkitTextFillColor = design.textColor;
       }
     },
 
