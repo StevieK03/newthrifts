@@ -132,6 +132,16 @@ Product Poll Section
       margin: 0 auto;
     }
 
+    /* Dark mode styling for product poll */
+    [data-theme="dark"] #product-poll-{{ section.id }} .poll-title {
+      color: #f8fafc !important;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    [data-theme="dark"] #product-poll-{{ section.id }} .poll-description {
+      color: #cbd5e1 !important;
+    }
+
     #product-poll-{{ section.id }} .poll-content {
       display: grid;
       grid-template-columns: 1fr;
@@ -161,6 +171,19 @@ Product Poll Section
       transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
+    }
+
+    /* Dark mode styling for poll products */
+    [data-theme="dark"] #product-poll-{{ section.id }} .poll-product {
+      background: #1e293b !important;
+      border: 1px solid #334155 !important;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+    }
+
+    [data-theme="dark"] #product-poll-{{ section.id }} .poll-product:hover {
+      background: #334155 !important;
+      border-color: #475569 !important;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4) !important;
     }
 
     #product-poll-{{ section.id }} .poll-product:hover {
@@ -195,6 +218,11 @@ Product Poll Section
       color: #0f172a;
       margin: 0 0 8px 0;
       line-height: 1.3;
+    }
+
+    /* Dark mode styling for product titles */
+    [data-theme="dark"] #product-poll-{{ section.id }} .product-title {
+      color: #f8fafc !important;
       text-align: center;
     }
 
@@ -240,6 +268,22 @@ Product Poll Section
 
     #product-poll-{{ section.id }} .vote-icon {
       font-size: 16px;
+    }
+
+    /* Dark mode styling for vote buttons */
+    [data-theme="dark"] #product-poll-{{ section.id }} .vote-btn {
+      background: linear-gradient(135deg, #27e1c1 0%, #20b2aa 100%) !important;
+      color: #ffffff !important;
+      box-shadow: 0 4px 12px rgba(39, 225, 193, 0.3) !important;
+    }
+
+    [data-theme="dark"] #product-poll-{{ section.id }} .vote-btn:hover {
+      background: linear-gradient(135deg, #20b2aa 0%, #1a9b8a 100%) !important;
+      box-shadow: 0 8px 20px rgba(39, 225, 193, 0.4) !important;
+    }
+
+    [data-theme="dark"] #product-poll-{{ section.id }} .vote-btn.voted {
+      background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
     }
 
     /* Poll Swatches - exact same styles as homepage */
@@ -314,10 +358,22 @@ Product Poll Section
       top: 20px;
     }
 
+    /* Dark mode styling for poll results */
+    [data-theme="dark"] #product-poll-{{ section.id }} .poll-results {
+      background: #1e293b !important;
+      border: 1px solid #334155 !important;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+    }
+
     #product-poll-{{ section.id }} .results-title {
       font-size: 20px;
       font-weight: 600;
       color: #0f172a;
+    }
+
+    /* Dark mode styling for results title */
+    [data-theme="dark"] #product-poll-{{ section.id }} .results-title {
+      color: #f8fafc !important;
       margin: 0 0 20px 0;
       text-align: center;
     }
