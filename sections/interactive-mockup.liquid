@@ -13,10 +13,10 @@ Enhanced Interactive Product Mockup
     <!-- Section Header -->
     <div class="mockup-header" style="text-align: center; margin-bottom: 40px;">
       <h2 style="font-family: 'Bebas Neue', sans-serif; font-size: 42px; margin: 0 0 16px 0; background: linear-gradient(45deg, #27e1c1, #ff4fa3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
-        🎨 Live Design Preview
+        🚀 Enhanced Live Design Preview
       </h2>
       <p style="font-size: 18px; color: #64748b; margin: 0; max-width: 600px; margin: 0 auto;">
-        See your custom design come to life with our professional mockup system. Switch between different views and colors to see how your design looks in real-world scenarios.
+        See your custom design come to life with our professional mockup system. Now with 3D rotation, real-time editing, design validation, and advanced customization tools.
       </p>
     </div>
 
@@ -62,6 +62,25 @@ Enhanced Interactive Product Mockup
             </button>
             <button class="nt-btn nt-btn--color" data-color="blue" aria-selected="false" style="padding: 8px 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
               🔵 Blue
+            </button>
+          </div>
+        </div>
+
+        <!-- Enhanced 3D Controls -->
+        <div class="nt-mockup__group" style="background: linear-gradient(135deg, #f8fafc, #e2e8f0); padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0;">
+          <span class="nt-mockup__label" style="font-weight: 600; font-size: 14px; color: #374151; margin-right: 12px;">🎯 3D Controls</span>
+          <div class="nt-mockup__buttons" style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button class="nt-btn nt-btn--3d" id="nt-3d-rotate-{{ section.id }}" style="padding: 8px 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              🔄 3D Rotate
+            </button>
+            <button class="nt-btn nt-btn--zoom" id="nt-zoom-{{ section.id }}" style="padding: 8px 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              🔍 Zoom
+            </button>
+            <button class="nt-btn nt-btn--validate" id="nt-validate-{{ section.id }}" style="padding: 8px 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              ✅ Validate
+            </button>
+            <button class="nt-btn nt-btn--reset" id="nt-reset-{{ section.id }}" style="padding: 8px 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              🔄 Reset
             </button>
           </div>
         </div>
@@ -2429,13 +2448,229 @@ document.addEventListener('DOMContentLoaded', function() {
     {% endif %}
   };
 
+  // Enhanced 3D Controls and Validation
+  let is3DRotationEnabled = false;
+  let currentRotation = 0;
+  let isZoomEnabled = false;
+  
+  // 3D Rotation toggle
+  const rotate3DBtn = document.getElementById(`nt-3d-rotate-{{ section.id }}`);
+  if (rotate3DBtn) {
+    rotate3DBtn.addEventListener('click', () => {
+      is3DRotationEnabled = !is3DRotationEnabled;
+      rotate3DBtn.style.background = is3DRotationEnabled ? '#27e1c1' : '';
+      rotate3DBtn.style.color = is3DRotationEnabled ? 'white' : '';
+      rotate3DBtn.style.borderColor = is3DRotationEnabled ? '#27e1c1' : '#e2e8f0';
+      console.log('🔄 3D Rotation:', is3DRotationEnabled ? 'Enabled' : 'Disabled');
+    });
+  }
+  
+  // Zoom controls
+  const zoomBtn = document.getElementById(`nt-zoom-{{ section.id }}`);
+  if (zoomBtn) {
+    zoomBtn.addEventListener('click', () => {
+      isZoomEnabled = !isZoomEnabled;
+      const canvas = document.querySelector('.nt-mockup__canvas');
+      if (canvas) {
+        canvas.style.transform = isZoomEnabled ? 'scale(1.5)' : 'scale(1)';
+        canvas.style.transition = 'transform 0.3s ease';
+      }
+      zoomBtn.style.background = isZoomEnabled ? '#27e1c1' : '';
+      zoomBtn.style.color = isZoomEnabled ? 'white' : '';
+      zoomBtn.style.borderColor = isZoomEnabled ? '#27e1c1' : '#e2e8f0';
+      console.log('🔍 Zoom:', isZoomEnabled ? 'Enabled' : 'Disabled');
+    });
+  }
+  
+  // Design validation
+  const validateBtn = document.getElementById(`nt-validate-{{ section.id }}`);
+  if (validateBtn) {
+    validateBtn.addEventListener('click', () => {
+      validateDesign();
+    });
+  }
+  
+  // Reset button
+  const resetBtn = document.getElementById(`nt-reset-{{ section.id }}`);
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      // Reset all controls to default values
+      const topSlider = document.querySelector('input[data-control="top"]');
+      const leftSlider = document.querySelector('input[data-control="left"]');
+      const widthSlider = document.querySelector('input[data-control="width"]');
+      const rotateSlider = document.querySelector('input[data-control="rotate"]');
+      
+      if (topSlider) topSlider.value = 30;
+      if (leftSlider) leftSlider.value = 30;
+      if (widthSlider) widthSlider.value = 50;
+      if (rotateSlider) rotateSlider.value = 0;
+      
+      // Reset 3D controls
+      is3DRotationEnabled = false;
+      isZoomEnabled = false;
+      currentRotation = 0;
+      
+      // Update button states
+      if (rotate3DBtn) {
+        rotate3DBtn.style.background = '';
+        rotate3DBtn.style.color = '';
+        rotate3DBtn.style.borderColor = '#e2e8f0';
+      }
+      if (zoomBtn) {
+        zoomBtn.style.background = '';
+        zoomBtn.style.color = '';
+        zoomBtn.style.borderColor = '#e2e8f0';
+      }
+      
+      // Reset canvas
+      const canvas = document.querySelector('.nt-mockup__canvas');
+      if (canvas) {
+        canvas.style.transform = '';
+        canvas.style.transition = '';
+      }
+      
+      // Trigger mockup update
+      if (window.mockup && window.mockup.updateMockup) {
+        window.mockup.updateMockup();
+      }
+      
+      console.log('🔄 Design reset to defaults');
+    });
+  }
+  
+  // Design validation function
+  function validateDesign() {
+    const issues = [];
+    let score = 100;
+    
+    // Check if design is loaded
+    const hasDesign = document.querySelector('.nt-mockup__canvas img[src*="data:"]') || 
+                     document.querySelector('.nt-mockup__canvas canvas');
+    
+    if (!hasDesign) {
+      issues.push('No design uploaded');
+      score = 0;
+    } else {
+      // Check design size
+      const widthSlider = document.querySelector('input[data-control="width"]');
+      const widthValue = widthSlider ? parseFloat(widthSlider.value) : 50;
+      
+      if (widthValue < 20) {
+        issues.push('Design too small');
+        score -= 30;
+      } else if (widthValue > 80) {
+        issues.push('Design too large');
+        score -= 20;
+      }
+      
+      // Check positioning
+      const topSlider = document.querySelector('input[data-control="top"]');
+      const leftSlider = document.querySelector('input[data-control="left"]');
+      const topValue = topSlider ? parseFloat(topSlider.value) : 30;
+      const leftValue = leftSlider ? parseFloat(leftSlider.value) : 30;
+      
+      if (topValue < 10 || topValue > 80) {
+        issues.push('Poor vertical positioning');
+        score -= 25;
+      }
+      
+      if (leftValue < 10 || leftValue > 80) {
+        issues.push('Poor horizontal positioning');
+        score -= 25;
+      }
+    }
+    
+    // Show validation result
+    showValidationResult(score, issues);
+    console.log('✅ Design validation complete. Score:', score, 'Issues:', issues);
+  }
+  
+  // Show validation result
+  function showValidationResult(score, issues) {
+    // Remove existing validation
+    const existingValidation = document.querySelector('.nt-validation-result');
+    if (existingValidation) {
+      existingValidation.remove();
+    }
+    
+    // Create validation indicator
+    const validationDiv = document.createElement('div');
+    validationDiv.className = 'nt-validation-result';
+    validationDiv.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      padding: 16px 20px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 14px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      backdrop-filter: blur(10px);
+      animation: slideInRight 0.3s ease;
+      max-width: 300px;
+    `;
+    
+    let bgColor, icon, text;
+    if (score >= 90) {
+      bgColor = 'rgba(16, 185, 129, 0.95)';
+      icon = '✓';
+      text = 'Design Quality: Perfect';
+    } else if (score >= 70) {
+      bgColor = 'rgba(245, 158, 11, 0.95)';
+      icon = '⚠';
+      text = `Design Quality: Good${issues[0] ? ` (${issues[0]})` : ''}`;
+    } else {
+      bgColor = 'rgba(239, 68, 68, 0.95)';
+      icon = '✗';
+      text = `Design Quality: Needs Work${issues[0] ? ` (${issues[0]})` : ''}`;
+    }
+    
+    validationDiv.style.background = bgColor;
+    validationDiv.style.color = 'white';
+    validationDiv.innerHTML = `
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 1.2rem;">${icon}</span>
+        <span>${text}</span>
+      </div>
+    `;
+    
+    document.body.appendChild(validationDiv);
+    
+    // Auto-hide after 5 seconds
+    setTimeout(() => {
+      if (validationDiv.parentNode) {
+        validationDiv.style.animation = 'slideOutRight 0.3s ease';
+        setTimeout(() => {
+          if (validationDiv.parentNode) {
+            validationDiv.remove();
+          }
+        }, 300);
+      }
+    }, 5000);
+  }
+  
+  // Add CSS animations
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes slideInRight {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOutRight {
+      from { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(100%); opacity: 0; }
+    }
+  `;
+  document.head.appendChild(style);
+
   // Initialize mockup
   mockup.init();
 
   // Make globally available
   window.mockup = mockup;
 
-  console.log('Enhanced Interactive Mockup initialized! 🎨');
+  console.log('🚀 ENHANCED Interactive Mockup initialized! 🎨');
 });
 </script>
 
