@@ -26,6 +26,21 @@
       "name": "T-Shirt Customizer",
       "settings": {}
     },
+    "welcome_social_bar_JEwJ6C": {
+      "type": "welcome-social-bar",
+      "name": "Welcome / Social Bar",
+      "settings": {
+        "heading": "",
+        "body": "",
+        "facebook_url": "",
+        "instagram_url": "",
+        "twitter_url": "",
+        "tiktok_url": "",
+        "youtube_url": "",
+        "pad_y": 24,
+        "section_bg": "#f8fafc"
+      }
+    },
     "halloween-countdown": {
       "type": "countdown-halloween",
       "settings": {
@@ -67,6 +82,10 @@
         "show_stars": true,
         "stars_count": 20,
         "show_moon": true,
+        "show_frankensteins": true,
+        "show_wind": true,
+        "show_cats": true,
+        "show_candy": true,
         "show_lightning": true,
         "lightning_debug": true,
         "lightning_min_gap": 10,
@@ -172,6 +191,7 @@
         "product_2",
         "product_3"
       ],
+      "disabled": true,
       "name": "Product Poll",
       "settings": {
         "title": "Vote for Your Favorite Products!",
@@ -191,21 +211,6 @@
         "subheading": "",
         "collection": "entire-collection",
         "max_products": 12
-      }
-    },
-    "welcome_social_bar_JEwJ6C": {
-      "type": "welcome-social-bar",
-      "name": "Welcome / Social Bar",
-      "settings": {
-        "heading": "",
-        "body": "",
-        "facebook_url": "",
-        "instagram_url": "",
-        "twitter_url": "",
-        "tiktok_url": "",
-        "youtube_url": "",
-        "pad_y": 24,
-        "section_bg": "#f8fafc"
       }
     }
   },
