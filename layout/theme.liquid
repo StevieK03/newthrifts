@@ -1406,6 +1406,60 @@
       });
       
       console.log('Global Quick View initialized');
+      
+      // Enhanced Page View Tracking with Supabase
+      async function trackPageView() {
+        try {
+          if (window.supabaseClient) {
+            // Get additional context
+            const isProductPage = window.location.pathname.includes('/products/');
+            const isCollectionPage = window.location.pathname.includes('/collections/');
+            const isCartPage = window.location.pathname.includes('/cart');
+            const isCheckoutPage = window.location.pathname.includes('/checkout');
+            
+            // Get product info if on product page
+            let productInfo = {};
+            if (isProductPage) {
+              const productTitle = document.querySelector('h1')?.textContent || '';
+              const productPrice = document.querySelector('.price')?.textContent || '';
+              const productImages = document.querySelectorAll('.product-image img');
+              productInfo = {
+                product_title: productTitle,
+                product_price: productPrice,
+                image_count: productImages.length
+              };
+            }
+            
+            await window.supabaseClient.trackEvent('page_view', {
+              page: window.location.pathname,
+              page_title: document.title,
+              referrer: document.referrer,
+              user_agent: navigator.userAgent,
+              screen_resolution: `${screen.width}x${screen.height}`,
+              viewport_size: `${window.innerWidth}x${window.innerHeight}`,
+              timestamp: new Date().toISOString(),
+              page_type: isProductPage ? 'product' : isCollectionPage ? 'collection' : isCartPage ? 'cart' : isCheckoutPage ? 'checkout' : 'other',
+              ...productInfo
+            });
+            console.log('📊 Page view tracked:', window.location.pathname);
+          }
+        } catch (error) {
+          console.log('📊 Page view tracking error:', error);
+        }
+      }
+      
+      // Track page view when page loads
+      trackPageView();
+      
+      // Track page views on navigation (for SPAs)
+      let lastUrl = window.location.href;
+      new MutationObserver(() => {
+        const url = window.location.href;
+        if (url !== lastUrl) {
+          lastUrl = url;
+          trackPageView();
+        }
+      }).observe(document, { subtree: true, childList: true });
     });
     </script>
   </body>
