@@ -129,10 +129,11 @@ Welcome / Social Bar — Modern Redesign
   <style>
     /* ---- Modern Welcome Section Redesign ---- */
     #welcome-{{ section.id }} {
-      padding: {{ section.settings.pad_y | default: 24 }}px 16px;
-      background: {{ section.settings.section_bg | default: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)' }};
+      padding: {{ section.settings.pad_y | default: 0 }}px 16px 24px 16px;
+      background: {{ section.settings.section_bg | default: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, #f8fafc 20%, #e2e8f0 100%)' }};
       position: relative;
       overflow: hidden;
+      margin-top: -1px;
     }
 
     #welcome-{{ section.id }} .welcome-container {
