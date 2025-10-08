@@ -9,15 +9,11 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-<<<<<<< Current (Your changes)
     "dev:shopify": "bash scripts/shopify.sh theme dev --store=\"$SHOPIFY_STORE\"",
     "pull:shopify:live": "bash scripts/shopify.sh theme pull --store=\"$SHOPIFY_STORE\" --live",
     "push:shopify:live": "bash scripts/shopify.sh theme push --store=\"$SHOPIFY_STORE\" --live",
     "push:shopify": "bash scripts/shopify.sh theme push --store=\"$SHOPIFY_STORE\" --theme-id=\"$SHOPIFY_THEME_ID\"",
     "open:shopify": "bash scripts/shopify.sh theme open --store=\"$SHOPIFY_STORE\""
-=======
-    "push:shopify:live": "shopify theme push --store newthrifts.myshopify.com --allow-live --live"
->>>>>>> Incoming (Background Agent changes)
   },
   "dependencies": {
     "react": "18.2.0",

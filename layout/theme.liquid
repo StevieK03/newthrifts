@@ -209,6 +209,9 @@
     <script src="{{ 'theme.js' | asset_url }}?v={{ 'now' | date: '%s' }}" defer></script>
     <script src="{{ 'swatch.js' | asset_url }}?v={{ 'now' | date: '%s' }}" defer></script>
     <script src="{{ 'variant-selector.js' | asset_url }}?v={{ 'now' | date: '%s' }}" defer></script>
+    
+    {%- comment -%} Supabase Integration {%- endcomment -%}
+    <script src="{{ 'supabase-config.js' | asset_url }}?v={{ 'now' | date: '%s' }}" defer></script>
     <script src="{{ 'visitor-counter.js' | asset_url }}?v={{ 'now' | date: '%s' }}" defer></script>
     
     <!-- Enhanced Homepage Features -->
