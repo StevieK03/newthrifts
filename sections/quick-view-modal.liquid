@@ -925,7 +925,14 @@ document.addEventListener('DOMContentLoaded', function() {
       );
       
       if (matchingVariant) {
+        // Validate variant is available before adding
+        if (!matchingVariant.available) {
+          showQuickAddMessage('This variant is sold out', 'error');
+          return;
+        }
         addToCart(matchingVariant.id);
+      } else {
+        showQuickAddMessage('Please select all options', 'error');
       }
     });
   }

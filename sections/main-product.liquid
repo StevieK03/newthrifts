@@ -273,6 +273,9 @@ Main product section — safe + styled + correct add-to-cart
 
 
     <script>
+    // Make product data available globally
+    window.productData = {{ product | json }};
+    
     (function(){
       var form       = document.getElementById('{{ product_form_id }}');
       if(!form) return;
@@ -343,6 +346,11 @@ Main product section — safe + styled + correct add-to-cart
           history.replaceState({}, '', url);
         } else {
           console.log('No matching variant found for options:', selectedOptions);
+          // If no variant found, disable the form
+          if(submitBtn){
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Select options';
+          }
         }
       }
 
@@ -355,11 +363,58 @@ Main product section — safe + styled + correct add-to-cart
         });
       });
       
-      // Add form submission debugging
+      // Add form submission validation
       form.addEventListener('submit', function(e) {
         console.log('=== FORM SUBMISSION DEBUG ===');
         console.log('Form submitting with variant ID:', idInput.value);
         console.log('Selected options at submission:', Array.from(selectors).map(s => s.value));
+        
+        // Validate that all required options are selected
+        var selectedOptions = getSelectedOptionsAligned();
+        var missingOptions = [];
+        
+        // Check if any options are missing (empty or undefined)
+        selectedOptions.forEach(function(option, index) {
+          if (!option || option === '') {
+            missingOptions.push(productData.options[index]);
+          }
+        });
+        
+        if (missingOptions.length > 0) {
+          e.preventDefault();
+          alert('Please select: ' + missingOptions.join(', '));
+          console.log('Form submission blocked - missing options:', missingOptions);
+          return false;
+        }
+        
+        // Validate variant ID exists and is available
+        if (!idInput.value || idInput.value === '') {
+          e.preventDefault();
+          alert('Please select all product options');
+          console.log('Form submission blocked - no variant ID');
+          return false;
+        }
+        
+        // Check if variant is available
+        var selectedVariant = productData.variants.find(function(v) {
+          return String(v.id) === String(idInput.value);
+        });
+        
+        if (!selectedVariant) {
+          e.preventDefault();
+          alert('Selected options are not available');
+          console.log('Form submission blocked - variant not found');
+          return false;
+        }
+        
+        if (!selectedVariant.available) {
+          e.preventDefault();
+          alert('This variant is sold out');
+          console.log('Form submission blocked - variant sold out');
+          return false;
+        }
+        
+        console.log('Form validation passed - submitting');
         console.log('=== END FORM SUBMISSION DEBUG ===');
       });
       

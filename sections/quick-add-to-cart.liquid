@@ -526,6 +526,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const button = document.querySelector(`[data-product-handle="${currentProduct.handle}"] .quick-add-btn`);
     const originalHTML = button.innerHTML;
     
+    // Validate variant exists and is available
+    const variant = currentProduct.variants.find(v => v.id === variantId);
+    if (!variant) {
+      showQuickAddMessage('Product variant not found', 'error');
+      return;
+    }
+    
+    if (!variant.available) {
+      showQuickAddMessage('This item is sold out', 'error');
+      return;
+    }
+    
     try {
       button.innerHTML = `
         <div class="loading-dots">
