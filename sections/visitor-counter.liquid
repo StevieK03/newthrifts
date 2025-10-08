@@ -4,8 +4,8 @@
 {% endcomment %}
 
 <section class="visitor-counter-section" style="
-  background: linear-gradient(135deg, {{ section.settings.bg_color | default: '#f8fafc' }}, {{ section.settings.bg_color_2 | default: '#e2e8f0' }});
-  padding: {{ section.settings.pad_y | default: 40 }}px 0;
+  background: linear-gradient(135deg, {{ section.settings.bg_color | default: '#0f172a' }}, {{ section.settings.bg_color_2 | default: '#1e293b' }});
+  padding: {{ section.settings.pad_y | default: 60 }}px 0;
   margin: {{ section.settings.margin_y | default: 20 }}px 0;
   border-radius: {{ section.settings.border_radius | default: 16 }}px;
   text-align: center;
@@ -31,9 +31,10 @@
       <h2 class="visitor-counter-heading" style="
         font-family: 'Bebas Neue', sans-serif;
         font-size: {{ section.settings.heading_size | default: 32 }}px;
-        color: {{ section.settings.text_color | default: '#0f172a' }};
+        color: {{ section.settings.text_color | default: '#f8fafc' }};
         margin: 0 0 16px 0;
         letter-spacing: 0.05em;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
       ">
         {{ section.settings.heading | default: 'Site Visitors' }}
       </h2>
@@ -41,8 +42,7 @@
     
     {% if section.settings.show_subheading %}
       <p class="visitor-counter-subheading" style="
-        color: {{ section.settings.text_color | default: '#0f172a' }};
-        opacity: 0.8;
+        color: {{ section.settings.text_color | default: '#cbd5e1' }};
         margin: 0 0 24px 0;
         font-size: {{ section.settings.subheading_size | default: 16 }}px;
       ">
@@ -60,11 +60,11 @@
       
       {% comment %} Total Visitors Counter {% endcomment %}
       <div class="counter-item" style="
-        background: {{ section.settings.counter_bg | default: '#ffffff' }};
+        background: {{ section.settings.counter_bg | default: '#334155' }};
         padding: 20px 24px;
         border-radius: 12px;
         box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        border: 1px solid {{ section.settings.counter_border | default: 'rgba(0,0,0,0.1)' }};
+        border: 1px solid {{ section.settings.counter_border | default: '#475569' }};
         min-width: 120px;
       ">
         <div class="counter-number" id="total-visitors" style="
@@ -78,7 +78,7 @@
         </div>
         <div class="counter-label" style="
           font-size: {{ section.settings.label_size | default: 14 }}px;
-          color: {{ section.settings.text_color | default: '#0f172a' }};
+          color: {{ section.settings.text_color | default: '#f8fafc' }};
           opacity: 0.7;
           font-weight: 600;
         ">
@@ -88,11 +88,11 @@
       
       {% comment %} Unique Visitors Counter {% endcomment %}
       <div class="counter-item" style="
-        background: {{ section.settings.counter_bg | default: '#ffffff' }};
+        background: {{ section.settings.counter_bg | default: '#334155' }};
         padding: 20px 24px;
         border-radius: 12px;
         box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        border: 1px solid {{ section.settings.counter_border | default: 'rgba(0,0,0,0.1)' }};
+        border: 1px solid {{ section.settings.counter_border | default: '#475569' }};
         min-width: 120px;
       ">
         <div class="counter-number" id="unique-visitors" style="
@@ -106,7 +106,7 @@
         </div>
         <div class="counter-label" style="
           font-size: {{ section.settings.label_size | default: 14 }}px;
-          color: {{ section.settings.text_color | default: '#0f172a' }};
+          color: {{ section.settings.text_color | default: '#f8fafc' }};
           opacity: 0.7;
           font-weight: 600;
         ">
