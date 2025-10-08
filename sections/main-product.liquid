@@ -1153,6 +1153,18 @@ Main product section — safe + styled + correct add-to-cart
     .btn:hover {
       background: #2563eb !important;
     }
+
+    /* Dark mode styling for mobile Add to Cart button */
+    [data-theme="dark"] .btn {
+      background: #1e293b !important;
+      color: #f8fafc !important;
+      border: 1px solid #334155 !important;
+    }
+
+    [data-theme="dark"] .btn:hover {
+      background: #334155 !important;
+      border-color: #475569 !important;
+    }
     
     /* Info Sections */
     .info-section {
@@ -1447,16 +1459,16 @@ Main product section — safe + styled + correct add-to-cart
 
 /* Add to cart button */
 [data-theme="dark"] .product-form__cart-submit {
-  background: var(--button-primary, #3b82f6) !important;
-  border: 1px solid var(--button-primary, #3b82f6) !important;
-  color: white !important;
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+  color: #f8fafc !important;
   transition: all 0.3s ease !important;
 }
 
 [data-theme="dark"] .product-form__cart-submit:hover {
-  background: var(--button-primary-hover, #2563eb) !important;
-  border-color: var(--button-primary-hover, #2563eb) !important;
-  box-shadow: 0 0 15px rgba(59, 130, 246, 0.3) !important;
+  background: #334155 !important;
+  border-color: #475569 !important;
+  box-shadow: 0 0 15px rgba(30, 41, 59, 0.3) !important;
   transform: translateY(-1px) !important;
 }
 
