@@ -98,11 +98,11 @@ Simple Cart template — drop-in
         </tbody>
 
         <tfoot style="border-top:2px solid rgba(0,0,0,.08);">
-          <tr>
-            <td></td>
-            <td></td>
-            <td style="text-align:right; padding-top:14px; font-weight:700;">Subtotal</td>
-            <td style="text-align:right; padding-top:14px; font-weight:700;">{{ cart.total_price | money }}</td>
+          <tr style="background: #334155; border-radius: 0 0 12px 12px; overflow: hidden;">
+            <td style="padding:16px 20px 16px 24px; border-radius: 0 0 0 12px;"></td>
+            <td style="padding:16px 20px;"></td>
+            <td style="text-align:right; padding:16px 20px; font-weight:700; color: #f8fafc;">Subtotal</td>
+            <td style="text-align:right; padding:16px 24px 16px 20px; font-weight:700; color: #f8fafc; border-radius: 0 0 12px 0;">{{ cart.total_price | money }}</td>
           </tr>
         </tfoot>
       </table>
