@@ -5,7 +5,7 @@ Product Poll Section
 - Responsive design for desktop and mobile
 {% endcomment %}
 
-<section id="product-poll-{{ section.id }}" class="product-poll-section">
+<section id="product-poll-{{ section.id }}" class="product-poll-section" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); padding: 60px 0;">
   <div class="poll-container">
     <div class="poll-header">
       <h2 class="poll-title">{{ section.settings.title | default: "Vote for Your Favorite Products!" }}</h2>
@@ -119,14 +119,15 @@ Product Poll Section
     #product-poll-{{ section.id }} .poll-title {
       font-family: 'Bebas Neue', 'Anton', system-ui, sans-serif;
       font-size: clamp(28px, 4vw, 42px);
-      color: #0f172a;
+      color: #f8fafc;
       margin: 0 0 16px 0;
       letter-spacing: 0.5px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     }
 
     #product-poll-{{ section.id }} .poll-description {
       font-size: 18px;
-      color: #475569;
+      color: #cbd5e1;
       margin: 0;
       max-width: 600px;
       margin: 0 auto;
@@ -319,27 +320,27 @@ Product Poll Section
     }
 
     #product-poll-{{ section.id }} .poll-results {
-      background: #ffffff !important;
+      background: #1e293b !important;
       border-radius: 16px;
       padding: 24px;
-      box-shadow: 0 8px 32px rgba(0,0,0,.08);
-      border: 1px solid rgba(0,0,0,.06) !important;
+      box-shadow: 0 8px 32px rgba(0,0,0,.3);
+      border: 1px solid #334155 !important;
       position: sticky;
       top: 20px;
-      color: #0f172a !important;
+      color: #f8fafc !important;
     }
 
-    /* Force light theme for poll results even in dark mode */
+    /* Dark theme for poll results */
     [data-theme="dark"] #product-poll-{{ section.id }} .poll-results {
-      background: #ffffff !important;
-      border: 1px solid rgba(0,0,0,.06) !important;
-      color: #0f172a !important;
+      background: #1e293b !important;
+      border: 1px solid #334155 !important;
+      color: #f8fafc !important;
     }
 
     #product-poll-{{ section.id }} .results-title {
       font-size: 20px;
       font-weight: 600;
-      color: #0f172a;
+      color: #f8fafc !important;
       margin: 0 0 20px 0;
       text-align: center;
     }
