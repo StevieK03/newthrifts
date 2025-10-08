@@ -1407,8 +1407,8 @@
       
       console.log('Global Quick View initialized');
       
-      // Enhanced Page View Tracking with Supabase
-      async function trackPageView() {
+      // Enhanced Page View Tracking with Supabase (Global Function)
+      window.trackPageView = async function() {
         try {
           if (window.supabaseClient) {
             // Ensure Supabase client is initialized
@@ -1462,7 +1462,7 @@
       }
       
       // Track page view when page loads
-      trackPageView();
+      window.trackPageView();
       
       // Track page views on navigation (for SPAs)
       let lastUrl = window.location.href;
@@ -1470,7 +1470,7 @@
         const url = window.location.href;
         if (url !== lastUrl) {
           lastUrl = url;
-          trackPageView();
+          window.trackPageView();
         }
       }).observe(document, { subtree: true, childList: true });
     });
