@@ -99,9 +99,20 @@ Welcome / Social Bar — Modern Redesign
         <div class="newsletter-signup">
           <h3 class="newsletter-title">Stay Updated</h3>
           <p class="newsletter-description">Get the latest drops and exclusive offers delivered to your inbox.</p>
-          <form class="newsletter-form" action="#" method="post">
+          {% form 'customer' %}
+            {% if form.posted_successfully? %}
+              <div class="newsletter-success" style="background: linear-gradient(135deg, #d1fae5, #a7f3d0); color: #065f46; padding: 12px 16px; border-radius: 8px; margin-bottom: 12px; text-align: center; font-weight: 600;">
+                ✅ Thanks for subscribing! Check your email for confirmation.
+              </div>
+            {% elsif form.errors %}
+              <div class="newsletter-error" style="background: linear-gradient(135deg, #fee2e2, #fca5a5); color: #991b1b; padding: 12px 16px; border-radius: 8px; margin-bottom: 12px; text-align: center; font-weight: 600;">
+                ❌ {{ form.errors | default_errors }}
+              </div>
+            {% endif %}
+            
             <div class="email-input-group">
-              <input type="email" name="email" placeholder="Enter your email" required class="email-input">
+              <input type="email" name="contact[email]" placeholder="Enter your email" required class="email-input" value="{{ form.email }}">
+              <input type="hidden" name="contact[tags]" value="newsletter">
               <button type="submit" class="subscribe-btn">
                 <span>Subscribe</span>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
@@ -109,7 +120,7 @@ Welcome / Social Bar — Modern Redesign
                 </svg>
               </button>
             </div>
-          </form>
+          {% endform %}
         </div>
       </div>
     </div>
