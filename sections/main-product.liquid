@@ -679,6 +679,25 @@ Main product section — safe + styled + correct add-to-cart
     background: #e9ecef;
   }
 
+  /* Dark mode styling for info section toggles */
+  [data-theme="dark"] .info-section-toggle {
+    background: #1e293b !important;
+    color: #f8fafc !important;
+    border: 1px solid #334155 !important;
+  }
+
+  [data-theme="dark"] .info-section-toggle:hover {
+    background: #334155 !important;
+  }
+
+  [data-theme="dark"] .section-title {
+    color: #f8fafc !important;
+  }
+
+  [data-theme="dark"] .toggle-icon {
+    color: #f8fafc !important;
+  }
+
   .section-title {
     font-weight: 600;
     color: #333;
@@ -1149,6 +1168,13 @@ Main product section — safe + styled + correct add-to-cart
       border: 1px solid #e5e7eb !important;
       border-radius: 6px !important;
     }
+
+    /* Dark mode styling for mobile info section toggles */
+    [data-theme="dark"] .info-section-toggle {
+      background: #1e293b !important;
+      color: #f8fafc !important;
+      border: 1px solid #334155 !important;
+    }
     
     .section-content {
       padding: 12px !important;
@@ -1180,6 +1206,13 @@ Main product section — safe + styled + correct add-to-cart
     .info-section-toggle {
       padding: 8px 12px !important;
       font-size: 14px !important;
+    }
+
+    /* Dark mode styling for smaller mobile info section toggles */
+    [data-theme="dark"] .info-section-toggle {
+      background: #1e293b !important;
+      color: #f8fafc !important;
+      border: 1px solid #334155 !important;
     }
     
     .section-title {
