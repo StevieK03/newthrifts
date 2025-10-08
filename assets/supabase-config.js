@@ -288,8 +288,12 @@ class SupabaseClient {
           page_url: window.location.href,
           user_agent: navigator.userAgent
         });
+      if (error) {
+        console.warn('[Supabase.trackEvent] insert error:', error);
+      }
       return { data, error };
     } catch (error) {
+      console.warn('[Supabase.trackEvent] exception:', error);
       return { error: error.message };
     }
   }
