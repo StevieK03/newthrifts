@@ -204,7 +204,20 @@
     </footer>
     
     <style>
-      /* Cache-busting comment: v2.6 - Match footer buttons to header button style */
+      /* Cache-busting comment: v2.7 - Fix footer buttons, mobile scrolling, and white line */
+      
+      /* Global fixes for horizontal scrolling and white line */
+      * {
+        box-sizing: border-box;
+      }
+      
+      html, body {
+        overflow-x: hidden !important;
+        max-width: 100vw !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      
       .footer-buttons-container {
         display: flex;
         justify-content: center;
@@ -222,24 +235,24 @@
       }
       
       .footer-btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 14px 28px;
-        border-radius: 50px;
-        text-decoration: none;
-        background: rgba(255, 255, 255, 0.15);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        backdrop-filter: blur(8px);
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 14px 28px !important;
+        border-radius: 50px !important;
+        text-decoration: none !important;
+        background: rgba(255, 255, 255, 0.15) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        backdrop-filter: blur(8px) !important;
         color: #ffffff !important;
-        font-weight: 600;
-        font-size: 0.9rem;
-        letter-spacing: 0.02em;
-        white-space: nowrap;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        overflow: hidden;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        font-weight: 600 !important;
+        font-size: 0.9rem !important;
+        letter-spacing: 0.02em !important;
+        white-space: nowrap !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        position: relative !important;
+        overflow: hidden !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
       }
       
       .footer-btn::before {
