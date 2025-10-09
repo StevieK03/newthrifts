@@ -195,10 +195,37 @@ Shows user profile information and management options
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(15, 23, 42, 0.8);
+  border-radius: 20px;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(39, 225, 193, 0.2);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), 0 8px 16px rgba(39, 225, 193, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Light mode dashboard */
+[data-theme="light"] .user-profile-dashboard {
+  background: rgba(248, 250, 252, 0.8);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(59, 130, 246, 0.1);
+}
+
+.user-profile-dashboard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(39, 225, 193, 0.02), rgba(255, 79, 163, 0.02));
+  pointer-events: none;
+  z-index: 0;
+}
+
+.user-profile-dashboard > * {
+  position: relative;
+  z-index: 1;
 }
 
 .profile-header {
@@ -340,10 +367,43 @@ Shows user profile information and management options
 }
 
 .overview-card {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  padding: 1.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(30, 41, 59, 0.6);
+  border-radius: 16px;
+  padding: 2rem;
+  border: 1px solid rgba(39, 225, 193, 0.2);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Light mode cards */
+[data-theme="light"] .overview-card {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.overview-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(39, 225, 193, 0.03), rgba(255, 79, 163, 0.03));
+  pointer-events: none;
+  z-index: 0;
+}
+
+.overview-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.overview-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(39, 225, 193, 0.3);
 }
 
 .overview-card h3 {
@@ -750,3 +810,4 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 </script>
+
