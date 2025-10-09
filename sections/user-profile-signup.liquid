@@ -3,7 +3,11 @@ User Profile Signup Section
 Allows users to create accounts with profile information
 {%- endcomment -%}
 
-<div class="user-profile-signup" id="user-profile-signup">
+{%- comment -%}
+User Profile Signup Section - Only show for non-authenticated users
+{%- endcomment -%}
+
+<div class="user-profile-signup" id="user-profile-signup" style="display: none;">
   <div class="profile-container">
     <div class="profile-header">
       <h2>Create Your Profile</h2>
@@ -370,6 +374,9 @@ Allows users to create accounts with profile information
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  // Check if user is authenticated and show/hide section accordingly
+  checkAuthAndShowSection();
+  
   const signupForm = document.getElementById('user-signup-form');
   const loginForm = document.getElementById('user-login-form');
   const signupSection = document.getElementById('signup-form');
@@ -538,6 +545,30 @@ document.addEventListener('DOMContentLoaded', function() {
   function clearMessages() {
     document.getElementById('success-message').style.display = 'none';
     document.getElementById('error-message').style.display = 'none';
+  }
+
+  async function checkAuthAndShowSection() {
+    try {
+      if (window.supabaseClient) {
+        const user = await window.supabaseClient.getCurrentUser();
+        const section = document.getElementById('user-profile-signup');
+        
+        if (user.user) {
+          // User is authenticated, hide the section
+          section.style.display = 'none';
+        } else {
+          // User is not authenticated, show the section
+          section.style.display = 'block';
+        }
+      } else {
+        // Supabase not available, show the section
+        document.getElementById('user-profile-signup').style.display = 'block';
+      }
+    } catch (error) {
+      console.error('Auth check error:', error);
+      // On error, show the section
+      document.getElementById('user-profile-signup').style.display = 'block';
+    }
   }
 
   // Clear individual field errors on input

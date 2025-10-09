@@ -21,6 +21,14 @@
       "type": "quick-view-modal",
       "settings": {}
     },
+    "user_profile_signup": {
+      "type": "user-profile-signup",
+      "name": "User Profile Signup",
+      "settings": {
+        "show_on_homepage": true,
+        "show_for_authenticated": false
+      }
+    },
     "advanced_tshirt_customizer": {
       "type": "advanced-tshirt-customizer",
       "name": "T-Shirt Customizer",
@@ -217,6 +225,7 @@
   "order": [
     "header",
     "quick_view_modal",
+    "user_profile_signup",
     "advanced_tshirt_customizer",
     "welcome_social_bar_JEwJ6C",
     "halloween-countdown",
