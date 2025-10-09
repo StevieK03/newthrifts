@@ -181,10 +181,29 @@ document.addEventListener('DOMContentLoaded', function() {
     min-height: 80px;
   }
   
+  /* Center the logo better on desktop */
+  #Header-{{ section.id }} .nt-header__logo {
+    margin-left: 20px;
+  }
+  
   /* User Account Button Styling */
   #Header-{{ section.id }} .nt-header__account {
     display: flex;
     align-items: center;
+  }
+  
+  /* Right side buttons container for better spacing */
+  #Header-{{ section.id }} .nt-header__account,
+  #Header-{{ section.id }} .nt-header__dark-mode,
+  #Header-{{ section.id }} .nt-header__cart {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  
+  /* Dark mode toggle spacing */
+  #Header-{{ section.id }} .nt-header__dark-mode {
+    margin: 0 8px;
   }
   
   #Header-{{ section.id }} .nt-header__account-btn {
@@ -607,6 +626,18 @@ document.addEventListener('DOMContentLoaded', function() {
       box-sizing: border-box;
     }
     
+    /* Mobile right side button spacing */
+    #Header-{{ section.id }} .nt-header__account,
+    #Header-{{ section.id }} .nt-header__dark-mode,
+    #Header-{{ section.id }} .nt-header__cart {
+      gap: 8px;
+    }
+    
+    /* Mobile dark mode toggle spacing */
+    #Header-{{ section.id }} .nt-header__dark-mode {
+      margin: 0 4px;
+    }
+    
     
     #Header-{{ section.id }} .nt-header__logo {
       margin-left: 0;
@@ -698,6 +729,18 @@ document.addEventListener('DOMContentLoaded', function() {
       padding: 6px 12px;
     }
     
+    /* Extra small screen button spacing */
+    #Header-{{ section.id }} .nt-header__account,
+    #Header-{{ section.id }} .nt-header__dark-mode,
+    #Header-{{ section.id }} .nt-header__cart {
+      gap: 6px;
+    }
+    
+    /* Extra small screen dark mode toggle spacing */
+    #Header-{{ section.id }} .nt-header__dark-mode {
+      margin: 0 3px;
+    }
+    
     #Header-{{ section.id }} .nt-header__account-btn {
       padding: 7px 11px;
       gap: 4px;
@@ -764,7 +807,7 @@ document.addEventListener('DOMContentLoaded', function() {
     align-items: center;
     justify-content: center;
   }
-  /* Cache-busting comment: v2.7 - Restored original layout with white outlines and equal button sizes */
+  /* Cache-busting comment: v2.8 - Fixed logo position and centered dark mode button */
   #Header-{{ section.id }} .nt-header__link{
     text-decoration: none; 
     color: #1f2937 !important; 
