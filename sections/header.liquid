@@ -42,8 +42,7 @@
           <span class="account-status-dot" id="account-status-dot"></span>
         </div>
         <div class="account-text">
-          <span class="account-title" id="account-title">My Account</span>
-          <span class="account-subtitle" id="account-subtitle">Sign In</span>
+          <span class="account-title" id="account-title">Sign in</span>
         </div>
       </button>
     </div>
@@ -110,16 +109,14 @@ document.addEventListener('DOMContentLoaded', function() {
   function updateAccountButton(isAuthenticated, user = null) {
     if (isAuthenticated && user) {
       // Authenticated state
-      accountTitle.textContent = 'My Account';
-      accountSubtitle.innerHTML = user.user_metadata?.full_name || user.email?.split('@')[0] || 'Profile';
+      accountTitle.textContent = user.user_metadata?.full_name || user.email?.split('@')[0] || 'Profile';
       statusDot.classList.add('authenticated');
       accountBtn.setAttribute('aria-label', 'My Account - Signed In');
     } else {
       // Not authenticated state
-      accountTitle.textContent = 'My Account';
-      accountSubtitle.innerHTML = 'Sign <span class="sign-in-highlight">In</span>';
+      accountTitle.textContent = 'Sign in';
       statusDot.classList.remove('authenticated');
-      accountBtn.setAttribute('aria-label', 'Sign In');
+      accountBtn.setAttribute('aria-label', 'Sign in');
     }
   }
   
@@ -195,44 +192,29 @@ document.addEventListener('DOMContentLoaded', function() {
   #Header-{{ section.id }} .nt-header__account-btn {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 10px 16px;
-    background: linear-gradient(135deg, #ffffff, #f8fafc);
-    border: 2px solid #e2e8f0;
-    border-radius: 12px;
-    color: #1e293b;
+    gap: 8px;
+    padding: 12px 20px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50px;
+    color: #1f2937;
     font-family: inherit;
+    font-weight: 600;
+    font-size: 0.9rem;
     cursor: pointer;
     transition: all 0.3s ease;
     backdrop-filter: blur(8px);
     text-decoration: none;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.05);
-    min-width: 140px;
+    white-space: nowrap;
     position: relative;
     overflow: hidden;
   }
   
-  #Header-{{ section.id }} .nt-header__account-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(147, 197, 253, 0.1));
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-  
   #Header-{{ section.id }} .nt-header__account-btn:hover {
-    background: linear-gradient(135deg, #f8fafc, #e2e8f0);
-    border-color: #3b82f6;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-  
-  #Header-{{ section.id }} .nt-header__account-btn:hover::before {
-    opacity: 1;
+    background: rgba(255, 255, 255, 0.25);
+    color: #1f2937;
+    transform: translateY(-1px);
+    border-color: rgba(255, 255, 255, 0.4);
   }
   
   #Header-{{ section.id }} .account-icon {
@@ -240,13 +222,13 @@ document.addEventListener('DOMContentLoaded', function() {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
   }
   
   #Header-{{ section.id }} .account-icon svg {
-    color: #1e293b;
-    stroke-width: 2.5;
+    color: #1f2937;
+    stroke-width: 2;
     width: 18px;
     height: 18px;
   }
@@ -270,41 +252,16 @@ document.addEventListener('DOMContentLoaded', function() {
   
   #Header-{{ section.id }} .account-text {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    line-height: 1.2;
+    align-items: center;
+    line-height: 1;
   }
   
   #Header-{{ section.id }} .account-title {
-    font-size: 14px;
-    font-weight: 700;
-    color: #1e293b;
-    margin: 0;
-    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
-    position: relative;
-    z-index: 1;
-  }
-  
-  #Header-{{ section.id }} .account-subtitle {
-    font-size: 12px;
-    font-weight: 500;
-    color: #475569;
-    margin: 0;
-    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
-    position: relative;
-    z-index: 1;
-  }
-  
-  /* Special styling for "In" part of "Sign In" */
-  #Header-{{ section.id }} .account-subtitle .sign-in-highlight {
-    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-    color: #ffffff;
-    padding: 2px 6px;
-    border-radius: 4px;
+    font-size: 0.9rem;
     font-weight: 600;
-    margin-left: 2px;
-    display: inline-block;
-    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+    color: #1f2937;
+    margin: 0;
+    letter-spacing: 0.01em;
     position: relative;
     z-index: 1;
   }
@@ -561,6 +518,36 @@ document.addEventListener('DOMContentLoaded', function() {
     color: var(--text-primary, #f8fafc) !important;
   }
 
+  /* Dark mode account button styling */
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__account-btn {
+    color: var(--text-primary, #f8fafc) !important;
+    background: rgba(71, 85, 105, 0.2) !important;
+    border: 1px solid var(--border-primary, #334155) !important;
+  }
+
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__account-btn:hover {
+    background: rgba(59, 130, 246, 0.2) !important;
+    border-color: var(--button-primary, #3b82f6) !important;
+    color: var(--text-accent, #60a5fa) !important;
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.3) !important;
+  }
+
+  [data-theme="dark"] #Header-{{ section.id }} .account-icon svg {
+    color: var(--text-primary, #f8fafc) !important;
+  }
+
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__account-btn:hover .account-icon svg {
+    color: var(--text-accent, #60a5fa) !important;
+  }
+
+  [data-theme="dark"] #Header-{{ section.id }} .account-title {
+    color: var(--text-primary, #f8fafc) !important;
+  }
+
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__account-btn:hover .account-title {
+    color: var(--text-accent, #60a5fa) !important;
+  }
+
   /* Dark mode logo styling */
   [data-theme="dark"] #Header-{{ section.id }} .nt-header__logo-img {
     filter: brightness(0) invert(1) !important; /* Makes logo white */
@@ -625,14 +612,14 @@ document.addEventListener('DOMContentLoaded', function() {
     
     /* Mobile Account Button Styling */
     #Header-{{ section.id }} .nt-header__account-btn {
-      padding: 10px 14px;
-      min-width: 120px;
-      gap: 8px;
+      padding: 8px 12px;
+      gap: 6px;
+      font-size: 13px;
     }
     
     #Header-{{ section.id }} .account-icon {
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
     }
     
     #Header-{{ section.id }} .account-icon svg {
@@ -642,10 +629,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     #Header-{{ section.id }} .account-title {
       font-size: 13px;
-    }
-    
-    #Header-{{ section.id }} .account-subtitle {
-      font-size: 11px;
     }
     
     /* Mobile Cart Button Styling */
@@ -706,17 +689,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     #Header-{{ section.id }} .nt-header__account-btn {
-      padding: 8px 10px;
-      min-width: 100px;
+      padding: 6px 8px;
       gap: 6px;
+      font-size: 12px;
     }
     
     #Header-{{ section.id }} .account-title {
       font-size: 12px;
-    }
-    
-    #Header-{{ section.id }} .account-subtitle {
-      font-size: 10px;
     }
     
     #Header-{{ section.id }} .nt-header__cart-link {
