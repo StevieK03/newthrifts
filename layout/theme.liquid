@@ -204,7 +204,7 @@
     </footer>
     
     <style>
-      /* Cache-busting comment: v2.5 - White footer button text */
+      /* Cache-busting comment: v2.6 - Match footer buttons to header button style */
       .footer-buttons-container {
         display: flex;
         justify-content: center;
@@ -228,9 +228,9 @@
         padding: 14px 28px;
         border-radius: 50px;
         text-decoration: none;
-        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 197, 253, 0.05));
-        border: 1px solid rgba(59, 130, 246, 0.3);
-        backdrop-filter: blur(12px);
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(8px);
         color: #ffffff !important;
         font-weight: 600;
         font-size: 0.9rem;
@@ -239,7 +239,7 @@
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
         overflow: hidden;
-        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.1);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
       }
       
       .footer-btn::before {
@@ -255,11 +255,11 @@
       }
       
       .footer-btn:hover {
-        background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(147, 197, 253, 0.15));
-        border-color: rgba(59, 130, 246, 0.5);
+        background: rgba(255, 255, 255, 0.25);
+        border-color: rgba(255, 255, 255, 0.3);
         color: #ffffff !important;
         transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.2), 0 4px 12px rgba(59, 130, 246, 0.15);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.15);
       }
       
       .footer-btn:hover::before {
@@ -271,23 +271,23 @@
         box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
       }
       
-      /* Dark mode footer button styling - enhanced */
+      /* Dark mode footer button styling - matches header buttons */
       [data-theme="dark"] .footer-btn {
-        color: var(--text-accent, #60a5fa) !important;
-        background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(147, 197, 253, 0.08)) !important;
-        border: 1px solid rgba(59, 130, 246, 0.4) !important;
-        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.15) !important;
+        color: #ffffff !important;
+        background: rgba(255, 255, 255, 0.15) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
       }
       
       [data-theme="dark"] .footer-btn::before {
-        background: linear-gradient(135deg, rgba(59, 130, 246, 0.25), rgba(147, 197, 253, 0.15)) !important;
+        background: rgba(255, 255, 255, 0.1) !important;
       }
       
       [data-theme="dark"] .footer-btn:hover {
-        background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(147, 197, 253, 0.2)) !important;
-        border-color: rgba(59, 130, 246, 0.6) !important;
-        color: var(--text-primary, #f8fafc) !important;
-        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3), 0 4px 12px rgba(59, 130, 246, 0.2) !important;
+        background: rgba(255, 255, 255, 0.25) !important;
+        border-color: rgba(255, 255, 255, 0.3) !important;
+        color: #ffffff !important;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.2) !important;
       }
       
       @media (max-width: 768px) {
