@@ -1,14 +1,21 @@
 <header id="Header-{{ section.id }}" class="nt-header" role="banner">
   <div class="nt-header__wrap">
-    <!-- Logo -->
-    <div class="nt-header__logo">
-      {% if section.settings.logo != blank %}
-        <a href="{{ routes.root_url }}" class="nt-header__logo-link">
-          <img src="{{ section.settings.logo | img_url: '200x' }}" alt="{{ shop.name }}" class="nt-header__logo-img">
-        </a>
-      {% else %}
-        <a href="{{ routes.root_url }}" class="nt-header__logo-text">{{ section.settings.logo_text }}</a>
-      {% endif %}
+    <!-- Logo and Shop Button -->
+    <div class="nt-header__logo-section">
+      <div class="nt-header__logo">
+        {% if section.settings.logo != blank %}
+          <a href="{{ routes.root_url }}" class="nt-header__logo-link">
+            <img src="{{ section.settings.logo | img_url: '200x' }}" alt="{{ shop.name }}" class="nt-header__logo-img">
+          </a>
+        {% else %}
+          <a href="{{ routes.root_url }}" class="nt-header__logo-text">{{ section.settings.logo_text }}</a>
+        {% endif %}
+      </div>
+      
+      <!-- Shop Button -->
+      <div class="nt-header__shop-btn">
+        <a href="/collections/all" class="nt-header__link">Shop</a>
+      </div>
     </div>
 
     <!-- Navigation -->
@@ -21,9 +28,9 @@
           {% endfor %}
         </ul>
       {% else %}
-        <!-- Fallback links if no menu chosen in settings -->
+        <!-- Empty navigation when no menu is set -->
         <ul class="nt-header__list">
-          <li><a href="/collections/all" class="nt-header__link">Shop</a></li>
+          <!-- Shop button moved to logo section -->
         </ul>
       {% endif %}
       
@@ -603,6 +610,12 @@ document.addEventListener('DOMContentLoaded', function() {
       align-items: center;
     }
     
+    #Header-{{ section.id }} .nt-header__logo-section {
+      margin-left: 0;
+      flex-shrink: 0;
+      gap: 12px;
+    }
+    
     #Header-{{ section.id }} .nt-header__logo {
       margin-left: 0;
       flex-shrink: 0;
@@ -714,6 +727,10 @@ document.addEventListener('DOMContentLoaded', function() {
       text-align: center;
     }
     
+    #Header-{{ section.id }} .nt-header__logo-section {
+      gap: 8px;
+    }
+    
     #Header-{{ section.id }} .nt-header__logo-img {
       max-height: 40px;
     }
@@ -726,6 +743,21 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   
   #Header-{{ section.id }} .nt-header__logo-img{ max-height:80px; display:block }
+  
+  /* Logo section styling */
+  #Header-{{ section.id }} .nt-header__logo-section {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+  }
+
+  /* Shop button styling in logo section */
+  #Header-{{ section.id }} .nt-header__shop-btn {
+    display: flex;
+    align-items: center;
+  }
+  
   /* Force sync trigger */
   #Header-{{ section.id }} .nt-header__logo-text{
     font-weight: 800; 
@@ -752,7 +784,7 @@ document.addEventListener('DOMContentLoaded', function() {
     align-items: center;
     justify-content: center;
   }
-  /* Cache-busting comment: v2.3 - Fixed Shop button cut-off */
+  /* Cache-busting comment: v2.4 - Moved Shop button next to logo */
   #Header-{{ section.id }} .nt-header__link{
     text-decoration: none; 
     color: #1f2937 !important; 
