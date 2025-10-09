@@ -5,6 +5,15 @@ Welcome / Social Bar — Modern Redesign
 - Responsive design for desktop and mobile
 {% endcomment %}
 
+<!-- NewThrifts Logo positioned above Welcome/Social bar -->
+<div class="logo-above-welcome">
+  <div class="logo-container">
+    <a href="{{ routes.root_url }}" class="logo-link">
+      <img src="{{ settings.logo | img_url: '300x' }}" alt="{{ shop.name }}" class="logo-img">
+    </a>
+  </div>
+</div>
+
 <section id="welcome-{{ section.id }}" class="welcome-wrap" role="region" aria-label="Welcome to New Thrifts">
   <div class="welcome-container">
     <div class="welcome-content">
@@ -113,6 +122,66 @@ Welcome / Social Bar — Modern Redesign
   </div>
 
   <style>
+    /* ---- Logo Above Welcome Section ---- */
+    .logo-above-welcome {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px 16px;
+      background: transparent;
+      position: relative;
+      z-index: 10;
+    }
+    
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .logo-link {
+      display: block;
+      text-decoration: none;
+      transition: transform 0.3s ease;
+    }
+    
+    .logo-link:hover {
+      transform: scale(1.05);
+    }
+    
+    .logo-img {
+      max-height: 80px;
+      width: auto;
+      display: block;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+    }
+    
+    /* Dark mode logo styling */
+    [data-theme="dark"] .logo-img {
+      filter: brightness(0) invert(1) drop-shadow(0 4px 8px rgba(255, 255, 255, 0.1));
+    }
+    
+    /* Mobile logo adjustments */
+    @media (max-width: 768px) {
+      .logo-above-welcome {
+        padding: 15px 16px;
+      }
+      
+      .logo-img {
+        max-height: 60px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .logo-above-welcome {
+        padding: 12px 16px;
+      }
+      
+      .logo-img {
+        max-height: 50px;
+      }
+    }
+
     /* ---- Modern Welcome Section Redesign ---- */
     #welcome-{{ section.id }} {
       padding: {{ section.settings.pad_y | default: 0 }}px 16px 24px 16px;

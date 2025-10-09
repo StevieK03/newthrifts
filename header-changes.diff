@@ -1,0 +1,293 @@
+diff --git a/sections/header.liquid b/sections/header.liquid
+index ceca326..ae8fb9a 100644
+--- a/sections/header.liquid
++++ b/sections/header.liquid
+@@ -1,21 +1,14 @@
+ <header id="Header-{{ section.id }}" class="nt-header" role="banner">
+   <div class="nt-header__wrap">
+-    <!-- Logo and Shop Button -->
+-    <div class="nt-header__logo-section">
+-      <div class="nt-header__logo">
+-        {% if section.settings.logo != blank %}
+-          <a href="{{ routes.root_url }}" class="nt-header__logo-link">
+-            <img src="{{ section.settings.logo | img_url: '200x' }}" alt="{{ shop.name }}" class="nt-header__logo-img">
+-          </a>
+-        {% else %}
+-          <a href="{{ routes.root_url }}" class="nt-header__logo-text">{{ section.settings.logo_text }}</a>
+-        {% endif %}
+-      </div>
+-      
+-      <!-- Shop Button -->
+-      <div class="nt-header__shop-btn">
+-        <a href="/collections/all" class="nt-header__link">Shop</a>
+-      </div>
++    <!-- Logo -->
++    <div class="nt-header__logo">
++      {% if section.settings.logo != blank %}
++        <a href="{{ routes.root_url }}" class="nt-header__logo-link">
++          <img src="{{ section.settings.logo | img_url: '200x' }}" alt="{{ shop.name }}" class="nt-header__logo-img">
++        </a>
++      {% else %}
++        <a href="{{ routes.root_url }}" class="nt-header__logo-text">{{ section.settings.logo_text }}</a>
++      {% endif %}
+     </div>
+ 
+     <!-- Navigation -->
+@@ -28,9 +21,9 @@
+           {% endfor %}
+         </ul>
+       {% else %}
+-        <!-- Empty navigation when no menu is set -->
++        <!-- Fallback links if no menu chosen in settings -->
+         <ul class="nt-header__list">
+-          <!-- Shop button moved to logo section -->
++          <li><a href="/collections/all" class="nt-header__link">Shop</a></li>
+         </ul>
+       {% endif %}
+       
+@@ -188,12 +181,27 @@ document.addEventListener('DOMContentLoaded', function() {
+     min-height: 80px;
+   }
+   
++  
+   /* User Account Button Styling */
+   #Header-{{ section.id }} .nt-header__account {
+     display: flex;
+     align-items: center;
+   }
+   
++  /* Right side buttons container for better spacing */
++  #Header-{{ section.id }} .nt-header__account,
++  #Header-{{ section.id }} .nt-header__dark-mode,
++  #Header-{{ section.id }} .nt-header__cart {
++    display: flex;
++    align-items: center;
++    gap: 16px;
++  }
++  
++  /* Dark mode toggle spacing */
++  #Header-{{ section.id }} .nt-header__dark-mode {
++    margin: 0 8px;
++  }
++  
+   #Header-{{ section.id }} .nt-header__account-btn {
+     display: flex;
+     align-items: center;
+@@ -201,6 +209,7 @@ document.addEventListener('DOMContentLoaded', function() {
+     padding: 12px 20px;
+     background: rgba(255, 255, 255, 0.15);
+     border: 1px solid rgba(255, 255, 255, 0.2);
++    outline: 1px solid rgba(255, 255, 255, 0.3);
+     border-radius: 50px;
+     color: #1f2937;
+     font-family: inherit;
+@@ -289,6 +298,7 @@ document.addEventListener('DOMContentLoaded', function() {
+     font-weight: 600;
+     background: rgba(255, 255, 255, 0.15);
+     border: 1px solid rgba(255, 255, 255, 0.2);
++    outline: 1px solid rgba(255, 255, 255, 0.3);
+     backdrop-filter: blur(8px);
+     transition: all 0.3s ease;
+     min-width: 56px;
+@@ -601,10 +611,10 @@ document.addEventListener('DOMContentLoaded', function() {
+     
+     #Header-{{ section.id }} .nt-header__wrap {
+       justify-content: space-between;
+-      gap: 4px;
+-      padding: 6px 8px;
++      gap: 2px;
++      padding: 4px 6px;
+       flex-wrap: nowrap;
+-      min-height: 52px;
++      min-height: 44px;
+       overflow-x: visible;
+       -webkit-overflow-scrolling: touch;
+       align-items: center;
+@@ -612,12 +622,19 @@ document.addEventListener('DOMContentLoaded', function() {
+       box-sizing: border-box;
+     }
+     
+-    #Header-{{ section.id }} .nt-header__logo-section {
+-      margin-left: 0;
+-      flex-shrink: 0;
+-      gap: 8px;
++    /* Mobile right side button spacing */
++    #Header-{{ section.id }} .nt-header__account,
++    #Header-{{ section.id }} .nt-header__dark-mode,
++    #Header-{{ section.id }} .nt-header__cart {
++      gap: 4px;
+     }
+     
++    /* Mobile dark mode toggle spacing */
++    #Header-{{ section.id }} .nt-header__dark-mode {
++      margin: 0 2px;
++    }
++    
++    
+     #Header-{{ section.id }} .nt-header__logo {
+       margin-left: 0;
+       flex-shrink: 0;
+@@ -633,17 +650,17 @@ document.addEventListener('DOMContentLoaded', function() {
+     }
+     
+     #Header-{{ section.id }} .account-icon {
+-      width: 16px;
+-      height: 16px;
++      width: 14px;
++      height: 14px;
+     }
+     
+     #Header-{{ section.id }} .account-icon svg {
+-      width: 16px;
+-      height: 16px;
++      width: 14px;
++      height: 14px;
+     }
+     
+     #Header-{{ section.id }} .account-title {
+-      font-size: 13px;
++      font-size: 11px;
+     }
+     
+     /* Mobile Cart Button Styling */
+@@ -654,8 +671,8 @@ document.addEventListener('DOMContentLoaded', function() {
+     }
+     
+     #Header-{{ section.id }} .nt-header__cart-icon {
+-      width: 18px;
+-      height: 18px;
++      width: 16px;
++      height: 16px;
+     }
+     
+     /* Mobile Navigation Styling */
+@@ -674,8 +691,8 @@ document.addEventListener('DOMContentLoaded', function() {
+     
+     #Header-{{ section.id }} .nt-header__list {
+       display: flex;
+-      gap: 12px;
+-      padding: 0 12px;
++      gap: 8px;
++      padding: 0 8px;
+       white-space: nowrap;
+       align-items: center;
+       justify-content: center;
+@@ -691,12 +708,12 @@ document.addEventListener('DOMContentLoaded', function() {
+     }
+     
+     #Header-{{ section.id }} .nt-header__logo-img { 
+-      max-height: 50px; 
++      max-height: 40px; 
+       width: auto;
+     }
+     
+     #Header-{{ section.id }} .nt-header__logo-text {
+-      font-size: 1.4rem;
++      font-size: 1.2rem;
+       line-height: 1.2;
+     }
+   }
+@@ -704,41 +721,50 @@ document.addEventListener('DOMContentLoaded', function() {
+   /* Extra small screens - ensure all buttons fit */
+   @media (max-width: 480px) {
+     #Header-{{ section.id }} .nt-header__wrap {
+-      gap: 4px;
+-      padding: 6px 12px;
++      gap: 2px;
++      padding: 4px 8px;
++    }
++    
++    /* Extra small screen button spacing */
++    #Header-{{ section.id }} .nt-header__account,
++    #Header-{{ section.id }} .nt-header__dark-mode,
++    #Header-{{ section.id }} .nt-header__cart {
++      gap: 3px;
++    }
++    
++    /* Extra small screen dark mode toggle spacing */
++    #Header-{{ section.id }} .nt-header__dark-mode {
++      margin: 0 2px;
+     }
+     
+     #Header-{{ section.id }} .nt-header__account-btn {
+-      padding: 6px 10px;
+-      gap: 4px;
+-      font-size: 11px;
+-      min-width: 65px;
++      padding: 5px 8px;
++      gap: 3px;
++      font-size: 10px;
++      min-width: 55px;
+       text-align: center;
+     }
+     
+     #Header-{{ section.id }} .account-title {
+-      font-size: 12px;
++      font-size: 10px;
+     }
+     
+     #Header-{{ section.id }} .nt-header__cart-link {
+-      padding: 6px 10px;
+-      min-width: 65px;
++      padding: 5px 8px;
++      min-width: 55px;
+       height: auto;
+     }
+     
+     #Header-{{ section.id }} .nt-header__link {
+-      padding: 6px 10px;
+-      font-size: 11px;
+-      min-width: 65px;
++      padding: 5px 8px;
++      font-size: 10px;
++      min-width: 55px;
+       text-align: center;
+     }
+     
+-    #Header-{{ section.id }} .nt-header__logo-section {
+-      gap: 8px;
+-    }
+     
+     #Header-{{ section.id }} .nt-header__logo-img {
+-      max-height: 40px;
++      max-height: 35px;
+     }
+     
+     #Header-{{ section.id }} .nt-header__nav {
+@@ -750,19 +776,6 @@ document.addEventListener('DOMContentLoaded', function() {
+   
+   #Header-{{ section.id }} .nt-header__logo-img{ max-height:80px; display:block }
+   
+-  /* Logo section styling */
+-  #Header-{{ section.id }} .nt-header__logo-section {
+-    display: flex;
+-    align-items: center;
+-    gap: 16px;
+-    flex-shrink: 0;
+-  }
+-
+-  /* Shop button styling in logo section */
+-  #Header-{{ section.id }} .nt-header__shop-btn {
+-    display: flex;
+-    align-items: center;
+-  }
+   
+   /* Force sync trigger */
+   #Header-{{ section.id }} .nt-header__logo-text{
+@@ -790,7 +803,7 @@ document.addEventListener('DOMContentLoaded', function() {
+     align-items: center;
+     justify-content: center;
+   }
+-  /* Cache-busting comment: v2.6 - Fixed mobile scrolling and button sizing */
++  /* Cache-busting comment: v2.10 - Reduced mobile header size to fix horizontal scrolling */
+   #Header-{{ section.id }} .nt-header__link{
+     text-decoration: none; 
+     color: #1f2937 !important; 
+@@ -802,6 +815,7 @@ document.addEventListener('DOMContentLoaded', function() {
+     overflow: hidden;
+     background: rgba(255, 255, 255, 0.15);
+     border: 1px solid rgba(255, 255, 255, 0.2);
++    outline: 1px solid rgba(255, 255, 255, 0.3);
+     backdrop-filter: blur(8px);
+     font-size: 0.9rem;
+     letter-spacing: 0.01em;

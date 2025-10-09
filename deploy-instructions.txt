@@ -1,0 +1,61 @@
+========================================
+SHOPIFY DEPLOYMENT INSTRUCTIONS
+========================================
+
+STEP 1: Complete Authentication
+--------------------------------
+Open this link in your browser:
+https://accounts.shopify.com/activate-with-code?device_code%5Buser_code%5D=PKRB-TFCC
+
+Or enter verification code: PKRB-TFCC
+
+Log in with your Shopify account that has access to maxstar03 store.
+
+
+STEP 2: After Authentication, Run This Command
+-----------------------------------------------
+cd c:\workspace2\newthrifts2
+shopify theme push --store=maxstar03 --live
+
+
+STEP 3: Verify Deployment
+--------------------------
+Visit: https://newthrifts.com
+Clear your browser cache (Ctrl+Shift+Delete)
+Check if changes are visible
+
+
+CHANGES THAT WILL BE DEPLOYED:
+-------------------------------
+1. Mobile header size reduction (smaller buttons, better fit)
+2. Logo position restored to original left position
+3. Footer buttons styling (neutral white glassmorphism)
+4. Dark mode button centered between Sign in and Cart
+5. Profile page styling improvements
+6. All other recent commits
+
+
+ALTERNATIVE: Manual Upload via Shopify Admin
+---------------------------------------------
+If CLI doesn't work, you can manually upload files:
+
+1. Go to: https://admin.shopify.com/store/maxstar03/themes
+2. Click your live theme → Actions → Edit code
+3. Upload these files:
+   - sections/header.liquid
+   - layout/theme.liquid
+   - sections/user-profile-signup.liquid
+   - sections/user-profile-dashboard.liquid
+   - templates/page.profile.liquid
+
+
+TROUBLESHOOTING:
+----------------
+If you still get "not authorized" error:
+1. Go to Settings → Users and permissions
+2. Ensure your account has "Themes" and "Edit code" permissions
+3. Make sure you're the store owner or have proper staff access
+
+For help: Let me know what error you see after authentication.
+
+
