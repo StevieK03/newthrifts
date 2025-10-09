@@ -601,11 +601,11 @@ document.addEventListener('DOMContentLoaded', function() {
     
     #Header-{{ section.id }} .nt-header__wrap {
       justify-content: space-between;
-      gap: 12px;
-      padding: 12px 20px;
+      gap: 6px;
+      padding: 8px 12px;
       flex-wrap: nowrap;
-      min-height: 60px;
-      overflow-x: auto;
+      min-height: 56px;
+      overflow-x: visible;
       -webkit-overflow-scrolling: touch;
       align-items: center;
     }
@@ -613,7 +613,7 @@ document.addEventListener('DOMContentLoaded', function() {
     #Header-{{ section.id }} .nt-header__logo-section {
       margin-left: 0;
       flex-shrink: 0;
-      gap: 12px;
+      gap: 8px;
     }
     
     #Header-{{ section.id }} .nt-header__logo {
@@ -623,9 +623,11 @@ document.addEventListener('DOMContentLoaded', function() {
     
     /* Mobile Account Button Styling */
     #Header-{{ section.id }} .nt-header__account-btn {
-      padding: 8px 12px;
-      gap: 6px;
-      font-size: 13px;
+      padding: 8px 14px;
+      gap: 4px;
+      font-size: 12px;
+      min-width: 70px;
+      text-align: center;
     }
     
     #Header-{{ section.id }} .account-icon {
@@ -644,9 +646,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     /* Mobile Cart Button Styling */
     #Header-{{ section.id }} .nt-header__cart-link {
-      padding: 10px 14px;
-      min-width: 48px;
-      height: 40px;
+      padding: 8px 14px;
+      min-width: 70px;
+      height: auto;
     }
     
     #Header-{{ section.id }} .nt-header__cart-icon {
@@ -678,8 +680,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     #Header-{{ section.id }} .nt-header__link {
-      padding: 10px 16px;
-      font-size: 13px;
+      padding: 8px 14px;
+      font-size: 12px;
       white-space: nowrap;
       flex-shrink: 0;
       min-width: 70px;
@@ -700,14 +702,16 @@ document.addEventListener('DOMContentLoaded', function() {
   /* Extra small screens - ensure all buttons fit */
   @media (max-width: 480px) {
     #Header-{{ section.id }} .nt-header__wrap {
-      gap: 8px;
-      padding: 8px 16px;
+      gap: 4px;
+      padding: 6px 12px;
     }
     
     #Header-{{ section.id }} .nt-header__account-btn {
-      padding: 6px 8px;
-      gap: 6px;
-      font-size: 12px;
+      padding: 6px 10px;
+      gap: 4px;
+      font-size: 11px;
+      min-width: 65px;
+      text-align: center;
     }
     
     #Header-{{ section.id }} .account-title {
@@ -715,15 +719,15 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     #Header-{{ section.id }} .nt-header__cart-link {
-      padding: 8px 10px;
-      min-width: 40px;
-      height: 36px;
+      padding: 6px 10px;
+      min-width: 65px;
+      height: auto;
     }
     
     #Header-{{ section.id }} .nt-header__link {
-      padding: 8px 12px;
-      font-size: 12px;
-      min-width: 60px;
+      padding: 6px 10px;
+      font-size: 11px;
+      min-width: 65px;
       text-align: center;
     }
     
@@ -784,7 +788,7 @@ document.addEventListener('DOMContentLoaded', function() {
     align-items: center;
     justify-content: center;
   }
-  /* Cache-busting comment: v2.4 - Moved Shop button next to logo */
+  /* Cache-busting comment: v2.5 - Fixed mobile header button sizing and spacing */
   #Header-{{ section.id }} .nt-header__link{
     text-decoration: none; 
     color: #1f2937 !important; 
