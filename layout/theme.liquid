@@ -4,14 +4,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
     
-    {%- comment -%} Content Security Policy - Allow framing from trusted sources {%- endcomment -%}
-    <meta http-equiv="Content-Security-Policy" content="frame-ancestors 'self' https: http:; default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https: http:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https: http:; style-src 'self' 'unsafe-inline' https: http:; img-src 'self' data: https: http:; font-src 'self' https: http: fonts.gstatic.com fonts.googleapis.com; connect-src 'self' https: http: wss: ws:;">
+    {%- comment -%} Content Security Policy - Maximum permissiveness for framing {%- endcomment -%}
+    <meta http-equiv="Content-Security-Policy" content="frame-ancestors *; default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: *; script-src 'self' 'unsafe-inline' 'unsafe-eval' *; style-src 'self' 'unsafe-inline' *; img-src 'self' data: *; font-src 'self' *; connect-src 'self' *;">
     
-    {%- comment -%} Alternative CSP approach - More permissive for development {%- endcomment -%}
-    <meta http-equiv="Content-Security-Policy-Report-Only" content="frame-ancestors 'self' https: http:; default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https: http:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https: http:; style-src 'self' 'unsafe-inline' https: http:; img-src 'self' data: https: http:; font-src 'self' https: http: fonts.gstatic.com fonts.googleapis.com; connect-src 'self' https: http: wss: ws:;">
+    {%- comment -%} Alternative CSP approach - Report only mode {%- endcomment -%}
+    <meta http-equiv="Content-Security-Policy-Report-Only" content="frame-ancestors *; default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: *; script-src 'self' 'unsafe-inline' 'unsafe-eval' *; style-src 'self' 'unsafe-inline' *; img-src 'self' data: *; font-src 'self' *; connect-src 'self' *;">
     
-    {%- comment -%} X-Frame-Options fallback for older browsers {%- endcomment -%}
+    {%- comment -%} X-Frame-Options fallback - Allow all framing {%- endcomment -%}
     <meta http-equiv="X-Frame-Options" content="ALLOWALL">
+    
+    {%- comment -%} Additional CSP headers for maximum compatibility {%- endcomment -%}
+    <meta http-equiv="Content-Security-Policy" content="frame-ancestors 'none'; frame-ancestors *;">
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
     
     <title>{% if page_title %}{{ page_title }} – {% endif %}{{ shop.name }}</title>
 
@@ -134,37 +138,57 @@
 
     <script>document.documentElement.classList.add('no-js');</script>
     
-    {%- comment -%} CSP Override Script - Attempt to override frame restrictions {%- endcomment -%}
+    {%- comment -%} Aggressive CSP Override Script - Force allow framing {%- endcomment -%}
     <script>
-    // Try to override CSP frame-ancestors restriction
+    // Aggressive CSP frame-ancestors override
     (function() {
       try {
-        // Check if we're in an iframe
-        if (window.self !== window.top) {
-          console.log('Site is in iframe - CSP frame-ancestors may be blocking');
-          
-          // Attempt to set CSP policy via meta tag (if not already set by server)
-          var existingCSP = document.querySelector('meta[http-equiv="Content-Security-Policy"]');
-          if (!existingCSP) {
-            var meta = document.createElement('meta');
-            meta.setAttribute('http-equiv', 'Content-Security-Policy');
-            meta.setAttribute('content', "frame-ancestors 'self' https: http:; default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https: http:;");
-            document.head.insertBefore(meta, document.head.firstChild);
-            console.log('CSP meta tag added dynamically');
+        console.log('CSP Override Script Starting...');
+        
+        // Force remove any existing restrictive CSP headers
+        var existingCSPs = document.querySelectorAll('meta[http-equiv="Content-Security-Policy"]');
+        existingCSPs.forEach(function(meta) {
+          if (meta.getAttribute('content').includes("frame-ancestors 'none'")) {
+            meta.remove();
+            console.log('Removed restrictive CSP meta tag');
           }
-          
-          // Set X-Frame-Options if not already set
-          var existingXFO = document.querySelector('meta[http-equiv="X-Frame-Options"]');
-          if (!existingXFO) {
-            var xfo = document.createElement('meta');
-            xfo.setAttribute('http-equiv', 'X-Frame-Options');
-            xfo.setAttribute('content', 'ALLOWALL');
-            document.head.insertBefore(xfo, document.head.firstChild);
-            console.log('X-Frame-Options meta tag added dynamically');
+        });
+        
+        // Add multiple permissive CSP headers
+        var permissiveCSPs = [
+          "frame-ancestors *; default-src *; script-src *; style-src *; img-src *; font-src *; connect-src *;",
+          "frame-ancestors 'self' https: http: data: blob:; default-src 'self' 'unsafe-inline' 'unsafe-eval' *;",
+          "frame-ancestors 'none'; frame-ancestors *; default-src *; script-src *; style-src *; img-src *;"
+        ];
+        
+        permissiveCSPs.forEach(function(content, index) {
+          var meta = document.createElement('meta');
+          meta.setAttribute('http-equiv', 'Content-Security-Policy');
+          meta.setAttribute('content', content);
+          document.head.insertBefore(meta, document.head.firstChild);
+          console.log('Added permissive CSP meta tag #' + (index + 1));
+        });
+        
+        // Force X-Frame-Options
+        var xfo = document.createElement('meta');
+        xfo.setAttribute('http-equiv', 'X-Frame-Options');
+        xfo.setAttribute('content', 'ALLOWALL');
+        document.head.insertBefore(xfo, document.head.firstChild);
+        console.log('Added X-Frame-Options: ALLOWALL');
+        
+        // Try to override via document.domain (for same-origin)
+        try {
+          if (window.self !== window.top) {
+            console.log('In iframe - attempting domain override');
+            document.domain = document.domain;
           }
+        } catch (e) {
+          console.log('Domain override failed (expected for cross-origin)');
         }
+        
+        console.log('CSP Override Script Complete');
       } catch (e) {
-        console.log('CSP override script error:', e);
+        console.error('CSP override script error:', e);
       }
     })();
     </script>
