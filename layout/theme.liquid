@@ -182,11 +182,9 @@
     <footer class="footer">
       <div class="container grid grid--3">
         <div>
-          <h4 style="margin:0 0 10px 0;">About</h4>
           <p style="opacity:.85;">{{ settings.footer_about | default: "Sunset palettes, neon nights, and beach-breeze basics." }}</p>
         </div>
         <div>
-          <h4 style="margin:0 0 15px 0;">Quick Links</h4>
           <div class="footer-buttons">
             <a href="/pages/about" class="footer-btn">About</a>
             <a href="/pages/contact" class="footer-btn">Contact Us</a>
@@ -209,7 +207,7 @@
       .footer-buttons {
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 12px;
         align-items: flex-start;
       }
       
@@ -217,52 +215,80 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        padding: 12px 24px;
+        padding: 14px 28px;
         border-radius: 50px;
         text-decoration: none;
-        background: rgba(255, 255, 255, 0.15);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        backdrop-filter: blur(8px);
-        color: #1f2937 !important;
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 197, 253, 0.05));
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        backdrop-filter: blur(12px);
+        color: #1e40af !important;
         font-weight: 600;
         font-size: 0.9rem;
-        letter-spacing: 0.01em;
+        letter-spacing: 0.02em;
         white-space: nowrap;
-        transition: all 0.3s ease;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
         overflow: hidden;
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.1);
+      }
+      
+      .footer-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(147, 197, 253, 0.1));
+        opacity: 0;
+        transition: opacity 0.3s ease;
       }
       
       .footer-btn:hover {
-        background: rgba(255, 255, 255, 0.25);
-        color: #1f2937 !important;
-        transform: translateY(-1px);
-        border-color: rgba(255, 255, 255, 0.4);
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(147, 197, 253, 0.15));
+        border-color: rgba(59, 130, 246, 0.5);
+        color: #1d4ed8 !important;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.2), 0 4px 12px rgba(59, 130, 246, 0.15);
       }
       
-      /* Dark mode footer button styling */
+      .footer-btn:hover::before {
+        opacity: 1;
+      }
+      
+      .footer-btn:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+      }
+      
+      /* Dark mode footer button styling - enhanced */
       [data-theme="dark"] .footer-btn {
-        color: var(--text-primary, #f8fafc) !important;
-        background: rgba(71, 85, 105, 0.2) !important;
-        border: 1px solid var(--border-primary, #334155) !important;
+        color: var(--text-accent, #60a5fa) !important;
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(147, 197, 253, 0.08)) !important;
+        border: 1px solid rgba(59, 130, 246, 0.4) !important;
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.15) !important;
+      }
+      
+      [data-theme="dark"] .footer-btn::before {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.25), rgba(147, 197, 253, 0.15)) !important;
       }
       
       [data-theme="dark"] .footer-btn:hover {
-        background: rgba(59, 130, 246, 0.2) !important;
-        border-color: var(--button-primary, #3b82f6) !important;
-        color: var(--text-accent, #60a5fa) !important;
-        box-shadow: 0 0 15px rgba(59, 130, 246, 0.3) !important;
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(147, 197, 253, 0.2)) !important;
+        border-color: rgba(59, 130, 246, 0.6) !important;
+        color: var(--text-primary, #f8fafc) !important;
+        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3), 0 4px 12px rgba(59, 130, 246, 0.2) !important;
       }
       
       @media (max-width: 768px) {
         .footer-buttons {
           flex-direction: row;
           flex-wrap: wrap;
-          gap: 8px;
+          gap: 10px;
         }
         
         .footer-btn {
-          padding: 10px 18px;
+          padding: 12px 20px;
           font-size: 0.85rem;
         }
       }
