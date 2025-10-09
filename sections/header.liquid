@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', function() {
     padding: 28px 40px;
     backdrop-filter: none !important; 
     -webkit-backdrop-filter: none !important;
-    gap: 24px;
+    gap: 32px;
     max-width: 1400px;
     margin: 0 auto;
     position: relative;
@@ -644,10 +644,11 @@ document.addEventListener('DOMContentLoaded', function() {
     /* Mobile Navigation Styling */
     #Header-{{ section.id }} .nt-header__nav {
       flex: 1;
-      overflow-x: auto;
+      overflow-x: visible;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
       -ms-overflow-style: none;
+      min-width: 0;
     }
     
     #Header-{{ section.id }} .nt-header__nav::-webkit-scrollbar {
@@ -656,9 +657,11 @@ document.addEventListener('DOMContentLoaded', function() {
     
     #Header-{{ section.id }} .nt-header__list {
       display: flex;
-      gap: 8px;
-      padding: 0 8px;
+      gap: 12px;
+      padding: 0 12px;
       white-space: nowrap;
+      align-items: center;
+      justify-content: center;
     }
     
     #Header-{{ section.id }} .nt-header__link {
@@ -740,14 +743,16 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   #Header-{{ section.id }} .nt-header__list{
     display: flex; 
-    gap: 8px; 
+    gap: 12px; 
     list-style: none; 
     margin: 0; 
     padding: 0;
     flex-shrink: 1;
     min-width: 0;
+    align-items: center;
+    justify-content: center;
   }
-  /* Cache-busting comment: v2.2 */
+  /* Cache-busting comment: v2.3 - Fixed Shop button cut-off */
   #Header-{{ section.id }} .nt-header__link{
     text-decoration: none; 
     color: #1f2937 !important; 
