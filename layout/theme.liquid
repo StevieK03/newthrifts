@@ -184,7 +184,7 @@
         <div>
           <p style="opacity:.85;">{{ settings.footer_about | default: "Sunset palettes, neon nights, and beach-breeze basics." }}</p>
         </div>
-        <div>
+        <div class="footer-buttons-container">
           <div class="footer-buttons">
             <a href="/pages/about" class="footer-btn">About</a>
             <a href="/pages/contact" class="footer-btn">Contact Us</a>
@@ -204,11 +204,20 @@
     </footer>
     
     <style>
+      .footer-buttons-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+      }
+      
       .footer-buttons {
         display: flex;
-        flex-direction: column;
-        gap: 12px;
-        align-items: flex-start;
+        flex-direction: row;
+        gap: 16px;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
       }
       
       .footer-btn {
@@ -281,15 +290,35 @@
       }
       
       @media (max-width: 768px) {
+        .footer-buttons-container {
+          justify-content: center;
+          margin: 10px 0;
+        }
+        
         .footer-buttons {
           flex-direction: row;
           flex-wrap: wrap;
-          gap: 10px;
+          gap: 12px;
+          justify-content: center;
         }
         
         .footer-btn {
           padding: 12px 20px;
           font-size: 0.85rem;
+          min-width: 120px;
+        }
+      }
+      
+      @media (max-width: 480px) {
+        .footer-buttons {
+          flex-direction: column;
+          gap: 10px;
+          width: 100%;
+        }
+        
+        .footer-btn {
+          width: 100%;
+          max-width: 200px;
         }
       }
     </style>
