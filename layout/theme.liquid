@@ -3,6 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    
+    {%- comment -%} Content Security Policy - Allow framing from trusted sources {%- endcomment -%}
+    <meta http-equiv="Content-Security-Policy" content="frame-ancestors 'self' https://*.shopify.com https://*.myshopify.com https://admin.shopify.com https://partners.shopify.com; default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' https: fonts.gstatic.com fonts.googleapis.com; connect-src 'self' https: wss: ws:;">
+    
     <title>{% if page_title %}{{ page_title }} – {% endif %}{{ shop.name }}</title>
 
     {%- comment -%} Use Primary accent for browser UI color (falls back if not set) {%- endcomment -%}
