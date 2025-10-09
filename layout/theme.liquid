@@ -204,7 +204,7 @@
     </footer>
     
     <style>
-      /* Cache-busting comment: v2.7 - Fix footer buttons, mobile scrolling, and white line */
+      /* Cache-busting comment: v2.8 - FORCE footer buttons to match header style with maximum specificity */
       
       /* Global fixes for horizontal scrolling and white line */
       * {
@@ -234,7 +234,10 @@
         flex-wrap: wrap;
       }
       
-      .footer-btn {
+      /* Force footer button styling with maximum specificity */
+      .footer .footer-btn,
+      .footer-btn,
+      a.footer-btn {
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
@@ -243,6 +246,7 @@
         text-decoration: none !important;
         background: rgba(255, 255, 255, 0.15) !important;
         border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        outline: 1px solid rgba(255, 255, 255, 0.3) !important;
         backdrop-filter: blur(8px) !important;
         color: #ffffff !important;
         font-weight: 600 !important;
@@ -267,12 +271,14 @@
         transition: opacity 0.3s ease;
       }
       
-      .footer-btn:hover {
-        background: rgba(255, 255, 255, 0.25);
-        border-color: rgba(255, 255, 255, 0.3);
+      .footer .footer-btn:hover,
+      .footer-btn:hover,
+      a.footer-btn:hover {
+        background: rgba(255, 255, 255, 0.25) !important;
+        border-color: rgba(255, 255, 255, 0.3) !important;
         color: #ffffff !important;
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.15);
+        transform: translateY(-2px) !important;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.15) !important;
       }
       
       .footer-btn:hover::before {
@@ -284,11 +290,14 @@
         box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
       }
       
-      /* Dark mode footer button styling - matches header buttons */
-      [data-theme="dark"] .footer-btn {
+      /* Dark mode footer button styling - matches header buttons with maximum specificity */
+      [data-theme="dark"] .footer .footer-btn,
+      [data-theme="dark"] .footer-btn,
+      [data-theme="dark"] a.footer-btn {
         color: #ffffff !important;
         background: rgba(255, 255, 255, 0.15) !important;
         border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        outline: 1px solid rgba(255, 255, 255, 0.3) !important;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
       }
       
@@ -296,9 +305,12 @@
         background: rgba(255, 255, 255, 0.1) !important;
       }
       
-      [data-theme="dark"] .footer-btn:hover {
+      [data-theme="dark"] .footer .footer-btn:hover,
+      [data-theme="dark"] .footer-btn:hover,
+      [data-theme="dark"] a.footer-btn:hover {
         background: rgba(255, 255, 255, 0.25) !important;
         border-color: rgba(255, 255, 255, 0.3) !important;
+        outline-color: rgba(255, 255, 255, 0.4) !important;
         color: #ffffff !important;
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.2) !important;
       }
