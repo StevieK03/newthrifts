@@ -4,38 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
     
-    {%- comment -%} CSP Override - Force allow framing by overriding server headers {%- endcomment -%}
-    <script>
-    // Immediate CSP override - runs before any other scripts
-    (function() {
-      console.log('=== CSP OVERRIDE SCRIPT STARTING ===');
-      
-      // Remove any existing CSP meta tags
-      var cspTags = document.querySelectorAll('meta[http-equiv*="Content-Security-Policy"]');
-      cspTags.forEach(function(tag) {
-        if (tag.getAttribute('content').includes('frame-ancestors')) {
-          tag.remove();
-          console.log('Removed existing CSP tag:', tag.getAttribute('content'));
-        }
-      });
-      
-      // Add permissive CSP immediately
-      var meta = document.createElement('meta');
-      meta.setAttribute('http-equiv', 'Content-Security-Policy');
-      meta.setAttribute('content', 'frame-ancestors *; default-src *; script-src *; style-src *; img-src *; font-src *; connect-src *;');
-      document.head.insertBefore(meta, document.head.firstChild);
-      console.log('Added permissive CSP meta tag');
-      
-      // Add X-Frame-Options
-      var xfo = document.createElement('meta');
-      xfo.setAttribute('http-equiv', 'X-Frame-Options');
-      xfo.setAttribute('content', 'ALLOWALL');
-      document.head.insertBefore(xfo, document.head.firstChild);
-      console.log('Added X-Frame-Options: ALLOWALL');
-      
-      console.log('=== CSP OVERRIDE SCRIPT COMPLETE ===');
-    })();
-    </script>
+    {%- comment -%} Note: CSP frame-ancestors cannot be overridden with meta tags - must be set via HTTP headers {%- endcomment -%}
+    {%- comment -%} Shopify controls server-level CSP headers, so iframe embedding is restricted by design {%- endcomment -%}
     
     <title>{% if page_title %}{{ page_title }} – {% endif %}{{ shop.name }}</title>
 
