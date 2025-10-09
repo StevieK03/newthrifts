@@ -31,6 +31,23 @@
       
     </nav>
 
+    <!-- User Account Button -->
+    <div class="nt-header__account">
+      <button class="nt-header__account-btn" id="header-account-btn" aria-label="My Account">
+        <div class="account-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          <span class="account-status-dot" id="account-status-dot"></span>
+        </div>
+        <div class="account-text">
+          <span class="account-title" id="account-title">My Account</span>
+          <span class="account-subtitle" id="account-subtitle">Sign In</span>
+        </div>
+      </button>
+    </div>
+
     <!-- Dark Mode Toggle -->
     <div class="nt-header__dark-mode">
       <button class="dark-mode-toggle" id="dark-mode-toggle" aria-label="Toggle dark mode">
@@ -50,6 +67,96 @@
     </div>
   </div>
 </header>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const accountBtn = document.getElementById('header-account-btn');
+  const accountTitle = document.getElementById('account-title');
+  const accountSubtitle = document.getElementById('account-subtitle');
+  const statusDot = document.getElementById('account-status-dot');
+  
+  // Check authentication status and update button
+  checkAccountStatus();
+  
+  // Handle account button click
+  if (accountBtn) {
+    accountBtn.addEventListener('click', function() {
+      handleAccountClick();
+    });
+  }
+  
+  async function checkAccountStatus() {
+    try {
+      if (window.supabaseClient) {
+        const user = await window.supabaseClient.getCurrentUser();
+        
+        if (user.user) {
+          // User is authenticated
+          updateAccountButton(true, user.user);
+        } else {
+          // User is not authenticated
+          updateAccountButton(false);
+        }
+      } else {
+        // Supabase not available
+        updateAccountButton(false);
+      }
+    } catch (error) {
+      console.error('Account status check error:', error);
+      updateAccountButton(false);
+    }
+  }
+  
+  function updateAccountButton(isAuthenticated, user = null) {
+    if (isAuthenticated && user) {
+      // Authenticated state
+      accountTitle.textContent = 'My Account';
+      accountSubtitle.textContent = user.user_metadata?.full_name || user.email?.split('@')[0] || 'Profile';
+      statusDot.classList.add('authenticated');
+      accountBtn.setAttribute('aria-label', 'My Account - Signed In');
+    } else {
+      // Not authenticated state
+      accountTitle.textContent = 'My Account';
+      accountSubtitle.textContent = 'Sign In';
+      statusDot.classList.remove('authenticated');
+      accountBtn.setAttribute('aria-label', 'Sign In');
+    }
+  }
+  
+  function handleAccountClick() {
+    if (statusDot.classList.contains('authenticated')) {
+      // User is authenticated - redirect to profile page or show profile dropdown
+      window.location.href = '/pages/profile';
+    } else {
+      // User is not authenticated - open profile modal
+      openProfileModal();
+    }
+  }
+  
+  function openProfileModal() {
+    // Check if profile modal exists and open it
+    const profileModal = document.getElementById('profile-modal');
+    const openModalBtn = document.getElementById('open-profile-modal');
+    
+    if (profileModal) {
+      profileModal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    } else if (openModalBtn) {
+      // Trigger the modal button click
+      openModalBtn.click();
+    } else {
+      // Fallback - redirect to profile page
+      window.location.href = '/pages/profile';
+    }
+  }
+  
+  // Listen for authentication changes
+  if (window.supabaseClient) {
+    // Check for auth state changes every 5 seconds
+    setInterval(checkAccountStatus, 5000);
+  }
+});
+</script>
 
 <style>
   /* ===== Modern Glassmorphism Header ===== */
@@ -76,6 +183,86 @@
     margin: 0 auto;
     position: relative;
     flex-wrap: nowrap;
+  }
+  
+  /* User Account Button Styling */
+  #Header-{{ section.id }} .nt-header__account {
+    display: flex;
+    align-items: center;
+  }
+  
+  #Header-{{ section.id }} .nt-header__account-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    color: #1f2937;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(8px);
+    text-decoration: none;
+  }
+  
+  #Header-{{ section.id }} .nt-header__account-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  #Header-{{ section.id }} .account-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+  }
+  
+  #Header-{{ section.id }} .account-icon svg {
+    color: #1f2937;
+  }
+  
+  #Header-{{ section.id }} .account-status-dot {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 8px;
+    height: 8px;
+    background: #ef4444;
+    border-radius: 50%;
+    border: 2px solid white;
+    display: none;
+  }
+  
+  #Header-{{ section.id }} .account-status-dot.authenticated {
+    background: #10b981;
+    display: block;
+  }
+  
+  #Header-{{ section.id }} .account-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1.2;
+  }
+  
+  #Header-{{ section.id }} .account-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0;
+  }
+  
+  #Header-{{ section.id }} .account-subtitle {
+    font-size: 12px;
+    font-weight: 400;
+    color: #6b7280;
+    margin: 0;
   }
   
   /* Cart Button Styling - Matches navigation buttons */
