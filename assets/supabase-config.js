@@ -124,51 +124,6 @@ class SupabaseClient {
     }
   }
 
-  async updateUserProfile(profileData) {
-    const client = await this.getClient();
-    if (!client) return { error: 'Client not initialized' };
-
-    try {
-      const { data, error } = await client.auth.updateUser({
-        data: {
-          full_name: profileData.full_name,
-          phone: profileData.phone,
-          birthday: profileData.birthday,
-          style_preferences: profileData.style_preferences,
-          newsletter_subscribed: profileData.newsletter_subscribed,
-          updated_at: new Date().toISOString()
-        }
-      });
-      return { data, error };
-    } catch (error) {
-      return { error: error.message };
-    }
-  }
-
-  async updateUserProfileInDB(userId, profileData) {
-    const client = await this.getClient();
-    if (!client) return { error: 'Client not initialized' };
-
-    try {
-      const { data, error } = await client
-        .from('user_profiles')
-        .upsert({
-          user_id: userId,
-          full_name: profileData.full_name,
-          phone: profileData.phone,
-          birthday: profileData.birthday,
-          style_preferences: profileData.style_preferences,
-          newsletter_subscribed: profileData.newsletter_subscribed,
-          updated_at: new Date().toISOString()
-        }, { 
-          onConflict: 'user_id' 
-        });
-      return { data, error };
-    } catch (error) {
-      return { error: error.message };
-    }
-  }
-
   async getCurrentUser() {
     const client = await this.getClient();
     if (!client) return { error: 'Client not initialized' };
@@ -351,73 +306,6 @@ class SupabaseClient {
         error: error.message,
         stack: error.stack,
         eventName
-      });
-      return { error: error.message };
-    }
-  }
-
-  /**
-   * Cart Session Tracking
-   */
-  async trackCartSession(cartData, action = 'update') {
-    const client = await this.getClient();
-    if (!client) {
-      console.error('📦 trackCartSession: Client not initialized');
-      return { error: 'Client not initialized' };
-    }
-
-    try {
-      // Generate or get session ID
-      let sessionId = localStorage.getItem('shopify_cart_session_id');
-      if (!sessionId) {
-        sessionId = 'cart_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-        localStorage.setItem('shopify_cart_session_id', sessionId);
-      }
-
-      const cartSessionData = {
-        session_id: sessionId,
-        cart_data: cartData,
-        user_id: (await this.getCurrentUser()).user?.id,
-        shopify_customer_id: this.getShopifyCustomerId(),
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      };
-
-      let result;
-      if (action === 'insert') {
-        // Insert new cart session
-        const { data, error } = await client
-          .from('cart_sessions')
-          .insert([cartSessionData]);
-        result = { data, error };
-      } else {
-        // Upsert (insert or update)
-        const { data, error } = await client
-          .from('cart_sessions')
-          .upsert(cartSessionData, { 
-            onConflict: 'session_id',
-            ignoreDuplicates: false 
-          });
-        result = { data, error };
-      }
-      
-      if (error) {
-        console.error('📦 trackCartSession: Failed', {
-          error,
-          action,
-          sessionId,
-          cartData
-        });
-      } else {
-        console.log('📦 Cart session tracked successfully:', action, sessionId);
-      }
-      
-      return result;
-    } catch (error) {
-      console.error('📦 trackCartSession: Exception', {
-        error: error.message,
-        stack: error.stack,
-        action
       });
       return { error: error.message };
     }

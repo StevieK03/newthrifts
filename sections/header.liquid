@@ -24,26 +24,12 @@
         <!-- Fallback links if no menu chosen in settings -->
         <ul class="nt-header__list">
           <li><a href="/collections/all" class="nt-header__link">Shop</a></li>
+          <li><a href="/pages/about" class="nt-header__link">About</a></li>
+          <li><a href="/pages/contact" class="nt-header__link">Contact Us</a></li>
         </ul>
       {% endif %}
       
     </nav>
-
-    <!-- User Account Button -->
-    <div class="nt-header__account">
-      <button class="nt-header__account-btn" id="header-account-btn" aria-label="My Account">
-        <div class="account-icon">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
-          </svg>
-          <span class="account-status-dot" id="account-status-dot"></span>
-        </div>
-        <div class="account-text">
-          <span class="account-title" id="account-title">Sign in</span>
-        </div>
-      </button>
-    </div>
 
     <!-- Dark Mode Toggle -->
     <div class="nt-header__dark-mode">
@@ -65,94 +51,6 @@
   </div>
 </header>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const accountBtn = document.getElementById('header-account-btn');
-  const accountTitle = document.getElementById('account-title');
-  const accountSubtitle = document.getElementById('account-subtitle');
-  const statusDot = document.getElementById('account-status-dot');
-  
-  // Check authentication status and update button
-  checkAccountStatus();
-  
-  // Handle account button click
-  if (accountBtn) {
-    accountBtn.addEventListener('click', function() {
-      handleAccountClick();
-    });
-  }
-  
-  async function checkAccountStatus() {
-    try {
-      if (window.supabaseClient) {
-        const user = await window.supabaseClient.getCurrentUser();
-        
-        if (user.user) {
-          // User is authenticated
-          updateAccountButton(true, user.user);
-        } else {
-          // User is not authenticated
-          updateAccountButton(false);
-        }
-      } else {
-        // Supabase not available
-        updateAccountButton(false);
-      }
-    } catch (error) {
-      console.error('Account status check error:', error);
-      updateAccountButton(false);
-    }
-  }
-  
-  function updateAccountButton(isAuthenticated, user = null) {
-    if (isAuthenticated && user) {
-      // Authenticated state
-      accountTitle.textContent = user.user_metadata?.full_name || user.email?.split('@')[0] || 'Profile';
-      statusDot.classList.add('authenticated');
-      accountBtn.setAttribute('aria-label', 'My Account - Signed In');
-    } else {
-      // Not authenticated state
-      accountTitle.textContent = 'Sign in';
-      statusDot.classList.remove('authenticated');
-      accountBtn.setAttribute('aria-label', 'Sign in');
-    }
-  }
-  
-  function handleAccountClick() {
-    if (statusDot.classList.contains('authenticated')) {
-      // User is authenticated - redirect to profile page or show profile dropdown
-      window.location.href = '/pages/profile';
-    } else {
-      // User is not authenticated - open profile modal
-      openProfileModal();
-    }
-  }
-  
-  function openProfileModal() {
-    // Check if profile modal exists and open it
-    const profileModal = document.getElementById('profile-modal');
-    const openModalBtn = document.getElementById('open-profile-modal');
-    
-    if (profileModal) {
-      profileModal.style.display = 'flex';
-      document.body.style.overflow = 'hidden';
-    } else if (openModalBtn) {
-      // Trigger the modal button click
-      openModalBtn.click();
-    } else {
-      // Fallback - redirect to profile page
-      window.location.href = '/pages/profile';
-    }
-  }
-  
-  // Listen for authentication changes
-  if (window.supabaseClient) {
-    // Check for auth state changes every 5 seconds
-    setInterval(checkAccountStatus, 5000);
-  }
-});
-</script>
-
 <style>
   /* ===== Modern Glassmorphism Header ===== */
   #Header-{{ section.id }}{
@@ -170,114 +68,14 @@ document.addEventListener('DOMContentLoaded', function() {
     display: flex; 
     align-items: center; 
     justify-content: space-between;
-    padding: 28px 40px;
+    padding: 20px 30px;
     backdrop-filter: none !important; 
     -webkit-backdrop-filter: none !important;
-    gap: 32px;
+    gap: 20px;
     max-width: 1400px;
     margin: 0 auto;
     position: relative;
     flex-wrap: nowrap;
-    min-height: 80px;
-  }
-  
-  
-  /* User Account Button Styling */
-  #Header-{{ section.id }} .nt-header__account {
-    display: flex;
-    align-items: center;
-  }
-  
-  /* Right side buttons container for better spacing */
-  #Header-{{ section.id }} .nt-header__account,
-  #Header-{{ section.id }} .nt-header__dark-mode,
-  #Header-{{ section.id }} .nt-header__cart {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-  
-  /* Dark mode toggle spacing */
-  #Header-{{ section.id }} .nt-header__dark-mode {
-    margin: 0 8px;
-  }
-  
-  #Header-{{ section.id }} .nt-header__account-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 20px;
-    background: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    outline: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50px;
-    color: #1f2937;
-    font-family: inherit;
-    font-weight: 600;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(8px);
-    text-decoration: none;
-    white-space: nowrap;
-    position: relative;
-    overflow: hidden;
-  }
-  
-  #Header-{{ section.id }} .nt-header__account-btn:hover {
-    background: rgba(255, 255, 255, 0.25);
-    color: #1f2937;
-    transform: translateY(-1px);
-    border-color: rgba(255, 255, 255, 0.4);
-  }
-  
-  #Header-{{ section.id }} .account-icon {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 18px;
-    height: 18px;
-  }
-  
-  #Header-{{ section.id }} .account-icon svg {
-    color: #1f2937;
-    stroke-width: 2;
-    width: 18px;
-    height: 18px;
-  }
-  
-  #Header-{{ section.id }} .account-status-dot {
-    position: absolute;
-    top: -2px;
-    right: -2px;
-    width: 8px;
-    height: 8px;
-    background: #ef4444;
-    border-radius: 50%;
-    border: 2px solid white;
-    display: none;
-  }
-  
-  #Header-{{ section.id }} .account-status-dot.authenticated {
-    background: #10b981;
-    display: block;
-  }
-  
-  #Header-{{ section.id }} .account-text {
-    display: flex;
-    align-items: center;
-    line-height: 1;
-  }
-  
-  #Header-{{ section.id }} .account-title {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #1f2937;
-    margin: 0;
-    letter-spacing: 0.01em;
-    position: relative;
-    z-index: 1;
   }
   
   /* Cart Button Styling - Matches navigation buttons */
@@ -298,7 +96,6 @@ document.addEventListener('DOMContentLoaded', function() {
     font-weight: 600;
     background: rgba(255, 255, 255, 0.15);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    outline: 1px solid rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(8px);
     transition: all 0.3s ease;
     min-width: 56px;
@@ -533,36 +330,6 @@ document.addEventListener('DOMContentLoaded', function() {
     color: var(--text-primary, #f8fafc) !important;
   }
 
-  /* Dark mode account button styling */
-  [data-theme="dark"] #Header-{{ section.id }} .nt-header__account-btn {
-    color: var(--text-primary, #f8fafc) !important;
-    background: rgba(71, 85, 105, 0.2) !important;
-    border: 1px solid var(--border-primary, #334155) !important;
-  }
-
-  [data-theme="dark"] #Header-{{ section.id }} .nt-header__account-btn:hover {
-    background: rgba(59, 130, 246, 0.2) !important;
-    border-color: var(--button-primary, #3b82f6) !important;
-    color: var(--text-accent, #60a5fa) !important;
-    box-shadow: 0 0 15px rgba(59, 130, 246, 0.3) !important;
-  }
-
-  [data-theme="dark"] #Header-{{ section.id }} .account-icon svg {
-    color: var(--text-primary, #f8fafc) !important;
-  }
-
-  [data-theme="dark"] #Header-{{ section.id }} .nt-header__account-btn:hover .account-icon svg {
-    color: var(--text-accent, #60a5fa) !important;
-  }
-
-  [data-theme="dark"] #Header-{{ section.id }} .account-title {
-    color: var(--text-primary, #f8fafc) !important;
-  }
-
-  [data-theme="dark"] #Header-{{ section.id }} .nt-header__account-btn:hover .account-title {
-    color: var(--text-accent, #60a5fa) !important;
-  }
-
   /* Dark mode logo styling */
   [data-theme="dark"] #Header-{{ section.id }} .nt-header__logo-img {
     filter: brightness(0) invert(1) !important; /* Makes logo white */
@@ -611,173 +378,140 @@ document.addEventListener('DOMContentLoaded', function() {
     
     #Header-{{ section.id }} .nt-header__wrap {
       justify-content: space-between;
-      gap: 2px;
-      padding: 4px 6px;
+      gap: 8px;
+      padding: 12px 16px;
       flex-wrap: nowrap;
-      min-height: 44px;
-      overflow-x: visible;
+      min-height: 60px;
+      overflow-x: auto;
       -webkit-overflow-scrolling: touch;
-      align-items: center;
-      max-width: 100vw;
-      box-sizing: border-box;
     }
-    
-    /* Mobile right side button spacing */
-    #Header-{{ section.id }} .nt-header__account,
-    #Header-{{ section.id }} .nt-header__dark-mode,
-    #Header-{{ section.id }} .nt-header__cart {
-      gap: 4px;
-    }
-    
-    /* Mobile dark mode toggle spacing */
-    #Header-{{ section.id }} .nt-header__dark-mode {
-      margin: 0 2px;
-    }
-    
     
     #Header-{{ section.id }} .nt-header__logo {
       margin-left: 0;
       flex-shrink: 0;
     }
     
-    /* Mobile Account Button Styling */
-    #Header-{{ section.id }} .nt-header__account-btn {
-      padding: 6px 10px;
-      gap: 3px;
-      font-size: 11px;
-      min-width: 60px;
-      text-align: center;
-    }
-    
-    #Header-{{ section.id }} .account-icon {
-      width: 14px;
-      height: 14px;
-    }
-    
-    #Header-{{ section.id }} .account-icon svg {
-      width: 14px;
-      height: 14px;
-    }
-    
-    #Header-{{ section.id }} .account-title {
-      font-size: 11px;
-    }
-    
-    /* Mobile Cart Button Styling */
-    #Header-{{ section.id }} .nt-header__cart-link {
-      padding: 6px 10px;
-      min-width: 60px;
-      height: auto;
-    }
-    
-    #Header-{{ section.id }} .nt-header__cart-icon {
-      width: 16px;
-      height: 16px;
-    }
-    
-    /* Mobile Navigation Styling */
-    #Header-{{ section.id }} .nt-header__nav {
-      flex: 1;
-      overflow-x: visible;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-      min-width: 0;
-    }
-    
-    #Header-{{ section.id }} .nt-header__nav::-webkit-scrollbar {
-      display: none;
-    }
-    
-    #Header-{{ section.id }} .nt-header__list {
-      display: flex;
-      gap: 8px;
-      padding: 0 8px;
-      white-space: nowrap;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    #Header-{{ section.id }} .nt-header__link {
-      padding: 6px 10px;
-      font-size: 11px;
-      white-space: nowrap;
-      flex-shrink: 0;
-      min-width: 60px;
-      text-align: center;
-    }
-    
     #Header-{{ section.id }} .nt-header__logo-img { 
-      max-height: 40px; 
+      max-height: 50px; 
       width: auto;
     }
     
     #Header-{{ section.id }} .nt-header__logo-text {
-      font-size: 1.2rem;
+      font-size: 1.4rem;
       line-height: 1.2;
-    }
-  }
-  
-  /* Extra small screens - ensure all buttons fit */
-  @media (max-width: 480px) {
-    #Header-{{ section.id }} .nt-header__wrap {
-      gap: 2px;
-      padding: 4px 8px;
-    }
-    
-    /* Extra small screen button spacing */
-    #Header-{{ section.id }} .nt-header__account,
-    #Header-{{ section.id }} .nt-header__dark-mode,
-    #Header-{{ section.id }} .nt-header__cart {
-      gap: 3px;
-    }
-    
-    /* Extra small screen dark mode toggle spacing */
-    #Header-{{ section.id }} .nt-header__dark-mode {
-      margin: 0 2px;
-    }
-    
-    #Header-{{ section.id }} .nt-header__account-btn {
-      padding: 5px 8px;
-      gap: 3px;
-      font-size: 10px;
-      min-width: 55px;
-      text-align: center;
-    }
-    
-    #Header-{{ section.id }} .account-title {
-      font-size: 10px;
-    }
-    
-    #Header-{{ section.id }} .nt-header__cart-link {
-      padding: 5px 8px;
-      min-width: 55px;
-      height: auto;
-    }
-    
-    #Header-{{ section.id }} .nt-header__link {
-      padding: 5px 8px;
-      font-size: 10px;
-      min-width: 55px;
-      text-align: center;
-    }
-    
-    
-    #Header-{{ section.id }} .nt-header__logo-img {
-      max-height: 35px;
     }
     
     #Header-{{ section.id }} .nt-header__nav {
       flex-shrink: 1;
       min-width: 0;
       overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      flex: 1;
+    }
+    
+    #Header-{{ section.id }} .nt-header__list {
+      gap: 6px;
+      flex-wrap: nowrap;
+      padding: 0 4px;
+      display: flex;
+      align-items: center;
+    }
+    
+    #Header-{{ section.id }} .nt-header__link {
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      border-radius: 25px;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      flex-shrink: 0;
+    }
+    
+    /* Mobile cart button adjustments */
+    #Header-{{ section.id }} .nt-header__cart {
+      flex-shrink: 0;
+    }
+    
+    #Header-{{ section.id }} .nt-header__cart-link {
+      padding: 10px 14px;
+      min-width: 48px;
+      height: 40px;
+      border-radius: 25px;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      flex-shrink: 0;
+    }
+    
+    #Header-{{ section.id }} .nt-header__cart-icon {
+      width: 18px;
+      height: 18px;
+    }
+    
+    #Header-{{ section.id }} .nt-header__cart-count {
+      width: 18px;
+      height: 18px;
+      font-size: 10px;
+      top: -4px;
+      right: -4px;
+      min-width: 18px;
+    }
+    
+    #Header-{{ section.id }} .header-wishlist {
+      margin-left: 12px;
+    }
+    
+    #Header-{{ section.id }} .wishlist-toggle {
+      width: 40px;
+      height: 40px;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      flex-shrink: 0;
     }
   }
   
+  /* Extra small mobile screens */
+  @media (max-width: 480px) {
+    #Header-{{ section.id }} .nt-header__wrap {
+      padding: 10px 12px;
+      gap: 8px;
+      min-height: 56px;
+    }
+    
+    #Header-{{ section.id }} .nt-header__logo-text {
+      font-size: 1.2rem;
+    }
+    
+    #Header-{{ section.id }} .nt-header__logo-img { 
+      max-height: 45px; 
+    }
+    
+    #Header-{{ section.id }} .nt-header__link {
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      min-height: 40px;
+    }
+    
+    #Header-{{ section.id }} .nt-header__cart-link {
+      padding: 10px 12px;
+      min-width: 48px;
+      height: 40px;
+    }
+    
+    #Header-{{ section.id }} .nt-header__cart-icon {
+      width: 18px;
+      height: 18px;
+    }
+    
+    #Header-{{ section.id }} .wishlist-toggle {
+      width: 40px;
+      height: 40px;
+    }
+  }
   #Header-{{ section.id }} .nt-header__logo-img{ max-height:80px; display:block }
-  
-  
-  /* Force sync trigger */
   #Header-{{ section.id }} .nt-header__logo-text{
     font-weight: 800; 
     text-decoration: none;
@@ -794,35 +528,29 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   #Header-{{ section.id }} .nt-header__list{
     display: flex; 
-    gap: 12px; 
+    gap: 8px; 
     list-style: none; 
     margin: 0; 
     padding: 0;
     flex-shrink: 1;
     min-width: 0;
-    align-items: center;
-    justify-content: center;
   }
-  /* Cache-busting comment: v2.10 - Reduced mobile header size to fix horizontal scrolling */
   #Header-{{ section.id }} .nt-header__link{
     text-decoration: none; 
     color: #1f2937 !important; 
     font-weight: 600;
-    padding: 12px 24px;
+    padding: 12px 20px;
     border-radius: 50px;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
     background: rgba(255, 255, 255, 0.15);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    outline: 1px solid rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(8px);
     font-size: 0.9rem;
     letter-spacing: 0.01em;
     white-space: nowrap;
     flex-shrink: 0;
-    min-width: 80px;
-    text-align: center;
   }
   
   #Header-{{ section.id }} .nt-header__link:hover{
