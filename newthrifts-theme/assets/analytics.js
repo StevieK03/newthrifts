@@ -131,8 +131,67 @@ new MutationObserver(() => {
   }
 }).observe(document, { subtree: true, childList: true });
 
+// Cart Tracking Integration
+window.trackCartEvent = async function(cartData, action = 'update') {
+  try {
+    console.log('[trackCartEvent] fired', {
+      action,
+      cartData,
+      timestamp: new Date().toISOString()
+    });
+
+    if (window.supabaseClient) {
+      const result = await window.supabaseClient.trackCartSession(cartData, action);
+      
+      if (result.error) {
+        console.error('📦 Cart tracking failed:', result.error);
+      } else {
+        console.log('📦 Cart event tracked successfully');
+      }
+      
+      return result;
+    } else {
+      console.warn('📦 Supabase client not available for cart tracking');
+      return { error: 'Supabase client not available' };
+    }
+  } catch (error) {
+    console.error('📦 Cart tracking error:', error);
+    return { error: error.message };
+  }
+};
+
+// Auto-track cart changes using Shopify's cart events
+if (typeof window !== 'undefined') {
+  // Listen for Shopify cart updates
+  document.addEventListener('cart:updated', function(event) {
+    const cartData = event.detail?.cart || window.cart || {};
+    window.trackCartEvent(cartData, 'update');
+  });
+
+  // Listen for add to cart events
+  document.addEventListener('cart:item-added', function(event) {
+    const cartData = event.detail?.cart || window.cart || {};
+    window.trackCartEvent(cartData, 'update');
+  });
+
+  // Listen for remove from cart events
+  document.addEventListener('cart:item-removed', function(event) {
+    const cartData = event.detail?.cart || window.cart || {};
+    window.trackCartEvent(cartData, 'update');
+  });
+
+  // Fallback: Track cart on page load if cart exists
+  window.addEventListener('load', function() {
+    setTimeout(() => {
+      if (window.cart && window.cart.items && window.cart.items.length > 0) {
+        window.trackCartEvent(window.cart, 'update');
+      }
+    }, 1000);
+  });
+}
+
 // Export for module systems
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { trackPageView };
+  module.exports = { trackPageView, trackCartEvent };
 }
 

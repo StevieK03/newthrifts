@@ -310,6 +310,73 @@ class SupabaseClient {
       return { error: error.message };
     }
   }
+
+  /**
+   * Cart Session Tracking
+   */
+  async trackCartSession(cartData, action = 'update') {
+    const client = await this.getClient();
+    if (!client) {
+      console.error('📦 trackCartSession: Client not initialized');
+      return { error: 'Client not initialized' };
+    }
+
+    try {
+      // Generate or get session ID
+      let sessionId = localStorage.getItem('shopify_cart_session_id');
+      if (!sessionId) {
+        sessionId = 'cart_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('shopify_cart_session_id', sessionId);
+      }
+
+      const cartSessionData = {
+        session_id: sessionId,
+        cart_data: cartData,
+        user_id: (await this.getCurrentUser()).user?.id,
+        shopify_customer_id: this.getShopifyCustomerId(),
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+
+      let result;
+      if (action === 'insert') {
+        // Insert new cart session
+        const { data, error } = await client
+          .from('cart_sessions')
+          .insert([cartSessionData]);
+        result = { data, error };
+      } else {
+        // Upsert (insert or update)
+        const { data, error } = await client
+          .from('cart_sessions')
+          .upsert(cartSessionData, { 
+            onConflict: 'session_id',
+            ignoreDuplicates: false 
+          });
+        result = { data, error };
+      }
+      
+      if (error) {
+        console.error('📦 trackCartSession: Failed', {
+          error,
+          action,
+          sessionId,
+          cartData
+        });
+      } else {
+        console.log('📦 Cart session tracked successfully:', action, sessionId);
+      }
+      
+      return result;
+    } catch (error) {
+      console.error('📦 trackCartSession: Exception', {
+        error: error.message,
+        stack: error.stack,
+        action
+      });
+      return { error: error.message };
+    }
+  }
 }
 
 // Create global instance
