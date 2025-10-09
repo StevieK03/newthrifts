@@ -1,0 +1,554 @@
+{%- comment -%}
+User Profile Signup Section
+Allows users to create accounts with profile information
+{%- endcomment -%}
+
+<div class="user-profile-signup" id="user-profile-signup">
+  <div class="profile-container">
+    <div class="profile-header">
+      <h2>Create Your Profile</h2>
+      <p>Join NewThrifts to save your preferences, track orders, and get personalized recommendations.</p>
+    </div>
+
+    <div class="profile-forms">
+      <!-- Sign Up Form -->
+      <div class="signup-form" id="signup-form">
+        <h3>Sign Up</h3>
+        <form id="user-signup-form">
+          <div class="form-group">
+            <label for="signup-email">Email Address</label>
+            <input type="email" id="signup-email" name="email" required>
+            <span class="error-message" id="signup-email-error"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="signup-password">Password</label>
+            <input type="password" id="signup-password" name="password" required minlength="6">
+            <span class="error-message" id="signup-password-error"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="signup-confirm-password">Confirm Password</label>
+            <input type="password" id="signup-confirm-password" name="confirm-password" required>
+            <span class="error-message" id="signup-confirm-password-error"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="signup-full-name">Full Name</label>
+            <input type="text" id="signup-full-name" name="full-name" required>
+            <span class="error-message" id="signup-full-name-error"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="signup-phone">Phone Number (Optional)</label>
+            <input type="tel" id="signup-phone" name="phone">
+          </div>
+
+          <div class="form-group">
+            <label for="signup-birthday">Birthday (Optional)</label>
+            <input type="date" id="signup-birthday" name="birthday">
+          </div>
+
+          <div class="form-group">
+            <label for="signup-preferences">Style Preferences</label>
+            <div class="preference-tags">
+              <label class="tag-label">
+                <input type="checkbox" name="preferences" value="casual">
+                <span>Casual</span>
+              </label>
+              <label class="tag-label">
+                <input type="checkbox" name="preferences" value="formal">
+                <span>Formal</span>
+              </label>
+              <label class="tag-label">
+                <input type="checkbox" name="preferences" value="streetwear">
+                <span>Streetwear</span>
+              </label>
+              <label class="tag-label">
+                <input type="checkbox" name="preferences" value="vintage">
+                <span>Vintage</span>
+              </label>
+              <label class="tag-label">
+                <input type="checkbox" name="preferences" value="sporty">
+                <span>Sporty</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="signup-newsletter">
+              <input type="checkbox" id="signup-newsletter" name="newsletter" checked>
+              Subscribe to our newsletter for exclusive offers and style tips
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="signup-submit">
+            <span class="btn-text">Create Profile</span>
+            <span class="btn-loading" style="display: none;">Creating...</span>
+          </button>
+        </form>
+
+        <div class="form-switch">
+          <p>Already have an account? <a href="#" id="switch-to-login">Sign In</a></p>
+        </div>
+      </div>
+
+      <!-- Sign In Form -->
+      <div class="login-form" id="login-form" style="display: none;">
+        <h3>Sign In</h3>
+        <form id="user-login-form">
+          <div class="form-group">
+            <label for="login-email">Email Address</label>
+            <input type="email" id="login-email" name="email" required>
+            <span class="error-message" id="login-email-error"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="login-password">Password</label>
+            <input type="password" id="login-password" name="password" required>
+            <span class="error-message" id="login-password-error"></span>
+          </div>
+
+          <div class="form-options">
+            <label class="remember-me">
+              <input type="checkbox" id="remember-me" name="remember-me">
+              Remember me
+            </label>
+            <a href="#" class="forgot-password">Forgot password?</a>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="login-submit">
+            <span class="btn-text">Sign In</span>
+            <span class="btn-loading" style="display: none;">Signing in...</span>
+          </button>
+        </form>
+
+        <div class="form-switch">
+          <p>Don't have an account? <a href="#" id="switch-to-signup">Create Profile</a></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Success/Error Messages -->
+    <div class="message-container">
+      <div class="success-message" id="success-message" style="display: none;">
+        <div class="message-icon">✓</div>
+        <div class="message-text" id="success-text"></div>
+      </div>
+      <div class="error-message" id="error-message" style="display: none;">
+        <div class="message-icon">✗</div>
+        <div class="message-text" id="error-text"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.user-profile-signup {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.profile-header h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #27e1c1, #ff4fa3);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.profile-header p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.1rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="tel"],
+.form-group input[type="date"] {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #27e1c1;
+  box-shadow: 0 0 0 3px rgba(39, 225, 193, 0.1);
+}
+
+.preference-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tag-label {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: normal;
+  margin-bottom: 0;
+}
+
+.tag-label:hover {
+  background: rgba(39, 225, 193, 0.1);
+  border-color: #27e1c1;
+}
+
+.tag-label input[type="checkbox"] {
+  margin-right: 0.5rem;
+  width: auto;
+}
+
+.tag-label input[type="checkbox"]:checked + span {
+  color: #27e1c1;
+  font-weight: 600;
+}
+
+.btn {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #27e1c1, #ff4fa3);
+  color: white;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(39, 225, 193, 0.3);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  font-weight: normal;
+  margin-bottom: 0;
+}
+
+.remember-me input[type="checkbox"] {
+  margin-right: 0.5rem;
+  width: auto;
+}
+
+.forgot-password {
+  color: #27e1c1;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
+
+.form-switch {
+  text-align: center;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.form-switch a {
+  color: #27e1c1;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.form-switch a:hover {
+  text-decoration: underline;
+}
+
+.message-container {
+  margin-top: 1.5rem;
+}
+
+.success-message,
+.error-message {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.success-message {
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: #22c55e;
+}
+
+.error-message {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+}
+
+.message-icon {
+  font-size: 1.2rem;
+  margin-right: 0.75rem;
+  font-weight: bold;
+}
+
+.error-message .error-message {
+  color: #ef4444;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+@media (max-width: 768px) {
+  .user-profile-signup {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+  
+  .preference-tags {
+    flex-direction: column;
+  }
+  
+  .tag-label {
+    justify-content: flex-start;
+  }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const signupForm = document.getElementById('user-signup-form');
+  const loginForm = document.getElementById('user-login-form');
+  const signupSection = document.getElementById('signup-form');
+  const loginSection = document.getElementById('login-form');
+  const switchToLogin = document.getElementById('switch-to-login');
+  const switchToSignup = document.getElementById('switch-to-signup');
+
+  // Form switching
+  switchToLogin.addEventListener('click', function(e) {
+    e.preventDefault();
+    signupSection.style.display = 'none';
+    loginSection.style.display = 'block';
+    clearMessages();
+  });
+
+  switchToSignup.addEventListener('click', function(e) {
+    e.preventDefault();
+    loginSection.style.display = 'none';
+    signupSection.style.display = 'block';
+    clearMessages();
+  });
+
+  // Signup form handling
+  signupForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const submitBtn = document.getElementById('signup-submit');
+    const btnText = submitBtn.querySelector('.btn-text');
+    const btnLoading = submitBtn.querySelector('.btn-loading');
+    
+    // Show loading state
+    submitBtn.disabled = true;
+    btnText.style.display = 'none';
+    btnLoading.style.display = 'inline';
+    
+    try {
+      const formData = new FormData(signupForm);
+      const password = formData.get('password');
+      const confirmPassword = formData.get('confirm-password');
+      
+      // Validate passwords match
+      if (password !== confirmPassword) {
+        showError('Passwords do not match');
+        return;
+      }
+      
+      // Get preferences
+      const preferences = Array.from(document.querySelectorAll('input[name="preferences"]:checked'))
+        .map(cb => cb.value);
+      
+      // Create user profile data
+      const profileData = {
+        email: formData.get('email'),
+        password: password,
+        full_name: formData.get('full-name'),
+        phone: formData.get('phone') || null,
+        birthday: formData.get('birthday') || null,
+        style_preferences: preferences,
+        newsletter_subscribed: formData.has('newsletter'),
+        shopify_customer_id: window.Shopify?.customer?.id || null
+      };
+      
+      // Sign up user
+      if (window.supabaseClient) {
+        const result = await window.supabaseClient.signUp(profileData.email, profileData.password, {
+          full_name: profileData.full_name,
+          phone: profileData.phone,
+          birthday: profileData.birthday,
+          style_preferences: profileData.style_preferences,
+          newsletter_subscribed: profileData.newsletter_subscribed,
+          shopify_customer_id: profileData.shopify_customer_id
+        });
+        
+        if (result.error) {
+          showError(result.error.message || 'Signup failed. Please try again.');
+        } else {
+          showSuccess('Profile created successfully! Please check your email to verify your account.');
+          signupForm.reset();
+          
+          // Track signup event
+          if (window.trackPageView) {
+            window.trackPageView({source: 'user_signup', profile_created: true});
+          }
+        }
+      } else {
+        showError('Authentication service not available. Please try again later.');
+      }
+      
+    } catch (error) {
+      console.error('Signup error:', error);
+      showError('An unexpected error occurred. Please try again.');
+    } finally {
+      // Reset button state
+      submitBtn.disabled = false;
+      btnText.style.display = 'inline';
+      btnLoading.style.display = 'none';
+    }
+  });
+
+  // Login form handling
+  loginForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const submitBtn = document.getElementById('login-submit');
+    const btnText = submitBtn.querySelector('.btn-text');
+    const btnLoading = submitBtn.querySelector('.btn-loading');
+    
+    // Show loading state
+    submitBtn.disabled = true;
+    btnText.style.display = 'none';
+    btnLoading.style.display = 'inline';
+    
+    try {
+      const formData = new FormData(loginForm);
+      
+      if (window.supabaseClient) {
+        const result = await window.supabaseClient.signIn(formData.get('email'), formData.get('password'));
+        
+        if (result.error) {
+          showError(result.error.message || 'Login failed. Please check your credentials.');
+        } else {
+          showSuccess('Welcome back! You are now signed in.');
+          loginForm.reset();
+          
+          // Track login event
+          if (window.trackPageView) {
+            window.trackPageView({source: 'user_login', user_authenticated: true});
+          }
+          
+          // Redirect or update UI
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        }
+      } else {
+        showError('Authentication service not available. Please try again later.');
+      }
+      
+    } catch (error) {
+      console.error('Login error:', error);
+      showError('An unexpected error occurred. Please try again.');
+    } finally {
+      // Reset button state
+      submitBtn.disabled = false;
+      btnText.style.display = 'inline';
+      btnLoading.style.display = 'none';
+    }
+  });
+
+  function showSuccess(message) {
+    clearMessages();
+    const successDiv = document.getElementById('success-message');
+    const successText = document.getElementById('success-text');
+    successText.textContent = message;
+    successDiv.style.display = 'flex';
+  }
+
+  function showError(message) {
+    clearMessages();
+    const errorDiv = document.getElementById('error-message');
+    const errorText = document.getElementById('error-text');
+    errorText.textContent = message;
+    errorDiv.style.display = 'flex';
+  }
+
+  function clearMessages() {
+    document.getElementById('success-message').style.display = 'none';
+    document.getElementById('error-message').style.display = 'none';
+  }
+
+  // Clear individual field errors on input
+  const inputs = document.querySelectorAll('input');
+  inputs.forEach(input => {
+    input.addEventListener('input', function() {
+      const errorSpan = document.getElementById(this.id + '-error');
+      if (errorSpan) {
+        errorSpan.textContent = '';
+      }
+    });
+  });
+});
+</script>

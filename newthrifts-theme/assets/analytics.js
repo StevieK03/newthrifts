@@ -160,31 +160,78 @@ window.trackCartEvent = async function(cartData, action = 'update') {
   }
 };
 
+// Enhanced cart tracking with user profile integration
+window.trackCartEventWithProfile = async function(cartData, action = 'update') {
+  try {
+    // Get user profile data if available
+    let userProfile = null;
+    if (window.supabaseClient) {
+      const user = await window.supabaseClient.getCurrentUser();
+      if (user.user) {
+        userProfile = {
+          user_id: user.user.id,
+          email: user.user.email,
+          full_name: user.user.user_metadata?.full_name,
+          style_preferences: user.user.user_metadata?.style_preferences || [],
+          newsletter_subscribed: user.user.user_metadata?.newsletter_subscribed || false
+        };
+      }
+    }
+
+    // Enhanced cart data with user context
+    const enhancedCartData = {
+      ...cartData,
+      user_profile: userProfile,
+      is_authenticated: !!userProfile,
+      timestamp: new Date().toISOString()
+    };
+
+    // Track the cart event
+    const result = await window.trackCartEvent(enhancedCartData, action);
+    
+    // Track user behavior analytics
+    if (userProfile) {
+      await window.trackPageView({
+        source: 'cart_tracking',
+        user_authenticated: true,
+        cart_action: action,
+        cart_item_count: cartData.items?.length || 0,
+        cart_total: cartData.total_price || 0
+      });
+    }
+
+    return result;
+  } catch (error) {
+    console.error('Enhanced cart tracking error:', error);
+    return { error: error.message };
+  }
+};
+
 // Auto-track cart changes using Shopify's cart events
 if (typeof window !== 'undefined') {
   // Listen for Shopify cart updates
   document.addEventListener('cart:updated', function(event) {
     const cartData = event.detail?.cart || window.cart || {};
-    window.trackCartEvent(cartData, 'update');
+    window.trackCartEventWithProfile(cartData, 'update');
   });
 
   // Listen for add to cart events
   document.addEventListener('cart:item-added', function(event) {
     const cartData = event.detail?.cart || window.cart || {};
-    window.trackCartEvent(cartData, 'update');
+    window.trackCartEventWithProfile(cartData, 'add_item');
   });
 
   // Listen for remove from cart events
   document.addEventListener('cart:item-removed', function(event) {
     const cartData = event.detail?.cart || window.cart || {};
-    window.trackCartEvent(cartData, 'update');
+    window.trackCartEventWithProfile(cartData, 'remove_item');
   });
 
   // Fallback: Track cart on page load if cart exists
   window.addEventListener('load', function() {
     setTimeout(() => {
       if (window.cart && window.cart.items && window.cart.items.length > 0) {
-        window.trackCartEvent(window.cart, 'update');
+        window.trackCartEventWithProfile(window.cart, 'load');
       }
     }, 1000);
   });

@@ -124,6 +124,51 @@ class SupabaseClient {
     }
   }
 
+  async updateUserProfile(profileData) {
+    const client = await this.getClient();
+    if (!client) return { error: 'Client not initialized' };
+
+    try {
+      const { data, error } = await client.auth.updateUser({
+        data: {
+          full_name: profileData.full_name,
+          phone: profileData.phone,
+          birthday: profileData.birthday,
+          style_preferences: profileData.style_preferences,
+          newsletter_subscribed: profileData.newsletter_subscribed,
+          updated_at: new Date().toISOString()
+        }
+      });
+      return { data, error };
+    } catch (error) {
+      return { error: error.message };
+    }
+  }
+
+  async updateUserProfileInDB(userId, profileData) {
+    const client = await this.getClient();
+    if (!client) return { error: 'Client not initialized' };
+
+    try {
+      const { data, error } = await client
+        .from('user_profiles')
+        .upsert({
+          user_id: userId,
+          full_name: profileData.full_name,
+          phone: profileData.phone,
+          birthday: profileData.birthday,
+          style_preferences: profileData.style_preferences,
+          newsletter_subscribed: profileData.newsletter_subscribed,
+          updated_at: new Date().toISOString()
+        }, { 
+          onConflict: 'user_id' 
+        });
+      return { data, error };
+    } catch (error) {
+      return { error: error.message };
+    }
+  }
+
   async getCurrentUser() {
     const client = await this.getClient();
     if (!client) return { error: 'Client not initialized' };
