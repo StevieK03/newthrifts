@@ -7,147 +7,327 @@ Allows users to create accounts with profile information
 User Profile Signup Section - Only show for non-authenticated users
 {%- endcomment -%}
 
-<div class="user-profile-signup" id="user-profile-signup" style="display: none;">
-  <div class="profile-container">
-    <div class="profile-header">
-      <h2>Create Your Profile</h2>
-      <p>Join NewThrifts to save your preferences, track orders, and get personalized recommendations.</p>
+<!-- Compact Profile CTA Button -->
+<div class="profile-cta-section" id="user-profile-signup" style="display: none;">
+  <div class="profile-cta-container">
+    <div class="cta-content">
+      <h3>Join NewThrifts</h3>
+      <p>Create your profile to save preferences, track orders, and get personalized style recommendations.</p>
+      <button class="profile-cta-btn" id="open-profile-modal">
+        <span class="btn-icon">👤</span>
+        <span class="btn-text">Create Your Profile</span>
+        <span class="btn-arrow">→</span>
+      </button>
     </div>
+  </div>
+</div>
 
-    <div class="profile-forms">
-      <!-- Sign Up Form -->
-      <div class="signup-form" id="signup-form">
-        <h3>Sign Up</h3>
-        <form id="user-signup-form">
-          <div class="form-group">
-            <label for="signup-email">Email Address</label>
-            <input type="email" id="signup-email" name="email" required>
-            <span class="error-message" id="signup-email-error"></span>
-          </div>
+<!-- Full Profile Modal (hidden by default) -->
+<div class="profile-modal" id="profile-modal" style="display: none;">
+  <div class="modal-overlay" id="modal-overlay"></div>
+  <div class="modal-container">
+    <div class="modal-header">
+      <h2>Create Your Profile</h2>
+      <button class="modal-close" id="close-profile-modal">×</button>
+    </div>
+    
+    <div class="modal-content">
+      <div class="profile-forms">
+        <!-- Sign Up Form -->
+        <div class="signup-form" id="signup-form">
+          <h3>Sign Up</h3>
+          <form id="user-signup-form">
+            <div class="form-group">
+              <label for="signup-email">Email Address</label>
+              <input type="email" id="signup-email" name="email" required>
+              <span class="error-message" id="signup-email-error"></span>
+            </div>
 
-          <div class="form-group">
-            <label for="signup-password">Password</label>
-            <input type="password" id="signup-password" name="password" required minlength="6">
-            <span class="error-message" id="signup-password-error"></span>
-          </div>
+            <div class="form-group">
+              <label for="signup-password">Password</label>
+              <input type="password" id="signup-password" name="password" required minlength="6">
+              <span class="error-message" id="signup-password-error"></span>
+            </div>
 
-          <div class="form-group">
-            <label for="signup-confirm-password">Confirm Password</label>
-            <input type="password" id="signup-confirm-password" name="confirm-password" required>
-            <span class="error-message" id="signup-confirm-password-error"></span>
-          </div>
+            <div class="form-group">
+              <label for="signup-confirm-password">Confirm Password</label>
+              <input type="password" id="signup-confirm-password" name="confirm-password" required>
+              <span class="error-message" id="signup-confirm-password-error"></span>
+            </div>
 
-          <div class="form-group">
-            <label for="signup-full-name">Full Name</label>
-            <input type="text" id="signup-full-name" name="full-name" required>
-            <span class="error-message" id="signup-full-name-error"></span>
-          </div>
+            <div class="form-group">
+              <label for="signup-full-name">Full Name</label>
+              <input type="text" id="signup-full-name" name="full-name" required>
+              <span class="error-message" id="signup-full-name-error"></span>
+            </div>
 
-          <div class="form-group">
-            <label for="signup-phone">Phone Number (Optional)</label>
-            <input type="tel" id="signup-phone" name="phone">
-          </div>
+            <div class="form-group">
+              <label for="signup-phone">Phone Number (Optional)</label>
+              <input type="tel" id="signup-phone" name="phone">
+            </div>
 
-          <div class="form-group">
-            <label for="signup-birthday">Birthday (Optional)</label>
-            <input type="date" id="signup-birthday" name="birthday">
-          </div>
+            <div class="form-group">
+              <label for="signup-birthday">Birthday (Optional)</label>
+              <input type="date" id="signup-birthday" name="birthday">
+            </div>
 
-          <div class="form-group">
-            <label for="signup-preferences">Style Preferences</label>
-            <div class="preference-tags">
-              <label class="tag-label">
-                <input type="checkbox" name="preferences" value="casual">
-                <span>Casual</span>
-              </label>
-              <label class="tag-label">
-                <input type="checkbox" name="preferences" value="formal">
-                <span>Formal</span>
-              </label>
-              <label class="tag-label">
-                <input type="checkbox" name="preferences" value="streetwear">
-                <span>Streetwear</span>
-              </label>
-              <label class="tag-label">
-                <input type="checkbox" name="preferences" value="vintage">
-                <span>Vintage</span>
-              </label>
-              <label class="tag-label">
-                <input type="checkbox" name="preferences" value="sporty">
-                <span>Sporty</span>
+            <div class="form-group">
+              <label for="signup-preferences">Style Preferences</label>
+              <div class="preference-tags">
+                <label class="tag-label">
+                  <input type="checkbox" name="preferences" value="casual">
+                  <span>Casual</span>
+                </label>
+                <label class="tag-label">
+                  <input type="checkbox" name="preferences" value="formal">
+                  <span>Formal</span>
+                </label>
+                <label class="tag-label">
+                  <input type="checkbox" name="preferences" value="streetwear">
+                  <span>Streetwear</span>
+                </label>
+                <label class="tag-label">
+                  <input type="checkbox" name="preferences" value="vintage">
+                  <span>Vintage</span>
+                </label>
+                <label class="tag-label">
+                  <input type="checkbox" name="preferences" value="sporty">
+                  <span>Sporty</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="signup-newsletter">
+                <input type="checkbox" id="signup-newsletter" name="newsletter" checked>
+                Subscribe to our newsletter for exclusive offers and style tips
               </label>
             </div>
+
+            <button type="submit" class="btn btn-primary" id="signup-submit">
+              <span class="btn-text">Create Profile</span>
+              <span class="btn-loading" style="display: none;">Creating...</span>
+            </button>
+          </form>
+
+          <div class="form-switch">
+            <p>Already have an account? <a href="#" id="switch-to-login">Sign In</a></p>
           </div>
+        </div>
 
-          <div class="form-group">
-            <label for="signup-newsletter">
-              <input type="checkbox" id="signup-newsletter" name="newsletter" checked>
-              Subscribe to our newsletter for exclusive offers and style tips
-            </label>
+        <!-- Sign In Form -->
+        <div class="login-form" id="login-form" style="display: none;">
+          <h3>Sign In</h3>
+          <form id="user-login-form">
+            <div class="form-group">
+              <label for="login-email">Email Address</label>
+              <input type="email" id="login-email" name="email" required>
+              <span class="error-message" id="login-email-error"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="login-password">Password</label>
+              <input type="password" id="login-password" name="password" required>
+              <span class="error-message" id="login-password-error"></span>
+            </div>
+
+            <div class="form-options">
+              <label class="remember-me">
+                <input type="checkbox" id="remember-me" name="remember-me">
+                Remember me
+              </label>
+              <a href="#" class="forgot-password">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="login-submit">
+              <span class="btn-text">Sign In</span>
+              <span class="btn-loading" style="display: none;">Signing in...</span>
+            </button>
+          </form>
+
+          <div class="form-switch">
+            <p>Don't have an account? <a href="#" id="switch-to-signup">Create Profile</a></p>
           </div>
-
-          <button type="submit" class="btn btn-primary" id="signup-submit">
-            <span class="btn-text">Create Profile</span>
-            <span class="btn-loading" style="display: none;">Creating...</span>
-          </button>
-        </form>
-
-        <div class="form-switch">
-          <p>Already have an account? <a href="#" id="switch-to-login">Sign In</a></p>
         </div>
       </div>
 
-      <!-- Sign In Form -->
-      <div class="login-form" id="login-form" style="display: none;">
-        <h3>Sign In</h3>
-        <form id="user-login-form">
-          <div class="form-group">
-            <label for="login-email">Email Address</label>
-            <input type="email" id="login-email" name="email" required>
-            <span class="error-message" id="login-email-error"></span>
-          </div>
-
-          <div class="form-group">
-            <label for="login-password">Password</label>
-            <input type="password" id="login-password" name="password" required>
-            <span class="error-message" id="login-password-error"></span>
-          </div>
-
-          <div class="form-options">
-            <label class="remember-me">
-              <input type="checkbox" id="remember-me" name="remember-me">
-              Remember me
-            </label>
-            <a href="#" class="forgot-password">Forgot password?</a>
-          </div>
-
-          <button type="submit" class="btn btn-primary" id="login-submit">
-            <span class="btn-text">Sign In</span>
-            <span class="btn-loading" style="display: none;">Signing in...</span>
-          </button>
-        </form>
-
-        <div class="form-switch">
-          <p>Don't have an account? <a href="#" id="switch-to-signup">Create Profile</a></p>
+      <!-- Success/Error Messages -->
+      <div class="message-container">
+        <div class="success-message" id="success-message" style="display: none;">
+          <div class="message-icon">✓</div>
+          <div class="message-text" id="success-text"></div>
         </div>
-      </div>
-    </div>
-
-    <!-- Success/Error Messages -->
-    <div class="message-container">
-      <div class="success-message" id="success-message" style="display: none;">
-        <div class="message-icon">✓</div>
-        <div class="message-text" id="success-text"></div>
-      </div>
-      <div class="error-message" id="error-message" style="display: none;">
-        <div class="message-icon">✗</div>
-        <div class="message-text" id="error-text"></div>
+        <div class="error-message" id="error-message" style="display: none;">
+          <div class="message-icon">✗</div>
+          <div class="message-text" id="error-text"></div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <style>
+/* Compact CTA Section */
+.profile-cta-section {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.profile-cta-container {
+  background: linear-gradient(135deg, rgba(39, 225, 193, 0.1), rgba(255, 79, 163, 0.1));
+  border-radius: 20px;
+  padding: 2rem;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.cta-content h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #27e1c1, #ff4fa3);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.cta-content p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.profile-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #27e1c1, #ff4fa3);
+  border: none;
+  border-radius: 50px;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(39, 225, 193, 0.3);
+}
+
+.profile-cta-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(39, 225, 193, 0.4);
+}
+
+.btn-icon {
+  font-size: 1.2rem;
+}
+
+.btn-arrow {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.profile-cta-btn:hover .btn-arrow {
+  transform: translateX(3px);
+}
+
+/* Modal Styles */
+.profile-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+}
+
+.modal-container {
+  position: relative;
+  max-width: 600px;
+  max-height: 90vh;
+  width: 90%;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #27e1c1, #ff4fa3);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.modal-content {
+  max-height: calc(90vh - 80px);
+  overflow-y: auto;
+  padding: 2rem;
+}
+
 .user-profile-signup {
   max-width: 600px;
   margin: 0 auto;
@@ -377,12 +557,46 @@ document.addEventListener('DOMContentLoaded', function() {
   // Check if user is authenticated and show/hide section accordingly
   checkAuthAndShowSection();
   
+  // Modal functionality
+  const openModalBtn = document.getElementById('open-profile-modal');
+  const closeModalBtn = document.getElementById('close-profile-modal');
+  const modalOverlay = document.getElementById('modal-overlay');
+  const profileModal = document.getElementById('profile-modal');
+  
   const signupForm = document.getElementById('user-signup-form');
   const loginForm = document.getElementById('user-login-form');
   const signupSection = document.getElementById('signup-form');
   const loginSection = document.getElementById('login-form');
   const switchToLogin = document.getElementById('switch-to-login');
   const switchToSignup = document.getElementById('switch-to-signup');
+
+  // Modal open/close functionality
+  if (openModalBtn) {
+    openModalBtn.addEventListener('click', function() {
+      profileModal.style.display = 'flex';
+      document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    });
+  }
+
+  function closeModal() {
+    profileModal.style.display = 'none';
+    document.body.style.overflow = 'auto'; // Restore scrolling
+  }
+
+  if (closeModalBtn) {
+    closeModalBtn.addEventListener('click', closeModal);
+  }
+
+  if (modalOverlay) {
+    modalOverlay.addEventListener('click', closeModal);
+  }
+
+  // Close modal on Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && profileModal.style.display === 'flex') {
+      closeModal();
+    }
+  });
 
   // Form switching
   switchToLogin.addEventListener('click', function(e) {
@@ -460,6 +674,12 @@ document.addEventListener('DOMContentLoaded', function() {
           if (window.trackPageView) {
             window.trackPageView({source: 'user_signup', profile_created: true});
           }
+          
+          // Close modal after 2 seconds
+          setTimeout(() => {
+            closeModal();
+            checkAuthAndShowSection(); // Hide CTA since user is now authenticated
+          }, 2000);
         }
       } else {
         showError('Authentication service not available. Please try again later.');
@@ -506,9 +726,10 @@ document.addEventListener('DOMContentLoaded', function() {
             window.trackPageView({source: 'user_login', user_authenticated: true});
           }
           
-          // Redirect or update UI
+          // Close modal and update UI
           setTimeout(() => {
-            window.location.reload();
+            closeModal();
+            checkAuthAndShowSection(); // Hide CTA since user is now authenticated
           }, 1500);
         }
       } else {
@@ -551,23 +772,25 @@ document.addEventListener('DOMContentLoaded', function() {
     try {
       if (window.supabaseClient) {
         const user = await window.supabaseClient.getCurrentUser();
-        const section = document.getElementById('user-profile-signup');
+        const ctaSection = document.getElementById('user-profile-signup');
         
         if (user.user) {
-          // User is authenticated, hide the section
-          section.style.display = 'none';
+          // User is authenticated, hide the CTA section
+          if (ctaSection) ctaSection.style.display = 'none';
         } else {
-          // User is not authenticated, show the section
-          section.style.display = 'block';
+          // User is not authenticated, show the CTA section
+          if (ctaSection) ctaSection.style.display = 'block';
         }
       } else {
-        // Supabase not available, show the section
-        document.getElementById('user-profile-signup').style.display = 'block';
+        // Supabase not available, show the CTA section
+        const ctaSection = document.getElementById('user-profile-signup');
+        if (ctaSection) ctaSection.style.display = 'block';
       }
     } catch (error) {
       console.error('Auth check error:', error);
-      // On error, show the section
-      document.getElementById('user-profile-signup').style.display = 'block';
+      // On error, show the CTA section
+      const ctaSection = document.getElementById('user-profile-signup');
+      if (ctaSection) ctaSection.style.display = 'block';
     }
   }
 
