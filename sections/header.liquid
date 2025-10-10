@@ -997,6 +997,36 @@
   const storedTheme = localStorage.getItem('theme');
   const theme = storedTheme || 'dark';
   document.documentElement.setAttribute('data-theme', theme);
+  
+  // Remove any white boxes from header
+  function removeWhiteBoxes() {
+    const header = document.querySelector('header');
+    if (header) {
+      // Find and remove any elements with white background
+      const whiteElements = header.querySelectorAll('*');
+      whiteElements.forEach(el => {
+        const style = window.getComputedStyle(el);
+        const bgColor = style.backgroundColor;
+        if (bgColor === 'rgb(255, 255, 255)' || bgColor === 'white' || bgColor === '#ffffff') {
+          // Check if it's not one of our intended buttons
+          if (!el.classList.contains('nt-header__signin-link') && 
+              !el.classList.contains('dark-mode-toggle') && 
+              !el.classList.contains('nt-header__cart-link') &&
+              !el.classList.contains('wishlist-toggle') &&
+              el.id !== 'header-wishlist-toggle') {
+            el.style.display = 'none';
+          }
+        }
+      });
+    }
+  }
+  
+  // Run immediately and after DOM is ready
+  removeWhiteBoxes();
+  document.addEventListener('DOMContentLoaded', removeWhiteBoxes);
+  
+  // Also run after a short delay to catch dynamically added elements
+  setTimeout(removeWhiteBoxes, 1000);
 })();
 
 // Update cart count dynamically

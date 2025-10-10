@@ -9,7 +9,14 @@ Welcome / Social Bar — Modern Redesign
 <div class="logo-above-welcome">
   <div class="logo-container">
     <a href="{{ routes.root_url }}" class="logo-link">
-      <img src="{{ settings.logo | img_url: '300x' }}" alt="{{ shop.name }}" class="logo-img">
+      {% if settings.logo != blank %}
+        <img src="{{ settings.logo | img_url: '300x' }}" alt="{{ shop.name }}" class="logo-img">
+      {% else %}
+        <div class="logo-text-fallback">
+          <span class="logo-main">NEW THRIFTS</span>
+          <span class="logo-sub">Fresh Drops, Great Prices</span>
+        </div>
+      {% endif %}
     </a>
   </div>
 </div>
@@ -154,6 +161,31 @@ Welcome / Social Bar — Modern Redesign
       width: auto;
       display: block;
       filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+    }
+    
+    .logo-text-fallback {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: white;
+    }
+    
+    .logo-main {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      color: white;
+      text-shadow: 0 0 10px rgba(96, 165, 250, 0.3);
+    }
+    
+    .logo-sub {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: rgba(255, 255, 255, 0.8);
+      margin-top: 2px;
     }
     
     /* Dark mode logo styling */
