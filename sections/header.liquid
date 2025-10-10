@@ -1,6 +1,15 @@
 <header id="Header-{{ section.id }}" class="nt-header" role="banner">
   <div class="nt-header__wrap">
-    <!-- Logo removed - moved to welcome section -->
+    <!-- Logo -->
+    <div class="nt-header__logo">
+      {% if section.settings.logo != blank %}
+        <a href="{{ routes.root_url }}" class="nt-header__logo-link">
+          <img src="{{ section.settings.logo | img_url: '200x' }}" alt="{{ shop.name }}" class="nt-header__logo-img">
+        </a>
+      {% else %}
+        <a href="{{ routes.root_url }}" class="nt-header__logo-text">{{ section.settings.logo_text }}</a>
+      {% endif %}
+    </div>
 
     <!-- Navigation -->
     <nav class="nt-header__nav" aria-label="Main navigation">
