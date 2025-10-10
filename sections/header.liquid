@@ -101,28 +101,32 @@
     border-radius: 50px;
     text-decoration: none;
     color: white !important;
-    font-weight: 600;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(8px);
+    font-weight: 500;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px) saturate(180%);
     transition: all 0.3s ease;
     min-width: 120px;
-    height: 48px;
+    height: 44px;
     flex-shrink: 0;
     gap: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   }
   
   #Header-{{ section.id }} .nt-header__signin-link:hover {
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.3);
     color: white !important;
     transform: translateY(-1px);
-    border-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
   }
   
   #Header-{{ section.id }} .user-icon {
     color: white;
     transition: all 0.3s ease;
     flex-shrink: 0;
+    width: 18px;
+    height: 18px;
   }
   
   #Header-{{ section.id }} .nt-header__signin-link:hover .user-icon {
@@ -134,6 +138,7 @@
     font-size: 0.9rem;
     white-space: nowrap;
     color: white;
+    font-weight: 500;
   }
 
   /* Dark Mode Toggle Styling */
@@ -149,22 +154,20 @@
     justify-content: center;
     position: relative;
     padding: 0;
-    border-radius: 50%;
+    border-radius: 50px;
     text-decoration: none;
     color: white !important;
     font-weight: 600;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.2);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(20px) saturate(180%);
-    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    width: 50px;
-    height: 50px;
+    backdrop-filter: blur(10px) saturate(180%);
+    transition: all 0.3s ease;
+    width: 44px;
+    height: 44px;
     flex-shrink: 0;
     cursor: pointer;
     overflow: hidden;
-    box-shadow: 
-      0 8px 32px rgba(0, 0, 0, 0.12),
-      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   }
   
   #Header-{{ section.id }} .dark-mode-toggle::before {
@@ -182,13 +185,10 @@
   }
   
   #Header-{{ section.id }} .dark-mode-toggle:hover {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 165, 0, 0.4);
-    transform: translateY(-2px);
-    box-shadow: 
-      0 12px 40px rgba(0, 0, 0, 0.15),
-      0 4px 16px rgba(255, 165, 0, 0.2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
   }
   
   #Header-{{ section.id }} .dark-mode-toggle:hover::before {
@@ -217,8 +217,10 @@
     transform: rotate(0deg) scale(1);
     color: #ffa500;
     filter: 
-      drop-shadow(0 0 12px rgba(255, 165, 0, 0.8))
-      drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+      drop-shadow(0 0 8px rgba(255, 165, 0, 0.6))
+      drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    width: 20px;
+    height: 20px;
   }
   
   /* Light mode state */
@@ -232,8 +234,10 @@
     transform: rotate(0deg) scale(1);
     color: #ffa500;
     filter: 
-      drop-shadow(0 0 12px rgba(255, 165, 0, 0.8))
-      drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+      drop-shadow(0 0 8px rgba(255, 165, 0, 0.6))
+      drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    width: 20px;
+    height: 20px;
   }
   
   /* Dark mode state */
@@ -247,8 +251,10 @@
     transform: rotate(0deg) scale(1);
     color: #ffa500;
     filter: 
-      drop-shadow(0 0 12px rgba(255, 165, 0, 0.8))
-      drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+      drop-shadow(0 0 8px rgba(255, 165, 0, 0.6))
+      drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    width: 20px;
+    height: 20px;
   }
   
   /* Beautiful click animations */
@@ -331,26 +337,30 @@
     border-radius: 50px;
     text-decoration: none;
     color: white !important;
-    font-weight: 600;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(8px);
+    font-weight: 500;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px) saturate(180%);
     transition: all 0.3s ease;
-    min-width: 56px;
-    height: 48px;
+    min-width: 44px;
+    height: 44px;
     flex-shrink: 0;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   }
   
   #Header-{{ section.id }} .nt-header__cart-link:hover {
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.3);
     color: white !important;
     transform: translateY(-1px);
-    border-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
   }
   
   #Header-{{ section.id }} .nt-header__cart-icon {
     color: white;
     transition: all 0.3s ease;
+    width: 20px;
+    height: 20px;
   }
   
   #Header-{{ section.id }} .nt-header__cart-link:hover .nt-header__cart-icon {
@@ -513,8 +523,8 @@
     }
     
     #Header-{{ section.id }} .dark-mode-toggle {
-      width: 46px;
-      height: 46px;
+      width: 40px;
+      height: 40px;
       padding: 0;
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
@@ -522,8 +532,8 @@
     }
     
     #Header-{{ section.id }} .dark-mode-toggle svg {
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
     }
 
     /* Mobile cart button adjustments */
@@ -533,7 +543,7 @@
     
     #Header-{{ section.id }} .nt-header__cart-link {
       padding: 10px 14px;
-      min-width: 48px;
+      min-width: 40px;
       height: 40px;
       border-radius: 25px;
       touch-action: manipulation;
@@ -618,14 +628,14 @@
     }
     
     #Header-{{ section.id }} .dark-mode-toggle {
-      width: 44px;
-      height: 44px;
+      width: 38px;
+      height: 38px;
       border-width: 1px;
     }
     
     #Header-{{ section.id }} .dark-mode-toggle svg {
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
     }
     
     #Header-{{ section.id }} .wishlist-toggle {
