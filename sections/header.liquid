@@ -22,6 +22,17 @@
       
     </nav>
 
+    <!-- Sign In Button -->
+    <div class="nt-header__signin">
+      <a href="{{ routes.account_login_url }}" class="nt-header__signin-link" aria-label="Sign in">
+        <svg class="user-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+        <span class="signin-text">Sign in</span>
+      </a>
+    </div>
+
     <!-- Dark Mode Toggle -->
     <div class="nt-header__dark-mode">
       <button class="dark-mode-toggle" id="dark-mode-toggle" aria-label="Toggle dark mode">
@@ -74,6 +85,56 @@
     flex-wrap: nowrap;
   }
   
+  /* Sign In Button Styling */
+  #Header-{{ section.id }} .nt-header__signin {
+    display: flex;
+    align-items: center;
+    margin-right: 12px;
+  }
+  
+  #Header-{{ section.id }} .nt-header__signin-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 12px 20px;
+    border-radius: 50px;
+    text-decoration: none;
+    color: #1f2937 !important;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    transition: all 0.3s ease;
+    min-width: 120px;
+    height: 48px;
+    flex-shrink: 0;
+    gap: 8px;
+  }
+  
+  #Header-{{ section.id }} .nt-header__signin-link:hover {
+    background: rgba(255, 255, 255, 0.25);
+    color: #1f2937 !important;
+    transform: translateY(-1px);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+  
+  #Header-{{ section.id }} .user-icon {
+    color: #1f2937;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+  }
+  
+  #Header-{{ section.id }} .nt-header__signin-link:hover .user-icon {
+    transform: scale(1.05);
+    color: #374151;
+  }
+  
+  #Header-{{ section.id }} .signin-text {
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+
   /* Dark Mode Toggle Styling */
   #Header-{{ section.id }} .nt-header__dark-mode {
     display: flex;
@@ -137,6 +198,8 @@
   [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle .moon-icon {
     opacity: 1;
     transform: rotate(0deg) scale(1);
+    color: #ffa500; /* Warm orange-yellow moon color */
+    filter: drop-shadow(0 0 3px rgba(255, 165, 0, 0.3));
   }
 
   /* Cart Button Styling - Matches navigation buttons */
@@ -304,6 +367,31 @@
       flex-shrink: 0;
     }
     
+    /* Mobile sign in button adjustments */
+    #Header-{{ section.id }} .nt-header__signin {
+      flex-shrink: 0;
+      margin-right: 8px;
+    }
+    
+    #Header-{{ section.id }} .nt-header__signin-link {
+      padding: 10px 16px;
+      min-width: 100px;
+      height: 40px;
+      border-radius: 25px;
+      gap: 6px;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    #Header-{{ section.id }} .user-icon {
+      width: 16px;
+      height: 16px;
+    }
+    
+    #Header-{{ section.id }} .signin-text {
+      font-size: 0.8rem;
+    }
+
     /* Mobile dark mode toggle adjustments */
     #Header-{{ section.id }} .nt-header__dark-mode {
       flex-shrink: 0;
@@ -385,6 +473,22 @@
       padding: 8px 12px;
       font-size: 0.85rem;
       min-height: 40px;
+    }
+    
+    #Header-{{ section.id }} .nt-header__signin-link {
+      padding: 8px 12px;
+      min-width: 90px;
+      height: 40px;
+      gap: 4px;
+    }
+    
+    #Header-{{ section.id }} .user-icon {
+      width: 14px;
+      height: 14px;
+    }
+    
+    #Header-{{ section.id }} .signin-text {
+      font-size: 0.75rem;
     }
     
     #Header-{{ section.id }} .nt-header__cart-link {
