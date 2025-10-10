@@ -54,15 +54,17 @@
         --accent-2: {{ settings.accent_2 | default: '#ff4fa3' }};
       }
 
-      /* ===== HEADER: force white + neon brand + pill nav ===== */
+      /* ===== HEADER: dark theme compatible ===== */
       body > header.header,
       .header{
-        background:#fff !important;
-        color:#0f172a;
-        border-bottom:1px solid rgba(0,0,0,.06);
-        position:relative; z-index:50;
+        background: var(--glass-bg, rgba(255, 255, 255, 0.1)) !important;
+        color: var(--text-primary, #0f172a);
+        border-bottom: 1px solid var(--glass-border, rgba(255, 255, 255, 0.2));
+        position: relative; 
+        z-index: 50;
+        backdrop-filter: var(--glass-backdrop, blur(20px));
       }
-      .header::before, .header::after{ background:transparent !important; }
+      .header::before, .header::after{ background: transparent !important; }
 
       .header__inner{ display:flex; align-items:center; justify-content:space-between; padding:14px 20px; }
 
