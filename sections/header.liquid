@@ -925,7 +925,7 @@ window.updateCartCount = updateCartCount;
 class DarkMode {
   constructor() {
     this.toggle = document.getElementById('dark-mode-toggle');
-    this.currentTheme = this.getStoredTheme() || this.getSystemTheme();
+    this.currentTheme = this.getStoredTheme() || 'dark';
     this.init();
   }
 
@@ -933,10 +933,11 @@ class DarkMode {
     this.applyTheme(this.currentTheme);
     this.toggle?.addEventListener('click', () => this.toggleTheme());
     
-    // Listen for system theme changes
+    // Listen for system theme changes (only if no stored preference)
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
       if (!this.getStoredTheme()) {
-        this.applyTheme(e.matches ? 'dark' : 'light');
+        // Keep dark mode as default even if system changes
+        this.applyTheme('dark');
       }
     });
   }
