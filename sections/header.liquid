@@ -903,6 +903,37 @@
     opacity: 1;
     transform: scale(1);
   }
+  
+  /* Hide any white background elements in header */
+  #Header-{{ section.id }} * {
+    background: rgba(0, 0, 0, 0.8) !important;
+  }
+  
+  /* Override for buttons to maintain proper styling */
+  #Header-{{ section.id }} .nt-header__signin-link,
+  #Header-{{ section.id }} .dark-mode-toggle,
+  #Header-{{ section.id }} .nt-header__cart-link,
+  #Header-{{ section.id }} .wishlist-toggle {
+    background: rgba(0, 0, 0, 0.8) !important;
+  }
+  
+  /* Ensure text and icons are white */
+  #Header-{{ section.id }} * {
+    color: white !important;
+  }
+  
+  /* Specific overrides for icons */
+  #Header-{{ section.id }} .user-icon,
+  #Header-{{ section.id }} .wishlist-icon,
+  #Header-{{ section.id }} .nt-header__cart-icon,
+  #Header-{{ section.id }} .moon-icon {
+    color: white !important;
+  }
+  
+  /* Moon icon special color */
+  #Header-{{ section.id }} .moon-icon {
+    color: #ffa500 !important;
+  }
 </style>
 
 <script>
