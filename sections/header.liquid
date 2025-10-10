@@ -59,16 +59,84 @@
 </header>
 
 <style>
+  /* ===== Dark Mode CSS Variables ===== */
+  :root {
+    /* Light mode defaults */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-tertiary: #e2e8f0;
+    --bg-accent: #cbd5e1;
+    --text-primary: #1e293b;
+    --text-secondary: #475569;
+    --text-muted: #64748b;
+    --text-accent: #3b82f6;
+    --border-primary: #e2e8f0;
+    --border-secondary: #cbd5e1;
+    --button-primary: #3b82f6;
+    --button-primary-hover: #2563eb;
+    --button-secondary: #475569;
+    --button-secondary-hover: #334155;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --error: #ef4444;
+    --info: #3b82f6;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    --glass-bg: rgba(255, 255, 255, 0.8);
+    --glass-border: rgba(148, 163, 184, 0.2);
+    --glass-backdrop: blur(16px);
+  }
+  
+  /* Dark mode variables */
+  :root[data-theme="dark"] {
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-tertiary: #334155;
+    --bg-accent: #475569;
+    --text-primary: #f8fafc;
+    --text-secondary: #e2e8f0;
+    --text-muted: #94a3b8;
+    --text-accent: #60a5fa;
+    --border-primary: #334155;
+    --border-secondary: #475569;
+    --button-primary: #3b82f6;
+    --button-primary-hover: #2563eb;
+    --button-secondary: #475569;
+    --button-secondary-hover: #334155;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --error: #ef4444;
+    --info: #3b82f6;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+    --glass-bg: rgba(15, 23, 42, 0.8);
+    --glass-border: rgba(148, 163, 184, 0.2);
+    --glass-backdrop: blur(16px);
+  }
+
   /* ===== Modern Glassmorphism Header ===== */
   #Header-{{ section.id }}{
-    background: rgba(255, 255, 255, 0.1) !important;
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    background: var(--glass-bg) !important;
+    backdrop-filter: var(--glass-backdrop) saturate(180%);
+    -webkit-backdrop-filter: var(--glass-backdrop) saturate(180%);
     position: relative;
     z-index: 50;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--glass-border);
     border-radius: 0 0 20px 20px;
+  }
+  
+  /* Dark mode header styling */
+  [data-theme="dark"] #Header-{{ section.id }} {
+    background: var(--glass-bg) !important;
+    backdrop-filter: var(--glass-backdrop);
+    -webkit-backdrop-filter: var(--glass-backdrop);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-primary);
   }
   #Header-{{ section.id }} *{ box-sizing:border-box }
   #Header-{{ section.id }} .nt-header__wrap{
@@ -140,6 +208,29 @@
     color: white;
     font-weight: 500;
   }
+  
+  /* Dark mode sign in button styling */
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__signin-link {
+    background: rgba(71, 85, 105, 0.2);
+    border: 1px solid var(--border-primary);
+    color: var(--text-primary) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  }
+  
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__signin-link:hover {
+    background: rgba(59, 130, 246, 0.2);
+    border-color: var(--button-primary);
+    color: var(--text-accent) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  }
+  
+  [data-theme="dark"] #Header-{{ section.id }} .user-icon {
+    color: var(--text-primary);
+  }
+  
+  [data-theme="dark"] #Header-{{ section.id }} .signin-text {
+    color: var(--text-primary);
+  }
 
   /* Dark Mode Toggle Styling */
   #Header-{{ section.id }} .nt-header__dark-mode {
@@ -168,6 +259,19 @@
     cursor: pointer;
     overflow: hidden;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Dark mode toggle styling when in dark theme */
+  [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle {
+    background: rgba(71, 85, 105, 0.2);
+    border: 1px solid var(--border-primary);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  }
+  
+  [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle:hover {
+    background: rgba(59, 130, 246, 0.2);
+    border-color: var(--button-primary);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
   }
   
   #Header-{{ section.id }} .dark-mode-toggle::before {
@@ -366,6 +470,25 @@
   #Header-{{ section.id }} .nt-header__cart-link:hover .nt-header__cart-icon {
     transform: scale(1.05);
     color: white;
+  }
+  
+  /* Dark mode cart button styling */
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__cart-link {
+    background: rgba(71, 85, 105, 0.2);
+    border: 1px solid var(--border-primary);
+    color: var(--text-primary) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  }
+  
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__cart-link:hover {
+    background: rgba(59, 130, 246, 0.2);
+    border-color: var(--button-primary);
+    color: var(--text-accent) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  }
+  
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__cart-icon {
+    color: var(--text-primary);
   }
   
   #Header-{{ section.id }} .nt-header__cart-count {
