@@ -148,36 +148,66 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    padding: 12px;
+    padding: 0;
     border-radius: 50%;
     text-decoration: none;
     color: #ffa500 !important;
     font-weight: 600;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(8px);
-    transition: all 0.3s ease;
-    width: 48px;
-    height: 48px;
+    background: linear-gradient(135deg, rgba(255, 165, 0, 0.15) 0%, rgba(255, 140, 0, 0.25) 100%);
+    border: 2px solid rgba(255, 165, 0, 0.3);
+    backdrop-filter: blur(12px) saturate(180%);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 52px;
+    height: 52px;
     flex-shrink: 0;
     cursor: pointer;
     overflow: hidden;
+    box-shadow: 
+      0 4px 20px rgba(255, 165, 0, 0.2),
+      0 2px 8px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
   
   #Header-{{ section.id }} .dark-mode-toggle:hover {
-    background: rgba(0, 0, 0, 0.4);
-    color: #ffa500 !important;
-    transform: translateY(-1px) scale(1.05);
-    border-color: rgba(255, 255, 255, 0.2);
+    background: linear-gradient(135deg, rgba(255, 165, 0, 0.25) 0%, rgba(255, 140, 0, 0.35) 100%);
+    color: #ff8c00 !important;
+    transform: translateY(-2px) scale(1.08);
+    border-color: rgba(255, 165, 0, 0.5);
+    box-shadow: 
+      0 8px 30px rgba(255, 165, 0, 0.3),
+      0 4px 15px rgba(0, 0, 0, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
   
   #Header-{{ section.id }} .dark-mode-toggle:active {
-    transform: translateY(0) scale(0.95);
+    transform: translateY(-1px) scale(1.02);
+    transition: all 0.1s ease;
+  }
+  
+  #Header-{{ section.id }} .dark-mode-toggle::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: radial-gradient(circle, rgba(255, 165, 0, 0.4) 0%, transparent 70%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.3s ease;
+    pointer-events: none;
+  }
+  
+  #Header-{{ section.id }} .dark-mode-toggle:hover::before {
+    width: 100%;
+    height: 100%;
   }
   
   #Header-{{ section.id }} .dark-mode-toggle svg {
-    position: absolute;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 2;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
   }
   
   #Header-{{ section.id }} .dark-mode-toggle .sun-icon {
@@ -188,8 +218,10 @@
   #Header-{{ section.id }} .dark-mode-toggle .moon-icon {
     opacity: 1;
     transform: rotate(0deg) scale(1);
-    color: #ffa500; /* Warm orange-yellow moon color */
-    filter: drop-shadow(0 0 3px rgba(255, 165, 0, 0.3));
+    color: #ffa500;
+    filter: 
+      drop-shadow(0 0 8px rgba(255, 165, 0, 0.6))
+      drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
   }
   
   /* Light mode state - still show moon */
@@ -201,8 +233,10 @@
   [data-theme="light"] #Header-{{ section.id }} .dark-mode-toggle .moon-icon {
     opacity: 1;
     transform: rotate(0deg) scale(1);
-    color: #ffa500; /* Warm orange-yellow moon color */
-    filter: drop-shadow(0 0 3px rgba(255, 165, 0, 0.3));
+    color: #ffa500;
+    filter: 
+      drop-shadow(0 0 8px rgba(255, 165, 0, 0.6))
+      drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
   }
   
   /* Dark mode state */
@@ -214,8 +248,36 @@
   [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle .moon-icon {
     opacity: 1;
     transform: rotate(0deg) scale(1);
-    color: #ffa500; /* Warm orange-yellow moon color */
-    filter: drop-shadow(0 0 3px rgba(255, 165, 0, 0.3));
+    color: #ffa500;
+    filter: 
+      drop-shadow(0 0 8px rgba(255, 165, 0, 0.6))
+      drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  }
+  
+  /* Animation for button click */
+  @keyframes pulse-glow {
+    0% { 
+      box-shadow: 
+        0 4px 20px rgba(255, 165, 0, 0.2),
+        0 2px 8px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+    50% { 
+      box-shadow: 
+        0 8px 40px rgba(255, 165, 0, 0.4),
+        0 4px 20px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+    100% { 
+      box-shadow: 
+        0 4px 20px rgba(255, 165, 0, 0.2),
+        0 2px 8px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+  }
+  
+  #Header-{{ section.id }} .dark-mode-toggle.clicked {
+    animation: pulse-glow 0.6s ease-out;
   }
 
   /* Cart Button Styling - Matches navigation buttons */
@@ -415,16 +477,17 @@
     }
     
     #Header-{{ section.id }} .dark-mode-toggle {
-      width: 40px;
-      height: 40px;
-      padding: 10px;
+      width: 44px;
+      height: 44px;
+      padding: 0;
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
+      border-width: 1.5px;
     }
     
     #Header-{{ section.id }} .dark-mode-toggle svg {
-      width: 18px;
-      height: 18px;
+      width: 20px;
+      height: 20px;
     }
 
     /* Mobile cart button adjustments */
@@ -514,6 +577,17 @@
     }
     
     #Header-{{ section.id }} .nt-header__cart-icon {
+      width: 18px;
+      height: 18px;
+    }
+    
+    #Header-{{ section.id }} .dark-mode-toggle {
+      width: 42px;
+      height: 42px;
+      border-width: 1px;
+    }
+    
+    #Header-{{ section.id }} .dark-mode-toggle svg {
       width: 18px;
       height: 18px;
     }
@@ -732,12 +806,15 @@ class DarkMode {
     const newTheme = this.currentTheme === 'dark' ? 'light' : 'dark';
     this.applyTheme(newTheme);
     
-    // Add a subtle animation feedback
+    // Add enhanced animation feedback
     if (this.toggle) {
+      this.toggle.classList.add('clicked');
       this.toggle.style.transform = 'scale(0.95)';
+      
       setTimeout(() => {
         this.toggle.style.transform = '';
-      }, 150);
+        this.toggle.classList.remove('clicked');
+      }, 600);
     }
   }
 }
