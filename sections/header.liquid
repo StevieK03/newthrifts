@@ -151,68 +151,65 @@
     padding: 0;
     border-radius: 50%;
     text-decoration: none;
-    color: #ffa500 !important;
+    color: white !important;
     font-weight: 600;
-    background: linear-gradient(135deg, rgba(255, 165, 0, 0.15) 0%, rgba(255, 140, 0, 0.25) 100%);
-    border: 2px solid rgba(255, 165, 0, 0.3);
-    backdrop-filter: blur(12px) saturate(180%);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    width: 52px;
-    height: 52px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(20px) saturate(180%);
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    width: 50px;
+    height: 50px;
     flex-shrink: 0;
     cursor: pointer;
     overflow: hidden;
     box-shadow: 
-      0 4px 20px rgba(255, 165, 0, 0.2),
-      0 2px 8px rgba(0, 0, 0, 0.1),
+      0 8px 32px rgba(0, 0, 0, 0.12),
       inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  }
-  
-  #Header-{{ section.id }} .dark-mode-toggle:hover {
-    background: linear-gradient(135deg, rgba(255, 165, 0, 0.25) 0%, rgba(255, 140, 0, 0.35) 100%);
-    color: #ff8c00 !important;
-    transform: translateY(-2px) scale(1.08);
-    border-color: rgba(255, 165, 0, 0.5);
-    box-shadow: 
-      0 8px 30px rgba(255, 165, 0, 0.3),
-      0 4px 15px rgba(0, 0, 0, 0.15),
-      inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  }
-  
-  #Header-{{ section.id }} .dark-mode-toggle:active {
-    transform: translateY(-1px) scale(1.02);
-    transition: all 0.1s ease;
   }
   
   #Header-{{ section.id }} .dark-mode-toggle::before {
     content: '';
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    background: radial-gradient(circle, rgba(255, 165, 0, 0.4) 0%, transparent 70%);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 165, 0, 0.1) 0%, rgba(255, 140, 0, 0.05) 100%);
     border-radius: 50%;
-    transform: translate(-50%, -50%);
+    opacity: 0;
     transition: all 0.3s ease;
     pointer-events: none;
   }
   
+  #Header-{{ section.id }} .dark-mode-toggle:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 165, 0, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 
+      0 12px 40px rgba(0, 0, 0, 0.15),
+      0 4px 16px rgba(255, 165, 0, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+  
   #Header-{{ section.id }} .dark-mode-toggle:hover::before {
-    width: 100%;
-    height: 100%;
+    opacity: 1;
+  }
+  
+  #Header-{{ section.id }} .dark-mode-toggle:active {
+    transform: translateY(-1px) scale(0.98);
+    transition: all 0.1s ease;
   }
   
   #Header-{{ section.id }} .dark-mode-toggle svg {
     position: relative;
     z-index: 2;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
   }
   
   #Header-{{ section.id }} .dark-mode-toggle .sun-icon {
     opacity: 0;
-    transform: rotate(180deg) scale(0.8);
+    transform: rotate(180deg) scale(0.5);
   }
   
   #Header-{{ section.id }} .dark-mode-toggle .moon-icon {
@@ -220,14 +217,14 @@
     transform: rotate(0deg) scale(1);
     color: #ffa500;
     filter: 
-      drop-shadow(0 0 8px rgba(255, 165, 0, 0.6))
-      drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+      drop-shadow(0 0 12px rgba(255, 165, 0, 0.8))
+      drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
   }
   
-  /* Light mode state - still show moon */
+  /* Light mode state */
   [data-theme="light"] #Header-{{ section.id }} .dark-mode-toggle .sun-icon {
     opacity: 0;
-    transform: rotate(180deg) scale(0.8);
+    transform: rotate(180deg) scale(0.5);
   }
   
   [data-theme="light"] #Header-{{ section.id }} .dark-mode-toggle .moon-icon {
@@ -235,14 +232,14 @@
     transform: rotate(0deg) scale(1);
     color: #ffa500;
     filter: 
-      drop-shadow(0 0 8px rgba(255, 165, 0, 0.6))
-      drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+      drop-shadow(0 0 12px rgba(255, 165, 0, 0.8))
+      drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
   }
   
   /* Dark mode state */
   [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle .sun-icon {
     opacity: 0;
-    transform: rotate(180deg) scale(0.8);
+    transform: rotate(180deg) scale(0.5);
   }
   
   [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle .moon-icon {
@@ -250,34 +247,73 @@
     transform: rotate(0deg) scale(1);
     color: #ffa500;
     filter: 
-      drop-shadow(0 0 8px rgba(255, 165, 0, 0.6))
-      drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+      drop-shadow(0 0 12px rgba(255, 165, 0, 0.8))
+      drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
   }
   
-  /* Animation for button click */
-  @keyframes pulse-glow {
+  /* Beautiful click animations */
+  @keyframes moon-glow {
     0% { 
-      box-shadow: 
-        0 4px 20px rgba(255, 165, 0, 0.2),
-        0 2px 8px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      filter: 
+        drop-shadow(0 0 12px rgba(255, 165, 0, 0.8))
+        drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
     }
     50% { 
-      box-shadow: 
-        0 8px 40px rgba(255, 165, 0, 0.4),
-        0 4px 20px rgba(0, 0, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      filter: 
+        drop-shadow(0 0 20px rgba(255, 165, 0, 1))
+        drop-shadow(0 0 30px rgba(255, 165, 0, 0.6))
+        drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
     }
     100% { 
-      box-shadow: 
-        0 4px 20px rgba(255, 165, 0, 0.2),
-        0 2px 8px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      filter: 
+        drop-shadow(0 0 12px rgba(255, 165, 0, 0.8))
+        drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+    }
+  }
+  
+  @keyframes button-bounce {
+    0% { transform: translateY(-2px) scale(1); }
+    25% { transform: translateY(-4px) scale(1.05); }
+    50% { transform: translateY(-1px) scale(0.98); }
+    75% { transform: translateY(-3px) scale(1.02); }
+    100% { transform: translateY(-2px) scale(1); }
+  }
+  
+  @keyframes ripple-effect {
+    0% {
+      transform: scale(0);
+      opacity: 0.6;
+    }
+    100% {
+      transform: scale(2);
+      opacity: 0;
     }
   }
   
   #Header-{{ section.id }} .dark-mode-toggle.clicked {
-    animation: pulse-glow 0.6s ease-out;
+    animation: button-bounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+  
+  #Header-{{ section.id }} .dark-mode-toggle.clicked .moon-icon {
+    animation: moon-glow 0.8s ease-out;
+  }
+  
+  #Header-{{ section.id }} .dark-mode-toggle::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 165, 0, 0.3);
+    transform: translate(-50%, -50%);
+    transition: all 0.3s ease;
+    pointer-events: none;
+  }
+  
+  #Header-{{ section.id }} .dark-mode-toggle.clicked::after {
+    animation: ripple-effect 0.6s ease-out;
   }
 
   /* Cart Button Styling - Matches navigation buttons */
@@ -477,12 +513,12 @@
     }
     
     #Header-{{ section.id }} .dark-mode-toggle {
-      width: 44px;
-      height: 44px;
+      width: 46px;
+      height: 46px;
       padding: 0;
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
-      border-width: 1.5px;
+      border-width: 1px;
     }
     
     #Header-{{ section.id }} .dark-mode-toggle svg {
@@ -582,8 +618,8 @@
     }
     
     #Header-{{ section.id }} .dark-mode-toggle {
-      width: 42px;
-      height: 42px;
+      width: 44px;
+      height: 44px;
       border-width: 1px;
     }
     
@@ -806,15 +842,13 @@ class DarkMode {
     const newTheme = this.currentTheme === 'dark' ? 'light' : 'dark';
     this.applyTheme(newTheme);
     
-    // Add enhanced animation feedback
+    // Add beautiful animation feedback
     if (this.toggle) {
       this.toggle.classList.add('clicked');
-      this.toggle.style.transform = 'scale(0.95)';
       
       setTimeout(() => {
-        this.toggle.style.transform = '';
         this.toggle.classList.remove('clicked');
-      }, 600);
+      }, 800);
     }
   }
 }
