@@ -934,6 +934,18 @@
   #Header-{{ section.id }} .moon-icon {
     color: #ffa500 !important;
   }
+  
+  /* Hide any wishlist toggle that's not in the header */
+  .wishlist-toggle:not(#header-wishlist-toggle),
+  .wishlist-container:not(#Header-{{ section.id }} .wishlist-container) {
+    display: none !important;
+  }
+  
+  /* Hide any wishlist element with ID that's not header-wishlist-toggle */
+  #wishlist-toggle:not(#header-wishlist-toggle),
+  #wishlist-container:not(#Header-{{ section.id }} #wishlist-container) {
+    display: none !important;
+  }
 </style>
 
 <script>
