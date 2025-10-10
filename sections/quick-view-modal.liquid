@@ -625,8 +625,8 @@
     }
   }
   
-  /* Exact Homepage Swatch Styling - Copy */
-  .quick-view-variants .swatch-list {
+  /* Exact Homepage Swatch Styling - Override base.css */
+  .quick-view-modal .quick-view-variants .swatch-list {
     display: flex !important;
     flex-wrap: wrap !important;
     justify-content: center !important;
@@ -635,57 +635,60 @@
     overflow: visible !important;
   }
 
-  .quick-view-variants .swatch {
+  .quick-view-modal .quick-view-variants .swatch {
     --size: 34px;
-    transition: all 0.2s ease;
-    border: 2px solid transparent;
-    padding: 6px 8px 6px 6px;
-    border-radius: 9999px;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: transparent;
-    cursor: pointer;
-    flex-shrink: 0;
-    margin: 2px;
+    transition: all 0.2s ease !important;
+    border: 2px solid transparent !important;
+    padding: 6px 8px 6px 6px !important;
+    border-radius: 9999px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    background: transparent !important;
+    cursor: pointer !important;
+    flex-shrink: 0 !important;
+    margin: 2px !important;
+    color: inherit !important;
   }
 
-  .quick-view-variants .swatch:hover {
-    transform: scale(1.1);
-    border-color: #666;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  .quick-view-modal .quick-view-variants .swatch:hover {
+    transform: scale(1.1) !important;
+    border-color: #666 !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
   }
 
-  .quick-view-variants .swatch.is-selected {
-    border-color: #000;
-    transform: scale(1.05);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  .quick-view-modal .quick-view-variants .swatch.is-selected {
+    border-color: #000 !important;
+    transform: scale(1.05) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
   }
 
-  .quick-view-variants .swatch.unavailable {
-    opacity: 0.4;
-    cursor: not-allowed;
+  .quick-view-modal .quick-view-variants .swatch.unavailable {
+    opacity: 0.4 !important;
+    cursor: not-allowed !important;
   }
 
-  .quick-view-variants .swatch.unavailable:hover {
-    transform: none;
-    box-shadow: none;
-    border-color: transparent;
+  .quick-view-modal .quick-view-variants .swatch.unavailable:hover {
+    transform: none !important;
+    box-shadow: none !important;
+    border-color: transparent !important;
   }
 
-  .quick-view-variants .swatch__chip {
-    width: var(--size);
-    height: var(--size);
-    border-radius: 9999px;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    display: inline-block;
+  .quick-view-modal .quick-view-variants .swatch__chip {
+    width: var(--size) !important;
+    height: var(--size) !important;
+    border-radius: 9999px !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    display: inline-block !important;
+    border: none !important;
   }
 
-  .quick-view-variants .swatch__label {
-    font-size: 0.86rem;
-    font-weight: 700;
+  .quick-view-modal .quick-view-variants .swatch__label {
+    font-size: 0.86rem !important;
+    font-weight: 700 !important;
+    color: #0f172a !important;
   }
   
   /* Feature icons styling to match product page */
