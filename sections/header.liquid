@@ -904,21 +904,43 @@
     transform: scale(1);
   }
   
-  /* Hide any white background elements in header */
-  #Header-{{ section.id }} * {
-    background: rgba(0, 0, 0, 0.8) !important;
+  /* Restore proper header styling */
+  #Header-{{ section.id }} {
+    background: var(--glass-bg, rgba(255, 255, 255, 0.1)) !important;
+    backdrop-filter: var(--glass-backdrop, blur(20px)) saturate(180%) !important;
+    -webkit-backdrop-filter: var(--glass-backdrop, blur(20px)) saturate(180%) !important;
   }
   
-  /* Override for buttons to maintain proper styling */
+  /* Button styling with proper backgrounds */
   #Header-{{ section.id }} .nt-header__signin-link,
   #Header-{{ section.id }} .dark-mode-toggle,
   #Header-{{ section.id }} .nt-header__cart-link,
   #Header-{{ section.id }} .wishlist-toggle {
     background: rgba(0, 0, 0, 0.8) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
   }
   
-  /* Ensure text and icons are white */
-  #Header-{{ section.id }} * {
+  /* Ensure text and icons are visible */
+  #Header-{{ section.id }} .nt-header__signin-link,
+  #Header-{{ section.id }} .nt-header__signin-link span,
+  #Header-{{ section.id }} .nt-header__link {
+    color: white !important;
+  }
+  
+  /* Navigation links styling */
+  #Header-{{ section.id }} .nt-header__link {
+    background: rgba(0, 0, 0, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+    padding: 8px 16px !important;
+    border-radius: 12px !important;
+    text-decoration: none !important;
+    transition: all 0.3s ease !important;
+  }
+  
+  #Header-{{ section.id }} .nt-header__link:hover {
+    background: rgba(0, 0, 0, 0.3) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
     color: white !important;
   }
   
