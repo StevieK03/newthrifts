@@ -968,6 +968,26 @@
   #wishlist-container:not(#Header-{{ section.id }} #wishlist-container) {
     display: none !important;
   }
+  
+  /* Hide the wishlist dropdown that's creating the white box */
+  .wishlist-dropdown {
+    display: none !important;
+  }
+  
+  /* Hide any element with white background in header area */
+  header *[style*="background: white"],
+  header *[style*="background: #fff"],
+  header *[style*="background: #ffffff"],
+  header *[style*="background-color: white"],
+  header *[style*="background-color: #fff"],
+  header *[style*="background-color: #ffffff"] {
+    background: rgba(0, 0, 0, 0.8) !important;
+  }
+  
+  /* Target any small white square elements */
+  header *[class*="wishlist"]:not(#header-wishlist-toggle):not(.nt-header__wishlist) {
+    display: none !important;
+  }
 </style>
 
 <script>
