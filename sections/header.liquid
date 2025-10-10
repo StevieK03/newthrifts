@@ -881,6 +881,14 @@
 </style>
 
 <script>
+// Set dark theme immediately to prevent flash of light theme
+(function() {
+  // Check if user has a stored preference, otherwise default to dark
+  const storedTheme = localStorage.getItem('theme');
+  const theme = storedTheme || 'dark';
+  document.documentElement.setAttribute('data-theme', theme);
+})();
+
 // Update cart count dynamically
 function updateCartCount() {
   fetch('/cart.js')
@@ -925,12 +933,16 @@ window.updateCartCount = updateCartCount;
 class DarkMode {
   constructor() {
     this.toggle = document.getElementById('dark-mode-toggle');
-    this.currentTheme = this.getStoredTheme() || 'dark';
+    // Get current theme from DOM or localStorage, default to dark
+    this.currentTheme = document.documentElement.getAttribute('data-theme') || this.getStoredTheme() || 'dark';
     this.init();
   }
 
   init() {
-    this.applyTheme(this.currentTheme);
+    // Only apply theme if it's not already set
+    if (!document.documentElement.getAttribute('data-theme')) {
+      this.applyTheme(this.currentTheme);
+    }
     this.toggle?.addEventListener('click', () => this.toggleTheme());
     
     // Listen for system theme changes (only if no stored preference)
