@@ -9,7 +9,10 @@ Welcome / Social Bar — Modern Redesign
 <div class="logo-above-welcome">
   <div class="logo-container">
     <a href="{{ routes.root_url }}" class="logo-link">
-      {% if settings.logo != blank %}
+      {% assign header_section = sections.header %}
+      {% if header_section.settings.logo != blank %}
+        <img src="{{ header_section.settings.logo | img_url: '300x' }}" alt="{{ shop.name }}" class="logo-img">
+      {% elsif settings.logo != blank %}
         <img src="{{ settings.logo | img_url: '300x' }}" alt="{{ shop.name }}" class="logo-img">
       {% else %}
         <div class="logo-text-fallback">
