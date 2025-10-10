@@ -638,29 +638,30 @@
   .quick-view-modal .quick-view-variants .swatch {
     --size: 34px;
     transition: all 0.2s ease !important;
-    border: 2px solid transparent !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
     padding: 6px 8px 6px 6px !important;
     border-radius: 9999px !important;
     display: inline-flex !important;
     align-items: center !important;
     gap: 8px !important;
-    background: transparent !important;
+    background: rgba(51, 65, 85, 0.8) !important;
     cursor: pointer !important;
     flex-shrink: 0 !important;
     margin: 2px !important;
-    color: inherit !important;
+    color: white !important;
   }
 
   .quick-view-modal .quick-view-variants .swatch:hover {
-    transform: scale(1.1) !important;
-    border-color: #666 !important;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+    transform: scale(1.05) !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
   }
 
   .quick-view-modal .quick-view-variants .swatch.is-selected {
-    border-color: #000 !important;
-    transform: scale(1.05) !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
+    border-color: rgba(255, 255, 255, 0.8) !important;
+    transform: scale(1.02) !important;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3) !important;
+    background: rgba(51, 65, 85, 1) !important;
   }
 
   .quick-view-modal .quick-view-variants .swatch.unavailable {
@@ -688,7 +689,7 @@
   .quick-view-modal .quick-view-variants .swatch__label {
     font-size: 0.86rem !important;
     font-weight: 700 !important;
-    color: #0f172a !important;
+    color: white !important;
   }
   
   /* Feature icons styling to match product page */
