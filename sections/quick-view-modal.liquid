@@ -870,6 +870,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize interactions
     console.log('[Quick View] Initializing product interactions...');
     initializeProductInteractions();
+    
+    // Initialize swatches using the same system as product page
+    initializeQuickViewSwatches();
+    
     console.log('[Quick View] Product interactions initialized');
   }
   
@@ -890,27 +894,35 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('[Quick View] Is color option:', isColorOption);
         
         if (isColorOption) {
-          // Generate swatches for color options - HOMEPAGE STYLE
+          // Generate swatches for color options - MATCHING PRODUCT PAGE STRUCTURE
           console.log('[Quick View] Generating color swatches...');
           variantsHTML += `
-            <div class="variant-group">
-              <label class="variant-label">${option.name}:</label>
-              <div class="swatch-list" data-option-index="${optionIndex}">
+            <div class="variant-group" data-swatch-group data-option-index="${optionIndex}" aria-label="${option.name}">
+              <label class="variant-label vp-legend">${option.name}:</label>
+              <div class="swatch-list">
                 ${option.values.map((value, valueIndex) => {
                   const variant = product.variants.find(v => v.options[optionIndex] === value);
                   const variantImage = variant ? variant.featured_image?.src || product.images[0] : product.images[0];
                   const imgUrl = variantImage.includes('?') ? `${variantImage}&width=80` : `${variantImage}?width=80`;
+                  const highResUrl = variantImage.includes('?') ? `${variantImage}&width=800` : `${variantImage}?width=800`;
+                  const priceStr = variant ? formatPrice(variant.price) : '';
+                  const mediaId = variant?.featured_media?.id || '';
+                  
                   return `
                     <button type="button"
-                            class="swatch ${valueIndex === 0 ? 'is-selected' : ''} ${!variant?.available ? 'unavailable' : ''}" 
+                            class="swatch ${valueIndex === 0 ? 'is-selected' : ''} ${!variant?.available ? 'is-soldout' : ''}" 
+                            data-swatch
+                            data-option-index="${optionIndex}"
                             data-value="${value}"
-                            data-img="${variantImage}"
                             data-variant-id="${variant?.id || ''}"
                             data-available="${variant?.available || false}"
+                            ${mediaId ? `data-media-id="${mediaId}"` : ''}
+                            data-img="${highResUrl}"
+                            data-price="${priceStr}"
                             ${!variant?.available ? 'disabled' : ''}
-                            aria-label="Color: ${value}"
+                            aria-label="${option.name}: ${value}"
                             title="${value}">
-                      <span class="swatch__chip" style="background-image:url('${imgUrl}');"></span>
+                      <span class="swatch__chip" data-swatch-chip style="background-image:url('${imgUrl}');"></span>
                       <span class="swatch__label">${value}</span>
                     </button>
                   `;
@@ -1000,80 +1012,20 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
     
-    // Variant selection - handle both swatches and regular options
-    const variantOptions = content.querySelectorAll('.variant-option, .swatch');
-    const addToCartBtn = content.querySelector('#quick-add-to-cart');
-    const priceElement = content.querySelector('#quick-view-price');
-    
-    console.log('[Quick View] Found variant options:', variantOptions.length);
-    console.log('[Quick View] Found swatches:', content.querySelectorAll('.swatch').length);
+    // Handle non-swatch variant options (like Size dropdowns)
+    const variantOptions = content.querySelectorAll('.variant-option');
+    console.log('[Quick View] Found non-swatch variant options:', variantOptions.length);
     
     variantOptions.forEach(option => {
-      option.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
+      option.addEventListener('click', function() {
+        if (this.disabled) return;
         
-        console.log('[Quick View] Swatch clicked:', this.dataset.value);
+        // Handle regular variant option selection (Size, etc)
+        const group = this.closest('.variant-options');
+        group.querySelectorAll('.variant-option').forEach(opt => opt.classList.remove('selected'));
+        this.classList.add('selected');
         
-        if (this.disabled) {
-          console.log('[Quick View] Swatch is disabled');
-          return;
-        }
-        
-        // Update selected state
-        if (this.classList.contains('swatch')) {
-          console.log('[Quick View] Handling swatch selection');
-          
-          // Handle swatch selection
-          const group = this.closest('.swatch-list');
-          group.querySelectorAll('.swatch').forEach(swatch => swatch.classList.remove('is-selected'));
-          this.classList.add('is-selected');
-          
-          // Update main image if swatch has variant image - use high quality
-          const variantImage = this.dataset.img;
-          console.log('[Quick View] Variant image URL:', variantImage);
-          
-          if (variantImage && mainImage) {
-            const highResUrl = variantImage.includes('?') ? `${variantImage}&width=1200` : `${variantImage}?width=1200`;
-            console.log('[Quick View] Updating main image to:', highResUrl);
-            mainImage.src = highResUrl;
-          }
-        } else {
-          // Handle regular variant option selection
-          const group = this.closest('.variant-options');
-          group.querySelectorAll('.variant-option').forEach(opt => opt.classList.remove('selected'));
-          this.classList.add('selected');
-        }
-        
-        // Find matching variant
-        const selectedOptions = Array.from(content.querySelectorAll('.variant-option.selected, .swatch.is-selected')).map(opt => opt.dataset.value);
-        console.log('[Quick View] Selected options:', selectedOptions);
-        
-        const matchingVariant = currentProductData.variants.find(variant => 
-          variant.options.every((option, index) => option === selectedOptions[index])
-        );
-        
-        console.log('[Quick View] Matching variant:', matchingVariant);
-        
-        if (matchingVariant) {
-          // Update price
-          console.log('[Quick View] Updating price to:', formatPrice(matchingVariant.price));
-          priceElement.textContent = formatPrice(matchingVariant.price);
-          
-          // Update add to cart button
-          if (matchingVariant.available) {
-            addToCartBtn.disabled = false;
-            addToCartBtn.innerHTML = `
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <path d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.5 5.1 16.5H17M17 13V17C17 17.6 16.6 18 16 18H8C7.4 18 7 17.6 7 17V13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              Add to Cart
-            `;
-          } else {
-            addToCartBtn.disabled = true;
-            addToCartBtn.textContent = 'Sold Out';
-          }
-        }
+        console.log('[Quick View] Size option selected:', this.dataset.value);
       });
     });
     
@@ -1153,6 +1105,78 @@ document.addEventListener('DOMContentLoaded', function() {
       style: 'currency',
       currency: 'USD'
     }).format(price / 100);
+  }
+  
+  // Initialize swatches using the same system as product page (swatch.js)
+  function initializeQuickViewSwatches() {
+    console.log('[Quick View Swatches] Initializing swatch system...');
+    
+    const groups = content.querySelectorAll('[data-swatch-group]');
+    console.log('[Quick View Swatches] Found', groups.length, 'swatch groups');
+    
+    groups.forEach((group) => {
+      const swatches = group.querySelectorAll('[data-swatch]');
+      console.log('[Quick View Swatches] Found', swatches.length, 'swatches in group');
+      
+      swatches.forEach((btn) => {
+        console.log('[Quick View Swatches] Adding click listener to:', btn.getAttribute('data-value'));
+        
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          
+          console.log('[swatch] Clicked swatch:', btn.getAttribute('data-value'));
+          
+          const optIndex  = parseInt(btn.getAttribute('data-option-index'), 10);
+          const value     = btn.getAttribute('data-value');
+          const variantId = btn.getAttribute('data-variant-id');
+          const available = btn.getAttribute('data-available') === 'true';
+          const mediaId   = btn.getAttribute('data-media-id') || null;
+          const thumb     = btn.getAttribute('data-img') || null;
+          const priceStr  = btn.getAttribute('data-price') || null;
+          
+          console.log('[swatch] Swatch data:', { value, variantId, available, thumb, priceStr });
+          
+          // Update selected state
+          group.querySelectorAll('[data-swatch]').forEach((s) => {
+            s.classList.toggle('is-selected', s.getAttribute('data-value') === value);
+          });
+          
+          // Update main image
+          if (thumb) {
+            console.log('[swatch] Attempting to swap image:', thumb);
+            const mainImage = content.querySelector('#quick-view-main-image');
+            if (mainImage) {
+              console.log('[swatch] Found MainProductImage, updating src');
+              mainImage.src = thumb;
+            }
+          }
+          
+          // Update price
+          const priceElement = content.querySelector('#quick-view-price');
+          if (priceElement && priceStr) {
+            console.log('[swatch] Updating price to:', priceStr);
+            priceElement.textContent = priceStr;
+          }
+          
+          // Update add to cart button availability
+          const addToCartBtn = content.querySelector('#quick-add-to-cart');
+          if (addToCartBtn) {
+            addToCartBtn.disabled = !available;
+            addToCartBtn.innerHTML = available ? `
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.5 5.1 16.5H17M17 13V17C17 17.6 16.6 18 16 18H8C7.4 18 7 17.6 7 17V13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Add to Cart
+            ` : 'Sold Out';
+          }
+          
+          console.log('[Quick View Swatches] Swatch selection complete');
+        });
+      });
+    });
+    
+    console.log('[Quick View Swatches] Swatch system initialized');
   }
   
   // Event listeners
