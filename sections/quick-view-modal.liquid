@@ -751,6 +751,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Render product
   function renderProduct(product) {
+    console.log('[Quick View] Rendering product:', product.title);
+    console.log('[Quick View] Product has', product.variants.length, 'variants');
+    console.log('[Quick View] Product options:', product.options);
+    
     // Keep header as "Quick View" instead of product title
     title.textContent = 'Quick View';
     
@@ -860,23 +864,34 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
     `;
     
+    console.log('[Quick View] Content HTML rendered');
+    console.log('[Quick View] Swatches in DOM:', content.querySelectorAll('.swatch').length);
+    
     // Initialize interactions
+    console.log('[Quick View] Initializing product interactions...');
     initializeProductInteractions();
+    console.log('[Quick View] Product interactions initialized');
   }
   
   // Generate variants HTML
   function generateVariantsHTML(product) {
     if (product.variants.length <= 1) return '';
     
+    console.log('[Quick View] Generating variants HTML');
+    
     const options = product.options;
     let variantsHTML = '<div class="quick-view-variants">';
     
     options.forEach((option, optionIndex) => {
+      console.log('[Quick View] Processing option:', option.name, 'with', option.values.length, 'values');
+      
       if (option.values.length > 1) {
         const isColorOption = option.name.toLowerCase() === 'color';
+        console.log('[Quick View] Is color option:', isColorOption);
         
         if (isColorOption) {
           // Generate swatches for color options - HOMEPAGE STYLE
+          console.log('[Quick View] Generating color swatches...');
           variantsHTML += `
             <div class="variant-group">
               <label class="variant-label">${option.name}:</label>
@@ -989,14 +1004,26 @@ document.addEventListener('DOMContentLoaded', function() {
     const variantOptions = content.querySelectorAll('.variant-option, .swatch');
     const addToCartBtn = content.querySelector('#quick-add-to-cart');
     const priceElement = content.querySelector('#quick-view-price');
-    const mainImage = content.querySelector('#quick-view-main-image');
+    
+    console.log('[Quick View] Found variant options:', variantOptions.length);
+    console.log('[Quick View] Found swatches:', content.querySelectorAll('.swatch').length);
     
     variantOptions.forEach(option => {
-      option.addEventListener('click', function() {
-        if (this.disabled) return;
+      option.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        console.log('[Quick View] Swatch clicked:', this.dataset.value);
+        
+        if (this.disabled) {
+          console.log('[Quick View] Swatch is disabled');
+          return;
+        }
         
         // Update selected state
         if (this.classList.contains('swatch')) {
+          console.log('[Quick View] Handling swatch selection');
+          
           // Handle swatch selection
           const group = this.closest('.swatch-list');
           group.querySelectorAll('.swatch').forEach(swatch => swatch.classList.remove('is-selected'));
@@ -1004,8 +1031,11 @@ document.addEventListener('DOMContentLoaded', function() {
           
           // Update main image if swatch has variant image - use high quality
           const variantImage = this.dataset.img;
+          console.log('[Quick View] Variant image URL:', variantImage);
+          
           if (variantImage && mainImage) {
             const highResUrl = variantImage.includes('?') ? `${variantImage}&width=1200` : `${variantImage}?width=1200`;
+            console.log('[Quick View] Updating main image to:', highResUrl);
             mainImage.src = highResUrl;
           }
         } else {
@@ -1017,12 +1047,17 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Find matching variant
         const selectedOptions = Array.from(content.querySelectorAll('.variant-option.selected, .swatch.is-selected')).map(opt => opt.dataset.value);
+        console.log('[Quick View] Selected options:', selectedOptions);
+        
         const matchingVariant = currentProductData.variants.find(variant => 
           variant.options.every((option, index) => option === selectedOptions[index])
         );
         
+        console.log('[Quick View] Matching variant:', matchingVariant);
+        
         if (matchingVariant) {
           // Update price
+          console.log('[Quick View] Updating price to:', formatPrice(matchingVariant.price));
           priceElement.textContent = formatPrice(matchingVariant.price);
           
           // Update add to cart button
