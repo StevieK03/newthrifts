@@ -680,7 +680,7 @@ document.addEventListener('DOMContentLoaded', function() {
   function shortenProductTitle(fullTitle) {
     if (!fullTitle) return '';
     
-    // Handle specific long product names
+    // Handle specific long product names - make them much shorter
     if (fullTitle.includes('Boo-tiful Ghost Toddler Long Sleeve Tee')) {
       return 'Boo-tiful Ghost Toddler Tee';
     }
@@ -697,10 +697,16 @@ document.addEventListener('DOMContentLoaded', function() {
       return fullTitle.replace('BABY T-SHIRT', 'BABY TEE');
     }
     if (fullTitle.includes('TODDLER LONG SLEEVE TEE')) {
-      return fullTitle.replace('TODDLER LONG SLEEVE TEE, HALLOWEEN SHIRT, CUTE KIDS TEE, SPOOKY SEASON APPAREL, TODDLER HALLOWEEN CLOTHING', 'TODDLER TEE');
+      return 'Boo-tiful Ghost Toddler Tee';
     }
     if (fullTitle.includes('HALLOWEEN')) {
       return fullTitle.split('HALLOWEEN')[0] + 'HALLOWEEN';
+    }
+    
+    // General shortening - take first few words only
+    const words = fullTitle.split(' ');
+    if (words.length > 4) {
+      return words.slice(0, 4).join(' ') + '...';
     }
     
     return fullTitle;
