@@ -797,23 +797,53 @@ document.addEventListener('DOMContentLoaded', function() {
     
     options.forEach((option, optionIndex) => {
       if (option.values.length > 1) {
-        variantsHTML += `
-          <div class="variant-group">
-            <label class="variant-label">${option.name}:</label>
-            <div class="variant-options" data-option-index="${optionIndex}">
-              ${option.values.map(value => {
-                const variant = product.variants.find(v => v.options[optionIndex] === value);
-                return `
-                  <button class="variant-option ${optionIndex === 0 ? 'selected' : ''} ${!variant?.available ? 'unavailable' : ''}" 
-                          data-value="${value}" 
-                          ${!variant?.available ? 'disabled' : ''}>
-                    ${value}
-                  </button>
-                `;
-              }).join('')}
+        const isColorOption = option.name.toLowerCase() === 'color';
+        
+        if (isColorOption) {
+          // Generate swatches for color options
+          variantsHTML += `
+            <div class="variant-group">
+              <label class="variant-label">${option.name}:</label>
+              <div class="swatch-list" data-option-index="${optionIndex}">
+                ${option.values.map((value, valueIndex) => {
+                  const variant = product.variants.find(v => v.options[optionIndex] === value);
+                  const variantImage = variant ? variant.featured_image?.src || product.images[0] : product.images[0];
+                  return `
+                    <button class="swatch ${valueIndex === 0 ? 'is-selected' : ''} ${!variant?.available ? 'unavailable' : ''}" 
+                            data-value="${value}"
+                            data-img="${variantImage}"
+                            data-variant-id="${variant?.id || ''}"
+                            ${!variant?.available ? 'disabled' : ''}
+                            aria-label="Color: ${value}"
+                            title="${value}">
+                      <span class="swatch__chip" style="background-image:url('${variantImage}?width=80&height=80&format=webp');"></span>
+                      <span class="swatch__label">${value}</span>
+                    </button>
+                  `;
+                }).join('')}
+              </div>
             </div>
-          </div>
-        `;
+          `;
+        } else {
+          // Generate regular buttons for non-color options
+          variantsHTML += `
+            <div class="variant-group">
+              <label class="variant-label">${option.name}:</label>
+              <div class="variant-options" data-option-index="${optionIndex}">
+                ${option.values.map(value => {
+                  const variant = product.variants.find(v => v.options[optionIndex] === value);
+                  return `
+                    <button class="variant-option ${optionIndex === 0 ? 'selected' : ''} ${!variant?.available ? 'unavailable' : ''}" 
+                            data-value="${value}" 
+                            ${!variant?.available ? 'disabled' : ''}>
+                      ${value}
+                    </button>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          `;
+        }
       }
     });
     
@@ -874,22 +904,37 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
     
-    // Variant selection
-    const variantOptions = content.querySelectorAll('.variant-option');
+    // Variant selection - handle both swatches and regular options
+    const variantOptions = content.querySelectorAll('.variant-option, .swatch');
     const addToCartBtn = content.querySelector('#quick-add-to-cart');
     const priceElement = content.querySelector('#quick-view-price');
+    const mainImage = content.querySelector('#quick-view-main-image');
     
     variantOptions.forEach(option => {
       option.addEventListener('click', function() {
         if (this.disabled) return;
         
         // Update selected state
-        const group = this.closest('.variant-options');
-        group.querySelectorAll('.variant-option').forEach(opt => opt.classList.remove('selected'));
-        this.classList.add('selected');
+        if (this.classList.contains('swatch')) {
+          // Handle swatch selection
+          const group = this.closest('.swatch-list');
+          group.querySelectorAll('.swatch').forEach(swatch => swatch.classList.remove('is-selected'));
+          this.classList.add('is-selected');
+          
+          // Update main image if swatch has variant image
+          const variantImage = this.dataset.img;
+          if (variantImage && mainImage) {
+            mainImage.src = variantImage;
+          }
+        } else {
+          // Handle regular variant option selection
+          const group = this.closest('.variant-options');
+          group.querySelectorAll('.variant-option').forEach(opt => opt.classList.remove('selected'));
+          this.classList.add('selected');
+        }
         
         // Find matching variant
-        const selectedOptions = Array.from(content.querySelectorAll('.variant-option.selected')).map(opt => opt.dataset.value);
+        const selectedOptions = Array.from(content.querySelectorAll('.variant-option.selected, .swatch.is-selected')).map(opt => opt.dataset.value);
         const matchingVariant = currentProductData.variants.find(variant => 
           variant.options.every((option, index) => option === selectedOptions[index])
         );
@@ -919,7 +964,7 @@ document.addEventListener('DOMContentLoaded', function() {
     addToCartBtn.addEventListener('click', function() {
       if (this.disabled) return;
       
-      const selectedOptions = Array.from(content.querySelectorAll('.variant-option.selected')).map(opt => opt.dataset.value);
+      const selectedOptions = Array.from(content.querySelectorAll('.variant-option.selected, .swatch.is-selected')).map(opt => opt.dataset.value);
       const matchingVariant = currentProductData.variants.find(variant => 
         variant.options.every((option, index) => option === selectedOptions[index])
       );
