@@ -1,5 +1,5 @@
 <!-- Quick View Modal -->
-<div class="quick-view-modal" id="quick-view-modal" role="dialog" aria-labelledby="quick-view-title" aria-hidden="true">
+<div class="quick-view-modal" id="quick-view-modal" role="dialog" aria-labelledby="quick-view-title" aria-modal="true">
   <div class="quick-view-overlay" id="quick-view-overlay"></div>
   
   <div class="quick-view-container">
@@ -33,13 +33,13 @@
     align-items: center;
     justify-content: center;
     opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
   }
 
   .quick-view-modal.active {
     opacity: 1;
-    visibility: visible;
+    pointer-events: auto;
   }
 
   .quick-view-overlay {
@@ -70,12 +70,13 @@
   }
 
   .quick-view-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px 24px;
-    border-bottom: 1px solid #e5e7eb;
-    background: #f9fafb;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 10;
+    padding: 16px;
+    border: none;
+    background: transparent;
   }
 
   .quick-view-title {
@@ -83,23 +84,30 @@
   }
 
   .quick-view-close {
-    background: none;
+    background: rgba(255, 255, 255, 0.9);
     border: none;
-    color: #6b7280;
+    color: #374151;
     cursor: pointer;
     padding: 8px;
-    border-radius: 8px;
+    border-radius: 50%;
     transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .quick-view-close:hover {
-    background: #e5e7eb;
-    color: #374151;
+    background: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transform: scale(1.1);
   }
 
   .quick-view-content {
     padding: 0;
-    max-height: calc(90vh - 80px);
+    max-height: 90vh;
     overflow-y: auto;
   }
 
@@ -137,7 +145,8 @@
   .quick-view-main-image {
     width: 100%;
     height: 500px;
-    object-fit: cover;
+    object-fit: contain;
+    background: #f9fafb;
   }
 
   .quick-view-thumbnails {
@@ -178,6 +187,12 @@
 
   .quick-view-product-title {
     display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    position: absolute !important;
+    overflow: hidden !important;
   }
 
   .quick-view-product-price {
@@ -204,10 +219,10 @@
 
   .variant-label {
     display: block;
-    font-size: 14px;
-    font-weight: 500;
-    color: #374151;
-    margin-bottom: 8px;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 12px 0 8px;
   }
 
   .variant-options {
@@ -331,6 +346,15 @@
       max-height: 95vh;
       margin: 16px;
     }
+    
+    .quick-view-header {
+      padding: 12px;
+    }
+    
+    .quick-view-close {
+      width: 36px;
+      height: 36px;
+    }
 
     .quick-view-product {
       grid-template-columns: 1fr;
@@ -347,8 +371,7 @@
 
     .quick-view-main-image {
       height: 350px;
-      object-fit: cover;
-      object-position: center top;
+      object-fit: contain;
     }
 
     .quick-view-product-title {
@@ -373,11 +396,41 @@
       background: white;
       border: 1px solid #e5e7eb;
     }
+    
+    /* Mobile - Homepage exact copy */
+    .quick-view-variants .swatch {
+      --size: 34px;
+      border: 2px solid transparent !important;
+      border-radius: 20px !important;
+      transition: all 0.2s ease !important;
+    }
+    
+    .quick-view-variants .swatch:hover,
+    .quick-view-variants .swatch.is-selected {
+      border-color: #000 !important;
+      transform: scale(1.1) !important;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+    }
+    
+    .quick-view-variants .swatch-list {
+      display: flex !important;
+      flex-wrap: wrap !important;
+      justify-content: center !important;
+      gap: 6px !important;
+      margin: 8px 0 !important;
+      overflow: visible !important;
+    }
+    
+    .quick-view-variants .swatch {
+      flex-shrink: 0 !important;
+      margin: 2px !important;
+    }
   }
 
   @media (max-width: 480px) {
     .quick-view-header {
       padding: 16px 20px;
+      justify-content: flex-end;
     }
 
     .quick-view-info {
@@ -392,68 +445,74 @@
       padding: 6px 12px;
       font-size: 13px;
     }
+    
+    .quick-view-title {
+      display: none !important;
+      visibility: hidden !important;
+    }
+    
+    .quick-view-product-title {
+      display: none !important;
+      visibility: hidden !important;
+    }
+    
+    /* Very small screens - homepage exact copy */
+    .quick-view-variants .swatch {
+      --size: 28px;
+      padding: 4px 6px 4px 4px !important;
+      margin: 2px !important;
+    }
+    
+    .quick-view-variants .swatch__label {
+      font-size: 12px !important;
+    }
   }
   
-  /* Dark Theme Swatch Styling - Match Image Exactly */
+  /* HOMEPAGE EXACT COPY */
   .quick-view-variants .swatch {
-    --size: 32px;
+    --size: 34px;
+    transition: all 0.2s ease !important;
+    border: 2px solid transparent !important;
+    padding: 6px 8px 6px 6px;
+    border-radius: 20px !important;
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 8px 12px;
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    background: rgba(59, 73, 89, 0.9);
-    color: white;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-size: 14px;
-    font-weight: 600;
+    flex-shrink: 0 !important;
+    margin: 2px !important;
   }
-
-  .quick-view-variants .swatch:hover {
-    border-color: rgba(255, 255, 255, 0.5);
-    transform: scale(1.02);
-  }
-
+  
+  .quick-view-variants .swatch:hover,
   .quick-view-variants .swatch.is-selected {
-    border: 2px solid white;
-    background: rgba(59, 73, 89, 1);
-  }
-
-  .quick-view-variants .swatch.unavailable {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
-
-  .quick-view-variants .swatch.unavailable:hover {
-    transform: none;
-    border-color: rgba(255, 255, 255, 0.3);
+    border-color: #000 !important;
+    transform: scale(1.05) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
   }
 
   .quick-view-variants .swatch__chip {
     width: var(--size);
     height: var(--size);
-    border-radius: 50%;
+    border-radius: 9999px;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     display: inline-block;
-    border: none;
+    border: 1px solid #d1d5db !important;
+    outline: none !important;
   }
-
+  
   .quick-view-variants .swatch__label {
-    font-size: 14px;
-    font-weight: 600;
-    color: white;
+    font-size: 0.86rem;
+    font-weight: 700;
   }
-
+  
   .quick-view-variants .swatch-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
-    margin: 12px 0;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    margin: 8px 0 !important;
+    overflow: visible !important;
   }
   
   /* Feature icons styling to match product page */
@@ -565,19 +624,24 @@ document.addEventListener('DOMContentLoaded', function() {
   function showModal() {
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
-    modal.setAttribute('aria-hidden', 'false');
     
-    // Focus management
-    setTimeout(() => {
-      closeBtn.focus();
-    }, 100);
+    // Focus management - proper timing with requestAnimationFrame
+    requestAnimationFrame(() => {
+      if (closeBtn) {
+        closeBtn.focus();
+      }
+    });
   }
   
   // Hide modal
   function hideModal() {
+    // Remove focus from any element inside modal before hiding
+    if (document.activeElement && modal.contains(document.activeElement)) {
+      document.activeElement.blur();
+    }
+    
     modal.classList.remove('active');
     document.body.style.overflow = '';
-    modal.setAttribute('aria-hidden', 'true');
     currentProductData = null;
   }
   
@@ -716,11 +780,16 @@ document.addEventListener('DOMContentLoaded', function() {
     // Parse product description like the product page
     const { main: mainDescription, features: featuresHTML, care: careHTML } = parseProductDescription(product.description);
     
-    // Generate thumbnails HTML
+    // Generate thumbnails HTML with proper sizing
+    const getImageUrl = (url, size) => {
+      if (!url) return '';
+      return url.includes('?') ? `${url}&width=${size}` : `${url}?width=${size}`;
+    };
+    
     const thumbnailsHTML = hasMultipleImages ? `
       <div class="quick-view-thumbnails">
         ${product.images.map((image, index) => `
-          <img src="${image}" alt="${product.title}" class="quick-view-thumbnail ${index === 0 ? 'active' : ''}" data-index="${index}">
+          <img src="${getImageUrl(image, 120)}" alt="${product.title}" class="quick-view-thumbnail ${index === 0 ? 'active' : ''}" data-index="${index}" data-fullsize="${getImageUrl(image, 1200)}">
         `).join('')}
       </div>
     ` : '';
@@ -735,7 +804,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <div class="quick-view-product">
         <div class="quick-view-images">
           ${badgesHTML}
-          <img src="${product.images[0]}" alt="${product.title}" class="quick-view-main-image" id="quick-view-main-image">
+          <img src="${getImageUrl(product.images[0], 1200)}" alt="${product.title}" class="quick-view-main-image" id="quick-view-main-image">
           ${thumbnailsHTML}
         </div>
         
@@ -826,7 +895,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const isColorOption = option.name.toLowerCase() === 'color';
         
         if (isColorOption) {
-          // Generate swatches for color options
+          // Generate swatches for color options - HOMEPAGE STYLE
           variantsHTML += `
             <div class="variant-group">
               <label class="variant-label">${option.name}:</label>
@@ -834,15 +903,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 ${option.values.map((value, valueIndex) => {
                   const variant = product.variants.find(v => v.options[optionIndex] === value);
                   const variantImage = variant ? variant.featured_image?.src || product.images[0] : product.images[0];
+                  const imgUrl = variantImage.includes('?') ? `${variantImage}&width=80` : `${variantImage}?width=80`;
                   return `
-                    <button class="swatch ${valueIndex === 0 ? 'is-selected' : ''} ${!variant?.available ? 'unavailable' : ''}" 
+                    <button type="button"
+                            class="swatch ${valueIndex === 0 ? 'is-selected' : ''} ${!variant?.available ? 'unavailable' : ''}" 
                             data-value="${value}"
                             data-img="${variantImage}"
                             data-variant-id="${variant?.id || ''}"
+                            data-available="${variant?.available || false}"
                             ${!variant?.available ? 'disabled' : ''}
                             aria-label="Color: ${value}"
                             title="${value}">
-                      <span class="swatch__chip" style="background-image:url('${variantImage}?width=80&height=80&format=webp');"></span>
+                      <span class="swatch__chip" style="background-image:url('${imgUrl}');"></span>
                       <span class="swatch__label">${value}</span>
                     </button>
                   `;
@@ -900,7 +972,9 @@ document.addEventListener('DOMContentLoaded', function() {
       thumb.addEventListener('click', function() {
         thumbnails.forEach(t => t.classList.remove('active'));
         this.classList.add('active');
-        mainImage.src = this.src;
+        // Use full-size image from data attribute
+        const fullsizeUrl = this.dataset.fullsize || this.src;
+        mainImage.src = fullsizeUrl;
       });
     });
     
@@ -947,10 +1021,11 @@ document.addEventListener('DOMContentLoaded', function() {
           group.querySelectorAll('.swatch').forEach(swatch => swatch.classList.remove('is-selected'));
           this.classList.add('is-selected');
           
-          // Update main image if swatch has variant image
+          // Update main image if swatch has variant image - use high quality
           const variantImage = this.dataset.img;
           if (variantImage && mainImage) {
-            mainImage.src = variantImage;
+            const highResUrl = variantImage.includes('?') ? `${variantImage}&width=1200` : `${variantImage}?width=1200`;
+            mainImage.src = highResUrl;
           }
         } else {
           // Handle regular variant option selection
