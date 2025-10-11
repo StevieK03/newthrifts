@@ -681,8 +681,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!fullTitle) return '';
     
     // Handle specific long product names - make them much shorter
-    if (fullTitle.includes('Boo-tiful Ghost Toddler Long Sleeve Tee')) {
-      return 'Boo-tiful Ghost Toddler Tee';
+    if (fullTitle.includes('Boo-tiful Ghost Toddler Long Sleeve Tee') || fullTitle.includes('Boo-tiful Ghost Toddler')) {
+      return 'Ghost Tee';
     }
     if (fullTitle.includes('Baby T-Shirt Cutest Pumpkin')) {
       return 'Cutest Pumpkin Baby Tee';
@@ -697,7 +697,7 @@ document.addEventListener('DOMContentLoaded', function() {
       return fullTitle.replace('BABY T-SHIRT', 'BABY TEE');
     }
     if (fullTitle.includes('TODDLER LONG SLEEVE TEE')) {
-      return 'Boo-tiful Ghost Toddler Tee';
+      return 'Ghost Tee';
     }
     if (fullTitle.includes('HALLOWEEN')) {
       return fullTitle.split('HALLOWEEN')[0] + 'HALLOWEEN';
