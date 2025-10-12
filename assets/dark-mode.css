@@ -1019,6 +1019,48 @@
 /* Ensure all text in fixed positioned elements (likely banners) is visible */
 [data-theme="dark"] div[style*="position: fixed"] p,
 [data-theme="dark"] div[style*="position: fixed"] span,
-[data-theme="dark"] div[style*="position: fixed"] div {
+[data-theme="dark"] div[style*="position: fixed"] div,
+[data-theme="dark"] div[style*="position: fixed"] h1,
+[data-theme="dark"] div[style*="position: fixed"] h2,
+[data-theme="dark"] div[style*="position: fixed"] h3,
+[data-theme="dark"] div[style*="position: fixed"] h4,
+[data-theme="dark"] div[style*="position: fixed"] h5,
+[data-theme="dark"] div[style*="position: fixed"] h6,
+[data-theme="dark"] div[style*="position: fixed"] strong,
+[data-theme="dark"] div[style*="position: fixed"] em,
+[data-theme="dark"] div[style*="position: fixed"] label,
+[data-theme="dark"] div[style*="position: fixed"] li {
   color: var(--text-primary) !important;
+}
+
+/* Super aggressive - target ALL fixed position elements text */
+[data-theme="dark"] [style*="position: fixed"] *:not(button):not(a) {
+  color: #f8fafc !important;
+}
+
+/* Shopify cleanslate specific overrides */
+[data-theme="dark"] .shopify-cleanslate .shopify-cleanslate {
+  color: #f8fafc !important;
+}
+
+[data-theme="dark"] .shopify-cleanslate p,
+[data-theme="dark"] .shopify-cleanslate span,
+[data-theme="dark"] .shopify-cleanslate div:not([class*="button"]) {
+  color: #f8fafc !important;
+}
+
+/* Target any iframe content (if accessible) */
+[data-theme="dark"] iframe[style*="position: fixed"] {
+  background: var(--bg-secondary) !important;
+}
+
+/* Nuclear option - target everything at bottom of viewport */
+[data-theme="dark"] body > div[style*="bottom: 0"],
+[data-theme="dark"] body > div[style*="bottom:0"] {
+  background: var(--bg-secondary) !important;
+}
+
+[data-theme="dark"] body > div[style*="bottom: 0"] *,
+[data-theme="dark"] body > div[style*="bottom:0"] * {
+  color: #f8fafc !important;
 }
