@@ -79,8 +79,14 @@
     background: transparent;
   }
 
-  .quick-view-title {
+  .quick-view-title,
+  .quick-view-product-title {
     display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   .quick-view-close {
@@ -449,50 +455,77 @@
   
   /* HOMEPAGE SWATCHES - Pills with labels from base.css */
   .quick-view-variants .swatch {
-    --size: 34px;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 8px 6px 6px;
-    border-radius: 9999px;
-    border: 1px solid rgba(15,23,42,.12);
-    background: #fff;
-    color: #0f172a;
-    cursor: pointer;
-    transition: transform .12s ease, box-shadow .2s ease, border-color .2s ease;
+    --size: 34px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 6px 8px 6px 6px !important;
+    border-radius: 9999px !important;
+    border: 1px solid rgba(15,23,42,.12) !important;
+    background: #fff !important;
+    color: #0f172a !important;
+    cursor: pointer !important;
+    transition: transform .12s ease, box-shadow .2s ease, border-color .2s ease !important;
+    font-size: inherit !important;
+    text-align: left !important;
+    width: auto !important;
+    height: auto !important;
+    min-width: auto !important;
   }
   
   .quick-view-variants .swatch:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 8px 18px rgba(0,0,0,.08);
-    border-color: rgba(15,23,42,.20);
+    transform: translateY(-1px) !important;
+    box-shadow: 0 8px 18px rgba(0,0,0,.08) !important;
+    border-color: rgba(15,23,42,.20) !important;
   }
   
   .quick-view-variants .swatch.is-selected {
-    border-color: var(--accent, #27e1c1);
-    box-shadow: 0 0 0 3px rgba(39,225,193,.18);
+    border-color: var(--accent, #27e1c1) !important;
+    box-shadow: 0 0 0 3px rgba(39,225,193,.18) !important;
+  }
+  
+  .quick-view-variants .swatch.is-soldout {
+    opacity: 0.55 !important;
+    cursor: not-allowed !important;
   }
 
   .quick-view-variants .swatch__chip {
-    width: var(--size);
-    height: var(--size);
-    border-radius: 9999px;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    border: 1px solid rgba(15,23,42,.15);
-    display: inline-block;
+    width: var(--size) !important;
+    height: var(--size) !important;
+    border-radius: 9999px !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    border: 1px solid rgba(15,23,42,.15) !important;
+    display: inline-block !important;
+    flex-shrink: 0 !important;
   }
   
   .quick-view-variants .swatch__label {
-    font-size: .86rem;
-    font-weight: 700;
+    font-size: .86rem !important;
+    font-weight: 700 !important;
+    display: inline !important;
+    color: #0f172a !important;
   }
   
   .quick-view-variants .swatch-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+    margin-top: 8px !important;
+  }
+  
+  .quick-view-variants .variant-group {
+    margin-bottom: 20px !important;
+  }
+  
+  .quick-view-variants .variant-label,
+  .quick-view-variants .vp-legend {
+    display: block !important;
+    font-size: 0.95rem !important;
+    font-weight: 600 !important;
+    color: #374151 !important;
+    margin-bottom: 8px !important;
   }
   
   /* Feature icons styling to match product page */
@@ -793,7 +826,6 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
         
         <div class="quick-view-info">
-          <h3 class="quick-view-product-title">${product.title}</h3>
           <div class="quick-view-product-price" id="quick-view-price">
             ${formatPrice(firstVariant.price)}
           </div>
