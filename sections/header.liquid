@@ -53,16 +53,24 @@
       </button>
     </div>
 
-    <!-- Dark Mode Toggle -->
+    <!-- Dark Mode Toggle - Modern Design -->
     <div class="nt-header__dark-mode">
       <button class="dark-mode-toggle" id="dark-mode-toggle" aria-label="Toggle dark mode">
-        <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
-          <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2"/>
-        </svg>
-        <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2"/>
-        </svg>
+        <div class="toggle-track">
+          <div class="toggle-slider">
+            <svg class="slider-icon" width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
+              <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+          <svg class="toggle-sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="12" cy="12" r="5" fill="currentColor"/>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          <svg class="toggle-moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="currentColor"/>
+          </svg>
+        </div>
       </button>
     </div>
 
@@ -248,7 +256,7 @@
     color: var(--text-primary);
   }
 
-  /* Dark Mode Toggle Styling */
+  /* Dark Mode Toggle Styling - Modern Sliding Design */
   #Header-{{ section.id }} .nt-header__dark-mode {
     display: flex;
     align-items: center;
@@ -260,182 +268,125 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    padding: 0;
-    border-radius: 12px;
-    text-decoration: none;
-    color: white !important;
-    font-weight: 600;
-    background: rgba(0, 0, 0, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    transition: all 0.3s ease;
-    width: 48px;
-    height: 48px;
+    padding: 4px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #ffd700 0%, #ffb347 100%);
+    border: none;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 70px;
+    height: 36px;
     flex-shrink: 0;
     cursor: pointer;
-    overflow: hidden;
+    overflow: visible;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15),
+                inset 0 1px 2px rgba(255, 255, 255, 0.3);
   }
   
-  /* Dark mode toggle styling when in dark theme */
-  [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle {
-    background: rgba(71, 85, 105, 0.2);
-    border: 1px solid var(--border-primary);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  #Header-{{ section.id }} .toggle-track {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 6px;
   }
   
-  [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle:hover {
-    background: rgba(59, 130, 246, 0.2);
-    border-color: var(--button-primary);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-  }
-  
-  #Header-{{ section.id }} .dark-mode-toggle::before {
-    content: '';
+  /* Slider element - the moving circle */
+  #Header-{{ section.id }} .toggle-slider {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(255, 165, 0, 0.1) 0%, rgba(255, 140, 0, 0.05) 100%);
+    left: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 28px;
+    background: white;
     border-radius: 50%;
-    opacity: 0;
-    transition: all 0.3s ease;
-    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2),
+                0 0 0 1px rgba(0, 0, 0, 0.05);
+    z-index: 2;
   }
   
+  #Header-{{ section.id }} .slider-icon {
+    color: #ffa500;
+    transition: all 0.4s ease;
+  }
+  
+  /* Track icons */
+  #Header-{{ section.id }} .toggle-sun-icon,
+  #Header-{{ section.id }} .toggle-moon-icon {
+    position: relative;
+    z-index: 1;
+    transition: all 0.4s ease;
+  }
+  
+  #Header-{{ section.id }} .toggle-sun-icon {
+    color: rgba(255, 255, 255, 0.9);
+  }
+  
+  #Header-{{ section.id }} .toggle-moon-icon {
+    color: rgba(255, 255, 255, 0.3);
+  }
+  
+  /* Hover effect */
   #Header-{{ section.id }} .dark-mode-toggle:hover {
-    background: rgba(0, 0, 0, 0.9);
-    border-color: rgba(255, 255, 255, 0.5);
-  }
-  
-  #Header-{{ section.id }} .dark-mode-toggle:hover::before {
-    opacity: 1;
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2),
+                inset 0 1px 2px rgba(255, 255, 255, 0.3);
   }
   
   #Header-{{ section.id }} .dark-mode-toggle:active {
-    transform: translateY(-1px) scale(0.98);
-    transition: all 0.1s ease;
+    transform: scale(0.98);
   }
   
-  #Header-{{ section.id }} .dark-mode-toggle svg {
-    position: relative;
-    z-index: 2;
-    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+  /* Dark mode state - toggle is dark blue/purple */
+  [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle {
+    background: linear-gradient(135deg, #1e3a8a 0%, #312e81 100%);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3),
+                inset 0 1px 2px rgba(255, 255, 255, 0.1);
   }
   
-  #Header-{{ section.id }} .dark-mode-toggle .sun-icon {
-    opacity: 0;
-    transform: rotate(180deg) scale(0.5);
+  [data-theme="dark"] #Header-{{ section.id }} .toggle-slider {
+    left: calc(100% - 32px);
+    background: #1e293b;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
   }
   
-  #Header-{{ section.id }} .dark-mode-toggle .moon-icon {
-    opacity: 1;
-    transform: rotate(0deg) scale(1);
-    color: #ffa500;
-    filter: 
-      drop-shadow(0 0 8px rgba(255, 165, 0, 0.6))
-      drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-    width: 20px;
-    height: 20px;
+  [data-theme="dark"] #Header-{{ section.id }} .slider-icon {
+    color: #60a5fa;
   }
   
-  /* Light mode state */
-  [data-theme="light"] #Header-{{ section.id }} .dark-mode-toggle .sun-icon {
-    opacity: 0;
-    transform: rotate(180deg) scale(0.5);
+  [data-theme="dark"] #Header-{{ section.id }} .toggle-sun-icon {
+    color: rgba(255, 255, 255, 0.3);
   }
   
-  [data-theme="light"] #Header-{{ section.id }} .dark-mode-toggle .moon-icon {
-    opacity: 1;
-    transform: rotate(0deg) scale(1);
-    color: #ffa500;
-    filter: 
-      drop-shadow(0 0 8px rgba(255, 165, 0, 0.6))
-      drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-    width: 20px;
-    height: 20px;
+  [data-theme="dark"] #Header-{{ section.id }} .toggle-moon-icon {
+    color: rgba(255, 255, 255, 0.9);
   }
   
-  /* Dark mode state */
-  [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle .sun-icon {
-    opacity: 0;
-    transform: rotate(180deg) scale(0.5);
+  [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4),
+                inset 0 1px 2px rgba(255, 255, 255, 0.1);
   }
   
-  [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle .moon-icon {
-    opacity: 1;
-    transform: rotate(0deg) scale(1);
-    color: #ffa500;
-    filter: 
-      drop-shadow(0 0 8px rgba(255, 165, 0, 0.6))
-      drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-    width: 20px;
-    height: 20px;
-  }
-  
-  /* Beautiful click animations */
-  @keyframes moon-glow {
-    0% { 
-      filter: 
-        drop-shadow(0 0 12px rgba(255, 165, 0, 0.8))
-        drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+  /* Beautiful toggle animations */
+  @keyframes toggle-bounce {
+    0%, 100% {
+      transform: translateY(-50%) scale(1);
     }
-    50% { 
-      filter: 
-        drop-shadow(0 0 20px rgba(255, 165, 0, 1))
-        drop-shadow(0 0 30px rgba(255, 165, 0, 0.6))
-        drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
-    }
-    100% { 
-      filter: 
-        drop-shadow(0 0 12px rgba(255, 165, 0, 0.8))
-        drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+    50% {
+      transform: translateY(-50%) scale(0.9);
     }
   }
   
-  @keyframes button-bounce {
-    0% { transform: translateY(-2px) scale(1); }
-    25% { transform: translateY(-4px) scale(1.05); }
-    50% { transform: translateY(-1px) scale(0.98); }
-    75% { transform: translateY(-3px) scale(1.02); }
-    100% { transform: translateY(-2px) scale(1); }
-  }
-  
-  @keyframes ripple-effect {
-    0% {
-      transform: scale(0);
-      opacity: 0.6;
-    }
-    100% {
-      transform: scale(2);
-      opacity: 0;
-    }
-  }
-  
-  #Header-{{ section.id }} .dark-mode-toggle.clicked {
-    animation: button-bounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  }
-  
-  #Header-{{ section.id }} .dark-mode-toggle.clicked .moon-icon {
-    animation: moon-glow 0.8s ease-out;
-  }
-  
-  #Header-{{ section.id }} .dark-mode-toggle::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    background: rgba(255, 165, 0, 0.3);
-    transform: translate(-50%, -50%);
-    transition: all 0.3s ease;
-    pointer-events: none;
-  }
-  
-  #Header-{{ section.id }} .dark-mode-toggle.clicked::after {
-    animation: ripple-effect 0.6s ease-out;
+  #Header-{{ section.id }} .dark-mode-toggle.clicked .toggle-slider {
+    animation: toggle-bounce 0.3s ease-in-out;
   }
 
   /* Cart Button Styling - Matches navigation buttons */
@@ -654,17 +605,31 @@
     }
     
     #Header-{{ section.id }} .dark-mode-toggle {
-      width: 40px;
-      height: 40px;
-      padding: 0;
+      width: 60px;
+      height: 32px;
+      padding: 3px;
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
-      border-width: 1px;
     }
     
-    #Header-{{ section.id }} .dark-mode-toggle svg {
-      width: 18px;
-      height: 18px;
+    #Header-{{ section.id }} .toggle-slider {
+      width: 26px;
+      height: 26px;
+    }
+    
+    #Header-{{ section.id }} .toggle-sun-icon,
+    #Header-{{ section.id }} .toggle-moon-icon {
+      width: 16px;
+      height: 16px;
+    }
+    
+    #Header-{{ section.id }} .slider-icon {
+      width: 14px;
+      height: 14px;
+    }
+    
+    [data-theme="dark"] #Header-{{ section.id }} .toggle-slider {
+      left: calc(100% - 29px);
     }
 
     /* Mobile cart button adjustments */
