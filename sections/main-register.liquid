@@ -1,5 +1,5 @@
 {% comment %}
-  Customer Login Page - Modern & Stylish Design
+  Customer Register Page - Modern & Stylish Design
 {% endcomment %}
 
 <div class="login-page">
@@ -13,12 +13,12 @@
       {% endif %}
     </div>
 
-    <!-- Login Form -->
+    <!-- Register Form -->
     <div class="login-form-wrapper">
-      <h2 class="login-title">Sign in</h2>
-      <p class="login-subtitle">Choose how you'd like to sign in</p>
+      <h2 class="login-title">Create account</h2>
+      <p class="login-subtitle">Join us to start shopping</p>
 
-      {% form 'customer_login', class: 'login-form' %}
+      {% form 'create_customer', class: 'login-form' %}
         {% if form.errors %}
           <div class="form-error">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -30,25 +30,39 @@
           </div>
         {% endif %}
 
-        <!-- Shop Pay Button -->
-        <button type="button" class="shop-pay-btn" onclick="alert('Shop Pay integration coming soon!')">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
-          </svg>
-          Sign in with Shop
-        </button>
+        <!-- First Name -->
+        <div class="form-group">
+          <label for="RegisterFirstName" class="form-label">First name</label>
+          <input
+            type="text"
+            name="customer[first_name]"
+            id="RegisterFirstName"
+            class="form-input"
+            autocomplete="given-name"
+            placeholder="John"
+          >
+        </div>
 
-        <div class="login-divider">
-          <span>or</span>
+        <!-- Last Name -->
+        <div class="form-group">
+          <label for="RegisterLastName" class="form-label">Last name</label>
+          <input
+            type="text"
+            name="customer[last_name]"
+            id="RegisterLastName"
+            class="form-input"
+            autocomplete="family-name"
+            placeholder="Doe"
+          >
         </div>
 
         <!-- Email Input -->
         <div class="form-group">
-          <label for="CustomerEmail" class="form-label">Email</label>
+          <label for="RegisterEmail" class="form-label">Email</label>
           <input
             type="email"
             name="customer[email]"
-            id="CustomerEmail"
+            id="RegisterEmail"
             class="form-input"
             autocomplete="email"
             placeholder="your@email.com"
@@ -58,45 +72,39 @@
 
         <!-- Password Input -->
         <div class="form-group">
-          <label for="CustomerPassword" class="form-label">Password</label>
+          <label for="RegisterPassword" class="form-label">Password</label>
           <div class="password-wrapper">
             <input
               type="password"
               name="customer[password]"
-              id="CustomerPassword"
+              id="RegisterPassword"
               class="form-input"
-              autocomplete="current-password"
+              autocomplete="new-password"
               placeholder="••••••••"
               required
             >
-            <button type="button" class="password-toggle" onclick="togglePassword()">
+            <button type="button" class="password-toggle" onclick="toggleRegisterPassword()">
               <svg class="eye-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
                 <circle cx="12" cy="12" r="3"/>
               </svg>
             </button>
           </div>
-        </div>
-
-        <!-- Forgot Password Link -->
-        <div class="form-footer">
-          <a href="{{ routes.account_recover_url }}" class="forgot-password">
-            Forgot password?
-          </a>
+          <p class="form-hint">Must be at least 5 characters</p>
         </div>
 
         <!-- Submit Button -->
         <button type="submit" class="login-submit-btn">
-          <span>Continue</span>
+          <span>Create account</span>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M5 12h14M12 5l7 7-7 7"/>
           </svg>
         </button>
       {% endform %}
 
-      <!-- Create Account Link -->
+      <!-- Login Link -->
       <div class="login-footer">
-        <p>Don't have an account? <a href="{{ routes.account_register_url }}" class="register-link">Create account</a></p>
+        <p>Already have an account? <a href="{{ routes.account_login_url }}" class="register-link">Sign in</a></p>
       </div>
 
       <!-- Privacy & Terms -->
@@ -110,7 +118,7 @@
 </div>
 
 <style>
-  /* ===== Modern Login Page Styling ===== */
+  /* Use same styles as login page */
   .login-page {
     min-height: calc(100vh - 200px);
     display: flex;
@@ -156,7 +164,6 @@
     }
   }
 
-  /* Logo Styling */
   .login-logo {
     text-align: center;
     margin-bottom: 40px;
@@ -190,7 +197,6 @@
     color: white;
   }
 
-  /* Form Wrapper */
   .login-form-wrapper {
     animation: fadeIn 0.8s ease-out 0.2s both;
   }
@@ -223,7 +229,6 @@
     color: #94a3b8;
   }
 
-  /* Error Message */
   .form-error {
     display: flex;
     align-items: center;
@@ -253,66 +258,6 @@
     flex-shrink: 0;
   }
 
-  /* Shop Pay Button */
-  .shop-pay-btn {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    padding: 16px 24px;
-    background: linear-gradient(135deg, #5e47d0 0%, #7c5cdc 100%);
-    color: white;
-    border: none;
-    border-radius: 12px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(94, 71, 208, 0.3);
-  }
-
-  .shop-pay-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(94, 71, 208, 0.4);
-  }
-
-  .shop-pay-btn:active {
-    transform: translateY(0);
-  }
-
-  /* Divider */
-  .login-divider {
-    display: flex;
-    align-items: center;
-    margin: 24px 0;
-    color: #cbd5e1;
-  }
-
-  .login-divider::before,
-  .login-divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: #e2e8f0;
-  }
-
-  [data-theme="dark"] .login-divider::before,
-  [data-theme="dark"] .login-divider::after {
-    background: #334155;
-  }
-
-  .login-divider span {
-    padding: 0 16px;
-    font-size: 0.875rem;
-    color: #64748b;
-  }
-
-  [data-theme="dark"] .login-divider span {
-    color: #94a3b8;
-  }
-
-  /* Form Groups */
   .form-group {
     margin-bottom: 20px;
   }
@@ -361,7 +306,16 @@
     color: #94a3b8;
   }
 
-  /* Password Toggle */
+  .form-hint {
+    margin: 6px 0 0 0;
+    font-size: 0.75rem;
+    color: #64748b;
+  }
+
+  [data-theme="dark"] .form-hint {
+    color: #94a3b8;
+  }
+
   .password-wrapper {
     position: relative;
   }
@@ -394,34 +348,6 @@
     color: #60a5fa;
   }
 
-  /* Form Footer */
-  .form-footer {
-    text-align: right;
-    margin-bottom: 24px;
-  }
-
-  .forgot-password {
-    color: #3b82f6;
-    font-size: 0.875rem;
-    font-weight: 500;
-    text-decoration: none;
-    transition: color 0.2s ease;
-  }
-
-  .forgot-password:hover {
-    color: #2563eb;
-    text-decoration: underline;
-  }
-
-  [data-theme="dark"] .forgot-password {
-    color: #60a5fa;
-  }
-
-  [data-theme="dark"] .forgot-password:hover {
-    color: #93c5fd;
-  }
-
-  /* Submit Button */
   .login-submit-btn {
     width: 100%;
     display: flex;
@@ -438,6 +364,7 @@
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    margin-top: 8px;
   }
 
   .login-submit-btn:hover {
@@ -449,12 +376,6 @@
     transform: translateY(0);
   }
 
-  .login-submit-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-  }
-
   .login-submit-btn svg {
     transition: transform 0.3s ease;
   }
@@ -463,7 +384,6 @@
     transform: translateX(4px);
   }
 
-  /* Login Footer */
   .login-footer {
     text-align: center;
     margin-top: 32px;
@@ -505,7 +425,6 @@
     color: #93c5fd;
   }
 
-  /* Legal Links */
   .login-legal {
     display: flex;
     align-items: center;
@@ -542,7 +461,6 @@
     color: #475569;
   }
 
-  /* Responsive */
   @media (max-width: 640px) {
     .login-container {
       padding: 32px 24px;
@@ -559,8 +477,8 @@
 </style>
 
 <script>
-  function togglePassword() {
-    const passwordInput = document.getElementById('CustomerPassword');
+  function toggleRegisterPassword() {
+    const passwordInput = document.getElementById('RegisterPassword');
     const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
     passwordInput.setAttribute('type', type);
   }
@@ -568,7 +486,7 @@
 
 {% schema %}
 {
-  "name": "Login Page",
+  "name": "Register Page",
   "settings": [
     {
       "type": "image_picker",

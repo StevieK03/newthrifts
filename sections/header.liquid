@@ -31,15 +31,25 @@
       
     </nav>
 
-    <!-- Sign In Button -->
+    <!-- Sign In Button / Account Menu -->
     <div class="nt-header__signin">
-      <a href="{{ routes.account_login_url }}" class="nt-header__signin-link" aria-label="Sign in">
-        <svg class="user-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-          <circle cx="12" cy="7" r="4"/>
-        </svg>
-        <span class="signin-text">Sign in</span>
-      </a>
+      {% if customer %}
+        <a href="{{ routes.account_url }}" class="nt-header__signin-link" aria-label="My account">
+          <svg class="user-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          <span class="signin-text">Account</span>
+        </a>
+      {% else %}
+        <a href="{{ routes.account_login_url }}" class="nt-header__signin-link" aria-label="Sign in">
+          <svg class="user-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          <span class="signin-text">Sign in</span>
+        </a>
+      {% endif %}
     </div>
 
     <!-- Wishlist Toggle -->
