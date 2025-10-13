@@ -374,6 +374,51 @@
   [data-theme="dark"] #Header-{{ section.id }} .slider-icon {
     color: #60a5fa;
     filter: drop-shadow(0 0 8px rgba(96, 165, 250, 0.6));
+    animation: float-moon 3s ease-in-out infinite, pulse-moon 2s ease-in-out infinite;
+  }
+  
+  /* Moon craters - add texture */
+  [data-theme="dark"] #Header-{{ section.id }} .slider-icon::before {
+    content: '';
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    top: 8px;
+    left: 6px;
+    box-shadow: 6px 2px 0 1px rgba(0, 0, 0, 0.15),
+                2px -3px 0 1px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Animated stars around moon */
+  [data-theme="dark"] #Header-{{ section.id }} .toggle-slider::after {
+    content: '✦';
+    position: absolute;
+    color: #fbbf24;
+    font-size: 8px;
+    animation: twinkle-stars 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.8));
+  }
+  
+  [data-theme="dark"] #Header-{{ section.id }} .toggle-slider::before {
+    content: '✦';
+    position: absolute;
+    color: #a78bfa;
+    font-size: 6px;
+    top: 4px;
+    right: -8px;
+    animation: twinkle-stars 2.5s ease-in-out infinite 0.5s;
+    filter: drop-shadow(0 0 3px rgba(167, 139, 250, 0.8));
+  }
+  
+  /* Additional sparkles */
+  [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle::after {
+    box-shadow: 0 4px 20px rgba(96, 165, 250, 0.5),
+                inset 0 2px 4px rgba(255, 255, 255, 0.1),
+                0 0 30px rgba(139, 92, 246, 0.3),
+                -15px -15px 0 -10px rgba(251, 191, 36, 0.6),
+                15px 15px 0 -10px rgba(167, 139, 250, 0.6);
   }
   
   [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle:hover {
@@ -382,7 +427,15 @@
   
   [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle:hover .slider-icon {
     transform: rotate(-90deg) scale(1.1);
-    filter: drop-shadow(0 0 12px rgba(96, 165, 250, 0.8));
+    filter: drop-shadow(0 0 16px rgba(96, 165, 250, 1)) drop-shadow(0 0 8px rgba(167, 139, 250, 0.8));
+    animation: float-moon 3s ease-in-out infinite, pulse-moon 1s ease-in-out infinite;
+  }
+  
+  /* Shooting star effect on click */
+  [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle.clicked::before {
+    background: linear-gradient(135deg, #667eea, #764ba2, #f093fb, #4facfe);
+    opacity: 1;
+    animation: rotate-glow 0.5s linear, pulse-ring 0.8s ease-out;
   }
   
   /* ===== EPIC ANIMATIONS ===== */
@@ -442,6 +495,60 @@
   
   [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle.clicked::after {
     animation: pulse-glow-dark 0.8s ease-out;
+  }
+  
+  /* Moon floating animation */
+  @keyframes float-moon {
+    0%, 100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    25% {
+      transform: translateY(-3px) rotate(-2deg);
+    }
+    50% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    75% {
+      transform: translateY(3px) rotate(2deg);
+    }
+  }
+  
+  /* Moon pulse glow */
+  @keyframes pulse-moon {
+    0%, 100% {
+      filter: drop-shadow(0 0 8px rgba(96, 165, 250, 0.6));
+    }
+    50% {
+      filter: drop-shadow(0 0 16px rgba(96, 165, 250, 0.9)) drop-shadow(0 0 8px rgba(167, 139, 250, 0.6));
+    }
+  }
+  
+  /* Twinkling stars */
+  @keyframes twinkle-stars {
+    0%, 100% {
+      opacity: 0.3;
+      transform: scale(0.8) rotate(0deg);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.2) rotate(180deg);
+    }
+  }
+  
+  /* Pulse ring on click */
+  @keyframes pulse-ring {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 0.8;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 0.6;
+    }
   }
   
   /* Floating particles effect */
