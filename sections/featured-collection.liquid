@@ -414,12 +414,14 @@
     z-index: 1;
   }
   
-  #sec-{{ section.id }} .product-card__body h3 {
+  #sec-{{ section.id }} .product-card__body h3,
+  #sec-{{ section.id }} .product-card__title {
+    color: #1e293b !important;
     transition: color 0.3s ease;
   }
   
   #sec-{{ section.id }} .enhanced-product-card:hover .product-card__body h3 {
-    color: #333;
+    color: #333 !important;
   }
   
   /* Swatch Enhancements - No hover interference */

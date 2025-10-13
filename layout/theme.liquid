@@ -420,10 +420,9 @@
       align-items: center;
       justify-content: flex-end;
       padding: 0;
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(480px);
+      position: absolute;
+      top: 12px;
+      right: 12px;
       z-index: 10000;
     }
 
@@ -510,6 +509,37 @@
       color: #0f172a !important;
     }
     
+    .quick-view-content .vp-legend {
+      color: #0f172a;
+    }
+    
+    /* Dark mode styling for quickview swatches - match homepage */
+    [data-theme="dark"] .quick-view-content .swatch {
+      background: #fff !important;
+      border: 1px solid rgba(15,23,42,.12) !important;
+      color: #0f172a !important;
+    }
+    
+    [data-theme="dark"] .quick-view-content .swatch__label {
+      color: #0f172a !important;
+      text-shadow: none !important;
+    }
+    
+    [data-theme="dark"] .quick-view-content .vp-legend {
+      color: #f8fafc !important;
+    }
+    
+    [data-theme="dark"] .quick-view-content .swatch.is-selected {
+      border-color: var(--accent, #27e1c1) !important;
+      box-shadow: 0 0 0 3px rgba(39,225,193,.18) !important;
+      background: #fff !important;
+    }
+    
+    [data-theme="dark"] .quick-view-content .swatch:hover {
+      background: #fff !important;
+      border-color: rgba(15,23,42,.20) !important;
+    }
+    
     /* Mobile Quick View - Fits phone frame perfectly */
     @media (max-width: 768px) {
       .quick-view-container {
@@ -578,6 +608,11 @@
         margin-bottom: 6px !important;
         line-height: 1.2 !important;
         text-align: center !important;
+        color: #1e293b !important;
+      }
+      
+      [data-theme="dark"] #quick-view-title {
+        color: #f8fafc !important;
       }
       
       #quick-view-price {
@@ -1015,7 +1050,7 @@
             if (colorOption && colorOption.values && colorOption.values.length > 1) {
               swatchesHTML = `
                 <div class="swatch-block" style="margin: 8px 0 16px;">
-                  <div class="vp-legend" style="display: block; font-size: 0.95rem; font-weight: 700; color: #0f172a; margin-bottom: 8px;">Color</div>
+                  <div class="vp-legend" style="display: block; font-size: 0.95rem; font-weight: 700; margin-bottom: 8px;">Color</div>
                   <div class="swatch-list" style="display: flex; flex-wrap: wrap; gap: 10px;">
                     ${colorOption.values.map((color, index) => {
                       // Find variant that matches this color with default size
@@ -1113,7 +1148,7 @@
                 <img id="quick-view-image" src="${mainImageUrl}" alt="${cleanTitle}" style="width: 100%; border-radius: 8px;">
               </div>
               <div class="quick-view-details-section">
-                <h3 id="quick-view-title" style="margin: 0 0 12px 0; font-size: 24px; color: #f8fafc;">${cleanTitle}</h3>
+                <h3 id="quick-view-title" style="margin: 0 0 12px 0; font-size: 24px; color: #1e293b;">${cleanTitle}</h3>
                 <div id="quick-view-price" style="font-size: 20px; color: #dc2626; font-weight: 600; margin-bottom: 16px;">
                   ${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(firstVariant.price / 100)}
                 </div>

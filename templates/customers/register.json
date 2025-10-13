@@ -1,11 +1,13 @@
 {
   "sections": {
     "main": {
-      "type": "main-register"
+      "type": "main-register",
+      "settings": {
+        "logo": "shopify://shop_images/NewThriftsLogo_8a66d248-8dfa-4c60-96ab-c62730b683b5.png"
+      }
     }
   },
   "order": [
     "main"
   ]
 }
-

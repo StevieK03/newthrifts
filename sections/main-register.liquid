@@ -1,0 +1,500 @@
+{% comment %}
+  Customer Register Page - Modern & Stylish Design
+{% endcomment %}
+
+<div class="login-page">
+  <div class="login-container">
+    <!-- Logo -->
+    <div class="login-logo">
+      {% if section.settings.logo != blank %}
+        <img src="{{ section.settings.logo | img_url: '200x' }}" alt="{{ shop.name }}" class="login-logo-img">
+      {% else %}
+        <h1 class="login-logo-text">{{ shop.name }}</h1>
+      {% endif %}
+    </div>
+
+    <!-- Register Form -->
+    <div class="login-form-wrapper">
+      <h2 class="login-title">Create account</h2>
+      <p class="login-subtitle">Join us to start shopping</p>
+
+      {% form 'create_customer', class: 'login-form' %}
+        {% if form.errors %}
+          <div class="form-error">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <span>{{ form.errors | default_errors }}</span>
+          </div>
+        {% endif %}
+
+        <!-- First Name -->
+        <div class="form-group">
+          <label for="RegisterFirstName" class="form-label">First name</label>
+          <input
+            type="text"
+            name="customer[first_name]"
+            id="RegisterFirstName"
+            class="form-input"
+            autocomplete="given-name"
+            placeholder="John"
+          >
+        </div>
+
+        <!-- Last Name -->
+        <div class="form-group">
+          <label for="RegisterLastName" class="form-label">Last name</label>
+          <input
+            type="text"
+            name="customer[last_name]"
+            id="RegisterLastName"
+            class="form-input"
+            autocomplete="family-name"
+            placeholder="Doe"
+          >
+        </div>
+
+        <!-- Email Input -->
+        <div class="form-group">
+          <label for="RegisterEmail" class="form-label">Email</label>
+          <input
+            type="email"
+            name="customer[email]"
+            id="RegisterEmail"
+            class="form-input"
+            autocomplete="email"
+            placeholder="your@email.com"
+            required
+          >
+        </div>
+
+        <!-- Password Input -->
+        <div class="form-group">
+          <label for="RegisterPassword" class="form-label">Password</label>
+          <div class="password-wrapper">
+            <input
+              type="password"
+              name="customer[password]"
+              id="RegisterPassword"
+              class="form-input"
+              autocomplete="new-password"
+              placeholder="••••••••"
+              required
+            >
+            <button type="button" class="password-toggle" onclick="toggleRegisterPassword()">
+              <svg class="eye-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
+          <p class="form-hint">Must be at least 5 characters</p>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="login-submit-btn">
+          <span>Create account</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
+      {% endform %}
+
+      <!-- Login Link -->
+      <div class="login-footer">
+        <p>Already have an account? <a href="{{ routes.account_login_url }}" class="register-link">Sign in</a></p>
+      </div>
+
+      <!-- Privacy & Terms -->
+      <div class="login-legal">
+        <a href="/pages/privacy-policy">Privacy policy</a>
+        <span>•</span>
+        <a href="/pages/terms-of-service">Terms of service</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Use same styles as login page */
+  .login-page {
+    min-height: calc(100vh - 200px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, 
+      rgba(59, 130, 246, 0.05) 0%, 
+      rgba(147, 51, 234, 0.05) 100%);
+  }
+
+  [data-theme="dark"] .login-page {
+    background: linear-gradient(135deg, 
+      rgba(59, 130, 246, 0.1) 0%, 
+      rgba(147, 51, 234, 0.1) 100%);
+  }
+
+  .login-container {
+    width: 100%;
+    max-width: 480px;
+    background: white;
+    border-radius: 24px;
+    padding: 48px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1),
+                0 0 1px rgba(0, 0, 0, 0.1);
+    animation: fadeInUp 0.6s ease-out;
+  }
+
+  [data-theme="dark"] .login-container {
+    background: #1e293b;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4),
+                0 0 1px rgba(255, 255, 255, 0.1);
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .login-logo {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .login-logo-img {
+    max-width: 180px;
+    height: auto;
+    display: inline-block;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
+    transition: transform 0.3s ease;
+  }
+
+  .login-logo-img:hover {
+    transform: scale(1.05);
+  }
+
+  [data-theme="dark"] .login-logo-img {
+    filter: brightness(0) invert(1) drop-shadow(0 4px 12px rgba(255, 255, 255, 0.2));
+  }
+
+  .login-logo-text {
+    font-size: 2rem;
+    font-weight: 800;
+    margin: 0;
+    color: #1e293b;
+    letter-spacing: -0.02em;
+  }
+
+  [data-theme="dark"] .login-logo-text {
+    color: white;
+  }
+
+  .login-form-wrapper {
+    animation: fadeIn 0.8s ease-out 0.2s both;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .login-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    color: #1e293b;
+    text-align: center;
+  }
+
+  [data-theme="dark"] .login-title {
+    color: white;
+  }
+
+  .login-subtitle {
+    font-size: 1rem;
+    color: #64748b;
+    text-align: center;
+    margin: 0 0 32px 0;
+  }
+
+  [data-theme="dark"] .login-subtitle {
+    color: #94a3b8;
+  }
+
+  .form-error {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 12px;
+    color: #dc2626;
+    margin-bottom: 24px;
+    animation: shake 0.5s ease;
+  }
+
+  [data-theme="dark"] .form-error {
+    background: rgba(220, 38, 38, 0.1);
+    border-color: rgba(220, 38, 38, 0.3);
+    color: #fca5a5;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+  }
+
+  .form-error svg {
+    flex-shrink: 0;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #475569;
+  }
+
+  [data-theme="dark"] .form-label {
+    color: #cbd5e1;
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    color: #1e293b;
+    background: white;
+    transition: all 0.3s ease;
+  }
+
+  .form-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+  }
+
+  [data-theme="dark"] .form-input {
+    background: #0f172a;
+    border-color: #334155;
+    color: white;
+  }
+
+  [data-theme="dark"] .form-input:focus {
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.1);
+  }
+
+  .form-input::placeholder {
+    color: #94a3b8;
+  }
+
+  .form-hint {
+    margin: 6px 0 0 0;
+    font-size: 0.75rem;
+    color: #64748b;
+  }
+
+  [data-theme="dark"] .form-hint {
+    color: #94a3b8;
+  }
+
+  .password-wrapper {
+    position: relative;
+  }
+
+  .password-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+  }
+
+  .password-toggle:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: #3b82f6;
+  }
+
+  [data-theme="dark"] .password-toggle {
+    color: #94a3b8;
+  }
+
+  [data-theme="dark"] .password-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #60a5fa;
+  }
+
+  .login-submit-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 16px 24px;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    margin-top: 8px;
+  }
+
+  .login-submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+  }
+
+  .login-submit-btn:active {
+    transform: translateY(0);
+  }
+
+  .login-submit-btn svg {
+    transition: transform 0.3s ease;
+  }
+
+  .login-submit-btn:hover svg {
+    transform: translateX(4px);
+  }
+
+  .login-footer {
+    text-align: center;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid #e2e8f0;
+  }
+
+  [data-theme="dark"] .login-footer {
+    border-top-color: #334155;
+  }
+
+  .login-footer p {
+    margin: 0;
+    color: #64748b;
+    font-size: 0.875rem;
+  }
+
+  [data-theme="dark"] .login-footer p {
+    color: #94a3b8;
+  }
+
+  .register-link {
+    color: #3b82f6;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .register-link:hover {
+    color: #2563eb;
+    text-decoration: underline;
+  }
+
+  [data-theme="dark"] .register-link {
+    color: #60a5fa;
+  }
+
+  [data-theme="dark"] .register-link:hover {
+    color: #93c5fd;
+  }
+
+  .login-legal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 24px;
+    font-size: 0.75rem;
+  }
+
+  .login-legal a {
+    color: #3b82f6;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .login-legal a:hover {
+    color: #2563eb;
+    text-decoration: underline;
+  }
+
+  [data-theme="dark"] .login-legal a {
+    color: #60a5fa;
+  }
+
+  [data-theme="dark"] .login-legal a:hover {
+    color: #93c5fd;
+  }
+
+  .login-legal span {
+    color: #cbd5e1;
+  }
+
+  [data-theme="dark"] .login-legal span {
+    color: #475569;
+  }
+
+  @media (max-width: 640px) {
+    .login-container {
+      padding: 32px 24px;
+    }
+
+    .login-title {
+      font-size: 1.75rem;
+    }
+
+    .login-logo-img {
+      max-width: 140px;
+    }
+  }
+</style>
+
+<script>
+  function toggleRegisterPassword() {
+    const passwordInput = document.getElementById('RegisterPassword');
+    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordInput.setAttribute('type', type);
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Register Page",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo",
+      "info": "Recommended size: 400x100px"
+    }
+  ]
+}
+{% endschema %}
+

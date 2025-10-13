@@ -24,22 +24,30 @@
         <!-- Fallback links if no menu chosen in settings -->
         <ul class="nt-header__list">
           <li><a href="/collections/all" class="nt-header__link">Shop</a></li>
-          <li><a href="/pages/about" class="nt-header__link">About</a></li>
-          <li><a href="/pages/contact" class="nt-header__link">Contact Us</a></li>
         </ul>
       {% endif %}
       
     </nav>
 
-    <!-- Sign In Button -->
+    <!-- Sign In Button / Account Menu -->
     <div class="nt-header__signin">
-      <a href="{{ routes.account_login_url }}" class="nt-header__signin-link" aria-label="Sign in">
-        <svg class="user-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-          <circle cx="12" cy="7" r="4"/>
-        </svg>
-        <span class="signin-text">Sign in</span>
-      </a>
+      {% if customer %}
+        <a href="{{ routes.account_url }}" class="nt-header__signin-link" aria-label="My account">
+          <svg class="user-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          <span class="signin-text">Account</span>
+        </a>
+      {% else %}
+        <a href="{{ routes.account_login_url }}" class="nt-header__signin-link" aria-label="Sign in">
+          <svg class="user-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          <span class="signin-text">Sign in</span>
+        </a>
+      {% endif %}
     </div>
 
     <!-- Wishlist Toggle -->
@@ -257,6 +265,7 @@
   }
 
   /* Dark Mode Toggle Styling - Modern Sliding Design */
+  /* ===== EPIC DARK MODE TOGGLE - Futuristic Design ===== */
   #Header-{{ section.id }} .nt-header__dark-mode {
     display: flex;
     align-items: center;
@@ -268,125 +277,304 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    padding: 4px;
-    border-radius: 20px;
-    background: linear-gradient(135deg, #ffd700 0%, #ffb347 100%);
+    padding: 0;
+    border-radius: 50%;
     border: none;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    width: 70px;
-    height: 36px;
+    width: 56px;
+    height: 56px;
     flex-shrink: 0;
     cursor: pointer;
     overflow: visible;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15),
-                inset 0 1px 2px rgba(255, 255, 255, 0.3);
+    background: transparent;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
+  /* Outer glow ring */
+  #Header-{{ section.id }} .dark-mode-toggle::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ffd700, #ff6b35, #f72585, #4cc9f0);
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    animation: rotate-glow 3s linear infinite;
+    z-index: -1;
+  }
+  
+  #Header-{{ section.id }} .dark-mode-toggle:hover::before {
+    opacity: 0.6;
+  }
+  
+  /* Inner background circle */
+  #Header-{{ section.id }} .dark-mode-toggle::after {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ffd700 0%, #ffb347 50%, #ff8c42 100%);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 0;
+    box-shadow: 0 4px 20px rgba(255, 193, 7, 0.4),
+                inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  }
+  
+  /* Icon container */
   #Header-{{ section.id }} .toggle-track {
     position: relative;
     width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 0 6px;
+    justify-content: center;
+    z-index: 1;
   }
   
-  /* Slider element - the moving circle */
+  /* Sun/Moon Icon */
   #Header-{{ section.id }} .toggle-slider {
-    position: absolute;
-    left: 4px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 28px;
-    height: 28px;
-    background: white;
-    border-radius: 50%;
+    position: relative;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2),
-                0 0 0 1px rgba(0, 0, 0, 0.05);
-    z-index: 2;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: rotate(0deg) scale(1);
   }
   
   #Header-{{ section.id }} .slider-icon {
-    color: #ffa500;
-    transition: all 0.4s ease;
+    color: #fff;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: rotate(0deg);
   }
   
-  /* Track icons */
-  #Header-{{ section.id }} .toggle-sun-icon,
-  #Header-{{ section.id }} .toggle-moon-icon {
-    position: relative;
-    z-index: 1;
-    transition: all 0.4s ease;
-  }
-  
-  #Header-{{ section.id }} .toggle-sun-icon {
-    color: rgba(255, 255, 255, 0.9);
-  }
-  
-  #Header-{{ section.id }} .toggle-moon-icon {
-    color: rgba(255, 255, 255, 0.3);
-  }
-  
-  /* Hover effect */
+  /* Hover effect - Light Mode */
   #Header-{{ section.id }} .dark-mode-toggle:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2),
-                inset 0 1px 2px rgba(255, 255, 255, 0.3);
+    transform: scale(1.1) rotate(10deg);
+  }
+  
+  #Header-{{ section.id }} .dark-mode-toggle:hover .slider-icon {
+    transform: rotate(90deg) scale(1.1);
   }
   
   #Header-{{ section.id }} .dark-mode-toggle:active {
-    transform: scale(0.98);
+    transform: scale(0.95);
   }
   
-  /* Dark mode state - toggle is dark blue/purple */
-  [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle {
-    background: linear-gradient(135deg, #1e3a8a 0%, #312e81 100%);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3),
-                inset 0 1px 2px rgba(255, 255, 255, 0.1);
+  /* ===== DARK MODE STATE ===== */
+  [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle::before {
+    background: linear-gradient(135deg, #667eea, #764ba2, #f093fb, #4facfe);
+    opacity: 0.8;
   }
   
-  [data-theme="dark"] #Header-{{ section.id }} .toggle-slider {
-    left: calc(100% - 32px);
-    background: #1e293b;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4),
-                0 0 0 1px rgba(255, 255, 255, 0.1);
+  [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle:hover::before {
+    opacity: 1;
+  }
+  
+  [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle::after {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+    box-shadow: 0 4px 20px rgba(96, 165, 250, 0.5),
+                inset 0 2px 4px rgba(255, 255, 255, 0.1),
+                0 0 30px rgba(139, 92, 246, 0.3);
   }
   
   [data-theme="dark"] #Header-{{ section.id }} .slider-icon {
     color: #60a5fa;
+    filter: drop-shadow(0 0 8px rgba(96, 165, 250, 0.6));
+    animation: float-moon 3s ease-in-out infinite, pulse-moon 2s ease-in-out infinite;
   }
   
-  [data-theme="dark"] #Header-{{ section.id }} .toggle-sun-icon {
-    color: rgba(255, 255, 255, 0.3);
+  /* Moon craters - add texture */
+  [data-theme="dark"] #Header-{{ section.id }} .slider-icon::before {
+    content: '';
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    top: 8px;
+    left: 6px;
+    box-shadow: 6px 2px 0 1px rgba(0, 0, 0, 0.15),
+                2px -3px 0 1px rgba(0, 0, 0, 0.15);
   }
   
-  [data-theme="dark"] #Header-{{ section.id }} .toggle-moon-icon {
-    color: rgba(255, 255, 255, 0.9);
+  /* Animated stars around moon */
+  [data-theme="dark"] #Header-{{ section.id }} .toggle-slider::after {
+    content: '✦';
+    position: absolute;
+    color: #fbbf24;
+    font-size: 8px;
+    animation: twinkle-stars 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.8));
+  }
+  
+  [data-theme="dark"] #Header-{{ section.id }} .toggle-slider::before {
+    content: '✦';
+    position: absolute;
+    color: #a78bfa;
+    font-size: 6px;
+    top: 4px;
+    right: -8px;
+    animation: twinkle-stars 2.5s ease-in-out infinite 0.5s;
+    filter: drop-shadow(0 0 3px rgba(167, 139, 250, 0.8));
+  }
+  
+  /* Additional sparkles */
+  [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle::after {
+    box-shadow: 0 4px 20px rgba(96, 165, 250, 0.5),
+                inset 0 2px 4px rgba(255, 255, 255, 0.1),
+                0 0 30px rgba(139, 92, 246, 0.3),
+                -15px -15px 0 -10px rgba(251, 191, 36, 0.6),
+                15px 15px 0 -10px rgba(167, 139, 250, 0.6);
   }
   
   [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4),
-                inset 0 1px 2px rgba(255, 255, 255, 0.1);
+    transform: scale(1.1) rotate(-10deg);
   }
   
-  /* Beautiful toggle animations */
-  @keyframes toggle-bounce {
+  [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle:hover .slider-icon {
+    transform: rotate(-90deg) scale(1.1);
+    filter: drop-shadow(0 0 16px rgba(96, 165, 250, 1)) drop-shadow(0 0 8px rgba(167, 139, 250, 0.8));
+    animation: float-moon 3s ease-in-out infinite, pulse-moon 1s ease-in-out infinite;
+  }
+  
+  /* Shooting star effect on click */
+  [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle.clicked::before {
+    background: linear-gradient(135deg, #667eea, #764ba2, #f093fb, #4facfe);
+    opacity: 1;
+    animation: rotate-glow 0.5s linear, pulse-ring 0.8s ease-out;
+  }
+  
+  /* ===== EPIC ANIMATIONS ===== */
+  @keyframes rotate-glow {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  @keyframes pulse-glow {
     0%, 100% {
-      transform: translateY(-50%) scale(1);
+      box-shadow: 0 4px 20px rgba(255, 193, 7, 0.4),
+                  inset 0 2px 4px rgba(255, 255, 255, 0.3);
     }
     50% {
-      transform: translateY(-50%) scale(0.9);
+      box-shadow: 0 4px 30px rgba(255, 193, 7, 0.6),
+                  inset 0 2px 4px rgba(255, 255, 255, 0.3);
     }
   }
   
+  @keyframes pulse-glow-dark {
+    0%, 100% {
+      box-shadow: 0 4px 20px rgba(96, 165, 250, 0.5),
+                  inset 0 2px 4px rgba(255, 255, 255, 0.1),
+                  0 0 30px rgba(139, 92, 246, 0.3);
+    }
+    50% {
+      box-shadow: 0 4px 30px rgba(96, 165, 250, 0.7),
+                  inset 0 2px 4px rgba(255, 255, 255, 0.1),
+                  0 0 40px rgba(139, 92, 246, 0.5);
+    }
+  }
+  
+  @keyframes icon-spin {
+    0% {
+      transform: rotate(0deg) scale(1);
+    }
+    50% {
+      transform: rotate(180deg) scale(0.8);
+    }
+    100% {
+      transform: rotate(360deg) scale(1);
+    }
+  }
+  
+  /* Click animation */
   #Header-{{ section.id }} .dark-mode-toggle.clicked .toggle-slider {
-    animation: toggle-bounce 0.3s ease-in-out;
+    animation: icon-spin 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  #Header-{{ section.id }} .dark-mode-toggle.clicked::after {
+    animation: pulse-glow 0.8s ease-out;
+  }
+  
+  [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle.clicked::after {
+    animation: pulse-glow-dark 0.8s ease-out;
+  }
+  
+  /* Moon floating animation */
+  @keyframes float-moon {
+    0%, 100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    25% {
+      transform: translateY(-3px) rotate(-2deg);
+    }
+    50% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    75% {
+      transform: translateY(3px) rotate(2deg);
+    }
+  }
+  
+  /* Moon pulse glow */
+  @keyframes pulse-moon {
+    0%, 100% {
+      filter: drop-shadow(0 0 8px rgba(96, 165, 250, 0.6));
+    }
+    50% {
+      filter: drop-shadow(0 0 16px rgba(96, 165, 250, 0.9)) drop-shadow(0 0 8px rgba(167, 139, 250, 0.6));
+    }
+  }
+  
+  /* Twinkling stars */
+  @keyframes twinkle-stars {
+    0%, 100% {
+      opacity: 0.3;
+      transform: scale(0.8) rotate(0deg);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.2) rotate(180deg);
+    }
+  }
+  
+  /* Pulse ring on click */
+  @keyframes pulse-ring {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 0.8;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 0.6;
+    }
+  }
+  
+  /* Floating particles effect */
+  @keyframes float-particle {
+    0%, 100% {
+      transform: translate(0, 0) scale(1);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      transform: translate(var(--tx), var(--ty)) scale(0);
+      opacity: 0;
+    }
   }
 
   /* Cart Button Styling - Matches navigation buttons */
