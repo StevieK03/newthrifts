@@ -463,6 +463,15 @@
       color: #6b7280;
     }
     
+    /* Ensure swatches have white background, not blue */
+    .quick-view-content .swatch {
+      background: #fff !important;
+    }
+    
+    .quick-view-content .swatch:hover {
+      background: #fff !important;
+    }
+    
     /* Mobile Quick View - Fits phone frame perfectly */
     @media (max-width: 768px) {
       .quick-view-container {
@@ -989,12 +998,8 @@
                         // Handle both string URLs and image objects
                         const imageSrc = typeof variantImage === 'string' ? variantImage : variantImage.src || variantImage.url;
                         if (imageSrc && typeof imageSrc === 'string') {
-                          try {
-                            imageUrl = imageSrc.replace(/\.(jpg|jpeg|png|gif|webp)/i, '_80x80.$1');
-                          } catch (error) {
-                            console.warn('Error processing image URL:', error);
-                            imageUrl = imageSrc; // Use original URL as fallback
-                          }
+                          // Use higher resolution for swatches - 100x100 instead of 80x80
+                          imageUrl = imageSrc.includes('?') ? imageSrc + '&width=100' : imageSrc + '?width=100';
                         }
                       }
                       
@@ -1003,11 +1008,16 @@
                       const isAvailable = variant?.available !== false;
                       const soldOutClass = !isAvailable ? 'is-soldout' : '';
                       
+                      // Get high-resolution image for main product view
+                      const highResImage = variantImage ? 
+                        (typeof variantImage === 'string' ? variantImage : variantImage.src || variantImage.url) : '';
+                      const mainImageUrl = highResImage ? (highResImage.includes('?') ? highResImage + '&width=1200' : highResImage + '?width=1200') : '';
+                      
                       return `
                         <button class="swatch ${isSelected} ${soldOutClass}" 
                                 data-color="${color}" 
                                 data-variant-id="${variant?.id}"
-                                data-img="${imageUrl || ''}"
+                                data-img="${mainImageUrl}"
                                 data-price="${variant?.price || product.price}"
                                 data-available="${isAvailable}"
                                 title="${color}"
@@ -1050,13 +1060,22 @@
           cleanTitle = cleanTitle.replace(/  /g, ' '); // Replace double spaces
           cleanTitle = cleanTitle.trim();
           
+          // Get high-resolution image URL
+          const getImageUrl = (url, size) => {
+            if (!url) return '';
+            // Add size parameter to Shopify CDN URL
+            return url.includes('?') ? `${url}&width=${size}` : `${url}?width=${size}`;
+          };
+          
+          const mainImageUrl = getImageUrl(product.images[0], 1200);
+          
           quickViewContent.innerHTML = `
             <div class="quick-view-product" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
               <div class="quick-view-image-section">
-                <img id="quick-view-image" src="${product.images[0]}" alt="${cleanTitle}" style="width: 100%; border-radius: 8px;">
+                <img id="quick-view-image" src="${mainImageUrl}" alt="${cleanTitle}" style="width: 100%; border-radius: 8px;">
               </div>
               <div class="quick-view-details-section">
-                <h3 id="quick-view-title" style="margin: 0 0 12px 0; font-size: 24px;">${cleanTitle}</h3>
+                <h3 id="quick-view-title" style="margin: 0 0 12px 0; font-size: 24px; color: #f8fafc;">${cleanTitle}</h3>
                 <div id="quick-view-price" style="font-size: 20px; color: #dc2626; font-weight: 600; margin-bottom: 16px;">
                   ${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(firstVariant.price / 100)}
                 </div>
