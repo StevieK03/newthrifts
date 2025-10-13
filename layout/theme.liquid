@@ -419,34 +419,36 @@
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      padding: 16px 20px;
+      padding: 0;
       position: absolute;
-      top: 0;
-      right: 0;
+      top: 12px;
+      right: 12px;
       z-index: 10;
     }
 
     .quick-view-close {
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.95);
       border: none;
       color: #374151;
       cursor: pointer;
-      padding: 8px;
+      padding: 0;
       border-radius: 50%;
       transition: all 0.2s ease;
-      font-size: 24px;
-      width: 40px;
-      height: 40px;
+      font-size: 20px;
+      width: 36px;
+      height: 36px;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      line-height: 1;
     }
 
     .quick-view-close:hover {
-      background: white;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-      transform: scale(1.1);
+      background: #3b82f6;
+      color: white;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+      transform: scale(1.05);
     }
 
     .quick-view-content {
@@ -1049,13 +1051,37 @@
             }
           }
           
-          // Clean product title - remove vendor info
+          // Shorten product title to match homepage
           let cleanTitle = product.title;
-          // Remove common vendor patterns
-          cleanTitle = cleanTitle.replace(/\s*\|\s*[A-Z0-9\s]+$/, ''); // Remove | M&O 4800 type patterns
-          cleanTitle = cleanTitle.replace(/\s*-\s*[A-Z0-9\s]+$/, ''); // Remove - VENDOR patterns
-          cleanTitle = cleanTitle.replace(/\s*by\s+[A-Za-z0-9\s]+$/i, ''); // Remove by VENDOR patterns
-          cleanTitle = cleanTitle.replace(/\s*\([^)]*\)\s*$/, ''); // Remove (VENDOR) patterns
+          
+          // Handle specific long product names - make them much shorter
+          if (cleanTitle.includes('Boo-tiful Ghost Toddler Long Sleeve Tee') || cleanTitle.includes('Boo-tiful Ghost Toddler')) {
+            cleanTitle = 'Ghost Tee';
+          } else if (cleanTitle.includes('Baby T-Shirt Cutest Pumpkin')) {
+            cleanTitle = 'Cutest Pumpkin Baby Tee';
+          } else if (cleanTitle.includes('Butterfly Floral Boxy Tee')) {
+            cleanTitle = 'Butterfly Floral Boxy Tee';
+          } else if (cleanTitle.includes('Miami Nights Boxy Tee for Women')) {
+            cleanTitle = 'Miami Nights Boxy Tee';
+          } else if (cleanTitle.includes('BABY T-SHIRT')) {
+            cleanTitle = cleanTitle.replace('BABY T-SHIRT', 'BABY TEE');
+          } else if (cleanTitle.includes('TODDLER LONG SLEEVE TEE')) {
+            cleanTitle = 'Ghost Tee';
+          } else if (cleanTitle.includes('HALLOWEEN')) {
+            cleanTitle = cleanTitle.split('HALLOWEEN')[0] + 'HALLOWEEN';
+          } else {
+            // General shortening - take first few words only
+            const words = cleanTitle.split(' ');
+            if (words.length > 4) {
+              cleanTitle = words.slice(0, 4).join(' ') + '...';
+            }
+          }
+          
+          // Remove common vendor patterns as fallback
+          cleanTitle = cleanTitle.replace(/\s*\|\s*[A-Z0-9\s]+$/, '');
+          cleanTitle = cleanTitle.replace(/\s*-\s*[A-Z0-9\s]+$/, '');
+          cleanTitle = cleanTitle.replace(/\s*by\s+[A-Za-z0-9\s]+$/i, '');
+          cleanTitle = cleanTitle.replace(/\s*\([^)]*\)\s*$/, '');
           
           quickViewContent.innerHTML = `
             <div class="quick-view-product" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
