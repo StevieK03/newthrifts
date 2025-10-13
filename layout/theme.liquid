@@ -539,37 +539,7 @@
         text-align: center !important;
       }
       
-      .quick-view-swatches {
-        justify-content: center !important;
-        flex-wrap: wrap !important;
-        gap: 8px !important;
-        margin-bottom: 10px !important;
-      }
-      
-      .quick-view-swatch {
-        width: 36px !important;
-        height: 36px !important;
-        border-radius: 6px !important;
-        border: 2px solid #e5e7eb !important;
-        position: relative !important;
-      }
-      
-      .quick-view-swatch:hover {
-        border-color: #3b82f6 !important;
-        transform: scale(1.05) !important;
-      }
-      
-      .quick-view-swatch.active {
-        border-color: #3b82f6 !important;
-        box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3) !important;
-      }
-      
-      .quick-view-swatch img {
-        width: 100% !important;
-        height: 100% !important;
-        object-fit: cover !important;
-        border-radius: 4px !important;
-      }
+      /* Swatches use base.css styles - no overrides needed */
       
       .quick-view-options {
         margin-bottom: 10px !important;
@@ -991,15 +961,15 @@
           
           const firstVariant = product.variants[0];
           
-          // Generate swatches HTML
+          // Generate swatches HTML - match homepage pill style
           let swatchesHTML = '';
           if (product.options && product.options.length > 0) {
             const colorOption = product.options.find(opt => opt.name && opt.name.toLowerCase() === 'color');
             if (colorOption && colorOption.values && colorOption.values.length > 1) {
               swatchesHTML = `
-                <div style="margin-bottom: 20px;">
-                  <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #374151;">Color:</label>
-                  <div class="quick-view-swatches" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <div class="swatch-block" style="margin: 8px 0 16px;">
+                  <div class="vp-legend" style="display: block; font-size: 0.95rem; font-weight: 700; color: #0f172a; margin-bottom: 8px;">Color</div>
+                  <div class="swatch-list" style="display: flex; flex-wrap: wrap; gap: 10px;">
                     ${colorOption.values.map((color, index) => {
                       // Find variant that matches this color with default size
                       const defaultSize = product.options.find(opt => opt.name && opt.name.toLowerCase() !== 'color')?.values?.[0];
@@ -1028,20 +998,22 @@
                         }
                       }
                       
-                      // Fallback to color-based background if no image
-                      const fallbackColor = getSwatchColor(color);
-                      
                       const colorClass = color.toLowerCase().replace(/\s+/g, '-');
+                      const isSelected = index === 0 ? 'is-selected' : '';
+                      const isAvailable = variant?.available !== false;
+                      const soldOutClass = !isAvailable ? 'is-soldout' : '';
+                      
                       return `
-                        <button class="quick-view-swatch ${index === 0 ? 'selected' : ''}" 
+                        <button class="swatch ${isSelected} ${soldOutClass}" 
                                 data-color="${color}" 
                                 data-variant-id="${variant?.id}"
                                 data-img="${imageUrl || ''}"
                                 data-price="${variant?.price || product.price}"
-                                style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid ${index === 0 ? '#27e1c1' : '#e5e7eb'}; cursor: pointer; transition: all 0.2s ease; position: relative; overflow: hidden;"
-                                title="${color}">
-                          <span class="swatch__chip" style="width: 100%; height: 100%; border-radius: 50%; background-image: ${imageUrl ? `url('${imageUrl}')` : 'none'}; background-color: ${imageUrl ? 'transparent' : fallbackColor}; background-size: cover; background-position: center; display: block;"></span>
-                          <span class="swatch__label" style="position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); font-size: 10px; color: #374151; white-space: nowrap;">${color}</span>
+                                data-available="${isAvailable}"
+                                title="${color}"
+                                ${!isAvailable ? 'disabled' : ''}>
+                          <span class="swatch__chip" style="background-image: ${imageUrl ? `url('${imageUrl}')` : 'none'};"></span>
+                          <span class="swatch__label">${color}</span>
                         </button>
                       `;
                     }).join('')}
@@ -1261,22 +1233,22 @@
       
       // Initialize Quick View swatches
       function initQuickViewSwatches(product) {
-        const swatches = document.querySelectorAll('.quick-view-swatch');
+        const swatches = document.querySelectorAll('.swatch-list .swatch');
         const quickViewImage = document.getElementById('quick-view-image');
         const quickViewPrice = document.getElementById('quick-view-price');
         const addToCartBtn = document.getElementById('quick-view-add-to-cart');
         
         swatches.forEach(swatch => {
           swatch.addEventListener('click', function() {
+            if (this.disabled) return; // Don't allow clicking disabled (sold out) swatches
+            
             // Remove selected state from all swatches
             swatches.forEach(s => {
-              s.style.border = '2px solid #e5e7eb';
-              s.classList.remove('selected');
+              s.classList.remove('is-selected');
             });
             
             // Add selected state to clicked swatch
-            this.style.border = '2px solid #27e1c1';
-            this.classList.add('selected');
+            this.classList.add('is-selected');
             
             // Get the variant data from the swatch (same as home page)
             const color = this.dataset.color;
