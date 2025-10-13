@@ -143,7 +143,6 @@
       <div class="quick-view-overlay" id="quick-view-overlay"></div>
       <div class="quick-view-container">
         <div class="quick-view-header">
-          <h2 id="quick-view-title">Quick View</h2>
           <button class="quick-view-close" id="quick-view-close" aria-label="Close">×</button>
         </div>
         <div class="quick-view-content" id="quick-view-content">
@@ -419,33 +418,35 @@
     .quick-view-header {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 20px 24px;
-      border-bottom: 1px solid #e5e7eb;
-      background: #f9fafb;
-    }
-
-    .quick-view-header h2 {
-      margin: 0;
-      font-size: 18px;
-      font-weight: 600;
-      color: #111827;
+      justify-content: flex-end;
+      padding: 16px 20px;
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 10;
     }
 
     .quick-view-close {
-      background: none;
+      background: rgba(255, 255, 255, 0.9);
       border: none;
-      color: #6b7280;
+      color: #374151;
       cursor: pointer;
       padding: 8px;
-      border-radius: 8px;
+      border-radius: 50%;
       transition: all 0.2s ease;
       font-size: 24px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     }
 
     .quick-view-close:hover {
-      background: #e5e7eb;
-      color: #374151;
+      background: white;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transform: scale(1.1);
     }
 
     .quick-view-content {
@@ -945,7 +946,6 @@
       const quickViewOverlay = document.getElementById('quick-view-overlay');
       const quickViewClose = document.getElementById('quick-view-close');
       const quickViewContent = document.getElementById('quick-view-content');
-      const quickViewTitle = document.getElementById('quick-view-title');
       
       // Open Quick View function
       window.openQuickView = function(productHandle) {
@@ -981,8 +981,6 @@
           if (!product || !product.title) {
             throw new Error('Invalid product data received');
           }
-          
-          quickViewTitle.textContent = product.title;
           
           // Ensure variants exist
           if (!product.variants || product.variants.length === 0) {
