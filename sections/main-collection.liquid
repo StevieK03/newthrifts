@@ -308,8 +308,10 @@
   }
   
   /* Center product titles */
-  #collection-{{ collection.id }} .product-card__title {
+  #collection-{{ collection.id }} .product-card__title,
+  #collection-{{ collection.id }} .product-card h3 {
     text-align: center;
+    color: #1e293b !important;
   }
   
   /* Center product prices */
@@ -653,8 +655,10 @@ document.addEventListener('DOMContentLoaded', function() {
   text-align: center !important;
 }
 
-#collection-{{ collection.id }} .product-card__title {
+#collection-{{ collection.id }} .product-card__title,
+#collection-{{ collection.id }} .product-card h3 {
   text-align: center !important;
+  color: #1e293b !important;
 }
 
 #collection-{{ collection.id }} .product-card__price {
