@@ -1,10 +1,9 @@
 <!-- Quick View Modal -->
-<div class="quick-view-modal" id="quick-view-modal" role="dialog" aria-labelledby="quick-view-title" aria-modal="true">
+<div class="quick-view-modal" id="quick-view-modal" role="dialog" aria-label="Quick View Product" aria-modal="true">
   <div class="quick-view-overlay" id="quick-view-overlay"></div>
   
   <div class="quick-view-container">
     <div class="quick-view-header">
-      <h2 id="quick-view-title" class="quick-view-title">Quick View</h2>
       <button class="quick-view-close" id="quick-view-close" aria-label="Close quick view">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
           <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -79,15 +78,6 @@
     background: transparent;
   }
 
-  .quick-view-title,
-  .quick-view-product-title {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
 
   .quick-view-close {
     background: rgba(255, 255, 255, 0.9);
@@ -191,13 +181,6 @@
     flex-direction: column;
   }
 
-  .quick-view-product-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #1f2937;
-    margin: 0 0 12px 0;
-    line-height: 1.3;
-  }
 
   .quick-view-product-price {
     font-size: 20px;
@@ -378,10 +361,6 @@
       object-fit: contain;
     }
 
-    .quick-view-product-title {
-      font-size: 1.25rem;
-    }
-
     .quick-view-product-price {
       font-size: 18px;
     }
@@ -399,17 +378,6 @@
       margin-top: 16px;
       background: white;
       border: 1px solid #e5e7eb;
-    }
-    
-    /* Mobile - smaller pills */
-    .quick-view-variants .swatch {
-      --size: 32px;
-      padding: 5px 7px 5px 5px;
-      gap: 6px;
-    }
-    
-    .quick-view-variants .swatch__label {
-      font-size: .8rem;
     }
   }
 
@@ -431,101 +399,39 @@
       padding: 6px 12px;
       font-size: 13px;
     }
-    
-    .quick-view-title {
-      display: none !important;
-      visibility: hidden !important;
-    }
-    
-    .quick-view-product-title {
-      font-size: 1.1rem;
-    }
-    
-    /* Very small screens */
-    .quick-view-variants .swatch {
-      --size: 30px;
-      padding: 4px 6px 4px 4px;
-      gap: 5px;
-    }
-    
-    .quick-view-variants .swatch__label {
-      font-size: .75rem;
-    }
   }
   
-  /* HOMEPAGE SWATCHES - Pills with labels from base.css */
-  .quick-view-variants .swatch {
-    --size: 34px !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 8px !important;
-    padding: 6px 8px 6px 6px !important;
-    border-radius: 9999px !important;
-    border: 1px solid rgba(15,23,42,.12) !important;
-    background: #fff !important;
-    color: #0f172a !important;
-    cursor: pointer !important;
-    transition: transform .12s ease, box-shadow .2s ease, border-color .2s ease !important;
-    font-size: inherit !important;
-    text-align: left !important;
-    width: auto !important;
-    height: auto !important;
-    min-width: auto !important;
-  }
+  /* Swatches inherit from base.css - no overrides needed! */
+  /* The base.css swatch styles will apply automatically */
   
-  .quick-view-variants .swatch:hover {
-    transform: translateY(-1px) !important;
-    box-shadow: 0 8px 18px rgba(0,0,0,.08) !important;
-    border-color: rgba(15,23,42,.20) !important;
-  }
-  
-  .quick-view-variants .swatch.is-selected {
-    border-color: var(--accent, #27e1c1) !important;
-    box-shadow: 0 0 0 3px rgba(39,225,193,.18) !important;
-  }
-  
-  .quick-view-variants .swatch.is-soldout {
-    opacity: 0.55 !important;
-    cursor: not-allowed !important;
-  }
-
-  .quick-view-variants .swatch__chip {
-    width: var(--size) !important;
-    height: var(--size) !important;
-    border-radius: 9999px !important;
-    background-size: cover !important;
-    background-position: center !important;
-    background-repeat: no-repeat !important;
-    border: 1px solid rgba(15,23,42,.15) !important;
-    display: inline-block !important;
-    flex-shrink: 0 !important;
-  }
-  
-  .quick-view-variants .swatch__label {
-    font-size: .86rem !important;
-    font-weight: 700 !important;
-    display: inline !important;
-    color: #0f172a !important;
+  .quick-view-variants .swatch-block {
+    margin: 8px 0 16px;
   }
   
   .quick-view-variants .swatch-list {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    gap: 10px !important;
-    margin-top: 8px !important;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .quick-view-variants .vp-legend {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 8px;
+  }
+  
+  .quick-view-variants .variant-label {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
   }
   
   .quick-view-variants .variant-group {
-    margin-bottom: 20px !important;
-  }
-  
-  .quick-view-variants .variant-label,
-  .quick-view-variants .vp-legend {
-    display: block !important;
-    font-size: 0.95rem !important;
-    font-weight: 600 !important;
-    color: #374151 !important;
-    margin-bottom: 8px !important;
+    margin-bottom: 20px;
   }
   
   /* Feature icons styling to match product page */
@@ -623,7 +529,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const overlay = document.getElementById('quick-view-overlay');
   const closeBtn = document.getElementById('quick-view-close');
   const content = document.getElementById('quick-view-content');
-  const title = document.getElementById('quick-view-title');
   
   let currentProductData = null;
   
@@ -788,9 +693,6 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('[Quick View] Product has', product.variants.length, 'variants');
     console.log('[Quick View] Product options:', product.options);
     
-    // Keep header as "Quick View" instead of product title
-    title.textContent = 'Quick View';
-    
     const firstVariant = product.variants[0];
     const hasMultipleImages = product.images.length > 1;
     
@@ -926,11 +828,11 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('[Quick View] Is color option:', isColorOption);
         
         if (isColorOption) {
-          // Generate swatches for color options - MATCHING PRODUCT PAGE STRUCTURE
+          // Generate swatches for color options - MATCHING HOMEPAGE STRUCTURE
           console.log('[Quick View] Generating color swatches...');
           variantsHTML += `
-            <div class="variant-group" data-swatch-group data-option-index="${optionIndex}" aria-label="${option.name}">
-              <label class="variant-label vp-legend">${option.name}:</label>
+            <div class="swatch-block" data-swatch-group data-option-index="${optionIndex}" aria-label="${option.name}">
+              <div class="vp-legend">${option.name}</div>
               <div class="swatch-list">
                 ${option.values.map((value, valueIndex) => {
                   const variant = product.variants.find(v => v.options[optionIndex] === value);
@@ -1062,8 +964,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Add to cart functionality
-    addToCartBtn.addEventListener('click', function() {
-      if (this.disabled) return;
+    const addToCartBtn = content.querySelector('#quick-add-to-cart');
+    if (addToCartBtn) {
+      addToCartBtn.addEventListener('click', function() {
+        if (this.disabled) return;
       
       const selectedOptions = Array.from(content.querySelectorAll('.variant-option.selected, .swatch.is-selected')).map(opt => opt.dataset.value);
       const matchingVariant = currentProductData.variants.find(variant => 
@@ -1073,14 +977,15 @@ document.addEventListener('DOMContentLoaded', function() {
       if (matchingVariant) {
         // Validate variant is available before adding
         if (!matchingVariant.available) {
-          showQuickAddMessage('This variant is sold out', 'error');
+          console.log('[Quick View] This variant is sold out');
           return;
         }
         addToCart(matchingVariant.id);
       } else {
-        showQuickAddMessage('Please select all options', 'error');
+        console.log('[Quick View] Please select all options');
       }
-    });
+      });
+    }
   }
   
   // Add to cart function
