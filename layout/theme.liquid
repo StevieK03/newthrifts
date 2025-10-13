@@ -420,10 +420,11 @@
       align-items: center;
       justify-content: flex-end;
       padding: 0;
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      z-index: 10;
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(480px);
+      z-index: 10000;
     }
 
     .quick-view-close {
@@ -461,6 +462,52 @@
       text-align: center;
       padding: 40px;
       color: #6b7280;
+    }
+    
+    /* Force swatches to match homepage - white pills with image chips */
+    .quick-view-content .swatch {
+      --size: 34px;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      padding: 6px 8px 6px 6px !important;
+      border-radius: 9999px !important;
+      border: 1px solid rgba(15,23,42,.12) !important;
+      background: #fff !important;
+      color: #0f172a !important;
+      cursor: pointer !important;
+      transition: transform .12s ease, box-shadow .2s ease, border-color .2s ease !important;
+    }
+    
+    .quick-view-content .swatch:hover {
+      transform: translateY(-1px) !important;
+      box-shadow: 0 8px 18px rgba(0,0,0,.08) !important;
+      border-color: rgba(15,23,42,.20) !important;
+      background: #fff !important;
+    }
+    
+    .quick-view-content .swatch.is-selected {
+      border-color: var(--accent, #27e1c1) !important;
+      box-shadow: 0 0 0 3px rgba(39,225,193,.18) !important;
+      background: #fff !important;
+    }
+    
+    .quick-view-content .swatch__chip {
+      width: var(--size) !important;
+      height: var(--size) !important;
+      border-radius: 9999px !important;
+      background-size: cover !important;
+      background-position: center !important;
+      background-repeat: no-repeat !important;
+      border: 1px solid rgba(15,23,42,.15) !important;
+      display: inline-block !important;
+      flex-shrink: 0 !important;
+    }
+    
+    .quick-view-content .swatch__label {
+      font-size: .86rem !important;
+      font-weight: 700 !important;
+      color: #0f172a !important;
     }
     
     /* Mobile Quick View - Fits phone frame perfectly */
