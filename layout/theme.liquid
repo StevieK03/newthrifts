@@ -608,6 +608,11 @@
         margin-bottom: 6px !important;
         line-height: 1.2 !important;
         text-align: center !important;
+        color: #1e293b !important;
+      }
+      
+      [data-theme="dark"] #quick-view-title {
+        color: #f8fafc !important;
       }
       
       #quick-view-price {
@@ -1143,7 +1148,7 @@
                 <img id="quick-view-image" src="${mainImageUrl}" alt="${cleanTitle}" style="width: 100%; border-radius: 8px;">
               </div>
               <div class="quick-view-details-section">
-                <h3 id="quick-view-title" style="margin: 0 0 12px 0; font-size: 24px; color: #f8fafc;">${cleanTitle}</h3>
+                <h3 id="quick-view-title" style="margin: 0 0 12px 0; font-size: 24px; color: #1e293b;">${cleanTitle}</h3>
                 <div id="quick-view-price" style="font-size: 20px; color: #dc2626; font-weight: 600; margin-bottom: 16px;">
                   ${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(firstVariant.price / 100)}
                 </div>
