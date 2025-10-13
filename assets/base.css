@@ -117,6 +117,11 @@ a:hover{ text-shadow: var(--shadow-hard); }
 .product-card:hover{ transform: translateY(-3px); box-shadow: var(--shadow-soft); }
 .product-card__img{ aspect-ratio: 1/1; width: 100%; object-fit: cover; display:block; }
 .product-card__body{ padding: 14px 16px 18px; }
+.product-card h3,
+.product-card__title { 
+  color: #1e293b !important; 
+  font-weight: 600; 
+}
 .price{ font-weight: 700; color: var(--color-accent); }
 
 .footer{ margin-top: 40px; padding: 40px 0; border-top: 1px solid rgba(255,255,255,.08); background: rgba(15,23,42,.6); }
