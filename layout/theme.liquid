@@ -1051,12 +1051,12 @@
             }
           }
           
-          // Shorten product title to match homepage
+          // Shorten product title to match homepage exactly
           let cleanTitle = product.title;
           
-          // Handle specific long product names - make them much shorter
-          if (cleanTitle.includes('Boo-tiful Ghost Toddler Long Sleeve Tee') || cleanTitle.includes('Boo-tiful Ghost Toddler')) {
-            cleanTitle = 'Ghost Tee';
+          // Handle specific long product names - match homepage logic exactly
+          if (cleanTitle.includes('Boo-tiful Ghost Toddler Long Sleeve Tee')) {
+            cleanTitle = 'Boo-tiful Ghost Toddler Tee';
           } else if (cleanTitle.includes('Baby T-Shirt Cutest Pumpkin')) {
             cleanTitle = 'Cutest Pumpkin Baby Tee';
           } else if (cleanTitle.includes('Butterfly Floral Boxy Tee')) {
@@ -1066,22 +1066,17 @@
           } else if (cleanTitle.includes('BABY T-SHIRT')) {
             cleanTitle = cleanTitle.replace('BABY T-SHIRT', 'BABY TEE');
           } else if (cleanTitle.includes('TODDLER LONG SLEEVE TEE')) {
-            cleanTitle = 'Ghost Tee';
+            cleanTitle = cleanTitle.replace('TODDLER LONG SLEEVE TEE, HALLOWEEN SHIRT, CUTE KIDS TEE, SPOOKY SEASON APPAREL, TODDLER HALLOWEEN CLOTHING', 'TODDLER TEE');
           } else if (cleanTitle.includes('HALLOWEEN')) {
             cleanTitle = cleanTitle.split('HALLOWEEN')[0] + 'HALLOWEEN';
-          } else {
-            // General shortening - take first few words only
-            const words = cleanTitle.split(' ');
-            if (words.length > 4) {
-              cleanTitle = words.slice(0, 4).join(' ') + '...';
-            }
           }
           
-          // Remove common vendor patterns as fallback
-          cleanTitle = cleanTitle.replace(/\s*\|\s*[A-Z0-9\s]+$/, '');
-          cleanTitle = cleanTitle.replace(/\s*-\s*[A-Z0-9\s]+$/, '');
-          cleanTitle = cleanTitle.replace(/\s*by\s+[A-Za-z0-9\s]+$/i, '');
-          cleanTitle = cleanTitle.replace(/\s*\([^)]*\)\s*$/, '');
+          // Remove brand/vendor info like "Gildan 5200"
+          cleanTitle = cleanTitle.replace(/Gildan 5200/g, '');
+          cleanTitle = cleanTitle.replace(/Gildan/g, '');
+          cleanTitle = cleanTitle.replace(/5200/g, '');
+          cleanTitle = cleanTitle.replace(/  /g, ' '); // Replace double spaces
+          cleanTitle = cleanTitle.trim();
           
           quickViewContent.innerHTML = `
             <div class="quick-view-product" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
