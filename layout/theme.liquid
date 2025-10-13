@@ -509,21 +509,35 @@
       color: #0f172a !important;
     }
     
+    .quick-view-content .vp-legend {
+      color: #0f172a;
+    }
+    
     /* Dark mode styling for quickview swatches - match homepage */
     [data-theme="dark"] .quick-view-content .swatch {
       background: #fff !important;
       border: 1px solid rgba(15,23,42,.12) !important;
+      color: #0f172a !important;
     }
     
     [data-theme="dark"] .quick-view-content .swatch__label {
+      color: #0f172a !important;
+      text-shadow: none !important;
+    }
+    
+    [data-theme="dark"] .quick-view-content .vp-legend {
       color: #f8fafc !important;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important;
     }
     
     [data-theme="dark"] .quick-view-content .swatch.is-selected {
       border-color: var(--accent, #27e1c1) !important;
       box-shadow: 0 0 0 3px rgba(39,225,193,.18) !important;
       background: #fff !important;
+    }
+    
+    [data-theme="dark"] .quick-view-content .swatch:hover {
+      background: #fff !important;
+      border-color: rgba(15,23,42,.20) !important;
     }
     
     /* Mobile Quick View - Fits phone frame perfectly */
@@ -1031,7 +1045,7 @@
             if (colorOption && colorOption.values && colorOption.values.length > 1) {
               swatchesHTML = `
                 <div class="swatch-block" style="margin: 8px 0 16px;">
-                  <div class="vp-legend" style="display: block; font-size: 0.95rem; font-weight: 700; color: #0f172a; margin-bottom: 8px;">Color</div>
+                  <div class="vp-legend" style="display: block; font-size: 0.95rem; font-weight: 700; margin-bottom: 8px;">Color</div>
                   <div class="swatch-list" style="display: flex; flex-wrap: wrap; gap: 10px;">
                     ${colorOption.values.map((color, index) => {
                       // Find variant that matches this color with default size
