@@ -50,17 +50,6 @@
       {% endif %}
     </div>
 
-    <!-- Wishlist Toggle -->
-    <div class="nt-header__wishlist">
-      <button class="wishlist-toggle" id="header-wishlist-toggle" aria-label="Toggle wishlist">
-        <svg class="wishlist-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
-          <path class="heart-outline" d="M20.84 4.61C20.32 4.09 19.69 3.69 19 3.44C18.31 3.19 17.58 3.09 16.85 3.15C16.12 3.21 15.42 3.42 14.78 3.78C14.14 4.14 13.58 4.64 13.14 5.25L12 6.75L10.86 5.25C10.42 4.64 9.86 4.14 9.22 3.78C8.58 3.42 7.88 3.21 7.15 3.15C6.42 3.09 5.69 3.19 5 3.44C4.31 3.69 3.68 4.09 3.16 4.61C2.11 5.66 1.5 7.13 1.5 8.66C1.5 10.19 2.11 11.66 3.16 12.71L12 21.55L20.84 12.71C21.89 11.66 22.5 10.19 22.5 8.66C22.5 7.13 21.89 5.66 20.84 4.61Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path class="heart-filled" d="M20.84 4.61C20.32 4.09 19.69 3.69 19 3.44C18.31 3.19 17.58 3.09 16.85 3.15C16.12 3.21 15.42 3.42 14.78 3.78C14.14 4.14 13.58 4.64 13.14 5.25L12 6.75L10.86 5.25C10.42 4.64 9.86 4.14 9.22 3.78C8.58 3.42 7.88 3.21 7.15 3.15C6.42 3.09 5.69 3.19 5 3.44C4.31 3.69 3.68 4.09 3.16 4.61C2.11 5.66 1.5 7.13 1.5 8.66C1.5 10.19 2.11 11.66 3.16 12.71L12 21.55L20.84 12.71C21.89 11.66 22.5 10.19 22.5 8.66C22.5 7.13 21.89 5.66 20.84 4.61Z" fill="currentColor" style="display: none;"/>
-        </svg>
-        <span class="wishlist-count" id="header-wishlist-count">0</span>
-      </button>
-    </div>
-
     <!-- Dark Mode Toggle - Modern Design -->
     <div class="nt-header__dark-mode">
       <button class="dark-mode-toggle" id="dark-mode-toggle" aria-label="Toggle dark mode">
@@ -998,94 +987,6 @@
   
   /* Removed shine effect to clean up header */
   
-  /* Header Wishlist Styling */
-  #Header-{{ section.id }} .header-wishlist {
-    margin-left: 20px;
-  }
-  
-  /* Wishlist Toggle Styling */
-  #Header-{{ section.id }} .nt-header__wishlist {
-    display: flex;
-    align-items: center;
-    margin-right: 12px;
-  }
-  
-  #Header-{{ section.id }} .wishlist-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    padding: 0;
-    border-radius: 12px;
-    text-decoration: none;
-    color: white !important;
-    font-weight: 600;
-    background: rgba(0, 0, 0, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    transition: all 0.3s ease;
-    width: 48px;
-    height: 48px;
-    flex-shrink: 0;
-    cursor: pointer;
-    overflow: hidden;
-  }
-  
-  #Header-{{ section.id }} .wishlist-toggle:hover {
-    background: rgba(0, 0, 0, 0.9);
-    border-color: rgba(255, 255, 255, 0.5);
-  }
-  
-  #Header-{{ section.id }} .wishlist-toggle.has-items {
-    border-color: #dc2626;
-    background: rgba(220, 38, 38, 0.2);
-  }
-  
-  #Header-{{ section.id }} .wishlist-icon {
-    color: white;
-    transition: all 0.3s ease;
-    width: 20px;
-    height: 20px;
-  }
-  
-  #Header-{{ section.id }} .wishlist-toggle:hover .wishlist-icon,
-  #Header-{{ section.id }} .wishlist-toggle.has-items .wishlist-icon {
-    color: #dc2626;
-  }
-  
-  #Header-{{ section.id }} .wishlist-toggle.has-items .heart-outline {
-    display: none;
-  }
-  
-  #Header-{{ section.id }} .wishlist-toggle.has-items .heart-filled {
-    display: block !important;
-  }
-  
-  #Header-{{ section.id }} .wishlist-count {
-    position: absolute;
-    top: -4px;
-    right: -4px;
-    background: #dc2626;
-    color: white;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 2px 6px;
-    border-radius: 10px;
-    min-width: 16px;
-    height: 16px;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transform: scale(0);
-    transition: all 0.3s ease;
-  }
-
-  #Header-{{ section.id }} .wishlist-count.visible {
-    opacity: 1;
-    transform: scale(1);
-  }
-  
   /* Restore proper header styling */
   #Header-{{ section.id }} {
     background: var(--glass-bg, rgba(255, 255, 255, 0.1)) !important;
@@ -1096,8 +997,7 @@
   /* Button styling with proper backgrounds */
   #Header-{{ section.id }} .nt-header__signin-link,
   #Header-{{ section.id }} .dark-mode-toggle,
-  #Header-{{ section.id }} .nt-header__cart-link,
-  #Header-{{ section.id }} .wishlist-toggle {
+  #Header-{{ section.id }} .nt-header__cart-link {
     background: rgba(0, 0, 0, 0.8) !important;
     border: 1px solid rgba(255, 255, 255, 0.3) !important;
   }
@@ -1128,7 +1028,6 @@
   
   /* Specific overrides for icons */
   #Header-{{ section.id }} .user-icon,
-  #Header-{{ section.id }} .wishlist-icon,
   #Header-{{ section.id }} .nt-header__cart-icon,
   #Header-{{ section.id }} .moon-icon {
     color: white !important;
@@ -1137,38 +1036,6 @@
   /* Moon icon special color */
   #Header-{{ section.id }} .moon-icon {
     color: #ffa500 !important;
-  }
-  
-  /* Hide any wishlist toggle that's not in the header */
-  .wishlist-toggle:not(#header-wishlist-toggle),
-  .wishlist-container:not(#Header-{{ section.id }} .wishlist-container) {
-    display: none !important;
-  }
-  
-  /* Hide any wishlist element with ID that's not header-wishlist-toggle */
-  #wishlist-toggle:not(#header-wishlist-toggle),
-  #wishlist-container:not(#Header-{{ section.id }} #wishlist-container) {
-    display: none !important;
-  }
-  
-  /* Hide the wishlist dropdown that's creating the white box */
-  .wishlist-dropdown {
-    display: none !important;
-  }
-  
-  /* Hide any element with white background in header area */
-  header *[style*="background: white"],
-  header *[style*="background: #fff"],
-  header *[style*="background: #ffffff"],
-  header *[style*="background-color: white"],
-  header *[style*="background-color: #fff"],
-  header *[style*="background-color: #ffffff"] {
-    background: rgba(0, 0, 0, 0.8) !important;
-  }
-  
-  /* Target any small white square elements */
-  header *[class*="wishlist"]:not(#header-wishlist-toggle):not(.nt-header__wishlist) {
-    display: none !important;
   }
 </style>
 
