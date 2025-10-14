@@ -230,11 +230,15 @@ Enhanced Interactive Product Mockup
 
       <!-- Enhanced Preview Stage -->
         <div class="nt-mockup__stage" style="width: 100%; display: grid; place-items: center; margin-top: 60px !important; margin-bottom: 100px !important; padding: 0 20px;">
-          <div class="nt-mockup__canvas" 
-               id="nt-mockup-canvas-{{ section.id }}"
-               style="position: relative; width: min(900px, 100%); max-width: 90vw; aspect-ratio: 1 / 1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; overflow: hidden; box-shadow: 0 25px 80px rgba(102, 126, 234, 0.3), 0 10px 30px rgba(0,0,0,0.2); cursor: grab; --overlay-top: 45%; --overlay-left: 25%; --overlay-width: 60%; --overlay-rotate: 0deg;">
+          <div style="width: 100%; max-width: 900px;">
+            <h3 style="text-align: center; color: #f8fafc; font-size: 18px; font-weight: 600; margin-bottom: 20px; letter-spacing: 0.05em; text-transform: uppercase;">
+              👕 T-SHIRT MOCKUP
+            </h3>
+            <div class="nt-mockup__canvas" 
+                 id="nt-mockup-canvas-{{ section.id }}"
+                 style="position: relative; width: 100%; max-width: 900px; aspect-ratio: 1 / 1; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border-radius: 20px; overflow: hidden; box-shadow: 0 25px 80px rgba(0, 0, 0, 0.1), 0 10px 30px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.8); cursor: grab; --overlay-top: 45%; --overlay-left: 25%; --overlay-width: 60%; --overlay-rotate: 0deg; border: 3px solid rgba(255,255,255,0.5);">
           
-      <!-- Base Mockup (swapped by JS) -->
+      <!-- Base Mockup (swapped by JS) with SVG Fallback -->
       <img
         id="nt-base-{{ section.id }}"
         class="nt-mockup__base"
@@ -242,10 +246,39 @@ Enhanced Interactive Product Mockup
         alt="T-shirt mockup"
         loading="eager"
         decoding="async"
-        style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none;"
-        onerror="console.error('❌ Failed to load t-shirt image:', this.src);"
-        onload="console.log('✅ T-shirt image loaded:', this.src);"
+        style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; display: none;"
+        onerror="this.style.display='none'; document.getElementById('nt-fallback-{{ section.id }}').style.display='flex';"
+        onload="this.style.display='block'; document.getElementById('nt-fallback-{{ section.id }}').style.display='none';"
       >
+      
+      <!-- SVG Fallback Mockup -->
+      <div id="nt-fallback-{{ section.id }}" style="position: absolute; inset: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; pointer-events: none;">
+        <svg viewBox="0 0 400 500" style="width: 70%; height: 85%; filter: drop-shadow(0 10px 30px rgba(0,0,0,0.15));">
+          <!-- T-shirt base -->
+          <path d="M 100 80 L 80 100 L 80 180 Q 80 250 100 320 L 100 480 L 300 480 L 300 320 Q 320 250 320 180 L 320 100 L 300 80 L 280 90 Q 250 110 200 110 Q 150 110 120 90 Z" 
+                fill="white" stroke="#e2e8f0" stroke-width="2"/>
+          
+          <!-- Sleeves -->
+          <path d="M 100 80 L 80 100 L 60 130 L 50 160 L 60 190 L 80 180" fill="white" stroke="#e2e8f0" stroke-width="2"/>
+          <path d="M 300 80 L 320 100 L 340 130 L 350 160 L 340 190 L 320 180" fill="white" stroke="#e2e8f0" stroke-width="2"/>
+          
+          <!-- Neck opening -->
+          <ellipse cx="200" cy="90" rx="40" ry="25" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+          
+          <!-- Collar -->
+          <path d="M 160 90 Q 160 80 180 75 L 220 75 Q 240 80 240 90" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+          
+          <!-- Shadow/depth -->
+          <ellipse cx="200" cy="300" rx="80" ry="10" fill="rgba(0,0,0,0.05)"/>
+          
+          <!-- Seam lines -->
+          <line x1="100" y1="100" x2="100" y2="480" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="5,5"/>
+          <line x1="300" y1="100" x2="300" y2="480" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="5,5"/>
+          
+          <!-- Center seam -->
+          <line x1="200" y1="110" x2="200" y2="480" stroke="#f1f5f9" stroke-width="0.5" stroke-dasharray="3,3"/>
+        </svg>
+      </div>
           
           <!-- Debug: Test direct asset access -->
           <div id="debug-assets-{{ section.id }}" style="position: absolute; top: -100px; left: -100px; width: 1px; height: 1px; overflow: hidden;">
@@ -389,9 +422,10 @@ Enhanced Interactive Product Mockup
             </div>
         </div>
         
-        <p class="nt-mockup__hint" style="color: #6b7280; font-size: 14px; margin-top: 16px; text-align: center;">
+        <p class="nt-mockup__hint" style="color: #f8fafc; font-size: 14px; margin-top: 24px; text-align: center; font-weight: 500;">
           💡 Tip: Drag the design to move it, use scroll wheel to resize, or use the precise controls above
         </p>
+          </div>
       </div>
     </div>
   </div>
