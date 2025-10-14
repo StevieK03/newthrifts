@@ -419,41 +419,55 @@ Enhanced Interactive Product Mockup
           <div
             id="nt-overlay-{{ section.id }}"
             class="nt-mockup__overlay"
-            style="position: absolute; width: var(--overlay-width); left: var(--overlay-left); top: var(--overlay-top); transform: translateX(-50%) rotate(var(--overlay-rotate)); height: auto; inset: auto; display: flex; align-items: center; justify-content: center; cursor: grab; transition: all 0.1s ease; border: 2px dashed rgba(39, 225, 193, 0.3); border-radius: 8px; background: rgba(39, 225, 193, 0.05); z-index: 10;"
+            style="position: absolute; width: var(--overlay-width); left: var(--overlay-left); top: var(--overlay-top); transform: translateX(-50%) rotate(var(--overlay-rotate)); height: auto; inset: auto; display: flex; align-items: center; justify-content: center; cursor: grab; transition: none; border: 3px solid rgba(39, 225, 193, 0.5); border-radius: 12px; background: rgba(39, 225, 193, 0.08); z-index: 10; box-shadow: 0 4px 16px rgba(39, 225, 193, 0.2);"
           >
             <span id="nt-design-text-{{ section.id }}" 
                   style="font-family: 'Bebas Neue', sans-serif; font-size: 32px; font-weight: bold; color: #000000; text-align: center; white-space: nowrap; user-select: none; text-shadow: 1px 1px 2px rgba(255,255,255,0.8); pointer-events: none;">
               Your Design Here
             </span>
             
-            <!-- Drag Handle (only visible when dragging) -->
+            <!-- Center Drag Handle (Always visible for easy dragging) -->
             <div id="nt-drag-handle-{{ section.id }}" 
-                 style="position: absolute; top: -8px; right: -8px; width: 16px; height: 16px; background: #27e1c1; border: 2px solid white; border-radius: 50%; cursor: grab; display: none; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
+                 style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; background: linear-gradient(135deg, #27e1c1, #26d0ce); border: 4px solid white; border-radius: 50%; cursor: grab; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 20px rgba(39, 225, 193, 0.5); z-index: 15; transition: all 0.2s ease; pointer-events: auto;"
+                 onmouseover="this.style.transform='translate(-50%, -50%) scale(1.15)'; this.style.boxShadow='0 8px 24px rgba(39, 225, 193, 0.7)';"
+                 onmouseout="this.style.transform='translate(-50%, -50%) scale(1)'; this.style.boxShadow='0 6px 20px rgba(39, 225, 193, 0.5)';"
+                 title="Drag to move design">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7 9L12 4L17 9M7 15L12 20L17 15M15 7L20 12L15 17M9 7L4 12L9 17" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
             </div>
             
-            <!-- Resize Handles - All Directions (Hidden by default, shown when selected) -->
+            <!-- Resize Handles - All Directions (Always visible for easy access) -->
             <!-- Top-Left -->
             <div class="resize-handle" data-direction="nw" 
-                 style="position: absolute; top: -12px; left: -12px; width: 24px; height: 24px; background: #ff6b6b; border: 3px solid white; border-radius: 50%; cursor: nw-resize; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 10; touch-action: none;"
-                 title="Resize from top-left">
+                 style="position: absolute; top: -16px; left: -16px; width: 32px; height: 32px; background: #ff6b6b; border: 3px solid white; border-radius: 50%; cursor: nw-resize; display: block; box-shadow: 0 6px 16px rgba(0,0,0,0.4); z-index: 20; touch-action: none; transition: all 0.2s ease;"
+                 title="Resize from top-left"
+                 onmouseover="this.style.transform='scale(1.2)'; this.style.boxShadow='0 8px 20px rgba(255,107,107,0.6)';"
+                 onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 6px 16px rgba(0,0,0,0.4)';">
             </div>
             
             <!-- Top-Right -->
             <div class="resize-handle" data-direction="ne" 
-                 style="position: absolute; top: -12px; right: -12px; width: 24px; height: 24px; background: #ff6b6b; border: 3px solid white; border-radius: 50%; cursor: ne-resize; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 10; touch-action: none;"
-                 title="Resize from top-right">
+                 style="position: absolute; top: -16px; right: -16px; width: 32px; height: 32px; background: #ff6b6b; border: 3px solid white; border-radius: 50%; cursor: ne-resize; display: block; box-shadow: 0 6px 16px rgba(0,0,0,0.4); z-index: 20; touch-action: none; transition: all 0.2s ease;"
+                 title="Resize from top-right"
+                 onmouseover="this.style.transform='scale(1.2)'; this.style.boxShadow='0 8px 20px rgba(255,107,107,0.6)';"
+                 onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 6px 16px rgba(0,0,0,0.4)';">
             </div>
             
             <!-- Bottom-Left -->
             <div class="resize-handle" data-direction="sw" 
-                 style="position: absolute; bottom: -12px; left: -12px; width: 24px; height: 24px; background: #ff6b6b; border: 3px solid white; border-radius: 50%; cursor: sw-resize; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 10; touch-action: none;"
-                 title="Resize from bottom-left">
+                 style="position: absolute; bottom: -16px; left: -16px; width: 32px; height: 32px; background: #ff6b6b; border: 3px solid white; border-radius: 50%; cursor: sw-resize; display: block; box-shadow: 0 6px 16px rgba(0,0,0,0.4); z-index: 20; touch-action: none; transition: all 0.2s ease;"
+                 title="Resize from bottom-left"
+                 onmouseover="this.style.transform='scale(1.2)'; this.style.boxShadow='0 8px 20px rgba(255,107,107,0.6)';"
+                 onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 6px 16px rgba(0,0,0,0.4)';">
             </div>
             
             <!-- Bottom-Right -->
             <div class="resize-handle" data-direction="se" 
-                 style="position: absolute; bottom: -12px; right: -12px; width: 24px; height: 24px; background: #ff6b6b; border: 3px solid white; border-radius: 50%; cursor: se-resize; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 10; touch-action: none;"
-                 title="Resize from bottom-right">
+                 style="position: absolute; bottom: -16px; right: -16px; width: 32px; height: 32px; background: #ff6b6b; border: 3px solid white; border-radius: 50%; cursor: se-resize; display: block; box-shadow: 0 6px 16px rgba(0,0,0,0.4); z-index: 20; touch-action: none; transition: all 0.2s ease;"
+                 title="Resize from bottom-right"
+                 onmouseover="this.style.transform='scale(1.2)'; this.style.boxShadow='0 8px 20px rgba(255,107,107,0.6)';"
+                 onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 6px 16px rgba(0,0,0,0.4)';">
             </div>
             
             <!-- Side Handles (Hidden by default, shown when selected) -->
