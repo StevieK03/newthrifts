@@ -192,6 +192,7 @@
     {%- comment -%} Supabase Integration {%- endcomment -%}
     {%- comment -%} Supabase loads after analytics {%- endcomment -%}
     <script src="{{ 'supabase-config.js' | asset_url }}?v={{ 'now' | date: '%s' }}"></script>
+    <script src="{{ 'supabase-designs.js' | asset_url }}?v={{ 'now' | date: '%s' }}"></script>
     <script src="{{ 'visitor-counter.js' | asset_url }}?v={{ 'now' | date: '%s' }}" defer></script>
     
     <!-- Enhanced Homepage Features -->
