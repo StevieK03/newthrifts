@@ -1911,12 +1911,12 @@ document.addEventListener('DOMContentLoaded', function() {
       const overlayEl = document.querySelector(`#nt-overlay-{{ section.id }}`);
       if (!overlayEl) return;
       
-      // Define print area boundaries (safe zone)
+      // Define print area boundaries (safe zone) - matching the visual green dashed box
       const printArea = {
-        top: 25,    // 25% from top
-        left: 25,   // 25% from left  
-        right: 75,  // 75% from left
-        bottom: 85  // 85% from top
+        top: 35,    // 35% from top (matches the visual box)
+        left: 50,   // 50% from left (centered)
+        right: 50,  // 50% width from center
+        bottom: 50  // 50% height from top
       };
       
       // Get current design position
@@ -1929,19 +1929,42 @@ document.addEventListener('DOMContentLoaded', function() {
       const designRight = designLeft + designWidth;
       const designBottom = designTop + designHeight;
       
+      // Calculate print area boundaries (centered box)
+      const printAreaLeft = printArea.left - (printArea.right / 2);  // Center minus half width
+      const printAreaRight = printArea.left + (printArea.right / 2); // Center plus half width
+      const printAreaTop = printArea.top;
+      const printAreaBottom = printArea.top + printArea.bottom;
+      
+      console.log('🔍 Print Area Calculation:', {
+        printArea: { left: printAreaLeft, right: printAreaRight, top: printAreaTop, bottom: printAreaBottom },
+        design: { left: designLeft, right: designRight, top: designTop, bottom: designBottom },
+        designSize: { width: designWidth, height: designHeight }
+      });
+      
       // Check if design is completely within print area
       const isWithinPrintArea = (
-        designLeft >= printArea.left &&
-        designRight <= printArea.right &&
-        designTop >= printArea.top &&
-        designBottom <= printArea.bottom
+        designLeft >= printAreaLeft &&
+        designRight <= printAreaRight &&
+        designTop >= printAreaTop &&
+        designBottom <= printAreaBottom
       );
       
       // Check if design is partially within print area
       const isPartiallyWithin = (
-        (designLeft < printArea.right && designRight > printArea.left) &&
-        (designTop < printArea.bottom && designBottom > printArea.top)
+        (designLeft < printAreaRight && designRight > printAreaLeft) &&
+        (designTop < printAreaBottom && designBottom > printAreaTop)
       );
+      
+      console.log('🎯 Print Area Status:', {
+        isWithin: isWithinPrintArea,
+        isPartiallyWithin: isPartiallyWithin,
+        violations: {
+          left: designLeft < printAreaLeft,
+          right: designRight > printAreaRight,
+          top: designTop < printAreaTop,
+          bottom: designBottom > printAreaBottom
+        }
+      });
       
       // Update visual feedback
       if (isWithinPrintArea) {
