@@ -7,6 +7,40 @@
       {{ section.settings.description | default: "Have a question or feedback? We'd love to hear from you!" }}
     </p>
     
+    <!-- Contact Type Selector -->
+    <div style="margin-bottom: 30px; text-align: center;">
+      <div style="display: flex; justify-content: center; gap: 12px; margin-bottom: 20px;">
+        <button id="contact-type-general" class="contact-type-btn active" style="
+          padding: 12px 24px; 
+          border: 2px solid #3b82f6; 
+          background: #3b82f6; 
+          color: white; 
+          border-radius: 25px; 
+          font-weight: 600; 
+          cursor: pointer;
+          transition: all 0.3s ease;
+        ">
+          💬 General Inquiry
+        </button>
+        <button id="contact-type-custom" class="contact-type-btn" style="
+          padding: 12px 24px; 
+          border: 2px solid #f59e0b; 
+          background: transparent; 
+          color: #f59e0b; 
+          border-radius: 25px; 
+          font-weight: 600; 
+          cursor: pointer;
+          transition: all 0.3s ease;
+        ">
+          🎨 Custom T-Shirt Request
+        </button>
+      </div>
+      
+      <div id="contact-type-description" style="font-size: 14px; color: #6b7280; padding: 0 20px;">
+        Select the type of inquiry to show relevant fields and options.
+      </div>
+    </div>
+    
     <!-- Form Status Messages -->
     {% if form.posted_successfully? %}
       <div style="margin-bottom: 20px; padding: 12px; border-radius: 8px; background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; text-align: center;">
@@ -73,11 +107,129 @@
       
       <button 
         type="submit"
+        id="contact-submit-btn"
         style="background: #0f172a; color: white; border: none; padding: 14px 24px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 10px;"
       >
         Send Message
       </button>
     {% endform %}
+    
+    <!-- Custom T-Shirt Request Form (Hidden by default) -->
+    <div id="custom-request-form" style="display: none;">
+      <div style="background: #fef3c7; padding: 16px; border-radius: 12px; border: 1px solid #fbbf24; margin-bottom: 20px;">
+        <h3 style="margin: 0 0 8px 0; font-size: 18px; font-weight: 600; color: #92400e;">🎨 Custom T-Shirt Request</h3>
+        <p style="margin: 0; font-size: 14px; color: #92400e;">
+          Describe your custom design and we'll create a mockup for you!
+        </p>
+      </div>
+      
+      <form id="custom-contact-form" style="display: flex; flex-direction: column; gap: 20px;">
+        <!-- Customer Information -->
+        <div style="background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0;">
+          <h4 style="margin: 0 0 12px 0; font-size: 16px; font-weight: 600; color: #374151;">👤 Your Information</h4>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+            <div>
+              <label style="display: block; margin-bottom: 6px; font-size: 14px; font-weight: 500; color: #374151;">Full Name *</label>
+              <input type="text" id="custom-customer-name" required style="
+                width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px; box-sizing: border-box;
+              ">
+            </div>
+            <div>
+              <label style="display: block; margin-bottom: 6px; font-size: 14px; font-weight: 500; color: #374151;">Phone Number</label>
+              <input type="tel" id="custom-customer-phone" style="
+                width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px; box-sizing: border-box;
+              ">
+            </div>
+          </div>
+          
+          <div>
+            <label style="display: block; margin-bottom: 6px; font-size: 14px; font-weight: 500; color: #374151;">Email Address *</label>
+            <input type="email" id="custom-customer-email" required style="
+              width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px; box-sizing: border-box;
+            ">
+          </div>
+        </div>
+
+        <!-- Design Details -->
+        <div style="background: #f0fdf4; padding: 16px; border-radius: 12px; border: 1px solid #bbf7d0;">
+          <h4 style="margin: 0 0 12px 0; font-size: 16px; font-weight: 600; color: #166534;">🎨 Design Details</h4>
+          
+          <div style="margin-bottom: 12px;">
+            <label style="display: block; margin-bottom: 6px; font-size: 14px; font-weight: 500; color: #166534;">Tell us about your design *</label>
+            <textarea id="custom-customer-message" required placeholder="Describe your design, colors, text, logo, or any specific requirements..." style="
+              width: 100%; padding: 12px; border: 2px solid #bbf7d0; border-radius: 8px; font-size: 14px; min-height: 80px; resize: vertical; box-sizing: border-box;
+            "></textarea>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div>
+              <label style="display: block; margin-bottom: 6px; font-size: 14px; font-weight: 500; color: #166534;">T-shirt Color</label>
+              <select id="custom-selected-color" style="
+                width: 100%; padding: 12px; border: 2px solid #bbf7d0; border-radius: 8px; font-size: 14px; background: white; box-sizing: border-box;
+              ">
+                <option value="black">Black</option>
+                <option value="white">White</option>
+              </select>
+            </div>
+            <div>
+              <label style="display: block; margin-bottom: 6px; font-size: 14px; font-weight: 500; color: #166534;">Size</label>
+              <select id="custom-selected-size" style="
+                width: 100%; padding: 12px; border: 2px solid #bbf7d0; border-radius: 8px; font-size: 14px; background: white; box-sizing: border-box;
+              ">
+                <option value="S">Small (S)</option>
+                <option value="M" selected>Medium (M)</option>
+                <option value="L">Large (L)</option>
+                <option value="XL">Extra Large (XL)</option>
+                <option value="XXL">2XL</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Design Upload -->
+        <div style="background: #fef3c7; padding: 16px; border-radius: 12px; border: 1px solid #fbbf24;">
+          <h4 style="margin: 0 0 12px 0; font-size: 16px; font-weight: 600; color: #92400e;">📸 Design Upload (Optional)</h4>
+          <p style="margin: 0 0 12px 0; font-size: 14px; color: #92400e;">
+            Upload your design file for a custom mockup preview.
+          </p>
+          <input type="file" id="custom-design-upload" accept="image/*" style="
+            width: 100%; padding: 12px; border: 2px solid #fbbf24; border-radius: 8px; font-size: 14px; box-sizing: border-box;
+          ">
+          <div id="custom-upload-preview" style="margin-top: 12px; display: none;">
+            <img id="custom-preview-image" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 2px solid #fbbf24;">
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" id="custom-submit-btn" style="
+          width: 100%; padding: 16px; background: linear-gradient(45deg, #f59e0b, #d97706); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        ">
+          🚀 Submit Custom Request
+        </button>
+      </form>
+
+      <!-- Success Message -->
+      <div id="custom-request-success" style="display: none; text-align: center; padding: 24px;">
+        <div style="font-size: 48px; margin-bottom: 16px;">✅</div>
+        <h3 style="margin: 0 0 8px 0; font-size: 20px; font-weight: 700; color: #059669;">Custom Request Submitted!</h3>
+        <p style="margin: 0 0 16px 0; font-size: 14px; color: #6b7280;">
+          Your custom t-shirt request has been sent. We'll review your design and get back to you within 24 hours.
+        </p>
+        <div id="custom-request-id" style="
+          background: #f0fdf4; padding: 12px; border-radius: 8px; border: 1px solid #bbf7d0; font-size: 14px; color: #166534; font-weight: 600; margin-bottom: 16px;
+        "></div>
+        <button id="custom-close-success" style="
+          padding: 12px 24px; background: #059669; color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;
+        ">Close</button>
+      </div>
+
+      <!-- Loading State -->
+      <div id="custom-request-loading" style="display: none; text-align: center; padding: 24px;">
+        <div style="font-size: 32px; margin-bottom: 16px; animation: spin 1s linear infinite;">⏳</div>
+        <p style="margin: 0; font-size: 14px; color: #6b7280;">Submitting your request...</p>
+      </div>
+    </div>
     
     <div style="margin-top: 30px; padding: 20px; background: #f1f5f9; border-radius: 8px; text-align: center;">
       <p style="margin: 0; color: #64748b; font-size: 14px;">
@@ -90,6 +242,249 @@
   </div>
 </section>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('📧 Contact form with custom requests initialized!');
+
+  // ============================================================================
+  // CONTACT TYPE SELECTOR
+  // ============================================================================
+  
+  const generalBtn = document.getElementById('contact-type-general');
+  const customBtn = document.getElementById('contact-type-custom');
+  const generalForm = document.getElementById('ContactForm');
+  const customForm = document.getElementById('custom-request-form');
+  const description = document.getElementById('contact-type-description');
+
+  function switchToGeneral() {
+    generalBtn.style.background = '#3b82f6';
+    generalBtn.style.color = 'white';
+    customBtn.style.background = 'transparent';
+    customBtn.style.color = '#f59e0b';
+    
+    generalForm.style.display = 'flex';
+    customForm.style.display = 'none';
+    description.textContent = 'Send us a general message or inquiry.';
+  }
+
+  function switchToCustom() {
+    customBtn.style.background = '#f59e0b';
+    customBtn.style.color = 'white';
+    generalBtn.style.background = 'transparent';
+    generalBtn.style.color = '#3b82f6';
+    
+    generalForm.style.display = 'none';
+    customForm.style.display = 'block';
+    description.textContent = 'Submit a custom t-shirt design request with your specifications.';
+  }
+
+  if (generalBtn) {
+    generalBtn.addEventListener('click', switchToGeneral);
+  }
+
+  if (customBtn) {
+    customBtn.addEventListener('click', switchToCustom);
+  }
+
+  // ============================================================================
+  // CUSTOM REQUEST FORM FUNCTIONALITY
+  // ============================================================================
+  
+  const customContactForm = document.getElementById('custom-contact-form');
+  const customSubmitBtn = document.getElementById('custom-submit-btn');
+  const customRequestSuccess = document.getElementById('custom-request-success');
+  const customRequestLoading = document.getElementById('custom-request-loading');
+  const customRequestId = document.getElementById('custom-request-id');
+  const customCloseSuccess = document.getElementById('custom-close-success');
+  const designUpload = document.getElementById('custom-design-upload');
+  const uploadPreview = document.getElementById('custom-upload-preview');
+  const previewImage = document.getElementById('custom-preview-image');
+
+  // Handle design upload preview
+  if (designUpload) {
+    designUpload.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          previewImage.src = e.target.result;
+          uploadPreview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      } else {
+        uploadPreview.style.display = 'none';
+      }
+    });
+  }
+
+  // Handle custom form submission
+  if (customContactForm) {
+    customContactForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      console.log('📝 Submitting custom contact request...');
+
+      // Show loading state
+      customContactForm.style.display = 'none';
+      customRequestLoading.style.display = 'block';
+
+      try {
+        // Get form data
+        const formData = {
+          customer_name: document.getElementById('custom-customer-name').value,
+          customer_email: document.getElementById('custom-customer-email').value,
+          customer_phone: document.getElementById('custom-customer-phone').value || null,
+          customer_message: document.getElementById('custom-customer-message').value,
+          design_data: {
+            color: document.getElementById('custom-selected-color').value,
+            size: document.getElementById('custom-selected-size').value,
+            hasUploadedDesign: !!designUpload.files[0]
+          }
+        };
+
+        // Upload design image if provided
+        let designImageUrl = null;
+        if (designUpload.files[0]) {
+          console.log('📤 Uploading design image...');
+          const reader = new FileReader();
+          reader.onload = async function(e) {
+            try {
+              designImageUrl = await window.NewThriftsCustomRequests.uploadImageToStorage(e.target.result, 'design-uploads');
+              console.log('✅ Design uploaded:', designImageUrl);
+            } catch (error) {
+              console.error('❌ Error uploading design:', error);
+            }
+          };
+          reader.readAsDataURL(designUpload.files[0]);
+          
+          // Wait for upload to complete
+          await new Promise(resolve => {
+            const checkUpload = setInterval(() => {
+              if (designImageUrl) {
+                clearInterval(checkUpload);
+                resolve();
+              }
+            }, 100);
+          });
+        }
+
+        // Submit request to database
+        const result = await window.NewThriftsCustomRequests.submitCustomRequest({
+          ...formData,
+          design_image_url: designImageUrl,
+          mockup_image_url: null // No mockup for contact form requests
+        });
+
+        if (result.success) {
+          // Show success message
+          customRequestLoading.style.display = 'none';
+          customRequestSuccess.style.display = 'block';
+          customRequestId.textContent = `Request ID: ${window.NewThriftsCustomRequests.formatRequestId(result.requestId)}`;
+          
+          console.log('✅ Custom contact request submitted successfully!', result.requestId);
+          
+          // Reset form for next time
+          customContactForm.reset();
+          uploadPreview.style.display = 'none';
+          
+          // Show success notification
+          window.NewThriftsCustomRequests.showSuccessNotification(
+            'Custom request submitted successfully!', 
+            result.requestId
+          );
+          
+        } else {
+          throw new Error(result.error || 'Failed to submit request');
+        }
+
+      } catch (error) {
+        console.error('❌ Error submitting custom contact request:', error);
+        
+        // Show error message
+        customRequestLoading.style.display = 'none';
+        customContactForm.style.display = 'block';
+        
+        // Show error notification
+        window.NewThriftsCustomRequests.showErrorNotification(
+          `Failed to submit request: ${error.message}`
+        );
+      }
+    });
+  }
+
+  // Handle success modal close
+  if (customCloseSuccess) {
+    customCloseSuccess.addEventListener('click', function() {
+      customRequestSuccess.style.display = 'none';
+      customContactForm.style.display = 'block';
+      switchToGeneral(); // Switch back to general form
+    });
+  }
+
+  console.log('✅ Contact form functionality initialized!');
+});
+</script>
+
+<style>
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Dark Mode Support */
+[data-theme="dark"] .simple-contact-form {
+  background: #1f2937;
+}
+
+[data-theme="dark"] .simple-contact-form h2,
+[data-theme="dark"] .simple-contact-form h3,
+[data-theme="dark"] .simple-contact-form h4 {
+  color: #f9fafb;
+}
+
+[data-theme="dark"] .simple-contact-form label {
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .simple-contact-form input,
+[data-theme="dark"] .simple-contact-form textarea,
+[data-theme="dark"] .simple-contact-form select {
+  background: #374151;
+  border-color: #4b5563;
+  color: #f9fafb;
+}
+
+[data-theme="dark"] .simple-contact-form input:focus,
+[data-theme="dark"] .simple-contact-form textarea:focus,
+[data-theme="dark"] .simple-contact-form select:focus {
+  border-color: #f59e0b;
+  outline: none;
+}
+
+/* Hover Effects */
+.contact-type-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+#custom-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(245, 158, 11, 0.4);
+}
+
+/* Form Focus States */
+input:focus, textarea:focus, select:focus {
+  border-color: #3b82f6 !important;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+#custom-contact-form input:focus,
+#custom-contact-form textarea:focus,
+#custom-contact-form select:focus {
+  border-color: #f59e0b !important;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+}
+</style>
 
 {% schema %}
 {

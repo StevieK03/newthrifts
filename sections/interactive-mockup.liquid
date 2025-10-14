@@ -137,6 +137,11 @@ Enhanced Interactive Product Mockup
           </button>
           {% endif %}
           
+          <!-- Submit Custom Request Button -->
+          <button class="nt-btn nt-btn--submit-request" id="nt-submit-request-{{ section.id }}" style="padding: 12px 24px; background: linear-gradient(45deg, #f59e0b, #d97706); color: white; border: none; border-radius: 25px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin-top: 12px; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);">
+            🎨 Submit Your Request
+          </button>
+          
           <button class="nt-btn nt-btn--secondary" id="nt-edit-{{ section.id }}" style="padding: 10px 20px; background: linear-gradient(45deg, #8b5cf6, #a855f7); color: white; border: none; border-radius: 25px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin-top: 16px;">
             ✏️ Edit Design
           </button>
@@ -3014,8 +3019,591 @@ document.addEventListener('DOMContentLoaded', function() {
 
   console.log('🚀 ENHANCED Interactive Mockup initialized! 🎨');
   console.log('📏 Size selector integrated with size chart system!');
+
+  // ============================================================================
+  // CUSTOM REQUEST MODAL FUNCTIONALITY
+  // ============================================================================
+  
+  const submitRequestBtn = document.getElementById('nt-submit-request-{{ section.id }}');
+  const customRequestModal = document.getElementById('custom-request-modal-{{ section.id }}');
+  const closeRequestModal = document.getElementById('close-request-modal-{{ section.id }}');
+  const customRequestForm = document.getElementById('custom-request-form-{{ section.id }}');
+  const requestSuccess = document.getElementById('request-success-{{ section.id }}');
+  const requestLoading = document.getElementById('request-loading-{{ section.id }}');
+  const requestId = document.getElementById('request-id-{{ section.id }}');
+  const closeSuccess = document.getElementById('close-success-{{ section.id }}');
+
+  // Open modal when Submit Request button is clicked
+  if (submitRequestBtn) {
+    submitRequestBtn.addEventListener('click', () => {
+      console.log('🎨 Opening custom request modal...');
+      
+      // Pre-fill form with current mockup data
+      const selectedColor = getSelectedColor();
+      const selectedSize = mockup.selectedSize || 'M';
+      
+      document.getElementById('selected-color-{{ section.id }}').value = selectedColor;
+      document.getElementById('selected-size-{{ section.id }}').value = selectedSize;
+      
+      customRequestModal.style.display = 'flex';
+      document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    });
+  }
+
+  // Close modal functions
+  function closeModal() {
+    customRequestModal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }
+
+  if (closeRequestModal) {
+    closeRequestModal.addEventListener('click', closeModal);
+  }
+
+  if (closeSuccess) {
+    closeSuccess.addEventListener('click', closeModal);
+  }
+
+  // Close modal when clicking outside
+  if (customRequestModal) {
+    customRequestModal.addEventListener('click', (e) => {
+      if (e.target === customRequestModal) {
+        closeModal();
+      }
+    });
+  }
+
+  // Handle form submission
+  if (customRequestForm) {
+    customRequestForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      console.log('📝 Submitting custom request...');
+
+      // Show loading state
+      customRequestForm.style.display = 'none';
+      requestLoading.style.display = 'block';
+
+      try {
+        // Get form data
+        const formData = {
+          customer_name: document.getElementById('customer-name-{{ section.id }}').value,
+          customer_email: document.getElementById('customer-email-{{ section.id }}').value,
+          customer_phone: document.getElementById('customer-phone-{{ section.id }}').value || null,
+          customer_message: document.getElementById('customer-message-{{ section.id }}').value,
+          design_data: {
+            color: document.getElementById('selected-color-{{ section.id }}').value,
+            size: document.getElementById('selected-size-{{ section.id }}').value,
+            placement: {
+              topPct: this.placementState.topPct,
+              leftPct: this.placementState.leftPct,
+              widthPct: this.placementState.widthPct,
+              rotateDeg: this.placementState.rotateDeg || 0
+            },
+            hasUploadedDesign: this.placementState.hasUploadedDesign
+          }
+        };
+
+        // Upload images if design is uploaded
+        let designImageUrl = null;
+        let mockupImageUrl = null;
+
+        if (this.placementState.hasUploadedDesign) {
+          console.log('📤 Uploading design and mockup images...');
+          
+          // Upload design image
+          const designImg = document.querySelector(`#nt-overlay-{{ section.id }} img`);
+          if (designImg && designImg.src) {
+            designImageUrl = await uploadImageToSupabase(designImg.src, 'design-uploads');
+          }
+
+          // Generate and upload mockup
+          mockupImageUrl = await generateAndUploadMockup();
+        }
+
+        // Submit request to database
+        const result = await submitCustomRequest({
+          ...formData,
+          design_image_url: designImageUrl,
+          mockup_image_url: mockupImageUrl
+        });
+
+        if (result.success) {
+          // Show success message
+          requestLoading.style.display = 'none';
+          requestSuccess.style.display = 'block';
+          requestId.textContent = `Request ID: ${result.requestId}`;
+          
+          console.log('✅ Custom request submitted successfully!', result.requestId);
+          
+          // Reset form for next time
+          customRequestForm.reset();
+        } else {
+          throw new Error(result.error || 'Failed to submit request');
+        }
+
+      } catch (error) {
+        console.error('❌ Error submitting custom request:', error);
+        
+        // Show error message
+        requestLoading.style.display = 'none';
+        customRequestForm.style.display = 'block';
+        
+        // Show error alert
+        alert(`Failed to submit request: ${error.message}`);
+      }
+    });
+  }
+
+  // Helper function to upload image to Supabase Storage
+  async function uploadImageToSupabase(imageDataUrl, bucket) {
+    try {
+      if (!window.supabaseClient) {
+        throw new Error('Supabase client not initialized');
+      }
+
+      const supabase = await window.supabaseClient.getClient();
+      
+      // Convert data URL to blob
+      const response = await fetch(imageDataUrl);
+      const blob = await response.blob();
+      
+      // Generate unique filename
+      const filename = `custom-design-${Date.now()}-${Math.random().toString(36).substr(2, 9)}.png`;
+      
+      // Upload to Supabase Storage
+      const { data, error } = await supabase.storage
+        .from(bucket)
+        .upload(filename, blob, {
+          contentType: 'image/png',
+          upsert: false
+        });
+
+      if (error) throw error;
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from(bucket)
+        .getPublicUrl(filename);
+
+      console.log(`✅ Image uploaded to ${bucket}:`, publicUrl);
+      return publicUrl;
+
+    } catch (error) {
+      console.error(`❌ Error uploading to ${bucket}:`, error);
+      throw error;
+    }
+  }
+
+  // Helper function to generate and upload mockup
+  async function generateAndUploadMockup() {
+    try {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      
+      // Set canvas size to high resolution
+      canvas.width = 2000;
+      canvas.height = 2000;
+      
+      // Enable high-quality rendering
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+
+      // Create base image
+      const baseImg = new Image();
+      baseImg.crossOrigin = "anonymous";
+      baseImg.src = document.getElementById("nt-base-{{ section.id }}").src;
+      
+      return new Promise((resolve, reject) => {
+        baseImg.onload = async () => {
+          try {
+            // Draw base image (t-shirt) - fit to canvas
+            ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
+
+            // Check if there's an uploaded design image
+            const overlayImg = document.querySelector(`#nt-overlay-{{ section.id }} img`);
+            
+            if (overlayImg && overlayImg.src && !overlayImg.src.includes('data:image/svg+xml')) {
+              // Draw uploaded design image
+              const designImg = new Image();
+              designImg.crossOrigin = "anonymous";
+              designImg.src = overlayImg.src;
+              
+              designImg.onload = () => {
+                // Use the exact placement state values that match the preview
+                const topPct = this.placementState.topPct / 100;
+                const leftPct = this.placementState.leftPct / 100;
+                const widthPct = this.placementState.widthPct / 100;
+                const rotateDeg = this.placementState.rotateDeg || 0;
+
+                // Calculate overlay box position and size
+                const overlayLeft = canvas.width * leftPct;
+                const overlayTop = canvas.height * topPct;
+                const overlayWidth = canvas.width * widthPct;
+                
+                // Calculate design size maintaining aspect ratio
+                const designWidth = overlayWidth;
+                const designHeight = (designImg.height / designImg.width) * designWidth;
+                
+                // Design is centered within the overlay box
+                const designCenterX = overlayLeft + overlayWidth / 2;
+                const designCenterY = overlayTop + designHeight / 2;
+
+                // Save context for rotation
+                ctx.save();
+                // Translate to design center point
+                ctx.translate(designCenterX, designCenterY);
+                ctx.rotate(rotateDeg * Math.PI / 180);
+                
+                // Draw the design image centered at the translated point
+                ctx.drawImage(designImg, -designWidth / 2, -designHeight / 2, designWidth, designHeight);
+                ctx.restore();
+              };
+
+              designImg.onerror = () => {
+                console.log('⚠️ Design image failed to load for mockup generation');
+              };
+            }
+
+            // Convert canvas to data URL and upload
+            const dataUrl = canvas.toDataURL("image/png");
+            const mockupUrl = await uploadImageToSupabase(dataUrl, 'mockup-previews');
+            resolve(mockupUrl);
+
+          } catch (error) {
+            reject(error);
+          }
+        };
+
+        baseImg.onerror = () => {
+          reject(new Error('Failed to load base t-shirt image'));
+        };
+      });
+
+    } catch (error) {
+      console.error('❌ Error generating mockup:', error);
+      throw error;
+    }
+  }
+
+  // Helper function to submit custom request to database
+  async function submitCustomRequest(requestData) {
+    try {
+      if (!window.supabaseClient) {
+        throw new Error('Supabase client not initialized');
+      }
+
+      const supabase = await window.supabaseClient.getClient();
+      
+      // Insert request into database
+      const { data, error } = await supabase
+        .from('custom_tshirt_requests')
+        .insert([{
+          customer_email: requestData.customer_email,
+          customer_name: requestData.customer_name,
+          customer_phone: requestData.customer_phone,
+          customer_message: requestData.customer_message,
+          design_image_url: requestData.design_image_url,
+          mockup_image_url: requestData.mockup_image_url,
+          design_data: requestData.design_data,
+          status: 'pending'
+        }])
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      console.log('✅ Custom request saved to database:', data);
+      
+      return {
+        success: true,
+        requestId: data.id,
+        data: data
+      };
+
+    } catch (error) {
+      console.error('❌ Error saving custom request:', error);
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  }
+
+  console.log('🎨 Custom request modal functionality initialized!');
 });
 </script>
+
+<!-- Custom Request Modal -->
+<div id="custom-request-modal-{{ section.id }}" class="custom-request-modal" style="
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+  backdrop-filter: blur(8px);
+">
+  <div class="custom-request-modal-content" style="
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    max-width: 500px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  ">
+    <!-- Close Button -->
+    <button id="close-request-modal-{{ section.id }}" style="
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: #f3f4f6;
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: #6b7280;
+      transition: all 0.2s ease;
+    ">✕</button>
+
+    <!-- Modal Header -->
+    <div style="text-align: center; margin-bottom: 24px;">
+      <h3 style="margin: 0 0 8px 0; font-size: 24px; font-weight: 700; color: #1f2937;">
+        🎨 Submit Your Custom Request
+      </h3>
+      <p style="margin: 0; font-size: 14px; color: #6b7280;">
+        Tell us about your custom t-shirt design and we'll get back to you!
+      </p>
+    </div>
+
+    <!-- Request Form -->
+    <form id="custom-request-form-{{ section.id }}" style="display: flex; flex-direction: column; gap: 20px;">
+      
+      <!-- Customer Information -->
+      <div style="background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0;">
+        <h4 style="margin: 0 0 12px 0; font-size: 16px; font-weight: 600; color: #374151;">👤 Your Information</h4>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div>
+            <label style="display: block; margin-bottom: 6px; font-size: 14px; font-weight: 500; color: #374151;">Full Name *</label>
+            <input type="text" id="customer-name-{{ section.id }}" name="customer_name" required style="
+              width: 100%;
+              padding: 12px;
+              border: 2px solid #e5e7eb;
+              border-radius: 8px;
+              font-size: 14px;
+              transition: border-color 0.2s ease;
+            ">
+          </div>
+          <div>
+            <label style="display: block; margin-bottom: 6px; font-size: 14px; font-weight: 500; color: #374151;">Phone Number</label>
+            <input type="tel" id="customer-phone-{{ section.id }}" name="customer_phone" style="
+              width: 100%;
+              padding: 12px;
+              border: 2px solid #e5e7eb;
+              border-radius: 8px;
+              font-size: 14px;
+              transition: border-color 0.2s ease;
+            ">
+          </div>
+        </div>
+        
+        <div style="margin-top: 12px;">
+          <label style="display: block; margin-bottom: 6px; font-size: 14px; font-weight: 500; color: #374151;">Email Address *</label>
+          <input type="email" id="customer-email-{{ section.id }}" name="customer_email" required style="
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s ease;
+          ">
+        </div>
+      </div>
+
+      <!-- Design Details -->
+      <div style="background: #f0fdf4; padding: 16px; border-radius: 12px; border: 1px solid #bbf7d0;">
+        <h4 style="margin: 0 0 12px 0; font-size: 16px; font-weight: 600; color: #166534;">🎨 Design Details</h4>
+        
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; margin-bottom: 6px; font-size: 14px; font-weight: 500; color: #166534;">Tell us about your design *</label>
+          <textarea id="customer-message-{{ section.id }}" name="customer_message" required placeholder="Describe your design, colors, text, logo, or any specific requirements..." style="
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #bbf7d0;
+            border-radius: 8px;
+            font-size: 14px;
+            min-height: 80px;
+            resize: vertical;
+            transition: border-color 0.2s ease;
+          "></textarea>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div>
+            <label style="display: block; margin-bottom: 6px; font-size: 14px; font-weight: 500; color: #166534;">T-shirt Color</label>
+            <select id="selected-color-{{ section.id }}" style="
+              width: 100%;
+              padding: 12px;
+              border: 2px solid #bbf7d0;
+              border-radius: 8px;
+              font-size: 14px;
+              background: white;
+            ">
+              <option value="black">Black</option>
+              <option value="white">White</option>
+            </select>
+          </div>
+          <div>
+            <label style="display: block; margin-bottom: 6px; font-size: 14px; font-weight: 500; color: #166534;">Size</label>
+            <select id="selected-size-{{ section.id }}" style="
+              width: 100%;
+              padding: 12px;
+              border: 2px solid #bbf7d0;
+              border-radius: 8px;
+              font-size: 14px;
+              background: white;
+            ">
+              <option value="S">Small (S)</option>
+              <option value="M" selected>Medium (M)</option>
+              <option value="L">Large (L)</option>
+              <option value="XL">Extra Large (XL)</option>
+              <option value="XXL">2XL</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preview Info -->
+      <div style="background: #fef3c7; padding: 16px; border-radius: 12px; border: 1px solid #fbbf24;">
+        <h4 style="margin: 0 0 12px 0; font-size: 16px; font-weight: 600; color: #92400e;">📸 Your Design Preview</h4>
+        <p style="margin: 0; font-size: 14px; color: #92400e;">
+          We'll include your uploaded design and mockup preview with this request. 
+          Make sure your design is positioned how you want it before submitting!
+        </p>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" id="submit-request-btn-{{ section.id }}" style="
+        width: 100%;
+        padding: 16px;
+        background: linear-gradient(45deg, #f59e0b, #d97706);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+      ">
+        🚀 Submit Custom Request
+      </button>
+    </form>
+
+    <!-- Success Message -->
+    <div id="request-success-{{ section.id }}" style="display: none; text-align: center; padding: 24px;">
+      <div style="font-size: 48px; margin-bottom: 16px;">✅</div>
+      <h3 style="margin: 0 0 8px 0; font-size: 20px; font-weight: 700; color: #059669;">Request Submitted!</h3>
+      <p style="margin: 0 0 16px 0; font-size: 14px; color: #6b7280;">
+        Your custom t-shirt request has been sent. We'll review your design and get back to you within 24 hours.
+      </p>
+      <div id="request-id-{{ section.id }}" style="
+        background: #f0fdf4;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #bbf7d0;
+        font-size: 14px;
+        color: #166534;
+        font-weight: 600;
+        margin-bottom: 16px;
+      "></div>
+      <button id="close-success-{{ section.id }}" style="
+        padding: 12px 24px;
+        background: #059669;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+      ">Close</button>
+    </div>
+
+    <!-- Loading State -->
+    <div id="request-loading-{{ section.id }}" style="display: none; text-align: center; padding: 24px;">
+      <div style="font-size: 32px; margin-bottom: 16px; animation: spin 1s linear infinite;">⏳</div>
+      <p style="margin: 0; font-size: 14px; color: #6b7280;">Submitting your request...</p>
+    </div>
+  </div>
+</div>
+
+<style>
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Dark Mode Support */
+[data-theme="dark"] .custom-request-modal-content {
+  background: #1f2937;
+  color: #f9fafb;
+}
+
+[data-theme="dark"] .custom-request-modal-content h3,
+[data-theme="dark"] .custom-request-modal-content h4 {
+  color: #f9fafb;
+}
+
+[data-theme="dark"] .custom-request-modal-content label {
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .custom-request-modal-content input,
+[data-theme="dark"] .custom-request-modal-content textarea,
+[data-theme="dark"] .custom-request-modal-content select {
+  background: #374151;
+  border-color: #4b5563;
+  color: #f9fafb;
+}
+
+[data-theme="dark"] .custom-request-modal-content input:focus,
+[data-theme="dark"] .custom-request-modal-content textarea:focus,
+[data-theme="dark"] .custom-request-modal-content select:focus {
+  border-color: #f59e0b;
+  outline: none;
+}
+
+/* Hover Effects */
+#close-request-modal-{{ section.id }}:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+#submit-request-btn-{{ section.id }}:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(245, 158, 11, 0.4);
+}
+
+/* Form Focus States */
+input:focus, textarea:focus, select:focus {
+  border-color: #f59e0b !important;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+}
+</style>
 
 {% schema %}
 {
