@@ -2624,24 +2624,49 @@ document.addEventListener('DOMContentLoaded', function() {
           const overlayLeft = parseFloat(computedStyle.getPropertyValue('--overlay-left')) || 50;
           const overlayWidth = parseFloat(computedStyle.getPropertyValue('--overlay-width')) || 50;
           
-          console.log('📊 Position values:', { top: overlayTop, left: overlayLeft, width: overlayWidth });
+          console.log('📊 CSS Position values:', { top: overlayTop, left: overlayLeft, width: overlayWidth });
           
-          // Calculate position on canvas
-          const canvasLeft = canvas.width * (overlayLeft / 100);
-          const canvasTop = canvas.height * (overlayTop / 100);
-          const canvasWidth = canvas.width * (overlayWidth / 100);
-          const canvasHeight = (overlayImg.naturalHeight / overlayImg.naturalWidth) * canvasWidth;
+          // Calculate the overlay box position and size on canvas
+          const overlayBoxLeft = canvas.width * (overlayLeft / 100);
+          const overlayBoxTop = canvas.height * (overlayTop / 100);
+          const overlayBoxWidth = canvas.width * (overlayWidth / 100);
+          const overlayBoxHeight = overlayBoxWidth; // Square box
           
-          console.log('📐 Canvas position:', { 
-            left: canvasLeft, 
-            top: canvasTop, 
-            width: canvasWidth, 
-            height: canvasHeight 
+          console.log('📦 Overlay box:', { 
+            left: overlayBoxLeft, 
+            top: overlayBoxTop, 
+            width: overlayBoxWidth, 
+            height: overlayBoxHeight 
           });
           
-          // Draw the design
-          ctx.drawImage(overlayImg, canvasLeft, canvasTop, canvasWidth, canvasHeight);
-          console.log('✅ Design drawn to canvas');
+          // Calculate design size to fit within the overlay box (maintain aspect ratio)
+          const designAspectRatio = overlayImg.naturalWidth / overlayImg.naturalHeight;
+          let designWidth, designHeight;
+          
+          if (designAspectRatio > 1) {
+            // Design is wider than tall
+            designWidth = overlayBoxWidth * 0.9; // 90% of box width
+            designHeight = designWidth / designAspectRatio;
+          } else {
+            // Design is taller than wide
+            designHeight = overlayBoxHeight * 0.9; // 90% of box height
+            designWidth = designHeight * designAspectRatio;
+          }
+          
+          // Center the design within the overlay box
+          const designLeft = overlayBoxLeft + (overlayBoxWidth - designWidth) / 2;
+          const designTop = overlayBoxTop + (overlayBoxHeight - designHeight) / 2;
+          
+          console.log('🎨 Design final position:', { 
+            left: designLeft, 
+            top: designTop, 
+            width: designWidth, 
+            height: designHeight 
+          });
+          
+          // Draw the design centered within the overlay box
+          ctx.drawImage(overlayImg, designLeft, designTop, designWidth, designHeight);
+          console.log('✅ Design drawn to canvas (centered in overlay box)');
         } else {
           console.log('⚠️ Could not find overlay elements, using center position');
           // Fallback: center the design
