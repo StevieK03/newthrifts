@@ -898,3 +898,34 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 <!-- User Profile System Active -->
+
+{% schema %}
+{
+  "name": "User Profile Signup",
+  "tag": "section",
+  "class": "section-user-profile-signup",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Profile Signup Settings"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Join NewThrifts"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Create your profile to save preferences, track orders, and get personalized style recommendations."
+    }
+  ],
+  "presets": [
+    {
+      "name": "User Profile Signup"
+    }
+  ]
+}
+{% endschema %}
