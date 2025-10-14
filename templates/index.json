@@ -164,11 +164,6 @@
         "show_last_updated": true
       }
     },
-    "user_profile_signup_section": {
-      "type": "user-profile-signup",
-      "name": "Join NewThrifts",
-      "settings": {}
-    },
     "product_poll_section": {
       "type": "product-poll",
       "blocks": {
@@ -229,7 +224,6 @@
     "customizer_integration",
     "interactive_mockup",
     "visitor_counter_section",
-    "user_profile_signup_section",
     "product_poll_section",
     "marquee",
     "featured_collection_ETkhqA"
