@@ -2609,20 +2609,36 @@ document.addEventListener('DOMContentLoaded', function() {
         const allImages = overlayContainer.querySelectorAll('img');
         console.log('📸 Total images in overlay:', allImages.length);
         
-        allImages.forEach((img, index) => {
+        // Remove any SVG fallback images first
+        allImages.forEach((img) => {
+          if (img.src.includes('data:image/svg+xml;base64,PD94bwgdmVyc2tvb')) {
+            console.log('🗑️ Removing SVG fallback image');
+            img.remove();
+          }
+        });
+        
+        // Get updated list after removing fallbacks
+        const updatedImages = overlayContainer.querySelectorAll('img');
+        console.log('📸 Images after cleanup:', updatedImages.length);
+        
+        updatedImages.forEach((img, index) => {
           console.log(`📸 Image ${index + 1}:`, {
             src: img.src.substring(0, 100) + '...',
             complete: img.complete,
             naturalWidth: img.naturalWidth,
             naturalHeight: img.naturalHeight,
-            isSVG: img.src.includes('data:image/svg+xml')
+            isSVG: img.src.includes('data:image/svg+xml'),
+            isDefaultSVG: img.src.includes('data:image/svg+xml;base64,PD94bwgdmVyc2tvb'),
+            element: img
           });
         });
         
-        // Find the first non-SVG image
+        // Find the first real uploaded image (including SVGs)
         let designImg = null;
-        for (let img of allImages) {
-          if (!img.src.includes('data:image/svg+xml') && img.complete && img.naturalWidth > 0) {
+        for (let img of updatedImages) {
+          // Accept any image that's not the default SVG fallback
+          if (!img.src.includes('data:image/svg+xml;base64,PD94bwgdmVyc2tvb') && 
+              img.complete && img.naturalWidth > 0) {
             designImg = img;
             console.log('✅ Found real design image:', designImg.src.substring(0, 100) + '...');
             break;
