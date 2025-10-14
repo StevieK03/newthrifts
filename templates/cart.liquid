@@ -10,7 +10,7 @@ Simple Cart template — drop-in
 
   {% if cart.item_count == 0 %}
     <p>Your cart is empty.</p>
-    <p><a class="button button--primary continue-shopping-btn" href="{{ routes.all_products_collection_url }}" style="background: transparent !important; border: 2px solid #000 !important; color: #000 !important; box-shadow: none !important; border-radius: 6px; text-decoration: none;">Continue shopping</a></p>
+    <p><a class="button button--primary continue-shopping-btn" href="{{ routes.all_products_collection_url }}">Continue shopping</a></p>
   {% else %}
     {% form 'cart', cart %}
       <table style="width:100%; border-collapse:collapse;">
@@ -119,9 +119,33 @@ Simple Cart template — drop-in
 </section>
 
 <style>
-.continue-shopping-btn:hover {
-  background: #000 !important;  /* black fill on hover */
-  color: #fff !important;       /* white text on hover */
+/* Continue Shopping Button - Dark Mode Support */
+.continue-shopping-btn {
+  display: inline-block;
+  padding: 12px 24px;
+  background: transparent !important;
+  border: 2px solid #1e293b !important;
+  color: #1e293b !important;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
   transition: all 0.3s ease;
+  box-shadow: none !important;
+}
+
+.continue-shopping-btn:hover {
+  background: #1e293b !important;
+  color: #f8fafc !important;
+}
+
+/* Dark Mode */
+[data-theme="dark"] .continue-shopping-btn {
+  border-color: #f8fafc !important;
+  color: #f8fafc !important;
+}
+
+[data-theme="dark"] .continue-shopping-btn:hover {
+  background: #f8fafc !important;
+  color: #1e293b !important;
 }
 </style>
