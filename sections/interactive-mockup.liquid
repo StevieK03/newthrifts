@@ -1911,12 +1911,14 @@ document.addEventListener('DOMContentLoaded', function() {
       const overlayEl = document.querySelector(`#nt-overlay-{{ section.id }}`);
       if (!overlayEl) return;
       
-      // Define print area boundaries - more generous to match visual appearance
+      // Real-world print area dimensions: Large Front Center Chest
+      // 554mm x 162mm (21.8" x 6.4") at 300 DPI
+      // For a typical t-shirt mockup, this translates to approximately:
       const printArea = {
-        top: 30,    // 30% from top (more generous)
-        left: 25,   // 25% from left 
-        right: 75,  // 75% from left (50% width centered)
-        bottom: 80  // 80% from top (50% height)
+        top: 32,    // 32% from top (chest area)
+        left: 22,   // 22% from left (centered on chest)
+        right: 78,  // 78% from left (56% width centered)
+        bottom: 42  // 42% from top (10% height for chest area)
       };
       
       // Get current design position
@@ -1929,14 +1931,16 @@ document.addEventListener('DOMContentLoaded', function() {
       const designRight = designLeft + designWidth;
       const designBottom = designTop + designHeight;
       
-      console.log('🔍 Print Area Calculation:', {
+      console.log('🔍 Print Area Calculation (Real Dimensions):', {
+        realPrintArea: '554mm x 162mm (21.8" x 6.4") - Large Front Center Chest',
         printArea: { left: printArea.left, right: printArea.right, top: printArea.top, bottom: printArea.bottom },
         design: { left: designLeft, right: designRight, top: designTop, bottom: designBottom },
-        designSize: { width: designWidth, height: designHeight }
+        designSize: { width: designWidth, height: designHeight },
+        printAreaSize: { width: printArea.right - printArea.left, height: printArea.bottom - printArea.top }
       });
       
       // Check if design is completely within print area (with small tolerance)
-      const tolerance = 2; // 2% tolerance for visual alignment
+      const tolerance = 1; // 1% tolerance for visual alignment
       const isWithinPrintArea = (
         designLeft >= (printArea.left - tolerance) &&
         designRight <= (printArea.right + tolerance) &&
@@ -1958,22 +1962,23 @@ document.addEventListener('DOMContentLoaded', function() {
           right: designRight > printArea.right,
           top: designTop < printArea.top,
           bottom: designBottom > printArea.bottom
-        }
+        },
+        realDimensions: '554mm x 162mm (21.8" x 6.4")'
       });
       
       // Update visual feedback
       if (isWithinPrintArea) {
         overlayEl.classList.add('design-within-print-area');
         overlayEl.classList.remove('design-outside-print-area', 'design-partially-outside');
-        this.showPrintAreaMessage('✅ Design is within safe print area', 'success');
+        this.showPrintAreaMessage('✅ Design is within Large Front Center Chest (554mm x 162mm)', 'success');
       } else if (isPartiallyWithin) {
         overlayEl.classList.add('design-partially-outside');
         overlayEl.classList.remove('design-within-print-area', 'design-outside-print-area');
-        this.showPrintAreaMessage('⚠️ Design extends outside safe print area', 'warning');
+        this.showPrintAreaMessage('⚠️ Design extends outside Large Front Center Chest', 'warning');
       } else {
         overlayEl.classList.add('design-outside-print-area');
         overlayEl.classList.remove('design-within-print-area', 'design-partially-outside');
-        this.showPrintAreaMessage('❌ Design is outside safe print area', 'error');
+        this.showPrintAreaMessage('❌ Design is outside Large Front Center Chest', 'error');
       }
     },
 
