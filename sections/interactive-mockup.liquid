@@ -261,17 +261,17 @@ Enhanced Interactive Product Mockup
                  id="nt-mockup-canvas-{{ section.id }}"
                  style="position: relative; width: 100%; max-width: 900px; aspect-ratio: 1 / 1; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border-radius: 20px; overflow: hidden; box-shadow: 0 25px 80px rgba(0, 0, 0, 0.1), 0 10px 30px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.8); cursor: grab; --overlay-top: 45%; --overlay-left: 25%; --overlay-width: 60%; --overlay-rotate: 0deg; border: 3px solid rgba(255,255,255,0.5);">
           
-      <!-- Base Mockup (swapped by JS) with SVG Fallback -->
+      <!-- Base Mockup - Using tshirt-view.png -->
       <img
         id="nt-base-{{ section.id }}"
         class="nt-mockup__base"
-        src="{{ 'WFront_t-shirt.png' | asset_url }}"
+        src="{{ 'tshirt-view.png' | asset_url }}"
         alt="T-shirt mockup"
         loading="eager"
         decoding="async"
         style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; z-index: 2;"
-        onerror="this.style.display='none';"
-        onload="document.getElementById('nt-fallback-{{ section.id }}').style.display='none';"
+        onerror="this.style.display='none'; console.error('Failed to load tshirt-view.png');"
+        onload="document.getElementById('nt-fallback-{{ section.id }}').style.display='none'; console.log('✅ tshirt-view.png loaded successfully');"
       >
       
       <!-- SVG Fallback Mockup - Shows by default -->
@@ -412,9 +412,7 @@ Enhanced Interactive Product Mockup
           
           <!-- Debug: Test direct asset access -->
           <div id="debug-assets-{{ section.id }}" style="position: absolute; top: -100px; left: -100px; width: 1px; height: 1px; overflow: hidden;">
-            <img src="{{ 'WFront_t-shirt.png' | asset_url }}" onload="console.log('✅ Direct asset test - WFront_t-shirt.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - WFront_t-shirt.png failed:', this.src);">
-            <img src="{{ 'Wback_t-shirt.png' | asset_url }}" onload="console.log('✅ Direct asset test - Wback_t-shirt.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - Wback_t-shirt.png failed:', this.src);">
-            <img src="{{ 'Models/Women/Girl-Model.png' | asset_url }}" onload="console.log('✅ Direct asset test - Girl-Model.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - Girl-Model.png failed:', this.src);">
+            <img src="{{ 'tshirt-view.png' | asset_url }}" onload="console.log('✅ Direct asset test - tshirt-view.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - tshirt-view.png failed:', this.src);">
           </div>
           
           <!-- Dynamic Design Overlay -->
@@ -806,42 +804,42 @@ Enhanced Interactive Product Mockup
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const mockup = {
-    // Mockup images mapping
+    // Mockup images mapping - Using tshirt-view.png for all views
     mockupImages: {
       front: {
-        white: "{{ 'WFront_t-shirt.png' | asset_url }}",
-        black: "{{ 'WFront_t-shirt.png' | asset_url }}",
-        pink: "{{ 'WFront_t-shirt.png' | asset_url }}",
-        blue: "{{ 'WFront_t-shirt.png' | asset_url }}"
+        white: "{{ 'tshirt-view.png' | asset_url }}",
+        black: "{{ 'tshirt-view.png' | asset_url }}",
+        pink: "{{ 'tshirt-view.png' | asset_url }}",
+        blue: "{{ 'tshirt-view.png' | asset_url }}"
       },
       back: {
-        white: "{{ 'Wback_t-shirt.png' | asset_url }}",
-        black: "{{ 'Wback_t-shirt.png' | asset_url }}",
-        pink: "{{ 'Wback_t-shirt.png' | asset_url }}",
-        blue: "{{ 'Wback_t-shirt.png' | asset_url }}"
+        white: "{{ 'tshirt-view.png' | asset_url }}",
+        black: "{{ 'tshirt-view.png' | asset_url }}",
+        pink: "{{ 'tshirt-view.png' | asset_url }}",
+        blue: "{{ 'tshirt-view.png' | asset_url }}"
       },
       hanging: {
-        white: "{{ 'W3-D_t-shirt.png' | asset_url }}",
-        black: "{{ 'W3-D_t-shirt.png' | asset_url }}",
-        pink: "{{ 'W3-D_t-shirt.png' | asset_url }}",
-        blue: "{{ 'W3-D_t-shirt.png' | asset_url }}"
+        white: "{{ 'tshirt-view.png' | asset_url }}",
+        black: "{{ 'tshirt-view.png' | asset_url }}",
+        pink: "{{ 'tshirt-view.png' | asset_url }}",
+        blue: "{{ 'tshirt-view.png' | asset_url }}"
       },
       person1: {
-        white: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
-        black: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
-        pink: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
-        blue: "{{ 'Models/Women/Girl-Model.png' | asset_url }}"
+        white: "{{ 'tshirt-view.png' | asset_url }}",
+        black: "{{ 'tshirt-view.png' | asset_url }}",
+        pink: "{{ 'tshirt-view.png' | asset_url }}",
+        blue: "{{ 'tshirt-view.png' | asset_url }}"
       },
       person2: {
-        white: "{{ 'Models/Women/Women-side.png' | asset_url }}",
-        black: "{{ 'Models/Women/Women-side.png' | asset_url }}",
-        pink: "{{ 'Models/Women/Women-side.png' | asset_url }}",
-        blue: "{{ 'Models/Women/Women-side.png' | asset_url }}"
+        white: "{{ 'tshirt-view.png' | asset_url }}",
+        black: "{{ 'tshirt-view.png' | asset_url }}",
+        pink: "{{ 'tshirt-view.png' | asset_url }}",
+        blue: "{{ 'tshirt-view.png' | asset_url }}"
       }
     },
     
       // Current base mockup image
-      baseMockup: "{{ 'WFront_t-shirt.png' | asset_url }}",
+      baseMockup: "{{ 'tshirt-view.png' | asset_url }}",
 
     // Current design state
     designState: {
