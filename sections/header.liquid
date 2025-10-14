@@ -1320,7 +1320,7 @@ document.addEventListener('DOMContentLoaded', function() {
   if (headerTrigger && profileModal) {
     headerTrigger.addEventListener('click', function() {
       console.log('📍 Header Sign in button clicked - opening profile modal');
-      profileModal.style.display = 'flex';
+      profileModal.style.setProperty('display', 'flex', 'important');
       document.body.style.overflow = 'hidden';
     });
     console.log('✅ Header profile trigger connected to modal');
