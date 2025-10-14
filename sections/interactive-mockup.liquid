@@ -253,30 +253,137 @@ Enhanced Interactive Product Mockup
       
       <!-- SVG Fallback Mockup - Shows by default -->
       <div id="nt-fallback-{{ section.id }}" style="position: absolute; inset: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; pointer-events: none; z-index: 1;">
-        <svg viewBox="0 0 400 500" style="width: 70%; height: 85%; filter: drop-shadow(0 10px 30px rgba(0,0,0,0.15));">
-          <!-- T-shirt base -->
-          <path d="M 100 80 L 80 100 L 80 180 Q 80 250 100 320 L 100 480 L 300 480 L 300 320 Q 320 250 320 180 L 320 100 L 300 80 L 280 90 Q 250 110 200 110 Q 150 110 120 90 Z" 
-                fill="white" stroke="#e2e8f0" stroke-width="2"/>
+        <svg viewBox="0 0 400 500" style="width: 70%; height: 85%; filter: drop-shadow(0 15px 40px rgba(0,0,0,0.2));">
+          <defs>
+            <!-- Realistic fabric gradient -->
+            <linearGradient id="fabricGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+              <stop offset="30%" style="stop-color:#fafafa;stop-opacity:1" />
+              <stop offset="50%" style="stop-color:#f5f5f5;stop-opacity:1" />
+              <stop offset="70%" style="stop-color:#fafafa;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#ffffff;stop-opacity:1" />
+            </linearGradient>
+            
+            <!-- Sleeve shadows -->
+            <radialGradient id="sleeveShadow">
+              <stop offset="0%" style="stop-color:#e0e0e0;stop-opacity:0.4" />
+              <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0" />
+            </radialGradient>
+            
+            <!-- Neck shadow -->
+            <radialGradient id="neckShadow" cx="50%" cy="50%">
+              <stop offset="0%" style="stop-color:#d0d0d0;stop-opacity:0.6" />
+              <stop offset="100%" style="stop-color:#f5f5f5;stop-opacity:0" />
+            </radialGradient>
+            
+            <!-- Fabric texture pattern -->
+            <pattern id="fabricTexture" patternUnits="userSpaceOnUse" width="4" height="4">
+              <rect width="4" height="4" fill="#ffffff"/>
+              <circle cx="2" cy="2" r="0.3" fill="#f8f8f8"/>
+            </pattern>
+          </defs>
           
-          <!-- Sleeves -->
-          <path d="M 100 80 L 80 100 L 60 130 L 50 160 L 60 190 L 80 180" fill="white" stroke="#e2e8f0" stroke-width="2"/>
-          <path d="M 300 80 L 320 100 L 340 130 L 350 160 L 340 190 L 320 180" fill="white" stroke="#e2e8f0" stroke-width="2"/>
+          <!-- Body shadow (underneath) -->
+          <ellipse cx="200" cy="465" rx="95" ry="12" fill="rgba(0,0,0,0.12)"/>
           
-          <!-- Neck opening -->
-          <ellipse cx="200" cy="90" rx="40" ry="25" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+          <!-- Main t-shirt body with realistic shading -->
+          <path d="M 95 85 L 75 105 L 72 185 Q 72 260 90 340 L 92 470 L 308 470 L 310 340 Q 328 260 328 185 L 325 105 L 305 85 L 285 95 Q 250 115 200 115 Q 150 115 115 95 Z" 
+                fill="url(#fabricGradient)" 
+                stroke="#d4d4d4" 
+                stroke-width="1.5"
+                filter="url(#fabricTexture)"/>
           
-          <!-- Collar -->
-          <path d="M 160 90 Q 160 80 180 75 L 220 75 Q 240 80 240 90" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+          <!-- Left side shadow for depth -->
+          <path d="M 95 85 L 75 105 L 72 185 Q 72 260 90 340 L 92 470 L 110 470 L 108 340 Q 90 260 90 185 L 92 105 Z" 
+                fill="rgba(0,0,0,0.04)"/>
           
-          <!-- Shadow/depth -->
-          <ellipse cx="200" cy="300" rx="80" ry="10" fill="rgba(0,0,0,0.05)"/>
+          <!-- Right side highlight -->
+          <path d="M 305 85 L 325 105 L 328 185 Q 328 260 310 340 L 308 470 L 290 470 L 292 340 Q 310 260 310 185 L 308 105 Z" 
+                fill="rgba(255,255,255,0.3)"/>
           
-          <!-- Seam lines -->
-          <line x1="100" y1="100" x2="100" y2="480" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="5,5"/>
-          <line x1="300" y1="100" x2="300" y2="480" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="5,5"/>
+          <!-- Left sleeve with realistic shading -->
+          <g>
+            <path d="M 95 85 L 75 105 L 55 135 L 45 170 L 52 200 L 72 185" 
+                  fill="url(#fabricGradient)" 
+                  stroke="#d4d4d4" 
+                  stroke-width="1.5"/>
+            <ellipse cx="60" cy="150" rx="25" ry="45" fill="url(#sleeveShadow)" opacity="0.5"/>
+            <!-- Sleeve fold -->
+            <path d="M 50 140 Q 55 155 50 170" stroke="#e8e8e8" stroke-width="1.5" fill="none"/>
+          </g>
           
-          <!-- Center seam -->
-          <line x1="200" y1="110" x2="200" y2="480" stroke="#f1f5f9" stroke-width="0.5" stroke-dasharray="3,3"/>
+          <!-- Right sleeve with realistic shading -->
+          <g>
+            <path d="M 305 85 L 325 105 L 345 135 L 355 170 L 348 200 L 328 185" 
+                  fill="url(#fabricGradient)" 
+                  stroke="#d4d4d4" 
+                  stroke-width="1.5"/>
+            <ellipse cx="340" cy="150" rx="25" ry="45" fill="url(#sleeveShadow)" opacity="0.5"/>
+            <!-- Sleeve fold -->
+            <path d="M 350 140 Q 345 155 350 170" stroke="#e8e8e8" stroke-width="1.5" fill="none"/>
+          </g>
+          
+          <!-- Neck opening with realistic depth -->
+          <g>
+            <!-- Neck shadow/depth -->
+            <ellipse cx="200" cy="95" rx="42" ry="28" fill="url(#neckShadow)"/>
+            <!-- Neck opening -->
+            <ellipse cx="200" cy="92" rx="38" ry="26" fill="#f0f0f0" stroke="#c0c0c0" stroke-width="1.5"/>
+            <!-- Inner neck highlight -->
+            <ellipse cx="200" cy="90" rx="35" ry="23" fill="#fafafa"/>
+          </g>
+          
+          <!-- Collar ribbing with realistic texture -->
+          <g>
+            <path d="M 162 92 Q 162 84 180 80 L 220 80 Q 238 84 238 92" 
+                  fill="#f5f5f5" 
+                  stroke="#d0d0d0" 
+                  stroke-width="1.2"/>
+            <!-- Collar stitching lines -->
+            <path d="M 165 90 Q 165 85 180 82 L 220 82 Q 235 85 235 90" 
+                  stroke="#e5e5e5" 
+                  stroke-width="0.5" 
+                  fill="none"/>
+          </g>
+          
+          <!-- Center vertical fold/seam -->
+          <path d="M 200 115 L 200 470" 
+                stroke="rgba(0,0,0,0.03)" 
+                stroke-width="2" 
+                fill="none"/>
+          
+          <!-- Side seams with realistic stitching -->
+          <g>
+            <path d="M 95 115 L 92 470" stroke="#e8e8e8" stroke-width="1" stroke-dasharray="3,2"/>
+            <path d="M 305 115 L 308 470" stroke="#e8e8e8" stroke-width="1" stroke-dasharray="3,2"/>
+          </g>
+          
+          <!-- Fabric folds and wrinkles for realism -->
+          <g opacity="0.15">
+            <!-- Chest area subtle folds -->
+            <path d="M 120 160 Q 140 165 160 160" stroke="#d0d0d0" stroke-width="1.5" fill="none"/>
+            <path d="M 240 160 Q 260 165 280 160" stroke="#d0d0d0" stroke-width="1.5" fill="none"/>
+            
+            <!-- Mid-section natural wrinkles -->
+            <path d="M 110 250 Q 130 255 150 250" stroke="#d0d0d0" stroke-width="1" fill="none"/>
+            <path d="M 250 250 Q 270 255 290 250" stroke="#d0d0d0" stroke-width="1" fill="none"/>
+            
+            <!-- Lower section subtle folds -->
+            <path d="M 105 370 Q 130 375 155 370" stroke="#d0d0d0" stroke-width="1" fill="none"/>
+            <path d="M 245 370 Q 270 375 295 370" stroke="#d0d0d0" stroke-width="1" fill="none"/>
+          </g>
+          
+          <!-- Hem at bottom with stitching -->
+          <g>
+            <rect x="92" y="465" width="216" height="8" fill="#f8f8f8" stroke="#d4d4d4" stroke-width="0.8"/>
+            <line x1="95" y1="467" x2="305" y2="467" stroke="#e8e8e8" stroke-width="0.5" stroke-dasharray="2,1"/>
+          </g>
+          
+          <!-- Highlights for fabric shine -->
+          <g opacity="0.25">
+            <ellipse cx="160" cy="200" rx="35" ry="60" fill="white"/>
+            <ellipse cx="240" cy="220" rx="30" ry="55" fill="white"/>
+          </g>
         </svg>
       </div>
           
