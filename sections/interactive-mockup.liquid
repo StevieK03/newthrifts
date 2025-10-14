@@ -2604,12 +2604,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Check if there's an uploaded design image
         const overlayImg = document.querySelector(`#nt-overlay-{{ section.id }} img`);
+        const overlayElement = document.querySelector(`#nt-overlay-{{ section.id }}`);
         
         console.log('🔍 Checking for uploaded design:', overlayImg ? 'Found' : 'Not found');
+        console.log('🔍 Overlay element:', overlayElement ? 'Found' : 'Not found');
+        
         if (overlayImg) {
           console.log('📸 Design image src:', overlayImg.src.substring(0, 100) + '...');
           console.log('📸 Design image complete:', overlayImg.complete);
           console.log('📸 Design image natural dimensions:', overlayImg.naturalWidth + 'x' + overlayImg.naturalHeight);
+          console.log('📸 Design image loaded:', overlayImg.complete && overlayImg.naturalWidth > 0);
+        }
+        
+        if (overlayElement) {
+          console.log('📐 Overlay element computed style:', {
+            display: getComputedStyle(overlayElement).display,
+            visibility: getComputedStyle(overlayElement).visibility,
+            opacity: getComputedStyle(overlayElement).opacity,
+            transform: getComputedStyle(overlayElement).transform
+          });
         }
         
         if (overlayImg && overlayImg.src && !overlayImg.src.includes('data:image/svg+xml')) {
@@ -2618,21 +2631,56 @@ document.addEventListener('DOMContentLoaded', function() {
           // Create a promise to handle the design image loading
           const loadDesignImage = () => {
             return new Promise((resolve, reject) => {
-              const designImg = new Image();
-              designImg.crossOrigin = "anonymous";
+              // Check if the original image is already loaded
+              if (overlayImg.complete && overlayImg.naturalWidth > 0) {
+                console.log('✅ Original image already loaded, using it directly');
+                const designImg = new Image();
+                designImg.crossOrigin = "anonymous";
+                designImg.onload = () => {
+                  console.log('📐 Design image dimensions:', designImg.width + 'x' + designImg.height);
+                  resolve(designImg);
+                };
+                designImg.onerror = (error) => {
+                  console.error('❌ Error loading design image:', error);
+                  reject(error);
+                };
+                designImg.src = overlayImg.src;
+                return;
+              }
               
-              designImg.onload = () => {
-                console.log('✅ Design image loaded successfully!');
-                console.log('📐 Design image dimensions:', designImg.width + 'x' + designImg.height);
-                resolve(designImg);
+              // Wait for the original image to load first
+              const checkImageLoaded = () => {
+                if (overlayImg.complete && overlayImg.naturalWidth > 0) {
+                  console.log('✅ Original image now loaded');
+                  const designImg = new Image();
+                  designImg.crossOrigin = "anonymous";
+                  designImg.onload = () => {
+                    console.log('📐 Design image dimensions:', designImg.width + 'x' + designImg.height);
+                    resolve(designImg);
+                  };
+                  designImg.onerror = (error) => {
+                    console.error('❌ Error loading design image:', error);
+                    reject(error);
+                  };
+                  designImg.src = overlayImg.src;
+                } else {
+                  console.log('⏳ Waiting for original image to load...');
+                  setTimeout(checkImageLoaded, 100);
+                }
               };
               
-              designImg.onerror = (error) => {
-                console.error('❌ Error loading design image:', error);
+              overlayImg.onload = () => {
+                console.log('✅ Original overlay image loaded');
+                checkImageLoaded();
+              };
+              
+              overlayImg.onerror = (error) => {
+                console.error('❌ Error loading original overlay image:', error);
                 reject(error);
               };
               
-              designImg.src = overlayImg.src;
+              // Start checking
+              checkImageLoaded();
             });
           };
           
@@ -2707,8 +2755,78 @@ document.addEventListener('DOMContentLoaded', function() {
             this.showNotification('✅ Mockup downloaded successfully!', 'success');
             
           }).catch((error) => {
-            console.error('❌ Failed to load design image:', error);
-            this.showNotification('❌ Failed to load design image', 'error');
+            console.error('❌ Failed to load design image with new Image(), trying fallback:', error);
+            
+            // Fallback: try to use the original image directly
+            if (overlayImg.complete && overlayImg.naturalWidth > 0) {
+              console.log('🔄 Using fallback: original image directly');
+              
+              // Get the actual overlay element to read its computed styles
+              const overlayElement = document.querySelector(`#nt-overlay-{{ section.id }}`);
+              const canvasElement = document.querySelector(`#nt-mockup-{{ section.id }} .nt-mockup__canvas`);
+              
+              if (!overlayElement || !canvasElement) {
+                console.error('❌ Overlay or canvas element not found in fallback!');
+                this.showNotification('❌ Failed to find overlay elements', 'error');
+                return;
+              }
+              
+              // Get computed styles from the actual elements
+              const computedStyle = getComputedStyle(canvasElement);
+              const overlayStyle = getComputedStyle(overlayElement);
+              
+              // Read CSS custom properties
+              const overlayTop = parseFloat(computedStyle.getPropertyValue('--overlay-top')) || 35;
+              const overlayLeft = parseFloat(computedStyle.getPropertyValue('--overlay-left')) || 50;
+              const overlayWidth = parseFloat(computedStyle.getPropertyValue('--overlay-width')) || 50;
+              const overlayRotate = parseFloat(overlayStyle.getPropertyValue('--overlay-rotate')) || 0;
+              
+              console.log('📊 Fallback overlay CSS values:', {
+                top: overlayTop + '%',
+                left: overlayLeft + '%', 
+                width: overlayWidth + '%',
+                rotate: overlayRotate + 'deg'
+              });
+              
+              // Convert percentages to canvas coordinates
+              const canvasOverlayLeft = canvas.width * (overlayLeft / 100);
+              const canvasOverlayTop = canvas.height * (overlayTop / 100);
+              const canvasOverlayWidth = canvas.width * (overlayWidth / 100);
+              
+              // Calculate design size maintaining aspect ratio
+              const designWidth = canvasOverlayWidth;
+              const designHeight = (overlayImg.naturalHeight / overlayImg.naturalWidth) * designWidth;
+              
+              // Design is centered within the overlay box
+              const designCenterX = canvasOverlayLeft + canvasOverlayWidth / 2;
+              const designCenterY = canvasOverlayTop + designHeight / 2;
+
+              // Save context for rotation
+              ctx.save();
+              
+              // Translate to design center point
+              ctx.translate(designCenterX, designCenterY);
+              ctx.rotate((overlayRotate * Math.PI) / 180);
+              
+              // Draw the design image centered at the translated point
+              ctx.drawImage(overlayImg, -designWidth / 2, -designHeight / 2, designWidth, designHeight);
+              ctx.restore();
+              
+              console.log('🎨 Fallback design composited successfully!');
+              
+              // Download
+              const a = document.createElement('a');
+              a.download = `custom_mockup_${this.state.view}_${this.state.color}_${Date.now()}.png`;
+              a.href = canvas.toDataURL("image/png", 1.0);
+              a.click();
+              
+              console.log('✅ Fallback download initiated!');
+              this.showNotification('✅ Mockup downloaded (fallback method)', 'success');
+              
+            } else {
+              console.error('❌ Original image also not ready');
+              this.showNotification('❌ Design image not ready for download', 'error');
+            }
           });
         } else {
           console.log('⚠️ No uploaded design found, downloading base mockup only...');
