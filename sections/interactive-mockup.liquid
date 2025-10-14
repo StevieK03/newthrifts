@@ -71,15 +71,15 @@ Enhanced Interactive Product Mockup
         <div class="nt-mockup__group" style="background: linear-gradient(135deg, #667eea, #764ba2); padding: 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);">
           <span class="nt-mockup__label" style="font-weight: 600; font-size: 14px; color: #fff; margin-right: 12px;">📏 Size</span>
           <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-            <select id="mockup-size-select-{{ section.id }}" class="mockup-size-select" style="padding: 8px 16px; border: 2px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.15); color: #fff; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; min-width: 100px;">
+            <select id="mockup-size-select-{{ section.id }}" class="mockup-size-select" style="padding: 8px 16px; border: 2px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.15); color: #fff; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; min-width: 120px;">
               <option value="">Select Size</option>
-              <option value="XXS">XXS</option>
-              <option value="XS">XS</option>
-              <option value="S">S</option>
-              <option value="M" selected>M</option>
-              <option value="L">L</option>
-              <option value="XL">XL</option>
-              <option value="XXL">XXL</option>
+              <option value="XXS">XXS (25x30cm)</option>
+              <option value="XS">XS (27x32cm)</option>
+              <option value="S">S (29x34cm)</option>
+              <option value="M" selected>M (31x36cm)</option>
+              <option value="L">L (33x38cm)</option>
+              <option value="XL">XL (35x40cm)</option>
+              <option value="XXL">XXL (37x42cm)</option>
             </select>
             <button class="nt-btn nt-btn--size-guide" id="mockup-size-guide-{{ section.id }}" style="padding: 8px 16px; border: 2px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.2); color: #fff; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; white-space: nowrap;">
               📐 Size Guide
@@ -1911,15 +1911,41 @@ document.addEventListener('DOMContentLoaded', function() {
       const overlayEl = document.querySelector(`#nt-overlay-{{ section.id }}`);
       if (!overlayEl) return;
       
-      // Real-world print area dimensions: Large Front Center Chest
-      // 554mm x 162mm (21.8" x 6.4") at 300 DPI
-      // These are ABSOLUTE coordinates on the t-shirt mockup
-      const printArea = {
-        top: 32,    // 32% from top of t-shirt
-        left: 22,   // 22% from left of t-shirt
-        right: 78,  // 78% from left of t-shirt
-        bottom: 42  // 42% from top of t-shirt
+      // Get selected size
+      const sizeSelect = document.getElementById(`mockup-size-select-{{ section.id }}`);
+      const selectedSize = sizeSelect.value || 'M'; // Default to Medium
+      
+      // Size-specific print area dimensions (cm)
+      const sizeDimensions = {
+        'XXS': { width: 25, height: 30 },
+        'XS': { width: 27, height: 32 },
+        'S': { width: 29, height: 34 },
+        'M': { width: 31, height: 36 },
+        'L': { width: 33, height: 38 },
+        'XL': { width: 35, height: 40 },
+        'XXL': { width: 37, height: 42 }
       };
+      
+      const dimensions = sizeDimensions[selectedSize] || sizeDimensions['M'];
+      
+      // Convert cm dimensions to percentage-based boundaries on t-shirt mockup
+      // These percentages are calculated based on typical t-shirt proportions
+      const printArea = {
+        top: 32,    // 32% from top of t-shirt (chest area)
+        left: 22,   // 22% from left of t-shirt (centered)
+        right: 78,  // 78% from left of t-shirt
+        bottom: 42  // 42% from top of t-shirt (10% height for chest area)
+      };
+      
+      // Adjust boundaries based on size (larger sizes get slightly more space)
+      const sizeMultiplier = dimensions.width / 31; // 31cm is Medium size
+      const widthAdjustment = (sizeMultiplier - 1) * 5; // 5% adjustment per size difference
+      const heightAdjustment = (dimensions.height / 36 - 1) * 2; // 2% adjustment per height difference
+      
+      printArea.left = Math.max(15, printArea.left - widthAdjustment / 2);
+      printArea.right = Math.min(85, printArea.right + widthAdjustment / 2);
+      printArea.top = Math.max(28, printArea.top - heightAdjustment / 2);
+      printArea.bottom = Math.min(48, printArea.bottom + heightAdjustment / 2);
       
       // Get overlay position and size (the green dashed box)
       const overlayRect = overlayEl.getBoundingClientRect();
@@ -1948,8 +1974,9 @@ document.addEventListener('DOMContentLoaded', function() {
       const designRightAbs = designLeftAbs + designWidthAbs;
       const designBottomAbs = designTopAbs + designHeightAbs;
       
-      console.log('🔍 Print Area Calculation (Fixed):', {
-        realPrintArea: '554mm x 162mm (21.8" x 6.4") - Large Front Center Chest',
+      console.log('🔍 Print Area Calculation (Size-Specific):', {
+        selectedSize: selectedSize,
+        realDimensions: `${dimensions.width}x${dimensions.height}cm`,
         printArea: { left: printArea.left, right: printArea.right, top: printArea.top, bottom: printArea.bottom },
         overlay: { left: overlayLeftPct, top: overlayTopPct, width: overlayWidthPct, height: overlayHeightPct },
         designRelative: { left: designLeftRel, top: designTopRel, width: designWidthRel, height: designHeightRel },
@@ -1971,7 +1998,9 @@ document.addEventListener('DOMContentLoaded', function() {
         (designTopAbs < printArea.bottom && designBottomAbs > printArea.top)
       );
       
-      console.log('🎯 Print Area Status (Fixed):', {
+      console.log('🎯 Print Area Status (Size-Specific):', {
+        selectedSize: selectedSize,
+        realDimensions: `${dimensions.width}x${dimensions.height}cm`,
         isWithin: isWithinPrintArea,
         isPartiallyWithin: isPartiallyWithin,
         violations: {
@@ -1979,8 +2008,7 @@ document.addEventListener('DOMContentLoaded', function() {
           right: designRightAbs > printArea.right,
           top: designTopAbs < printArea.top,
           bottom: designBottomAbs > printArea.bottom
-        },
-        realDimensions: '554mm x 162mm (21.8" x 6.4")'
+        }
       });
       
       // Update visual feedback - REMOVE ALL existing messages first
@@ -1990,15 +2018,15 @@ document.addEventListener('DOMContentLoaded', function() {
       if (isWithinPrintArea) {
         overlayEl.classList.add('design-within-print-area');
         overlayEl.classList.remove('design-outside-print-area', 'design-partially-outside');
-        this.showPrintAreaMessage('✅ Design is within Large Front Center Chest (554mm x 162mm)', 'success');
+        this.showPrintAreaMessage(`✅ Design fits within ${selectedSize} print area (${dimensions.width}x${dimensions.height}cm)`, 'success');
       } else if (isPartiallyWithin) {
         overlayEl.classList.add('design-partially-outside');
         overlayEl.classList.remove('design-within-print-area', 'design-outside-print-area');
-        this.showPrintAreaMessage('⚠️ Design extends outside Large Front Center Chest', 'warning');
+        this.showPrintAreaMessage(`⚠️ Design extends outside ${selectedSize} print area (${dimensions.width}x${dimensions.height}cm)`, 'warning');
       } else {
         overlayEl.classList.add('design-outside-print-area');
         overlayEl.classList.remove('design-within-print-area', 'design-partially-outside');
-        this.showPrintAreaMessage('❌ Design is outside Large Front Center Chest', 'error');
+        this.showPrintAreaMessage(`❌ Design is outside ${selectedSize} print area (${dimensions.width}x${dimensions.height}cm)`, 'error');
       }
     },
 
@@ -3222,11 +3250,21 @@ document.addEventListener('DOMContentLoaded', function() {
             // Store selected size in mockup state
             mockup.selectedSize = selectedSize;
             console.log(`📏 Size selected: ${selectedSize}`, sizeData);
+            
+            // Update print area highlighting with new size
+            if (mockup.updatePrintAreaHighlighting) {
+              mockup.updatePrintAreaHighlighting();
+            }
           }
         }
       } catch (error) {
         console.error('Error loading size data:', error);
         sizeInfo.style.display = 'none';
+      }
+      
+      // Always update print area highlighting when size changes
+      if (mockup.updatePrintAreaHighlighting) {
+        mockup.updatePrintAreaHighlighting();
       }
     });
     
