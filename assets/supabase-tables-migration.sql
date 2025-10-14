@@ -329,17 +329,18 @@ CREATE TRIGGER design_likes_decrement
 -- ============================================================================
 
 -- View: Popular designs in gallery
+-- Note: Adjust column names based on your user_profiles table structure
 CREATE OR REPLACE VIEW popular_gallery_designs AS
 SELECT 
   dg.*,
   cd.design_name,
   cd.preview_image_url,
   cd.tags,
-  up.display_name as creator_name,
-  up.avatar_url as creator_avatar
+  up.email as creator_email,
+  up.id as creator_id
 FROM design_gallery dg
 JOIN custom_designs cd ON dg.custom_design_id = cd.id
-JOIN user_profiles up ON dg.user_id = up.id
+LEFT JOIN user_profiles up ON dg.user_id = up.id
 ORDER BY dg.likes_count DESC, dg.views_count DESC;
 
 -- View: User design stats
