@@ -1045,6 +1045,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // Enhanced keyboard shortcuts for resizing
       document.addEventListener('keydown', (e) => {
+        // Don't intercept keys if user is typing in an input/textarea
+        const isTyping = e.target.tagName === 'INPUT' || 
+                        e.target.tagName === 'TEXTAREA' || 
+                        e.target.isContentEditable;
+        
+        // Global Delete/Backspace handler for design removal
+        if ((e.key === 'Delete' || e.key === 'Backspace') && !isTyping) {
+          // Check if there's an uploaded design to delete
+          if (this.placementState.hasUploadedDesign) {
+            e.preventDefault();
+            this.removeDesign();
+            console.log('⌨️ Design removed via', e.key, 'key');
+            return; // Exit early
+          }
+        }
+        
+        // Other shortcuts only work when focused on mockup section
         if (e.target.closest(`#nt-mockup-{{ section.id }}`)) {
           let increment = 5; // Default increment
           
@@ -1087,13 +1104,6 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             this.setPresetSize(100);
             console.log('⌨️ Set to 100%');
-          } else if (e.key === 'Delete' || e.key === 'Backspace') {
-            // Check if there's an uploaded design to delete
-            if (this.placementState.hasUploadedDesign) {
-              e.preventDefault();
-              this.removeDesign();
-              console.log('⌨️ Design removed via', e.key, 'key');
-            }
           }
         }
       });
