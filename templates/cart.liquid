@@ -5,6 +5,7 @@ Simple Cart template — drop-in
 - Uses Shopify form 'cart'
 {% endcomment %}
 
+<div class="cart-page-wrapper">
 <section class="container" style="max-width:1100px; margin:24px auto; padding:20px;">
   <h1 style="font-family:'Bebas Neue', sans-serif; font-size:46px; margin:0 0 16px;">Your cart</h1>
 
@@ -117,8 +118,21 @@ Simple Cart template — drop-in
     <script src="{{ 'cart.js' | asset_url }}" defer></script>
   {% endif %}
 </section>
+</div>
 
 <style>
+/* Cart Page Wrapper - Full Height Background */
+.cart-page-wrapper {
+  min-height: 100vh;
+  background: #f8fafc;
+  padding-bottom: 40px;
+}
+
+/* Dark Mode Background */
+[data-theme="dark"] .cart-page-wrapper {
+  background: #0f172a;
+}
+
 /* Continue Shopping Button - Dark Mode Support */
 .continue-shopping-btn {
   display: inline-block;
