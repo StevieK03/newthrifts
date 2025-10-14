@@ -1913,60 +1913,80 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // Real-world print area dimensions: Large Front Center Chest
       // 554mm x 162mm (21.8" x 6.4") at 300 DPI
-      // For a typical t-shirt mockup, this translates to approximately:
+      // These are ABSOLUTE coordinates on the t-shirt mockup
       const printArea = {
-        top: 32,    // 32% from top (chest area)
-        left: 22,   // 22% from left (centered on chest)
-        right: 78,  // 78% from left (56% width centered)
-        bottom: 42  // 42% from top (10% height for chest area)
+        top: 32,    // 32% from top of t-shirt
+        left: 22,   // 22% from left of t-shirt
+        right: 78,  // 78% from left of t-shirt
+        bottom: 42  // 42% from top of t-shirt
       };
       
-      // Get current design position
-      const designLeft = this.placementState.leftPct;
-      const designTop = this.placementState.topPct;
-      const designWidth = this.placementState.widthPct;
-      const designHeight = designWidth; // Assuming square design
+      // Get overlay position and size (the green dashed box)
+      const overlayRect = overlayEl.getBoundingClientRect();
+      const mockupContainer = document.querySelector(`#nt-mockup-{{ section.id }}`);
+      const mockupRect = mockupContainer.getBoundingClientRect();
       
-      // Calculate design boundaries
-      const designRight = designLeft + designWidth;
-      const designBottom = designTop + designHeight;
+      // Calculate overlay position relative to t-shirt
+      const overlayLeftPct = ((overlayRect.left - mockupRect.left) / mockupRect.width) * 100;
+      const overlayTopPct = ((overlayRect.top - mockupRect.top) / mockupRect.height) * 100;
+      const overlayWidthPct = (overlayRect.width / mockupRect.width) * 100;
+      const overlayHeightPct = (overlayRect.height / mockupRect.height) * 100;
       
-      console.log('🔍 Print Area Calculation (Real Dimensions):', {
+      // Get design position relative to overlay
+      const designLeftRel = this.placementState.leftPct;
+      const designTopRel = this.placementState.topPct;
+      const designWidthRel = this.placementState.widthPct;
+      const designHeightRel = designWidthRel; // Assuming square design
+      
+      // Convert design position to ABSOLUTE coordinates on t-shirt
+      const designLeftAbs = overlayLeftPct + (designLeftRel * overlayWidthPct / 100);
+      const designTopAbs = overlayTopPct + (designTopRel * overlayHeightPct / 100);
+      const designWidthAbs = designWidthRel * overlayWidthPct / 100;
+      const designHeightAbs = designHeightRel * overlayHeightPct / 100;
+      
+      // Calculate absolute design boundaries
+      const designRightAbs = designLeftAbs + designWidthAbs;
+      const designBottomAbs = designTopAbs + designHeightAbs;
+      
+      console.log('🔍 Print Area Calculation (Fixed):', {
         realPrintArea: '554mm x 162mm (21.8" x 6.4") - Large Front Center Chest',
         printArea: { left: printArea.left, right: printArea.right, top: printArea.top, bottom: printArea.bottom },
-        design: { left: designLeft, right: designRight, top: designTop, bottom: designBottom },
-        designSize: { width: designWidth, height: designHeight },
-        printAreaSize: { width: printArea.right - printArea.left, height: printArea.bottom - printArea.top }
+        overlay: { left: overlayLeftPct, top: overlayTopPct, width: overlayWidthPct, height: overlayHeightPct },
+        designRelative: { left: designLeftRel, top: designTopRel, width: designWidthRel, height: designHeightRel },
+        designAbsolute: { left: designLeftAbs, top: designTopAbs, right: designRightAbs, bottom: designBottomAbs }
       });
       
       // Check if design is completely within print area (with small tolerance)
-      const tolerance = 1; // 1% tolerance for visual alignment
+      const tolerance = 2; // 2% tolerance for visual alignment
       const isWithinPrintArea = (
-        designLeft >= (printArea.left - tolerance) &&
-        designRight <= (printArea.right + tolerance) &&
-        designTop >= (printArea.top - tolerance) &&
-        designBottom <= (printArea.bottom + tolerance)
+        designLeftAbs >= (printArea.left - tolerance) &&
+        designRightAbs <= (printArea.right + tolerance) &&
+        designTopAbs >= (printArea.top - tolerance) &&
+        designBottomAbs <= (printArea.bottom + tolerance)
       );
       
       // Check if design is partially within print area
       const isPartiallyWithin = (
-        (designLeft < printArea.right && designRight > printArea.left) &&
-        (designTop < printArea.bottom && designBottom > printArea.top)
+        (designLeftAbs < printArea.right && designRightAbs > printArea.left) &&
+        (designTopAbs < printArea.bottom && designBottomAbs > printArea.top)
       );
       
-      console.log('🎯 Print Area Status:', {
+      console.log('🎯 Print Area Status (Fixed):', {
         isWithin: isWithinPrintArea,
         isPartiallyWithin: isPartiallyWithin,
         violations: {
-          left: designLeft < printArea.left,
-          right: designRight > printArea.right,
-          top: designTop < printArea.top,
-          bottom: designBottom > printArea.bottom
+          left: designLeftAbs < printArea.left,
+          right: designRightAbs > printArea.right,
+          top: designTopAbs < printArea.top,
+          bottom: designBottomAbs > printArea.bottom
         },
         realDimensions: '554mm x 162mm (21.8" x 6.4")'
       });
       
-      // Update visual feedback
+      // Update visual feedback - REMOVE ALL existing messages first
+      const existingMsgs = document.querySelectorAll('.print-area-message');
+      existingMsgs.forEach(msg => msg.remove());
+      
       if (isWithinPrintArea) {
         overlayEl.classList.add('design-within-print-area');
         overlayEl.classList.remove('design-outside-print-area', 'design-partially-outside');
