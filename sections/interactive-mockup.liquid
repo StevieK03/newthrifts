@@ -2602,30 +2602,37 @@ document.addEventListener('DOMContentLoaded', function() {
             const topPct = this.placementState.topPct / 100;
             const leftPct = this.placementState.leftPct / 100;
             const widthPct = this.placementState.widthPct / 100;
-            const rotateDeg = this.placementState.rotate || 0;
+            const rotateDeg = this.placementState.rotateDeg || 0;
 
-            // Calculate design position and size on canvas
-            // Note: leftPct is 50% (0.5) with translateX(-50%), so we center it
-            const designWidth = canvas.width * widthPct;
+            // Calculate overlay box position and size
+            // The overlay box starts at (leftPct, topPct) with size widthPct
+            const overlayLeft = canvas.width * leftPct;
+            const overlayTop = canvas.height * topPct;
+            const overlayWidth = canvas.width * widthPct;
+            
+            // Calculate design size maintaining aspect ratio
+            const designWidth = overlayWidth; // Design fills overlay width
             const designHeight = (designImg.height / designImg.width) * designWidth;
             
-            // Center the design horizontally (since we use translateX(-50%))
-            const designX = canvas.width * leftPct; // This is the center point
-            const designY = canvas.height * topPct;
+            // Design is centered within the overlay box
+            // So design center is at: overlay left + half overlay width, overlay top + half design height
+            const designCenterX = overlayLeft + overlayWidth / 2;
+            const designCenterY = overlayTop + designHeight / 2;
 
             // Save context for rotation
             ctx.save();
-            // Translate to center point (which is already at leftPct due to translateX(-50%))
-            ctx.translate(designX, designY + designHeight / 2);
+            // Translate to design center point
+            ctx.translate(designCenterX, designCenterY);
             ctx.rotate(rotateDeg * Math.PI / 180);
             
-            // Draw the design image centered
+            // Draw the design image centered at the translated point
             ctx.drawImage(designImg, -designWidth / 2, -designHeight / 2, designWidth, designHeight);
             ctx.restore();
             
             console.log('🎨 Design composited successfully!');
-            console.log(`📐 Position: x=${designX.toFixed(0)}px, y=${designY.toFixed(0)}px`);
-            console.log(`📏 Size: ${designWidth.toFixed(0)}x${designHeight.toFixed(0)}px`);
+            console.log(`📦 Overlay box: left=${overlayLeft.toFixed(0)}px, top=${overlayTop.toFixed(0)}px, width=${overlayWidth.toFixed(0)}px`);
+            console.log(`📐 Design center: x=${designCenterX.toFixed(0)}px, y=${designCenterY.toFixed(0)}px`);
+            console.log(`📏 Design size: ${designWidth.toFixed(0)}x${designHeight.toFixed(0)}px`);
             console.log(`🔄 Rotation: ${rotateDeg}°`);
 
             // Download
