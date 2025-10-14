@@ -77,7 +77,6 @@
         </div>
         <div class="counter-label" style="
           font-size: {{ section.settings.label_size | default: 14 }}px;
-          color: #f8fafc !important;
           opacity: 0.7;
           font-weight: 600;
         ">
@@ -105,7 +104,6 @@
         </div>
         <div class="counter-label" style="
           font-size: {{ section.settings.label_size | default: 14 }}px;
-          color: #f8fafc !important;
           opacity: 0.7;
           font-weight: 600;
         ">
@@ -165,6 +163,11 @@
 
 [data-theme="light"] .visitor-counter-subheading {
   color: #475569 !important;
+}
+
+/* Counter Label - Default Dark Mode */
+.counter-label {
+  color: #f8fafc !important;
 }
 
 /* Light Mode Counter Items */
