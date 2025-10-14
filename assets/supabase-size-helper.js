@@ -9,6 +9,22 @@
 // ============================================================================
 
 /**
+ * Ensure Supabase client is ready
+ */
+async function ensureSupabaseReady() {
+  if (!window.supabaseClient) {
+    throw new Error('Supabase client not found. Please ensure supabase-config.js is loaded.');
+  }
+  
+  const client = await window.supabaseClient.getClient();
+  if (!client) {
+    throw new Error('Supabase client initialization failed');
+  }
+  
+  return client;
+}
+
+/**
  * Get size chart for a specific product and color
  * @param {string} productType - Product type (default: 't-shirt')
  * @param {string} color - Color (default: 'black')
@@ -16,7 +32,9 @@
  */
 async function getSizeChart(productType = 't-shirt', color = 'black') {
   try {
-    const { data, error } = await window.supabase
+    const supabase = await ensureSupabaseReady();
+    
+    const { data, error } = await supabase
       .from('size_charts')
       .select('*')
       .eq('product_type', productType)
@@ -40,7 +58,9 @@ async function getSizeChart(productType = 't-shirt', color = 'black') {
  */
 async function getAvailableSizes(productType = 't-shirt') {
   try {
-    const { data, error } = await window.supabase
+    const supabase = await ensureSupabaseReady();
+    
+    const { data, error } = await supabase
       .from('size_charts')
       .select('size_code, color')
       .eq('product_type', productType)
@@ -68,9 +88,10 @@ async function getAvailableSizes(productType = 't-shirt') {
  */
 async function getRecommendedSize(measurements) {
   try {
+    const supabase = await ensureSupabaseReady();
     const { height, weight, fitPreference = 'regular' } = measurements;
 
-    const { data, error } = await window.supabase
+    const { data, error } = await supabase
       .rpc('get_recommended_size', {
         user_height: height,
         user_weight: weight,
@@ -103,7 +124,9 @@ async function getRecommendedSize(measurements) {
  */
 async function getCompleteSizeGuide() {
   try {
-    const { data, error } = await window.supabase
+    const supabase = await ensureSupabaseReady();
+    
+    const { data, error } = await supabase
       .from('complete_size_guide')
       .select('*');
 
