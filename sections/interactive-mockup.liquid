@@ -2902,56 +2902,56 @@ document.addEventListener('DOMContentLoaded', function() {
           const canvasElement = document.querySelector(`#nt-mockup-{{ section.id }} .nt-mockup__canvas`);
           
           if (canvasElement) {
-            // Get positioning from CSS custom properties
-            const computedStyle = getComputedStyle(canvasElement);
-            const overlayTop = parseFloat(computedStyle.getPropertyValue('--overlay-top')) || 35;
-            const overlayLeft = parseFloat(computedStyle.getPropertyValue('--overlay-left')) || 50;
-            const overlayWidth = parseFloat(computedStyle.getPropertyValue('--overlay-width')) || 50;
+            // Get selected size for print area calculation
+            const sizeSelect = document.getElementById(`mockup-size-select-{{ section.id }}`);
+            const selectedSize = sizeSelect.value || 'M';
             
-            console.log('📊 CSS Position values:', { top: overlayTop, left: overlayLeft, width: overlayWidth });
+            console.log(`📏 Downloading for size: ${selectedSize}`);
             
-            // Calculate the overlay box position and size on canvas
-            const overlayBoxLeft = canvas.width * (overlayLeft / 100);
-            const overlayBoxTop = canvas.height * (overlayTop / 100);
-            const overlayBoxWidth = canvas.width * (overlayWidth / 100);
-            const overlayBoxHeight = overlayBoxWidth; // Square box
+            // Get current design position from placement state
+            const designLeftPct = this.placementState.leftPct;
+            const designTopPct = this.placementState.topPct;
+            const designWidthPct = this.placementState.widthPct;
+            const designHeightPct = designWidthPct; // Assuming square design
             
-            console.log('📦 Overlay box:', { 
-              left: overlayBoxLeft, 
-              top: overlayBoxTop, 
-              width: overlayBoxWidth, 
-              height: overlayBoxHeight 
+            console.log('📊 Placement state:', { 
+              left: designLeftPct, 
+              top: designTopPct, 
+              width: designWidthPct 
             });
             
-            // Calculate design size to fit within the overlay box (maintain aspect ratio)
-            const designAspectRatio = designImg.naturalWidth / designImg.naturalHeight;
-            let designWidth, designHeight;
+            // Get overlay position and size from DOM
+            const overlayEl = document.querySelector(`#nt-overlay-{{ section.id }}`);
+            const overlayRect = overlayEl.getBoundingClientRect();
+            const mockupRect = document.querySelector(`#nt-mockup-{{ section.id }}`).getBoundingClientRect();
             
-            if (designAspectRatio > 1) {
-              // Design is wider than tall
-              designWidth = overlayBoxWidth * 0.9; // 90% of box width
-              designHeight = designWidth / designAspectRatio;
-            } else {
-              // Design is taller than wide
-              designHeight = overlayBoxHeight * 0.9; // 90% of box height
-              designWidth = designHeight * designAspectRatio;
-            }
+            // Calculate overlay position relative to mockup
+            const overlayLeftPct = ((overlayRect.left - mockupRect.left) / mockupRect.width) * 100;
+            const overlayTopPct = ((overlayRect.top - mockupRect.top) / mockupRect.height) * 100;
+            const overlayWidthPct = (overlayRect.width / mockupRect.width) * 100;
+            const overlayHeightPct = (overlayRect.height / mockupRect.height) * 100;
             
-            // Center the design within the overlay box
-            const designLeft = overlayBoxLeft + (overlayBoxWidth - designWidth) / 2;
-            const designTop = overlayBoxTop + (overlayBoxHeight - designHeight) / 2;
+            // Convert design position to absolute coordinates on canvas
+            const designLeftAbs = overlayLeftPct + (designLeftPct * overlayWidthPct / 100);
+            const designTopAbs = overlayTopPct + (designTopPct * overlayHeightPct / 100);
+            const designWidthAbs = designWidthPct * overlayWidthPct / 100;
+            const designHeightAbs = designHeightPct * overlayHeightPct / 100;
+            
+            // Convert percentages to pixel coordinates
+            const designX = (designLeftAbs / 100) * canvas.width;
+            const designY = (designTopAbs / 100) * canvas.height;
+            const designWidth = (designWidthAbs / 100) * canvas.width;
+            const designHeight = (designHeightAbs / 100) * canvas.height;
             
             console.log('🎨 Design final position:', { 
-              left: designLeft, 
-              top: designTop, 
-              width: designWidth, 
-              height: designHeight,
-              aspectRatio: designAspectRatio
+              designX, designY, designWidth, designHeight,
+              overlay: { overlayLeftPct, overlayTopPct, overlayWidthPct, overlayHeightPct },
+              absolute: { designLeftAbs, designTopAbs, designWidthAbs, designHeightAbs }
             });
             
-            // Draw the design centered within the overlay box
-            ctx.drawImage(designImg, designLeft, designTop, designWidth, designHeight);
-            console.log('✅ Design drawn to canvas (centered in overlay box)');
+            // Draw the design at the calculated position
+            ctx.drawImage(designImg, designX, designY, designWidth, designHeight);
+            console.log('✅ Design drawn to canvas at calculated position');
           } else {
             console.log('⚠️ Could not find canvas element, using center position');
             // Fallback: center the design
@@ -2971,13 +2971,16 @@ document.addEventListener('DOMContentLoaded', function() {
       }
 
       // Download the result
+      const sizeSelect = document.getElementById(`mockup-size-select-{{ section.id }}`);
+      const selectedSize = sizeSelect.value || 'M';
+      
       const a = document.createElement('a');
-      a.download = `mockup_${Date.now()}.png`;
+      a.download = `custom-mockup-${selectedSize}-${Date.now()}.png`;
       a.href = canvas.toDataURL("image/png", 1.0);
       a.click();
       
-      console.log('✅ Download initiated!');
-      alert('✅ Mockup downloaded! Check the console for details.');
+      console.log(`✅ Download initiated for size: ${selectedSize}!`);
+      alert(`✅ Mockup downloaded for ${selectedSize}! Check the console for details.`);
     }
     {% endif %}
   };
