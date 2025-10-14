@@ -1911,12 +1911,12 @@ document.addEventListener('DOMContentLoaded', function() {
       const overlayEl = document.querySelector(`#nt-overlay-{{ section.id }}`);
       if (!overlayEl) return;
       
-      // Define print area boundaries (safe zone) - matching the visual green dashed box
+      // Define print area boundaries - more generous to match visual appearance
       const printArea = {
-        top: 35,    // 35% from top (matches the visual box)
-        left: 50,   // 50% from left (centered)
-        right: 50,  // 50% width from center
-        bottom: 50  // 50% height from top
+        top: 30,    // 30% from top (more generous)
+        left: 25,   // 25% from left 
+        right: 75,  // 75% from left (50% width centered)
+        bottom: 80  // 80% from top (50% height)
       };
       
       // Get current design position
@@ -1929,40 +1929,35 @@ document.addEventListener('DOMContentLoaded', function() {
       const designRight = designLeft + designWidth;
       const designBottom = designTop + designHeight;
       
-      // Calculate print area boundaries (centered box)
-      const printAreaLeft = printArea.left - (printArea.right / 2);  // Center minus half width
-      const printAreaRight = printArea.left + (printArea.right / 2); // Center plus half width
-      const printAreaTop = printArea.top;
-      const printAreaBottom = printArea.top + printArea.bottom;
-      
       console.log('🔍 Print Area Calculation:', {
-        printArea: { left: printAreaLeft, right: printAreaRight, top: printAreaTop, bottom: printAreaBottom },
+        printArea: { left: printArea.left, right: printArea.right, top: printArea.top, bottom: printArea.bottom },
         design: { left: designLeft, right: designRight, top: designTop, bottom: designBottom },
         designSize: { width: designWidth, height: designHeight }
       });
       
-      // Check if design is completely within print area
+      // Check if design is completely within print area (with small tolerance)
+      const tolerance = 2; // 2% tolerance for visual alignment
       const isWithinPrintArea = (
-        designLeft >= printAreaLeft &&
-        designRight <= printAreaRight &&
-        designTop >= printAreaTop &&
-        designBottom <= printAreaBottom
+        designLeft >= (printArea.left - tolerance) &&
+        designRight <= (printArea.right + tolerance) &&
+        designTop >= (printArea.top - tolerance) &&
+        designBottom <= (printArea.bottom + tolerance)
       );
       
       // Check if design is partially within print area
       const isPartiallyWithin = (
-        (designLeft < printAreaRight && designRight > printAreaLeft) &&
-        (designTop < printAreaBottom && designBottom > printAreaTop)
+        (designLeft < printArea.right && designRight > printArea.left) &&
+        (designTop < printArea.bottom && designBottom > printArea.top)
       );
       
       console.log('🎯 Print Area Status:', {
         isWithin: isWithinPrintArea,
         isPartiallyWithin: isPartiallyWithin,
         violations: {
-          left: designLeft < printAreaLeft,
-          right: designRight > printAreaRight,
-          top: designTop < printAreaTop,
-          bottom: designBottom > printAreaBottom
+          left: designLeft < printArea.left,
+          right: designRight > printArea.right,
+          top: designTop < printArea.top,
+          bottom: designBottom > printArea.bottom
         }
       });
       
@@ -1983,31 +1978,30 @@ document.addEventListener('DOMContentLoaded', function() {
     },
 
     showPrintAreaMessage(message, type) {
-      // Remove existing message
-      const existingMsg = document.querySelector('.print-area-message');
-      if (existingMsg) {
-        existingMsg.remove();
-      }
+      // Remove ALL existing print area messages to prevent overlap
+      const existingMsgs = document.querySelectorAll('.print-area-message');
+      existingMsgs.forEach(msg => msg.remove());
       
       // Create new message
       const msgEl = document.createElement('div');
       msgEl.className = `print-area-message print-area-message--${type}`;
       msgEl.textContent = message;
       
-      // Style the message
+      // Style the message with higher z-index and better positioning
       msgEl.style.cssText = `
         position: fixed;
-        top: 20px;
+        top: 80px;
         right: 20px;
         padding: 12px 20px;
         border-radius: 8px;
         font-size: 14px;
         font-weight: 600;
-        z-index: 1000;
+        z-index: 10000;
         transition: all 0.3s ease;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         backdrop-filter: blur(8px);
         animation: slideInFromRight 0.3s ease;
+        max-width: 300px;
       `;
       
       // Set colors based on type
