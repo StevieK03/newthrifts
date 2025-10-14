@@ -27,6 +27,10 @@ class SupabaseClient {
       if (window.supabase) {
         this.client = window.supabase.createClient(this.supabaseUrl, this.supabaseKey);
         this.initialized = true;
+        
+        // IMPORTANT: Expose the client instance globally for other scripts
+        window.supabase = this.client;
+        
         console.log('✅ Supabase client initialized');
         return this.client;
       } else {
