@@ -1166,6 +1166,19 @@
   #Header-{{ section.id }} .moon-icon {
     color: #ffa500 !important;
   }
+
+  /* Light Mode - Shop Link Visibility Fix */
+  [data-theme="light"] #Header-{{ section.id }} .nt-header__link {
+    background: rgba(30, 41, 59, 0.1) !important;
+    border: 1px solid rgba(30, 41, 59, 0.2) !important;
+    color: #1e293b !important;
+  }
+
+  [data-theme="light"] #Header-{{ section.id }} .nt-header__link:hover {
+    background: rgba(30, 41, 59, 0.2) !important;
+    border-color: rgba(30, 41, 59, 0.3) !important;
+    color: #0f172a !important;
+  }
 </style>
 
 <script>
