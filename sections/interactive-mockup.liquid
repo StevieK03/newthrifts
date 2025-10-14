@@ -589,6 +589,82 @@ Enhanced Interactive Product Mockup
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%) !important;
 }
 
+/* Print Area Highlighting Styles */
+.design-within-print-area {
+  border: 3px solid #10b981 !important;
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2), 0 0 20px rgba(16, 185, 129, 0.3) !important;
+  animation: printAreaSuccess 2s ease-in-out infinite !important;
+}
+
+.design-partially-outside {
+  border: 3px solid #f59e0b !important;
+  box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2), 0 0 20px rgba(245, 158, 11, 0.3) !important;
+  animation: printAreaWarning 2s ease-in-out infinite !important;
+}
+
+.design-outside-print-area {
+  border: 3px solid #ef4444 !important;
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.2), 0 0 20px rgba(239, 68, 68, 0.3) !important;
+  animation: printAreaError 2s ease-in-out infinite !important;
+}
+
+/* Print Area Animation Keyframes */
+@keyframes printAreaSuccess {
+  0%, 100% { 
+    border-color: #10b981;
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2), 0 0 20px rgba(16, 185, 129, 0.3);
+  }
+  50% { 
+    border-color: #059669;
+    box-shadow: 0 0 0 6px rgba(5, 150, 105, 0.3), 0 0 30px rgba(5, 150, 105, 0.4);
+  }
+}
+
+@keyframes printAreaWarning {
+  0%, 100% { 
+    border-color: #f59e0b;
+    box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2), 0 0 20px rgba(245, 158, 11, 0.3);
+  }
+  50% { 
+    border-color: #d97706;
+    box-shadow: 0 0 0 6px rgba(217, 119, 6, 0.3), 0 0 30px rgba(217, 119, 6, 0.4);
+  }
+}
+
+@keyframes printAreaError {
+  0%, 100% { 
+    border-color: #ef4444;
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.2), 0 0 20px rgba(239, 68, 68, 0.3);
+  }
+  50% { 
+    border-color: #dc2626;
+    box-shadow: 0 0 0 6px rgba(220, 38, 38, 0.3), 0 0 30px rgba(220, 38, 38, 0.4);
+  }
+}
+
+/* Message Animation Keyframes */
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutToRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
 /* Mockup Description Text */
 .mockup-description {
   color: #cbd5e1;
@@ -1820,12 +1896,118 @@ document.addEventListener('DOMContentLoaded', function() {
           width: overlayDiv.style.width,
           transform: overlayDiv.style.transform
         });
+        
+        // Check if design is within print area and update highlighting
+        this.updatePrintAreaHighlighting();
       } else {
         console.error('❌ Overlay element not found!');
       }
       
       // Check for centering and show indicators
       this.checkCentering();
+    },
+
+    updatePrintAreaHighlighting() {
+      const overlayEl = document.querySelector(`#nt-overlay-{{ section.id }}`);
+      if (!overlayEl) return;
+      
+      // Define print area boundaries (safe zone)
+      const printArea = {
+        top: 25,    // 25% from top
+        left: 25,   // 25% from left  
+        right: 75,  // 75% from left
+        bottom: 85  // 85% from top
+      };
+      
+      // Get current design position
+      const designLeft = this.placementState.leftPct;
+      const designTop = this.placementState.topPct;
+      const designWidth = this.placementState.widthPct;
+      const designHeight = designWidth; // Assuming square design
+      
+      // Calculate design boundaries
+      const designRight = designLeft + designWidth;
+      const designBottom = designTop + designHeight;
+      
+      // Check if design is completely within print area
+      const isWithinPrintArea = (
+        designLeft >= printArea.left &&
+        designRight <= printArea.right &&
+        designTop >= printArea.top &&
+        designBottom <= printArea.bottom
+      );
+      
+      // Check if design is partially within print area
+      const isPartiallyWithin = (
+        (designLeft < printArea.right && designRight > printArea.left) &&
+        (designTop < printArea.bottom && designBottom > printArea.top)
+      );
+      
+      // Update visual feedback
+      if (isWithinPrintArea) {
+        overlayEl.classList.add('design-within-print-area');
+        overlayEl.classList.remove('design-outside-print-area', 'design-partially-outside');
+        this.showPrintAreaMessage('✅ Design is within safe print area', 'success');
+      } else if (isPartiallyWithin) {
+        overlayEl.classList.add('design-partially-outside');
+        overlayEl.classList.remove('design-within-print-area', 'design-outside-print-area');
+        this.showPrintAreaMessage('⚠️ Design extends outside safe print area', 'warning');
+      } else {
+        overlayEl.classList.add('design-outside-print-area');
+        overlayEl.classList.remove('design-within-print-area', 'design-partially-outside');
+        this.showPrintAreaMessage('❌ Design is outside safe print area', 'error');
+      }
+    },
+
+    showPrintAreaMessage(message, type) {
+      // Remove existing message
+      const existingMsg = document.querySelector('.print-area-message');
+      if (existingMsg) {
+        existingMsg.remove();
+      }
+      
+      // Create new message
+      const msgEl = document.createElement('div');
+      msgEl.className = `print-area-message print-area-message--${type}`;
+      msgEl.textContent = message;
+      
+      // Style the message
+      msgEl.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        z-index: 1000;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        backdrop-filter: blur(8px);
+        animation: slideInFromRight 0.3s ease;
+      `;
+      
+      // Set colors based on type
+      if (type === 'success') {
+        msgEl.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+        msgEl.style.color = 'white';
+      } else if (type === 'warning') {
+        msgEl.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+        msgEl.style.color = 'white';
+      } else if (type === 'error') {
+        msgEl.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+        msgEl.style.color = 'white';
+      }
+      
+      document.body.appendChild(msgEl);
+      
+      // Auto-remove after 3 seconds
+      setTimeout(() => {
+        if (msgEl.parentNode) {
+          msgEl.style.animation = 'slideOutToRight 0.3s ease';
+          setTimeout(() => msgEl.remove(), 300);
+        }
+      }, 3000);
     },
 
     checkCentering() {
