@@ -4,7 +4,6 @@
 {% endcomment %}
 
 <section class="visitor-counter-section" style="
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
   padding: 60px 0;
   margin: 20px 0;
   border-radius: 16px;
@@ -146,11 +145,26 @@
 
 .visitor-counter-section {
   transition: all 0.3s ease;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
 }
 
 .visitor-counter-section:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+}
+
+/* Light Mode Background */
+[data-theme="light"] .visitor-counter-section {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%) !important;
+}
+
+/* Light Mode Text Colors */
+[data-theme="light"] .visitor-counter-heading {
+  color: #1e293b !important;
+}
+
+[data-theme="light"] .visitor-counter-subheading {
+  color: #475569 !important;
 }
 
 .counter-item {

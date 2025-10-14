@@ -8,7 +8,7 @@ Enhanced Interactive Product Mockup
 - Reverted to clean version
 {% endcomment %}
 
-<section id="nt-mockup-{{ section.id }}" class="nt-mockup" style="padding: 60px 0; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);">
+<section id="nt-mockup-{{ section.id }}" class="nt-mockup nt-mockup-section" style="padding: 60px 0;">
   <div class="container">
     
     <!-- Section Header -->
@@ -539,6 +539,16 @@ Enhanced Interactive Product Mockup
 </section>
 
 <style>
+/* Section Background - Dark Mode Default */
+.nt-mockup-section {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}
+
+/* Light Mode Background */
+[data-theme="light"] .nt-mockup-section {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%) !important;
+}
+
 /* Enhanced Button Styles */
 .nt-btn:hover {
   transform: translateY(-2px);
