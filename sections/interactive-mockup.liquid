@@ -2592,7 +2592,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const baseImg = document.getElementById("nt-base-{{ section.id }}");
       if (!baseImg) {
         console.error('❌ Base t-shirt image not found!');
-        this.showNotification('❌ Base t-shirt image not found', 'error');
+        alert('❌ Base t-shirt image not found');
         return;
       }
 
@@ -2603,6 +2603,13 @@ document.addEventListener('DOMContentLoaded', function() {
       if (overlayImg) {
         console.log('📸 Design image src:', overlayImg.src.substring(0, 50) + '...');
         console.log('📸 Design image loaded:', overlayImg.complete && overlayImg.naturalWidth > 0);
+        console.log('📸 Is SVG fallback:', overlayImg.src.includes('data:image/svg+xml'));
+        
+        // Skip if it's the SVG fallback
+        if (overlayImg.src.includes('data:image/svg+xml')) {
+          console.log('⚠️ Skipping SVG fallback, no real design uploaded');
+          overlayImg = null;
+        }
       }
 
       // Draw the base t-shirt first
@@ -2610,7 +2617,7 @@ document.addEventListener('DOMContentLoaded', function() {
       console.log('✅ Base t-shirt drawn to canvas');
 
       // If there's a design, try to draw it
-      if (overlayImg && overlayImg.src && overlayImg.complete && overlayImg.naturalWidth > 0) {
+      if (overlayImg && overlayImg.src && !overlayImg.src.includes('data:image/svg+xml') && overlayImg.complete && overlayImg.naturalWidth > 0) {
         console.log('✅ Drawing design to canvas...');
         
         // Get the overlay element for positioning
@@ -2687,7 +2694,7 @@ document.addEventListener('DOMContentLoaded', function() {
       a.click();
       
       console.log('✅ Download initiated!');
-      this.showNotification('✅ Mockup downloaded!', 'success');
+      alert('✅ Mockup downloaded successfully!');
     }
     {% endif %}
   };
