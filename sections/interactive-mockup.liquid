@@ -246,7 +246,7 @@ Enhanced Interactive Product Mockup
             💡 <strong>Pro Tips:</strong><br>
             • Drag design to move • Scroll wheel to resize • Ctrl+scroll for precise control<br>
             • Shift+scroll for large steps • Double-click to reset • Use keyboard arrows for fine control<br>
-            • Ctrl+1/2/3/4 for quick presets (25%, 50%, 75%, 100%)
+            • Ctrl+1/2/3/4 for quick presets (25%, 50%, 75%, 100%) • <strong>Delete/Backspace to remove design</strong>
           </div>
         </div>
       </div>
@@ -1087,6 +1087,13 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             this.setPresetSize(100);
             console.log('⌨️ Set to 100%');
+          } else if (e.key === 'Delete' || e.key === 'Backspace') {
+            // Check if there's an uploaded design to delete
+            if (this.placementState.hasUploadedDesign) {
+              e.preventDefault();
+              this.removeDesign();
+              console.log('⌨️ Design removed via', e.key, 'key');
+            }
           }
         }
       });
