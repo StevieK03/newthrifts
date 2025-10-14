@@ -310,8 +310,22 @@
   background: #1e293b;
 }
 
+[data-theme="dark"] .size-chart-table thead {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+}
+
+[data-theme="dark"] .size-chart-table th {
+  color: #f8fafc !important;
+  border-bottom: 2px solid #475569;
+}
+
+[data-theme="dark"] .size-chart-table th small {
+  color: #cbd5e1 !important;
+  opacity: 1;
+}
+
 [data-theme="dark"] .size-chart-table td {
-  color: #cbd5e1;
+  color: #e2e8f0 !important;
   border-bottom-color: #334155;
 }
 
@@ -319,8 +333,13 @@
   background: #334155;
 }
 
+[data-theme="dark"] .size-chart-table tbody tr:hover td {
+  color: #f8fafc !important;
+}
+
 [data-theme="dark"] .size-chart-table td strong {
-  color: #f8fafc;
+  color: #fff !important;
+  font-weight: 700;
 }
 
 [data-theme="dark"] .size-select-dropdown {
@@ -346,6 +365,16 @@
 [data-theme="dark"] .size-guide-close:hover {
   background: #475569;
   color: #f8fafc;
+}
+
+[data-theme="dark"] .size-chart-note {
+  background: rgba(251, 191, 36, 0.15);
+  border-left-color: #fbbf24;
+  color: #fcd34d;
+}
+
+[data-theme="dark"] .size-chart-note small {
+  color: #fde68a;
 }
 
 /* Mobile Responsive */
