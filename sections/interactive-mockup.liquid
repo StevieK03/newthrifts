@@ -16,7 +16,7 @@ Enhanced Interactive Product Mockup
       <h2 style="font-family: 'Bebas Neue', sans-serif; font-size: 42px; margin: 0 0 16px 0; background: linear-gradient(45deg, #27e1c1, #ff4fa3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
         🚀 Enhanced Live Design Preview
       </h2>
-      <p style="font-size: 18px; color: #cbd5e1; margin: 0; max-width: 600px; margin: 0 auto;">
+      <p class="mockup-description" style="font-size: 18px; margin: 0; max-width: 600px; margin: 0 auto;">
         See your custom design come to life with our professional mockup system. Now with 3D rotation, real-time editing, design validation, and advanced customization tools.
       </p>
     </div>
@@ -549,8 +549,13 @@ Enhanced Interactive Product Mockup
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%) !important;
 }
 
+/* Mockup Description Text */
+.mockup-description {
+  color: #cbd5e1;
+}
+
 /* Light Mode Text Colors */
-[data-theme="light"] .mockup-header p {
+[data-theme="light"] .mockup-description {
   color: #475569 !important;
 }
 
