@@ -16,6 +16,9 @@
 
     {%- comment -%} ✅ Dark Mode styles {%- endcomment -%}
     {{ 'dark-mode.css' | asset_url | stylesheet_tag }}
+    
+    {%- comment -%} ✅ Size Chart Styles {%- endcomment -%}
+    {{ 'size-chart.css' | asset_url | stylesheet_tag }}
 
     {%- comment -%} ✅ Halloween styles (global include) {%- endcomment -%}
     {{ 'halloween.css' | asset_url | stylesheet_tag }}
@@ -193,6 +196,7 @@
     {%- comment -%} Supabase loads after analytics {%- endcomment -%}
     <script src="{{ 'supabase-config.js' | asset_url }}?v={{ 'now' | date: '%s' }}"></script>
     <script src="{{ 'supabase-designs.js' | asset_url }}?v={{ 'now' | date: '%s' }}"></script>
+    <script src="{{ 'supabase-size-helper.js' | asset_url }}?v={{ 'now' | date: '%s' }}"></script>
     <script src="{{ 'visitor-counter.js' | asset_url }}?v={{ 'now' | date: '%s' }}" defer></script>
     
     <!-- Enhanced Homepage Features -->
