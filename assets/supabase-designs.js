@@ -159,8 +159,7 @@ async function getGalleryDesigns(options = {}) {
       .from('design_gallery')
       .select(`
         *,
-        custom_designs!inner(design_name, preview_image_url, tags, base_color),
-        user_profiles!inner(email, id)
+        custom_designs!inner(design_name, preview_image_url, tags, base_color)
       `)
       .order(sortBy, { ascending: false })
       .limit(limit);
