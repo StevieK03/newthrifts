@@ -2576,7 +2576,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     {% if section.settings.allow_download %}
     downloadComposite() {
-      console.log('📥 Starting SIMPLE mockup download...');
+      console.log('📥 Starting DEBUG mockup download...');
       
       // Create a simple canvas
       const canvas = document.createElement("canvas");
@@ -2596,95 +2596,112 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
       }
 
-      // Get the uploaded design image
-      let overlayImg = document.querySelector(`#nt-overlay-{{ section.id }} img`);
-      console.log('🔍 Design image found:', overlayImg ? 'YES' : 'NO');
-      
-      if (overlayImg) {
-        console.log('📸 Design image src:', overlayImg.src.substring(0, 50) + '...');
-        console.log('📸 Design image loaded:', overlayImg.complete && overlayImg.naturalWidth > 0);
-        console.log('📸 Is SVG fallback:', overlayImg.src.includes('data:image/svg+xml'));
-        
-        // Skip if it's the SVG fallback
-        if (overlayImg.src.includes('data:image/svg+xml')) {
-          console.log('⚠️ Skipping SVG fallback, no real design uploaded');
-          overlayImg = null;
-        }
-      }
-
       // Draw the base t-shirt first
       ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
       console.log('✅ Base t-shirt drawn to canvas');
 
-      // If there's a design, try to draw it
-      if (overlayImg && overlayImg.src && !overlayImg.src.includes('data:image/svg+xml') && overlayImg.complete && overlayImg.naturalWidth > 0) {
-        console.log('✅ Drawing design to canvas...');
+      // Look for ALL images in the overlay area
+      const overlayContainer = document.querySelector(`#nt-overlay-{{ section.id }}`);
+      console.log('🔍 Overlay container found:', overlayContainer ? 'YES' : 'NO');
+      
+      if (overlayContainer) {
+        // Get all images in the overlay
+        const allImages = overlayContainer.querySelectorAll('img');
+        console.log('📸 Total images in overlay:', allImages.length);
         
-        // Get the overlay element for positioning
-        const overlayElement = document.querySelector(`#nt-overlay-{{ section.id }}`);
-        const canvasElement = document.querySelector(`#nt-mockup-{{ section.id }} .nt-mockup__canvas`);
-        
-        if (overlayElement && canvasElement) {
-          // Get positioning from CSS custom properties
-          const computedStyle = getComputedStyle(canvasElement);
-          const overlayTop = parseFloat(computedStyle.getPropertyValue('--overlay-top')) || 35;
-          const overlayLeft = parseFloat(computedStyle.getPropertyValue('--overlay-left')) || 50;
-          const overlayWidth = parseFloat(computedStyle.getPropertyValue('--overlay-width')) || 50;
-          
-          console.log('📊 CSS Position values:', { top: overlayTop, left: overlayLeft, width: overlayWidth });
-          
-          // Calculate the overlay box position and size on canvas
-          const overlayBoxLeft = canvas.width * (overlayLeft / 100);
-          const overlayBoxTop = canvas.height * (overlayTop / 100);
-          const overlayBoxWidth = canvas.width * (overlayWidth / 100);
-          const overlayBoxHeight = overlayBoxWidth; // Square box
-          
-          console.log('📦 Overlay box:', { 
-            left: overlayBoxLeft, 
-            top: overlayBoxTop, 
-            width: overlayBoxWidth, 
-            height: overlayBoxHeight 
+        allImages.forEach((img, index) => {
+          console.log(`📸 Image ${index + 1}:`, {
+            src: img.src.substring(0, 100) + '...',
+            complete: img.complete,
+            naturalWidth: img.naturalWidth,
+            naturalHeight: img.naturalHeight,
+            isSVG: img.src.includes('data:image/svg+xml')
           });
-          
-          // Calculate design size to fit within the overlay box (maintain aspect ratio)
-          const designAspectRatio = overlayImg.naturalWidth / overlayImg.naturalHeight;
-          let designWidth, designHeight;
-          
-          if (designAspectRatio > 1) {
-            // Design is wider than tall
-            designWidth = overlayBoxWidth * 0.9; // 90% of box width
-            designHeight = designWidth / designAspectRatio;
-          } else {
-            // Design is taller than wide
-            designHeight = overlayBoxHeight * 0.9; // 90% of box height
-            designWidth = designHeight * designAspectRatio;
+        });
+        
+        // Find the first non-SVG image
+        let designImg = null;
+        for (let img of allImages) {
+          if (!img.src.includes('data:image/svg+xml') && img.complete && img.naturalWidth > 0) {
+            designImg = img;
+            console.log('✅ Found real design image:', designImg.src.substring(0, 100) + '...');
+            break;
           }
+        }
+        
+        if (designImg) {
+          console.log('✅ Drawing design to canvas...');
           
-          // Center the design within the overlay box
-          const designLeft = overlayBoxLeft + (overlayBoxWidth - designWidth) / 2;
-          const designTop = overlayBoxTop + (overlayBoxHeight - designHeight) / 2;
+          // Get the canvas element for positioning
+          const canvasElement = document.querySelector(`#nt-mockup-{{ section.id }} .nt-mockup__canvas`);
           
-          console.log('🎨 Design final position:', { 
-            left: designLeft, 
-            top: designTop, 
-            width: designWidth, 
-            height: designHeight 
-          });
-          
-          // Draw the design centered within the overlay box
-          ctx.drawImage(overlayImg, designLeft, designTop, designWidth, designHeight);
-          console.log('✅ Design drawn to canvas (centered in overlay box)');
+          if (canvasElement) {
+            // Get positioning from CSS custom properties
+            const computedStyle = getComputedStyle(canvasElement);
+            const overlayTop = parseFloat(computedStyle.getPropertyValue('--overlay-top')) || 35;
+            const overlayLeft = parseFloat(computedStyle.getPropertyValue('--overlay-left')) || 50;
+            const overlayWidth = parseFloat(computedStyle.getPropertyValue('--overlay-width')) || 50;
+            
+            console.log('📊 CSS Position values:', { top: overlayTop, left: overlayLeft, width: overlayWidth });
+            
+            // Calculate the overlay box position and size on canvas
+            const overlayBoxLeft = canvas.width * (overlayLeft / 100);
+            const overlayBoxTop = canvas.height * (overlayTop / 100);
+            const overlayBoxWidth = canvas.width * (overlayWidth / 100);
+            const overlayBoxHeight = overlayBoxWidth; // Square box
+            
+            console.log('📦 Overlay box:', { 
+              left: overlayBoxLeft, 
+              top: overlayBoxTop, 
+              width: overlayBoxWidth, 
+              height: overlayBoxHeight 
+            });
+            
+            // Calculate design size to fit within the overlay box (maintain aspect ratio)
+            const designAspectRatio = designImg.naturalWidth / designImg.naturalHeight;
+            let designWidth, designHeight;
+            
+            if (designAspectRatio > 1) {
+              // Design is wider than tall
+              designWidth = overlayBoxWidth * 0.9; // 90% of box width
+              designHeight = designWidth / designAspectRatio;
+            } else {
+              // Design is taller than wide
+              designHeight = overlayBoxHeight * 0.9; // 90% of box height
+              designWidth = designHeight * designAspectRatio;
+            }
+            
+            // Center the design within the overlay box
+            const designLeft = overlayBoxLeft + (overlayBoxWidth - designWidth) / 2;
+            const designTop = overlayBoxTop + (overlayBoxHeight - designHeight) / 2;
+            
+            console.log('🎨 Design final position:', { 
+              left: designLeft, 
+              top: designTop, 
+              width: designWidth, 
+              height: designHeight,
+              aspectRatio: designAspectRatio
+            });
+            
+            // Draw the design centered within the overlay box
+            ctx.drawImage(designImg, designLeft, designTop, designWidth, designHeight);
+            console.log('✅ Design drawn to canvas (centered in overlay box)');
+          } else {
+            console.log('⚠️ Could not find canvas element, using center position');
+            // Fallback: center the design
+            const designSize = Math.min(canvas.width, canvas.height) * 0.3;
+            const centerX = (canvas.width - designSize) / 2;
+            const centerY = (canvas.height - designSize) / 2;
+            ctx.drawImage(designImg, centerX, centerY, designSize, designSize);
+            console.log('✅ Design drawn at center');
+          }
         } else {
-          console.log('⚠️ Could not find overlay elements, using center position');
-          // Fallback: center the design
-          const designSize = Math.min(canvas.width, canvas.height) * 0.3;
-          const centerX = (canvas.width - designSize) / 2;
-          const centerY = (canvas.height - designSize) / 2;
-          ctx.drawImage(overlayImg, centerX, centerY, designSize, designSize);
-          console.log('✅ Design drawn at center');
+          console.log('⚠️ No real design image found - only SVG fallbacks detected');
+          alert('⚠️ No design image found. Please upload a real image file (PNG, JPG, etc.)');
         }
       } else {
-        console.log('⚠️ No design to draw');
+        console.log('❌ No overlay container found');
+        alert('❌ Overlay container not found');
       }
 
       // Download the result
@@ -2694,7 +2711,7 @@ document.addEventListener('DOMContentLoaded', function() {
       a.click();
       
       console.log('✅ Download initiated!');
-      alert('✅ Mockup downloaded successfully!');
+      alert('✅ Mockup downloaded! Check the console for details.');
     }
     {% endif %}
   };
