@@ -621,7 +621,11 @@ User Profile Signup Section - Only show for non-authenticated users
 </style>
 
 <script>
+console.log('🎯 Profile signup section script loaded');
+
 document.addEventListener('DOMContentLoaded', function() {
+  console.log('🎯 Profile signup DOMContentLoaded fired');
+  
   // Check if user is authenticated and show/hide section accordingly
   checkAuthAndShowSection();
   
@@ -837,27 +841,43 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   async function checkAuthAndShowSection() {
+    const ctaSection = document.getElementById('user-profile-signup');
+    
+    // Always ensure the section is visible first
+    if (ctaSection) {
+      ctaSection.style.display = 'block';
+      console.log('✅ Profile section is visible');
+    }
+    
     try {
+      // Wait for Supabase to initialize (with timeout)
+      let attempts = 0;
+      while (!window.supabaseClient && attempts < 10) {
+        await new Promise(resolve => setTimeout(resolve, 300));
+        attempts++;
+      }
+      
       if (window.supabaseClient) {
-        const user = await window.supabaseClient.getCurrentUser();
-        const ctaSection = document.getElementById('user-profile-signup');
+        console.log('✅ Supabase client found, checking auth status...');
+        const result = await window.supabaseClient.getCurrentUser();
         
-        if (user.user) {
+        if (result.user) {
           // User is authenticated, hide the CTA section
+          console.log('✅ User is authenticated:', result.user.email);
           if (ctaSection) ctaSection.style.display = 'none';
         } else {
-          // User is not authenticated, show the CTA section
+          // User is not authenticated, keep showing the CTA section
+          console.log('ℹ️ User is not authenticated, showing signup CTA');
           if (ctaSection) ctaSection.style.display = 'block';
         }
       } else {
-        // Supabase not available, show the CTA section
-        const ctaSection = document.getElementById('user-profile-signup');
+        // Supabase not available after waiting, keep showing the CTA section
+        console.warn('⚠️ Supabase not available, showing signup CTA anyway');
         if (ctaSection) ctaSection.style.display = 'block';
       }
     } catch (error) {
-      console.error('Auth check error:', error);
-      // On error, show the CTA section
-      const ctaSection = document.getElementById('user-profile-signup');
+      console.error('❌ Auth check error:', error);
+      // On error, keep showing the CTA section
       if (ctaSection) ctaSection.style.display = 'block';
     }
   }
