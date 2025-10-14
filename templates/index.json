@@ -43,6 +43,7 @@
     },
     "halloween-countdown": {
       "type": "countdown-halloween",
+      "disabled": true,
       "settings": {
         "show_label": true,
         "label": "Countdown to Halloween",
@@ -101,6 +102,7 @@
     },
     "smart_design_suggestions": {
       "type": "smart-design-suggestions",
+      "disabled": true,
       "name": "AI Suggestions",
       "settings": {
         "heading": "AI-Powered Design Suggestions",
@@ -114,6 +116,7 @@
     },
     "customizer_integration": {
       "type": "customizer-integration",
+      "disabled": true,
       "name": "Design Process",
       "settings": {
         "heading": "From Design to Delivery",
