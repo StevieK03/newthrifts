@@ -2597,7 +2597,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
 
       // Get the uploaded design image
-      const overlayImg = document.querySelector(`#nt-overlay-{{ section.id }} img`);
+      let overlayImg = document.querySelector(`#nt-overlay-{{ section.id }} img`);
       console.log('🔍 Design image found:', overlayImg ? 'YES' : 'NO');
       
       if (overlayImg) {
