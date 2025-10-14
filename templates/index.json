@@ -164,14 +164,6 @@
         "show_last_updated": true
       }
     },
-    "user_profile_signup_section": {
-      "type": "user-profile-signup",
-      "name": "Join NewThrifts",
-      "settings": {
-        "heading": "Join NewThrifts",
-        "description": "Create your profile to save preferences, track orders, and get personalized style recommendations."
-      }
-    },
     "product_poll_section": {
       "type": "product-poll",
       "blocks": {
@@ -226,7 +218,6 @@
     "header",
     "quick_view_modal",
     "advanced_tshirt_customizer",
-    "user_profile_signup_section",
     "welcome_social_bar_JEwJ6C",
     "halloween-countdown",
     "smart_design_suggestions",
