@@ -535,7 +535,8 @@ document.addEventListener('DOMContentLoaded', function() {
   function closeModal() {
     console.log('🔒 Closing modal');
     if (profileModal) {
-      profileModal.style.display = 'none';
+      // Use setProperty with 'important' to override CSS !important rules
+      profileModal.style.setProperty('display', 'none', 'important');
       document.body.style.overflow = 'auto'; // Restore scrolling
       console.log('✅ Modal closed successfully');
     } else {
