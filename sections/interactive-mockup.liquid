@@ -67,6 +67,29 @@ Enhanced Interactive Product Mockup
           </div>
         </div>
 
+        <!-- Size Selector with Size Guide -->
+        <div class="nt-mockup__group" style="background: linear-gradient(135deg, #667eea, #764ba2); padding: 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);">
+          <span class="nt-mockup__label" style="font-weight: 600; font-size: 14px; color: #fff; margin-right: 12px;">📏 Size</span>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <select id="mockup-size-select-{{ section.id }}" class="mockup-size-select" style="padding: 8px 16px; border: 2px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.15); color: #fff; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; min-width: 100px;">
+              <option value="">Select Size</option>
+              <option value="XXS">XXS</option>
+              <option value="XS">XS</option>
+              <option value="S">S</option>
+              <option value="M" selected>M</option>
+              <option value="L">L</option>
+              <option value="XL">XL</option>
+              <option value="XXL">XXL</option>
+            </select>
+            <button class="nt-btn nt-btn--size-guide" id="mockup-size-guide-{{ section.id }}" style="padding: 8px 16px; border: 2px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.2); color: #fff; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; white-space: nowrap;">
+              📐 Size Guide
+            </button>
+          </div>
+          <div id="size-info-{{ section.id }}" class="size-info" style="margin-top: 8px; font-size: 12px; color: rgba(255,255,255,0.9); display: none;">
+            <span id="size-details-{{ section.id }}"></span>
+          </div>
+        </div>
+
         <!-- Enhanced 3D Controls -->
         <div class="nt-mockup__group" style="background: linear-gradient(135deg, #334155, #475569); padding: 16px; border-radius: 12px; border: 1px solid #475569;">
           <span class="nt-mockup__label" style="font-weight: 600; font-size: 14px; color: #f8fafc; margin-right: 12px;">🎯 3D Controls</span>
@@ -2832,7 +2855,82 @@ document.addEventListener('DOMContentLoaded', function() {
   // Make globally available
   window.mockup = mockup;
 
+  // ============================================================================
+  // SIZE SELECTOR INTEGRATION
+  // ============================================================================
+  
+  const sizeSelect = document.getElementById('mockup-size-select-{{ section.id }}');
+  const sizeGuideBtn = document.getElementById('mockup-size-guide-{{ section.id }}');
+  const sizeInfo = document.getElementById('size-info-{{ section.id }}');
+  const sizeDetails = document.getElementById('size-details-{{ section.id }}');
+  
+  // Get selected color for size chart lookup
+  function getSelectedColor() {
+    const activeColorBtn = document.querySelector('.nt-btn--color.is-active');
+    return activeColorBtn ? activeColorBtn.dataset.color : 'white';
+  }
+  
+  // Handle size selection change
+  if (sizeSelect) {
+    sizeSelect.addEventListener('change', async (e) => {
+      const selectedSize = e.target.value;
+      if (!selectedSize) {
+        sizeInfo.style.display = 'none';
+        return;
+      }
+      
+      // Get size measurements from database
+      try {
+        const color = getSelectedColor() === 'white' || getSelectedColor() === 'black' ? getSelectedColor() : 'black';
+        const result = await window.NewThriftsSizes.getSizeChart('t-shirt', color);
+        
+        if (result.success) {
+          const sizeData = result.sizes.find(s => s.size_code === selectedSize);
+          if (sizeData) {
+            sizeDetails.innerHTML = `
+              <strong>${selectedSize}:</strong> 
+              Length: ${sizeData.garment_length}cm | 
+              Bust: ${sizeData.bust_width}cm | 
+              Shoulder: ${sizeData.shoulder_width}cm | 
+              Sleeve: ${sizeData.sleeve_length}cm
+            `;
+            sizeInfo.style.display = 'block';
+            
+            // Store selected size in mockup state
+            mockup.selectedSize = selectedSize;
+            console.log(`📏 Size selected: ${selectedSize}`, sizeData);
+          }
+        }
+      } catch (error) {
+        console.error('Error loading size data:', error);
+        sizeInfo.style.display = 'none';
+      }
+    });
+    
+    // Trigger change event for default size
+    sizeSelect.dispatchEvent(new Event('change'));
+  }
+  
+  // Handle size guide button click
+  if (sizeGuideBtn) {
+    sizeGuideBtn.addEventListener('click', () => {
+      const color = getSelectedColor() === 'white' || getSelectedColor() === 'black' ? getSelectedColor() : 'black';
+      window.NewThriftsSizes.showSizeGuideModal('t-shirt', color);
+    });
+  }
+  
+  // Update size info when color changes
+  document.querySelectorAll('.nt-btn--color').forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Trigger size select change to update measurements for new color
+      if (sizeSelect && sizeSelect.value) {
+        sizeSelect.dispatchEvent(new Event('change'));
+      }
+    });
+  });
+
   console.log('🚀 ENHANCED Interactive Mockup initialized! 🎨');
+  console.log('📏 Size selector integrated with size chart system!');
 });
 </script>
 
