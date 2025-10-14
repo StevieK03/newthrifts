@@ -526,18 +526,40 @@ document.addEventListener('DOMContentLoaded', function() {
   const switchToLogin = document.getElementById('switch-to-login');
   const switchToSignup = document.getElementById('switch-to-signup');
 
+  console.log('🔍 Modal elements:', {
+    closeModalBtn: closeModalBtn,
+    modalOverlay: modalOverlay,
+    profileModal: profileModal
+  });
+
   function closeModal() {
     console.log('🔒 Closing modal');
-    profileModal.style.display = 'none';
-    document.body.style.overflow = 'auto'; // Restore scrolling
+    if (profileModal) {
+      profileModal.style.display = 'none';
+      document.body.style.overflow = 'auto'; // Restore scrolling
+      console.log('✅ Modal closed successfully');
+    } else {
+      console.error('❌ Profile modal element not found!');
+    }
   }
 
   if (closeModalBtn) {
-    closeModalBtn.addEventListener('click', closeModal);
+    console.log('✅ Close button found, attaching listener');
+    closeModalBtn.addEventListener('click', function(e) {
+      console.log('🖱️ Close button clicked!');
+      e.preventDefault();
+      e.stopPropagation();
+      closeModal();
+    });
+  } else {
+    console.error('❌ Close button not found!');
   }
 
   if (modalOverlay) {
+    console.log('✅ Modal overlay found, attaching listener');
     modalOverlay.addEventListener('click', closeModal);
+  } else {
+    console.error('❌ Modal overlay not found!');
   }
 
   // Close modal on Escape key
