@@ -414,7 +414,7 @@ async function showGallery() {
       <div class="gallery-item">
         <img src="${item.custom_designs.preview_image_url}">
         <h4>${item.title || item.custom_designs.design_name}</h4>
-        <p>By ${item.user_profiles.email.split('@')[0]}</p>
+        <p>User ID: ${item.user_id.substring(0, 8)}...</p>
         <div class="stats">
           <span>❤️ ${item.likes_count}</span>
           <span>👁️ ${item.views_count}</span>
@@ -467,10 +467,9 @@ SELECT
   cd.preview_image_url,
   dg.likes_count,
   dg.views_count,
-  up.email as creator_email
+  dg.user_id
 FROM design_gallery dg
 JOIN custom_designs cd ON dg.custom_design_id = cd.id
-LEFT JOIN user_profiles up ON dg.user_id = up.id
 ORDER BY dg.likes_count DESC
 LIMIT 10;
 ```
