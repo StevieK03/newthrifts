@@ -42,9 +42,13 @@ Enhanced Interactive Product Mockup
       </div>
     </div>
 
-    <!-- Size Chart - MOVED ABOVE CANVAS -->
-    <div class="size-chart-container" style="margin: 20px 0; padding: 16px; background: #ff0000; border-radius: 12px; border: 5px solid #00ff00; max-width: 1200px; margin-left: auto; margin-right: auto;">
-      <h5 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #ffffff;">🚨 SIZE CHART MOVED ABOVE CANVAS 🚨</h5>
+    <!-- Size Chart - Collapsible -->
+    <div class="size-chart-container" style="margin: 20px 0; max-width: 1200px; margin-left: auto; margin-right: auto;">
+      <button id="size-chart-toggle-{{ section.id }}" style="width: 100%; padding: 16px; background: linear-gradient(135deg, #0ea5e9, #0284c7); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3); transition: all 0.3s ease;">
+        <span>📏 Size Chart</span>
+        <span id="size-chart-icon-{{ section.id }}" style="font-size: 18px; transition: transform 0.3s ease;">▼</span>
+      </button>
+      <div id="size-chart-content-{{ section.id }}" style="display: none; margin-top: 16px; padding: 16px; background: #f0f9ff; border-radius: 12px; border: 1px solid #0ea5e9;">
       <div style="overflow-x: auto;">
         <table class="size-chart-table" style="width: 100%; border-collapse: collapse; font-size: 12px; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
           <thead>
@@ -113,6 +117,7 @@ Enhanced Interactive Product Mockup
         <p style="margin: 0; font-size: 11px; color: #92400e; line-height: 1.4;">
           <strong>📏 Measurement Notes:</strong> Flat measurements with 1-3cm tolerance. Body shapes vary, please choose carefully. Slight color variations may occur due to lighting and printing.
         </p>
+      </div>
       </div>
     </div>
 
@@ -1122,6 +1127,25 @@ Enhanced Interactive Product Mockup
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  // Size Chart Toggle Functionality
+  const sizeChartToggle = document.getElementById('size-chart-toggle-{{ section.id }}');
+  const sizeChartContent = document.getElementById('size-chart-content-{{ section.id }}');
+  const sizeChartIcon = document.getElementById('size-chart-icon-{{ section.id }}');
+  
+  if (sizeChartToggle && sizeChartContent && sizeChartIcon) {
+    sizeChartToggle.addEventListener('click', function() {
+      if (sizeChartContent.style.display === 'none') {
+        sizeChartContent.style.display = 'block';
+        sizeChartIcon.style.transform = 'rotate(180deg)';
+        sizeChartToggle.style.background = 'linear-gradient(135deg, #059669, #047857)';
+      } else {
+        sizeChartContent.style.display = 'none';
+        sizeChartIcon.style.transform = 'rotate(0deg)';
+        sizeChartToggle.style.background = 'linear-gradient(135deg, #0ea5e9, #0284c7)';
+      }
+    });
+  }
+
   const mockup = {
     // Mockup images mapping - using tshirt-view.png as the base template
     mockupImages: {
