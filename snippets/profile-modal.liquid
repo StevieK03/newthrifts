@@ -101,16 +101,19 @@ Contains the signup/login modal accessible from the header
         <!-- Sign In Form -->
         <div class="login-form" id="login-form" style="display: none;">
           <h3>Sign In</h3>
-          <form id="user-login-form">
+          <form id="user-login-form" action="/account/login" method="post">
+            <input type="hidden" name="form_type" value="customer_login">
+            <input type="hidden" name="utf8" value="✓">
+            
             <div class="form-group">
               <label for="login-email">Email Address</label>
-              <input type="email" id="login-email" name="email" required autocomplete="email">
+              <input type="email" id="login-email" name="customer[email]" required autocomplete="email">
               <span class="error-message" id="login-email-error"></span>
             </div>
 
             <div class="form-group">
               <label for="login-password">Password</label>
-              <input type="password" id="login-password" name="password" required autocomplete="current-password">
+              <input type="password" id="login-password" name="customer[password]" required autocomplete="current-password">
               <span class="error-message" id="login-password-error"></span>
             </div>
 
