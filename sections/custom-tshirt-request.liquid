@@ -438,37 +438,21 @@
             </div>
           </div>
 
-          <!-- DRAMATICALLY ENHANCED Submit Button -->
+          <!-- Submit Button -->
           <div style="text-align: center; margin-top: 2rem;">
-            <button type="submit" class="submit-request-btn" style="
-              background: linear-gradient(135deg, #ff4fa3, #ef4444);
+            <button type="submit" style="
+              background: linear-gradient(135deg, var(--accent-color), #B22222);
               color: white;
               border: none;
-              padding: 18px 36px;
-              font-size: 1.2rem;
-              font-weight: 700;
-              border-radius: 16px;
+              padding: 1rem 2rem;
+              font-size: 1.1rem;
+              font-weight: 600;
+              border-radius: 8px;
               cursor: pointer;
-              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-              box-shadow: 0 8px 32px rgba(255, 79, 163, 0.4);
-              backdrop-filter: blur(10px);
-              -webkit-backdrop-filter: blur(10px);
-              position: relative;
-              overflow: hidden;
-              text-transform: uppercase;
-              letter-spacing: 1px;
-              min-height: 60px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              gap: 12px;
-              margin: 0 auto;
-            ">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                <path d="M2 17l10 5 10-5"/>
-                <path d="M2 12l10 5 10-5"/>
-              </svg>
+              transition: transform 0.2s ease, box-shadow 0.2s ease;
+              box-shadow: 0 4px 15px rgba(220, 20, 60, 0.3);
+            " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(220, 20, 60, 0.4)'" 
+               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(220, 20, 60, 0.3)'">
               {{ section.settings.button_text | default: 'Submit Request' }}
             </button>
           </div>
@@ -1483,125 +1467,14 @@
       border-color: var(--accent-color);
     }
 
-    /* ===== DRAMATICALLY ENHANCED VIEW TOGGLE BUTTONS ===== */
+    /* View toggle buttons */
     .view-btn, .angle-btn {
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-      background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)) !important;
-      border: 2px solid transparent !important;
-      border-radius: 12px !important;
-      padding: 10px 16px !important;
-      font-weight: 600 !important;
-      cursor: pointer !important;
-      backdrop-filter: blur(10px) !important;
-      -webkit-backdrop-filter: blur(10px) !important;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.1) !important;
-      position: relative !important;
-      overflow: hidden !important;
-      min-height: 40px !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      gap: 6px !important;
+      transition: all 0.2s ease !important;
     }
     
     .view-btn:hover, .angle-btn:hover {
-      transform: translateY(-2px) scale(1.02) !important;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.2) !important;
-      background: linear-gradient(135deg, rgba(39,225,193,0.15), rgba(39,225,193,0.1)) !important;
-      border-color: var(--accent-color, #27e1c1) !important;
-    }
-
-    .view-btn.active, .angle-btn.active {
-      background: linear-gradient(135deg, var(--accent-color, #27e1c1), #20b2aa) !important;
-      color: white !important;
-      box-shadow: 0 6px 20px rgba(39,225,193,0.4) !important;
       transform: translateY(-1px) !important;
-    }
-
-    /* ===== DRAMATICALLY ENHANCED SUBMIT BUTTON ===== */
-    .submit-request-btn {
-      animation: button-pulse 2s ease-in-out infinite !important;
-    }
-
-    .submit-request-btn:hover {
-      background: linear-gradient(135deg, #ff6bb3, #f56565) !important;
-      transform: translateY(-3px) scale(1.05) !important;
-      box-shadow: 0 12px 40px rgba(255, 79, 163, 0.6) !important;
-    }
-
-    .submit-request-btn:active {
-      transform: translateY(-1px) scale(1.02) !important;
-    }
-
-    .submit-request-btn::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-      transition: left 0.6s;
-    }
-
-    .submit-request-btn:hover::before {
-      left: 100%;
-    }
-
-    /* ===== ENHANCED ACTION BUTTONS ===== */
-    .download-btn, .edit-btn, .placement-btn {
-      padding: 12px 20px !important;
-      border-radius: 12px !important;
-      font-weight: 600 !important;
-      cursor: pointer !important;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-      backdrop-filter: blur(10px) !important;
-      -webkit-backdrop-filter: blur(10px) !important;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.1) !important;
-      position: relative !important;
-      overflow: hidden !important;
-      min-height: 44px !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      gap: 8px !important;
-      border: 2px solid transparent !important;
-    }
-
-    .download-btn {
-      background: linear-gradient(135deg, #10b981, #059669) !important;
-      color: white !important;
-      box-shadow: 0 4px 16px rgba(16,185,129,0.3) !important;
-    }
-
-    .download-btn:hover {
-      background: linear-gradient(135deg, #34d399, #10b981) !important;
-      transform: translateY(-2px) scale(1.02) !important;
-      box-shadow: 0 8px 24px rgba(16,185,129,0.4) !important;
-    }
-
-    .edit-btn {
-      background: linear-gradient(135deg, #6b7280, #4b5563) !important;
-      color: white !important;
-      box-shadow: 0 4px 16px rgba(107,114,128,0.3) !important;
-    }
-
-    .edit-btn:hover {
-      background: linear-gradient(135deg, #9ca3af, #6b7280) !important;
-      transform: translateY(-2px) scale(1.02) !important;
-      box-shadow: 0 8px 24px rgba(107,114,128,0.4) !important;
-    }
-
-    .placement-btn {
-      background: linear-gradient(135deg, #f59e0b, #d97706) !important;
-      color: white !important;
-      box-shadow: 0 4px 16px rgba(245,158,11,0.3) !important;
-    }
-
-    .placement-btn:hover {
-      background: linear-gradient(135deg, #f6ad55, #ea580c) !important;
-      transform: translateY(-2px) scale(1.02) !important;
-      box-shadow: 0 8px 24px rgba(245,158,11,0.4) !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
     }
     
     .model-view {

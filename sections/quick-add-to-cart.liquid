@@ -22,35 +22,28 @@
 </div>
 
 <style>
-  /* Enhanced Quick Add to Cart Button Styles */
+  /* Quick Add to Cart Button Styles */
   .quick-add-btn {
     position: absolute;
     bottom: 12px;
     left: 12px;
     right: 12px;
-    background: linear-gradient(135deg, #ff4fa3 0%, #27e1c1 100%);
+    background: var(--color-accent);
     color: white;
     border: none;
-    border-radius: 12px;
-    padding: 14px 20px;
+    border-radius: 8px;
+    padding: 12px 16px;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s ease;
     opacity: 0;
     transform: translateY(10px);
     z-index: 10;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    box-shadow: 0 4px 16px rgba(255, 79, 163, 0.3);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    min-height: 48px;
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
+    gap: 6px;
   }
 
   .product-card:hover .quick-add-btn {
@@ -59,13 +52,9 @@
   }
 
   .quick-add-btn:hover {
-    background: linear-gradient(135deg, #ff6bb3 0%, #39f1d1 100%);
+    background: var(--color-accent-2);
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(255, 79, 163, 0.4);
-  }
-
-  .quick-add-btn:active {
-    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   }
 
   .quick-add-btn:disabled {
@@ -321,34 +310,22 @@
   .quick-add-to-cart-btn {
     flex: 1;
     padding: 16px 24px;
-    background: linear-gradient(135deg, #ff4fa3 0%, #27e1c1 100%);
+    background: var(--color-accent);
     color: white;
     border: none;
     border-radius: 12px;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    box-shadow: 0 4px 16px rgba(255, 79, 163, 0.3);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    min-height: 56px;
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
   }
 
   .quick-add-to-cart-btn:hover {
-    background: linear-gradient(135deg, #ff6bb3 0%, #39f1d1 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(255, 79, 163, 0.4);
-  }
-
-  .quick-add-to-cart-btn:active {
+    background: var(--color-accent-2);
     transform: translateY(-1px);
   }
 
