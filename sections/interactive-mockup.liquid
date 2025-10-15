@@ -42,11 +42,86 @@ Enhanced Interactive Product Mockup
       </div>
     </div>
 
+    <!-- Size Chart - MOVED ABOVE CANVAS -->
+    <div class="size-chart-container" style="margin: 20px 0; padding: 16px; background: #ff0000; border-radius: 12px; border: 5px solid #00ff00; max-width: 1200px; margin-left: auto; margin-right: auto;">
+      <h5 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #ffffff;">🚨 SIZE CHART MOVED ABOVE CANVAS 🚨</h5>
+      <div style="overflow-x: auto;">
+        <table class="size-chart-table" style="width: 100%; border-collapse: collapse; font-size: 12px; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <thead>
+            <tr style="background: linear-gradient(135deg, #0ea5e9, #0284c7); color: white;">
+              <th style="padding: 8px; text-align: left; font-weight: 600;">Size</th>
+              <th style="padding: 8px; text-align: center; font-weight: 600;">Garment Length</th>
+              <th style="padding: 8px; text-align: center; font-weight: 600;">Chest Width</th>
+              <th style="padding: 8px; text-align: center; font-weight: 600;">Shoulder Width</th>
+              <th style="padding: 8px; text-align: center; font-weight: 600;">Sleeve Length</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid #e5e7eb;">
+              <td style="padding: 8px; font-weight: 600; color: #374151;">XXS</td>
+              <td style="padding: 8px; text-align: center; color: #374151;">52cm</td>
+              <td style="padding: 8px; text-align: center; color: #374151;">46cm</td>
+              <td style="padding: 8px; text-align: center; color: #374151;">42cm</td>
+              <td style="padding: 8px; text-align: center; color: #374151;">19cm</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e5e7eb; background: #f8fafc;">
+              <td style="padding: 8px; font-weight: 600; color: #374151;">XS</td>
+              <td style="padding: 8px; text-align: center; color: #374151;">54cm</td>
+              <td style="padding: 8px; text-align: center; color: #374151;">48cm</td>
+              <td style="padding: 8px; text-align: center; color: #374151;">43.5cm</td>
+              <td style="padding: 8px; text-align: center; color: #374151;">19cm</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e5e7eb;">
+              <td style="padding: 8px; font-weight: 600; color: #374151;">S</td>
+              <td style="padding: 8px; text-align: center; color: #374151;">56cm</td>
+              <td style="padding: 8px; text-align: center; color: #374151;">50cm</td>
+              <td style="padding: 8px; text-align: center; color: #374151;">45cm</td>
+              <td style="padding: 8px; text-align: center; color: #374151;">20cm</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e5e7eb; background: #f8fafc;">
+              <td style="padding: 8px; font-weight: 600; color: #374151;">M</td>
+              <td style="padding: 8px; text-align: center; color: #374151;">58cm</td>
+              <td style="padding: 8px; text-align: center; color: #374151;">52cm</td>
+              <td style="padding: 8px; text-align: center; color: #374151;">46.5cm</td>
+              <td style="padding: 8px; text-align: center; color: #374151;">20cm</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e5e7eb;">
+              <td style="padding: 8px; font-weight: 600; color: #374151;">L</td>
+              <td style="padding: 8px; text-align: center; color: #374151;">60cm</td>
+              <td style="padding: 8px; text-align: center; color: #374151;">54cm</td>
+              <td style="padding: 8px; text-align: center; color: #374151;">48cm</td>
+              <td style="padding: 8px; text-align: center; color: #374151;">21cm</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e5e7eb; background: #f8fafc;">
+              <td style="padding: 8px; font-weight: 600; color: #374151;">XL</td>
+              <td style="padding: 8px; text-align: center; color: #374151;">62cm</td>
+              <td style="padding: 8px; text-align: center; color: #374151;">56cm</td>
+              <td style="padding: 8px; text-align: center; color: #374151;">49.5cm</td>
+              <td style="padding: 8px; text-align: center; color: #374151;">21cm</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px; font-weight: 600; color: #374151;">XXL</td>
+              <td style="padding: 8px; text-align: center; color: #374151;">64cm</td>
+              <td style="padding: 8px; text-align: center; color: #374151;">58cm</td>
+              <td style="padding: 8px; text-align: center; color: #374151;">51cm</td>
+              <td style="padding: 8px; text-align: center; color: #374151;">22cm</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top: 12px; padding: 8px; background: #fef3c7; border-radius: 6px; border: 1px solid #fbbf24;">
+        <p style="margin: 0; font-size: 11px; color: #92400e; line-height: 1.4;">
+          <strong>📏 Measurement Notes:</strong> Flat measurements with 1-3cm tolerance. Body shapes vary, please choose carefully. Slight color variations may occur due to lighting and printing.
+        </p>
+      </div>
+    </div>
+
     <!-- Enhanced Preview Stage -->
     <div class="nt-mockup__stage" style="width: 100%; display: grid; place-items: center; margin-top: 60px !important; margin-bottom: 100px !important; padding: 0 20px;">
         <div class="nt-mockup__canvas" 
              id="nt-mockup-canvas-{{ section.id }}"
-           style="position: relative; width: min(1400px, 100%); max-width: 98vw; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; overflow: visible; box-shadow: 0 25px 80px rgba(102, 126, 234, 0.3), 0 10px 30px rgba(0,0,0,0.2); padding: 40px; border: 5px solid #ff0000; --overlay-top: 30%; --overlay-left: 50%; --overlay-width: 50%; --overlay-height: 65%; --overlay-rotate: 0deg;">
+           style="position: relative; width: min(1400px, 100%); max-width: 98vw; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; overflow: visible; box-shadow: 0 25px 80px rgba(102, 126, 234, 0.3), 0 10px 30px rgba(0,0,0,0.2); padding: 40px; --overlay-top: 30%; --overlay-left: 50%; --overlay-width: 50%; --overlay-height: 65%; --overlay-rotate: 0deg;">
+        
         
         <!-- T-shirt Mockup Container -->
         <div style="position: relative; width: 100%; aspect-ratio: 1 / 1; cursor: grab;">
@@ -163,26 +238,28 @@ Enhanced Interactive Product Mockup
       <div id="nt-status-text-{{ section.id }}"></div>
     </div>
   </div>
-</div>
 
   <!-- Resize Handle (only visible when design is selected) -->
   <div id="nt-resize-handle-{{ section.id }}" 
        style="position: absolute; bottom: -8px; right: -8px; width: 20px; height: 20px; background: #8b5cf6; border: 2px solid white; border-radius: 50%; cursor: nw-resize; display: none; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; border-right: 2px solid white; border-bottom: 2px solid white; transform: translate(-50%, -50%) rotate(45deg);"></div>
   </div>
+  </div>
 <!-- Close inner mockup container -->
 
-      <p class="nt-mockup__hint" style="color: #e5e7eb; font-size: 14px; margin-top: 16px; text-align: center;">
-        💡 Tip: Drag the design to move it, use scroll wheel to resize, or use the precise controls below
-      </p>
+<!-- DESIGN CONTROLS INSIDE CANVAS -->
+<div style="margin-top: 20px;">
+  <p style="color: #e5e7eb; font-size: 14px; margin-top: 16px; text-align: center;">
+    💡 Tip: Drag the design to move it, use scroll wheel to resize, or use the precise controls below
+  </p>
 
-      <!-- Design Customization Controls -->
-      <div style="text-align: center; margin: 20px 0 16px 0;">
-        <h2 style="font-size: 18px; font-weight: 600; color: #ffffff; margin: 0 0 8px 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">🎛️ Design Customization Controls</h2>
-        <p style="font-size: 11px; color: #e5e7eb; margin: 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">Customize your t-shirt design with precision controls</p>
-      </div>
+  <!-- Design Customization Controls -->
+  <div style="text-align: center; margin: 20px 0 16px 0;">
+    <h2 style="font-size: 18px; font-weight: 600; color: #ffffff; margin: 0 0 8px 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">🎛️ Design Customization Controls</h2>
+    <p style="font-size: 11px; color: #e5e7eb; margin: 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">Customize your t-shirt design with precision controls</p>
+  </div>
 
-      <div class="nt-mockup__controls" style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: center; background: rgba(30, 41, 59, 0.8); padding: 16px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); border: 3px solid #ff0000; margin: 10px 0;">
+  <div class="nt-mockup__controls" style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: center; background: rgba(30, 41, 59, 0.8); padding: 16px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); border: 1px solid rgba(255, 255, 255, 0.1); margin: 10px 0;">
         
         <!-- View Controls -->
         <div class="nt-mockup__group">
@@ -316,6 +393,8 @@ Enhanced Interactive Product Mockup
         </div>
       </div>
     </div>
+</div>
+<!-- CLOSE DESIGN CONTROLS INSIDE CANVAS -->
     <!-- Close nt-mockup__canvas -->
     </div>
     <!-- Close nt-mockup__stage -->
@@ -446,79 +525,6 @@ Enhanced Interactive Product Mockup
           </form>
         </div>
 
-        <!-- Size Chart -->
-        <div class="size-chart-container" style="margin-top: 20px; padding: 16px; background: #f0f9ff; border-radius: 12px; border: 1px solid #0ea5e9;">
-          <h5 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #0c4a6e;">📏 Size Chart</h5>
-          <div style="overflow-x: auto;">
-            <table class="size-chart-table" style="width: 100%; border-collapse: collapse; font-size: 12px; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-              <thead>
-                <tr style="background: linear-gradient(135deg, #0ea5e9, #0284c7); color: white;">
-                  <th style="padding: 8px; text-align: left; font-weight: 600;">Size</th>
-                  <th style="padding: 8px; text-align: center; font-weight: 600;">Garment Length</th>
-                  <th style="padding: 8px; text-align: center; font-weight: 600;">Chest Width</th>
-                  <th style="padding: 8px; text-align: center; font-weight: 600;">Shoulder Width</th>
-                  <th style="padding: 8px; text-align: center; font-weight: 600;">Sleeve Length</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr style="border-bottom: 1px solid #e5e7eb;">
-                  <td style="padding: 8px; font-weight: 600; color: #374151;">XXS</td>
-                  <td style="padding: 8px; text-align: center; color: #374151;">52cm</td>
-                  <td style="padding: 8px; text-align: center; color: #374151;">46cm</td>
-                  <td style="padding: 8px; text-align: center; color: #374151;">42cm</td>
-                  <td style="padding: 8px; text-align: center; color: #374151;">19cm</td>
-                </tr>
-                <tr style="border-bottom: 1px solid #e5e7eb; background: #f8fafc;">
-                  <td style="padding: 8px; font-weight: 600; color: #374151;">XS</td>
-                  <td style="padding: 8px; text-align: center; color: #374151;">54cm</td>
-                  <td style="padding: 8px; text-align: center; color: #374151;">48cm</td>
-                  <td style="padding: 8px; text-align: center; color: #374151;">43.5cm</td>
-                  <td style="padding: 8px; text-align: center; color: #374151;">19cm</td>
-                </tr>
-                <tr style="border-bottom: 1px solid #e5e7eb;">
-                  <td style="padding: 8px; font-weight: 600; color: #374151;">S</td>
-                  <td style="padding: 8px; text-align: center; color: #374151;">56cm</td>
-                  <td style="padding: 8px; text-align: center; color: #374151;">50cm</td>
-                  <td style="padding: 8px; text-align: center; color: #374151;">45cm</td>
-                  <td style="padding: 8px; text-align: center; color: #374151;">20cm</td>
-                </tr>
-                <tr style="border-bottom: 1px solid #e5e7eb; background: #f8fafc;">
-                  <td style="padding: 8px; font-weight: 600; color: #374151;">M</td>
-                  <td style="padding: 8px; text-align: center; color: #374151;">58cm</td>
-                  <td style="padding: 8px; text-align: center; color: #374151;">52cm</td>
-                  <td style="padding: 8px; text-align: center; color: #374151;">46.5cm</td>
-                  <td style="padding: 8px; text-align: center; color: #374151;">20cm</td>
-                </tr>
-                <tr style="border-bottom: 1px solid #e5e7eb;">
-                  <td style="padding: 8px; font-weight: 600; color: #374151;">L</td>
-                  <td style="padding: 8px; text-align: center; color: #374151;">60cm</td>
-                  <td style="padding: 8px; text-align: center; color: #374151;">54cm</td>
-                  <td style="padding: 8px; text-align: center; color: #374151;">48cm</td>
-                  <td style="padding: 8px; text-align: center; color: #374151;">21cm</td>
-                </tr>
-                <tr style="border-bottom: 1px solid #e5e7eb; background: #f8fafc;">
-                  <td style="padding: 8px; font-weight: 600; color: #374151;">XL</td>
-                  <td style="padding: 8px; text-align: center; color: #374151;">62cm</td>
-                  <td style="padding: 8px; text-align: center; color: #374151;">56cm</td>
-                  <td style="padding: 8px; text-align: center; color: #374151;">49.5cm</td>
-                  <td style="padding: 8px; text-align: center; color: #374151;">21cm</td>
-                </tr>
-                <tr>
-                  <td style="padding: 8px; font-weight: 600; color: #374151;">XXL</td>
-                  <td style="padding: 8px; text-align: center; color: #374151;">64cm</td>
-                  <td style="padding: 8px; text-align: center; color: #374151;">58cm</td>
-                  <td style="padding: 8px; text-align: center; color: #374151;">51cm</td>
-                  <td style="padding: 8px; text-align: center; color: #374151;">22cm</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div style="margin-top: 12px; padding: 8px; background: #fef3c7; border-radius: 6px; border: 1px solid #fbbf24;">
-            <p style="margin: 0; font-size: 11px; color: #92400e; line-height: 1.4;">
-              <strong>📏 Measurement Notes:</strong> Flat measurements with 1-3cm tolerance. Body shapes vary, please choose carefully. Slight color variations may occur due to lighting and printing.
-            </p>
-          </div>
-        </div>
 
         <!-- Mockup Size Controls -->
         <div style="margin-top: 20px; padding: 16px; background: #f0fdf4; border-radius: 12px; border: 1px solid #bbf7d0; max-width: 1200px; margin-left: auto; margin-right: auto;">
