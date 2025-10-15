@@ -46,7 +46,10 @@ Enhanced Interactive Product Mockup
     <div class="nt-mockup__stage" style="width: 100%; display: grid; place-items: center; margin-top: 60px !important; margin-bottom: 100px !important; padding: 0 20px;">
         <div class="nt-mockup__canvas" 
              id="nt-mockup-canvas-{{ section.id }}"
-           style="position: relative; width: min(900px, 100%); max-width: 90vw; aspect-ratio: 1 / 1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; overflow: hidden; box-shadow: 0 25px 80px rgba(102, 126, 234, 0.3), 0 10px 30px rgba(0,0,0,0.2); cursor: grab; --overlay-top: 30%; --overlay-left: 50%; --overlay-width: 50%; --overlay-height: 65%; --overlay-rotate: 0deg;">
+           style="position: relative; width: min(900px, 100%); max-width: 90vw; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; overflow: visible; box-shadow: 0 25px 80px rgba(102, 126, 234, 0.3), 0 10px 30px rgba(0,0,0,0.2); padding: 20px; --overlay-top: 30%; --overlay-left: 50%; --overlay-width: 50%; --overlay-height: 65%; --overlay-rotate: 0deg;">
+        
+        <!-- T-shirt Mockup Container -->
+        <div style="position: relative; width: 100%; aspect-ratio: 1 / 1; cursor: grab;">
       
   <!-- Base Mockup (swapped by JS) -->
   <img
@@ -168,18 +171,19 @@ Enhanced Interactive Product Mockup
     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; border-right: 2px solid white; border-bottom: 2px solid white; transform: translate(-50%, -50%) rotate(45deg);"></div>
   </div>
 </div>
+</div>
 
-<p class="nt-mockup__hint" style="color: #6b7280; font-size: 14px; margin-top: 16px; text-align: center;">
+<p class="nt-mockup__hint" style="color: #e5e7eb; font-size: 14px; margin-top: 16px; text-align: center;">
   💡 Tip: Drag the design to move it, use scroll wheel to resize, or use the precise controls below
 </p>
 
       <!-- Design Customization Controls -->
-      <div style="text-align: center; margin: 30px 0 20px 0;">
-        <h2 style="font-size: 20px; font-weight: 600; color: #ffffff; margin: 0 0 10px 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">🎛️ Design Customization Controls</h2>
-        <p style="font-size: 12px; color: #cbd5e1; margin: 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">Customize your t-shirt design with precision controls</p>
+      <div style="text-align: center; margin: 20px 0 16px 0;">
+        <h2 style="font-size: 18px; font-weight: 600; color: #ffffff; margin: 0 0 8px 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">🎛️ Design Customization Controls</h2>
+        <p style="font-size: 11px; color: #e5e7eb; margin: 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">Customize your t-shirt design with precision controls</p>
       </div>
 
-      <div class="nt-mockup__controls" style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: center; background: #1e293b; padding: 20px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); border: 1px solid #334155; max-width: 1200px; margin: 0 auto;">
+      <div class="nt-mockup__controls" style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: center; background: rgba(30, 41, 59, 0.8); padding: 16px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); border: 1px solid rgba(255, 255, 255, 0.1);">
         
         <!-- View Controls -->
         <div class="nt-mockup__group">
@@ -311,6 +315,7 @@ Enhanced Interactive Product Mockup
             "></div>
           </button>
         </div>
+      </div>
       </div>
     </div>
 
