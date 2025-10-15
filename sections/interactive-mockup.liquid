@@ -3200,7 +3200,7 @@ document.addEventListener('DOMContentLoaded', function() {
           throw new Error('EmailJS not loaded. Please include EmailJS script.');
         }
         
-        // Create email template parameters (simplified for EmailJS)
+        // Create email template parameters (without large image data)
         const templateParams = {
           to_email: emailContent.to,
           name: requestData.customer_name,
@@ -3224,15 +3224,15 @@ Design Specifications:
 - View: ${requestData.design_data.view}
 - T-Shirt Color: ${requestData.design_data.color}
 
-Attachments: Design and mockup images are attached.
+Design Images: 
+- Original design and mockup images are available in the database
+- Request ID: ${requestData.id || 'Pending'}
+- You can view/download images from Supabase dashboard
 
 Submitted: ${new Date().toLocaleString()}
-Request ID: ${requestData.id || 'Pending'}
 Source: NewThrifts Custom T-Shirt Designer
           `,
-          title: 'Custom T-Shirt Request',
-          design_image: designImageBase64,
-          mockup_image: mockupImageBase64
+          title: 'Custom T-Shirt Request'
         };
         
         // Send email via EmailJS
