@@ -232,7 +232,7 @@ Enhanced Interactive Product Mockup
         <div class="nt-mockup__stage" style="width: 100%; display: grid; place-items: center; margin-top: 60px !important; margin-bottom: 100px !important; padding: 0 20px;">
             <div class="nt-mockup__canvas" 
                  id="nt-mockup-canvas-{{ section.id }}"
-               style="position: relative; width: min(900px, 100%); max-width: 90vw; aspect-ratio: 1 / 1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; overflow: hidden; box-shadow: 0 25px 80px rgba(102, 126, 234, 0.3), 0 10px 30px rgba(0,0,0,0.2); cursor: grab; --overlay-top: 45%; --overlay-left: 50%; --overlay-width: 60%; --overlay-rotate: 0deg;">
+               style="position: relative; width: min(900px, 100%); max-width: 90vw; aspect-ratio: 1 / 1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; overflow: hidden; box-shadow: 0 25px 80px rgba(102, 126, 234, 0.3), 0 10px 30px rgba(0,0,0,0.2); cursor: grab; --overlay-top: 35%; --overlay-left: 50%; --overlay-width: 50%; --overlay-rotate: 0deg;">
           
       <!-- Base Mockup (swapped by JS) -->
       <img
@@ -658,11 +658,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Current view state
     state: { view: "front", color: "white" },
 
-    // Enhanced placement state - centered positioning
+    // Enhanced placement state - aligned with print area
     placementState: {
-      topPct: 45,
+      topPct: 35,   // Adjusted to match print area
       leftPct: 50,  // Centered horizontally
-      widthPct: 60,
+      widthPct: 50, // Adjusted to match print area width
       rotateDeg: 0,
       dragging: false,
       resizing: false,
@@ -692,9 +692,9 @@ document.addEventListener('DOMContentLoaded', function() {
     },
 
     forceCenterPositioning() {
-      this.placementState.topPct = 45;
+      this.placementState.topPct = 35;   // Aligned with print area
       this.placementState.leftPct = 50;  // Centered horizontally
-      this.placementState.widthPct = 60;
+      this.placementState.widthPct = 50; // Aligned with print area width
       this.placementState.rotateDeg = 0;
       
       this.updatePlacementDisplay();
@@ -705,9 +705,9 @@ document.addEventListener('DOMContentLoaded', function() {
       const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
       const rotateSlider = document.getElementById(`nt-rotate-{{ section.id }}`);
       
-      if (topSlider) topSlider.value = 45;
+      if (topSlider) topSlider.value = 35;
       if (leftSlider) leftSlider.value = 50;
-      if (widthSlider) widthSlider.value = 60;
+      if (widthSlider) widthSlider.value = 50;
       if (rotateSlider) rotateSlider.value = 0;
     },
 
@@ -934,9 +934,9 @@ document.addEventListener('DOMContentLoaded', function() {
           removeBtn.style.display = 'none';
         }
         
-        this.placementState.topPct = 45;
+        this.placementState.topPct = 35;   // Aligned with print area
         this.placementState.leftPct = 50;  // Centered horizontally
-        this.placementState.widthPct = 60;
+        this.placementState.widthPct = 50; // Aligned with print area width
         this.placementState.rotateDeg = 0;
         
         this.updatePlacementDisplay();
@@ -1030,9 +1030,9 @@ document.addEventListener('DOMContentLoaded', function() {
     },
 
     resetPlacement() {
-      this.placementState.topPct = 45;
+      this.placementState.topPct = 35;   // Aligned with print area
       this.placementState.leftPct = 50;  // Centered horizontally
-      this.placementState.widthPct = 60;
+      this.placementState.widthPct = 50; // Aligned with print area width
       this.placementState.rotateDeg = 0;
 
       const topSlider = document.getElementById(`nt-top-{{ section.id }}`);
