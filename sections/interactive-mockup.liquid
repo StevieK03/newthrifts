@@ -2170,7 +2170,14 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (submitBtn) {
           submitBtn.style.display = 'inline-block';
-          console.log('✅ Submit button shown');
+          submitBtn.style.opacity = '1';
+          submitBtn.style.pointerEvents = 'auto';
+          // Add a subtle glow to indicate it's ready
+          submitBtn.style.boxShadow = '0 8px 32px rgba(255, 79, 163, 0.6)';
+          console.log('✅ Submit button shown and enabled');
+          
+          // Show a brief success message
+          this.showMessage('✨ Design uploaded! You can now submit your request.', 'success');
         } else {
           console.log('❌ Submit button not found');
         }
@@ -2565,11 +2572,22 @@ document.addEventListener('DOMContentLoaded', function() {
       if (submitBtn) {
         submitBtn.addEventListener('click', () => {
           if (!this.placementState.hasUploadedDesign) {
-            this.showMessage('❌ Please upload a design first', 'error');
+            this.showMessage('📁 Please upload a design first to submit your request', 'error');
+            // Highlight the upload button to guide the user
+            const uploadBtn = document.getElementById(`nt-upload-{{ section.id }}`);
+            if (uploadBtn) {
+              uploadBtn.style.boxShadow = '0 0 20px rgba(30, 64, 175, 0.8)';
+              uploadBtn.style.animation = 'upload-royal-glow 1s ease-in-out 3';
+              setTimeout(() => {
+                uploadBtn.style.boxShadow = '';
+                uploadBtn.style.animation = '';
+              }, 3000);
+            }
             return;
           }
           requestPanel.style.display = 'block';
           requestPanel.scrollIntoView({ behavior: 'smooth' });
+          this.showMessage('📝 Please fill out the form below to submit your custom t-shirt request', 'info');
         });
       }
       
@@ -2742,7 +2760,17 @@ document.addEventListener('DOMContentLoaded', function() {
         this.showMessage('📤 Submitting your request...', 'info');
         
         // Generate mockup image for submission
+        this.showMessage('🎨 Generating design preview...', 'info');
         const mockupImageData = await this.generateMockupForSubmission();
+        
+        // Upload design to storage if available
+        let designImageUrl = null;
+        try {
+          designImageUrl = await this.uploadDesignToStorage();
+        } catch (error) {
+          console.warn('Could not upload design image:', error);
+          // Continue without design image if upload fails
+        }
         
         // Prepare request data
         const requestData = {
@@ -2761,16 +2789,29 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             view: this.state.view,
             color: this.state.color,
-            canvas_size: { width: 2000, height: 2000 }
+            canvas_size: { width: 2000, height: 2000 },
+            has_uploaded_design: this.placementState.hasUploadedDesign
           },
-          design_image_url: await this.uploadDesignToStorage(),
+          design_image_url: designImageUrl,
           mockup_image_url: mockupImageData
         };
 
-        // Send email notification using EmailJS
-        await this.sendEmailNotification(requestData);
+        // Submit to Supabase database
+        const supabaseResult = await this.submitToSupabase(requestData);
         
-        this.showMessage('🎉 Request submitted successfully! We\'ll contact you within 24 hours.', 'success');
+        if (supabaseResult.success) {
+          const requestId = supabaseResult.requestId ? ` (Request #${supabaseResult.requestId.slice(-8)})` : '';
+          this.showMessage(`🎉 Request submitted successfully! We'll contact you within 24 hours.${requestId}`, 'success');
+          
+          // Log success for debugging
+          console.log('✅ Custom t-shirt request submitted:', {
+            requestId: supabaseResult.requestId,
+            customerEmail: customerEmail,
+            hasDesign: this.placementState.hasUploadedDesign
+          });
+        } else {
+          throw new Error(supabaseResult.error || 'Failed to save request to database');
+        }
         document.getElementById(`nt-submit-request-{{ section.id }}`).style.display = 'none';
         this.resetRequestForm();
         
@@ -2790,6 +2831,31 @@ document.addEventListener('DOMContentLoaded', function() {
           submitBtn.classList.remove('loading');
           submitBtn.style.pointerEvents = 'auto';
         }
+      }
+    },
+
+    async submitToSupabase(requestData) {
+      try {
+        // Check if Supabase is available
+        if (typeof window.NewThriftsCustomRequests === 'undefined') {
+          console.warn('Supabase custom requests API not loaded');
+          return { success: false, error: 'Database service not available' };
+        }
+
+        // Use the existing Supabase API
+        const result = await window.NewThriftsCustomRequests.submitCustomRequest(requestData);
+        
+        if (result.success) {
+          console.log('✅ Request saved to Supabase:', result.requestId);
+          return { success: true, requestId: result.requestId };
+        } else {
+          console.error('❌ Supabase submission failed:', result.error);
+          return { success: false, error: result.error };
+        }
+        
+      } catch (error) {
+        console.error('❌ Error in submitToSupabase:', error);
+        return { success: false, error: error.message || 'Database connection failed' };
       }
     },
 
