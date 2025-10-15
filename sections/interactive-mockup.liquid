@@ -230,9 +230,9 @@ Enhanced Interactive Product Mockup
 
       <!-- Enhanced Preview Stage -->
         <div class="nt-mockup__stage" style="width: 100%; display: grid; place-items: center; margin-top: 60px !important; margin-bottom: 100px !important; padding: 0 20px;">
-          <div class="nt-mockup__canvas" 
-               id="nt-mockup-canvas-{{ section.id }}"
-               style="position: relative; width: min(900px, 100%); max-width: 90vw; aspect-ratio: 1 / 1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; overflow: hidden; box-shadow: 0 25px 80px rgba(102, 126, 234, 0.3), 0 10px 30px rgba(0,0,0,0.2); cursor: grab; --overlay-top: 45%; --overlay-left: 25%; --overlay-width: 60%; --overlay-rotate: 0deg;">
+            <div class="nt-mockup__canvas" 
+                 id="nt-mockup-canvas-{{ section.id }}"
+               style="position: relative; width: min(900px, 100%); max-width: 90vw; aspect-ratio: 1 / 1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; overflow: hidden; box-shadow: 0 25px 80px rgba(102, 126, 234, 0.3), 0 10px 30px rgba(0,0,0,0.2); cursor: grab; --overlay-top: 45%; --overlay-left: 50%; --overlay-width: 60%; --overlay-rotate: 0deg;">
           
       <!-- Base Mockup (swapped by JS) -->
       <img
@@ -254,11 +254,11 @@ Enhanced Interactive Product Mockup
             <img src="{{ 'Models/Women/Girl-Model.png' | asset_url }}" onload="console.log('✅ Direct asset test - Girl-Model.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - Girl-Model.png failed:', this.src);">
           </div>
           
-          <!-- Dynamic Design Overlay -->
+          <!-- Dynamic Design Overlay - Centered in print area -->
           <div
             id="nt-overlay-{{ section.id }}"
             class="nt-mockup__overlay"
-            style="position: absolute; width: var(--overlay-width); left: var(--overlay-left); top: var(--overlay-top); transform: rotate(var(--overlay-rotate)); height: auto; inset: auto; display: flex; align-items: center; justify-content: center; cursor: grab; transition: all 0.1s ease; border: 2px dashed rgba(39, 225, 193, 0.3); border-radius: 8px; background: rgba(39, 225, 193, 0.05);"
+            style="position: absolute; width: var(--overlay-width); left: 50%; top: var(--overlay-top); transform: translateX(-50%) rotate(var(--overlay-rotate)); height: auto; inset: auto; display: flex; align-items: center; justify-content: center; cursor: grab; transition: all 0.1s ease; border: 2px dashed rgba(39, 225, 193, 0.3); border-radius: 8px; background: rgba(39, 225, 193, 0.05);"
           >
             <span id="nt-design-text-{{ section.id }}" 
                   style="font-family: 'Bebas Neue', sans-serif; font-size: 32px; font-weight: bold; color: #000000; text-align: center; white-space: nowrap; user-select: none; text-shadow: 1px 1px 2px rgba(255,255,255,0.8); pointer-events: none;">
@@ -643,7 +643,7 @@ document.addEventListener('DOMContentLoaded', function() {
     },
     
     // Current base mockup image - using tshirt-view.png as the default template
-    baseMockup: "{{ 'tshirt-view.png' | asset_url }}",
+      baseMockup: "{{ 'tshirt-view.png' | asset_url }}",
 
     // Current design state
     designState: {
@@ -658,10 +658,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Current view state
     state: { view: "front", color: "white" },
 
-    // Enhanced placement state
+    // Enhanced placement state - centered positioning
     placementState: {
       topPct: 45,
-      leftPct: 25,
+      leftPct: 50,  // Centered horizontally
       widthPct: 60,
       rotateDeg: 0,
       dragging: false,
@@ -693,7 +693,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     forceCenterPositioning() {
       this.placementState.topPct = 45;
-      this.placementState.leftPct = 25;
+      this.placementState.leftPct = 50;  // Centered horizontally
       this.placementState.widthPct = 60;
       this.placementState.rotateDeg = 0;
       
@@ -706,7 +706,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const rotateSlider = document.getElementById(`nt-rotate-{{ section.id }}`);
       
       if (topSlider) topSlider.value = 45;
-      if (leftSlider) leftSlider.value = 25;
+      if (leftSlider) leftSlider.value = 50;
       if (widthSlider) widthSlider.value = 60;
       if (rotateSlider) rotateSlider.value = 0;
     },
@@ -935,7 +935,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         this.placementState.topPct = 45;
-        this.placementState.leftPct = 25;
+        this.placementState.leftPct = 50;  // Centered horizontally
         this.placementState.widthPct = 60;
         this.placementState.rotateDeg = 0;
         
@@ -1023,13 +1023,15 @@ document.addEventListener('DOMContentLoaded', function() {
         overlayDiv.style.left = this.placementState.leftPct + '%';
         overlayDiv.style.width = this.placementState.widthPct + '%';
         overlayDiv.style.height = this.placementState.widthPct + '%';
+        // Always include translateX(-50%) to keep it centered horizontally
         overlayDiv.style.transform = `translateX(-50%) rotate(${this.placementState.rotateDeg}deg)`;
+        overlayDiv.style.transformOrigin = 'center center';
       }
     },
 
     resetPlacement() {
       this.placementState.topPct = 45;
-      this.placementState.leftPct = 25;
+      this.placementState.leftPct = 50;  // Centered horizontally
       this.placementState.widthPct = 60;
       this.placementState.rotateDeg = 0;
 
@@ -1114,7 +1116,7 @@ document.addEventListener('DOMContentLoaded', function() {
       
       const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
       if (widthSlider) widthSlider.value = 60;
-      
+
       this.showMessage('📏 Reset to default size (60%)', 'success');
     },
 
@@ -1177,37 +1179,37 @@ document.addEventListener('DOMContentLoaded', function() {
       
       canvas.width = 2000;
       canvas.height = 2000;
-
+      
       const baseImg = new Image();
       baseImg.crossOrigin = "anonymous";
       baseImg.src = document.getElementById("nt-base-{{ section.id }}").src;
-
+      
       baseImg.onload = () => {
-        ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
+            ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
 
-        const overlayImg = document.querySelector(`#nt-overlay-{{ section.id }} img`);
-        
+            const overlayImg = document.querySelector(`#nt-overlay-{{ section.id }} img`);
+            
         if (overlayImg && overlayImg.src) {
-          const designImg = new Image();
-          designImg.crossOrigin = "anonymous";
-          designImg.src = overlayImg.src;
-          
-          designImg.onload = () => {
-            const topPct = this.placementState.topPct / 100;
-            const leftPct = this.placementState.leftPct / 100;
-            const widthPct = this.placementState.widthPct / 100;
-            const rotateDeg = this.placementState.rotateDeg || 0;
+              const designImg = new Image();
+              designImg.crossOrigin = "anonymous";
+              designImg.src = overlayImg.src;
+              
+              designImg.onload = () => {
+                const topPct = this.placementState.topPct / 100;
+                const leftPct = this.placementState.leftPct / 100;
+                const widthPct = this.placementState.widthPct / 100;
+                const rotateDeg = this.placementState.rotateDeg || 0;
 
             const designX = canvas.width * leftPct;
             const designY = canvas.height * topPct;
             const designWidth = canvas.width * widthPct;
-            const designHeight = (designImg.height / designImg.width) * designWidth;
-
-            ctx.save();
+                const designHeight = (designImg.height / designImg.width) * designWidth;
+                
+                ctx.save();
             ctx.translate(designX + designWidth / 2, designY + designHeight / 2);
-            ctx.rotate(rotateDeg * Math.PI / 180);
-            ctx.drawImage(designImg, -designWidth / 2, -designHeight / 2, designWidth, designHeight);
-            ctx.restore();
+                ctx.rotate(rotateDeg * Math.PI / 180);
+                ctx.drawImage(designImg, -designWidth / 2, -designHeight / 2, designWidth, designHeight);
+                ctx.restore();
 
             const a = document.createElement('a');
             a.download = `custom_mockup_${this.state.view}_${this.state.color}.png`;
