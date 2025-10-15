@@ -122,7 +122,7 @@ Enhanced Interactive Product Mockup
             🗑️ Remove Design
           </button>
           
-          <button class="nt-btn nt-btn--success" id="nt-submit-request-btn-{{ section.id }}" style="padding: 10px 20px; background: linear-gradient(45deg, #10b981, #059669); color: white; border: none; border-radius: 25px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; display: none; margin-top: 16px;">
+          <button class="nt-btn nt-btn--success" id="nt-submit-request-btn-{{ section.id }}" style="padding: 10px 20px; background: linear-gradient(45deg, #10b981, #059669); color: white; border: none; border-radius: 25px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; display: block; margin-top: 16px;">
             🚀 Submit Request
           </button>
         </div>
@@ -1209,11 +1209,23 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const removeBtn = document.getElementById(`nt-remove-{{ section.id }}`);
         const submitBtn = document.getElementById(`nt-submit-request-btn-{{ section.id }}`);
+        
+        console.log('🔍 Debugging button visibility:');
+        console.log('Remove button found:', removeBtn);
+        console.log('Submit button found:', submitBtn);
+        
         if (removeBtn) {
           removeBtn.style.display = 'inline-block';
+          console.log('✅ Remove button shown');
+        } else {
+          console.log('❌ Remove button not found');
         }
+        
         if (submitBtn) {
           submitBtn.style.display = 'inline-block';
+          console.log('✅ Submit button shown');
+        } else {
+          console.log('❌ Submit button not found');
         }
         
         this.showPlacementControls();
