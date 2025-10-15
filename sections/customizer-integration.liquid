@@ -139,10 +139,54 @@ Customizer Integration Section
     <!-- Call to Action -->
     <div class="cta-section" style="text-align: center; margin-top: 40px;">
       <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-        <button id="start-designing-btn" style="padding: 16px 32px; background: linear-gradient(45deg, #27e1c1, #20b2aa); color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 8px 25px rgba(39, 225, 193, 0.3);">
+        <button id="start-designing-btn" class="customizer-btn customizer-btn--primary" style="
+          padding: 18px 36px; 
+          background: linear-gradient(135deg, #ff4fa3, #27e1c1); 
+          color: white; 
+          border: none; 
+          border-radius: 16px; 
+          font-size: 18px; 
+          font-weight: 700; 
+          cursor: pointer; 
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+          box-shadow: 0 8px 32px rgba(255, 79, 163, 0.4);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          position: relative;
+          overflow: hidden;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          min-height: 60px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 12px;
+        ">
           🎨 Start Designing Now
         </button>
-        <button id="view-mockup-btn" style="padding: 16px 32px; background: linear-gradient(45deg, #8b5cf6, #a855f7); color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);">
+        <button id="view-mockup-btn" class="customizer-btn customizer-btn--secondary" style="
+          padding: 18px 36px; 
+          background: linear-gradient(135deg, #8b5cf6, #a855f7); 
+          color: white; 
+          border: none; 
+          border-radius: 16px; 
+          font-size: 18px; 
+          font-weight: 700; 
+          cursor: pointer; 
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+          box-shadow: 0 8px 32px rgba(139, 92, 246, 0.4);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          position: relative;
+          overflow: hidden;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          min-height: 60px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 12px;
+        ">
           👁️ View Live Preview
         </button>
       </div>
@@ -155,6 +199,51 @@ Customizer Integration Section
 </section>
 
 <style>
+  /* ===== DRAMATICALLY ENHANCED CUSTOMIZER BUTTONS ===== */
+  .customizer-btn {
+    animation: button-float 3s ease-in-out infinite !important;
+  }
+
+  .customizer-btn:hover {
+    transform: translateY(-3px) scale(1.05) !important;
+    animation-play-state: paused !important;
+  }
+
+  .customizer-btn--primary:hover {
+    background: linear-gradient(135deg, #ff6bb3, #39f1d1) !important;
+    box-shadow: 0 12px 40px rgba(255, 79, 163, 0.6) !important;
+  }
+
+  .customizer-btn--secondary:hover {
+    background: linear-gradient(135deg, #9f6df8, #b865f9) !important;
+    box-shadow: 0 12px 40px rgba(139, 92, 246, 0.6) !important;
+  }
+
+  .customizer-btn:active {
+    transform: translateY(-1px) scale(1.02) !important;
+  }
+
+  .customizer-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.6s;
+  }
+
+  .customizer-btn:hover::before {
+    left: 100%;
+  }
+
+  /* Enhanced combination items */
+  .combination-item:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15) !important;
+    background: rgba(255,255,255,0.15) !important;
+  }
 /* Hover Effects */
 .process-step:hover {
   background: rgba(255,255,255,0.15) !important;

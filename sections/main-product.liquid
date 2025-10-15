@@ -1240,7 +1240,7 @@ Main product section — safe + styled + correct add-to-cart
       min-width: 120px !important;
     }
     
-    /* Add to Cart Button */
+    /* Enhanced Add to Cart Button */
     .product-form__buttons {
       text-align: center !important;
     }
@@ -1250,15 +1250,31 @@ Main product section — safe + styled + correct add-to-cart
       padding: 16px 24px !important;
       font-size: 16px !important;
       font-weight: 600 !important;
-      border-radius: 8px !important;
-      background: #3b82f6 !important;
+      border-radius: 12px !important;
+      background: linear-gradient(135deg, #ff4fa3 0%, #27e1c1 100%) !important;
       color: white !important;
       border: none !important;
       cursor: pointer !important;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+      box-shadow: 0 4px 16px rgba(255, 79, 163, 0.3) !important;
+      backdrop-filter: blur(10px) !important;
+      -webkit-backdrop-filter: blur(10px) !important;
+      min-height: 56px !important;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      touch-action: manipulation !important;
+      position: relative !important;
+      overflow: hidden !important;
     }
     
     .btn:hover {
-      background: #2563eb !important;
+      background: linear-gradient(135deg, #ff6bb3 0%, #39f1d1 100%) !important;
+      transform: translateY(-2px) !important;
+      box-shadow: 0 8px 24px rgba(255, 79, 163, 0.4) !important;
+    }
+
+    .btn:active {
+      transform: translateY(-1px) !important;
     }
 
     /* Dark mode styling for mobile Add to Cart button - matching dark theme */

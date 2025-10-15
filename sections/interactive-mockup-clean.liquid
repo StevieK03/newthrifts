@@ -186,14 +186,113 @@ Interactive Mockup (Cleaned)
 .nt-mockup__label { font-weight:600; color:#374151; font-size:14px; }
 .nt-mockup__buttons { display:flex; gap:8px; flex-wrap:wrap; }
 
-.nt-btn { padding:8px 16px; border:2px solid var(--nt-border); background:#fff; color:var(--nt-muted); border-radius:20px; font-size:14px; font-weight:600; cursor:pointer; transition: transform .2s ease, box-shadow .2s ease, background .2s ease, color .2s ease, border .2s ease; }
-.nt-btn:hover { transform: translateY(-1px); box-shadow:0 8px 20px rgba(0,0,0,.12); border-color: var(--nt-teal); color: var(--nt-teal); background:#f0fdfa; }
-.nt-btn.is-active { border-color: var(--nt-teal); background: var(--nt-teal); color:#fff; }
+/* ===== DRAMATICALLY ENHANCED MOCKUP BUTTONS ===== */
+.nt-btn { 
+  padding: 12px 20px; 
+  border: 2px solid transparent; 
+  background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); 
+  color: var(--nt-muted); 
+  border-radius: 16px; 
+  font-size: 14px; 
+  font-weight: 600; 
+  cursor: pointer; 
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  position: relative;
+  overflow: hidden;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
 
-.nt-btn--primary { background: linear-gradient(45deg,#10b981,#059669); color:#fff; border:none; }
-.nt-btn--secondary { background: linear-gradient(45deg,#8b5cf6,#a855f7); color:#fff; border:none; }
-.nt-btn--danger { background: linear-gradient(45deg,#ef4444,#dc2626); color:#fff; border:none; }
-.nt-btn--upload { position:relative; overflow:hidden; background: linear-gradient(45deg,#f59e0b,#d97706); color:#fff; border:none; }
+.nt-btn:hover { 
+  transform: translateY(-2px) scale(1.02); 
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2); 
+  border-color: var(--nt-teal); 
+  color: var(--nt-teal); 
+  background: linear-gradient(135deg, rgba(39,225,193,0.15), rgba(39,225,193,0.1));
+}
+
+.nt-btn.is-active { 
+  border-color: var(--nt-teal); 
+  background: linear-gradient(135deg, var(--nt-teal), #20b2aa); 
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(39,225,193,0.4);
+  transform: translateY(-1px);
+}
+
+.nt-btn--primary { 
+  background: linear-gradient(135deg, #ff4fa3, #27e1c1); 
+  color: #fff; 
+  border: none; 
+  box-shadow: 0 4px 16px rgba(255,79,163,0.3);
+}
+
+.nt-btn--primary:hover {
+  background: linear-gradient(135deg, #ff6bb3, #39f1d1);
+  box-shadow: 0 8px 24px rgba(255,79,163,0.4);
+}
+
+.nt-btn--secondary { 
+  background: linear-gradient(135deg, #8b5cf6, #a855f7); 
+  color: #fff; 
+  border: none; 
+  box-shadow: 0 4px 16px rgba(139,92,246,0.3);
+}
+
+.nt-btn--secondary:hover {
+  background: linear-gradient(135deg, #9f6df8, #b865f9);
+  box-shadow: 0 8px 24px rgba(139,92,246,0.4);
+}
+
+.nt-btn--danger { 
+  background: linear-gradient(135deg, #ef4444, #dc2626); 
+  color: #fff; 
+  border: none; 
+  box-shadow: 0 4px 16px rgba(239,68,68,0.3);
+}
+
+.nt-btn--danger:hover {
+  background: linear-gradient(135deg, #f56565, #e53e3e);
+  box-shadow: 0 8px 24px rgba(239,68,68,0.4);
+}
+
+.nt-btn--upload { 
+  position: relative; 
+  overflow: hidden; 
+  background: linear-gradient(135deg, #f59e0b, #d97706); 
+  color: #fff; 
+  border: none; 
+  box-shadow: 0 4px 16px rgba(245,158,11,0.3);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.nt-btn--upload:hover {
+  background: linear-gradient(135deg, #f6ad55, #ea580c);
+  box-shadow: 0 8px 24px rgba(245,158,11,0.4);
+  transform: translateY(-2px) scale(1.02);
+}
+
+.nt-btn--upload::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+.nt-btn--upload:hover::before {
+  left: 100%;
+}
 .nt-btn--upload input[type=file]{ position:absolute; inset:0; opacity:0; cursor:pointer; }
 
 .upload-section { display:flex; flex-direction:column; gap:6px; align-items:center; }

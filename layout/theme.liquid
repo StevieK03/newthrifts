@@ -17,6 +17,263 @@
     {%- comment -%} ✅ Dark Mode styles {%- endcomment -%}
     {{ 'dark-mode.css' | asset_url | stylesheet_tag }}
     
+    {%- comment -%} ✅ BEAUTIFUL BUTTON STYLES - HIGH PRIORITY {%- endcomment -%}
+    <style id="force-button-styles">
+      /* ===== MODERN BUTTON SYSTEM ===== */
+      button, .btn, input[type="submit"], input[type="button"] {
+        background: linear-gradient(135deg, #ff4fa3 0%, #27e1c1 100%) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 12px !important;
+        padding: 14px 24px !important;
+        font-weight: 600 !important;
+        font-size: 14px !important;
+        cursor: pointer !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        box-shadow: 0 4px 16px rgba(255, 79, 163, 0.3) !important;
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+        position: relative !important;
+        overflow: hidden !important;
+        min-height: 48px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        text-decoration: none !important;
+        white-space: nowrap !important;
+        user-select: none !important;
+        -webkit-user-select: none !important;
+        touch-action: manipulation !important;
+        font-family: inherit !important;
+      }
+
+      button:hover, .btn:hover, input[type="submit"]:hover, input[type="button"]:hover {
+        background: linear-gradient(135deg, #ff6bb3 0%, #39f1d1 100%) !important;
+        transform: translateY(-2px) scale(1.02) !important;
+        box-shadow: 0 8px 24px rgba(255, 79, 163, 0.4) !important;
+      }
+
+      button:active, .btn:active, input[type="submit"]:active, input[type="button"]:active {
+        transform: translateY(-1px) !important;
+      }
+      /* ===== DRAMATIC BUTTON OVERRIDES - FORCE APPLY ===== */
+      * {
+        box-sizing: border-box;
+      }
+
+      /* Force all buttons to use new styling */
+      button, .btn, input[type="submit"], input[type="button"] {
+        background: linear-gradient(135deg, #ff4fa3 0%, #27e1c1 100%) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 12px !important;
+        padding: 14px 24px !important;
+        font-weight: 600 !important;
+        font-size: 14px !important;
+        cursor: pointer !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        box-shadow: 0 4px 16px rgba(255, 79, 163, 0.3) !important;
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+        position: relative !important;
+        overflow: hidden !important;
+        min-height: 48px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        text-decoration: none !important;
+        white-space: nowrap !important;
+        user-select: none !important;
+        -webkit-user-select: none !important;
+        touch-action: manipulation !important;
+        font-family: inherit !important;
+      }
+
+      button:hover, .btn:hover, input[type="submit"]:hover, input[type="button"]:hover {
+        background: linear-gradient(135deg, #ff6bb3 0%, #39f1d1 100%) !important;
+        transform: translateY(-2px) scale(1.02) !important;
+        box-shadow: 0 8px 24px rgba(255, 79, 163, 0.4) !important;
+      }
+
+      button:active, .btn:active, input[type="submit"]:active, input[type="button"]:active {
+        transform: translateY(-1px) !important;
+      }
+
+      /* Specific overrides for custom buttons */
+      .nt-btn {
+        background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)) !important;
+        color: #374151 !important;
+        border: 2px solid transparent !important;
+        border-radius: 16px !important;
+        padding: 12px 20px !important;
+        font-weight: 600 !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.1) !important;
+        min-height: 44px !important;
+      }
+
+      .nt-btn:hover {
+        transform: translateY(-2px) scale(1.02) !important;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.2) !important;
+        background: linear-gradient(135deg, rgba(39,225,193,0.15), rgba(39,225,193,0.1)) !important;
+        border-color: #27e1c1 !important;
+        color: #27e1c1 !important;
+      }
+
+      .nt-btn.is-active {
+        background: linear-gradient(135deg, #27e1c1, #20b2aa) !important;
+        color: white !important;
+        box-shadow: 0 6px 20px rgba(39,225,193,0.4) !important;
+        transform: translateY(-1px) !important;
+      }
+
+      /* Primary button variant */
+      .nt-btn--primary {
+        background: linear-gradient(135deg, #ff4fa3, #27e1c1) !important;
+        color: white !important;
+        box-shadow: 0 4px 16px rgba(255,79,163,0.3) !important;
+      }
+
+      .nt-btn--primary:hover {
+        background: linear-gradient(135deg, #ff6bb3, #39f1d1) !important;
+        box-shadow: 0 8px 24px rgba(255,79,163,0.4) !important;
+      }
+
+      /* Upload button */
+      .nt-btn--upload {
+        background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+        color: white !important;
+        box-shadow: 0 4px 16px rgba(245,158,11,0.3) !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+      }
+
+      .nt-btn--upload:hover {
+        background: linear-gradient(135deg, #f6ad55, #ea580c) !important;
+        box-shadow: 0 8px 24px rgba(245,158,11,0.4) !important;
+      }
+
+      /* Submit request button */
+      .submit-request-btn {
+        background: linear-gradient(135deg, #ff4fa3, #ef4444) !important;
+        color: white !important;
+        padding: 18px 36px !important;
+        font-size: 1.2rem !important;
+        font-weight: 700 !important;
+        border-radius: 16px !important;
+        box-shadow: 0 8px 32px rgba(255, 79, 163, 0.4) !important;
+        text-transform: uppercase !important;
+        letter-spacing: 1px !important;
+        min-height: 60px !important;
+        animation: button-pulse 2s ease-in-out infinite !important;
+      }
+
+      .submit-request-btn:hover {
+        background: linear-gradient(135deg, #ff6bb3, #f56565) !important;
+        transform: translateY(-3px) scale(1.05) !important;
+        box-shadow: 0 12px 40px rgba(255, 79, 163, 0.6) !important;
+      }
+
+      /* Pulse animation */
+      @keyframes button-pulse {
+        0%, 100% {
+          box-shadow: 0 8px 32px rgba(255, 79, 163, 0.4);
+        }
+        50% {
+          box-shadow: 0 8px 32px rgba(255, 79, 163, 0.6);
+        }
+      }
+
+      /* View toggle buttons */
+      .view-btn, .angle-btn {
+        background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)) !important;
+        border: 2px solid transparent !important;
+        border-radius: 12px !important;
+        padding: 10px 16px !important;
+        font-weight: 600 !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.1) !important;
+        min-height: 40px !important;
+      }
+
+      .view-btn:hover, .angle-btn:hover {
+        transform: translateY(-2px) scale(1.02) !important;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.2) !important;
+        background: linear-gradient(135deg, rgba(39,225,193,0.15), rgba(39,225,193,0.1)) !important;
+        border-color: #27e1c1 !important;
+      }
+
+      .view-btn.active, .angle-btn.active {
+        background: linear-gradient(135deg, #27e1c1, #20b2aa) !important;
+        color: white !important;
+        box-shadow: 0 6px 20px rgba(39,225,193,0.4) !important;
+        transform: translateY(-1px) !important;
+      }
+
+      /* ===== ADDITIONAL CUSTOMIZER STYLES ===== */
+      .download-btn, .edit-btn, .placement-btn {
+        padding: 12px 20px !important;
+        border-radius: 12px !important;
+        font-weight: 600 !important;
+        cursor: pointer !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.1) !important;
+        position: relative !important;
+        overflow: hidden !important;
+        min-height: 44px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        border: 2px solid transparent !important;
+      }
+
+      .download-btn {
+        background: linear-gradient(135deg, #10b981, #059669) !important;
+        color: white !important;
+        box-shadow: 0 4px 16px rgba(16,185,129,0.3) !important;
+      }
+
+      .download-btn:hover {
+        background: linear-gradient(135deg, #34d399, #10b981) !important;
+        transform: translateY(-2px) scale(1.02) !important;
+        box-shadow: 0 8px 24px rgba(16,185,129,0.4) !important;
+      }
+
+      .edit-btn {
+        background: linear-gradient(135deg, #6b7280, #4b5563) !important;
+        color: white !important;
+        box-shadow: 0 4px 16px rgba(107,114,128,0.3) !important;
+      }
+
+      .edit-btn:hover {
+        background: linear-gradient(135deg, #9ca3af, #6b7280) !important;
+        transform: translateY(-2px) scale(1.02) !important;
+        box-shadow: 0 8px 24px rgba(107,114,128,0.4) !important;
+      }
+
+      .placement-btn {
+        background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+        color: white !important;
+        box-shadow: 0 4px 16px rgba(245,158,11,0.3) !important;
+      }
+
+      .placement-btn:hover {
+        background: linear-gradient(135deg, #f6ad55, #ea580c) !important;
+        transform: translateY(-2px) scale(1.02) !important;
+        box-shadow: 0 8px 24px rgba(245,158,11,0.4) !important;
+      }
+    </style>
+    
     {%- comment -%} ✅ Size Chart Styles {%- endcomment -%}
     {{ 'size-chart.css' | asset_url | stylesheet_tag }}
 
@@ -200,6 +457,78 @@
     <script src="{{ 'supabase-custom-requests.js' | asset_url }}?v={{ 'now' | date: '%s' }}"></script>
     <script src="{{ 'visitor-counter.js' | asset_url }}?v={{ 'now' | date: '%s' }}" defer></script>
     
+    <!-- Force Button Styles JavaScript -->
+    <script>
+    // Force apply button styles immediately
+    function forceButtonStyles() {
+      const buttons = document.querySelectorAll('button, .btn, input[type="submit"], input[type="button"], .nt-btn, .view-btn, .angle-btn');
+      
+      buttons.forEach(btn => {
+        // Force apply inline styles for immediate effect
+        if (!btn.classList.contains('nt-btn') && !btn.classList.contains('view-btn') && !btn.classList.contains('angle-btn')) {
+          btn.style.cssText += `
+            background: linear-gradient(135deg, #ff4fa3 0%, #27e1c1 100%) !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 12px !important;
+            padding: 14px 24px !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            cursor: pointer !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            box-shadow: 0 4px 16px rgba(255, 79, 163, 0.3) !important;
+            backdrop-filter: blur(10px) !important;
+            -webkit-backdrop-filter: blur(10px) !important;
+            position: relative !important;
+            overflow: hidden !important;
+            min-height: 48px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 8px !important;
+            text-decoration: none !important;
+            white-space: nowrap !important;
+            user-select: none !important;
+            -webkit-user-select: none !important;
+            touch-action: manipulation !important;
+            font-family: inherit !important;
+          `;
+        }
+        
+        // Add hover effect
+        btn.addEventListener('mouseenter', function() {
+          if (!this.classList.contains('nt-btn') && !this.classList.contains('view-btn') && !this.classList.contains('angle-btn')) {
+            this.style.background = 'linear-gradient(135deg, #ff6bb3 0%, #39f1d1 100%)';
+            this.style.transform = 'translateY(-2px) scale(1.02)';
+            this.style.boxShadow = '0 8px 24px rgba(255, 79, 163, 0.4)';
+          }
+        });
+        
+        btn.addEventListener('mouseleave', function() {
+          if (!this.classList.contains('nt-btn') && !this.classList.contains('view-btn') && !this.classList.contains('angle-btn')) {
+            this.style.background = 'linear-gradient(135deg, #ff4fa3 0%, #27e1c1 100%)';
+            this.style.transform = 'translateY(0) scale(1)';
+            this.style.boxShadow = '0 4px 16px rgba(255, 79, 163, 0.3)';
+          }
+        });
+      });
+    }
+    
+    // Apply styles immediately and on DOM ready
+    forceButtonStyles();
+    document.addEventListener('DOMContentLoaded', forceButtonStyles);
+    
+    // Reapply styles when new content is loaded
+    const observer = new MutationObserver(function(mutations) {
+      mutations.forEach(function(mutation) {
+        if (mutation.addedNodes.length) {
+          setTimeout(forceButtonStyles, 100);
+        }
+      });
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+    </script>
+
     <!-- Enhanced Homepage Features -->
     <script>
     document.addEventListener('DOMContentLoaded', function() {
