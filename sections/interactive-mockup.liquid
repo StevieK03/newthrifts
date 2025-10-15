@@ -3111,23 +3111,35 @@ document.addEventListener('DOMContentLoaded', function() {
         // Create email content
         const emailContent = this.createEmailContent(requestData);
         
-        // Try multiple email methods for reliability
-        const results = await Promise.allSettled([
-          this.sendViaResend(requestData, emailContent, designImageBase64, mockupImageBase64),
-          this.sendViaFormspreeWithImages(requestData, emailContent, designImageBase64, mockupImageBase64),
-          this.sendViaSimpleEmail(requestData, emailContent)
-        ]);
+        // Try Resend first (supports attachments)
+        const resendResult = await this.sendViaResend(requestData, emailContent, designImageBase64, mockupImageBase64);
         
-        // Check if any method succeeded
-        const success = results.some(result => result.status === 'fulfilled' && result.value?.success);
-        
-        if (success) {
-          console.log('✅ Email with images sent successfully to shopping@newthrifts.com');
-          return { success: true, message: 'Email sent with images attached' };
-        } else {
-          console.error('❌ All email methods failed');
-          return { success: false, error: 'Failed to send email with images' };
+        if (resendResult.success) {
+          console.log('✅ Resend email with images sent successfully to shopping@newthrifts.com');
+          return { success: true, message: 'Email sent with images attached via Resend' };
         }
+        
+        // Fallback to Formspree if Resend fails
+        console.log('⚠️ Resend failed, trying Formspree fallback...');
+        const formspreeResult = await this.sendViaFormspreeWithImages(requestData, emailContent, designImageBase64, mockupImageBase64);
+        
+        if (formspreeResult.success) {
+          console.log('✅ Formspree fallback email sent successfully');
+          return { success: true, message: 'Email sent via Formspree fallback (no attachments)' };
+        }
+        
+        // Final fallback to simple email
+        console.log('⚠️ Formspree failed, trying simple email fallback...');
+        const simpleResult = await this.sendViaSimpleEmail(requestData, emailContent);
+        
+        if (simpleResult.success) {
+          console.log('✅ Simple email fallback sent successfully');
+          return { success: true, message: 'Email sent via simple fallback (no attachments)' };
+        }
+        
+        // All methods failed
+        console.error('❌ All email methods failed');
+        return { success: false, error: 'Failed to send email with all methods' };
         
       } catch (error) {
         console.error('❌ Error sending email with images:', error);
