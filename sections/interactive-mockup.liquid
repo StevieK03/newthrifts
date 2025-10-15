@@ -231,6 +231,40 @@ Enhanced Interactive Product Mockup
             🗑️ Remove Design
           </button>
           
+          <button class="nt-btn nt-btn--perfect-fit" id="nt-perfect-fit-btn-{{ section.id }}" style="
+            padding: 10px 20px; 
+            background: linear-gradient(45deg, #8b5cf6, #7c3aed, #6d28d9, #8b5cf6);
+            background-size: 300% 300%;
+            color: white; 
+            border: none; 
+            border-radius: 25px; 
+            font-size: 14px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: none; 
+            margin-top: 8px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: gradientShift 3s ease-in-out infinite;
+          ">
+            <span style="position: relative; z-index: 2; display: flex; align-items: center; gap: 8px;">
+              ✨ Perfect Fit
+            </span>
+            <div style="
+              position: absolute;
+              top: 0;
+              left: -100%;
+              width: 100%;
+              height: 100%;
+              background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+              transition: left 0.6s ease;
+            "></div>
+          </button>
+          
           <button class="nt-btn nt-btn--success" id="nt-submit-request-btn-{{ section.id }}" style="
             padding: 10px 20px; 
             background: linear-gradient(45deg, #ef4444, #dc2626, #b91c1c, #ef4444);
@@ -1462,6 +1496,7 @@ document.addEventListener('DOMContentLoaded', function() {
       this.bindDragResize();
       this.bindPresetButtons();
       this.bindSubmitRequest();
+      this.bindPerfectFit();
 
       {% if section.settings.allow_download %}
       const downloadBtn = document.getElementById(`nt-download-{{ section.id }}`);
@@ -1594,10 +1629,12 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const removeBtn = document.getElementById(`nt-remove-{{ section.id }}`);
         const submitBtn = document.getElementById(`nt-submit-request-btn-{{ section.id }}`);
+        const perfectFitBtn = document.getElementById(`nt-perfect-fit-btn-{{ section.id }}`);
         
         console.log('🔍 Debugging button visibility:');
         console.log('Remove button found:', removeBtn);
         console.log('Submit button found:', submitBtn);
+        console.log('Perfect Fit button found:', perfectFitBtn);
         
         if (removeBtn) {
           removeBtn.style.display = 'inline-block';
@@ -1611,6 +1648,13 @@ document.addEventListener('DOMContentLoaded', function() {
           console.log('✅ Submit button shown');
         } else {
           console.log('❌ Submit button not found');
+        }
+        
+        if (perfectFitBtn) {
+          perfectFitBtn.style.display = 'inline-block';
+          console.log('✅ Perfect Fit button shown');
+        } else {
+          console.log('❌ Perfect Fit button not found');
         }
         
         this.showPlacementControls();
@@ -1640,8 +1684,19 @@ document.addEventListener('DOMContentLoaded', function() {
         this.deselectDesign();
         
         const removeBtn = document.getElementById(`nt-remove-{{ section.id }}`);
+        const perfectFitBtn = document.getElementById(`nt-perfect-fit-btn-{{ section.id }}`);
+        const submitBtn = document.getElementById(`nt-submit-request-btn-{{ section.id }}`);
+        
         if (removeBtn) {
           removeBtn.style.display = 'none';
+        }
+        
+        if (perfectFitBtn) {
+          perfectFitBtn.style.display = 'none';
+        }
+        
+        if (submitBtn) {
+          submitBtn.style.display = 'none';
         }
         
         this.placementState.topPct = 30;   // Aligned with print area top
@@ -2004,6 +2059,55 @@ document.addEventListener('DOMContentLoaded', function() {
           e.preventDefault();
           this.submitTShirtRequest();
         });
+      }
+    },
+
+    bindPerfectFit() {
+      const perfectFitBtn = document.getElementById(`nt-perfect-fit-btn-{{ section.id }}`);
+      
+      if (perfectFitBtn) {
+        perfectFitBtn.addEventListener('click', () => {
+          if (!this.placementState.hasUploadedDesign) {
+            this.showMessage('❌ Please upload a design first', 'error');
+            return;
+          }
+          this.applyPerfectFit();
+        });
+      }
+    },
+
+    applyPerfectFit() {
+      // Optimal dimensions for perfect fit in print area
+      // These values are based on the console debug output for optimal positioning
+      const perfectDimensions = {
+        topPct: 30,     // Optimal top position
+        leftPct: 50,    // Centered horizontally
+        widthPct: 50,   // Optimal width for print area
+        heightPct: 65,  // Optimal height for print area
+        rotateDeg: 0    // No rotation for perfect fit
+      };
+
+      // Apply the perfect dimensions
+      this.placementState.topPct = perfectDimensions.topPct;
+      this.placementState.leftPct = perfectDimensions.leftPct;
+      this.placementState.widthPct = perfectDimensions.widthPct;
+      this.placementState.heightPct = perfectDimensions.heightPct;
+      this.placementState.rotateDeg = perfectDimensions.rotateDeg;
+
+      // Update the display and position
+      this.updatePlacementDisplay();
+      this.updateDesignPosition();
+
+      // Show success message
+      this.showMessage('✨ Perfect fit applied! Design positioned optimally in print area', 'success');
+      
+      // Add a subtle animation to show the change
+      const overlay = document.getElementById(`nt-overlay-{{ section.id }}`);
+      if (overlay) {
+        overlay.style.transform = `translateX(-50%) rotate(${this.placementState.rotateDeg}deg) scale(1.05)`;
+        setTimeout(() => {
+          overlay.style.transform = `translateX(-50%) rotate(${this.placementState.rotateDeg}deg) scale(1)`;
+        }, 200);
       }
     },
 
