@@ -1666,18 +1666,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async sendEmailNotification(requestData) {
       try {
-        // Use the same Formspree service as your contact form
-        const response = await fetch('https://formspree.io/f/xpzqkqyz', {
+        // Use Shopify's built-in contact form API
+        const response = await fetch('/contact', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
           },
-          body: JSON.stringify({
-            name: requestData.customer_name,
-            email: requestData.customer_email,
-            phone: requestData.customer_phone || 'Not provided',
-            tshirt_size: requestData.tshirt_size || 'Not specified',
-            message: `🎨 CUSTOM T-SHIRT REQUEST
+          body: new URLSearchParams({
+            'form_type': 'contact',
+            'utf8': '✓',
+            'contact[name]': requestData.customer_name,
+            'contact[email]': requestData.customer_email,
+            'contact[phone]': requestData.customer_phone || 'Not provided',
+            'contact[tshirt_size]': requestData.tshirt_size || 'Not specified',
+            'contact[message]': `🎨 CUSTOM T-SHIRT REQUEST
 
 Customer Information:
 • Name: ${requestData.customer_name}
@@ -1699,21 +1701,19 @@ Design Images:
 • Original Design: ${requestData.design_image_url}
 • Mockup Preview: ${requestData.mockup_image_url}
 
-Please review this request and contact the customer within 24 hours.`,
-            _subject: `🎨 New Custom T-Shirt Request from ${requestData.customer_name}`,
-            _replyto: requestData.customer_email
+Please review this request and contact the customer within 24 hours.`
           })
         });
         
         if (response.ok) {
-          console.log('✅ T-shirt request email sent successfully');
+          console.log('✅ T-shirt request email sent via Shopify contact form');
           return true;
         } else {
-          console.error('❌ Failed to send email:', response.status);
+          console.error('❌ Failed to send email via Shopify:', response.status);
           return false;
         }
       } catch (error) {
-        console.error('❌ Error sending email:', error);
+        console.error('❌ Error sending email via Shopify:', error);
         return false;
       }
     },
