@@ -67,28 +67,6 @@ Enhanced Interactive Product Mockup
           </div>
         </div>
 
-        <!-- Size Selector with Size Guide -->
-        <div class="nt-mockup__group" style="background: linear-gradient(135deg, #667eea, #764ba2); padding: 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);">
-          <span class="nt-mockup__label" style="font-weight: 600; font-size: 14px; color: #fff; margin-right: 12px;">📏 Size</span>
-          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-            <select id="mockup-size-select-{{ section.id }}" class="mockup-size-select" style="padding: 8px 16px; border: 2px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.15); color: #fff; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; min-width: 100px;">
-              <option value="">Select Size</option>
-              <option value="XXS">XXS</option>
-              <option value="XS">XS</option>
-              <option value="S">S</option>
-              <option value="M" selected>M</option>
-              <option value="L">L</option>
-              <option value="XL">XL</option>
-              <option value="XXL">XXL</option>
-            </select>
-            <button class="nt-btn nt-btn--size-guide" id="mockup-size-guide-{{ section.id }}" style="padding: 8px 16px; border: 2px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.2); color: #fff; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; white-space: nowrap;">
-              📐 Size Guide
-            </button>
-          </div>
-          <div id="size-info-{{ section.id }}" class="size-info" style="margin-top: 8px; font-size: 12px; color: rgba(255,255,255,0.9); display: none;">
-            <span id="size-details-{{ section.id }}"></span>
-          </div>
-        </div>
 
         <!-- Enhanced 3D Controls -->
         <div class="nt-mockup__group" style="background: linear-gradient(135deg, #334155, #475569); padding: 16px; border-radius: 12px; border: 1px solid #475569;">
@@ -137,6 +115,11 @@ Enhanced Interactive Product Mockup
           </button>
           {% endif %}
           
+          <!-- Submit Custom Request Button -->
+          <button class="nt-btn nt-btn--submit-request" id="nt-submit-request-{{ section.id }}" style="padding: 12px 24px; background: linear-gradient(45deg, #f59e0b, #d97706); color: white; border: none; border-radius: 25px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin-top: 12px; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);">
+            🎨 Submit Your Request
+          </button>
+          
           <button class="nt-btn nt-btn--secondary" id="nt-edit-{{ section.id }}" style="padding: 10px 20px; background: linear-gradient(45deg, #8b5cf6, #a855f7); color: white; border: none; border-radius: 25px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin-top: 16px;">
             ✏️ Edit Design
           </button>
@@ -149,14 +132,34 @@ Enhanced Interactive Product Mockup
 
       <!-- Advanced Placement Controls -->
       <div id="nt-placement-controls-{{ section.id }}" class="nt-placement-controls" style="display: block; background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin: 10px 0 40px 0;">
-        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;">
           <span style="font-weight: 600; font-size: 16px; color: #374151;">🎯 Precise Placement Controls</span>
+          
+          <!-- Size Selector -->
+          <div style="display: flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #667eea, #764ba2); padding: 8px 16px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2);">
+            <span style="font-weight: 600; font-size: 12px; color: #fff;">📏 Size:</span>
+            <select id="mockup-size-select-{{ section.id }}" class="mockup-size-select" style="padding: 4px 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.15); color: #fff; border-radius: 12px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; min-width: 100px;">
+              <option value="XXS">XXS (4494x5097px)</option>
+              <option value="XS">XS (4494x5097px)</option>
+              <option value="S">S (4494x5097px)</option>
+              <option value="M" selected>M (4494x5097px)</option>
+              <option value="L">L (4494x5097px)</option>
+              <option value="XL">XL (4494x5097px)</option>
+              <option value="XXL">XXL (4494x5097px)</option>
+            </select>
+          </div>
+          
           <button id="nt-auto-equidistant-{{ section.id }}" style="padding: 6px 12px; background: linear-gradient(45deg, #8b5cf6, #7c3aed); color: white; border: none; border-radius: 8px; font-size: 12px; cursor: pointer; font-weight: 500; display: flex; align-items: center; gap: 4px;">
             ⚖️ Auto-Equidistant
           </button>
           <button id="nt-reset-placement-{{ section.id }}" style="padding: 6px 12px; background: #f3f4f6; color: #6b7280; border: 1px solid #d1d5db; border-radius: 8px; font-size: 12px; cursor: pointer;">
             🔄 Reset
           </button>
+        </div>
+        
+        <!-- Size Info Display -->
+        <div id="size-info-{{ section.id }}" class="size-info" style="margin-bottom: 16px; padding: 8px 12px; background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border: 1px solid #bae6fd; border-radius: 8px; font-size: 12px; color: #0369a1; display: none;">
+          <div id="size-details-{{ section.id }}"></div>
         </div>
         
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
@@ -259,7 +262,7 @@ Enhanced Interactive Product Mockup
             </h3>
             <div class="nt-mockup__canvas" 
                  id="nt-mockup-canvas-{{ section.id }}"
-                 style="position: relative; width: 100%; max-width: 900px; aspect-ratio: 1 / 1; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border-radius: 20px; overflow: hidden; box-shadow: 0 25px 80px rgba(0, 0, 0, 0.1), 0 10px 30px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.8); cursor: grab; --overlay-top: 35%; --overlay-left: 50%; --overlay-width: 50%; --overlay-rotate: 0deg; border: 3px solid rgba(255,255,255,0.5);">
+                 style="position: relative; width: 100%; max-width: 900px; aspect-ratio: 1 / 1; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border-radius: 20px; overflow: hidden; box-shadow: 0 25px 80px rgba(0, 0, 0, 0.1), 0 10px 30px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.8); cursor: grab; --overlay-top: 35%; --overlay-left: 25%; --overlay-width: 60%; --overlay-height: 60%; --overlay-rotate: 0deg; border: 3px solid rgba(255,255,255,0.5);">
           
       <!-- Base Mockup - Using tshirt-view.png -->
       <img
@@ -419,7 +422,7 @@ Enhanced Interactive Product Mockup
           <div
             id="nt-overlay-{{ section.id }}"
             class="nt-mockup__overlay"
-            style="position: absolute; width: var(--overlay-width); left: var(--overlay-left); top: var(--overlay-top); transform: translateX(-50%) rotate(var(--overlay-rotate)); height: auto; inset: auto; display: flex; align-items: center; justify-content: center; cursor: grab; transition: none; border: 3px solid rgba(39, 225, 193, 0.5); border-radius: 12px; background: rgba(39, 225, 193, 0.08); z-index: 10; box-shadow: 0 4px 16px rgba(39, 225, 193, 0.2);"
+            style="position: absolute; width: var(--overlay-width, 60%); height: var(--overlay-width, 60%); left: var(--overlay-left, 25%); top: var(--overlay-top, 35%); transform: translateX(-50%) rotate(var(--overlay-rotate, 0deg)); inset: auto; display: flex; align-items: center; justify-content: center; cursor: grab; transition: none; border: 3px solid rgba(39, 225, 193, 0.5); border-radius: 12px; background: rgba(39, 225, 193, 0.08); z-index: 10; box-shadow: 0 4px 16px rgba(39, 225, 193, 0.2);"
           >
             <span id="nt-design-text-{{ section.id }}" 
                   style="font-family: 'Bebas Neue', sans-serif; font-size: 32px; font-weight: bold; color: #000000; text-align: center; white-space: nowrap; user-select: none; text-shadow: 1px 1px 2px rgba(255,255,255,0.8); pointer-events: none;">
@@ -582,6 +585,82 @@ Enhanced Interactive Product Mockup
 /* Light Mode Background */
 [data-theme="light"] .nt-mockup-section {
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%) !important;
+}
+
+/* Print Area Highlighting Styles */
+.design-within-print-area {
+  border: 3px solid #10b981 !important;
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2), 0 0 20px rgba(16, 185, 129, 0.3) !important;
+  animation: printAreaSuccess 2s ease-in-out infinite !important;
+}
+
+.design-partially-outside {
+  border: 3px solid #f59e0b !important;
+  box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2), 0 0 20px rgba(245, 158, 11, 0.3) !important;
+  animation: printAreaWarning 2s ease-in-out infinite !important;
+}
+
+.design-outside-print-area {
+  border: 3px solid #ef4444 !important;
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.2), 0 0 20px rgba(239, 68, 68, 0.3) !important;
+  animation: printAreaError 2s ease-in-out infinite !important;
+}
+
+/* Print Area Animation Keyframes */
+@keyframes printAreaSuccess {
+  0%, 100% { 
+    border-color: #10b981;
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2), 0 0 20px rgba(16, 185, 129, 0.3);
+  }
+  50% { 
+    border-color: #059669;
+    box-shadow: 0 0 0 6px rgba(5, 150, 105, 0.3), 0 0 30px rgba(5, 150, 105, 0.4);
+  }
+}
+
+@keyframes printAreaWarning {
+  0%, 100% { 
+    border-color: #f59e0b;
+    box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2), 0 0 20px rgba(245, 158, 11, 0.3);
+  }
+  50% { 
+    border-color: #d97706;
+    box-shadow: 0 0 0 6px rgba(217, 119, 6, 0.3), 0 0 30px rgba(217, 119, 6, 0.4);
+  }
+}
+
+@keyframes printAreaError {
+  0%, 100% { 
+    border-color: #ef4444;
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.2), 0 0 20px rgba(239, 68, 68, 0.3);
+  }
+  50% { 
+    border-color: #dc2626;
+    box-shadow: 0 0 0 6px rgba(220, 38, 38, 0.3), 0 0 30px rgba(220, 38, 38, 0.4);
+  }
+}
+
+/* Message Animation Keyframes */
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutToRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
 }
 
 /* Mockup Description Text */
@@ -816,6 +895,214 @@ Enhanced Interactive Product Mockup
 </style>
 
 <script>
+  /** ===== Generic helpers ===== **/
+
+  // Trim transparent border pixels from a raster image (PNG/JPG or rasterized SVG)
+  async function cropTransparent(dataUrlOrBlobUrl) {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.src = dataUrlOrBlobUrl;
+    await img.decode();
+
+    const c = document.createElement('canvas');
+    c.width = img.naturalWidth; c.height = img.naturalHeight;
+    const ctx = c.getContext('2d');
+    ctx.drawImage(img, 0, 0);
+
+    const { width, height } = c;
+    const { data } = ctx.getImageData(0, 0, width, height);
+
+    let top = height, left = width, right = 0, bottom = 0, found = false;
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        const a = data[(y * width + x) * 4 + 3];
+        if (a > 4) { // non-transparent
+          found = true;
+          if (x < left) left = x;
+          if (x > right) right = x;
+          if (y < top) top = y;
+          if (y > bottom) bottom = y;
+        }
+      }
+    }
+    if (!found) return c.toDataURL('image/png');
+
+    const w = right - left + 1, h = bottom - top + 1;
+    const out = document.createElement('canvas');
+    out.width = w; out.height = h;
+    out.getContext('2d').drawImage(c, left, top, w, h, 0, 0, w, h);
+    return out.toDataURL('image/png');
+  }
+
+  // Rasterize an SVG string to a PNG data URL (so we can crop it)
+  async function rasterizeSvgString(svgString, scale = 1) {
+    const svgBlob = new Blob([svgString], { type: 'image/svg+xml' });
+    const url = URL.createObjectURL(svgBlob);
+    const img = new Image();
+    img.src = url;
+    await img.decode();
+
+    const w = img.naturalWidth * scale || 2048;
+    const h = img.naturalHeight * scale || 2048;
+
+    const c = document.createElement('canvas');
+    c.width = w; c.height = h;
+    c.getContext('2d').drawImage(img, 0, 0, w, h);
+    URL.revokeObjectURL(url);
+    return c.toDataURL('image/png');
+  }
+
+  // Tighten a real vector SVG's viewBox to its actual drawn geometry
+  async function normalizeSvgViewBox(svg) {
+    // wrap children to measure as one group
+    let wrap = svg.querySelector('#__nt_wrap__');
+    if (!wrap) {
+      wrap = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      wrap.setAttribute('id','__nt_wrap__');
+      while (svg.firstChild) wrap.appendChild(svg.firstChild);
+      svg.appendChild(wrap);
+    }
+    // mount temporarily to measure
+    const tmp = document.createElement('div');
+    tmp.style.cssText = 'position:absolute;left:-99999px;top:-99999px;';
+    document.body.appendChild(tmp);
+    tmp.appendChild(svg);
+
+    const box = wrap.getBBox(); // tight bounds around drawn shapes
+    svg.setAttribute('viewBox', `${box.x} ${box.y} ${box.width} ${box.height}`);
+    svg.removeAttribute('width');
+    svg.removeAttribute('height');
+    svg.setAttribute('preserveAspectRatio','xMidYMid meet');
+
+    // unwrap
+    while (wrap.firstChild) svg.appendChild(wrap.firstChild);
+    wrap.remove();
+    tmp.remove();
+
+    svg.style.width = '100%';
+    svg.style.height = '100%';
+    return svg;
+  }
+
+  // Detect whether an SVG is "real vector" vs "raster-in-SVG"
+  function isVectorSvg(svgEl) {
+    const vectorNodes = svgEl.querySelectorAll('path,rect,circle,ellipse,polygon,polyline,line,text,g');
+    const hasVector = Array.from(vectorNodes).some(n => n.tagName.toLowerCase() !== 'g');
+    const hasImage = !!svgEl.querySelector('image');
+    // treat as vector only if it contains some actual vector primitives
+    return hasVector && !hasImage;
+  }
+
+  // Enhanced upload handler with auto-cropping and SVG normalization
+  (async function initNTUpload(){
+    const input   = document.querySelector('#nt-file-input-{{ section.id }}');  // Updated to match our input ID
+    const overlay = document.querySelector('#nt-overlay-{{ section.id }}');     // Updated to match our overlay ID
+
+    console.log('🚀 Initializing enhanced upload handler...');
+    console.log('📁 Input found:', !!input, input?.id);
+    console.log('🎯 Overlay found:', !!overlay, overlay?.id);
+
+    if (!input || !overlay) {
+      console.error('❌ Missing input or overlay element!');
+      return;
+    }
+
+    input.addEventListener('change', async (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      console.log('📤 File selected:', file.name, file.type, file.size);
+      console.log('🎯 Overlay before:', {
+        width: overlay.offsetWidth,
+        height: overlay.offsetHeight,
+        innerHTML: overlay.innerHTML.substring(0, 100)
+      });
+
+      overlay.innerHTML = '';                    // clear placeholder
+      overlay.style.background = 'transparent';  // ensure no leftover bg
+
+      try {
+        if (file.type === 'image/svg+xml') {
+          // read SVG text
+          const text = await file.text();
+          const doc  = new DOMParser().parseFromString(text, 'image/svg+xml');
+          let svg    = doc.documentElement;
+
+          // ensure some size so we can measure/rasterize if needed
+          if (!svg.getAttribute('viewBox')) {
+            const w = parseFloat(svg.getAttribute('width') || '1024');
+            const h = parseFloat(svg.getAttribute('height') || '1024');
+            svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+          }
+          svg.removeAttribute('width');
+          svg.removeAttribute('height');
+
+          if (isVectorSvg(svg)) {
+            // ✅ real vector: tighten viewBox so art fills overlay
+            svg = await normalizeSvgViewBox(svg);
+            svg.style.width = '100%';
+            svg.style.height = '100%';
+            svg.setAttribute('preserveAspectRatio','xMidYMid meet');
+            overlay.appendChild(svg);
+          } else {
+            // 🖼️ raster-in-SVG: rasterize -> auto-crop -> display as <img>
+            const raster = await rasterizeSvgString(new XMLSerializer().serializeToString(svg), 1);
+            const cropped = await cropTransparent(raster);
+            const img = new Image();
+            img.src = cropped;
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.objectFit = 'contain';
+            img.draggable = false;
+            overlay.appendChild(img);
+            
+            console.log('✅ Raster SVG processed and added to overlay');
+          }
+
+        } else {
+          // PNG/JPG: auto-crop transparent margin then display
+          const blobUrl = URL.createObjectURL(file);
+          const cropped = await cropTransparent(blobUrl);
+          URL.revokeObjectURL(blobUrl);
+          const img = new Image();
+          img.src = cropped;
+          img.style.width = '100%';
+          img.style.height = '100%';
+          img.style.objectFit = 'contain';
+          img.draggable = false;
+          overlay.appendChild(img);
+          
+          console.log('✅ PNG/JPG processed and added to overlay');
+        }
+        
+        // Final debug check
+        setTimeout(() => {
+          const addedElement = overlay.querySelector('img, svg');
+          console.log('🎯 Overlay after processing:', {
+            overlayWidth: overlay.offsetWidth,
+            overlayHeight: overlay.offsetHeight,
+            elementType: addedElement?.tagName,
+            elementWidth: addedElement?.offsetWidth,
+            elementHeight: addedElement?.offsetHeight,
+            elementStyle: addedElement?.style.cssText
+          });
+        }, 100);
+        
+      } catch (err) {
+        console.error('Upload normalize error:', err);
+        // graceful fallback: just show the file as-is
+        const url = URL.createObjectURL(file);
+        const img = new Image();
+        img.onload = () => URL.revokeObjectURL(url);
+        img.src = url;
+        img.style.width = '100%';
+        img.style.height = '100%';
+        img.style.objectFit = 'contain';
+        overlay.appendChild(img);
+      }
+    });
+  })();
+
 document.addEventListener('DOMContentLoaded', function() {
   const mockup = {
     // Mockup images mapping - Using tshirt-view.png for all views
@@ -870,7 +1157,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Enhanced placement state - Initialize with centered values
     placementState: {
-      topPct: 45,
+      topPct: 35,
       leftPct: 25,
       widthPct: 60,
       rotateDeg: 0,
@@ -911,13 +1198,16 @@ document.addEventListener('DOMContentLoaded', function() {
       // Ensure design starts unselected
       this.deselectDesign();
       
+      // Initialize positioning with default values
+      this.updateDesignPosition();
+      
       console.log('✅ Mockup initialized with placement controls visible');
     },
 
     forceCenterPositioning() {
       console.log('🔧 Applying centered positioning...');
       // Update the placement state to centered values
-      this.placementState.topPct = 45;
+      this.placementState.topPct = 35;
       this.placementState.leftPct = 25;
       this.placementState.widthPct = 60;
       this.placementState.rotateDeg = 0;
@@ -998,13 +1288,13 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         });
 
-        // Handle file selection
-        fileInput.addEventListener("change", (e) => {
-          const file = e.target.files[0];
-          if (file) {
-            this.handleFileUpload(file);
-          }
-        });
+        // Handle file selection - DISABLED (using new enhanced upload handler instead)
+        // fileInput.addEventListener("change", async (e) => {
+        //   const file = e.target.files[0];
+        //   if (file) {
+        //     await this.handleFileUpload(file);
+        //   }
+        // });
       }
 
       // Bind help button
@@ -1312,7 +1602,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     },
 
-    handleFileUpload(file) {
+    async handleFileUpload(file) {
       console.log('File uploaded:', file.name, file.type, file.size);
       
       // Validate file type
@@ -1339,13 +1629,13 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // Create preview
       const reader = new FileReader();
-      reader.onload = (e) => {
-        this.previewUploadedDesign(e.target.result, file.name);
+      reader.onload = async (e) => {
+        await this.previewUploadedDesign(e.target.result, file.name, file);
       };
       reader.readAsDataURL(file);
     },
 
-    previewUploadedDesign(imageData, fileName) {
+    async previewUploadedDesign(imageData, fileName, file) {
       // Create preview overlay
       const previewOverlay = document.createElement('div');
       previewOverlay.style.cssText = `
@@ -1410,8 +1700,8 @@ document.addEventListener('DOMContentLoaded', function() {
       }, 100);
 
       // Bind events
-      document.getElementById('apply-design-btn').addEventListener('click', () => {
-        this.applyUploadedDesign(imageData);
+      document.getElementById('apply-design-btn').addEventListener('click', async () => {
+        await this.applyUploadedDesign(imageData, file);
         this.closeUploadPreview();
       });
 
@@ -1428,7 +1718,7 @@ document.addEventListener('DOMContentLoaded', function() {
       this.currentUploadPreview = previewOverlay;
     },
 
-    applyUploadedDesign(imageData) {
+    async applyUploadedDesign(imageData, file) {
       // Replace text with uploaded image
       const overlayDiv = document.getElementById(`nt-overlay-{{ section.id }}`);
       const designText = document.getElementById(`nt-design-text-{{ section.id }}`);
@@ -1437,12 +1727,65 @@ document.addEventListener('DOMContentLoaded', function() {
         // Hide text
         designText.style.display = 'none';
         
-        // Create image element
+      // Check if it's an SVG and handle accordingly
+      if (file.type === 'image/svg+xml' || file.name.toLowerCase().endsWith('.svg')) {
+        // For SVGs, create an inline SVG element to avoid size issues
+        const svgElement = document.createElement('div');
+        svgElement.innerHTML = await file.text();
+        const svg = svgElement.querySelector('svg');
+        
+        if (svg) {
+          // Remove width and height attributes to allow scaling
+          svg.removeAttribute('width');
+          svg.removeAttribute('height');
+          svg.style.cssText = `
+            width: 100%;
+            height: 100%;
+            display: block;
+          `;
+          
+          overlayDiv.appendChild(svg);
+          
+          // Force apply sizing styles immediately
+          setTimeout(() => {
+            svg.style.cssText = `
+              width: 100% !important;
+              height: 100% !important;
+              max-width: 100% !important;
+              max-height: 100% !important;
+              display: block !important;
+              position: absolute !important;
+              top: 0 !important;
+              left: 0 !important;
+              right: 0 !important;
+              bottom: 0 !important;
+            `;
+            console.log('🔧 Force-applied SVG sizing styles');
+          }, 100);
+          
+          console.log('✅ SVG uploaded and normalized');
+        } else {
+          // Fallback to img element for SVGs
+          const uploadedImg = document.createElement('img');
+          uploadedImg.src = imageData;
+          uploadedImg.style.cssText = `
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+            pointer-events: none;
+            position: relative;
+            z-index: 1;
+          `;
+          overlayDiv.appendChild(uploadedImg);
+        }
+      } else {
+        // For other image types, use regular img element
         const uploadedImg = document.createElement('img');
         uploadedImg.src = imageData;
         uploadedImg.style.cssText = `
-          max-width: 100%;
-          max-height: 100%;
+          width: 100%;
+          height: 100%;
           object-fit: contain;
           filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
           pointer-events: none;
@@ -1451,6 +1794,25 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
         
         overlayDiv.appendChild(uploadedImg);
+        
+        // Force apply sizing styles immediately
+        setTimeout(() => {
+          uploadedImg.style.cssText = `
+            width: 100% !important;
+            height: 100% !important;
+            max-width: 100% !important;
+            max-height: 100% !important;
+            object-fit: contain !important;
+            display: block !important;
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+          `;
+          console.log('🔧 Force-applied image sizing styles');
+        }, 100);
+      }
         
         // Mark as uploaded design
         this.placementState.hasUploadedDesign = true;
@@ -1466,6 +1828,23 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Automatically select the uploaded design
         this.selectDesign();
+        
+        // Debug: Check overlay dimensions
+        setTimeout(() => {
+          const overlay = document.getElementById(`nt-overlay-{{ section.id }}`);
+          const img = overlay?.querySelector('img, svg');
+          if (overlay && img) {
+            console.log('🔍 OVERLAY DEBUG:', {
+              overlayWidth: overlay.offsetWidth,
+              overlayHeight: overlay.offsetHeight,
+              overlayStyle: overlay.style.cssText,
+              imgWidth: img.offsetWidth,
+              imgHeight: img.offsetHeight,
+              imgStyle: img.style.cssText,
+              imgSrc: img.src || 'SVG element'
+            });
+          }
+        }, 500);
         
         this.showMessage('✨ Uploaded design applied to mockup!', 'success');
       }
@@ -1767,7 +2146,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // Reset to default positioning
-        this.placementState.topPct = 45;
+        this.placementState.topPct = 35;
         this.placementState.leftPct = 25;
         this.placementState.widthPct = 60;
         this.placementState.rotateDeg = 0;
@@ -1799,6 +2178,7 @@ document.addEventListener('DOMContentLoaded', function() {
         overlayDiv.style.top = this.placementState.topPct + '%';
         overlayDiv.style.left = this.placementState.leftPct + '%';
         overlayDiv.style.width = this.placementState.widthPct + '%';
+        overlayDiv.style.height = this.placementState.widthPct + '%'; // Make it square
         overlayDiv.style.transform = `rotate(${this.placementState.rotateDeg}deg)`;
         overlayDiv.style.transformOrigin = 'center center';
         
@@ -1806,7 +2186,18 @@ document.addEventListener('DOMContentLoaded', function() {
         overlayDiv.style.setProperty('--overlay-top', this.placementState.topPct + '%');
         overlayDiv.style.setProperty('--overlay-left', this.placementState.leftPct + '%');
         overlayDiv.style.setProperty('--overlay-width', this.placementState.widthPct + '%');
+        overlayDiv.style.setProperty('--overlay-height', this.placementState.widthPct + '%');
         overlayDiv.style.setProperty('--overlay-rotate', this.placementState.rotateDeg + 'deg');
+        
+        // Also update canvas CSS variables
+        const canvas = document.querySelector(`#nt-mockup-canvas-{{ section.id }}`);
+        if (canvas) {
+          canvas.style.setProperty('--overlay-top', this.placementState.topPct + '%');
+          canvas.style.setProperty('--overlay-left', this.placementState.leftPct + '%');
+          canvas.style.setProperty('--overlay-width', this.placementState.widthPct + '%');
+          canvas.style.setProperty('--overlay-height', this.placementState.widthPct + '%');
+          canvas.style.setProperty('--overlay-rotate', this.placementState.rotateDeg + 'deg');
+        }
         
         console.log('✅ Positioning applied directly to element');
         console.log('🔍 Current element styles:', {
@@ -1815,12 +2206,182 @@ document.addEventListener('DOMContentLoaded', function() {
           width: overlayDiv.style.width,
           transform: overlayDiv.style.transform
         });
+        
+        // Check if design is within print area and update highlighting
+        this.updatePrintAreaHighlighting();
       } else {
         console.error('❌ Overlay element not found!');
       }
       
       // Check for centering and show indicators
       this.checkCentering();
+    },
+
+    updatePrintAreaHighlighting() {
+      const overlayEl = document.querySelector(`#nt-overlay-{{ section.id }}`);
+      if (!overlayEl) return;
+      
+      // Get selected size
+      const sizeSelect = document.getElementById(`mockup-size-select-{{ section.id }}`);
+      const selectedSize = sizeSelect.value || 'M'; // Default to Medium
+      
+      // Size-specific print area dimensions (px at 300 DPI)
+      // Based on 4494 x 5097 px print area size
+      const sizeDimensions = {
+        'XXS': { width: 4494, height: 5097, displayWidth: '4494', displayHeight: '5097' },
+        'XS': { width: 4494, height: 5097, displayWidth: '4494', displayHeight: '5097' },
+        'S': { width: 4494, height: 5097, displayWidth: '4494', displayHeight: '5097' },
+        'M': { width: 4494, height: 5097, displayWidth: '4494', displayHeight: '5097' },
+        'L': { width: 4494, height: 5097, displayWidth: '4494', displayHeight: '5097' },
+        'XL': { width: 4494, height: 5097, displayWidth: '4494', displayHeight: '5097' },
+        'XXL': { width: 4494, height: 5097, displayWidth: '4494', displayHeight: '5097' }
+      };
+      
+      const dimensions = sizeDimensions[selectedSize] || sizeDimensions['M'];
+      
+      // Convert pixel dimensions to percentage-based boundaries on t-shirt mockup
+      // These percentages are calculated based on typical t-shirt proportions
+      const printArea = {
+        top: 32,    // 32% from top of t-shirt (chest area)
+        left: 22,   // 22% from left of t-shirt (centered)
+        right: 78,  // 78% from left of t-shirt
+        bottom: 42  // 42% from top of t-shirt (10% height for chest area)
+      };
+      
+      // All sizes now use the same print area dimensions (4494 x 5097 px)
+      // No size-based adjustments needed since print area is consistent across all sizes
+      
+      // Get overlay position and size (the green dashed box)
+      const overlayRect = overlayEl.getBoundingClientRect();
+      const mockupContainer = document.querySelector(`#nt-mockup-{{ section.id }}`);
+      const mockupRect = mockupContainer.getBoundingClientRect();
+      
+      // Calculate overlay position relative to t-shirt
+      const overlayLeftPct = ((overlayRect.left - mockupRect.left) / mockupRect.width) * 100;
+      const overlayTopPct = ((overlayRect.top - mockupRect.top) / mockupRect.height) * 100;
+      const overlayWidthPct = (overlayRect.width / mockupRect.width) * 100;
+      const overlayHeightPct = (overlayRect.height / mockupRect.height) * 100;
+      
+      // Get design position relative to overlay
+      const designLeftRel = this.placementState.leftPct;
+      const designTopRel = this.placementState.topPct;
+      const designWidthRel = this.placementState.widthPct;
+      const designHeightRel = designWidthRel; // Assuming square design
+      
+      // Convert design position to ABSOLUTE coordinates on t-shirt
+      const designLeftAbs = overlayLeftPct + (designLeftRel * overlayWidthPct / 100);
+      const designTopAbs = overlayTopPct + (designTopRel * overlayHeightPct / 100);
+      const designWidthAbs = designWidthRel * overlayWidthPct / 100;
+      const designHeightAbs = designHeightRel * overlayHeightPct / 100;
+      
+      // Calculate absolute design boundaries
+      const designRightAbs = designLeftAbs + designWidthAbs;
+      const designBottomAbs = designTopAbs + designHeightAbs;
+      
+      console.log('🔍 Print Area Calculation (Size-Specific):', {
+        selectedSize: selectedSize,
+        realDimensions: `${dimensions.displayWidth}x${dimensions.displayHeight}px (300 DPI)`,
+        printArea: { left: printArea.left, right: printArea.right, top: printArea.top, bottom: printArea.bottom },
+        overlay: { left: overlayLeftPct, top: overlayTopPct, width: overlayWidthPct, height: overlayHeightPct },
+        designRelative: { left: designLeftRel, top: designTopRel, width: designWidthRel, height: designHeightRel },
+        designAbsolute: { left: designLeftAbs, top: designTopAbs, right: designRightAbs, bottom: designBottomAbs }
+      });
+      
+      // Check if design is completely within print area (with small tolerance)
+      const tolerance = 2; // 2% tolerance for visual alignment
+      const isWithinPrintArea = (
+        designLeftAbs >= (printArea.left - tolerance) &&
+        designRightAbs <= (printArea.right + tolerance) &&
+        designTopAbs >= (printArea.top - tolerance) &&
+        designBottomAbs <= (printArea.bottom + tolerance)
+      );
+      
+      // Check if design is partially within print area
+      const isPartiallyWithin = (
+        (designLeftAbs < printArea.right && designRightAbs > printArea.left) &&
+        (designTopAbs < printArea.bottom && designBottomAbs > printArea.top)
+      );
+      
+      console.log('🎯 Print Area Status (Size-Specific):', {
+        selectedSize: selectedSize,
+        realDimensions: `${dimensions.displayWidth}x${dimensions.displayHeight}px (300 DPI)`,
+        isWithin: isWithinPrintArea,
+        isPartiallyWithin: isPartiallyWithin,
+        violations: {
+          left: designLeftAbs < printArea.left,
+          right: designRightAbs > printArea.right,
+          top: designTopAbs < printArea.top,
+          bottom: designBottomAbs > printArea.bottom
+        }
+      });
+      
+      // Update visual feedback - REMOVE ALL existing messages first
+      const existingMsgs = document.querySelectorAll('.print-area-message');
+      existingMsgs.forEach(msg => msg.remove());
+      
+      if (isWithinPrintArea) {
+        overlayEl.classList.add('design-within-print-area');
+        overlayEl.classList.remove('design-outside-print-area', 'design-partially-outside');
+        this.showPrintAreaMessage(`✅ Design fits within print area (${dimensions.displayWidth}x${dimensions.displayHeight}px @ 300 DPI)`, 'success');
+      } else if (isPartiallyWithin) {
+        overlayEl.classList.add('design-partially-outside');
+        overlayEl.classList.remove('design-within-print-area', 'design-outside-print-area');
+        this.showPrintAreaMessage(`⚠️ Design extends outside print area (${dimensions.displayWidth}x${dimensions.displayHeight}px @ 300 DPI)`, 'warning');
+      } else {
+        overlayEl.classList.add('design-outside-print-area');
+        overlayEl.classList.remove('design-within-print-area', 'design-partially-outside');
+        this.showPrintAreaMessage(`❌ Design is outside print area (${dimensions.displayWidth}x${dimensions.displayHeight}px @ 300 DPI)`, 'error');
+      }
+    },
+
+    showPrintAreaMessage(message, type) {
+      // Remove ALL existing print area messages to prevent overlap
+      const existingMsgs = document.querySelectorAll('.print-area-message');
+      existingMsgs.forEach(msg => msg.remove());
+      
+      // Create new message
+      const msgEl = document.createElement('div');
+      msgEl.className = `print-area-message print-area-message--${type}`;
+      msgEl.textContent = message;
+      
+      // Style the message with higher z-index and better positioning
+      msgEl.style.cssText = `
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        z-index: 10000;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        backdrop-filter: blur(8px);
+        animation: slideInFromRight 0.3s ease;
+        max-width: 300px;
+      `;
+      
+      // Set colors based on type
+      if (type === 'success') {
+        msgEl.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+        msgEl.style.color = 'white';
+      } else if (type === 'warning') {
+        msgEl.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+        msgEl.style.color = 'white';
+      } else if (type === 'error') {
+        msgEl.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+        msgEl.style.color = 'white';
+      }
+      
+      document.body.appendChild(msgEl);
+      
+      // Auto-remove after 3 seconds
+      setTimeout(() => {
+        if (msgEl.parentNode) {
+          msgEl.style.animation = 'slideOutToRight 0.3s ease';
+          setTimeout(() => msgEl.remove(), 300);
+        }
+      }, 3000);
     },
 
     checkCentering() {
@@ -1844,8 +2405,8 @@ document.addEventListener('DOMContentLoaded', function() {
       statusDiv.style.display = 'none';
       
       // Check for perfect center (within 2% tolerance)
-      const isHorizontallyCentered = Math.abs(leftPct - 25) <= 2; // 25% is center for 50% width
-      const isVerticallyCentered = Math.abs(topPct - 45) <= 2; // 45% is center for t-shirt
+      const isHorizontallyCentered = Math.abs(leftPct - 20) <= 2; // 20% is center for 60% width
+      const isVerticallyCentered = Math.abs(topPct - 35) <= 2; // 35% is center for t-shirt
       const isPerfectCenter = isHorizontallyCentered && isVerticallyCentered;
       
       // Check for equidistant positioning (equal distance from edges)
@@ -1909,7 +2470,7 @@ document.addEventListener('DOMContentLoaded', function() {
       // Calculate the optimal position for equidistant placement
       // Left margin = Right margin, Top margin = Bottom margin
       const optimalLeft = (100 - currentWidth) / 2;
-      const optimalTop = 35; // Position higher on t-shirt for better visual balance
+      const optimalTop = 30; // Position higher on t-shirt for better visual balance
       
       // Apply the equidistant positioning
       this.placementState.leftPct = Math.max(5, Math.min(95 - currentWidth, optimalLeft));
@@ -1937,7 +2498,7 @@ document.addEventListener('DOMContentLoaded', function() {
     },
 
     resetPlacement() {
-      this.placementState.topPct = 45;
+      this.placementState.topPct = 35;
       this.placementState.leftPct = 25;
       this.placementState.widthPct = 60;
       this.placementState.rotateDeg = 0;
@@ -2571,147 +3132,161 @@ document.addEventListener('DOMContentLoaded', function() {
 
     {% if section.settings.allow_download %}
     downloadComposite() {
-      console.log('📥 Starting mockup download...');
+      console.log('📥 Starting DEBUG mockup download...');
       
+      // Create a simple canvas
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
-      
-      // Set canvas size to high resolution
-      canvas.width = 2000;
-      canvas.height = 2000;
+      canvas.width = 1200;
+      canvas.height = 1200;
       
       // Enable high-quality rendering
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = 'high';
 
-      // Create base image
-      const baseImg = new Image();
-      baseImg.crossOrigin = "anonymous";
-      baseImg.src = document.getElementById("nt-base-{{ section.id }}").src;
+      // Get the base t-shirt image
+      const baseImg = document.getElementById("nt-base-{{ section.id }}");
+      if (!baseImg) {
+        console.error('❌ Base t-shirt image not found!');
+        alert('❌ Base t-shirt image not found');
+        return;
+      }
+
+      // Draw the base t-shirt first
+      ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
+      console.log('✅ Base t-shirt drawn to canvas');
+
+      // Look for ALL images in the overlay area
+      const overlayContainer = document.querySelector(`#nt-overlay-{{ section.id }}`);
+      console.log('🔍 Overlay container found:', overlayContainer ? 'YES' : 'NO');
       
-      console.log('🖼️ Loading base t-shirt image:', baseImg.src);
-
-      baseImg.onload = () => {
-        console.log('✅ Base t-shirt loaded, drawing to canvas...');
+      if (overlayContainer) {
+        // Get all images in the overlay
+        const allImages = overlayContainer.querySelectorAll('img');
+        console.log('📸 Total images in overlay:', allImages.length);
         
-        // Draw base image (t-shirt) - fit to canvas
-        ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
-
-        // Check if there's an uploaded design image
-        const overlayImg = document.querySelector(`#nt-overlay-{{ section.id }} img`);
-        
-        console.log('🔍 Checking for uploaded design:', overlayImg ? 'Found' : 'Not found');
-        if (overlayImg) {
-          console.log('📸 Design image src:', overlayImg.src.substring(0, 100) + '...');
-        }
-        
-        if (overlayImg && overlayImg.src && !overlayImg.src.includes('data:image/svg+xml')) {
-          console.log('✅ Uploaded design detected, compositing...');
-          
-          // Draw uploaded design image
-          const designImg = new Image();
-          designImg.crossOrigin = "anonymous";
-          designImg.src = overlayImg.src;
-          
-          designImg.onload = () => {
-            console.log('✅ Design image loaded, calculating position...');
-            // Use the exact placement state values that match the preview
-            const topPct = this.placementState.topPct / 100;
-            const leftPct = this.placementState.leftPct / 100;
-            const widthPct = this.placementState.widthPct / 100;
-            const rotateDeg = this.placementState.rotateDeg || 0;
-
-            // Calculate overlay box position and size
-            // The overlay box starts at (leftPct, topPct) with size widthPct
-            const overlayLeft = canvas.width * leftPct;
-            const overlayTop = canvas.height * topPct;
-            const overlayWidth = canvas.width * widthPct;
-            
-            // Calculate design size maintaining aspect ratio
-            const designWidth = overlayWidth; // Design fills overlay width
-            const designHeight = (designImg.height / designImg.width) * designWidth;
-            
-            // Design is centered within the overlay box
-            // So design center is at: overlay left + half overlay width, overlay top + half design height
-            const designCenterX = overlayLeft + overlayWidth / 2;
-            const designCenterY = overlayTop + designHeight / 2;
-
-            // Save context for rotation
-            ctx.save();
-            // Translate to design center point
-            ctx.translate(designCenterX, designCenterY);
-            ctx.rotate(rotateDeg * Math.PI / 180);
-            
-            // Draw the design image centered at the translated point
-            ctx.drawImage(designImg, -designWidth / 2, -designHeight / 2, designWidth, designHeight);
-            ctx.restore();
-            
-            console.log('🎨 Design composited successfully!');
-            console.log(`📦 Overlay box: left=${overlayLeft.toFixed(0)}px, top=${overlayTop.toFixed(0)}px, width=${overlayWidth.toFixed(0)}px`);
-            console.log(`📐 Design center: x=${designCenterX.toFixed(0)}px, y=${designCenterY.toFixed(0)}px`);
-            console.log(`📏 Design size: ${designWidth.toFixed(0)}x${designHeight.toFixed(0)}px`);
-            console.log(`🔄 Rotation: ${rotateDeg}°`);
-
-            // Download
-            const a = document.createElement('a');
-            a.download = `custom_mockup_${this.state.view}_${this.state.color}.png`;
-            a.href = canvas.toDataURL("image/png");
-            a.click();
-            
-            console.log('✅ Download initiated!');
-          };
-        } else {
-          console.log('⚠️ No uploaded design found, using text placeholder...');
-          
-          // Fallback to text if no image uploaded
-          ctx.save();
-          ctx.font = `${this.designState.fontSize * 2}px ${this.designState.fontFamily}`;
-          ctx.fillStyle = this.designState.textColor;
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-
-          // Calculate text position based on overlay settings
-          const stage = document.querySelector(`#nt-mockup-{{ section.id }} .nt-mockup__canvas`);
-          const topPct = parseFloat(getComputedStyle(stage).getPropertyValue('--overlay-top')) / 100;
-          const leftPct = parseFloat(getComputedStyle(stage).getPropertyValue('--overlay-left')) / 100;
-          const widthPct = parseFloat(getComputedStyle(stage).getPropertyValue('--overlay-width')) / 100;
-          const rotateDeg = parseFloat(getComputedStyle(stage).getPropertyValue('--overlay-rotate')) || 0;
-
-          const x = canvas.width * (leftPct + widthPct / 2);
-          const y = canvas.height * (topPct + 0.3); // Adjust for text positioning
-
-          ctx.translate(x, y);
-          ctx.rotate(rotateDeg * Math.PI / 180);
-          
-          // Apply text effects
-          switch (this.designState.effect) {
-            case 'outline':
-              ctx.strokeStyle = this.designState.textColor;
-              ctx.lineWidth = 4;
-              ctx.strokeText(this.designState.text, 0, 0);
-              ctx.fillStyle = 'transparent';
-              break;
-            case 'shadow':
-              ctx.shadowColor = 'rgba(0,0,0,0.5)';
-              ctx.shadowBlur = 8;
-              ctx.shadowOffsetX = 4;
-              ctx.shadowOffsetY = 4;
-              ctx.fillStyle = this.designState.textColor;
-              break;
-            default:
-              ctx.fillStyle = this.designState.textColor;
+        // Remove any SVG fallback images first
+        allImages.forEach((img) => {
+          if (img.src.includes('data:image/svg+xml;base64,PD94bwgdmVyc2tvb')) {
+            console.log('🗑️ Removing SVG fallback image');
+            img.remove();
           }
-          
-          ctx.fillText(this.designState.text, 0, 0);
-          ctx.restore();
-
-          // Download
-          const a = document.createElement('a');
-          a.download = `custom_mockup_${this.state.view}_${this.state.color}.png`;
-          a.href = canvas.toDataURL("image/png");
-          a.click();
+        });
+        
+        // Get updated list after removing fallbacks
+        const updatedImages = overlayContainer.querySelectorAll('img');
+        console.log('📸 Images after cleanup:', updatedImages.length);
+        
+        updatedImages.forEach((img, index) => {
+          console.log(`📸 Image ${index + 1}:`, {
+            src: img.src.substring(0, 100) + '...',
+            complete: img.complete,
+            naturalWidth: img.naturalWidth,
+            naturalHeight: img.naturalHeight,
+            isSVG: img.src.includes('data:image/svg+xml'),
+            isDefaultSVG: img.src.includes('data:image/svg+xml;base64,PD94bwgdmVyc2tvb'),
+            element: img
+          });
+        });
+        
+        // Find the first real uploaded image (including SVGs)
+        let designImg = null;
+        for (let img of updatedImages) {
+          // Accept any image that's not the default SVG fallback
+          if (!img.src.includes('data:image/svg+xml;base64,PD94bwgdmVyc2tvb') && 
+              img.complete && img.naturalWidth > 0) {
+            designImg = img;
+            console.log('✅ Found real design image:', designImg.src.substring(0, 100) + '...');
+            break;
+          }
         }
-      };
+        
+        if (designImg) {
+          console.log('✅ Drawing design to canvas...');
+          
+          // Get the canvas element for positioning
+          const canvasElement = document.querySelector(`#nt-mockup-{{ section.id }} .nt-mockup__canvas`);
+          
+          if (canvasElement) {
+            // Get selected size for print area calculation
+            const sizeSelect = document.getElementById(`mockup-size-select-{{ section.id }}`);
+            const selectedSize = sizeSelect.value || 'M';
+            
+            console.log(`📏 Downloading for size: ${selectedSize}`);
+            
+            // Get current design position from placement state
+            const designLeftPct = this.placementState.leftPct;
+            const designTopPct = this.placementState.topPct;
+            const designWidthPct = this.placementState.widthPct;
+            const designHeightPct = designWidthPct; // Assuming square design
+            
+            console.log('📊 Placement state:', { 
+              left: designLeftPct, 
+              top: designTopPct, 
+              width: designWidthPct 
+            });
+            
+            // Get overlay position and size from DOM
+            const overlayEl = document.querySelector(`#nt-overlay-{{ section.id }}`);
+            const overlayRect = overlayEl.getBoundingClientRect();
+            const mockupRect = document.querySelector(`#nt-mockup-{{ section.id }}`).getBoundingClientRect();
+            
+            // Calculate overlay position relative to mockup
+            const overlayLeftPct = ((overlayRect.left - mockupRect.left) / mockupRect.width) * 100;
+            const overlayTopPct = ((overlayRect.top - mockupRect.top) / mockupRect.height) * 100;
+            const overlayWidthPct = (overlayRect.width / mockupRect.width) * 100;
+            const overlayHeightPct = (overlayRect.height / mockupRect.height) * 100;
+            
+            // Convert design position to absolute coordinates on canvas
+            const designLeftAbs = overlayLeftPct + (designLeftPct * overlayWidthPct / 100);
+            const designTopAbs = overlayTopPct + (designTopPct * overlayHeightPct / 100);
+            const designWidthAbs = designWidthPct * overlayWidthPct / 100;
+            const designHeightAbs = designHeightPct * overlayHeightPct / 100;
+            
+            // Convert percentages to pixel coordinates
+            const designX = (designLeftAbs / 100) * canvas.width;
+            const designY = (designTopAbs / 100) * canvas.height;
+            const designWidth = (designWidthAbs / 100) * canvas.width;
+            const designHeight = (designHeightAbs / 100) * canvas.height;
+            
+            console.log('🎨 Design final position:', { 
+              designX, designY, designWidth, designHeight,
+              overlay: { overlayLeftPct, overlayTopPct, overlayWidthPct, overlayHeightPct },
+              absolute: { designLeftAbs, designTopAbs, designWidthAbs, designHeightAbs }
+            });
+            
+            // Draw the design at the calculated position
+            ctx.drawImage(designImg, designX, designY, designWidth, designHeight);
+            console.log('✅ Design drawn to canvas at calculated position');
+          } else {
+            console.log('⚠️ Could not find canvas element, using center position');
+            // Fallback: center the design
+            const designSize = Math.min(canvas.width, canvas.height) * 0.3;
+            const centerX = (canvas.width - designSize) / 2;
+            const centerY = (canvas.height - designSize) / 2;
+            ctx.drawImage(designImg, centerX, centerY, designSize, designSize);
+            console.log('✅ Design drawn at center');
+          }
+        } else {
+          console.log('⚠️ No real design image found - only SVG fallbacks detected');
+          alert('⚠️ No design image found. Please upload a real image file (PNG, JPG, etc.)');
+        }
+      } else {
+        console.log('❌ No overlay container found');
+        alert('❌ Overlay container not found');
+      }
+
+      // Download the result
+      const sizeSelect = document.getElementById(`mockup-size-select-{{ section.id }}`);
+      const selectedSize = sizeSelect.value || 'M';
+      
+      const a = document.createElement('a');
+      a.download = `custom-mockup-${selectedSize}-${Date.now()}.png`;
+      a.href = canvas.toDataURL("image/png", 1.0);
+      a.click();
+      
+      console.log(`✅ Download initiated for size: ${selectedSize}!`);
+      alert(`✅ Mockup downloaded for ${selectedSize}! Check the console for details.`);
     }
     {% endif %}
   };
@@ -2982,11 +3557,32 @@ document.addEventListener('DOMContentLoaded', function() {
             // Store selected size in mockup state
             mockup.selectedSize = selectedSize;
             console.log(`📏 Size selected: ${selectedSize}`, sizeData);
+            
+            // Update print area highlighting with new size
+            if (mockup.updatePrintAreaHighlighting) {
+              mockup.updatePrintAreaHighlighting();
+            }
           }
         }
       } catch (error) {
         console.error('Error loading size data:', error);
         sizeInfo.style.display = 'none';
+      }
+      
+      // Always update print area highlighting when size changes
+      if (mockup.updatePrintAreaHighlighting) {
+        mockup.updatePrintAreaHighlighting();
+      }
+      
+      // Update overlay class for size-specific styling
+      const overlayEl = document.querySelector(`#nt-overlay-{{ section.id }}`);
+      if (overlayEl) {
+        // Remove all size classes
+        overlayEl.classList.remove('size-xxs', 'size-xs', 'size-s', 'size-m', 'size-l', 'size-xl', 'size-xxl');
+        // Add current size class
+        if (selectedSize) {
+          overlayEl.classList.add(`size-${selectedSize.toLowerCase()}`);
+        }
       }
     });
     
@@ -3014,8 +3610,678 @@ document.addEventListener('DOMContentLoaded', function() {
 
   console.log('🚀 ENHANCED Interactive Mockup initialized! 🎨');
   console.log('📏 Size selector integrated with size chart system!');
+
+  // ============================================================================
+  // CUSTOM REQUEST MODAL FUNCTIONALITY
+  // ============================================================================
+  
+  const submitRequestBtn = document.getElementById('nt-submit-request-{{ section.id }}');
+  const customRequestModal = document.getElementById('custom-request-modal-{{ section.id }}');
+  const closeRequestModal = document.getElementById('close-request-modal-{{ section.id }}');
+  const customRequestForm = document.getElementById('custom-request-form-{{ section.id }}');
+  const requestSuccess = document.getElementById('request-success-{{ section.id }}');
+  const requestLoading = document.getElementById('request-loading-{{ section.id }}');
+  const requestId = document.getElementById('request-id-{{ section.id }}');
+  const closeSuccess = document.getElementById('close-success-{{ section.id }}');
+
+  // Open modal when Submit Request button is clicked
+  if (submitRequestBtn) {
+    submitRequestBtn.addEventListener('click', () => {
+      console.log('🎨 Opening custom request modal...');
+      
+      // Pre-fill form with current mockup data
+      const selectedColor = getSelectedColor();
+      const selectedSize = mockup.selectedSize || 'M';
+      
+      document.getElementById('selected-color-{{ section.id }}').value = selectedColor;
+      document.getElementById('selected-size-{{ section.id }}').value = selectedSize;
+      
+      customRequestModal.style.display = 'flex';
+      document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    });
+  }
+
+  // Close modal functions
+  function closeModal() {
+    customRequestModal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }
+
+  if (closeRequestModal) {
+    closeRequestModal.addEventListener('click', closeModal);
+  }
+
+  if (closeSuccess) {
+    closeSuccess.addEventListener('click', closeModal);
+  }
+
+  // Close modal when clicking outside
+  if (customRequestModal) {
+    customRequestModal.addEventListener('click', (e) => {
+      if (e.target === customRequestModal) {
+        closeModal();
+      }
+    });
+  }
+
+  // Handle form submission
+  if (customRequestForm) {
+    customRequestForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      console.log('📝 Submitting custom request...');
+
+      // Show loading state
+      customRequestForm.style.display = 'none';
+      requestLoading.style.display = 'block';
+
+      try {
+        // Get form data
+        const formData = {
+          customer_name: document.getElementById('customer-name-{{ section.id }}').value,
+          customer_email: document.getElementById('customer-email-{{ section.id }}').value,
+          customer_phone: document.getElementById('customer-phone-{{ section.id }}').value || null,
+          customer_message: document.getElementById('customer-message-{{ section.id }}').value,
+          design_data: {
+            color: document.getElementById('selected-color-{{ section.id }}').value,
+            size: document.getElementById('selected-size-{{ section.id }}').value,
+            placement: {
+              topPct: this.placementState.topPct,
+              leftPct: this.placementState.leftPct,
+              widthPct: this.placementState.widthPct,
+              rotateDeg: this.placementState.rotateDeg || 0
+            },
+            hasUploadedDesign: this.placementState.hasUploadedDesign
+          }
+        };
+
+        // Upload images if design is uploaded
+        let designImageUrl = null;
+        let mockupImageUrl = null;
+
+        if (this.placementState.hasUploadedDesign) {
+          console.log('📤 Uploading design and mockup images...');
+          
+          // Upload design image
+          const designImg = document.querySelector(`#nt-overlay-{{ section.id }} img`);
+          if (designImg && designImg.src) {
+            designImageUrl = await uploadImageToSupabase(designImg.src, 'design-uploads');
+          }
+
+          // Generate and upload mockup
+          mockupImageUrl = await generateAndUploadMockup();
+        }
+
+        // Submit request to database
+        const result = await submitCustomRequest({
+          ...formData,
+          design_image_url: designImageUrl,
+          mockup_image_url: mockupImageUrl
+        });
+
+        if (result.success) {
+          // Show success message
+          requestLoading.style.display = 'none';
+          requestSuccess.style.display = 'block';
+          requestId.textContent = `Request ID: ${result.requestId}`;
+          
+          console.log('✅ Custom request submitted successfully!', result.requestId);
+          
+          // Reset form for next time
+          customRequestForm.reset();
+        } else {
+          throw new Error(result.error || 'Failed to submit request');
+        }
+
+      } catch (error) {
+        console.error('❌ Error submitting custom request:', error);
+        
+        // Show error message
+        requestLoading.style.display = 'none';
+        customRequestForm.style.display = 'block';
+        
+        // Show error alert
+        alert(`Failed to submit request: ${error.message}`);
+      }
+    });
+  }
+
+  // Helper function to upload image to Supabase Storage
+  async function uploadImageToSupabase(imageDataUrl, bucket) {
+    try {
+      if (!window.supabaseClient) {
+        throw new Error('Supabase client not initialized');
+      }
+
+      const supabase = await window.supabaseClient.getClient();
+      
+      // Convert data URL to blob
+      const response = await fetch(imageDataUrl);
+      const blob = await response.blob();
+      
+      // Generate unique filename
+      const filename = `custom-design-${Date.now()}-${Math.random().toString(36).substr(2, 9)}.png`;
+      
+      // Upload to Supabase Storage
+      const { data, error } = await supabase.storage
+        .from(bucket)
+        .upload(filename, blob, {
+          contentType: 'image/png',
+          upsert: false
+        });
+
+      if (error) throw error;
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from(bucket)
+        .getPublicUrl(filename);
+
+      console.log(`✅ Image uploaded to ${bucket}:`, publicUrl);
+      return publicUrl;
+
+    } catch (error) {
+      console.error(`❌ Error uploading to ${bucket}:`, error);
+      throw error;
+    }
+  }
+
+  // Helper function to generate and upload mockup
+  async function generateAndUploadMockup() {
+    try {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      
+      // Set canvas size to high resolution
+      canvas.width = 2000;
+      canvas.height = 2000;
+      
+      // Enable high-quality rendering
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+
+      // Create base image
+      const baseImg = new Image();
+      baseImg.crossOrigin = "anonymous";
+      baseImg.src = document.getElementById("nt-base-{{ section.id }}").src;
+      
+      return new Promise((resolve, reject) => {
+        baseImg.onload = async () => {
+          try {
+            // Draw base image (t-shirt) - fit to canvas
+            ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
+
+            // Check if there's an uploaded design image
+            const overlayImg = document.querySelector(`#nt-overlay-{{ section.id }} img`);
+            
+            if (overlayImg && overlayImg.src && !overlayImg.src.includes('data:image/svg+xml')) {
+              // Draw uploaded design image
+              const designImg = new Image();
+              designImg.crossOrigin = "anonymous";
+              designImg.src = overlayImg.src;
+              
+              designImg.onload = () => {
+                // Use the exact placement state values that match the preview
+                const topPct = this.placementState.topPct / 100;
+                const leftPct = this.placementState.leftPct / 100;
+                const widthPct = this.placementState.widthPct / 100;
+                const rotateDeg = this.placementState.rotateDeg || 0;
+
+                // Calculate overlay box position and size
+                const overlayLeft = canvas.width * leftPct;
+                const overlayTop = canvas.height * topPct;
+                const overlayWidth = canvas.width * widthPct;
+                
+                // Calculate design size maintaining aspect ratio
+                const designWidth = overlayWidth;
+                const designHeight = (designImg.height / designImg.width) * designWidth;
+                
+                // Design is centered within the overlay box
+                const designCenterX = overlayLeft + overlayWidth / 2;
+                const designCenterY = overlayTop + designHeight / 2;
+
+                // Save context for rotation
+                ctx.save();
+                // Translate to design center point
+                ctx.translate(designCenterX, designCenterY);
+                ctx.rotate(rotateDeg * Math.PI / 180);
+                
+                // Draw the design image centered at the translated point
+                ctx.drawImage(designImg, -designWidth / 2, -designHeight / 2, designWidth, designHeight);
+                ctx.restore();
+              };
+
+              designImg.onerror = () => {
+                console.log('⚠️ Design image failed to load for mockup generation');
+              };
+            }
+
+            // Convert canvas to data URL and upload
+            const dataUrl = canvas.toDataURL("image/png");
+            const mockupUrl = await uploadImageToSupabase(dataUrl, 'mockup-previews');
+            resolve(mockupUrl);
+
+          } catch (error) {
+            reject(error);
+          }
+        };
+
+        baseImg.onerror = () => {
+          reject(new Error('Failed to load base t-shirt image'));
+        };
+      });
+
+    } catch (error) {
+      console.error('❌ Error generating mockup:', error);
+      throw error;
+    }
+  }
+
+  // Helper function to submit custom request to database
+  async function submitCustomRequest(requestData) {
+    try {
+      if (!window.supabaseClient) {
+        throw new Error('Supabase client not initialized');
+      }
+
+      const supabase = await window.supabaseClient.getClient();
+      
+      // Insert request into database
+      const { data, error } = await supabase
+        .from('custom_tshirt_requests')
+        .insert([{
+          customer_email: requestData.customer_email,
+          customer_name: requestData.customer_name,
+          customer_phone: requestData.customer_phone,
+          customer_message: requestData.customer_message,
+          design_image_url: requestData.design_image_url,
+          mockup_image_url: requestData.mockup_image_url,
+          design_data: requestData.design_data,
+          status: 'pending'
+        }])
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      console.log('✅ Custom request saved to database:', data);
+      
+      return {
+        success: true,
+        requestId: data.id,
+        data: data
+      };
+
+    } catch (error) {
+      console.error('❌ Error saving custom request:', error);
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  }
+
+  console.log('🎨 Custom request modal functionality initialized!');
 });
 </script>
+
+<!-- Custom Request Modal -->
+<div id="custom-request-modal-{{ section.id }}" class="custom-request-modal" style="
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+  backdrop-filter: blur(8px);
+">
+  <div class="custom-request-modal-content" style="
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    max-width: 500px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  ">
+    <!-- Close Button -->
+    <button id="close-request-modal-{{ section.id }}" style="
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: #f3f4f6;
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: #6b7280;
+      transition: all 0.2s ease;
+    ">✕</button>
+
+    <!-- Modal Header -->
+    <div style="text-align: center; margin-bottom: 24px;">
+      <h3 style="margin: 0 0 8px 0; font-size: 24px; font-weight: 700; color: #1f2937;">
+        🎨 Submit Your Custom Request
+      </h3>
+      <p style="margin: 0; font-size: 14px; color: #6b7280;">
+        Tell us about your custom t-shirt design and we'll get back to you!
+      </p>
+    </div>
+
+    <!-- Request Form -->
+    <form id="custom-request-form-{{ section.id }}" style="display: flex; flex-direction: column; gap: 20px;">
+      
+      <!-- Customer Information -->
+      <div style="background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0;">
+        <h4 style="margin: 0 0 12px 0; font-size: 16px; font-weight: 600; color: #374151;">👤 Your Information</h4>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div>
+            <label style="display: block; margin-bottom: 6px; font-size: 14px; font-weight: 500; color: #374151;">Full Name *</label>
+            <input type="text" id="customer-name-{{ section.id }}" name="customer_name" required style="
+              width: 100%;
+              padding: 12px;
+              border: 2px solid #e5e7eb;
+              border-radius: 8px;
+              font-size: 14px;
+              transition: border-color 0.2s ease;
+            ">
+          </div>
+          <div>
+            <label style="display: block; margin-bottom: 6px; font-size: 14px; font-weight: 500; color: #374151;">Phone Number</label>
+            <input type="tel" id="customer-phone-{{ section.id }}" name="customer_phone" style="
+              width: 100%;
+              padding: 12px;
+              border: 2px solid #e5e7eb;
+              border-radius: 8px;
+              font-size: 14px;
+              transition: border-color 0.2s ease;
+            ">
+          </div>
+        </div>
+        
+        <div style="margin-top: 12px;">
+          <label style="display: block; margin-bottom: 6px; font-size: 14px; font-weight: 500; color: #374151;">Email Address *</label>
+          <input type="email" id="customer-email-{{ section.id }}" name="customer_email" required style="
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s ease;
+          ">
+        </div>
+      </div>
+
+      <!-- Design Details -->
+      <div style="background: #f0fdf4; padding: 16px; border-radius: 12px; border: 1px solid #bbf7d0;">
+        <h4 style="margin: 0 0 12px 0; font-size: 16px; font-weight: 600; color: #166534;">🎨 Design Details</h4>
+        
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; margin-bottom: 6px; font-size: 14px; font-weight: 500; color: #166534;">Tell us about your design *</label>
+          <textarea id="customer-message-{{ section.id }}" name="customer_message" required placeholder="Describe your design, colors, text, logo, or any specific requirements..." style="
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #bbf7d0;
+            border-radius: 8px;
+            font-size: 14px;
+            min-height: 80px;
+            resize: vertical;
+            transition: border-color 0.2s ease;
+          "></textarea>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div>
+            <label style="display: block; margin-bottom: 6px; font-size: 14px; font-weight: 500; color: #166534;">T-shirt Color</label>
+            <select id="selected-color-{{ section.id }}" style="
+              width: 100%;
+              padding: 12px;
+              border: 2px solid #bbf7d0;
+              border-radius: 8px;
+              font-size: 14px;
+              background: white;
+            ">
+              <option value="black">Black</option>
+              <option value="white">White</option>
+            </select>
+          </div>
+          <div>
+            <label style="display: block; margin-bottom: 6px; font-size: 14px; font-weight: 500; color: #166534;">Size</label>
+            <select id="selected-size-{{ section.id }}" style="
+              width: 100%;
+              padding: 12px;
+              border: 2px solid #bbf7d0;
+              border-radius: 8px;
+              font-size: 14px;
+              background: white;
+            ">
+              <option value="S">Small (S)</option>
+              <option value="M" selected>Medium (M)</option>
+              <option value="L">Large (L)</option>
+              <option value="XL">Extra Large (XL)</option>
+              <option value="XXL">2XL</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preview Info -->
+      <div style="background: #fef3c7; padding: 16px; border-radius: 12px; border: 1px solid #fbbf24;">
+        <h4 style="margin: 0 0 12px 0; font-size: 16px; font-weight: 600; color: #92400e;">📸 Your Design Preview</h4>
+        <p style="margin: 0; font-size: 14px; color: #92400e;">
+          We'll include your uploaded design and mockup preview with this request. 
+          Make sure your design is positioned how you want it before submitting!
+        </p>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" id="submit-request-btn-{{ section.id }}" style="
+        width: 100%;
+        padding: 16px;
+        background: linear-gradient(45deg, #f59e0b, #d97706);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+      ">
+        🚀 Submit Custom Request
+      </button>
+    </form>
+
+    <!-- Success Message -->
+    <div id="request-success-{{ section.id }}" style="display: none; text-align: center; padding: 24px;">
+      <div style="font-size: 48px; margin-bottom: 16px;">✅</div>
+      <h3 style="margin: 0 0 8px 0; font-size: 20px; font-weight: 700; color: #059669;">Request Submitted!</h3>
+      <p style="margin: 0 0 16px 0; font-size: 14px; color: #6b7280;">
+        Your custom t-shirt request has been sent. We'll review your design and get back to you within 24 hours.
+      </p>
+      <div id="request-id-{{ section.id }}" style="
+        background: #f0fdf4;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #bbf7d0;
+        font-size: 14px;
+        color: #166534;
+        font-weight: 600;
+        margin-bottom: 16px;
+      "></div>
+      <button id="close-success-{{ section.id }}" style="
+        padding: 12px 24px;
+        background: #059669;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+      ">Close</button>
+    </div>
+
+    <!-- Loading State -->
+    <div id="request-loading-{{ section.id }}" style="display: none; text-align: center; padding: 24px;">
+      <div style="font-size: 32px; margin-bottom: 16px; animation: spin 1s linear infinite;">⏳</div>
+      <p style="margin: 0; font-size: 14px; color: #6b7280;">Submitting your request...</p>
+    </div>
+  </div>
+</div>
+
+<style>
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Dark Mode Support */
+[data-theme="dark"] .custom-request-modal-content {
+  background: #1f2937;
+  color: #f9fafb;
+}
+
+[data-theme="dark"] .custom-request-modal-content h3,
+[data-theme="dark"] .custom-request-modal-content h4 {
+  color: #f9fafb;
+}
+
+[data-theme="dark"] .custom-request-modal-content label {
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .custom-request-modal-content input,
+[data-theme="dark"] .custom-request-modal-content textarea,
+[data-theme="dark"] .custom-request-modal-content select {
+  background: #374151;
+  border-color: #4b5563;
+  color: #f9fafb;
+}
+
+[data-theme="dark"] .custom-request-modal-content input:focus,
+[data-theme="dark"] .custom-request-modal-content textarea:focus,
+[data-theme="dark"] .custom-request-modal-content select:focus {
+  border-color: #f59e0b;
+  outline: none;
+}
+
+/* Hover Effects */
+#close-request-modal-{{ section.id }}:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+#submit-request-btn-{{ section.id }}:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(245, 158, 11, 0.4);
+}
+
+/* Form Focus States */
+input:focus, textarea:focus, select:focus {
+  border-color: #f59e0b !important;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+}
+
+/* Make whatever we render fill the overlay box */
+.nt-mockup__overlay img,
+.nt-mockup__overlay svg {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  display: block;
+}
+
+/* Ensure overlay container has proper dimensions */
+#nt-overlay-{{ section.id }} {
+  min-width: 200px !important;
+  min-height: 200px !important;
+}
+
+/* Size-specific print area visual indicators */
+.nt-mockup__overlay.size-xxs::before { 
+  content: 'XXS Print Area (4494x5097px @ 300 DPI)'; 
+  position: absolute; 
+  top: 30%; left: 20%; width: 60%; height: 8%; 
+  border: 2px dashed #10b981; 
+  background: rgba(16, 185, 129, 0.1); 
+  display: flex; align-items: center; justify-content: center; 
+  font-size: 10px; color: #10b981; font-weight: 600;
+  pointer-events: none; z-index: 1;
+}
+.nt-mockup__overlay.size-xs::before { 
+  content: 'XS Print Area (4494x5097px @ 300 DPI)'; 
+  position: absolute; 
+  top: 31%; left: 21%; width: 58%; height: 9%; 
+  border: 2px dashed #10b981; 
+  background: rgba(16, 185, 129, 0.1); 
+  display: flex; align-items: center; justify-content: center; 
+  font-size: 10px; color: #10b981; font-weight: 600;
+  pointer-events: none; z-index: 1;
+}
+.nt-mockup__overlay.size-s::before { 
+  content: 'S Print Area (4494x5097px @ 300 DPI)'; 
+  position: absolute; 
+  top: 31.5%; left: 21.5%; width: 57%; height: 9.5%; 
+  border: 2px dashed #10b981; 
+  background: rgba(16, 185, 129, 0.1); 
+  display: flex; align-items: center; justify-content: center; 
+  font-size: 10px; color: #10b981; font-weight: 600;
+  pointer-events: none; z-index: 1;
+}
+.nt-mockup__overlay.size-m::before { 
+  content: 'M Print Area (4494x5097px @ 300 DPI)'; 
+  position: absolute; 
+  top: 32%; left: 22%; width: 56%; height: 10%; 
+  border: 2px dashed #10b981; 
+  background: rgba(16, 185, 129, 0.1); 
+  display: flex; align-items: center; justify-content: center; 
+  font-size: 10px; color: #10b981; font-weight: 600;
+  pointer-events: none; z-index: 1;
+}
+.nt-mockup__overlay.size-l::before { 
+  content: 'L Print Area (4494x5097px @ 300 DPI)'; 
+  position: absolute; 
+  top: 32.5%; left: 22.5%; width: 55%; height: 10.5%; 
+  border: 2px dashed #10b981; 
+  background: rgba(16, 185, 129, 0.1); 
+  display: flex; align-items: center; justify-content: center; 
+  font-size: 10px; color: #10b981; font-weight: 600;
+  pointer-events: none; z-index: 1;
+}
+.nt-mockup__overlay.size-xl::before { 
+  content: 'XL Print Area (4494x5097px @ 300 DPI)'; 
+  position: absolute; 
+  top: 33%; left: 23%; width: 54%; height: 11%; 
+  border: 2px dashed #10b981; 
+  background: rgba(16, 185, 129, 0.1); 
+  display: flex; align-items: center; justify-content: center; 
+  font-size: 10px; color: #10b981; font-weight: 600;
+  pointer-events: none; z-index: 1;
+}
+.nt-mockup__overlay.size-xxl::before { 
+  content: 'XXL Print Area (4494x5097px @ 300 DPI)'; 
+  position: absolute; 
+  top: 33.5%; left: 23.5%; width: 53%; height: 11.5%; 
+  border: 2px dashed #10b981; 
+  background: rgba(16, 185, 129, 0.1); 
+  display: flex; align-items: center; justify-content: center; 
+  font-size: 10px; color: #10b981; font-weight: 600;
+  pointer-events: none; z-index: 1;
+}
+</style>
 
 {% schema %}
 {
