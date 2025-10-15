@@ -608,42 +608,42 @@ Enhanced Interactive Product Mockup
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const mockup = {
-    // Mockup images mapping
+    // Mockup images mapping - using tshirt-view.png as the base template
     mockupImages: {
       front: {
-        white: "{{ 'WFront_t-shirt.png' | asset_url }}",
-        black: "{{ 'WFront_t-shirt.png' | asset_url }}",
-        pink: "{{ 'WFront_t-shirt.png' | asset_url }}",
-        blue: "{{ 'WFront_t-shirt.png' | asset_url }}"
+        white: "{{ 'tshirt-view.png' | asset_url }}",
+        black: "{{ 'tshirt-view.png' | asset_url }}",
+        pink: "{{ 'tshirt-view.png' | asset_url }}",
+        blue: "{{ 'tshirt-view.png' | asset_url }}"
       },
       back: {
-        white: "{{ 'Wback_t-shirt.png' | asset_url }}",
-        black: "{{ 'Wback_t-shirt.png' | asset_url }}",
-        pink: "{{ 'Wback_t-shirt.png' | asset_url }}",
-        blue: "{{ 'Wback_t-shirt.png' | asset_url }}"
+        white: "{{ 'tshirt-view.png' | asset_url }}",
+        black: "{{ 'tshirt-view.png' | asset_url }}",
+        pink: "{{ 'tshirt-view.png' | asset_url }}",
+        blue: "{{ 'tshirt-view.png' | asset_url }}"
       },
       hanging: {
-        white: "{{ 'W3-D_t-shirt.png' | asset_url }}",
-        black: "{{ 'W3-D_t-shirt.png' | asset_url }}",
-        pink: "{{ 'W3-D_t-shirt.png' | asset_url }}",
-        blue: "{{ 'W3-D_t-shirt.png' | asset_url }}"
+        white: "{{ 'tshirt-view.png' | asset_url }}",
+        black: "{{ 'tshirt-view.png' | asset_url }}",
+        pink: "{{ 'tshirt-view.png' | asset_url }}",
+        blue: "{{ 'tshirt-view.png' | asset_url }}"
       },
       person1: {
-        white: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
-        black: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
-        pink: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
-        blue: "{{ 'Models/Women/Girl-Model.png' | asset_url }}"
+        white: "{{ 'Girl-Model.png' | asset_url }}",
+        black: "{{ 'Girl-Model.png' | asset_url }}",
+        pink: "{{ 'Girl-Model.png' | asset_url }}",
+        blue: "{{ 'Girl-Model.png' | asset_url }}"
       },
       person2: {
-        white: "{{ 'Models/Women/Women-side.png' | asset_url }}",
-        black: "{{ 'Models/Women/Women-side.png' | asset_url }}",
-        pink: "{{ 'Models/Women/Women-side.png' | asset_url }}",
-        blue: "{{ 'Models/Women/Women-side.png' | asset_url }}"
+        white: "{{ 'Women-side.png' | asset_url }}",
+        black: "{{ 'Women-side.png' | asset_url }}",
+        pink: "{{ 'Women-side.png' | asset_url }}",
+        blue: "{{ 'Women-side.png' | asset_url }}"
       }
     },
     
-    // Current base mockup image
-    baseMockup: "{{ 'WFront_t-shirt.png' | asset_url }}",
+    // Current base mockup image - using tshirt-view.png as the default template
+    baseMockup: "{{ 'tshirt-view.png' | asset_url }}",
 
     // Current design state
     designState: {
