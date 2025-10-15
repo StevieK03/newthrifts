@@ -1767,6 +1767,21 @@ document.addEventListener('DOMContentLoaded', function() {
       
       if (!canvas || !overlay) return;
 
+      // Track if mouse is over the overlay
+      let isOverOverlay = false;
+      
+      overlay.addEventListener('mouseenter', () => {
+        isOverOverlay = true;
+        overlay.style.cursor = 'grab';
+      });
+      
+      overlay.addEventListener('mouseleave', () => {
+        isOverOverlay = false;
+        if (!this.placementState.dragging) {
+          overlay.style.cursor = 'grab';
+        }
+      });
+
       // Click to select design
       overlay.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -1780,22 +1795,89 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       });
 
+      // Drag functionality - make the entire overlay draggable
+      overlay.addEventListener('mousedown', (e) => {
+        // Don't start drag if clicking on a resize handle
+        if (e.target.classList.contains('resize-handle')) {
+          return;
+        }
+        
+        e.preventDefault();
+        e.stopPropagation();
+        this.startDrag(e);
+      });
+
       // Bind resize handles
       const resizeHandles = document.querySelectorAll(`#nt-overlay-{{ section.id }} .resize-handle`);
       resizeHandles.forEach(handle => {
         handle.addEventListener('mousedown', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
+          e.preventDefault();
+          e.stopPropagation();
           this.startResize(e, handle.dataset.direction);
         });
       });
 
-      // Mouse wheel resize
-      overlay.addEventListener('wheel', (e) => {
-        e.preventDefault();
-        const delta = e.deltaY > 0 ? -2 : 2;
-        this.resizeDesign(delta);
-      });
+      // Mouse wheel resize - ONLY when hovering over the overlay
+      document.addEventListener('wheel', (e) => {
+        if (isOverOverlay && this.placementState.hasUploadedDesign) {
+          e.preventDefault();
+          const delta = e.deltaY > 0 ? -2 : 2;
+          this.resizeDesign(delta);
+        }
+      }, { passive: false });
+    },
+
+    startDrag(e) {
+      this.placementState.dragging = true;
+      this.placementState.lastX = e.clientX;
+      this.placementState.lastY = e.clientY;
+      
+      const overlay = document.getElementById(`nt-overlay-{{ section.id }}`);
+      if (overlay) {
+        overlay.style.cursor = 'grabbing';
+      }
+
+      const handleDrag = (e) => {
+        if (!this.placementState.dragging) return;
+        
+        const canvas = document.getElementById(`nt-mockup-canvas-{{ section.id }}`);
+        if (!canvas) return;
+        
+        // Calculate movement as percentage of canvas size
+        const canvasRect = canvas.getBoundingClientRect();
+        const deltaX = e.clientX - this.placementState.lastX;
+        const deltaY = e.clientY - this.placementState.lastY;
+        
+        // Convert pixel movement to percentage (more sensitive for easier control)
+        const deltaXPct = (deltaX / canvasRect.width) * 100;
+        const deltaYPct = (deltaY / canvasRect.height) * 100;
+        
+        this.placementState.leftPct += deltaXPct;
+        this.placementState.topPct += deltaYPct;
+        
+        // Constrain values
+        this.placementState.leftPct = Math.max(0, Math.min(100, this.placementState.leftPct));
+        this.placementState.topPct = Math.max(0, Math.min(100, this.placementState.topPct));
+        
+        this.placementState.lastX = e.clientX;
+        this.placementState.lastY = e.clientY;
+        
+        this.updatePlacementDisplay();
+        this.updateDesignPosition();
+      };
+
+      const stopDrag = () => {
+        this.placementState.dragging = false;
+        const overlay = document.getElementById(`nt-overlay-{{ section.id }}`);
+        if (overlay) {
+          overlay.style.cursor = 'grab';
+        }
+        document.removeEventListener('mousemove', handleDrag);
+        document.removeEventListener('mouseup', stopDrag);
+      };
+
+      document.addEventListener('mousemove', handleDrag);
+      document.addEventListener('mouseup', stopDrag);
     },
 
     startResize(e, direction) {
