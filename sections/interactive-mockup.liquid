@@ -13,7 +13,7 @@ Enhanced Interactive Product Mockup
     
     <!-- Section Header -->
     <div class="mockup-header" style="text-align: center; margin-bottom: 60px; padding-top: 20px;">
-      <h1 style="font-family: 'Bebas Neue', 'Impact', Arial Black, sans-serif; font-size: 56px; margin: 0 0 20px 0; color: #ffffff !important; text-shadow: -2px -2px 0 #000000, 2px -2px 0 #000000, -2px 2px 0 #000000, 2px 2px 0 #000000, 0 0 10px rgba(0,0,0,0.8); letter-spacing: 4px; font-weight: 700; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 15px; background: rgba(0,0,0,0.4); padding: 15px 25px; border-radius: 10px; border: 2px solid #ffffff;">
+      <h1 class="theme-responsive-title" style="font-family: 'Bebas Neue', 'Impact', Arial Black, sans-serif; font-size: 56px; margin: 0 0 20px 0; color: #ffffff; text-shadow: -2px -2px 0 #000000, 2px -2px 0 #000000, -2px 2px 0 #000000, 2px 2px 0 #000000, 0 0 10px rgba(0,0,0,0.8); letter-spacing: 4px; font-weight: 700; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 15px; background: rgba(0,0,0,0.4); padding: 15px 25px; border-radius: 10px; border: 2px solid #ffffff;">
         <span style="font-size: 48px; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.4));">🎨</span>
         <span>CUSTOM T-SHIRT DESIGN</span>
       </h1>
@@ -561,6 +561,65 @@ Enhanced Interactive Product Mockup
 
 
 <style>
+/* Theme Responsive Title */
+.theme-responsive-title {
+  transition: all 0.3s ease;
+}
+
+/* Light Mode Styles */
+@media (prefers-color-scheme: light) {
+  .theme-responsive-title {
+    color: #1f2937 !important;
+    text-shadow: -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff, 1px 1px 0 #ffffff, 0 0 5px rgba(0,0,0,0.3) !important;
+    background: rgba(255,255,255,0.9) !important;
+    border: 2px solid #1f2937 !important;
+  }
+  
+  .theme-responsive-title span {
+    filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.2)) !important;
+  }
+}
+
+.light .theme-responsive-title,
+[data-theme="light"] .theme-responsive-title {
+  color: #1f2937 !important;
+  text-shadow: -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff, 1px 1px 0 #ffffff, 0 0 5px rgba(0,0,0,0.3) !important;
+  background: rgba(255,255,255,0.9) !important;
+  border: 2px solid #1f2937 !important;
+}
+
+.light .theme-responsive-title span,
+[data-theme="light"] .theme-responsive-title span {
+  filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.2)) !important;
+}
+
+/* Dark Mode Styles (default) */
+@media (prefers-color-scheme: dark) {
+  .theme-responsive-title {
+    color: #ffffff !important;
+    text-shadow: -2px -2px 0 #000000, 2px -2px 0 #000000, -2px 2px 0 #000000, 2px 2px 0 #000000, 0 0 10px rgba(0,0,0,0.8) !important;
+    background: rgba(0,0,0,0.4) !important;
+    border: 2px solid #ffffff !important;
+  }
+  
+  .theme-responsive-title span {
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.4)) !important;
+  }
+}
+
+.dark .theme-responsive-title,
+[data-theme="dark"] .theme-responsive-title {
+  color: #ffffff !important;
+  text-shadow: -2px -2px 0 #000000, 2px -2px 0 #000000, -2px 2px 0 #000000, 2px 2px 0 #000000, 0 0 10px rgba(0,0,0,0.8) !important;
+  background: rgba(0,0,0,0.4) !important;
+  border: 2px solid #ffffff !important;
+}
+
+.dark .theme-responsive-title span,
+[data-theme="dark"] .theme-responsive-title span {
+  filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.4)) !important;
+}
+
 /* Enhanced Button Styles */
 .nt-btn:hover {
   transform: translateY(-2px);
