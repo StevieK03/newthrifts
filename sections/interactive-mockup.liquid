@@ -1821,7 +1821,9 @@ document.addEventListener('DOMContentLoaded', function() {
       document.addEventListener('wheel', (e) => {
         if (isOverOverlay && this.placementState.hasUploadedDesign) {
           e.preventDefault();
-          const delta = e.deltaY > 0 ? -2 : 2;
+          // Reduced sensitivity for touchpad: -1/+1 instead of -2/+2
+          // Makes scrolling more controllable on MacBooks and laptops
+          const delta = e.deltaY > 0 ? -1 : 1;
           this.resizeDesign(delta);
         }
       }, { passive: false });
@@ -1848,9 +1850,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const deltaX = e.clientX - this.placementState.lastX;
         const deltaY = e.clientY - this.placementState.lastY;
         
-        // Convert pixel movement to percentage (more sensitive for easier control)
-        const deltaXPct = (deltaX / canvasRect.width) * 100;
-        const deltaYPct = (deltaY / canvasRect.height) * 100;
+        // Reduced sensitivity for touchpad control (0.6 = 60% movement)
+        // Makes it easier to position precisely on laptops/MacBooks
+        const sensitivity = 0.6;
+        
+        // Convert pixel movement to percentage with reduced sensitivity
+        const deltaXPct = (deltaX / canvasRect.width) * 100 * sensitivity;
+        const deltaYPct = (deltaY / canvasRect.height) * 100 * sensitivity;
         
         this.placementState.leftPct += deltaXPct;
         this.placementState.topPct += deltaYPct;
