@@ -3200,24 +3200,39 @@ document.addEventListener('DOMContentLoaded', function() {
           throw new Error('EmailJS not loaded. Please include EmailJS script.');
         }
         
-        // Create email template parameters
+        // Create email template parameters (simplified for EmailJS)
         const templateParams = {
           to_email: emailContent.to,
-          customer_name: requestData.customer_name,
-          customer_email: requestData.customer_email,
-          customer_phone: requestData.customer_phone || 'Not provided',
-          tshirt_size: requestData.tshirt_size || 'Not specified',
-          customer_message: requestData.customer_message || 'No special instructions',
-          design_position: `Top ${requestData.design_data.position.top}%, Left ${requestData.design_data.position.left}%`,
-          design_size: `${requestData.design_data.position.width}% × ${requestData.design_data.position.height}%`,
-          design_rotation: `${requestData.design_data.position.rotation}°`,
-          design_view: requestData.design_data.view,
-          tshirt_color: requestData.design_data.color,
-          submission_date: new Date().toLocaleString(),
-          request_id: requestData.id || 'Pending',
+          name: requestData.customer_name,
+          email: requestData.customer_email,
+          phone: requestData.customer_phone || 'Not provided',
+          message: `
+Custom T-Shirt Request Details:
+
+Customer Information:
+- Name: ${requestData.customer_name}
+- Email: ${requestData.customer_email}
+- Phone: ${requestData.customer_phone || 'Not provided'}
+- T-Shirt Size: ${requestData.tshirt_size || 'Not specified'}
+
+Customer Message: ${requestData.customer_message || 'No special instructions'}
+
+Design Specifications:
+- Position: Top ${requestData.design_data.position.top}%, Left ${requestData.design_data.position.left}%
+- Size: ${requestData.design_data.position.width}% × ${requestData.design_data.position.height}%
+- Rotation: ${requestData.design_data.position.rotation}°
+- View: ${requestData.design_data.view}
+- T-Shirt Color: ${requestData.design_data.color}
+
+Attachments: Design and mockup images are attached.
+
+Submitted: ${new Date().toLocaleString()}
+Request ID: ${requestData.id || 'Pending'}
+Source: NewThrifts Custom T-Shirt Designer
+          `,
+          title: 'Custom T-Shirt Request',
           design_image: designImageBase64,
-          mockup_image: mockupImageBase64,
-          email_content: emailContent.body
+          mockup_image: mockupImageBase64
         };
         
         // Send email via EmailJS
