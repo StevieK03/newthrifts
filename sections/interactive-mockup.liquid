@@ -859,6 +859,67 @@ Enhanced Interactive Product Mockup
   cursor: pointer;
 }
 
+/* Light/Dark Mode Support for Main Section */
+@media (prefers-color-scheme: light) {
+  .nt-mockup {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%) !important;
+  }
+  
+  .mockup-header h1 {
+    background: linear-gradient(45deg, #1e40af, #7c3aed) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+  }
+  
+  .mockup-header p {
+    color: #475569 !important;
+  }
+  
+  .mockup-header div {
+    background: rgba(255, 255, 255, 0.8) !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  }
+  
+  .mockup-header div span {
+    color: #374151 !important;
+  }
+}
+
+.dark .nt-mockup,
+[data-theme="dark"] .nt-mockup {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+}
+
+.light .nt-mockup,
+[data-theme="light"] .nt-mockup {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%) !important;
+}
+
+.light .mockup-header h1,
+[data-theme="light"] .mockup-header h1 {
+  background: linear-gradient(45deg, #1e40af, #7c3aed) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+.light .mockup-header p,
+[data-theme="light"] .mockup-header p {
+  color: #475569 !important;
+}
+
+.light .mockup-header div,
+[data-theme="light"] .mockup-header div {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+.light .mockup-header div span,
+[data-theme="light"] .mockup-header div span {
+  color: #374151 !important;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .nt-mockup__controls {
