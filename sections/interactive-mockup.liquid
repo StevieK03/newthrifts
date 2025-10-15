@@ -1391,6 +1391,19 @@ document.addEventListener('DOMContentLoaded', function() {
             `Position: ${rect.left.toFixed(2)}px, ${rect.top.toFixed(2)}px`
           );
         });
+        
+        // Also debug the print area (overlay div)
+        const overlay = document.getElementById(`nt-overlay-{{ section.id }}`);
+        if (overlay) {
+          const rect = overlay.getBoundingClientRect();
+          console.log('🎯 PRINT AREA (Overlay):');
+          console.log(
+            `Element: nt-overlay-{{ section.id }}\n` +
+            `Displayed size: ${rect.width.toFixed(2)}x${rect.height.toFixed(2)}px\n` +
+            `Position: ${rect.left.toFixed(2)}px, ${rect.top.toFixed(2)}px\n` +
+            `CSS Variables: --overlay-width: ${getComputedStyle(overlay).getPropertyValue('--overlay-width')}, --overlay-height: ${getComputedStyle(overlay).getPropertyValue('--overlay-height')}`
+          );
+        }
       };
       
       // Add canvas debugging if canvas exists
@@ -1401,6 +1414,28 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
           console.log('No canvas element found');
         }
+        
+        // Debug the main canvas container
+        const canvasContainer = document.getElementById(`nt-mockup-canvas-{{ section.id }}`);
+        if (canvasContainer) {
+          const rect = canvasContainer.getBoundingClientRect();
+          console.log('🎨 CANVAS CONTAINER:');
+          console.log(
+            `Element: nt-mockup-canvas-{{ section.id }}\n` +
+            `Displayed size: ${rect.width.toFixed(2)}x${rect.height.toFixed(2)}px\n` +
+            `Position: ${rect.left.toFixed(2)}px, ${rect.top.toFixed(2)}px`
+          );
+        }
+        
+        // Debug placement state
+        console.log('📐 PLACEMENT STATE:');
+        console.log(
+          `Top: ${this.placementState.topPct}%\n` +
+          `Left: ${this.placementState.leftPct}%\n` +
+          `Width: ${this.placementState.widthPct}%\n` +
+          `Height: ${this.placementState.heightPct}%\n` +
+          `Rotation: ${this.placementState.rotateDeg}°`
+        );
       };
       
       console.log('🛠️ Debug helpers added:');
