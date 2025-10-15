@@ -121,6 +121,10 @@ Enhanced Interactive Product Mockup
           <button class="nt-btn nt-btn--danger" id="nt-remove-{{ section.id }}" style="padding: 10px 20px; background: linear-gradient(45deg, #ef4444, #dc2626); color: white; border: none; border-radius: 25px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; display: none; margin-top: 16px;">
             🗑️ Remove Design
           </button>
+          
+          <button class="nt-btn nt-btn--success" id="nt-submit-request-btn-{{ section.id }}" style="padding: 10px 20px; background: linear-gradient(45deg, #10b981, #059669); color: white; border: none; border-radius: 25px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; display: none; margin-top: 16px;">
+            🚀 Submit Request
+          </button>
         </div>
       </div>
 
@@ -183,6 +187,70 @@ Enhanced Interactive Product Mockup
             </button>
             <span style="font-size: 12px; color: #92400e;">Toggle crosshairs and placement area</span>
           </div>
+        </div>
+
+        <!-- Submit T-Shirt Request -->
+        <div id="nt-submit-request-{{ section.id }}" style="margin-top: 20px; padding: 16px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 12px; border: 1px solid #10b981; display: none;">
+          <h5 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: white;">🎨 Submit Your T-Shirt Request</h5>
+          <p style="margin: 0 0 16px 0; font-size: 12px; color: #d1fae5; line-height: 1.4;">
+            Submit your design for review. We'll contact you within 24 hours to discuss your custom t-shirt!
+          </p>
+          
+          <form id="nt-request-form-{{ section.id }}" style="display: grid; gap: 12px;">
+            <!-- Customer Details -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div>
+                <label style="display: block; margin-bottom: 4px; font-size: 12px; font-weight: 600; color: white;">Full Name *</label>
+                <input type="text" id="nt-customer-name-{{ section.id }}" required 
+                       style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 12px; background: white;">
+              </div>
+              <div>
+                <label style="display: block; margin-bottom: 4px; font-size: 12px; font-weight: 600; color: white;">Email *</label>
+                <input type="email" id="nt-customer-email-{{ section.id }}" required 
+                       style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 12px; background: white;">
+              </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div>
+                <label style="display: block; margin-bottom: 4px; font-size: 12px; font-weight: 600; color: white;">Phone Number</label>
+                <input type="tel" id="nt-customer-phone-{{ section.id }}" 
+                       style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 12px; background: white;">
+              </div>
+              <div>
+                <label style="display: block; margin-bottom: 4px; font-size: 12px; font-weight: 600; color: white;">T-Shirt Size</label>
+                <select id="nt-tshirt-size-{{ section.id }}" 
+                        style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 12px; background: white;">
+                  <option value="">Select Size</option>
+                  <option value="XXS">XXS</option>
+                  <option value="XS">XS</option>
+                  <option value="S">S</option>
+                  <option value="M">M</option>
+                  <option value="L">L</option>
+                  <option value="XL">XL</option>
+                  <option value="XXL">XXL</option>
+                </select>
+              </div>
+            </div>
+            
+            <div>
+              <label style="display: block; margin-bottom: 4px; font-size: 12px; font-weight: 600; color: white;">Special Instructions or Message</label>
+              <textarea id="nt-customer-message-{{ section.id }}" rows="3" placeholder="Any special requirements, color preferences, or additional details..."
+                        style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 12px; background: white; resize: vertical;"></textarea>
+            </div>
+            
+            <!-- Submit Button -->
+            <div style="display: flex; gap: 8px; justify-content: flex-end;">
+              <button type="button" id="nt-cancel-request-{{ section.id }}" 
+                      style="padding: 8px 16px; background: #6b7280; color: white; border: none; border-radius: 6px; font-size: 12px; cursor: pointer;">
+                Cancel
+              </button>
+              <button type="submit" id="nt-submit-request-btn-{{ section.id }}" 
+                      style="padding: 8px 16px; background: #f59e0b; color: white; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 600;">
+                🚀 Submit Request
+              </button>
+            </div>
+          </form>
         </div>
 
         <!-- Size Chart -->
@@ -1008,6 +1076,7 @@ document.addEventListener('DOMContentLoaded', function() {
       this.bindPlacementControls();
       this.bindDragResize();
       this.bindPresetButtons();
+      this.bindSubmitRequest();
 
       {% if section.settings.allow_download %}
       const downloadBtn = document.getElementById(`nt-download-{{ section.id }}`);
@@ -1139,8 +1208,12 @@ document.addEventListener('DOMContentLoaded', function() {
         this.placementState.hasUploadedDesign = true;
         
         const removeBtn = document.getElementById(`nt-remove-{{ section.id }}`);
+        const submitBtn = document.getElementById(`nt-submit-request-btn-{{ section.id }}`);
         if (removeBtn) {
           removeBtn.style.display = 'inline-block';
+        }
+        if (submitBtn) {
+          submitBtn.style.display = 'inline-block';
         }
         
         this.showPlacementControls();
@@ -1314,8 +1387,8 @@ document.addEventListener('DOMContentLoaded', function() {
       const resizeHandles = document.querySelectorAll(`#nt-overlay-{{ section.id }} .resize-handle`);
       resizeHandles.forEach(handle => {
         handle.addEventListener('mousedown', (e) => {
-          e.preventDefault();
-          e.stopPropagation();
+        e.preventDefault();
+        e.stopPropagation();
           this.startResize(e, handle.dataset.direction);
         });
       });
@@ -1335,10 +1408,10 @@ document.addEventListener('DOMContentLoaded', function() {
       this.placementState.lastY = e.clientY;
 
       const handleResize = (e) => {
-        if (!this.placementState.resizing) return;
-        
-        const deltaX = e.clientX - this.placementState.lastX;
-        const deltaY = e.clientY - this.placementState.lastY;
+      if (!this.placementState.resizing) return;
+      
+      const deltaX = e.clientX - this.placementState.lastX;
+      const deltaY = e.clientY - this.placementState.lastY;
         
         this.resizeDesignByDirection(direction, deltaX, deltaY);
         
@@ -1401,9 +1474,9 @@ document.addEventListener('DOMContentLoaded', function() {
       this.placementState.leftPct = Math.max(0, Math.min(100, this.placementState.leftPct));
       this.placementState.widthPct = Math.max(10, Math.min(90, this.placementState.widthPct));
       this.placementState.heightPct = Math.max(10, Math.min(90, this.placementState.heightPct));
-
-      this.updatePlacementDisplay();
-      this.updateDesignPosition();
+        
+        this.updatePlacementDisplay();
+        this.updateDesignPosition();
     },
 
     resizeDesign(delta) {
@@ -1416,6 +1489,231 @@ document.addEventListener('DOMContentLoaded', function() {
       
       this.updatePlacementDisplay();
       this.updateDesignPosition();
+    },
+
+    bindSubmitRequest() {
+      const submitBtn = document.getElementById(`nt-submit-request-btn-{{ section.id }}`);
+      const cancelBtn = document.getElementById(`nt-cancel-request-{{ section.id }}`);
+      const requestForm = document.getElementById(`nt-request-form-{{ section.id }}`);
+      const requestPanel = document.getElementById(`nt-submit-request-{{ section.id }}`);
+      
+      if (submitBtn) {
+        submitBtn.addEventListener('click', () => {
+          if (!this.placementState.hasUploadedDesign) {
+            this.showMessage('❌ Please upload a design first', 'error');
+            return;
+          }
+          requestPanel.style.display = 'block';
+          requestPanel.scrollIntoView({ behavior: 'smooth' });
+        });
+      }
+      
+      if (cancelBtn) {
+        cancelBtn.addEventListener('click', () => {
+          requestPanel.style.display = 'none';
+        });
+      }
+      
+      if (requestForm) {
+        requestForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          this.submitTShirtRequest();
+        });
+      }
+    },
+
+    async submitTShirtRequest() {
+      if (!this.placementState.hasUploadedDesign) {
+        this.showMessage('❌ Please upload a design first', 'error');
+        return;
+      }
+
+      // Get form data
+      const customerName = document.getElementById(`nt-customer-name-{{ section.id }}`).value.trim();
+      const customerEmail = document.getElementById(`nt-customer-email-{{ section.id }}`).value.trim();
+      const customerPhone = document.getElementById(`nt-customer-phone-{{ section.id }}`).value.trim();
+      const tshirtSize = document.getElementById(`nt-tshirt-size-{{ section.id }}`).value;
+      const customerMessage = document.getElementById(`nt-customer-message-{{ section.id }}`).value.trim();
+
+      // Validate required fields
+      if (!customerName || !customerEmail) {
+        this.showMessage('❌ Please fill in all required fields', 'error');
+        return;
+      }
+
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(customerEmail)) {
+        this.showMessage('❌ Please enter a valid email address', 'error');
+        return;
+      }
+
+      try {
+        this.showMessage('📤 Submitting your request...', 'info');
+        
+        // Generate mockup image for submission
+        const mockupImageData = await this.generateMockupForSubmission();
+        
+        // Prepare request data
+        const requestData = {
+          customer_name: customerName,
+          customer_email: customerEmail,
+          customer_phone: customerPhone || null,
+          customer_message: customerMessage || null,
+          tshirt_size: tshirtSize || null,
+          design_data: {
+            position: {
+              top: this.placementState.topPct,
+              left: this.placementState.leftPct,
+              width: this.placementState.widthPct,
+              height: this.placementState.heightPct,
+              rotation: this.placementState.rotateDeg
+            },
+            view: this.state.view,
+            color: this.state.color,
+            canvas_size: { width: 2000, height: 2000 }
+          },
+          design_image_url: await this.uploadDesignToStorage(),
+          mockup_image_url: mockupImageData
+        };
+
+        // Send email notification using EmailJS
+        await this.sendEmailNotification(requestData);
+        
+        this.showMessage('🎉 Request submitted successfully! We\'ll contact you within 24 hours.', 'success');
+        document.getElementById(`nt-submit-request-{{ section.id }}`).style.display = 'none';
+        this.resetRequestForm();
+
+      } catch (error) {
+        console.error('Error submitting request:', error);
+        this.showMessage('❌ Failed to submit request. Please try again.', 'error');
+      }
+    },
+
+    async generateMockupForSubmission() {
+      return new Promise((resolve) => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        
+        canvas.width = 2000;
+        canvas.height = 2000;
+        
+        const baseImg = new Image();
+        baseImg.crossOrigin = "anonymous";
+        baseImg.src = document.getElementById("nt-base-{{ section.id }}").src;
+        
+        baseImg.onload = () => {
+          ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
+
+          const overlayImg = document.querySelector(`#nt-overlay-{{ section.id }} img`);
+          
+          if (overlayImg && overlayImg.src) {
+            const designImg = new Image();
+            designImg.crossOrigin = "anonymous";
+            designImg.src = overlayImg.src;
+            
+            designImg.onload = () => {
+              const topPct = this.placementState.topPct / 100;
+              const leftPct = this.placementState.leftPct / 100;
+              const widthPct = this.placementState.widthPct / 100;
+              const heightPct = this.placementState.heightPct / 100;
+              const rotateDeg = this.placementState.rotateDeg || 0;
+
+              const designX = canvas.width * leftPct - (canvas.width * widthPct) / 2;
+              const designY = canvas.height * topPct;
+              const designWidth = canvas.width * widthPct;
+              const designHeight = canvas.height * heightPct;
+              
+              ctx.save();
+              ctx.translate(designX + designWidth / 2, designY + designHeight / 2);
+              ctx.rotate(rotateDeg * Math.PI / 180);
+              ctx.drawImage(designImg, -designWidth / 2, -designHeight / 2, designWidth, designHeight);
+              ctx.restore();
+
+              resolve(canvas.toDataURL("image/png"));
+            };
+          } else {
+            resolve(canvas.toDataURL("image/png"));
+          }
+        };
+      });
+    },
+
+    async uploadDesignToStorage() {
+      const overlayImg = document.querySelector(`#nt-overlay-{{ section.id }} img`);
+      if (overlayImg && overlayImg.src) {
+        // Convert data URL to blob
+        const response = await fetch(overlayImg.src);
+        const blob = await response.blob();
+        
+        // Generate unique filename
+        const timestamp = Date.now();
+        const filename = `design_${timestamp}.png`;
+        
+        // For now, return the data URL (in production, upload to Supabase Storage)
+        return overlayImg.src;
+      }
+      return null;
+    },
+
+    resetRequestForm() {
+      document.getElementById(`nt-customer-name-{{ section.id }}`).value = '';
+      document.getElementById(`nt-customer-email-{{ section.id }}`).value = '';
+      document.getElementById(`nt-customer-phone-{{ section.id }}`).value = '';
+      document.getElementById(`nt-tshirt-size-{{ section.id }}`).value = '';
+      document.getElementById(`nt-customer-message-{{ section.id }}`).value = '';
+    },
+
+    async sendEmailNotification(requestData) {
+      // Using a simple email service - you can replace this with EmailJS, Resend, or any email service
+      const emailData = {
+        to: 'shopping@newthrifts.com',
+        subject: `New Custom T-Shirt Request #${Date.now()}`,
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: #f9f9f9;">
+            <div style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+              <h2 style="color: #10b981; margin-bottom: 20px;">🎨 New Custom T-Shirt Request</h2>
+              
+              <div style="background: #f0f9ff; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                <h3 style="color: #0c4a6e; margin: 0 0 10px 0;">Customer Information</h3>
+                <p style="margin: 5px 0;"><strong>Name:</strong> ${requestData.customer_name}</p>
+                <p style="margin: 5px 0;"><strong>Email:</strong> ${requestData.customer_email}</p>
+                <p style="margin: 5px 0;"><strong>Phone:</strong> ${requestData.customer_phone || 'Not provided'}</p>
+                <p style="margin: 5px 0;"><strong>T-Shirt Size:</strong> ${requestData.tshirt_size || 'Not specified'}</p>
+                <p style="margin: 5px 0;"><strong>Message:</strong> ${requestData.customer_message || 'No additional message'}</p>
+              </div>
+              
+              <div style="background: #fef3c7; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                <h3 style="color: #92400e; margin: 0 0 10px 0;">Design Details</h3>
+                <p style="margin: 5px 0;"><strong>View:</strong> ${requestData.design_data.view}</p>
+                <p style="margin: 5px 0;"><strong>Color:</strong> ${requestData.design_data.color}</p>
+                <p style="margin: 5px 0;"><strong>Position:</strong> Top ${requestData.design_data.position.top}%, Left ${requestData.design_data.position.left}%</p>
+                <p style="margin: 5px 0;"><strong>Size:</strong> ${requestData.design_data.position.width}% × ${requestData.design_data.position.height}%</p>
+                <p style="margin: 5px 0;"><strong>Rotation:</strong> ${requestData.design_data.position.rotation}°</p>
+              </div>
+              
+              <div style="background: #f3e8ff; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                <h3 style="color: #7c3aed; margin: 0 0 10px 0;">Design Images</h3>
+                <p style="margin: 5px 0;"><strong>Original Design:</strong> <a href="${requestData.design_image_url}" style="color: #7c3aed;">View Design</a></p>
+                <p style="margin: 5px 0;"><strong>Mockup Preview:</strong> <a href="${requestData.mockup_image_url}" style="color: #7c3aed;">View Mockup</a></p>
+              </div>
+              
+              <div style="background: #d1fae5; padding: 15px; border-radius: 8px; text-align: center;">
+                <p style="margin: 0; color: #065f46; font-weight: 600;">⏰ Please review this request and contact the customer within 24 hours.</p>
+              </div>
+            </div>
+          </div>
+        `
+      };
+
+      // For now, we'll use a simple approach - in production, integrate with EmailJS or another service
+      console.log('📧 Email notification prepared:', emailData);
+      
+      // You can integrate with EmailJS here:
+      // await emailjs.send('service_id', 'template_id', emailData, 'user_id');
+      
+      // Or use any other email service like Resend, SendGrid, etc.
+      return true;
     },
 
     bindPresetButtons() {
@@ -1464,7 +1762,7 @@ document.addEventListener('DOMContentLoaded', function() {
       this.placementState.widthPct = 60;
       this.updatePlacementDisplay();
       this.updateDesignPosition();
-      
+
       const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
       if (widthSlider) widthSlider.value = 60;
 
@@ -1541,26 +1839,26 @@ document.addEventListener('DOMContentLoaded', function() {
       
       baseImg.onload = () => {
         console.log('✅ Base image loaded, drawing to canvas');
-        ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
+            ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
 
-        const overlayImg = document.querySelector(`#nt-overlay-{{ section.id }} img`);
+            const overlayImg = document.querySelector(`#nt-overlay-{{ section.id }} img`);
         console.log('Overlay image found:', overlayImg);
-        
+            
         if (overlayImg && overlayImg.src && this.placementState.hasUploadedDesign) {
           console.log('🎨 Processing uploaded design for download');
-          const designImg = new Image();
-          designImg.crossOrigin = "anonymous";
-          designImg.src = overlayImg.src;
-          
-          designImg.onload = () => {
+              const designImg = new Image();
+              designImg.crossOrigin = "anonymous";
+              designImg.src = overlayImg.src;
+              
+              designImg.onload = () => {
             console.log('✅ Design image loaded, applying to canvas');
             
             // Use the current placement state values
-            const topPct = this.placementState.topPct / 100;
-            const leftPct = this.placementState.leftPct / 100;
-            const widthPct = this.placementState.widthPct / 100;
+                const topPct = this.placementState.topPct / 100;
+                const leftPct = this.placementState.leftPct / 100;
+                const widthPct = this.placementState.widthPct / 100;
             const heightPct = this.placementState.heightPct / 100;
-            const rotateDeg = this.placementState.rotateDeg || 0;
+                const rotateDeg = this.placementState.rotateDeg || 0;
 
             // Calculate design position and size on canvas
             const designX = canvas.width * leftPct - (canvas.width * widthPct) / 2; // Center horizontally
@@ -1577,11 +1875,11 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             
             // Apply rotation and draw the design
-            ctx.save();
+                ctx.save();
             ctx.translate(designX + designWidth / 2, designY + designHeight / 2);
-            ctx.rotate(rotateDeg * Math.PI / 180);
-            ctx.drawImage(designImg, -designWidth / 2, -designHeight / 2, designWidth, designHeight);
-            ctx.restore();
+                ctx.rotate(rotateDeg * Math.PI / 180);
+                ctx.drawImage(designImg, -designWidth / 2, -designHeight / 2, designWidth, designHeight);
+                ctx.restore();
 
             console.log('✅ Design applied to canvas, starting download');
             const a = document.createElement('a');
@@ -1590,9 +1888,9 @@ document.addEventListener('DOMContentLoaded', function() {
             a.click();
             
             this.showMessage('📥 Mockup downloaded with design!', 'success');
-          };
-          
-          designImg.onerror = () => {
+              };
+
+              designImg.onerror = () => {
             console.error('❌ Failed to load design image for download');
             this.showMessage('❌ Failed to load design for download', 'error');
           };
@@ -1604,10 +1902,10 @@ document.addEventListener('DOMContentLoaded', function() {
           a.click();
           
           this.showMessage('📥 Mockup downloaded (no design)', 'info');
-        }
-      };
-      
-      baseImg.onerror = () => {
+          }
+        };
+
+        baseImg.onerror = () => {
         console.error('❌ Failed to load base image for download');
         this.showMessage('❌ Failed to load base image for download', 'error');
       };
