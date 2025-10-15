@@ -885,7 +885,40 @@ document.addEventListener('DOMContentLoaded', function() {
       this.showPlacementControls();
       this.deselectDesign();
       
+      // Add debugging helper for image dimensions
+      this.addDebugHelper();
+      
       console.log('✅ Mockup initialized');
+    },
+
+    addDebugHelper() {
+      // Add debugging function to window for easy console access
+      window.debugImageSizes = () => {
+        console.log('🔍 Debugging Image Sizes:');
+        document.querySelectorAll('img').forEach(img => {
+          const rect = img.getBoundingClientRect();
+          console.log(
+            `Image: ${img.src.split('/').pop()}\n` +
+            `Natural size: ${img.naturalWidth}x${img.naturalHeight}px\n` +
+            `Displayed size: ${rect.width.toFixed(2)}x${rect.height.toFixed(2)}px\n` +
+            `Position: ${rect.left.toFixed(2)}px, ${rect.top.toFixed(2)}px`
+          );
+        });
+      };
+      
+      // Add canvas debugging if canvas exists
+      window.debugCanvasSize = () => {
+        const canvas = document.querySelector('canvas');
+        if (canvas) {
+          console.log(`Canvas width: ${canvas.width}px, height: ${canvas.height}px`);
+        } else {
+          console.log('No canvas element found');
+        }
+      };
+      
+      console.log('🛠️ Debug helpers added:');
+      console.log('- Run debugImageSizes() to check all image dimensions');
+      console.log('- Run debugCanvasSize() to check canvas dimensions');
     },
 
     forceCenterPositioning() {
