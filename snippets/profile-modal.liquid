@@ -673,11 +673,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Login form handling
+  // Login form handling - Allow Shopify native authentication
   if (loginForm) {
     loginForm.addEventListener('submit', async function(e) {
-      e.preventDefault();
-      
+      // Don't prevent default - let Shopify handle the authentication
+      // Only show loading state
       const submitBtn = document.getElementById('login-submit');
       const btnText = submitBtn.querySelector('.btn-text');
       const btnLoading = submitBtn.querySelector('.btn-loading');
@@ -687,42 +687,8 @@ document.addEventListener('DOMContentLoaded', function() {
       btnText.style.display = 'none';
       btnLoading.style.display = 'inline';
       
-      try {
-        const formData = new FormData(loginForm);
-        
-        if (window.supabaseClient) {
-          const result = await window.supabaseClient.signIn(formData.get('email'), formData.get('password'));
-          
-          if (result.error) {
-            showError(result.error.message || 'Login failed. Please check your credentials.');
-          } else {
-            showSuccess('Welcome back! You are now signed in.');
-            loginForm.reset();
-            
-            // Track login event
-            if (window.trackPageView) {
-              window.trackPageView({source: 'user_login', user_authenticated: true});
-            }
-            
-            // Close modal and reload page
-            setTimeout(() => {
-              closeModal();
-              window.location.reload(); // Refresh to update header button
-            }, 1500);
-          }
-        } else {
-          showError('Authentication service not available. Please try again later.');
-        }
-        
-      } catch (error) {
-        console.error('Login error:', error);
-        showError('An unexpected error occurred. Please try again.');
-      } finally {
-        // Reset button state
-        submitBtn.disabled = false;
-        btnText.style.display = 'inline';
-        btnLoading.style.display = 'none';
-      }
+      // Let the form submit naturally to Shopify
+      // The form will redirect or show errors as needed
     });
   }
 

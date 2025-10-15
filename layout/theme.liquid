@@ -1218,5 +1218,107 @@
     <!-- Profile Modal (Global - always available) -->
     {% render 'profile-modal' %}
 
+    <!-- Global testPerfectFit function for console testing -->
+    <script>
+      (function() {
+        // Force immediate registration - this runs as soon as script loads
+        alert('🎯 testPerfectFit function is being registered NOW!');
+        console.log('🎯 Registering GLOBAL testPerfectFit function...');
+        
+        window.testPerfectFit = function() {
+          console.log('🎯 Testing Perfect Fit with exact dimensions...');
+          
+          // Try to find the mockup section (could have any section ID)
+          const mockupSection = document.querySelector('[id^="nt-mockup-"]');
+          if (!mockupSection) {
+            console.error('❌ Mockup section not found on this page!');
+            console.log('💡 Navigate to the home page where the Interactive Mockup section is located.');
+            return;
+          }
+          
+          const sectionId = mockupSection.id.replace('nt-mockup-', '');
+          console.log('✅ Found mockup section with ID:', sectionId);
+          
+          // Get the overlay and canvas
+          const overlay = document.getElementById(`nt-overlay-${sectionId}`);
+          const canvas = document.getElementById(`nt-mockup-canvas-${sectionId}`);
+          
+          if (!overlay || !canvas) {
+            console.error('❌ Overlay or canvas not found!');
+            return;
+          }
+          
+          // Apply exact dimensions
+          const perfectDimensions = {
+            topPct: 29.142857142856876,
+            leftPct: 50.21428571428568,
+            widthPct: 37,
+            heightPct: 42,
+            rotateDeg: 0
+          };
+          
+          // Update CSS variables
+          canvas.style.setProperty('--overlay-top', perfectDimensions.topPct + '%');
+          canvas.style.setProperty('--overlay-left', perfectDimensions.leftPct + '%');
+          canvas.style.setProperty('--overlay-width', perfectDimensions.widthPct + '%');
+          canvas.style.setProperty('--overlay-height', perfectDimensions.heightPct + '%');
+          canvas.style.setProperty('--overlay-rotate', perfectDimensions.rotateDeg + 'deg');
+          
+          // Update overlay directly
+          overlay.style.top = perfectDimensions.topPct + '%';
+          overlay.style.left = perfectDimensions.leftPct + '%';
+          overlay.style.width = perfectDimensions.widthPct + '%';
+          overlay.style.height = perfectDimensions.heightPct + '%';
+          overlay.style.transform = `translateX(-50%) rotate(${perfectDimensions.rotateDeg}deg)`;
+          
+          console.log('✅ Perfect Fit applied with exact dimensions:');
+          console.log(`Top: ${perfectDimensions.topPct}%`);
+          console.log(`Left: ${perfectDimensions.leftPct}%`);
+          console.log(`Width: ${perfectDimensions.widthPct}%`);
+          console.log(`Height: ${perfectDimensions.heightPct}%`);
+          console.log(`Rotation: ${perfectDimensions.rotateDeg}°`);
+          
+          // Add animation
+          overlay.style.transition = 'transform 0.3s ease';
+          overlay.style.transform = `translateX(-50%) rotate(${perfectDimensions.rotateDeg}deg) scale(1.05)`;
+          setTimeout(() => {
+            overlay.style.transform = `translateX(-50%) rotate(${perfectDimensions.rotateDeg}deg) scale(1)`;
+          }, 200);
+          
+          // Show success message on page
+          const existingMessage = document.querySelector('.nt-global-message');
+          if (existingMessage) {
+            existingMessage.remove();
+          }
+          
+          const message = document.createElement('div');
+          message.className = 'nt-global-message';
+          message.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, #10b981, #059669);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+            z-index: 10000;
+            font-weight: 600;
+            animation: slideInRight 0.3s ease;
+          `;
+          message.textContent = '🎯 Perfect Fit test applied with exact dimensions!';
+          document.body.appendChild(message);
+          
+          setTimeout(() => {
+            message.style.opacity = '0';
+            message.style.transition = 'opacity 0.3s ease';
+            setTimeout(() => message.remove(), 300);
+          }, 3000);
+        };
+        
+        console.log('✅ GLOBAL testPerfectFit is now available on ALL pages! Type: testPerfectFit()');
+      })();
+    </script>
+
   </body>
 </html>
