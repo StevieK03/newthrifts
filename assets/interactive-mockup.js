@@ -1,0 +1,2065 @@
+document.addEventListener('DOMContentLoaded', function() {
+  const mockup = {
+    // Mockup images mapping
+    mockupImages: {
+      front: {
+        white: "{{ 'WFront_t-shirt.png' | asset_url }}",
+        black: "{{ 'WFront_t-shirt.png' | asset_url }}",
+        pink: "{{ 'WFront_t-shirt.png' | asset_url }}",
+        blue: "{{ 'WFront_t-shirt.png' | asset_url }}"
+      },
+      back: {
+        white: "{{ 'Wback_t-shirt.png' | asset_url }}",
+        black: "{{ 'Wback_t-shirt.png' | asset_url }}",
+        pink: "{{ 'Wback_t-shirt.png' | asset_url }}",
+        blue: "{{ 'Wback_t-shirt.png' | asset_url }}"
+      },
+      hanging: {
+        white: "{{ 'W3-D_t-shirt.png' | asset_url }}",
+        black: "{{ 'W3-D_t-shirt.png' | asset_url }}",
+        pink: "{{ 'W3-D_t-shirt.png' | asset_url }}",
+        blue: "{{ 'W3-D_t-shirt.png' | asset_url }}"
+      },
+      person1: {
+        white: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        black: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        pink: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        blue: "{{ 'Models/Women/Girl-Model.png' | asset_url }}"
+      },
+      person2: {
+        white: "{{ 'Models/Women/Women-side.png' | asset_url }}",
+        black: "{{ 'Models/Women/Women-side.png' | asset_url }}",
+        pink: "{{ 'Models/Women/Women-side.png' | asset_url }}",
+        blue: "{{ 'Models/Women/Women-side.png' | asset_url }}"
+      }
+    },
+    
+      // Current base mockup image
+      baseMockup: "{{ 'WFront_t-shirt.png' | asset_url }}",
+
+    // Current design state
+    designState: {
+      text: 'Your Design Here',
+      fontSize: 32,
+      fontFamily: "'Bebas Neue', sans-serif",
+      textColor: '#000000',
+      shirtColor: 'white',
+      effect: 'none'
+    },
+
+    // Current view state
+    state: { view: "front", color: "white" },
+
+    // Enhanced placement state - Initialize with centered values
+    placementState: {
+      topPct: 45,
+      leftPct: 25,
+      widthPct: 60,
+      rotateDeg: 0,
+      dragging: false,
+      resizing: false,
+      resizeDirection: 'se',
+      lastX: 0,
+      lastY: 0,
+      hasUploadedDesign: false,
+      designSelected: false
+    },
+
+    init() {
+      console.log('🎯 Initializing Enhanced Interactive Mockup...');
+      console.log('📍 Current placement values:', {
+        top: this.placementState.topPct,
+        left: this.placementState.leftPct,
+        width: this.placementState.widthPct,
+        rotate: this.placementState.rotateDeg
+      });
+      console.log('📁 Available mockup images:', this.mockupImages);
+      console.log('🖼️ Base mockup:', this.baseMockup);
+      
+      this.bindEvents();
+      this.loadFromCustomizer();
+      this.updateBase();
+      this.updateDesign();
+      this.updatePlacementDisplay();
+      
+      // Force override positioning after a short delay
+      setTimeout(() => {
+        this.forceCenterPositioning();
+      }, 100);
+      
+      // Show placement controls by default for testing
+      this.showPlacementControls();
+      
+      // Ensure design starts unselected
+      this.deselectDesign();
+      
+      console.log('✅ Mockup initialized with placement controls visible');
+    },
+
+    forceCenterPositioning() {
+      console.log('🔧 Applying centered positioning...');
+      // Update the placement state to centered values
+      this.placementState.topPct = 45;
+      this.placementState.leftPct = 25;
+      this.placementState.widthPct = 60;
+      this.placementState.rotateDeg = 0;
+      
+      // Update the display and position
+      this.updatePlacementDisplay();
+      this.updateDesignPosition();
+      
+      // Update the sliders to reflect the new values
+      const topSlider = document.getElementById(`nt-top-{{ section.id }}`);
+      const leftSlider = document.getElementById(`nt-left-{{ section.id }}`);
+      const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
+      const rotateSlider = document.getElementById(`nt-rotate-{{ section.id }}`);
+      
+      if (topSlider) topSlider.value = 40;
+      if (leftSlider) leftSlider.value = 30;
+      if (widthSlider) widthSlider.value = 50;
+      if (rotateSlider) rotateSlider.value = 0;
+      
+      console.log('✅ Centered positioning applied:', {
+        top: '40%',
+        left: '30%',
+        width: '50%',
+        rotate: '0deg'
+      });
+    },
+
+    bindEvents() {
+      const rootId = "nt-mockup-{{ section.id }}";
+      
+      // Bind view buttons
+      const viewBtns = Array.from(document.querySelectorAll(`#${rootId} .nt-btn--view`));
+      viewBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          console.log('🖱️ View button clicked:', btn.dataset.view);
+          this.state.view = btn.dataset.view;
+          console.log('🔄 State updated to:', this.state);
+          this.setActive(viewBtns, this.state.view);
+          this.updateBase();
+        });
+      });
+
+      // Bind color buttons
+      const colorBtns = Array.from(document.querySelectorAll(`#${rootId} .nt-btn--color`));
+      colorBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          this.state.color = btn.dataset.color;
+          this.setActive(colorBtns, this.state.color);
+          this.updateBase();
+        });
+      });
+
+      // Bind edit button
+      const editBtn = document.getElementById(`nt-edit-{{ section.id }}`);
+      if (editBtn) {
+        editBtn.addEventListener("click", () => {
+          this.scrollToCustomizer();
+        });
+      }
+
+      // Bind remove button
+      const removeBtn = document.getElementById(`nt-remove-{{ section.id }}`);
+      if (removeBtn) {
+        removeBtn.addEventListener("click", () => {
+          this.removeDesign();
+        });
+      }
+
+      // Bind upload button and file input
+      const uploadBtn = document.getElementById(`nt-upload-{{ section.id }}`);
+      const fileInput = document.getElementById(`nt-file-input-{{ section.id }}`);
+      
+      if (uploadBtn && fileInput) {
+        // Click upload button triggers file input
+        uploadBtn.addEventListener("click", (e) => {
+          if (e.target === uploadBtn) {
+            fileInput.click();
+          }
+        });
+
+        // Handle file selection
+        fileInput.addEventListener("change", (e) => {
+          const file = e.target.files[0];
+          if (file) {
+            this.handleFileUpload(file);
+          }
+        });
+      }
+
+      // Bind help button
+      const helpBtn = document.getElementById(`nt-help-{{ section.id }}`);
+      if (helpBtn) {
+        helpBtn.addEventListener("click", () => {
+          this.showHelpModal();
+        });
+      }
+
+      // Bind placement controls
+      this.bindPlacementControls();
+
+      // Bind mockup size controls
+      this.bindMockupSizeControls();
+
+      // Bind placement guide controls
+      this.bindPlacementGuideControls();
+
+      // Bind drag/resize functionality
+      this.bindDragResize();
+
+      // Bind preset size buttons
+      this.bindPresetButtons();
+
+      {% if section.settings.allow_download %}
+      // Bind download button
+      const downloadBtn = document.getElementById(`nt-download-{{ section.id }}`);
+      if (downloadBtn) {
+        downloadBtn.addEventListener("click", () => {
+          this.downloadComposite();
+        });
+      }
+      {% endif %}
+
+      // Listen for customizer updates
+      this.setupCustomizerListener();
+
+      // Enhanced keyboard shortcuts for resizing
+      document.addEventListener('keydown', (e) => {
+        if (e.target.closest(`#nt-mockup-{{ section.id }}`)) {
+          let increment = 5; // Default increment
+          
+          // Adjust increment based on modifier keys
+          if (e.shiftKey) increment = 10; // Larger steps with Shift
+          if (e.ctrlKey) increment = 1;   // Smaller steps with Ctrl
+          if (e.altKey) increment = 2.5;  // Medium steps with Alt
+          
+          if (e.key === '+' || e.key === '=' || e.key === 'ArrowUp') {
+            e.preventDefault();
+            this.placementState.widthPct = Math.min(120, this.placementState.widthPct + increment);
+            this.updatePlacementDisplay();
+            this.updateDesignPosition();
+            this.updateWidthSlider();
+            console.log('⌨️ Keyboard resize +, new width:', this.placementState.widthPct + '%');
+          } else if (e.key === '-' || e.key === 'ArrowDown') {
+            e.preventDefault();
+            this.placementState.widthPct = Math.max(5, this.placementState.widthPct - increment);
+            this.updatePlacementDisplay();
+            this.updateDesignPosition();
+            this.updateWidthSlider();
+            console.log('⌨️ Keyboard resize -, new width:', this.placementState.widthPct + '%');
+          } else if (e.key === '0' && e.ctrlKey) {
+            e.preventDefault();
+            this.resetToDefaultSize();
+            console.log('⌨️ Reset to default size');
+          } else if (e.key === '1' && e.ctrlKey) {
+            e.preventDefault();
+            this.setPresetSize(25);
+            console.log('⌨️ Set to 25%');
+          } else if (e.key === '2' && e.ctrlKey) {
+            e.preventDefault();
+            this.setPresetSize(50);
+            console.log('⌨️ Set to 50%');
+          } else if (e.key === '3' && e.ctrlKey) {
+            e.preventDefault();
+            this.setPresetSize(75);
+            console.log('⌨️ Set to 75%');
+          } else if (e.key === '4' && e.ctrlKey) {
+            e.preventDefault();
+            this.setPresetSize(100);
+            console.log('⌨️ Set to 100%');
+          }
+        }
+      });
+    },
+
+    setActive(buttons, active) {
+      buttons.forEach(b => {
+        const on = (b.dataset.view || b.dataset.color) === active;
+        if (on) {
+          b.classList.add("is-active");
+          b.style.borderColor = "#27e1c1";
+          b.style.background = "#27e1c1";
+          b.style.color = "white";
+        } else {
+          b.classList.remove("is-active");
+          b.style.borderColor = "#e2e8f0";
+          b.style.background = "white";
+          b.style.color = "#64748b";
+        }
+        b.setAttribute("aria-selected", on ? "true" : "false");
+      });
+    },
+
+    updateBase() {
+      const baseEl = document.getElementById("nt-base-{{ section.id }}");
+      if (baseEl) {
+        // Get the appropriate mockup image based on current view and color
+        const mockupImage = this.mockupImages[this.state.view]?.[this.state.color] || 
+                           this.mockupImages[this.state.view]?.white ||
+                           this.mockupImages.front?.white ||
+                           this.baseMockup;
+        
+        console.log('🔄 Loading mockup image:', mockupImage, 'for view:', this.state.view, 'color:', this.state.color);
+        console.log('🔍 Available mockup images:', this.mockupImages);
+        console.log('🔍 Current state:', this.state);
+        
+        // Add error handling
+        baseEl.onerror = () => {
+          console.error('❌ Failed to load mockup image:', mockupImage);
+          console.error('❌ Image URL:', baseEl.src);
+          this.createFallbackTshirt();
+        };
+        
+        baseEl.onload = () => {
+          console.log('✅ Mockup image loaded successfully:', baseEl.src);
+          // Remove any existing fallback when real image loads
+          const existingFallback = document.querySelector('.fallback-tshirt');
+          if (existingFallback) {
+            existingFallback.remove();
+          }
+        };
+        
+        // Force reload by setting src to empty first
+        baseEl.src = '';
+        setTimeout(() => {
+          baseEl.src = mockupImage;
+        }, 10);
+      } else {
+        console.error('❌ Base element not found:', "nt-base-{{ section.id }}");
+      }
+    },
+
+    createFallbackTshirt() {
+      const canvas = document.getElementById(`nt-mockup-canvas-{{ section.id }}`);
+      if (!canvas) return;
+      
+      // Remove existing fallback
+      const existingFallback = canvas.querySelector('.fallback-tshirt');
+      if (existingFallback) {
+        existingFallback.remove();
+      }
+      
+      // Create fallback t-shirt shape
+      const fallback = document.createElement('div');
+      fallback.className = 'fallback-tshirt';
+      fallback.style.cssText = `
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, #f8f9fa, #e9ecef);
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Bebas Neue', sans-serif;
+        color: #6c757d;
+        text-align: center;
+      `;
+      
+      // Create t-shirt shape
+      const tshirtShape = document.createElement('div');
+      tshirtShape.style.cssText = `
+        width: 60%;
+        height: 70%;
+        background: #ffffff;
+        border: 3px solid #dee2e6;
+        border-radius: 20px 20px 8px 8px;
+        position: relative;
+        margin-bottom: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      `;
+      
+      // Add sleeves
+      const leftSleeve = document.createElement('div');
+      leftSleeve.style.cssText = `
+        position: absolute;
+        left: -20px;
+        top: 20%;
+        width: 15px;
+        height: 40%;
+        background: #ffffff;
+        border: 3px solid #dee2e6;
+        border-radius: 0 8px 8px 0;
+      `;
+      
+      const rightSleeve = document.createElement('div');
+      rightSleeve.style.cssText = `
+        position: absolute;
+        right: -20px;
+        top: 20%;
+        width: 15px;
+        height: 40%;
+        background: #ffffff;
+        border: 3px solid #dee2e6;
+        border-radius: 8px 0 0 8px;
+      `;
+      
+      tshirtShape.appendChild(leftSleeve);
+      tshirtShape.appendChild(rightSleeve);
+      
+      const label = document.createElement('div');
+      label.style.cssText = `
+        font-size: 14px;
+        text-align: center;
+        color: #6c757d;
+      `;
+      label.textContent = 'T-shirt Mockup';
+      
+      fallback.appendChild(tshirtShape);
+      fallback.appendChild(label);
+      
+      canvas.appendChild(fallback);
+      console.log('🔄 Created fallback t-shirt shape');
+    },
+
+    updateDesign() {
+      const designText = document.getElementById("nt-design-text-{{ section.id }}");
+      if (designText) {
+        designText.textContent = this.designState.text;
+        designText.style.fontFamily = this.designState.fontFamily;
+        designText.style.fontSize = this.designState.fontSize + 'px';
+        designText.style.color = this.designState.textColor;
+
+        // Apply text effects
+        switch (this.designState.effect) {
+          case 'outline':
+            designText.style.webkitTextStroke = `2px ${this.designState.textColor}`;
+            designText.style.webkitTextFillColor = 'transparent';
+            break;
+          case 'shadow':
+            designText.style.textShadow = '2px 2px 4px rgba(0,0,0,0.5)';
+            designText.style.webkitTextStroke = 'none';
+            designText.style.webkitTextFillColor = this.designState.textColor;
+            break;
+          case 'gradient':
+            designText.style.background = 'linear-gradient(45deg, #27e1c1, #ff4fa3)';
+            designText.style.webkitBackgroundClip = 'text';
+            designText.style.webkitTextFillColor = 'transparent';
+            designText.style.webkitTextStroke = 'none';
+            break;
+          default:
+            designText.style.textShadow = '1px 1px 2px rgba(255,255,255,0.8)';
+            designText.style.webkitTextStroke = 'none';
+            designText.style.webkitTextFillColor = this.designState.textColor;
+        }
+      }
+    },
+
+    loadFromCustomizer() {
+      // Try to load design from customizer if available
+      if (window.customizer && window.customizer.state) {
+        this.designState = { ...this.designState, ...window.customizer.state };
+        this.updateDesign();
+      }
+    },
+
+    setupCustomizerListener() {
+      // Listen for customizer updates
+      const originalUpdatePreview = window.customizer?.updatePreview;
+      if (originalUpdatePreview) {
+        window.customizer.updatePreview = () => {
+          originalUpdatePreview.call(window.customizer);
+          // Update mockup when customizer changes
+          setTimeout(() => {
+            this.loadFromCustomizer();
+            this.updateDesign();
+          }, 100);
+        };
+      }
+    },
+
+    scrollToCustomizer() {
+      const customizerSection = document.querySelector('.tshirt-customizer-section');
+      if (customizerSection) {
+        customizerSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    },
+
+    handleFileUpload(file) {
+      console.log('File uploaded:', file.name, file.type, file.size);
+      
+      // Validate file type
+      const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/svg+xml', 'application/pdf'];
+      const allowedExtensions = ['.png', '.jpg', '.jpeg', '.svg', '.pdf', '.ai', '.psd'];
+      
+      const fileExtension = file.name.toLowerCase().substring(file.name.lastIndexOf('.'));
+      const isValidType = allowedTypes.includes(file.type) || allowedExtensions.includes(fileExtension);
+      
+      if (!isValidType) {
+        this.showMessage('❌ Invalid file type. Please upload PNG, JPG, SVG, or PDF files.', 'error');
+        return;
+      }
+      
+      // Validate file size (10MB limit)
+      const maxSize = 10 * 1024 * 1024; // 10MB
+      if (file.size > maxSize) {
+        this.showMessage('❌ File too large. Please upload files smaller than 10MB.', 'error');
+        return;
+      }
+      
+      // Show processing message
+      this.showMessage('📁 Processing your design...', 'info');
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.previewUploadedDesign(e.target.result, file.name);
+      };
+      reader.readAsDataURL(file);
+    },
+
+    previewUploadedDesign(imageData, fileName) {
+      // Create preview overlay
+      const previewOverlay = document.createElement('div');
+      previewOverlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(10px);
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      `;
+
+      const previewContainer = document.createElement('div');
+      previewContainer.style.cssText = `
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        max-width: 600px;
+        width: 90vw;
+        text-align: center;
+        transform: scale(0.8);
+        transition: transform 0.3s ease;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      `;
+
+      previewContainer.innerHTML = `
+        <h3 style="margin: 0 0 20px 0; font-size: 24px; font-weight: 700; color: #374151;">
+          📁 Design Preview
+        </h3>
+        
+        <div style="width: 300px; height: 300px; margin: 0 auto 20px; border: 2px dashed #e5e7eb; border-radius: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+          <img src="${imageData}" alt="Uploaded design" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+        </div>
+        
+        <p style="margin: 0 0 20px 0; font-size: 16px; color: #6b7280;">
+          <strong>File:</strong> ${fileName}
+        </p>
+        
+        <div style="display: flex; gap: 12px; justify-content: center;">
+          <button id="apply-design-btn" style="padding: 12px 24px; background: linear-gradient(45deg, #27e1c1, #20b2aa); color: white; border: none; border-radius: 25px; font-weight: 600; cursor: pointer;">
+            ✨ Apply to Mockup
+          </button>
+          <button id="cancel-upload-btn" style="padding: 12px 24px; background: white; color: #6b7280; border: 2px solid #e2e8f0; border-radius: 25px; font-weight: 600; cursor: pointer;">
+            Cancel
+          </button>
+        </div>
+      `;
+
+      previewOverlay.appendChild(previewContainer);
+      document.body.appendChild(previewOverlay);
+
+      // Animate in
+      setTimeout(() => {
+        previewOverlay.style.opacity = '1';
+        previewContainer.style.transform = 'scale(1)';
+      }, 100);
+
+      // Bind events
+      document.getElementById('apply-design-btn').addEventListener('click', () => {
+        this.applyUploadedDesign(imageData);
+        this.closeUploadPreview();
+      });
+
+      document.getElementById('cancel-upload-btn').addEventListener('click', () => {
+        this.closeUploadPreview();
+      });
+
+      previewOverlay.addEventListener('click', (e) => {
+        if (e.target === previewOverlay) {
+          this.closeUploadPreview();
+        }
+      });
+
+      this.currentUploadPreview = previewOverlay;
+    },
+
+    applyUploadedDesign(imageData) {
+      // Replace text with uploaded image
+      const overlayDiv = document.getElementById(`nt-overlay-{{ section.id }}`);
+      const designText = document.getElementById(`nt-design-text-{{ section.id }}`);
+      
+      if (overlayDiv && designText) {
+        // Hide text
+        designText.style.display = 'none';
+        
+        // Create image element
+        const uploadedImg = document.createElement('img');
+        uploadedImg.src = imageData;
+        uploadedImg.style.cssText = `
+          max-width: 100%;
+          max-height: 100%;
+          object-fit: contain;
+          filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+          pointer-events: none;
+        `;
+        
+        overlayDiv.appendChild(uploadedImg);
+        
+        // Mark as uploaded design
+        this.placementState.hasUploadedDesign = true;
+        
+        // Show the remove button
+        const removeBtn = document.getElementById(`nt-remove-{{ section.id }}`);
+        if (removeBtn) {
+          removeBtn.style.display = 'inline-block';
+        }
+        
+        // Show placement controls
+        this.showPlacementControls();
+        
+        // Automatically select the uploaded design
+        this.selectDesign();
+        
+        this.showMessage('✨ Uploaded design applied to mockup!', 'success');
+      }
+    },
+
+    showPlacementControls() {
+      const placementControls = document.getElementById(`nt-placement-controls-{{ section.id }}`);
+      if (placementControls) {
+        placementControls.style.display = 'block';
+        // Animate in
+        setTimeout(() => {
+          placementControls.style.opacity = '1';
+          placementControls.style.transform = 'translateY(0)';
+        }, 100);
+      }
+    },
+
+    bindPlacementControls() {
+      console.log('🎛️ Binding placement controls...');
+      // Get placement control elements
+      const topSlider = document.getElementById(`nt-top-{{ section.id }}`);
+      const leftSlider = document.getElementById(`nt-left-{{ section.id }}`);
+      const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
+      const rotateSlider = document.getElementById(`nt-rotate-{{ section.id }}`);
+      const resetBtn = document.getElementById(`nt-reset-placement-{{ section.id }}`);
+
+      console.log('Placement controls found:', {
+        topSlider: !!topSlider,
+        leftSlider: !!leftSlider,
+        widthSlider: !!widthSlider,
+        rotateSlider: !!rotateSlider,
+        resetBtn: !!resetBtn
+      });
+
+      // Bind slider events
+      if (topSlider) {
+        topSlider.addEventListener('input', () => {
+          this.placementState.topPct = parseFloat(topSlider.value);
+          this.updatePlacementDisplay();
+          this.updateDesignPosition();
+        });
+      }
+
+      if (leftSlider) {
+        leftSlider.addEventListener('input', () => {
+          this.placementState.leftPct = parseFloat(leftSlider.value);
+          this.updatePlacementDisplay();
+          this.updateDesignPosition();
+        });
+      }
+
+      if (widthSlider) {
+        widthSlider.addEventListener('input', () => {
+          this.placementState.widthPct = parseFloat(widthSlider.value);
+          this.updatePlacementDisplay();
+          this.updateDesignPosition();
+        });
+      }
+
+      if (rotateSlider) {
+        rotateSlider.addEventListener('input', () => {
+          this.placementState.rotateDeg = parseFloat(rotateSlider.value);
+          this.updatePlacementDisplay();
+          this.updateDesignPosition();
+        });
+      }
+
+      // Bind reset button
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          this.resetPlacement();
+        });
+      }
+
+      // Bind auto-equidistant button
+      const autoEquidistantBtn = document.getElementById(`nt-auto-equidistant-{{ section.id }}`);
+      if (autoEquidistantBtn) {
+        autoEquidistantBtn.addEventListener('click', () => {
+          this.autoEquidistant();
+        });
+      }
+    },
+
+    updatePlacementDisplay() {
+      // Update value displays
+      const topVal = document.getElementById(`nt-top-val-{{ section.id }}`);
+      const leftVal = document.getElementById(`nt-left-val-{{ section.id }}`);
+      const widthVal = document.getElementById(`nt-width-val-{{ section.id }}`);
+      const rotateVal = document.getElementById(`nt-rotate-val-{{ section.id }}`);
+
+      if (topVal) topVal.textContent = this.placementState.topPct.toFixed(1) + '%';
+      if (leftVal) leftVal.textContent = this.placementState.leftPct.toFixed(1) + '%';
+      if (widthVal) widthVal.textContent = this.placementState.widthPct.toFixed(0) + '%';
+      if (rotateVal) rotateVal.textContent = this.placementState.rotateDeg.toFixed(1) + '°';
+    },
+
+    bindMockupSizeControls() {
+      const scaleSlider = document.getElementById(`nt-mockup-scale-{{ section.id }}`);
+      const scaleValue = document.getElementById(`nt-mockup-scale-val-{{ section.id }}`);
+      const zoomInBtn = document.getElementById(`nt-zoom-in-{{ section.id }}`);
+      const zoomOutBtn = document.getElementById(`nt-zoom-out-{{ section.id }}`);
+
+      if (scaleSlider) {
+        scaleSlider.addEventListener('input', () => {
+          const scale = parseFloat(scaleSlider.value);
+          this.updateMockupScale(scale);
+          if (scaleValue) scaleValue.textContent = scale + '%';
+        });
+      }
+
+      if (zoomInBtn) {
+        zoomInBtn.addEventListener('click', () => {
+          const currentScale = parseFloat(scaleSlider?.value || 100);
+          const newScale = Math.min(130, currentScale + 10);
+          if (scaleSlider) scaleSlider.value = newScale;
+          this.updateMockupScale(newScale);
+          if (scaleValue) scaleValue.textContent = newScale + '%';
+        });
+      }
+
+      if (zoomOutBtn) {
+        zoomOutBtn.addEventListener('click', () => {
+          const currentScale = parseFloat(scaleSlider?.value || 100);
+          const newScale = Math.max(50, currentScale - 10);
+          if (scaleSlider) scaleSlider.value = newScale;
+          this.updateMockupScale(newScale);
+          if (scaleValue) scaleValue.textContent = newScale + '%';
+        });
+      }
+
+      // Add reset to 100% button
+      const resetScaleBtn = document.createElement('button');
+      resetScaleBtn.textContent = '🔄 Reset Size';
+      resetScaleBtn.style.cssText = 'padding: 6px 12px; background: #6b7280; color: white; border: none; border-radius: 4px; font-size: 11px; cursor: pointer; margin-top: 8px;';
+      resetScaleBtn.addEventListener('click', () => {
+        if (scaleSlider) scaleSlider.value = 100;
+        this.updateMockupScale(100);
+        if (scaleValue) scaleValue.textContent = '100%';
+      });
+      
+      // Add reset button to the controls
+      const scaleContainer = scaleSlider?.parentElement;
+      if (scaleContainer) {
+        scaleContainer.appendChild(resetScaleBtn);
+      }
+    },
+
+    bindPlacementGuideControls() {
+      const toggleBtn = document.getElementById(`nt-toggle-guide-{{ section.id }}`);
+      const guide = document.getElementById(`nt-placement-guide-{{ section.id }}`);
+      
+      if (toggleBtn && guide) {
+        let isVisible = false;
+        
+        toggleBtn.addEventListener('click', () => {
+          isVisible = !isVisible;
+          
+          if (isVisible) {
+            guide.style.display = 'block';
+            toggleBtn.textContent = '📐 Hide Placement Guide';
+            toggleBtn.style.background = 'linear-gradient(45deg, #ef4444, #dc2626)';
+            console.log('🎯 Placement guide shown');
+          } else {
+            guide.style.display = 'none';
+            toggleBtn.textContent = '📐 Show Placement Guide';
+            toggleBtn.style.background = 'linear-gradient(45deg, #f59e0b, #d97706)';
+            console.log('🎯 Placement guide hidden');
+          }
+        });
+      }
+    },
+
+    bindPresetButtons() {
+      console.log('⚡ Binding preset size buttons...');
+      
+      // Bind preset size buttons
+      const presetButtons = document.querySelectorAll(`#nt-mockup-{{ section.id }} .size-preset`);
+      presetButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const size = parseInt(button.dataset.size);
+          this.setPresetSize(size);
+          
+          // Visual feedback
+          presetButtons.forEach(btn => {
+            btn.style.background = '#f3f4f6';
+            btn.style.borderColor = '#d1d5db';
+            btn.style.color = '#374151';
+          });
+          button.style.background = '#27e1c1';
+          button.style.borderColor = '#27e1c1';
+          button.style.color = 'white';
+        });
+
+        // Hover effects
+        button.addEventListener('mouseenter', () => {
+          if (button.style.background !== 'rgb(39, 225, 193)') {
+            button.style.background = '#e5e7eb';
+            button.style.borderColor = '#9ca3af';
+          }
+        });
+
+        button.addEventListener('mouseleave', () => {
+          if (button.style.background !== 'rgb(39, 225, 193)') {
+            button.style.background = '#f3f4f6';
+            button.style.borderColor = '#d1d5db';
+          }
+        });
+      });
+
+      // Bind reset button
+      const resetBtn = document.getElementById(`nt-reset-size-{{ section.id }}`);
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          this.resetToDefaultSize();
+          
+          // Reset preset button styles
+          presetButtons.forEach(btn => {
+            btn.style.background = '#f3f4f6';
+            btn.style.borderColor = '#d1d5db';
+            btn.style.color = '#374151';
+          });
+        });
+      }
+      
+      console.log('✅ Preset buttons bound successfully');
+    },
+
+    updateMockupScale(scale) {
+      const canvas = document.getElementById(`nt-mockup-canvas-{{ section.id }}`);
+      const baseImage = document.getElementById(`nt-base-{{ section.id }}`);
+      
+      if (canvas && baseImage) {
+        console.log('🔍 Scaling t-shirt container to:', scale + '%');
+        
+        // Reset container to original size
+        canvas.style.width = '900px';
+        canvas.style.height = '900px';
+        canvas.style.maxWidth = '100%';
+        canvas.style.maxHeight = '100%';
+        
+        // Reset image positioning
+        baseImage.style.position = 'absolute';
+        baseImage.style.top = '0';
+        baseImage.style.left = '0';
+        baseImage.style.width = '100%';
+        baseImage.style.height = '100%';
+        baseImage.style.marginTop = '0';
+        baseImage.style.marginLeft = '0';
+        baseImage.style.transform = 'none';
+        baseImage.style.transformOrigin = 'unset';
+        
+        // Scale the entire container using CSS transform
+        canvas.style.transform = `scale(${scale / 100})`;
+        canvas.style.transformOrigin = 'center center';
+        
+        // Add visual feedback for maximum scale
+        if (scale >= 130) {
+          canvas.style.border = '3px solid #f59e0b';
+          canvas.style.boxShadow = '0 20px 60px rgba(245, 158, 11, 0.3)';
+        } else {
+          canvas.style.border = 'none';
+          canvas.style.boxShadow = '0 20px 60px rgba(0,0,0,0.1)';
+        }
+        
+        // Update the design overlay to match the container scale
+        this.updateDesignPosition();
+        
+        console.log('✅ T-shirt container scaled successfully to:', scale + '%');
+      }
+    },
+
+    removeDesign() {
+      console.log('🗑️ Removing design...');
+      
+      const overlayDiv = document.getElementById(`nt-overlay-{{ section.id }}`);
+      const designText = document.getElementById(`nt-design-text-{{ section.id }}`);
+      const removeBtn = document.getElementById(`nt-remove-{{ section.id }}`);
+      
+      if (overlayDiv && designText) {
+        // Remove any uploaded image
+        const uploadedImg = overlayDiv.querySelector('img[src^="data:"]');
+        if (uploadedImg) {
+          uploadedImg.remove();
+        }
+        
+        // Show the default text
+        designText.style.display = 'block';
+        designText.textContent = 'Your Design Here';
+        
+        // Reset placement state
+        this.placementState.hasUploadedDesign = false;
+        
+        // Deselect the design
+        this.deselectDesign();
+        
+        // Hide the remove button
+        if (removeBtn) {
+          removeBtn.style.display = 'none';
+        }
+        
+        // Reset to default positioning
+        this.placementState.topPct = 45;
+        this.placementState.leftPct = 25;
+        this.placementState.widthPct = 60;
+        this.placementState.rotateDeg = 0;
+        
+        // Update the display
+        this.updatePlacementDisplay();
+        this.updateDesignPosition();
+        
+        // Show success message
+        this.showMessage('✅ Design removed successfully', 'success');
+        
+        console.log('✅ Design removed successfully');
+      }
+    },
+
+    updateDesignPosition() {
+      const overlayDiv = document.getElementById(`nt-overlay-{{ section.id }}`);
+      console.log('🔍 Looking for overlay element:', `nt-overlay-{{ section.id }}`, 'Found:', !!overlayDiv);
+      
+      if (overlayDiv) {
+        console.log('🎯 Applying positioning:', {
+          top: this.placementState.topPct + '%',
+          left: this.placementState.leftPct + '%',
+          width: this.placementState.widthPct + '%',
+          rotate: this.placementState.rotateDeg + 'deg'
+        });
+        
+        // Apply positioning directly to the element
+        overlayDiv.style.top = this.placementState.topPct + '%';
+        overlayDiv.style.left = this.placementState.leftPct + '%';
+        overlayDiv.style.width = this.placementState.widthPct + '%';
+        overlayDiv.style.transform = `rotate(${this.placementState.rotateDeg}deg)`;
+        overlayDiv.style.transformOrigin = 'center center';
+        
+        // Also update CSS variables for consistency
+        overlayDiv.style.setProperty('--overlay-top', this.placementState.topPct + '%');
+        overlayDiv.style.setProperty('--overlay-left', this.placementState.leftPct + '%');
+        overlayDiv.style.setProperty('--overlay-width', this.placementState.widthPct + '%');
+        overlayDiv.style.setProperty('--overlay-rotate', this.placementState.rotateDeg + 'deg');
+        
+        console.log('✅ Positioning applied directly to element');
+        console.log('🔍 Current element styles:', {
+          top: overlayDiv.style.top,
+          left: overlayDiv.style.left,
+          width: overlayDiv.style.width,
+          transform: overlayDiv.style.transform
+        });
+      } else {
+        console.error('❌ Overlay element not found!');
+      }
+      
+      // Check for centering and show indicators
+      this.checkCentering();
+    },
+
+    checkCentering() {
+      const { topPct, leftPct, widthPct } = this.placementState;
+      
+      // Get indicator elements
+      const perfectCenter = document.getElementById(`nt-perfect-center-{{ section.id }}`);
+      const horizontalCenter = document.getElementById(`nt-horizontal-center-{{ section.id }}`);
+      const verticalCenter = document.getElementById(`nt-vertical-center-{{ section.id }}`);
+      const equidistant = document.getElementById(`nt-equidistant-{{ section.id }}`);
+      const statusDiv = document.getElementById(`nt-centering-status-{{ section.id }}`);
+      const statusText = document.getElementById(`nt-status-text-{{ section.id }}`);
+      
+      if (!perfectCenter || !horizontalCenter || !verticalCenter || !equidistant || !statusDiv || !statusText) return;
+      
+      // Hide all indicators first
+      perfectCenter.style.display = 'none';
+      horizontalCenter.style.display = 'none';
+      verticalCenter.style.display = 'none';
+      equidistant.style.display = 'none';
+      statusDiv.style.display = 'none';
+      
+      // Check for perfect center (within 2% tolerance)
+      const isHorizontallyCentered = Math.abs(leftPct - 25) <= 2; // 25% is center for 50% width
+      const isVerticallyCentered = Math.abs(topPct - 45) <= 2; // 45% is center for t-shirt
+      const isPerfectCenter = isHorizontallyCentered && isVerticallyCentered;
+      
+      // Check for equidistant positioning (equal distance from edges)
+      const leftDistance = leftPct;
+      const rightDistance = 100 - leftPct - widthPct;
+      const topDistance = topPct;
+      const bottomDistance = 100 - topPct - (widthPct * 0.8); // Approximate height
+      const isEquidistant = Math.abs(leftDistance - rightDistance) <= 3 && Math.abs(topDistance - bottomDistance) <= 3;
+      
+      // Show appropriate indicators
+      if (isPerfectCenter) {
+        perfectCenter.style.display = 'block';
+        statusText.textContent = '🎯 Perfect center achieved!';
+        statusDiv.style.display = 'block';
+        statusDiv.style.background = 'rgba(16, 185, 129, 0.9)';
+      } else if (isHorizontallyCentered && isVerticallyCentered) {
+        perfectCenter.style.display = 'block';
+        statusText.textContent = '🎯 Very close to center!';
+        statusDiv.style.display = 'block';
+        statusDiv.style.background = 'rgba(16, 185, 129, 0.9)';
+      } else {
+        if (isHorizontallyCentered) {
+          horizontalCenter.style.display = 'block';
+          statusText.textContent = '↔️ Horizontally centered';
+          statusDiv.style.display = 'block';
+          statusDiv.style.background = 'rgba(245, 158, 11, 0.9)';
+        }
+        if (isVerticallyCentered) {
+          verticalCenter.style.display = 'block';
+          statusText.textContent = '↕️ Vertically centered';
+          statusDiv.style.display = 'block';
+          statusDiv.style.background = 'rgba(245, 158, 11, 0.9)';
+        }
+      }
+      
+      if (isEquidistant && !isPerfectCenter) {
+        equidistant.style.display = 'block';
+        if (statusDiv.style.display === 'none') {
+          statusText.textContent = '⚖️ Equidistant positioning';
+          statusDiv.style.display = 'block';
+          statusDiv.style.background = 'rgba(139, 92, 246, 0.9)';
+        }
+      }
+      
+      // Auto-hide status after 3 seconds
+      if (statusDiv.style.display === 'block') {
+        setTimeout(() => {
+          statusDiv.style.display = 'none';
+        }, 3000);
+      }
+    },
+
+    autoEquidistant() {
+      console.log('⚖️ Auto-equidistant positioning activated');
+      
+      // Calculate equidistant positioning
+      // For a design to be equidistant, it should have equal margins on all sides
+      // Assuming the design should be centered with equal margins
+      const currentWidth = this.placementState.widthPct;
+      
+      // Calculate the optimal position for equidistant placement
+      // Left margin = Right margin, Top margin = Bottom margin
+      const optimalLeft = (100 - currentWidth) / 2;
+      const optimalTop = 35; // Position higher on t-shirt for better visual balance
+      
+      // Apply the equidistant positioning
+      this.placementState.leftPct = Math.max(5, Math.min(95 - currentWidth, optimalLeft));
+      this.placementState.topPct = Math.max(10, Math.min(80, optimalTop));
+      
+      // Update the display and position
+      this.updatePlacementDisplay();
+      this.updateDesignPosition();
+      
+      // Update the sliders to reflect the new values
+      const topSlider = document.getElementById(`nt-top-{{ section.id }}`);
+      const leftSlider = document.getElementById(`nt-left-{{ section.id }}`);
+      
+      if (topSlider) topSlider.value = this.placementState.topPct;
+      if (leftSlider) leftSlider.value = this.placementState.leftPct;
+      
+      // Show success message
+      this.showMessage('⚖️ Design positioned equidistant from edges!', 'success');
+      
+      console.log('✅ Auto-equidistant positioning applied:', {
+        left: this.placementState.leftPct + '%',
+        top: this.placementState.topPct + '%',
+        width: this.placementState.widthPct + '%'
+      });
+    },
+
+    resetPlacement() {
+      this.placementState.topPct = 45;
+      this.placementState.leftPct = 25;
+      this.placementState.widthPct = 60;
+      this.placementState.rotateDeg = 0;
+
+      // Update sliders
+      const topSlider = document.getElementById(`nt-top-{{ section.id }}`);
+      const leftSlider = document.getElementById(`nt-left-{{ section.id }}`);
+      const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
+      const rotateSlider = document.getElementById(`nt-rotate-{{ section.id }}`);
+
+      if (topSlider) topSlider.value = this.placementState.topPct;
+      if (leftSlider) leftSlider.value = this.placementState.leftPct;
+      if (widthSlider) widthSlider.value = this.placementState.widthPct;
+      if (rotateSlider) rotateSlider.value = this.placementState.rotateDeg;
+
+      this.updatePlacementDisplay();
+      this.updateDesignPosition();
+    },
+
+    bindDragResize() {
+      const canvas = document.getElementById(`nt-mockup-canvas-{{ section.id }}`);
+      const overlay = document.getElementById(`nt-overlay-{{ section.id }}`);
+      
+      if (!canvas || !overlay) return;
+
+      // Click on overlay to select design and show handles
+      overlay.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.selectDesign();
+      });
+
+      // Double-click to reset size
+      overlay.addEventListener('dblclick', (e) => {
+        e.stopPropagation();
+        this.resetToDefaultSize();
+        console.log('🔄 Double-click reset size');
+      });
+
+      // Click on canvas (outside design) to deselect
+      canvas.addEventListener('click', (e) => {
+        if (e.target === canvas || e.target.classList.contains('nt-mockup__base')) {
+          this.deselectDesign();
+        }
+      });
+
+      // Mouse events - Allow dragging on the entire overlay
+      overlay.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.startDrag(e);
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (this.placementState.dragging) {
+          this.handleDrag(e);
+        }
+        if (this.placementState.resizing) {
+          this.handleResizeDrag(e);
+        }
+      });
+
+      document.addEventListener('mouseup', () => {
+        this.endDrag();
+        this.endResize();
+      });
+
+      // Touch events - Enhanced for mobile
+      overlay.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        // Check if it's a single touch (not pinch)
+        if (e.touches.length === 1) {
+          this.startDrag(e.touches[0]);
+        } else if (e.touches.length === 2) {
+          // Handle pinch-to-zoom for mobile
+          this.startPinch(e);
+        }
+      }, { passive: false });
+
+      // Touch click to select design
+      overlay.addEventListener('touchend', (e) => {
+        if (e.changedTouches.length === 1) {
+          e.stopPropagation();
+          this.selectDesign();
+        }
+      }, { passive: false });
+
+      // Touch outside to deselect
+      canvas.addEventListener('touchend', (e) => {
+        if (e.target === canvas || e.target.classList.contains('nt-mockup__base')) {
+          this.deselectDesign();
+        }
+      }, { passive: false });
+
+      document.addEventListener('touchmove', (e) => {
+        if (this.placementState.dragging) {
+          e.preventDefault();
+          this.handleDrag(e.touches[0]);
+        }
+        if (this.placementState.resizing) {
+          e.preventDefault();
+          this.handleResizeDrag(e.touches[0]);
+        }
+        if (this.placementState.pinching) {
+          e.preventDefault();
+          this.handlePinch(e);
+        }
+      }, { passive: false });
+
+      document.addEventListener('touchend', () => {
+        this.endDrag();
+        this.endResize();
+        this.endPinch();
+      });
+
+      // Enhanced scroll wheel for resize with multiple sensitivity levels
+      canvas.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // Different sensitivity based on modifier keys
+        let sensitivity = 3; // Default sensitivity
+        let increment = 1;
+        
+        if (e.ctrlKey) {
+          // Ultra-precise control with Ctrl
+          sensitivity = 0.5;
+          increment = 0.5;
+        } else if (e.shiftKey) {
+          // Coarse control with Shift
+          sensitivity = 8;
+          increment = 2;
+        } else if (e.altKey) {
+          // Medium control with Alt
+          sensitivity = 2;
+          increment = 1;
+        }
+        
+        const delta = Math.sign(e.deltaY);
+        const newWidth = this.placementState.widthPct - (delta * increment);
+        this.placementState.widthPct = Math.max(5, Math.min(120, newWidth));
+        
+        this.updatePlacementDisplay();
+        this.updateDesignPosition();
+        
+        const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
+        if (widthSlider) widthSlider.value = this.placementState.widthPct;
+        
+        console.log('🔄 Resize with sensitivity:', sensitivity, 'new width:', this.placementState.widthPct + '%');
+      }, { passive: false });
+
+      // Hover effects - only show if design is not selected
+      overlay.addEventListener('mouseenter', () => {
+        if (!this.placementState.designSelected) {
+          // Show subtle hover effect
+          overlay.style.borderColor = 'rgba(39, 225, 193, 0.6)';
+          overlay.style.boxShadow = '0 0 0 2px rgba(39, 225, 193, 0.2)';
+        }
+      });
+
+      overlay.addEventListener('mouseleave', () => {
+        if (!this.placementState.designSelected) {
+          // Hide hover effect
+          overlay.style.borderColor = 'rgba(39, 225, 193, 0.3)';
+          overlay.style.boxShadow = 'none';
+        }
+      });
+
+      // Resize handles functionality - All directions
+      const resizeHandles = document.querySelectorAll('.resize-handle');
+      resizeHandles.forEach(handle => {
+        handle.addEventListener('mousedown', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const direction = handle.dataset.direction;
+          console.log('🔧 Resize handle clicked, direction:', direction);
+          this.startResize(e, direction);
+        });
+      });
+    },
+
+    startDrag(e) {
+      console.log('🖱️ Start drag triggered');
+      this.placementState.dragging = true;
+      const canvas = document.getElementById(`nt-mockup-canvas-{{ section.id }}`);
+      const rect = canvas.getBoundingClientRect();
+      
+      this.placementState.lastX = e.clientX - rect.left;
+      this.placementState.lastY = e.clientY - rect.top;
+      
+      canvas.classList.add('dragging');
+      this.showMessage('🎯 Drag to move design', 'info');
+    },
+
+    handleDrag(e) {
+      if (!this.placementState.dragging) return;
+      
+      const canvas = document.getElementById(`nt-mockup-canvas-{{ section.id }}`);
+      const rect = canvas.getBoundingClientRect();
+      
+      const currentX = e.clientX - rect.left;
+      const currentY = e.clientY - rect.top;
+      
+      const deltaX = currentX - this.placementState.lastX;
+      const deltaY = currentY - this.placementState.lastY;
+      
+      // Convert pixel deltas to percentages
+      const deltaXPercent = (deltaX / rect.width) * 100;
+      const deltaYPercent = (deltaY / rect.height) * 100;
+      
+      // Update position
+      this.placementState.leftPct = Math.max(0, Math.min(90, this.placementState.leftPct + deltaXPercent));
+      this.placementState.topPct = Math.max(0, Math.min(90, this.placementState.topPct + deltaYPercent));
+      
+      // Update display
+      this.updatePlacementDisplay();
+      this.updateDesignPosition();
+      
+      // Update sliders
+      const leftSlider = document.getElementById(`nt-left-{{ section.id }}`);
+      const topSlider = document.getElementById(`nt-top-{{ section.id }}`);
+      if (leftSlider) leftSlider.value = this.placementState.leftPct;
+      if (topSlider) topSlider.value = this.placementState.topPct;
+      
+      this.placementState.lastX = currentX;
+      this.placementState.lastY = currentY;
+    },
+
+    endDrag() {
+      if (this.placementState.dragging) {
+        this.placementState.dragging = false;
+        const canvas = document.getElementById(`nt-mockup-canvas-{{ section.id }}`);
+        canvas.classList.remove('dragging');
+      }
+    },
+
+    endResize() {
+      if (this.placementState.resizing) {
+        this.placementState.resizing = false;
+        this.placementState.resizeMomentum = 0; // Clear momentum
+        console.log('🔧 Resize ended');
+      }
+    },
+
+    startPinch(e) {
+      if (e.touches.length === 2) {
+        this.placementState.pinching = true;
+        const touch1 = e.touches[0];
+        const touch2 = e.touches[1];
+        this.placementState.initialDistance = Math.sqrt(
+          Math.pow(touch2.clientX - touch1.clientX, 2) + 
+          Math.pow(touch2.clientY - touch1.clientY, 2)
+        );
+        this.placementState.initialWidth = this.placementState.widthPct;
+        console.log('📱 Pinch started, initial distance:', this.placementState.initialDistance);
+      }
+    },
+
+    handlePinch(e) {
+      if (!this.placementState.pinching || e.touches.length !== 2) return;
+      
+      const touch1 = e.touches[0];
+      const touch2 = e.touches[1];
+      const currentDistance = Math.sqrt(
+        Math.pow(touch2.clientX - touch1.clientX, 2) + 
+        Math.pow(touch2.clientY - touch1.clientY, 2)
+      );
+      
+      const scale = currentDistance / this.placementState.initialDistance;
+      const newWidth = Math.max(10, Math.min(100, this.placementState.initialWidth * scale));
+      
+      this.placementState.widthPct = newWidth;
+      this.updatePlacementDisplay();
+      this.updateDesignPosition();
+      
+      const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
+      if (widthSlider) widthSlider.value = this.placementState.widthPct;
+      
+      console.log('📱 Pinch resize:', newWidth.toFixed(1) + '%');
+    },
+
+    endPinch() {
+      if (this.placementState.pinching) {
+        this.placementState.pinching = false;
+        console.log('📱 Pinch ended');
+      }
+    },
+
+    startResize(e, direction) {
+      console.log('🔧 Start resize triggered, direction:', direction);
+      this.placementState.resizing = true;
+      this.placementState.resizeDirection = direction;
+      this.placementState.lastX = e.clientX;
+      this.placementState.lastY = e.clientY;
+    },
+
+    handleResizeDrag(e) {
+      if (!this.placementState.resizing) return;
+      
+      const deltaX = e.clientX - this.placementState.lastX;
+      const deltaY = e.clientY - this.placementState.lastY;
+      const direction = this.placementState.resizeDirection;
+      
+      // Calculate distance moved for better sensitivity control
+      const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+      let sensitivity = 0.5; // Base sensitivity
+      
+      // Adjust sensitivity based on movement speed (helps with touchpads)
+      if (distance > 20) sensitivity = 0.8; // Faster movement = higher sensitivity
+      else if (distance < 5) sensitivity = 0.2; // Slower movement = lower sensitivity
+      
+      let resizeIncrement = 0;
+      
+      // Calculate resize based on direction with improved sensitivity
+      switch(direction) {
+        case 'nw': // Top-left: both X and Y affect size
+          resizeIncrement = (deltaX + deltaY) * sensitivity;
+          break;
+        case 'ne': // Top-right: X increases, Y decreases
+          resizeIncrement = (deltaX - deltaY) * sensitivity;
+          break;
+        case 'sw': // Bottom-left: X decreases, Y increases
+          resizeIncrement = (-deltaX + deltaY) * sensitivity;
+          break;
+        case 'se': // Bottom-right: both X and Y increase
+          resizeIncrement = (deltaX + deltaY) * sensitivity;
+          break;
+        case 'n': // Top: Y affects size
+          resizeIncrement = deltaY * sensitivity;
+          break;
+        case 's': // Bottom: Y affects size
+          resizeIncrement = deltaY * sensitivity;
+          break;
+        case 'w': // Left: X affects size
+          resizeIncrement = deltaX * sensitivity;
+          break;
+        case 'e': // Right: X affects size
+          resizeIncrement = deltaX * sensitivity;
+          break;
+        default:
+          resizeIncrement = (deltaX + deltaY) * sensitivity;
+      }
+      
+      // Apply momentum for smoother touchpad experience
+      const momentum = this.placementState.resizeMomentum || 0;
+      const finalIncrement = resizeIncrement + (momentum * 0.3);
+      
+      const newWidth = this.placementState.widthPct + finalIncrement;
+      this.placementState.widthPct = Math.max(5, Math.min(120, newWidth));
+      
+      // Store momentum for next frame
+      this.placementState.resizeMomentum = resizeIncrement * 0.7;
+      
+      console.log('🔧 Resizing to:', this.placementState.widthPct + '%', 'direction:', direction, 'sensitivity:', sensitivity);
+      
+      this.updatePlacementDisplay();
+      this.updateDesignPosition();
+      this.updateWidthSlider();
+      
+      this.placementState.lastX = e.clientX;
+      this.placementState.lastY = e.clientY;
+    },
+
+    updateWidthSlider() {
+      const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
+      if (widthSlider) widthSlider.value = this.placementState.widthPct;
+    },
+
+    resetToDefaultSize() {
+      this.placementState.widthPct = 60; // Default size
+      this.updatePlacementDisplay();
+      this.updateDesignPosition();
+      this.updateWidthSlider();
+      this.showMessage('📏 Reset to default size (60%)', 'success');
+    },
+
+    setPresetSize(size) {
+      this.placementState.widthPct = size;
+      this.updatePlacementDisplay();
+      this.updateDesignPosition();
+      this.updateWidthSlider();
+      this.showMessage(`📏 Set to ${size}%`, 'success');
+    },
+
+    handleResize(deltaY) {
+      console.log('🔄 Resize triggered, deltaY:', deltaY);
+      const delta = Math.sign(deltaY);
+      const increment = 5; // Increased from 2 to 5 for more noticeable resizing
+      const newWidth = this.placementState.widthPct - (delta * increment);
+      
+      // Clamp between 5% and 120% for more flexibility
+      this.placementState.widthPct = Math.max(5, Math.min(120, newWidth));
+      
+      console.log('📏 New width:', this.placementState.widthPct + '%');
+      
+      this.updatePlacementDisplay();
+      this.updateDesignPosition();
+      this.updateWidthSlider();
+    },
+
+    selectDesign() {
+      console.log('🎯 Design selected - showing handles');
+      
+      // Show all resize handles using CSS class
+      const resizeHandles = document.querySelectorAll(`#nt-mockup-canvas-{{ section.id }} .resize-handle`);
+      resizeHandles.forEach(handle => {
+        handle.classList.add('show-handle');
+      });
+      
+      // Show drag handle
+      const dragHandle = document.getElementById(`nt-drag-handle-{{ section.id }}`);
+      if (dragHandle) dragHandle.style.display = 'block';
+      
+      // Show main resize handle
+      const mainResizeHandle = document.getElementById(`nt-resize-handle-{{ section.id }}`);
+      if (mainResizeHandle) mainResizeHandle.style.display = 'block';
+      
+      // Add selected class to overlay for visual feedback
+      const overlay = document.getElementById(`nt-overlay-{{ section.id }}`);
+      if (overlay) {
+        overlay.classList.add('design-selected');
+        overlay.style.borderColor = '#27e1c1';
+        overlay.style.boxShadow = '0 0 0 3px rgba(39, 225, 193, 0.3)';
+      }
+      
+      // Mark as selected in state
+      this.placementState.designSelected = true;
+    },
+
+    deselectDesign() {
+      console.log('🎯 Design deselected - hiding handles');
+      
+      // Hide all resize handles by removing CSS class
+      const resizeHandles = document.querySelectorAll(`#nt-mockup-canvas-{{ section.id }} .resize-handle`);
+      resizeHandles.forEach(handle => {
+        handle.classList.remove('show-handle');
+      });
+      
+      // Hide drag handle
+      const dragHandle = document.getElementById(`nt-drag-handle-{{ section.id }}`);
+      if (dragHandle) dragHandle.style.display = 'none';
+      
+      // Hide main resize handle
+      const mainResizeHandle = document.getElementById(`nt-resize-handle-{{ section.id }}`);
+      if (mainResizeHandle) mainResizeHandle.style.display = 'none';
+      
+      // Remove selected class from overlay
+      const overlay = document.getElementById(`nt-overlay-{{ section.id }}`);
+      if (overlay) {
+        overlay.classList.remove('design-selected');
+        overlay.style.borderColor = 'rgba(39, 225, 193, 0.3)';
+        overlay.style.boxShadow = 'none';
+      }
+      
+      // Mark as not selected in state
+      this.placementState.designSelected = false;
+    },
+
+    closeUploadPreview() {
+      if (this.currentUploadPreview) {
+        this.currentUploadPreview.style.opacity = '0';
+        setTimeout(() => {
+          if (document.body.contains(this.currentUploadPreview)) {
+            document.body.removeChild(this.currentUploadPreview);
+          }
+          this.currentUploadPreview = null;
+        }, 300);
+      }
+    },
+
+    showHelpModal() {
+      const helpOverlay = document.createElement('div');
+      helpOverlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(10px);
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      `;
+
+      const helpContainer = document.createElement('div');
+      helpContainer.style.cssText = `
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        max-width: 700px;
+        width: 90vw;
+        max-height: 80vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      `;
+
+      helpContainer.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+          <h2 style="margin: 0; font-size: 28px; font-weight: 700; color: #374151;">
+            📁 File Upload Help
+          </h2>
+          <button id="close-help-btn" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #6b7280;">
+            ×
+          </button>
+        </div>
+
+        <div style="margin-bottom: 25px;">
+          <h3 style="margin: 0 0 12px 0; font-size: 20px; font-weight: 600; color: #374151;">
+            ✅ Accepted File Formats
+          </h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+            <div style="background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0;">
+              <div style="font-weight: 600; color: #059669; margin-bottom: 4px;">📄 PNG</div>
+              <div style="font-size: 14px; color: #6b7280;">Best for designs with transparency</div>
+            </div>
+            <div style="background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0;">
+              <div style="font-weight: 600; color: #059669; margin-bottom: 4px;">🖼️ JPG/JPEG</div>
+              <div style="font-size: 14px; color: #6b7280;">Standard photo format</div>
+            </div>
+            <div style="background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0;">
+              <div style="font-weight: 600; color: #059669; margin-bottom: 4px;">🎨 SVG</div>
+              <div style="font-size: 14px; color: #6b7280;">Vector graphics (scalable)</div>
+            </div>
+            <div style="background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0;">
+              <div style="font-weight: 600; color: #059669; margin-bottom: 4px;">📋 PDF</div>
+              <div style="font-size: 14px; color: #6b7280;">Document format</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 25px;">
+          <h3 style="margin: 0 0 12px 0; font-size: 20px; font-weight: 600; color: #374151;">
+            📏 File Requirements
+          </h3>
+          <ul style="margin: 0; padding-left: 20px; color: #6b7280; line-height: 1.6;">
+            <li><strong>Maximum file size:</strong> 10MB</li>
+            <li><strong>Recommended resolution:</strong> 2048x2048px or higher</li>
+            <li><strong>Color mode:</strong> RGB or CMYK</li>
+            <li><strong>Transparency:</strong> Supported for PNG files</li>
+          </ul>
+        </div>
+
+        <div style="margin-bottom: 25px;">
+          <h3 style="margin: 0 0 12px 0; font-size: 20px; font-weight: 600; color: #374151;">
+            💡 Design Tips
+          </h3>
+          <ul style="margin: 0; padding-left: 20px; color: #6b7280; line-height: 1.6;">
+            <li>Use high-resolution images for best print quality</li>
+            <li>Keep important design elements within the center area</li>
+            <li>PNG files with transparency work best for logos</li>
+            <li>Vector files (SVG) will scale perfectly at any size</li>
+            <li>Test your design on different t-shirt colors</li>
+          </ul>
+        </div>
+
+        <div style="background: linear-gradient(135deg, #f0fdfa, #ecfdf5); padding: 20px; border-radius: 12px; border: 1px solid #a7f3d0;">
+          <div style="font-weight: 600; color: #065f46; margin-bottom: 8px;">🚀 Pro Tip</div>
+          <div style="color: #047857; font-size: 14px;">
+            For best results, create your design in a square format (1:1 ratio) with a transparent background. This ensures your design will look great on any t-shirt color!
+          </div>
+        </div>
+      `;
+
+      helpOverlay.appendChild(helpContainer);
+      document.body.appendChild(helpOverlay);
+
+      // Animate in
+      setTimeout(() => {
+        helpOverlay.style.opacity = '1';
+      }, 100);
+
+      // Bind close event
+      document.getElementById('close-help-btn').addEventListener('click', () => {
+        helpOverlay.style.opacity = '0';
+        setTimeout(() => {
+          if (document.body.contains(helpOverlay)) {
+            document.body.removeChild(helpOverlay);
+          }
+        }, 300);
+      });
+
+      helpOverlay.addEventListener('click', (e) => {
+        if (e.target === helpOverlay) {
+          helpOverlay.style.opacity = '0';
+          setTimeout(() => {
+            if (document.body.contains(helpOverlay)) {
+              document.body.removeChild(helpOverlay);
+            }
+          }, 300);
+        }
+      });
+    },
+
+    showMessage(message, type = 'info') {
+      const messageEl = document.createElement('div');
+      messageEl.textContent = message;
+      Object.assign(messageEl.style, {
+        position: 'fixed',
+        top: '20px',
+        right: '20px',
+        background: type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#6b7280',
+        color: 'white',
+        padding: '12px 20px',
+        borderRadius: '8px',
+        fontSize: '14px',
+        fontWeight: '500',
+        zIndex: '10000',
+        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.15)',
+        transform: 'translateX(100%)',
+        transition: 'transform 0.3s ease'
+      });
+      
+      document.body.appendChild(messageEl);
+      
+      setTimeout(() => messageEl.style.transform = 'translateX(0)', 100);
+      setTimeout(() => {
+        messageEl.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+          if (document.body.contains(messageEl)) {
+            document.body.removeChild(messageEl);
+          }
+        }, 300);
+      }, 3000);
+    },
+
+    {% if section.settings.allow_download %}
+    downloadComposite() {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      
+      // Set canvas size
+      canvas.width = 2000;
+      canvas.height = 2000;
+
+      // Create base image
+      const baseImg = new Image();
+      baseImg.crossOrigin = "anonymous";
+      baseImg.src = document.getElementById("nt-base-{{ section.id }}").src;
+
+      baseImg.onload = () => {
+        // Draw base image
+        ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
+
+        // Check if there's an uploaded design image
+        const overlayImg = document.querySelector(`#nt-overlay-{{ section.id }} img`);
+        
+        if (overlayImg && overlayImg.src && !overlayImg.src.includes('data:image/svg+xml')) {
+          // Draw uploaded design image
+          const designImg = new Image();
+          designImg.crossOrigin = "anonymous";
+          designImg.src = overlayImg.src;
+          
+          designImg.onload = () => {
+            // Use the exact placement state values that match the preview
+            const topPct = this.placementState.topPct / 100;
+            const leftPct = this.placementState.leftPct / 100;
+            const widthPct = this.placementState.widthPct / 100;
+            const rotateDeg = this.placementState.rotate || 0;
+
+            // Calculate design position and size on canvas (matching the visual positioning exactly)
+            const designX = canvas.width * leftPct;
+            const designY = canvas.height * topPct;
+            const designWidth = canvas.width * widthPct;
+            const designHeight = (designImg.height / designImg.width) * designWidth;
+
+            // Save context for rotation
+            ctx.save();
+            ctx.translate(designX + designWidth / 2, designY + designHeight / 2);
+            ctx.rotate(rotateDeg * Math.PI / 180);
+            
+            // Draw the design image
+            ctx.drawImage(designImg, -designWidth / 2, -designHeight / 2, designWidth, designHeight);
+            ctx.restore();
+
+            // Download
+            const a = document.createElement('a');
+            a.download = `custom_mockup_${this.state.view}_${this.state.color}.png`;
+            a.href = canvas.toDataURL("image/png");
+            a.click();
+          };
+        } else {
+          // Fallback to text if no image uploaded
+          ctx.save();
+          ctx.font = `${this.designState.fontSize * 2}px ${this.designState.fontFamily}`;
+          ctx.fillStyle = this.designState.textColor;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+
+          // Calculate text position based on overlay settings
+          const stage = document.querySelector(`#nt-mockup-{{ section.id }} .nt-mockup__canvas`);
+          const topPct = parseFloat(getComputedStyle(stage).getPropertyValue('--overlay-top')) / 100;
+          const leftPct = parseFloat(getComputedStyle(stage).getPropertyValue('--overlay-left')) / 100;
+          const widthPct = parseFloat(getComputedStyle(stage).getPropertyValue('--overlay-width')) / 100;
+          const rotateDeg = parseFloat(getComputedStyle(stage).getPropertyValue('--overlay-rotate')) || 0;
+
+          const x = canvas.width * (leftPct + widthPct / 2);
+          const y = canvas.height * (topPct + 0.3); // Adjust for text positioning
+
+          ctx.translate(x, y);
+          ctx.rotate(rotateDeg * Math.PI / 180);
+          
+          // Apply text effects
+          switch (this.designState.effect) {
+            case 'outline':
+              ctx.strokeStyle = this.designState.textColor;
+              ctx.lineWidth = 4;
+              ctx.strokeText(this.designState.text, 0, 0);
+              ctx.fillStyle = 'transparent';
+              break;
+            case 'shadow':
+              ctx.shadowColor = 'rgba(0,0,0,0.5)';
+              ctx.shadowBlur = 8;
+              ctx.shadowOffsetX = 4;
+              ctx.shadowOffsetY = 4;
+              ctx.fillStyle = this.designState.textColor;
+              break;
+            default:
+              ctx.fillStyle = this.designState.textColor;
+          }
+          
+          ctx.fillText(this.designState.text, 0, 0);
+          ctx.restore();
+
+          // Download
+          const a = document.createElement('a');
+          a.download = `custom_mockup_${this.state.view}_${this.state.color}.png`;
+          a.href = canvas.toDataURL("image/png");
+          a.click();
+        }
+      };
+    }
+    {% endif %}
+  };
+
+  // Enhanced 3D Controls and Validation
+  let is3DRotationEnabled = false;
+  let currentRotation = 0;
+  let isZoomEnabled = false;
+  
+  // 3D Rotation toggle
+  const rotate3DBtn = document.getElementById(`nt-3d-rotate-{{ section.id }}`);
+  if (rotate3DBtn) {
+    rotate3DBtn.addEventListener('click', () => {
+      is3DRotationEnabled = !is3DRotationEnabled;
+      rotate3DBtn.style.background = is3DRotationEnabled ? '#27e1c1' : '';
+      rotate3DBtn.style.color = is3DRotationEnabled ? 'white' : '';
+      rotate3DBtn.style.borderColor = is3DRotationEnabled ? '#27e1c1' : '#e2e8f0';
+      console.log('🔄 3D Rotation:', is3DRotationEnabled ? 'Enabled' : 'Disabled');
+    });
+  }
+  
+  // Zoom controls
+  const zoomBtn = document.getElementById(`nt-zoom-{{ section.id }}`);
+  if (zoomBtn) {
+    zoomBtn.addEventListener('click', () => {
+      isZoomEnabled = !isZoomEnabled;
+      const canvas = document.querySelector('.nt-mockup__canvas');
+      if (canvas) {
+        canvas.style.transform = isZoomEnabled ? 'scale(1.5)' : 'scale(1)';
+        canvas.style.transition = 'transform 0.3s ease';
+      }
+      zoomBtn.style.background = isZoomEnabled ? '#27e1c1' : '';
+      zoomBtn.style.color = isZoomEnabled ? 'white' : '';
+      zoomBtn.style.borderColor = isZoomEnabled ? '#27e1c1' : '#e2e8f0';
+      console.log('🔍 Zoom:', isZoomEnabled ? 'Enabled' : 'Disabled');
+    });
+  }
+  
+  // Design validation
+  const validateBtn = document.getElementById(`nt-validate-{{ section.id }}`);
+  if (validateBtn) {
+    validateBtn.addEventListener('click', () => {
+      validateDesign();
+    });
+  }
+  
+  // Reset button
+  const resetBtn = document.getElementById(`nt-reset-{{ section.id }}`);
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      // Reset all controls to default values
+      const topSlider = document.querySelector('input[data-control="top"]');
+      const leftSlider = document.querySelector('input[data-control="left"]');
+      const widthSlider = document.querySelector('input[data-control="width"]');
+      const rotateSlider = document.querySelector('input[data-control="rotate"]');
+      
+      if (topSlider) topSlider.value = 30;
+      if (leftSlider) leftSlider.value = 30;
+      if (widthSlider) widthSlider.value = 50;
+      if (rotateSlider) rotateSlider.value = 0;
+      
+      // Reset 3D controls
+      is3DRotationEnabled = false;
+      isZoomEnabled = false;
+      currentRotation = 0;
+      
+      // Update button states
+      if (rotate3DBtn) {
+        rotate3DBtn.style.background = '';
+        rotate3DBtn.style.color = '';
+        rotate3DBtn.style.borderColor = '#e2e8f0';
+      }
+      if (zoomBtn) {
+        zoomBtn.style.background = '';
+        zoomBtn.style.color = '';
+        zoomBtn.style.borderColor = '#e2e8f0';
+      }
+      
+      // Reset canvas
+      const canvas = document.querySelector('.nt-mockup__canvas');
+      if (canvas) {
+        canvas.style.transform = '';
+        canvas.style.transition = '';
+      }
+      
+      // Trigger mockup update
+      if (window.mockup && window.mockup.updateMockup) {
+        window.mockup.updateMockup();
+      }
+      
+      console.log('🔄 Design reset to defaults');
+    });
+  }
+  
+  // Design validation function
+  function validateDesign() {
+    const issues = [];
+    let score = 100;
+    
+    // Check if design is loaded
+    const hasDesign = document.querySelector('.nt-mockup__canvas img[src*="data:"]') || 
+                     document.querySelector('.nt-mockup__canvas canvas');
+    
+    if (!hasDesign) {
+      issues.push('No design uploaded');
+      score = 0;
+    } else {
+      // Check design size
+      const widthSlider = document.querySelector('input[data-control="width"]');
+      const widthValue = widthSlider ? parseFloat(widthSlider.value) : 50;
+      
+      if (widthValue < 20) {
+        issues.push('Design too small');
+        score -= 30;
+      } else if (widthValue > 80) {
+        issues.push('Design too large');
+        score -= 20;
+      }
+      
+      // Check positioning
+      const topSlider = document.querySelector('input[data-control="top"]');
+      const leftSlider = document.querySelector('input[data-control="left"]');
+      const topValue = topSlider ? parseFloat(topSlider.value) : 30;
+      const leftValue = leftSlider ? parseFloat(leftSlider.value) : 30;
+      
+      if (topValue < 10 || topValue > 80) {
+        issues.push('Poor vertical positioning');
+        score -= 25;
+      }
+      
+      if (leftValue < 10 || leftValue > 80) {
+        issues.push('Poor horizontal positioning');
+        score -= 25;
+      }
+    }
+    
+    // Show validation result
+    showValidationResult(score, issues);
+    console.log('✅ Design validation complete. Score:', score, 'Issues:', issues);
+  }
+  
+  // Show validation result
+  function showValidationResult(score, issues) {
+    // Remove existing validation
+    const existingValidation = document.querySelector('.nt-validation-result');
+    if (existingValidation) {
+      existingValidation.remove();
+    }
+    
+    // Create validation indicator
+    const validationDiv = document.createElement('div');
+    validationDiv.className = 'nt-validation-result';
+    validationDiv.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      padding: 16px 20px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 14px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      backdrop-filter: blur(10px);
+      animation: slideInRight 0.3s ease;
+      max-width: 300px;
+    `;
+    
+    let bgColor, icon, text;
+    if (score >= 90) {
+      bgColor = 'rgba(16, 185, 129, 0.95)';
+      icon = '✓';
+      text = 'Design Quality: Perfect';
+    } else if (score >= 70) {
+      bgColor = 'rgba(245, 158, 11, 0.95)';
+      icon = '⚠';
+      text = `Design Quality: Good${issues[0] ? ` (${issues[0]})` : ''}`;
+    } else {
+      bgColor = 'rgba(239, 68, 68, 0.95)';
+      icon = '✗';
+      text = `Design Quality: Needs Work${issues[0] ? ` (${issues[0]})` : ''}`;
+    }
+    
+    validationDiv.style.background = bgColor;
+    validationDiv.style.color = 'white';
+    validationDiv.innerHTML = `
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 1.2rem;">${icon}</span>
+        <span>${text}</span>
+      </div>
+    `;
+    
+    document.body.appendChild(validationDiv);
+    
+    // Auto-hide after 5 seconds
+    setTimeout(() => {
+      if (validationDiv.parentNode) {
+        validationDiv.style.animation = 'slideOutRight 0.3s ease';
+        setTimeout(() => {
+          if (validationDiv.parentNode) {
+            validationDiv.remove();
+          }
+        }, 300);
+      }
+    }, 5000);
+  }
+  
+  // Add CSS animations
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes slideInRight {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOutRight {
+      from { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(100%); opacity: 0; }
+    }
+  `;
+  document.head.appendChild(style);
+
+  // Initialize mockup
+  mockup.init();
+
+  // Make globally available
+  window.mockup = mockup;
+
+  console.log('🚀 ENHANCED Interactive Mockup initialized! 🎨');
+});
