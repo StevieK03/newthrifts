@@ -51,8 +51,8 @@ async function trackSupabasePageView(meta = {}) {
       return;
     }
 
-    // Ensure Supabase client is initialized
-    const client = await window.supabaseClient.getClient();
+    // Use the global Supabase client directly
+    const client = window.supabaseClient;
     if (!client) {
       console.log('📊 Supabase client not ready, skipping tracking');
       return;

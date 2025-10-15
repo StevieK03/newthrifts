@@ -57,12 +57,16 @@ ALTER TABLE custom_tshirt_requests ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Allow public insert" ON custom_tshirt_requests
   FOR INSERT WITH CHECK (true);
 
--- Policy: Users can view their own requests
-CREATE POLICY "Users can view own requests" ON custom_tshirt_requests
-  FOR SELECT USING (auth.uid() = user_id OR user_id IS NULL);
+-- Policy: Anyone can view requests (for admin purposes - you can restrict this later)
+CREATE POLICY "Allow public view" ON custom_tshirt_requests
+  FOR SELECT USING (true);
 
--- Policy: Admins can view all requests (you'll need to set up admin role)
-CREATE POLICY "Admins can view all" ON custom_tshirt_requests
+-- Policy: Users can update their own requests (optional)
+CREATE POLICY "Users can update own requests" ON custom_tshirt_requests
+  FOR UPDATE USING (auth.uid() = user_id OR user_id IS NULL);
+
+-- Policy: Admins can do everything (you'll need to set up admin role)
+CREATE POLICY "Admins can do everything" ON custom_tshirt_requests
   FOR ALL USING (
     EXISTS (
       SELECT 1 FROM auth.users 

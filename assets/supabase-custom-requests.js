@@ -275,16 +275,24 @@ window.NewThriftsCustomRequests = {
    * @returns {Promise<Object>} - Supabase client
    */
   async ensureSupabaseReady() {
-    if (!window.supabaseClient) {
-      throw new Error('Supabase client not found. Please ensure supabase-config.js is loaded.');
+    // Check for global Supabase client first
+    if (window.supabaseClient) {
+      console.log('✅ Using global Supabase client');
+      return window.supabaseClient;
     }
     
-    const client = await window.supabaseClient.getClient();
-    if (!client) {
-      throw new Error('Supabase client initialization failed');
+    // Try to initialize Supabase client if not available
+    if (window.SupabaseClient) {
+      console.log('🔄 Initializing Supabase client...');
+      const supabaseClient = new window.SupabaseClient();
+      const client = await supabaseClient.init();
+      if (client) {
+        console.log('✅ Supabase client initialized successfully');
+        return client;
+      }
     }
     
-    return client;
+    throw new Error('Supabase client not found. Please ensure supabase-config.js is loaded.');
   },
 
   /**
