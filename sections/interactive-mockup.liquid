@@ -143,8 +143,38 @@ Enhanced Interactive Product Mockup
             🗑️ Remove Design
           </button>
           
-          <button class="nt-btn nt-btn--success" id="nt-submit-request-btn-{{ section.id }}" style="padding: 10px 20px; background: linear-gradient(45deg, #10b981, #059669); color: white; border: none; border-radius: 25px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; display: block; margin-top: 16px;">
-            🚀 Submit Request
+          <button class="nt-btn nt-btn--success" id="nt-submit-request-btn-{{ section.id }}" style="
+            padding: 12px 24px; 
+            background: linear-gradient(45deg, #10b981, #059669, #047857, #10b981);
+            background-size: 300% 300%;
+            color: white; 
+            border: none; 
+            border-radius: 30px; 
+            font-size: 16px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: block; 
+            margin-top: 16px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: gradientShift 3s ease-in-out infinite;
+          ">
+            <span style="position: relative; z-index: 2; display: flex; align-items: center; gap: 8px;">
+              🚀 Submit Request
+            </span>
+            <div style="
+              position: absolute;
+              top: 0;
+              left: -100%;
+              width: 100%;
+              height: 100%;
+              background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+              transition: left 0.6s ease;
+            "></div>
           </button>
         </div>
       </div>
@@ -888,6 +918,74 @@ Enhanced Interactive Product Mockup
 .nt-mockup__stage {
   animation: fadeInUp 1s ease;
 }
+
+/* Amazing Submit Request Button Animations */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3); }
+  50% { transform: scale(1.05); box-shadow: 0 12px 35px rgba(16, 185, 129, 0.5); }
+  100% { transform: scale(1); box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3); }
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-10px); }
+  60% { transform: translateY(-5px); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Submit Request Button Hover Effects */
+#nt-submit-request-btn-{{ section.id }}:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 15px 40px rgba(16, 185, 129, 0.4);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+#nt-submit-request-btn-{{ section.id }}:hover div {
+  animation: shimmer 0.8s ease-in-out;
+}
+
+#nt-submit-request-btn-{{ section.id }}:active {
+  transform: translateY(-1px) scale(0.98);
+  animation: bounce 0.6s ease;
+}
+
+#nt-submit-request-btn-{{ section.id }}:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.3);
+}
+
+/* Loading state animation */
+#nt-submit-request-btn-{{ section.id }}.loading {
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+#nt-submit-request-btn-{{ section.id }}.loading span::after {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-left: 8px;
+}
 </style>
 
 <script>
@@ -1582,6 +1680,13 @@ document.addEventListener('DOMContentLoaded', function() {
       }
 
       try {
+        // Add loading state to button
+        const submitBtn = document.getElementById(`nt-submit-request-btn-{{ section.id }}`);
+        if (submitBtn) {
+          submitBtn.classList.add('loading');
+          submitBtn.style.pointerEvents = 'none';
+        }
+        
         this.showMessage('📤 Submitting your request...', 'info');
         
         // Generate mockup image for submission
@@ -1616,10 +1721,23 @@ document.addEventListener('DOMContentLoaded', function() {
         this.showMessage('🎉 Request submitted successfully! We\'ll contact you within 24 hours.', 'success');
         document.getElementById(`nt-submit-request-{{ section.id }}`).style.display = 'none';
         this.resetRequestForm();
+        
+        // Remove loading state
+        if (submitBtn) {
+          submitBtn.classList.remove('loading');
+          submitBtn.style.pointerEvents = 'auto';
+        }
 
       } catch (error) {
         console.error('Error submitting request:', error);
         this.showMessage('❌ Failed to submit request. Please try again.', 'error');
+        
+        // Remove loading state on error
+        const submitBtn = document.getElementById(`nt-submit-request-btn-{{ section.id }}`);
+        if (submitBtn) {
+          submitBtn.classList.remove('loading');
+          submitBtn.style.pointerEvents = 'auto';
+        }
       }
     },
 
