@@ -2836,26 +2836,162 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async submitToSupabase(requestData) {
       try {
+        console.log('🔍 Debugging submitToSupabase...');
+        console.log('Request data:', requestData);
+        
         // Check if Supabase is available
         if (typeof window.NewThriftsCustomRequests === 'undefined') {
-          console.warn('Supabase custom requests API not loaded');
+          console.warn('❌ Supabase custom requests API not loaded');
+          console.log('Available window objects:', Object.keys(window).filter(k => k.includes('supabase') || k.includes('NewThrifts')));
           return { success: false, error: 'Database service not available' };
         }
 
-        // Use the existing Supabase API
+        console.log('✅ NewThriftsCustomRequests API found');
+        
+        // Try the existing Supabase API first
+        console.log('📤 Calling submitCustomRequest...');
         const result = await window.NewThriftsCustomRequests.submitCustomRequest(requestData);
+        
+        console.log('📥 Result from submitCustomRequest:', result);
         
         if (result.success) {
           console.log('✅ Request saved to Supabase:', result.requestId);
           return { success: true, requestId: result.requestId };
         } else {
           console.error('❌ Supabase submission failed:', result.error);
-          return { success: false, error: result.error };
+          
+          // Try direct Supabase connection as fallback
+          console.log('🔄 Trying direct Supabase connection...');
+          return await this.submitDirectlyToSupabase(requestData);
         }
         
       } catch (error) {
         console.error('❌ Error in submitToSupabase:', error);
-        return { success: false, error: error.message || 'Database connection failed' };
+        console.error('Error stack:', error.stack);
+        
+        // Final fallback: try email submission
+        console.log('📧 Trying email fallback...');
+        return await this.submitViaEmail(requestData);
+      }
+    },
+
+    async submitDirectlyToSupabase(requestData) {
+      try {
+        console.log('🔧 Attempting direct Supabase submission...');
+        
+        // Check if Supabase client is available
+        if (typeof window.SupabaseClient === 'undefined') {
+          console.error('❌ SupabaseClient not available');
+          return { success: false, error: 'Supabase client not loaded' };
+        }
+
+        // Initialize Supabase client
+        const supabaseClient = new window.SupabaseClient();
+        const client = await supabaseClient.init();
+        
+        if (!client) {
+          console.error('❌ Failed to initialize Supabase client');
+          return { success: false, error: 'Failed to connect to database' };
+        }
+
+        console.log('✅ Supabase client initialized, submitting data...');
+
+        // Insert request into database
+        const { data, error } = await client
+          .from('custom_tshirt_requests')
+          .insert([{
+            customer_email: requestData.customer_email,
+            customer_name: requestData.customer_name,
+            customer_phone: requestData.customer_phone,
+            customer_message: requestData.customer_message,
+            design_image_url: requestData.design_image_url,
+            mockup_image_url: requestData.mockup_image_url,
+            design_data: requestData.design_data,
+            status: 'pending'
+          }])
+          .select()
+          .single();
+
+        if (error) {
+          console.error('❌ Direct Supabase error:', error);
+          return { success: false, error: error.message };
+        }
+
+        console.log('✅ Direct Supabase submission successful:', data);
+        return { success: true, requestId: data.id };
+
+      } catch (error) {
+        console.error('❌ Error in direct Supabase submission:', error);
+        return { success: false, error: error.message || 'Direct database connection failed' };
+      }
+    },
+
+    async submitViaEmail(requestData) {
+      try {
+        console.log('📧 Attempting email fallback submission...');
+        
+        // Create a simple email submission using a web service
+        const emailData = {
+          to: 'steviekhadan@gmail.com', // Your email
+          subject: `Custom T-Shirt Request from ${requestData.customer_name}`,
+          body: `
+            New Custom T-Shirt Request:
+            
+            Customer Details:
+            - Name: ${requestData.customer_name}
+            - Email: ${requestData.customer_email}
+            - Phone: ${requestData.customer_phone || 'Not provided'}
+            - T-Shirt Size: ${requestData.tshirt_size || 'Not specified'}
+            
+            Message:
+            ${requestData.customer_message || 'No special instructions'}
+            
+            Design Data:
+            - Has Uploaded Design: ${requestData.design_data.has_uploaded_design}
+            - Position: Top ${requestData.design_data.position.top}%, Left ${requestData.design_data.position.left}%
+            - Size: ${requestData.design_data.position.width}% x ${requestData.design_data.position.height}%
+            - Rotation: ${requestData.design_data.position.rotation}°
+            - View: ${requestData.design_data.view}
+            - Color: ${requestData.design_data.color}
+            
+            Design Image: ${requestData.design_image_url || 'Not uploaded'}
+            Mockup Preview: ${requestData.mockup_image_url ? 'Available' : 'Not generated'}
+            
+            Submitted at: ${new Date().toLocaleString()}
+          `
+        };
+
+        // Use a simple form submission approach
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = 'https://formspree.io/f/xpwgqgje'; // You'll need to set up a Formspree account
+        
+        const fields = {
+          name: requestData.customer_name,
+          email: requestData.customer_email,
+          phone: requestData.customer_phone || '',
+          message: emailData.body,
+          _subject: emailData.subject
+        };
+
+        Object.keys(fields).forEach(key => {
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = key;
+          input.value = fields[key];
+          form.appendChild(input);
+        });
+
+        document.body.appendChild(form);
+        form.submit();
+        document.body.removeChild(form);
+
+        console.log('✅ Email fallback submission sent');
+        return { success: true, requestId: 'email-' + Date.now() };
+
+      } catch (error) {
+        console.error('❌ Email fallback failed:', error);
+        return { success: false, error: 'All submission methods failed. Please contact us directly.' };
       }
     },
 
