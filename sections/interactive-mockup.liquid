@@ -139,19 +139,84 @@ Enhanced Interactive Product Mockup
         <div class="nt-mockup__group">
           <span class="nt-mockup__label" style="font-weight: 600; font-size: 14px; color: #374151; margin-right: 12px;">View</span>
           <div class="nt-mockup__buttons" role="tablist" aria-label="Mockup view" style="display: flex; gap: 8px;">
-            <button class="nt-btn nt-btn--view is-active" data-view="front" aria-selected="true" style="padding: 8px 16px; border: 2px solid #3b82f6; background: #3b82f6; color: white; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+            <button class="nt-btn nt-btn--view is-active enhanced-view-btn" data-view="front" aria-selected="true" style="
+              padding: 12px 20px; 
+              border: 2px solid transparent; 
+              background: linear-gradient(135deg, #27e1c1, #20b2aa); 
+              color: white; 
+              border-radius: 16px; 
+              font-size: 14px; 
+              font-weight: 600; 
+              cursor: pointer; 
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+              box-shadow: 0 4px 16px rgba(39, 225, 193, 0.3);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+            ">
               👕 Front
             </button>
-            <button class="nt-btn nt-btn--view" data-view="back" aria-selected="false" style="padding: 8px 16px; border: 2px solid #6b7280; background: #374151; color: #9ca3af; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+            <button class="nt-btn nt-btn--view enhanced-view-btn" data-view="back" aria-selected="false" style="
+              padding: 12px 20px; 
+              border: 2px solid transparent; 
+              background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); 
+              color: #374151; 
+              border-radius: 16px; 
+              font-size: 14px; 
+              font-weight: 600; 
+              cursor: pointer; 
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+              box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+            ">
               👕 Back
             </button>
-            <button class="nt-btn nt-btn--view" data-view="hanging" aria-selected="false" style="padding: 8px 16px; border: 2px solid #6b7280; background: #374151; color: #9ca3af; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+            <button class="nt-btn nt-btn--view enhanced-view-btn" data-view="hanging" aria-selected="false" style="
+              padding: 12px 20px; 
+              border: 2px solid transparent; 
+              background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); 
+              color: #374151; 
+              border-radius: 16px; 
+              font-size: 14px; 
+              font-weight: 600; 
+              cursor: pointer; 
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+              box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+            ">
               🏷️ Hanging
             </button>
-            <button class="nt-btn nt-btn--view" data-view="person1" aria-selected="false" style="padding: 8px 16px; border: 2px solid #6b7280; background: #374151; color: #9ca3af; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+            <button class="nt-btn nt-btn--view enhanced-view-btn" data-view="person1" aria-selected="false" style="
+              padding: 12px 20px; 
+              border: 2px solid transparent; 
+              background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); 
+              color: #374151; 
+              border-radius: 16px; 
+              font-size: 14px; 
+              font-weight: 600; 
+              cursor: pointer; 
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+              box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+            ">
               👤 Model 1
             </button>
-            <button class="nt-btn nt-btn--view" data-view="person2" aria-selected="false" style="padding: 8px 16px; border: 2px solid #6b7280; background: #374151; color: #9ca3af; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+            <button class="nt-btn nt-btn--view enhanced-view-btn" data-view="person2" aria-selected="false" style="
+              padding: 12px 20px; 
+              border: 2px solid transparent; 
+              background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); 
+              color: #374151; 
+              border-radius: 16px; 
+              font-size: 14px; 
+              font-weight: 600; 
+              cursor: pointer; 
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+              box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+            ">
               👤 Model 2
             </button>
           </div>
@@ -161,35 +226,139 @@ Enhanced Interactive Product Mockup
         <div class="nt-mockup__group">
           <span class="nt-mockup__label" style="font-weight: 600; font-size: 14px; color: #374151; margin-right: 12px;">Color</span>
           <div class="nt-mockup__buttons" role="tablist" aria-label="Shirt color" style="display: flex; gap: 8px;">
-            <button class="nt-btn nt-btn--color is-active" data-color="white" aria-selected="true" style="padding: 8px 16px; border: 2px solid #10b981; background: #10b981; color: white; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+            <button class="nt-btn nt-btn--color is-active enhanced-color-btn" data-color="white" aria-selected="true" style="
+              padding: 12px 20px; 
+              border: 2px solid transparent; 
+              background: linear-gradient(135deg, #27e1c1, #20b2aa); 
+              color: white; 
+              border-radius: 16px; 
+              font-size: 14px; 
+              font-weight: 600; 
+              cursor: pointer; 
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+              box-shadow: 0 4px 16px rgba(39, 225, 193, 0.3);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+            ">
               ⚪ White
             </button>
-            <button class="nt-btn nt-btn--color" data-color="black" aria-selected="false" style="padding: 8px 16px; border: 2px solid #6b7280; background: #374151; color: #9ca3af; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+            <button class="nt-btn nt-btn--color enhanced-color-btn" data-color="black" aria-selected="false" style="
+              padding: 12px 20px; 
+              border: 2px solid transparent; 
+              background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); 
+              color: #374151; 
+              border-radius: 16px; 
+              font-size: 14px; 
+              font-weight: 600; 
+              cursor: pointer; 
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+              box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+            ">
               ⚫ Black
             </button>
-            <button class="nt-btn nt-btn--color" data-color="pink" aria-selected="false" style="padding: 8px 16px; border: 2px solid #6b7280; background: #374151; color: #9ca3af; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+            <button class="nt-btn nt-btn--color enhanced-color-btn" data-color="pink" aria-selected="false" style="
+              padding: 12px 20px; 
+              border: 2px solid transparent; 
+              background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); 
+              color: #374151; 
+              border-radius: 16px; 
+              font-size: 14px; 
+              font-weight: 600; 
+              cursor: pointer; 
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+              box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+            ">
               🩷 Pink
             </button>
-            <button class="nt-btn nt-btn--color" data-color="blue" aria-selected="false" style="padding: 8px 16px; border: 2px solid #6b7280; background: #374151; color: #9ca3af; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+            <button class="nt-btn nt-btn--color enhanced-color-btn" data-color="blue" aria-selected="false" style="
+              padding: 12px 20px; 
+              border: 2px solid transparent; 
+              background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); 
+              color: #374151; 
+              border-radius: 16px; 
+              font-size: 14px; 
+              font-weight: 600; 
+              cursor: pointer; 
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+              box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+            ">
               🔵 Blue
             </button>
           </div>
         </div>
 
         <!-- Enhanced 3D Controls -->
-        <div class="nt-mockup__group" style="background: linear-gradient(135deg, #f1f5f9, #e2e8f0); padding: 16px; border-radius: 12px; border: 1px solid #cbd5e1;">
+        <div class="nt-mockup__group" style="background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); padding: 16px; border-radius: 16px; border: 2px solid rgba(255,255,255,0.2); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);">
           <span class="nt-mockup__label" style="font-weight: 600; font-size: 14px; color: #334155; margin-right: 12px;">🎯 3D Controls</span>
           <div class="nt-mockup__buttons" style="display: flex; gap: 8px; flex-wrap: wrap;">
-            <button class="nt-btn nt-btn--3d" id="nt-3d-rotate-{{ section.id }}" style="padding: 8px 16px; border: 2px solid #6b7280; background: #374151; color: #9ca3af; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+            <button class="nt-btn nt-btn--3d enhanced-3d-btn" id="nt-3d-rotate-{{ section.id }}" style="
+              padding: 12px 20px; 
+              border: 2px solid transparent; 
+              background: linear-gradient(135deg, #3b82f6, #1d4ed8); 
+              color: white; 
+              border-radius: 16px; 
+              font-size: 14px; 
+              font-weight: 600; 
+              cursor: pointer; 
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+              box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+            ">
               🔄 3D Rotate
             </button>
-            <button class="nt-btn nt-btn--zoom" id="nt-zoom-{{ section.id }}" style="padding: 8px 16px; border: 2px solid #6b7280; background: #374151; color: #9ca3af; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+            <button class="nt-btn nt-btn--zoom enhanced-3d-btn" id="nt-zoom-{{ section.id }}" style="
+              padding: 12px 20px; 
+              border: 2px solid transparent; 
+              background: linear-gradient(135deg, #8b5cf6, #7c3aed); 
+              color: white; 
+              border-radius: 16px; 
+              font-size: 14px; 
+              font-weight: 600; 
+              cursor: pointer; 
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+              box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+            ">
               🔍 Zoom
             </button>
-            <button class="nt-btn nt-btn--validate" id="nt-validate-{{ section.id }}" style="padding: 8px 16px; border: 2px solid #6b7280; background: #374151; color: #9ca3af; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+            <button class="nt-btn nt-btn--validate enhanced-3d-btn" id="nt-validate-{{ section.id }}" style="
+              padding: 12px 20px; 
+              border: 2px solid transparent; 
+              background: linear-gradient(135deg, #10b981, #059669); 
+              color: white; 
+              border-radius: 16px; 
+              font-size: 14px; 
+              font-weight: 600; 
+              cursor: pointer; 
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+              box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+            ">
               ✅ Validate
             </button>
-            <button class="nt-btn nt-btn--reset" id="nt-reset-{{ section.id }}" style="padding: 8px 16px; border: 2px solid #6b7280; background: #374151; color: #9ca3af; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+            <button class="nt-btn nt-btn--reset enhanced-3d-btn" id="nt-reset-{{ section.id }}" style="
+              padding: 12px 20px; 
+              border: 2px solid transparent; 
+              background: linear-gradient(135deg, #f59e0b, #d97706); 
+              color: white; 
+              border-radius: 16px; 
+              font-size: 14px; 
+              font-weight: 600; 
+              cursor: pointer; 
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+              box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+            ">
               🔄 Reset
             </button>
           </div>
@@ -618,6 +787,48 @@ Enhanced Interactive Product Mockup
 
 
 <style>
+/* ===== ENHANCED DESIGN CUSTOMIZATION CONTROLS ===== */
+.enhanced-view-btn:hover, .enhanced-color-btn:hover, .enhanced-3d-btn:hover {
+  transform: translateY(-2px) scale(1.02) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2) !important;
+}
+
+.enhanced-view-btn:hover {
+  background: linear-gradient(135deg, rgba(39,225,193,0.15), rgba(39,225,193,0.1)) !important;
+  border-color: #27e1c1 !important;
+  color: #27e1c1 !important;
+}
+
+.enhanced-color-btn:hover {
+  background: linear-gradient(135deg, rgba(39,225,193,0.15), rgba(39,225,193,0.1)) !important;
+  border-color: #27e1c1 !important;
+  color: #27e1c1 !important;
+}
+
+.enhanced-3d-btn:hover {
+  transform: translateY(-2px) scale(1.02) !important;
+}
+
+.nt-btn--3d:hover {
+  background: linear-gradient(135deg, #60a5fa, #3b82f6) !important;
+  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4) !important;
+}
+
+.nt-btn--zoom:hover {
+  background: linear-gradient(135deg, #a78bfa, #8b5cf6) !important;
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4) !important;
+}
+
+.nt-btn--validate:hover {
+  background: linear-gradient(135deg, #34d399, #10b981) !important;
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4) !important;
+}
+
+.nt-btn--reset:hover {
+  background: linear-gradient(135deg, #f6ad55, #f59e0b) !important;
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.4) !important;
+}
+
 /* Theme Responsive Title */
 .theme-responsive-title {
   transition: all 0.3s ease;
