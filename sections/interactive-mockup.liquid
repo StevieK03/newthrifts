@@ -605,7 +605,632 @@ Enhanced Interactive Product Mockup
 }
 </style>
 
-<script src="{{ 'interactive-mockup.js' | asset_url }}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const mockup = {
+    // Mockup images mapping
+    mockupImages: {
+      front: {
+        white: "{{ 'WFront_t-shirt.png' | asset_url }}",
+        black: "{{ 'WFront_t-shirt.png' | asset_url }}",
+        pink: "{{ 'WFront_t-shirt.png' | asset_url }}",
+        blue: "{{ 'WFront_t-shirt.png' | asset_url }}"
+      },
+      back: {
+        white: "{{ 'Wback_t-shirt.png' | asset_url }}",
+        black: "{{ 'Wback_t-shirt.png' | asset_url }}",
+        pink: "{{ 'Wback_t-shirt.png' | asset_url }}",
+        blue: "{{ 'Wback_t-shirt.png' | asset_url }}"
+      },
+      hanging: {
+        white: "{{ 'W3-D_t-shirt.png' | asset_url }}",
+        black: "{{ 'W3-D_t-shirt.png' | asset_url }}",
+        pink: "{{ 'W3-D_t-shirt.png' | asset_url }}",
+        blue: "{{ 'W3-D_t-shirt.png' | asset_url }}"
+      },
+      person1: {
+        white: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        black: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        pink: "{{ 'Models/Women/Girl-Model.png' | asset_url }}",
+        blue: "{{ 'Models/Women/Girl-Model.png' | asset_url }}"
+      },
+      person2: {
+        white: "{{ 'Models/Women/Women-side.png' | asset_url }}",
+        black: "{{ 'Models/Women/Women-side.png' | asset_url }}",
+        pink: "{{ 'Models/Women/Women-side.png' | asset_url }}",
+        blue: "{{ 'Models/Women/Women-side.png' | asset_url }}"
+      }
+    },
+    
+    // Current base mockup image
+    baseMockup: "{{ 'WFront_t-shirt.png' | asset_url }}",
+
+    // Current design state
+    designState: {
+      text: 'Your Design Here',
+      fontSize: 32,
+      fontFamily: "'Bebas Neue', sans-serif",
+      textColor: '#000000',
+      shirtColor: 'white',
+      effect: 'none'
+    },
+
+    // Current view state
+    state: { view: "front", color: "white" },
+
+    // Enhanced placement state
+    placementState: {
+      topPct: 45,
+      leftPct: 25,
+      widthPct: 60,
+      rotateDeg: 0,
+      dragging: false,
+      resizing: false,
+      resizeDirection: 'se',
+      lastX: 0,
+      lastY: 0,
+      hasUploadedDesign: false,
+      designSelected: false
+    },
+
+    init() {
+      console.log('🎯 Initializing Enhanced Interactive Mockup...');
+      this.bindEvents();
+      this.loadFromCustomizer();
+      this.updateBase();
+      this.updateDesign();
+      this.updatePlacementDisplay();
+      
+      setTimeout(() => {
+        this.forceCenterPositioning();
+      }, 100);
+      
+      this.showPlacementControls();
+      this.deselectDesign();
+      
+      console.log('✅ Mockup initialized');
+    },
+
+    forceCenterPositioning() {
+      this.placementState.topPct = 45;
+      this.placementState.leftPct = 25;
+      this.placementState.widthPct = 60;
+      this.placementState.rotateDeg = 0;
+      
+      this.updatePlacementDisplay();
+      this.updateDesignPosition();
+      
+      const topSlider = document.getElementById(`nt-top-{{ section.id }}`);
+      const leftSlider = document.getElementById(`nt-left-{{ section.id }}`);
+      const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
+      const rotateSlider = document.getElementById(`nt-rotate-{{ section.id }}`);
+      
+      if (topSlider) topSlider.value = 45;
+      if (leftSlider) leftSlider.value = 25;
+      if (widthSlider) widthSlider.value = 60;
+      if (rotateSlider) rotateSlider.value = 0;
+    },
+
+    bindEvents() {
+      const rootId = "nt-mockup-{{ section.id }}";
+      
+      // View buttons
+      const viewBtns = Array.from(document.querySelectorAll(`#${rootId} .nt-btn--view`));
+      viewBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          this.state.view = btn.dataset.view;
+          this.setActive(viewBtns, this.state.view);
+          this.updateBase();
+        });
+      });
+
+      // Color buttons
+      const colorBtns = Array.from(document.querySelectorAll(`#${rootId} .nt-btn--color`));
+      colorBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          this.state.color = btn.dataset.color;
+          this.setActive(colorBtns, this.state.color);
+          this.updateBase();
+        });
+      });
+
+      // Upload button
+      const uploadBtn = document.getElementById(`nt-upload-{{ section.id }}`);
+      const fileInput = document.getElementById(`nt-file-input-{{ section.id }}`);
+      
+      if (uploadBtn && fileInput) {
+        uploadBtn.addEventListener("click", (e) => {
+          if (e.target === uploadBtn) {
+            console.log('📁 Upload button clicked');
+            fileInput.click();
+          }
+        });
+
+        fileInput.addEventListener("change", (e) => {
+          console.log('📁 File input changed', e.target.files);
+          const file = e.target.files[0];
+          if (file) {
+            console.log('📁 File selected:', file.name, file.type, file.size);
+            this.handleFileUpload(file);
+          }
+        });
+      }
+
+      // Remove button
+      const removeBtn = document.getElementById(`nt-remove-{{ section.id }}`);
+      if (removeBtn) {
+        removeBtn.addEventListener("click", () => {
+          this.removeDesign();
+        });
+      }
+
+      // Placement controls
+      this.bindPlacementControls();
+      this.bindDragResize();
+      this.bindPresetButtons();
+
+      {% if section.settings.allow_download %}
+      const downloadBtn = document.getElementById(`nt-download-{{ section.id }}`);
+      if (downloadBtn) {
+        downloadBtn.addEventListener("click", () => {
+          this.downloadComposite();
+        });
+      }
+      {% endif %}
+
+      this.setupCustomizerListener();
+    },
+
+    setActive(buttons, active) {
+      buttons.forEach(b => {
+        const on = (b.dataset.view || b.dataset.color) === active;
+        if (on) {
+          b.classList.add("is-active");
+          b.style.borderColor = "#27e1c1";
+          b.style.background = "#27e1c1";
+          b.style.color = "white";
+        } else {
+          b.classList.remove("is-active");
+          b.style.borderColor = "#e2e8f0";
+          b.style.background = "white";
+          b.style.color = "#64748b";
+        }
+        b.setAttribute("aria-selected", on ? "true" : "false");
+      });
+    },
+
+    updateBase() {
+      const baseEl = document.getElementById("nt-base-{{ section.id }}");
+      if (baseEl) {
+        const mockupImage = this.mockupImages[this.state.view]?.[this.state.color] || 
+                           this.mockupImages.front?.white ||
+                           this.baseMockup;
+        
+        console.log('🔄 Loading mockup:', mockupImage);
+        baseEl.src = '';
+        setTimeout(() => {
+          baseEl.src = mockupImage;
+        }, 10);
+      }
+    },
+
+    updateDesign() {
+      const designText = document.getElementById("nt-design-text-{{ section.id }}");
+      if (designText) {
+        designText.textContent = this.designState.text;
+        designText.style.fontFamily = this.designState.fontFamily;
+        designText.style.fontSize = this.designState.fontSize + 'px';
+        designText.style.color = this.designState.textColor;
+      }
+    },
+
+    loadFromCustomizer() {
+      if (window.customizer && window.customizer.state) {
+        this.designState = { ...this.designState, ...window.customizer.state };
+        this.updateDesign();
+      }
+    },
+
+    setupCustomizerListener() {
+      const originalUpdatePreview = window.customizer?.updatePreview;
+      if (originalUpdatePreview) {
+        window.customizer.updatePreview = () => {
+          originalUpdatePreview.call(window.customizer);
+          setTimeout(() => {
+            this.loadFromCustomizer();
+            this.updateDesign();
+          }, 100);
+        };
+      }
+    },
+
+    handleFileUpload(file) {
+      console.log('📤 Processing file:', file.name, file.type, file.size);
+      
+      const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/svg+xml'];
+      if (!allowedTypes.includes(file.type)) {
+        this.showMessage('❌ Invalid file type. Please upload PNG, JPG, or SVG files.', 'error');
+        return;
+      }
+      
+      const maxSize = 10 * 1024 * 1024;
+      if (file.size > maxSize) {
+        this.showMessage('❌ File too large. Please upload files smaller than 10MB.', 'error');
+        return;
+      }
+      
+      this.showMessage('📁 Processing your design...', 'info');
+      
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        console.log('✅ File loaded, applying to mockup');
+        this.applyUploadedDesign(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    },
+
+    applyUploadedDesign(imageData) {
+      console.log('🎨 Applying design to mockup');
+      
+      const overlayDiv = document.getElementById(`nt-overlay-{{ section.id }}`);
+      const designText = document.getElementById(`nt-design-text-{{ section.id }}`);
+      
+      if (overlayDiv && designText) {
+        designText.style.display = 'none';
+        
+        // Remove any existing uploaded image
+        const existingImg = overlayDiv.querySelector('img');
+        if (existingImg) {
+          existingImg.remove();
+        }
+        
+        const uploadedImg = document.createElement('img');
+        uploadedImg.src = imageData;
+        uploadedImg.style.cssText = `
+          width: 100% !important;
+          height: 100% !important;
+          object-fit: contain !important;
+          display: block;
+          pointer-events: none;
+        `;
+        
+        overlayDiv.appendChild(uploadedImg);
+        
+        this.placementState.hasUploadedDesign = true;
+        
+        const removeBtn = document.getElementById(`nt-remove-{{ section.id }}`);
+        if (removeBtn) {
+          removeBtn.style.display = 'inline-block';
+        }
+        
+        this.showPlacementControls();
+        this.selectDesign();
+        
+        console.log('✅ Design applied successfully');
+        this.showMessage('✨ Design uploaded successfully!', 'success');
+      } else {
+        console.error('❌ Could not find overlay or design text elements');
+      }
+    },
+
+    removeDesign() {
+      const overlayDiv = document.getElementById(`nt-overlay-{{ section.id }}`);
+      const designText = document.getElementById(`nt-design-text-{{ section.id }}`);
+      
+      if (overlayDiv && designText) {
+        const uploadedImg = overlayDiv.querySelector('img');
+        if (uploadedImg) {
+          uploadedImg.remove();
+        }
+        
+        designText.style.display = 'block';
+        designText.textContent = 'Your Design Here';
+        
+        this.placementState.hasUploadedDesign = false;
+        this.deselectDesign();
+        
+        const removeBtn = document.getElementById(`nt-remove-{{ section.id }}`);
+        if (removeBtn) {
+          removeBtn.style.display = 'none';
+        }
+        
+        this.placementState.topPct = 45;
+        this.placementState.leftPct = 25;
+        this.placementState.widthPct = 60;
+        this.placementState.rotateDeg = 0;
+        
+        this.updatePlacementDisplay();
+        this.updateDesignPosition();
+        
+        this.showMessage('✅ Design removed', 'success');
+      }
+    },
+
+    showPlacementControls() {
+      const placementControls = document.getElementById(`nt-placement-controls-{{ section.id }}`);
+      if (placementControls) {
+        placementControls.style.display = 'block';
+        setTimeout(() => {
+          placementControls.style.opacity = '1';
+          placementControls.style.transform = 'translateY(0)';
+        }, 100);
+      }
+    },
+
+    bindPlacementControls() {
+      const topSlider = document.getElementById(`nt-top-{{ section.id }}`);
+      const leftSlider = document.getElementById(`nt-left-{{ section.id }}`);
+      const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
+      const rotateSlider = document.getElementById(`nt-rotate-{{ section.id }}`);
+      const resetBtn = document.getElementById(`nt-reset-placement-{{ section.id }}`);
+
+      if (topSlider) {
+        topSlider.addEventListener('input', () => {
+          this.placementState.topPct = parseFloat(topSlider.value);
+          this.updatePlacementDisplay();
+          this.updateDesignPosition();
+        });
+      }
+
+      if (leftSlider) {
+        leftSlider.addEventListener('input', () => {
+          this.placementState.leftPct = parseFloat(leftSlider.value);
+          this.updatePlacementDisplay();
+          this.updateDesignPosition();
+        });
+      }
+
+      if (widthSlider) {
+        widthSlider.addEventListener('input', () => {
+          this.placementState.widthPct = parseFloat(widthSlider.value);
+          this.updatePlacementDisplay();
+          this.updateDesignPosition();
+        });
+      }
+
+      if (rotateSlider) {
+        rotateSlider.addEventListener('input', () => {
+          this.placementState.rotateDeg = parseFloat(rotateSlider.value);
+          this.updatePlacementDisplay();
+          this.updateDesignPosition();
+        });
+      }
+
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          this.resetPlacement();
+        });
+      }
+    },
+
+    updatePlacementDisplay() {
+      const topVal = document.getElementById(`nt-top-val-{{ section.id }}`);
+      const leftVal = document.getElementById(`nt-left-val-{{ section.id }}`);
+      const widthVal = document.getElementById(`nt-width-val-{{ section.id }}`);
+      const rotateVal = document.getElementById(`nt-rotate-val-{{ section.id }}`);
+
+      if (topVal) topVal.textContent = this.placementState.topPct.toFixed(1) + '%';
+      if (leftVal) leftVal.textContent = this.placementState.leftPct.toFixed(1) + '%';
+      if (widthVal) widthVal.textContent = this.placementState.widthPct.toFixed(0) + '%';
+      if (rotateVal) rotateVal.textContent = this.placementState.rotateDeg.toFixed(1) + '°';
+    },
+
+    updateDesignPosition() {
+      const overlayDiv = document.getElementById(`nt-overlay-{{ section.id }}`);
+      
+      if (overlayDiv) {
+        overlayDiv.style.top = this.placementState.topPct + '%';
+        overlayDiv.style.left = this.placementState.leftPct + '%';
+        overlayDiv.style.width = this.placementState.widthPct + '%';
+        overlayDiv.style.height = this.placementState.widthPct + '%';
+        overlayDiv.style.transform = `translateX(-50%) rotate(${this.placementState.rotateDeg}deg)`;
+      }
+    },
+
+    resetPlacement() {
+      this.placementState.topPct = 45;
+      this.placementState.leftPct = 25;
+      this.placementState.widthPct = 60;
+      this.placementState.rotateDeg = 0;
+
+      const topSlider = document.getElementById(`nt-top-{{ section.id }}`);
+      const leftSlider = document.getElementById(`nt-left-{{ section.id }}`);
+      const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
+      const rotateSlider = document.getElementById(`nt-rotate-{{ section.id }}`);
+
+      if (topSlider) topSlider.value = this.placementState.topPct;
+      if (leftSlider) leftSlider.value = this.placementState.leftPct;
+      if (widthSlider) widthSlider.value = this.placementState.widthPct;
+      if (rotateSlider) rotateSlider.value = this.placementState.rotateDeg;
+
+      this.updatePlacementDisplay();
+      this.updateDesignPosition();
+    },
+
+    bindDragResize() {
+      const canvas = document.getElementById(`nt-mockup-canvas-{{ section.id }}`);
+      const overlay = document.getElementById(`nt-overlay-{{ section.id }}`);
+      
+      if (!canvas || !overlay) return;
+
+      overlay.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.selectDesign();
+      });
+
+      canvas.addEventListener('click', (e) => {
+        if (e.target === canvas || e.target.classList.contains('nt-mockup__base')) {
+          this.deselectDesign();
+        }
+      });
+    },
+
+    bindPresetButtons() {
+      const presetButtons = document.querySelectorAll(`#nt-mockup-{{ section.id }} .size-preset`);
+      presetButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const size = parseInt(button.dataset.size);
+          this.setPresetSize(size);
+          
+          presetButtons.forEach(btn => {
+            btn.style.background = '#f3f4f6';
+            btn.style.borderColor = '#d1d5db';
+            btn.style.color = '#374151';
+          });
+          button.style.background = '#27e1c1';
+          button.style.borderColor = '#27e1c1';
+          button.style.color = 'white';
+        });
+      });
+
+      const resetBtn = document.getElementById(`nt-reset-size-{{ section.id }}`);
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          this.resetToDefaultSize();
+          presetButtons.forEach(btn => {
+            btn.style.background = '#f3f4f6';
+            btn.style.borderColor = '#d1d5db';
+            btn.style.color = '#374151';
+          });
+        });
+      }
+    },
+
+    setPresetSize(size) {
+      this.placementState.widthPct = size;
+      this.updatePlacementDisplay();
+      this.updateDesignPosition();
+      
+      const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
+      if (widthSlider) widthSlider.value = size;
+      
+      this.showMessage(`📏 Set to ${size}%`, 'success');
+    },
+
+    resetToDefaultSize() {
+      this.placementState.widthPct = 60;
+      this.updatePlacementDisplay();
+      this.updateDesignPosition();
+      
+      const widthSlider = document.getElementById(`nt-width-{{ section.id }}`);
+      if (widthSlider) widthSlider.value = 60;
+      
+      this.showMessage('📏 Reset to default size (60%)', 'success');
+    },
+
+    selectDesign() {
+      const overlay = document.getElementById(`nt-overlay-{{ section.id }}`);
+      if (overlay) {
+        overlay.classList.add('design-selected');
+        overlay.style.borderColor = '#27e1c1';
+        overlay.style.boxShadow = '0 0 0 3px rgba(39, 225, 193, 0.3)';
+      }
+      this.placementState.designSelected = true;
+    },
+
+    deselectDesign() {
+      const overlay = document.getElementById(`nt-overlay-{{ section.id }}`);
+      if (overlay) {
+        overlay.classList.remove('design-selected');
+        overlay.style.borderColor = 'rgba(39, 225, 193, 0.3)';
+        overlay.style.boxShadow = 'none';
+      }
+      this.placementState.designSelected = false;
+    },
+
+    showMessage(message, type = 'info') {
+      const messageEl = document.createElement('div');
+      messageEl.textContent = message;
+      Object.assign(messageEl.style, {
+        position: 'fixed',
+        top: '20px',
+        right: '20px',
+        background: type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#6b7280',
+        color: 'white',
+        padding: '12px 20px',
+        borderRadius: '8px',
+        fontSize: '14px',
+        fontWeight: '500',
+        zIndex: '10000',
+        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.15)',
+        transform: 'translateX(100%)',
+        transition: 'transform 0.3s ease'
+      });
+      
+      document.body.appendChild(messageEl);
+      
+      setTimeout(() => messageEl.style.transform = 'translateX(0)', 100);
+      setTimeout(() => {
+        messageEl.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+          if (document.body.contains(messageEl)) {
+            document.body.removeChild(messageEl);
+          }
+        }, 300);
+      }, 3000);
+    },
+
+    {% if section.settings.allow_download %}
+    downloadComposite() {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      
+      canvas.width = 2000;
+      canvas.height = 2000;
+
+      const baseImg = new Image();
+      baseImg.crossOrigin = "anonymous";
+      baseImg.src = document.getElementById("nt-base-{{ section.id }}").src;
+
+      baseImg.onload = () => {
+        ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
+
+        const overlayImg = document.querySelector(`#nt-overlay-{{ section.id }} img`);
+        
+        if (overlayImg && overlayImg.src) {
+          const designImg = new Image();
+          designImg.crossOrigin = "anonymous";
+          designImg.src = overlayImg.src;
+          
+          designImg.onload = () => {
+            const topPct = this.placementState.topPct / 100;
+            const leftPct = this.placementState.leftPct / 100;
+            const widthPct = this.placementState.widthPct / 100;
+            const rotateDeg = this.placementState.rotateDeg || 0;
+
+            const designX = canvas.width * leftPct;
+            const designY = canvas.height * topPct;
+            const designWidth = canvas.width * widthPct;
+            const designHeight = (designImg.height / designImg.width) * designWidth;
+
+            ctx.save();
+            ctx.translate(designX + designWidth / 2, designY + designHeight / 2);
+            ctx.rotate(rotateDeg * Math.PI / 180);
+            ctx.drawImage(designImg, -designWidth / 2, -designHeight / 2, designWidth, designHeight);
+            ctx.restore();
+
+            const a = document.createElement('a');
+            a.download = `custom_mockup_${this.state.view}_${this.state.color}.png`;
+            a.href = canvas.toDataURL("image/png");
+            a.click();
+          };
+        } else {
+          const a = document.createElement('a');
+          a.download = `custom_mockup_${this.state.view}_${this.state.color}.png`;
+          a.href = canvas.toDataURL("image/png");
+          a.click();
+        }
+      };
+    }
+    {% endif %}
+  };
+
+  mockup.init();
+  window.mockup = mockup;
+
+  console.log('🚀 Enhanced Interactive Mockup initialized! 🎨');
+});
+</script>
 
 {% schema %}
 {
