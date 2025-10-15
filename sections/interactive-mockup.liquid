@@ -42,6 +42,138 @@ Enhanced Interactive Product Mockup
       </div>
     </div>
 
+    <!-- Enhanced Preview Stage -->
+    <div class="nt-mockup__stage" style="width: 100%; display: grid; place-items: center; margin-top: 60px !important; margin-bottom: 100px !important; padding: 0 20px;">
+        <div class="nt-mockup__canvas" 
+             id="nt-mockup-canvas-{{ section.id }}"
+           style="position: relative; width: min(900px, 100%); max-width: 90vw; aspect-ratio: 1 / 1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; overflow: hidden; box-shadow: 0 25px 80px rgba(102, 126, 234, 0.3), 0 10px 30px rgba(0,0,0,0.2); cursor: grab; --overlay-top: 30%; --overlay-left: 50%; --overlay-width: 50%; --overlay-height: 65%; --overlay-rotate: 0deg;">
+      
+  <!-- Base Mockup (swapped by JS) -->
+  <img
+    id="nt-base-{{ section.id }}"
+    class="nt-mockup__base"
+    src="{{ 'WFront_t-shirt.png' | asset_url }}"
+    alt="T-shirt mockup"
+    loading="eager"
+    decoding="async"
+    style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none;"
+    onerror="console.error('❌ Failed to load t-shirt image:', this.src);"
+    onload="console.log('✅ T-shirt image loaded:', this.src);"
+  >
+    
+    <!-- Debug: Test direct asset access -->
+    <div id="debug-assets-{{ section.id }}" style="position: absolute; top: -100px; left: -100px; width: 1px; height: 1px; overflow: hidden;">
+      <img src="{{ 'WFront_t-shirt.png' | asset_url }}" onload="console.log('✅ Direct asset test - WFront_t-shirt.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - WFront_t-shirt.png failed:', this.src);">
+      <img src="{{ 'Wback_t-shirt.png' | asset_url }}" onload="console.log('✅ Direct asset test - Wback_t-shirt.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - Wback_t-shirt.png failed:', this.src);">
+      <img src="{{ 'Models/Women/Girl-Model.png' | asset_url }}" onload="console.log('✅ Direct asset test - Girl-Model.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - Girl-Model.png failed:', this.src);">
+    </div>
+    
+    <!-- Dynamic Design Overlay - Aligned with print area -->
+    <div
+      id="nt-overlay-{{ section.id }}"
+      class="nt-mockup__overlay"
+      style="position: absolute; width: var(--overlay-width); height: var(--overlay-height); left: 50%; top: var(--overlay-top); transform: translateX(-50%) rotate(var(--overlay-rotate)); inset: auto; display: flex; align-items: center; justify-content: center; cursor: grab; transition: all 0.1s ease; border: 2px dashed rgba(39, 225, 193, 0.3); border-radius: 8px; background: rgba(39, 225, 193, 0.05);"
+    >
+      <span id="nt-design-text-{{ section.id }}" 
+            style="font-family: 'Bebas Neue', sans-serif; font-size: 32px; font-weight: bold; color: #000000; text-align: center; white-space: nowrap; user-select: none; text-shadow: 1px 1px 2px rgba(255,255,255,0.8); pointer-events: none;">
+        Your Design Here
+      </span>
+      
+      <!-- Drag Handle (only visible when dragging) -->
+      <div id="nt-drag-handle-{{ section.id }}" 
+           style="position: absolute; top: -8px; right: -8px; width: 16px; height: 16px; background: #27e1c1; border: 2px solid white; border-radius: 50%; cursor: grab; display: none; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
+      </div>
+      
+      <!-- Enhanced Resize Handles - All Directions (Hidden by default, shown when selected) -->
+      <!-- Top-Left -->
+      <div class="resize-handle" data-direction="nw" 
+           style="position: absolute; top: -15px; left: -15px; width: 30px; height: 30px; background: linear-gradient(135deg, #ff6b6b, #ee5a52); border: 4px solid white; border-radius: 50%; cursor: nw-resize; display: none; box-shadow: 0 6px 20px rgba(255,107,107,0.4), 0 2px 8px rgba(0,0,0,0.2); z-index: 10; touch-action: none; transition: all 0.2s ease;"
+           title="Resize from top-left">
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
+      </div>
+      
+      <!-- Top-Right -->
+      <div class="resize-handle" data-direction="ne" 
+           style="position: absolute; top: -15px; right: -15px; width: 30px; height: 30px; background: linear-gradient(135deg, #ff6b6b, #ee5a52); border: 4px solid white; border-radius: 50%; cursor: ne-resize; display: none; box-shadow: 0 6px 20px rgba(255,107,107,0.4), 0 2px 8px rgba(0,0,0,0.2); z-index: 10; touch-action: none; transition: all 0.2s ease;"
+           title="Resize from top-right">
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
+      </div>
+      
+      <!-- Bottom-Left -->
+      <div class="resize-handle" data-direction="sw" 
+           style="position: absolute; bottom: -15px; left: -15px; width: 30px; height: 30px; background: linear-gradient(135deg, #ff6b6b, #ee5a52); border: 4px solid white; border-radius: 50%; cursor: sw-resize; display: none; box-shadow: 0 6px 20px rgba(255,107,107,0.4), 0 2px 8px rgba(0,0,0,0.2); z-index: 10; touch-action: none; transition: all 0.2s ease;"
+           title="Resize from bottom-left">
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
+      </div>
+      
+      <!-- Bottom-Right -->
+      <div class="resize-handle" data-direction="se" 
+           style="position: absolute; bottom: -15px; right: -15px; width: 30px; height: 30px; background: linear-gradient(135deg, #ff6b6b, #ee5a52); border: 4px solid white; border-radius: 50%; cursor: se-resize; display: none; box-shadow: 0 6px 20px rgba(255,107,107,0.4), 0 2px 8px rgba(0,0,0,0.2); z-index: 10; touch-action: none; transition: all 0.2s ease;"
+           title="Resize from bottom-right">
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
+      </div>
+      
+      <!-- Top Edge -->
+      <div class="resize-handle" data-direction="n" 
+           style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 30px; height: 30px; background: linear-gradient(135deg, #20bf6b, #26a69a); border: 4px solid white; border-radius: 50%; cursor: n-resize; display: none; box-shadow: 0 6px 20px rgba(32,191,107,0.4), 0 2px 8px rgba(0,0,0,0.2); z-index: 10; touch-action: none; transition: all 0.2s ease;"
+           title="Resize from top">
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
+      </div>
+      
+      <!-- Bottom Edge -->
+      <div class="resize-handle" data-direction="s" 
+           style="position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%); width: 30px; height: 30px; background: linear-gradient(135deg, #20bf6b, #26a69a); border: 4px solid white; border-radius: 50%; cursor: s-resize; display: none; box-shadow: 0 6px 20px rgba(32,191,107,0.4), 0 2px 8px rgba(0,0,0,0.2); z-index: 10; touch-action: none; transition: all 0.2s ease;"
+           title="Resize from bottom">
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
+      </div>
+      
+      <!-- Left Edge -->
+      <div class="resize-handle" data-direction="w" 
+           style="position: absolute; left: -15px; top: 50%; transform: translateY(-50%); width: 30px; height: 30px; background: linear-gradient(135deg, #20bf6b, #26a69a); border: 4px solid white; border-radius: 50%; cursor: w-resize; display: none; box-shadow: 0 6px 20px rgba(32,191,107,0.4), 0 2px 8px rgba(0,0,0,0.2); z-index: 10; touch-action: none; transition: all 0.2s ease;"
+           title="Resize from left">
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
+      </div>
+      
+      <!-- Right Edge -->
+      <div class="resize-handle" data-direction="e" 
+           style="position: absolute; right: -15px; top: 50%; transform: translateY(-50%); width: 30px; height: 30px; background: linear-gradient(135deg, #20bf6b, #26a69a); border: 4px solid white; border-radius: 50%; cursor: e-resize; display: none; box-shadow: 0 6px 20px rgba(32,191,107,0.4), 0 2px 8px rgba(0,0,0,0.2); z-index: 10; touch-action: none; transition: all 0.2s ease;"
+           title="Resize from right">
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
+      </div>
+    </div>
+    
+    <!-- Crosshair Overlays (Hidden by default) -->
+    <div id="nt-crosshairs-{{ section.id }}" style="position: absolute; inset: 0; pointer-events: none; display: none;">
+      <!-- Horizontal crosshair -->
+      <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: rgba(39, 225, 193, 0.6); transform: translateY(-50%);"></div>
+      <!-- Vertical crosshair -->
+      <div style="position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: rgba(39, 225, 193, 0.6); transform: translateX(-50%);"></div>
+    </div>
+    
+    <!-- Print Area Indicator (Hidden by default) -->
+    <div id="nt-print-area-{{ section.id }}" style="position: absolute; inset: 0; pointer-events: none; display: none;">
+      <div style="position: absolute; top: var(--overlay-top); left: 50%; transform: translateX(-50%); width: var(--overlay-width); height: var(--overlay-height); border: 2px dashed rgba(39, 225, 193, 0.8); border-radius: 8px; background: rgba(39, 225, 193, 0.1);"></div>
+    </div>
+    
+    <!-- Status Messages -->
+    <div id="nt-centering-status-{{ section.id }}" style="position: absolute; top: 10px; left: 10px; background: rgba(0, 0, 0, 0.8); color: white; padding: 8px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; display: none; max-width: 200px;">
+      <div id="nt-status-text-{{ section.id }}"></div>
+    </div>
+  </div>
+</div>
+
+  <!-- Resize Handle (only visible when design is selected) -->
+  <div id="nt-resize-handle-{{ section.id }}" 
+       style="position: absolute; bottom: -8px; right: -8px; width: 20px; height: 20px; background: #8b5cf6; border: 2px solid white; border-radius: 50%; cursor: nw-resize; display: none; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; border-right: 2px solid white; border-bottom: 2px solid white; transform: translate(-50%, -50%) rotate(45deg);"></div>
+  </div>
+</div>
+
+<p class="nt-mockup__hint" style="color: #6b7280; font-size: 14px; margin-top: 16px; text-align: center;">
+  💡 Tip: Drag the design to move it, use scroll wheel to resize, or use the precise controls above
+</p>
+</div>
+
     <div class="nt-mockup__inner" style="display: grid; gap: 20px;">
       
       <!-- Enhanced Controls -->
@@ -423,182 +555,6 @@ Enhanced Interactive Product Mockup
         </div>
       </div>
 
-      <!-- Enhanced Preview Stage -->
-        <div class="nt-mockup__stage" style="width: 100%; display: grid; place-items: center; margin-top: 60px !important; margin-bottom: 100px !important; padding: 0 20px;">
-            <div class="nt-mockup__canvas" 
-                 id="nt-mockup-canvas-{{ section.id }}"
-               style="position: relative; width: min(900px, 100%); max-width: 90vw; aspect-ratio: 1 / 1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; overflow: hidden; box-shadow: 0 25px 80px rgba(102, 126, 234, 0.3), 0 10px 30px rgba(0,0,0,0.2); cursor: grab; --overlay-top: 30%; --overlay-left: 50%; --overlay-width: 50%; --overlay-height: 65%; --overlay-rotate: 0deg;">
-          
-      <!-- Base Mockup (swapped by JS) -->
-      <img
-        id="nt-base-{{ section.id }}"
-        class="nt-mockup__base"
-        src="{{ 'WFront_t-shirt.png' | asset_url }}"
-        alt="T-shirt mockup"
-        loading="eager"
-        decoding="async"
-        style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none;"
-        onerror="console.error('❌ Failed to load t-shirt image:', this.src);"
-        onload="console.log('✅ T-shirt image loaded:', this.src);"
-      >
-          
-          <!-- Debug: Test direct asset access -->
-          <div id="debug-assets-{{ section.id }}" style="position: absolute; top: -100px; left: -100px; width: 1px; height: 1px; overflow: hidden;">
-            <img src="{{ 'WFront_t-shirt.png' | asset_url }}" onload="console.log('✅ Direct asset test - WFront_t-shirt.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - WFront_t-shirt.png failed:', this.src);">
-            <img src="{{ 'Wback_t-shirt.png' | asset_url }}" onload="console.log('✅ Direct asset test - Wback_t-shirt.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - Wback_t-shirt.png failed:', this.src);">
-            <img src="{{ 'Models/Women/Girl-Model.png' | asset_url }}" onload="console.log('✅ Direct asset test - Girl-Model.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - Girl-Model.png failed:', this.src);">
-          </div>
-          
-          <!-- Dynamic Design Overlay - Aligned with print area -->
-          <div
-            id="nt-overlay-{{ section.id }}"
-            class="nt-mockup__overlay"
-            style="position: absolute; width: var(--overlay-width); height: var(--overlay-height); left: 50%; top: var(--overlay-top); transform: translateX(-50%) rotate(var(--overlay-rotate)); inset: auto; display: flex; align-items: center; justify-content: center; cursor: grab; transition: all 0.1s ease; border: 2px dashed rgba(39, 225, 193, 0.3); border-radius: 8px; background: rgba(39, 225, 193, 0.05);"
-          >
-            <span id="nt-design-text-{{ section.id }}" 
-                  style="font-family: 'Bebas Neue', sans-serif; font-size: 32px; font-weight: bold; color: #000000; text-align: center; white-space: nowrap; user-select: none; text-shadow: 1px 1px 2px rgba(255,255,255,0.8); pointer-events: none;">
-              Your Design Here
-            </span>
-            
-            <!-- Drag Handle (only visible when dragging) -->
-            <div id="nt-drag-handle-{{ section.id }}" 
-                 style="position: absolute; top: -8px; right: -8px; width: 16px; height: 16px; background: #27e1c1; border: 2px solid white; border-radius: 50%; cursor: grab; display: none; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
-            </div>
-            
-            <!-- Enhanced Resize Handles - All Directions (Hidden by default, shown when selected) -->
-            <!-- Top-Left -->
-            <div class="resize-handle" data-direction="nw" 
-                 style="position: absolute; top: -15px; left: -15px; width: 30px; height: 30px; background: linear-gradient(135deg, #ff6b6b, #ee5a52); border: 4px solid white; border-radius: 50%; cursor: nw-resize; display: none; box-shadow: 0 6px 20px rgba(255,107,107,0.4), 0 2px 8px rgba(0,0,0,0.2); z-index: 10; touch-action: none; transition: all 0.2s ease;"
-                 title="Resize from top-left">
-              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
-            </div>
-            
-            <!-- Top-Right -->
-            <div class="resize-handle" data-direction="ne" 
-                 style="position: absolute; top: -15px; right: -15px; width: 30px; height: 30px; background: linear-gradient(135deg, #ff6b6b, #ee5a52); border: 4px solid white; border-radius: 50%; cursor: ne-resize; display: none; box-shadow: 0 6px 20px rgba(255,107,107,0.4), 0 2px 8px rgba(0,0,0,0.2); z-index: 10; touch-action: none; transition: all 0.2s ease;"
-                 title="Resize from top-right">
-              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
-            </div>
-            
-            <!-- Bottom-Left -->
-            <div class="resize-handle" data-direction="sw" 
-                 style="position: absolute; bottom: -15px; left: -15px; width: 30px; height: 30px; background: linear-gradient(135deg, #ff6b6b, #ee5a52); border: 4px solid white; border-radius: 50%; cursor: sw-resize; display: none; box-shadow: 0 6px 20px rgba(255,107,107,0.4), 0 2px 8px rgba(0,0,0,0.2); z-index: 10; touch-action: none; transition: all 0.2s ease;"
-                 title="Resize from bottom-left">
-              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
-            </div>
-            
-            <!-- Bottom-Right -->
-            <div class="resize-handle" data-direction="se" 
-                 style="position: absolute; bottom: -15px; right: -15px; width: 30px; height: 30px; background: linear-gradient(135deg, #ff6b6b, #ee5a52); border: 4px solid white; border-radius: 50%; cursor: se-resize; display: none; box-shadow: 0 6px 20px rgba(255,107,107,0.4), 0 2px 8px rgba(0,0,0,0.2); z-index: 10; touch-action: none; transition: all 0.2s ease;"
-                 title="Resize from bottom-right">
-              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
-            </div>
-            
-            <!-- Edge Handles (Teal) -->
-            <!-- Top -->
-            <div class="resize-handle" data-direction="n" 
-                 style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 30px; height: 30px; background: linear-gradient(135deg, #4ecdc4, #44a08d); border: 4px solid white; border-radius: 50%; cursor: n-resize; display: none; box-shadow: 0 6px 20px rgba(78,205,196,0.4), 0 2px 8px rgba(0,0,0,0.2); z-index: 10; touch-action: none; transition: all 0.2s ease;"
-                 title="Resize from top">
-              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
-            </div>
-            
-            <!-- Bottom -->
-            <div class="resize-handle" data-direction="s" 
-                 style="position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%); width: 30px; height: 30px; background: linear-gradient(135deg, #4ecdc4, #44a08d); border: 4px solid white; border-radius: 50%; cursor: s-resize; display: none; box-shadow: 0 6px 20px rgba(78,205,196,0.4), 0 2px 8px rgba(0,0,0,0.2); z-index: 10; touch-action: none; transition: all 0.2s ease;"
-                 title="Resize from bottom">
-              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
-            </div>
-            
-            <!-- Left -->
-            <div class="resize-handle" data-direction="w" 
-                 style="position: absolute; left: -15px; top: 50%; transform: translateY(-50%); width: 30px; height: 30px; background: linear-gradient(135deg, #4ecdc4, #44a08d); border: 4px solid white; border-radius: 50%; cursor: w-resize; display: none; box-shadow: 0 6px 20px rgba(78,205,196,0.4), 0 2px 8px rgba(0,0,0,0.2); z-index: 10; touch-action: none; transition: all 0.2s ease;"
-                 title="Resize from left">
-              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
-            </div>
-            
-            <!-- Right -->
-            <div class="resize-handle" data-direction="e" 
-                 style="position: absolute; right: -15px; top: 50%; transform: translateY(-50%); width: 30px; height: 30px; background: linear-gradient(135deg, #4ecdc4, #44a08d); border: 4px solid white; border-radius: 50%; cursor: e-resize; display: none; box-shadow: 0 6px 20px rgba(78,205,196,0.4), 0 2px 8px rgba(0,0,0,0.2); z-index: 10; touch-action: none; transition: all 0.2s ease;"
-                 title="Resize from right">
-              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
-            </div>
-            
-          </div>
-          
-          <!-- Interactive Placement Guide (positioned above design when active) -->
-          <div id="nt-placement-guide-{{ section.id }}" 
-               style="position: absolute; inset: 0; pointer-events: none; z-index: 6; display: none;">
-            
-            <!-- Crosshairs with better visibility -->
-            <div style="position: absolute; top: 50%; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, #ff6b6b, #ff6b6b, transparent); transform: translateY(-50%); box-shadow: 0 0 4px rgba(255, 107, 107, 0.5);"></div>
-            <div style="position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, transparent, #ff6b6b, #ff6b6b, transparent); transform: translateX(-50%); box-shadow: 0 0 4px rgba(255, 107, 107, 0.5);"></div>
-            
-            <!-- Center circle with better visibility -->
-            <div style="position: absolute; top: 50%; left: 50%; width: 24px; height: 24px; border: 3px solid #ff6b6b; border-radius: 50%; transform: translate(-50%, -50%); background: rgba(255, 107, 107, 0.2); box-shadow: 0 0 8px rgba(255, 107, 107, 0.6);"></div>
-            
-            <!-- Placement area indicator with better styling -->
-            <div style="position: absolute; top: 20%; left: 20%; right: 20%; bottom: 20%; border: 3px dashed #4ecdc4; border-radius: 12px; background: rgba(78, 205, 196, 0.1); box-shadow: 0 0 12px rgba(78, 205, 196, 0.3);">
-              <div style="position: absolute; top: 8px; left: 50%; transform: translateX(-50%); background: linear-gradient(45deg, #4ecdc4, #44a08d); color: white; padding: 6px 16px; border-radius: 8px; font-size: 13px; font-weight: 700; white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
-                🎯 Place Design Here
-              </div>
-            </div>
-            
-            <!-- Corner guides with better visibility -->
-            <div style="position: absolute; top: 15%; left: 15%; width: 12px; height: 12px; border: 2px solid #4ecdc4; border-radius: 50%; background: rgba(78, 205, 196, 0.3); box-shadow: 0 0 6px rgba(78, 205, 196, 0.5);"></div>
-            <div style="position: absolute; top: 15%; right: 15%; width: 12px; height: 12px; border: 2px solid #4ecdc4; border-radius: 50%; background: rgba(78, 205, 196, 0.3); box-shadow: 0 0 6px rgba(78, 205, 196, 0.5);"></div>
-            <div style="position: absolute; bottom: 15%; left: 15%; width: 12px; height: 12px; border: 2px solid #4ecdc4; border-radius: 50%; background: rgba(78, 205, 196, 0.3); box-shadow: 0 0 6px rgba(78, 205, 196, 0.5);"></div>
-            <div style="position: absolute; bottom: 15%; right: 15%; width: 12px; height: 12px; border: 2px solid #4ecdc4; border-radius: 50%; background: rgba(78, 205, 196, 0.3); box-shadow: 0 0 6px rgba(78, 205, 196, 0.5);"></div>
-            
-            <!-- Smart Centering Indicators -->
-            <div id="nt-centering-indicators-{{ section.id }}" style="position: absolute; inset: 0; pointer-events: none;">
-              
-              <!-- Perfect Center Indicator -->
-              <div id="nt-perfect-center-{{ section.id }}" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: none;">
-                <div style="width: 40px; height: 40px; border: 3px solid #10b981; border-radius: 50%; background: rgba(16, 185, 129, 0.2); box-shadow: 0 0 20px rgba(16, 185, 129, 0.8); animation: pulse 2s infinite;">
-                  <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #10b981; font-size: 16px; font-weight: bold;">✓</div>
-                </div>
-                <div style="position: absolute; top: -25px; left: 50%; transform: translateX(-50%); background: #10b981; color: white; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; white-space: nowrap;">
-                  PERFECT CENTER
-                </div>
-              </div>
-              
-              <!-- Horizontal Center Indicator -->
-              <div id="nt-horizontal-center-{{ section.id }}" style="position: absolute; top: 50%; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, #f59e0b, #f59e0b, transparent); transform: translateY(-50%); display: none; box-shadow: 0 0 8px rgba(245, 158, 11, 0.6);"></div>
-              
-              <!-- Vertical Center Indicator -->
-              <div id="nt-vertical-center-{{ section.id }}" style="position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, transparent, #f59e0b, #f59e0b, transparent); transform: translateX(-50%); display: none; box-shadow: 0 0 8px rgba(245, 158, 11, 0.6);"></div>
-              
-              <!-- Equidistant Indicators -->
-              <div id="nt-equidistant-{{ section.id }}" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: none;">
-                <div style="width: 60px; height: 60px; border: 2px dashed #8b5cf6; border-radius: 50%; background: rgba(139, 92, 246, 0.1); box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);">
-                  <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #8b5cf6; font-size: 14px; font-weight: bold;">⚖</div>
-                </div>
-                <div style="position: absolute; top: -20px; left: 50%; transform: translateX(-50%); background: #8b5cf6; color: white; padding: 3px 6px; border-radius: 3px; font-size: 9px; font-weight: 600; white-space: nowrap;">
-                  EQUIDISTANT
-                </div>
-              </div>
-              
-              <!-- Status Messages -->
-              <div id="nt-centering-status-{{ section.id }}" style="position: absolute; top: 10px; left: 10px; background: rgba(0, 0, 0, 0.8); color: white; padding: 8px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; display: none; max-width: 200px;">
-                <div id="nt-status-text-{{ section.id }}"></div>
-              </div>
-            </div>
-          </div>
-
-            <!-- Resize Handle (only visible when design is selected) -->
-            <div id="nt-resize-handle-{{ section.id }}" 
-                 style="position: absolute; bottom: -8px; right: -8px; width: 20px; height: 20px; background: #8b5cf6; border: 2px solid white; border-radius: 50%; cursor: nw-resize; display: none; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
-              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; border-right: 2px solid white; border-bottom: 2px solid white; transform: translate(-50%, -50%) rotate(45deg);"></div>
-            </div>
-        </div>
-        
-        <p class="nt-mockup__hint" style="color: #6b7280; font-size: 14px; margin-top: 16px; text-align: center;">
-          💡 Tip: Drag the design to move it, use scroll wheel to resize, or use the precise controls above
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
 
 <style>
 /* Enhanced Button Styles */
