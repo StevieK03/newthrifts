@@ -3112,7 +3112,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const emailContent = this.createEmailContent(requestData);
         
         // Try Resend first (supports attachments)
+        console.log('🎯 Attempting Resend email first...');
         const resendResult = await this.sendViaResend(requestData, emailContent, designImageBase64, mockupImageBase64);
+        
+        console.log('📊 Resend result:', resendResult);
         
         if (resendResult.success) {
           console.log('✅ Resend email with images sent successfully to shopping@newthrifts.com');
@@ -3295,7 +3298,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Create email payload for Resend
         const emailPayload = {
-          from: 'noreply@newthrifts.com', // You can use your domain or a verified email
+          from: 'NewThrifts <onboarding@resend.dev>', // Use Resend's verified domain
           to: [emailContent.to],
           subject: emailContent.subject,
           html: `
@@ -3388,6 +3391,7 @@ document.addEventListener('DOMContentLoaded', function() {
           return { success: true, method: 'Resend', messageId: result.id };
         } else {
           const error = await response.text();
+          console.error('❌ Resend API Error:', response.status, error);
           throw new Error(`Resend error: ${response.status} - ${error}`);
         }
         
