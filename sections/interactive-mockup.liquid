@@ -2842,8 +2842,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Test database connection first
         const connectionTest = await this.testDatabaseConnection();
         if (!connectionTest.success) {
-          console.error('❌ Database connection test failed:', connectionTest.error);
-          return { success: false, error: `Database connection failed: ${connectionTest.error}` };
+          console.warn('⚠️ Database connection test failed:', connectionTest.error);
+          console.log('🔄 Proceeding with submission anyway...');
+          // Don't return error - try submission anyway
         }
         
         // Check if Supabase is available
@@ -2998,10 +2999,10 @@ document.addEventListener('DOMContentLoaded', function() {
           return { success: false, error: 'No client' };
         }
 
-        // Simple test query
+        // Simple test query - try a basic select first
         const { data, error } = await client
           .from('custom_tshirt_requests')
-          .select('count')
+          .select('id')
           .limit(1);
 
         if (error) {
