@@ -2839,6 +2839,13 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('🔍 Debugging submitToSupabase...');
         console.log('Request data:', requestData);
         
+        // Test database connection first
+        const connectionTest = await this.testDatabaseConnection();
+        if (!connectionTest.success) {
+          console.error('❌ Database connection test failed:', connectionTest.error);
+          return { success: false, error: `Database connection failed: ${connectionTest.error}` };
+        }
+        
         // Check if Supabase is available
         if (typeof window.NewThriftsCustomRequests === 'undefined') {
           console.warn('❌ Supabase custom requests API not loaded');
@@ -2945,19 +2952,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
         console.log('✅ Global Supabase client found, submitting data...');
 
-        // Insert request into database
+        // Insert request into database (simplified)
+        const insertData = {
+          customer_email: requestData.customer_email,
+          customer_name: requestData.customer_name,
+          status: 'pending'
+        };
+        
+        // Add optional fields only if they exist
+        if (requestData.customer_phone) insertData.customer_phone = requestData.customer_phone;
+        if (requestData.customer_message) insertData.customer_message = requestData.customer_message;
+        if (requestData.design_image_url) insertData.design_image_url = requestData.design_image_url;
+        if (requestData.mockup_image_url) insertData.mockup_image_url = requestData.mockup_image_url;
+        if (requestData.design_data) insertData.design_data = requestData.design_data;
+        
+        console.log('📤 Inserting data:', insertData);
+        
         const { data, error } = await client
           .from('custom_tshirt_requests')
-          .insert([{
-            customer_email: requestData.customer_email,
-            customer_name: requestData.customer_name,
-            customer_phone: requestData.customer_phone,
-            customer_message: requestData.customer_message,
-            design_image_url: requestData.design_image_url,
-            mockup_image_url: requestData.mockup_image_url,
-            design_data: requestData.design_data,
-            status: 'pending'
-          }])
+          .insert([insertData])
           .select()
           .single();
 
@@ -2972,6 +2985,36 @@ document.addEventListener('DOMContentLoaded', function() {
       } catch (error) {
         console.error('❌ Error in global client submission:', error);
         return { success: false, error: error.message || 'Global client submission failed' };
+      }
+    },
+
+    async testDatabaseConnection() {
+      try {
+        console.log('🧪 Testing database connection...');
+        
+        const client = window.supabaseClient;
+        if (!client) {
+          console.error('❌ No Supabase client available');
+          return { success: false, error: 'No client' };
+        }
+
+        // Simple test query
+        const { data, error } = await client
+          .from('custom_tshirt_requests')
+          .select('count')
+          .limit(1);
+
+        if (error) {
+          console.error('❌ Database test failed:', error);
+          return { success: false, error: error.message };
+        }
+
+        console.log('✅ Database connection test successful');
+        return { success: true };
+
+      } catch (error) {
+        console.error('❌ Database test error:', error);
+        return { success: false, error: error.message };
       }
     },
 
