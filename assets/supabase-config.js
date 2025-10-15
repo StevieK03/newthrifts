@@ -29,7 +29,7 @@ class SupabaseClient {
         this.initialized = true;
         
         // IMPORTANT: Expose the client instance globally for other scripts
-        window.supabase = this.client;
+        window.supabaseClient = this.client;
         
         console.log('✅ Supabase client initialized');
         return this.client;

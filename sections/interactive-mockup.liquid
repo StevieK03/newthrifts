@@ -2889,6 +2889,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const supabaseClient = new window.SupabaseClient();
         const client = await supabaseClient.init();
         
+        // Also try to use the global client if available
+        if (!client && window.supabaseClient) {
+          console.log('✅ Using global Supabase client');
+          return await this.submitWithGlobalClient(requestData);
+        }
+        
         if (!client) {
           console.error('❌ Failed to initialize Supabase client');
           return { success: false, error: 'Failed to connect to database' };
@@ -2923,6 +2929,49 @@ document.addEventListener('DOMContentLoaded', function() {
       } catch (error) {
         console.error('❌ Error in direct Supabase submission:', error);
         return { success: false, error: error.message || 'Direct database connection failed' };
+      }
+    },
+
+    async submitWithGlobalClient(requestData) {
+      try {
+        console.log('🔧 Using global Supabase client for submission...');
+        
+        const client = window.supabaseClient;
+        
+        if (!client) {
+          console.error('❌ Global Supabase client not available');
+          return { success: false, error: 'Global client not available' };
+        }
+
+        console.log('✅ Global Supabase client found, submitting data...');
+
+        // Insert request into database
+        const { data, error } = await client
+          .from('custom_tshirt_requests')
+          .insert([{
+            customer_email: requestData.customer_email,
+            customer_name: requestData.customer_name,
+            customer_phone: requestData.customer_phone,
+            customer_message: requestData.customer_message,
+            design_image_url: requestData.design_image_url,
+            mockup_image_url: requestData.mockup_image_url,
+            design_data: requestData.design_data,
+            status: 'pending'
+          }])
+          .select()
+          .single();
+
+        if (error) {
+          console.error('❌ Global client Supabase error:', error);
+          return { success: false, error: error.message };
+        }
+
+        console.log('✅ Global client submission successful:', data);
+        return { success: true, requestId: data.id };
+
+      } catch (error) {
+        console.error('❌ Error in global client submission:', error);
+        return { success: false, error: error.message || 'Global client submission failed' };
       }
     },
 
