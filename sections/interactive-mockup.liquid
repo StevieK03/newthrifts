@@ -1525,9 +1525,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     {% if section.settings.allow_download %}
     downloadComposite() {
+      console.log('📥 Starting download composite...');
+      console.log('Current placement state:', this.placementState);
+      
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
       
+      // Use higher resolution for better quality
       canvas.width = 2000;
       canvas.height = 2000;
       
@@ -1536,43 +1540,76 @@ document.addEventListener('DOMContentLoaded', function() {
       baseImg.src = document.getElementById("nt-base-{{ section.id }}").src;
       
       baseImg.onload = () => {
-            ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
+        console.log('✅ Base image loaded, drawing to canvas');
+        ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
 
-            const overlayImg = document.querySelector(`#nt-overlay-{{ section.id }} img`);
+        const overlayImg = document.querySelector(`#nt-overlay-{{ section.id }} img`);
+        console.log('Overlay image found:', overlayImg);
+        
+        if (overlayImg && overlayImg.src && this.placementState.hasUploadedDesign) {
+          console.log('🎨 Processing uploaded design for download');
+          const designImg = new Image();
+          designImg.crossOrigin = "anonymous";
+          designImg.src = overlayImg.src;
+          
+          designImg.onload = () => {
+            console.log('✅ Design image loaded, applying to canvas');
             
-        if (overlayImg && overlayImg.src) {
-              const designImg = new Image();
-              designImg.crossOrigin = "anonymous";
-              designImg.src = overlayImg.src;
-              
-              designImg.onload = () => {
-                const topPct = this.placementState.topPct / 100;
-                const leftPct = this.placementState.leftPct / 100;
-                const widthPct = this.placementState.widthPct / 100;
-                const rotateDeg = this.placementState.rotateDeg || 0;
+            // Use the current placement state values
+            const topPct = this.placementState.topPct / 100;
+            const leftPct = this.placementState.leftPct / 100;
+            const widthPct = this.placementState.widthPct / 100;
+            const heightPct = this.placementState.heightPct / 100;
+            const rotateDeg = this.placementState.rotateDeg || 0;
 
-            const designX = canvas.width * leftPct;
+            // Calculate design position and size on canvas
+            const designX = canvas.width * leftPct - (canvas.width * widthPct) / 2; // Center horizontally
             const designY = canvas.height * topPct;
             const designWidth = canvas.width * widthPct;
-                const designHeight = (designImg.height / designImg.width) * designWidth;
-                
-                ctx.save();
+            const designHeight = canvas.height * heightPct;
+            
+            console.log('Design positioning:', {
+              x: designX,
+              y: designY,
+              width: designWidth,
+              height: designHeight,
+              rotation: rotateDeg
+            });
+            
+            // Apply rotation and draw the design
+            ctx.save();
             ctx.translate(designX + designWidth / 2, designY + designHeight / 2);
-                ctx.rotate(rotateDeg * Math.PI / 180);
-                ctx.drawImage(designImg, -designWidth / 2, -designHeight / 2, designWidth, designHeight);
-                ctx.restore();
+            ctx.rotate(rotateDeg * Math.PI / 180);
+            ctx.drawImage(designImg, -designWidth / 2, -designHeight / 2, designWidth, designHeight);
+            ctx.restore();
 
+            console.log('✅ Design applied to canvas, starting download');
             const a = document.createElement('a');
             a.download = `custom_mockup_${this.state.view}_${this.state.color}.png`;
             a.href = canvas.toDataURL("image/png");
             a.click();
+            
+            this.showMessage('📥 Mockup downloaded with design!', 'success');
+          };
+          
+          designImg.onerror = () => {
+            console.error('❌ Failed to load design image for download');
+            this.showMessage('❌ Failed to load design for download', 'error');
           };
         } else {
+          console.log('ℹ️ No uploaded design found, downloading base mockup only');
           const a = document.createElement('a');
           a.download = `custom_mockup_${this.state.view}_${this.state.color}.png`;
           a.href = canvas.toDataURL("image/png");
           a.click();
+          
+          this.showMessage('📥 Mockup downloaded (no design)', 'info');
         }
+      };
+      
+      baseImg.onerror = () => {
+        console.error('❌ Failed to load base image for download');
+        this.showMessage('❌ Failed to load base image for download', 'error');
       };
     }
     {% endif %}
