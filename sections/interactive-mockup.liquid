@@ -439,6 +439,8 @@ Enhanced Interactive Product Mockup
     <!-- Close nt-mockup__stage -->
 
     <div class="nt-mockup__inner" style="display: grid; gap: 20px;">
+      {%- comment -%}
+      <!-- COMMENTED OUT: Precise Placement Controls (can be restored later if needed) -->
       <!-- Advanced Placement Controls -->
       <div id="nt-placement-controls-{{ section.id }}" class="nt-placement-controls" style="display: block; background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin: 10px 0 40px 0; max-width: 1200px; margin-left: auto; margin-right: auto;">
         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
@@ -452,7 +454,6 @@ Enhanced Interactive Product Mockup
         </div>
         
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
-          <!-- Top Position -->
           <div class="placement-slider">
             <label style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: #374151;">
               <span>📐 Top Position</span>
@@ -461,7 +462,6 @@ Enhanced Interactive Product Mockup
             <input type="range" id="nt-top-{{ section.id }}" min="0" max="90" step="0.5" value="{{ section.settings.overlay_top }}" style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; outline: none; cursor: pointer;">
           </div>
 
-          <!-- Left Position -->
           <div class="placement-slider">
             <label style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: #374151;">
               <span>📐 Left Position</span>
@@ -470,7 +470,6 @@ Enhanced Interactive Product Mockup
             <input type="range" id="nt-left-{{ section.id }}" min="0" max="90" step="0.5" value="{{ section.settings.overlay_left }}" style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; outline: none; cursor: pointer;">
           </div>
 
-          <!-- Width -->
           <div class="placement-slider">
             <label style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: #374151;">
               <span>📏 Design Width</span>
@@ -479,7 +478,6 @@ Enhanced Interactive Product Mockup
             <input type="range" id="nt-width-{{ section.id }}" min="10" max="100" step="1" value="{{ section.settings.overlay_width }}" style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; outline: none; cursor: pointer;">
           </div>
 
-          <!-- Rotation -->
           <div class="placement-slider">
             <label style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: #374151;">
               <span>🔄 Rotation</span>
@@ -488,6 +486,7 @@ Enhanced Interactive Product Mockup
             <input type="range" id="nt-rotate-{{ section.id }}" min="-45" max="45" step="0.5" value="{{ section.settings.overlay_rotate }}" style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; outline: none; cursor: pointer;">
           </div>
         </div>
+      {%- endcomment -%}
 
         <!-- Placement Guide Controls -->
         <div style="margin-top: 20px; padding: 16px; background: #fef3c7; border-radius: 12px; border: 1px solid #fbbf24; max-width: 1200px; margin-left: auto; margin-right: auto;">
