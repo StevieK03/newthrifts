@@ -298,6 +298,24 @@ Enhanced Interactive Product Mockup
               transition: left 0.6s ease;
             "></div>
           </button>
+          
+          <!-- Placement Guide Toggle Button -->
+          <button class="nt-btn" id="nt-toggle-guide-{{ section.id }}" style="
+            padding: 10px 20px; 
+            background: linear-gradient(45deg, #f59e0b, #d97706);
+            color: white; 
+            border: none; 
+            border-radius: 25px; 
+            font-size: 14px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: all 0.3s ease;
+            display: block; 
+            margin-top: 8px;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+          ">
+            📐 <span id="nt-guide-text-{{ section.id }}">Show</span> Placement Guide
+          </button>
         </div>
       </div>
     </div>
@@ -488,17 +506,6 @@ Enhanced Interactive Product Mockup
         </div>
       {%- endcomment -%}
 
-        <!-- Placement Guide Controls -->
-        <div style="margin-top: 20px; padding: 16px; background: #fef3c7; border-radius: 12px; border: 1px solid #fbbf24; max-width: 1200px; margin-left: auto; margin-right: auto;">
-          <h5 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #92400e;">🎯 Placement Guide</h5>
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <button id="nt-toggle-guide-{{ section.id }}" style="padding: 8px 16px; background: linear-gradient(45deg, #f59e0b, #d97706); color: white; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 500;">
-              📐 Show Placement Guide
-            </button>
-            <span style="font-size: 12px; color: #92400e;">Toggle crosshairs and placement area</span>
-          </div>
-        </div>
-
         <!-- Submit T-Shirt Request -->
         <div id="nt-submit-request-{{ section.id }}" style="margin-top: 20px; padding: 16px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 12px; border: 1px solid #10b981; display: none;">
           <h5 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: white;">🎨 Submit Your T-Shirt Request</h5>
@@ -563,7 +570,8 @@ Enhanced Interactive Product Mockup
           </form>
         </div>
 
-
+      {%- comment -%}
+      <!-- COMMENTED OUT: Mockup Size Controls & Quick Size Presets (can be restored later if needed) -->
         <!-- Mockup Size Controls -->
         <div style="margin-top: 20px; padding: 16px; background: #f0fdf4; border-radius: 12px; border: 1px solid #bbf7d0; max-width: 1200px; margin-left: auto; margin-right: auto;">
           <h5 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #166534;">🔍 Mockup Size Controls</h5>
@@ -605,6 +613,7 @@ Enhanced Interactive Product Mockup
             • Ctrl+1/2/3/4 for quick presets (25%, 50%, 75%, 100%)
           </div>
         </div>
+      {%- endcomment -%}
       </div>
 
 
@@ -2144,6 +2153,75 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
           }
           this.applyPerfectFit();
+        });
+      }
+      
+      // Bind Placement Guide Toggle
+      this.bindPlacementGuide();
+    },
+
+    bindPlacementGuide() {
+      const toggleBtn = document.getElementById(`nt-toggle-guide-{{ section.id }}`);
+      const guideText = document.getElementById(`nt-guide-text-{{ section.id }}`);
+      const overlay = document.getElementById(`nt-overlay-{{ section.id }}`);
+      let guideVisible = false;
+      
+      if (toggleBtn && overlay) {
+        toggleBtn.addEventListener('click', () => {
+          guideVisible = !guideVisible;
+          
+          if (guideVisible) {
+            // Show guide - add red border and crosshairs
+            overlay.style.border = '2px dashed #ef4444';
+            overlay.style.boxShadow = '0 0 0 2px rgba(239, 68, 68, 0.2), inset 0 0 0 2px rgba(239, 68, 68, 0.1)';
+            
+            // Add crosshairs using pseudo-elements via a style element
+            if (!document.getElementById('placement-guide-style-{{ section.id }}')) {
+              const styleEl = document.createElement('style');
+              styleEl.id = 'placement-guide-style-{{ section.id }}';
+              styleEl.textContent = `
+                #nt-overlay-{{ section.id }}::before,
+                #nt-overlay-{{ section.id }}::after {
+                  content: '';
+                  position: absolute;
+                  background: rgba(239, 68, 68, 0.5);
+                  z-index: 1000;
+                  pointer-events: none;
+                }
+                #nt-overlay-{{ section.id }}::before {
+                  top: 50%;
+                  left: 0;
+                  right: 0;
+                  height: 2px;
+                  transform: translateY(-50%);
+                }
+                #nt-overlay-{{ section.id }}::after {
+                  left: 50%;
+                  top: 0;
+                  bottom: 0;
+                  width: 2px;
+                  transform: translateX(-50%);
+                }
+              `;
+              document.head.appendChild(styleEl);
+            }
+            
+            if (guideText) guideText.textContent = 'Hide';
+            this.showMessage('📐 Placement guide enabled - red border shows print area', 'success');
+          } else {
+            // Hide guide - remove border and crosshairs
+            overlay.style.border = '2px dashed rgba(255, 255, 255, 0.3)';
+            overlay.style.boxShadow = 'inset 0 4px 12px rgba(0, 0, 0, 0.1)';
+            
+            // Remove crosshairs style
+            const styleEl = document.getElementById('placement-guide-style-{{ section.id }}');
+            if (styleEl) {
+              styleEl.remove();
+            }
+            
+            if (guideText) guideText.textContent = 'Show';
+            this.showMessage('📐 Placement guide disabled', 'success');
+          }
         });
       }
     },
