@@ -200,6 +200,15 @@
     <script src="{{ 'supabase-custom-requests.js' | asset_url }}?v={{ 'now' | date: '%s' }}"></script>
     <script src="{{ 'visitor-counter.js' | asset_url }}?v={{ 'now' | date: '%s' }}" defer></script>
     
+    {%- comment -%} EmailJS Integration for Email with Attachments {%- endcomment -%}
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+      // Initialize EmailJS
+      (function() {
+        emailjs.init('YOUR_EMAILJS_USER_ID'); // Replace with your EmailJS User ID
+      })();
+    </script>
+    
     <!-- Enhanced Homepage Features -->
     <script>
     document.addEventListener('DOMContentLoaded', function() {

@@ -3111,18 +3111,18 @@ document.addEventListener('DOMContentLoaded', function() {
         // Create email content
         const emailContent = this.createEmailContent(requestData);
         
-        // Send email via Resend (with attachments)
-        console.log('🎯 Sending email via Resend...');
-        const resendResult = await this.sendViaResend(requestData, emailContent, designImageBase64, mockupImageBase64);
+        // Send email via EmailJS (browser-compatible)
+        console.log('🎯 Sending email via EmailJS...');
+        const emailResult = await this.sendViaEmailJS(requestData, emailContent, designImageBase64, mockupImageBase64);
         
-        console.log('📊 Resend result:', resendResult);
+        console.log('📊 EmailJS result:', emailResult);
         
-        if (resendResult.success) {
-          console.log('✅ Resend email with images sent successfully to shopping@newthrifts.com');
-          return { success: true, message: 'Email sent with images attached via Resend' };
+        if (emailResult.success) {
+          console.log('✅ EmailJS email with images sent successfully to shopping@newthrifts.com');
+          return { success: true, message: 'Email sent with images attached via EmailJS' };
         } else {
-          console.error('❌ Resend email failed:', resendResult.error);
-          return { success: false, error: 'Failed to send email via Resend: ' + resendResult.error };
+          console.error('❌ EmailJS email failed:', emailResult.error);
+          return { success: false, error: 'Failed to send email via EmailJS: ' + emailResult.error };
         }
         
       } catch (error) {
@@ -3191,112 +3191,48 @@ document.addEventListener('DOMContentLoaded', function() {
     },
 
 
-    async sendViaResend(requestData, emailContent, designImageBase64, mockupImageBase64) {
+    async sendViaEmailJS(requestData, emailContent, designImageBase64, mockupImageBase64) {
       try {
-        console.log('📧 Attempting Resend email with images...');
+        console.log('📧 Attempting EmailJS email with images...');
         
-        // Create email payload for Resend
-        const emailPayload = {
-          from: 'NewThrifts <onboarding@resend.dev>', // Use Resend's verified domain
-          to: [emailContent.to],
-          subject: emailContent.subject,
-          html: `
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #f9f9f9; padding: 20px;">
-              <div style="background: white; border-radius: 8px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-                
-                <h2 style="color: #333; border-bottom: 3px solid #ff4fa3; padding-bottom: 10px; margin-top: 0;">
-                  🎨 New Custom T-Shirt Request
-                </h2>
-                
-                <div style="background: #f0f8ff; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #27e1c1;">
-                  <h3 style="color: #333; margin-top: 0;">👤 Customer Details</h3>
-                  <p><strong>Name:</strong> ${requestData.customer_name}</p>
-                  <p><strong>Email:</strong> ${requestData.customer_email}</p>
-                  <p><strong>Phone:</strong> ${requestData.customer_phone || 'Not provided'}</p>
-                  <p><strong>T-Shirt Size:</strong> ${requestData.tshirt_size || 'Not specified'}</p>
-                </div>
-                
-                <div style="background: #fff; border-left: 4px solid #ff4fa3; padding: 15px; margin: 20px 0;">
-                  <h3 style="color: #333; margin-top: 0;">💬 Customer Message</h3>
-                  <p style="font-style: italic; background: #f9f9f9; padding: 10px; border-radius: 4px;">
-                    ${requestData.customer_message || 'No special instructions provided'}
-                  </p>
-                </div>
-                
-                <div style="background: #f0f8ff; padding: 20px; border-radius: 8px; margin: 20px 0;">
-                  <h3 style="color: #333; margin-top: 0;">🎨 Design Specifications</h3>
-                  <p><strong>Position:</strong> Top ${requestData.design_data.position.top}%, Left ${requestData.design_data.position.left}%</p>
-                  <p><strong>Size:</strong> ${requestData.design_data.position.width}% × ${requestData.design_data.position.height}%</p>
-                  <p><strong>Rotation:</strong> ${requestData.design_data.position.rotation}°</p>
-                  <p><strong>View:</strong> ${requestData.design_data.view}</p>
-                  <p><strong>T-Shirt Color:</strong> ${requestData.design_data.color}</p>
-                </div>
-                
-                <div style="background: #fffacd; padding: 15px; border-radius: 8px; margin: 20px 0; border: 2px dashed #ffa500;">
-                  <h3 style="color: #333; margin-top: 0;">📎 Attachments</h3>
-                  <p>✅ <strong>Original Design Image</strong> - See attached file</p>
-                  <p>✅ <strong>Generated Mockup Preview</strong> - See attached file</p>
-                  <p style="font-size: 12px; color: #666; margin-bottom: 0;">
-                    <em>Images are attached to this email for your review and production.</em>
-                  </p>
-                </div>
-                
-                <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd;">
-                  <p style="color: #666; font-size: 12px; margin: 0;">
-                    📅 <strong>Submitted:</strong> ${new Date().toLocaleString()}<br>
-                    🆔 <strong>Request ID:</strong> ${requestData.id || 'Pending'}<br>
-                    🌐 <strong>Source:</strong> NewThrifts Custom T-Shirt Designer
-                  </p>
-                </div>
-                
-              </div>
-            </div>
-          `,
-          text: emailContent.body,
-          attachments: []
+        // Check if EmailJS is available
+        if (typeof emailjs === 'undefined') {
+          throw new Error('EmailJS not loaded. Please include EmailJS script.');
+        }
+        
+        // Create email template parameters
+        const templateParams = {
+          to_email: emailContent.to,
+          customer_name: requestData.customer_name,
+          customer_email: requestData.customer_email,
+          customer_phone: requestData.customer_phone || 'Not provided',
+          tshirt_size: requestData.tshirt_size || 'Not specified',
+          customer_message: requestData.customer_message || 'No special instructions',
+          design_position: `Top ${requestData.design_data.position.top}%, Left ${requestData.design_data.position.left}%`,
+          design_size: `${requestData.design_data.position.width}% × ${requestData.design_data.position.height}%`,
+          design_rotation: `${requestData.design_data.position.rotation}°`,
+          design_view: requestData.design_data.view,
+          tshirt_color: requestData.design_data.color,
+          submission_date: new Date().toLocaleString(),
+          request_id: requestData.id || 'Pending',
+          design_image: designImageBase64,
+          mockup_image: mockupImageBase64,
+          email_content: emailContent.body
         };
         
-        // Add design image attachment
-        if (designImageBase64) {
-          emailPayload.attachments.push({
-            filename: `design_${requestData.customer_name.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}.png`,
-            content: designImageBase64.split(',')[1], // Remove data:image/png;base64, prefix
-            encoding: 'base64'
-          });
-        }
+        // Send email via EmailJS
+        const result = await emailjs.send(
+          'service_newthrifts', // Replace with your EmailJS service ID
+          'template_tshirt_request', // Replace with your EmailJS template ID
+          templateParams
+        );
         
-        // Add mockup image attachment
-        if (mockupImageBase64) {
-          emailPayload.attachments.push({
-            filename: `mockup_${requestData.customer_name.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}.png`,
-            content: mockupImageBase64.split(',')[1], // Remove data:image/png;base64, prefix
-            encoding: 'base64'
-          });
-        }
-        
-        // Send via Resend API
-        const response = await fetch('https://api.resend.com/emails', {
-          method: 'POST',
-          headers: {
-            'Authorization': 'Bearer re_YeZj1HEo_9HdoNzyYYnPq2RuFumTeeix4',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(emailPayload)
-        });
-        
-        if (response.ok) {
-          const result = await response.json();
-          console.log('✅ Resend email sent successfully:', result);
-          return { success: true, method: 'Resend', messageId: result.id };
-        } else {
-          const error = await response.text();
-          console.error('❌ Resend API Error:', response.status, error);
-          throw new Error(`Resend error: ${response.status} - ${error}`);
-        }
+        console.log('✅ EmailJS email sent successfully:', result);
+        return { success: true, method: 'EmailJS', messageId: result.text };
         
       } catch (error) {
-        console.warn('⚠️ Resend email failed:', error);
-        return { success: false, error: error.message, method: 'Resend' };
+        console.warn('⚠️ EmailJS email failed:', error);
+        return { success: false, error: error.message, method: 'EmailJS' };
       }
     },
 
