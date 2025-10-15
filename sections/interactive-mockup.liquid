@@ -185,6 +185,80 @@ Enhanced Interactive Product Mockup
           </div>
         </div>
 
+        <!-- Size Chart -->
+        <div style="margin-top: 20px; padding: 16px; background: #f0f9ff; border-radius: 12px; border: 1px solid #0ea5e9;">
+          <h5 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #0c4a6e;">📏 Size Chart</h5>
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 12px; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+              <thead>
+                <tr style="background: linear-gradient(135deg, #0ea5e9, #0284c7); color: white;">
+                  <th style="padding: 8px; text-align: left; font-weight: 600;">Size</th>
+                  <th style="padding: 8px; text-align: center; font-weight: 600;">Garment Length</th>
+                  <th style="padding: 8px; text-align: center; font-weight: 600;">Chest Width</th>
+                  <th style="padding: 8px; text-align: center; font-weight: 600;">Shoulder Width</th>
+                  <th style="padding: 8px; text-align: center; font-weight: 600;">Sleeve Length</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom: 1px solid #e5e7eb;">
+                  <td style="padding: 8px; font-weight: 600; color: #374151;">XXS</td>
+                  <td style="padding: 8px; text-align: center;">52cm</td>
+                  <td style="padding: 8px; text-align: center;">46cm</td>
+                  <td style="padding: 8px; text-align: center;">42cm</td>
+                  <td style="padding: 8px; text-align: center;">19cm</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #e5e7eb; background: #f8fafc;">
+                  <td style="padding: 8px; font-weight: 600; color: #374151;">XS</td>
+                  <td style="padding: 8px; text-align: center;">54cm</td>
+                  <td style="padding: 8px; text-align: center;">48cm</td>
+                  <td style="padding: 8px; text-align: center;">43.5cm</td>
+                  <td style="padding: 8px; text-align: center;">19cm</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #e5e7eb;">
+                  <td style="padding: 8px; font-weight: 600; color: #374151;">S</td>
+                  <td style="padding: 8px; text-align: center;">56cm</td>
+                  <td style="padding: 8px; text-align: center;">50cm</td>
+                  <td style="padding: 8px; text-align: center;">45cm</td>
+                  <td style="padding: 8px; text-align: center;">20cm</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #e5e7eb; background: #f8fafc;">
+                  <td style="padding: 8px; font-weight: 600; color: #374151;">M</td>
+                  <td style="padding: 8px; text-align: center;">58cm</td>
+                  <td style="padding: 8px; text-align: center;">52cm</td>
+                  <td style="padding: 8px; text-align: center;">46.5cm</td>
+                  <td style="padding: 8px; text-align: center;">20cm</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #e5e7eb;">
+                  <td style="padding: 8px; font-weight: 600; color: #374151;">L</td>
+                  <td style="padding: 8px; text-align: center;">60cm</td>
+                  <td style="padding: 8px; text-align: center;">54cm</td>
+                  <td style="padding: 8px; text-align: center;">48cm</td>
+                  <td style="padding: 8px; text-align: center;">21cm</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #e5e7eb; background: #f8fafc;">
+                  <td style="padding: 8px; font-weight: 600; color: #374151;">XL</td>
+                  <td style="padding: 8px; text-align: center;">62cm</td>
+                  <td style="padding: 8px; text-align: center;">56cm</td>
+                  <td style="padding: 8px; text-align: center;">49.5cm</td>
+                  <td style="padding: 8px; text-align: center;">21cm</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; font-weight: 600; color: #374151;">XXL</td>
+                  <td style="padding: 8px; text-align: center;">64cm</td>
+                  <td style="padding: 8px; text-align: center;">58cm</td>
+                  <td style="padding: 8px; text-align: center;">51cm</td>
+                  <td style="padding: 8px; text-align: center;">22cm</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="margin-top: 12px; padding: 8px; background: #fef3c7; border-radius: 6px; border: 1px solid #fbbf24;">
+            <p style="margin: 0; font-size: 11px; color: #92400e; line-height: 1.4;">
+              <strong>📏 Measurement Notes:</strong> Flat measurements with 1-3cm tolerance. Body shapes vary, please choose carefully. Slight color variations may occur due to lighting and printing.
+            </p>
+          </div>
+        </div>
+
         <!-- Mockup Size Controls -->
         <div style="margin-top: 20px; padding: 16px; background: #f0fdf4; border-radius: 12px; border: 1px solid #bbf7d0;">
           <h5 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #166534;">🔍 Mockup Size Controls</h5>
@@ -270,54 +344,62 @@ Enhanced Interactive Product Mockup
                  style="position: absolute; top: -8px; right: -8px; width: 16px; height: 16px; background: #27e1c1; border: 2px solid white; border-radius: 50%; cursor: grab; display: none; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
             </div>
             
-            <!-- Resize Handles - All Directions (Hidden by default, shown when selected) -->
+            <!-- Enhanced Resize Handles - All Directions (Hidden by default, shown when selected) -->
             <!-- Top-Left -->
             <div class="resize-handle" data-direction="nw" 
-                 style="position: absolute; top: -12px; left: -12px; width: 24px; height: 24px; background: #ff6b6b; border: 3px solid white; border-radius: 50%; cursor: nw-resize; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 10; touch-action: none;"
+                 style="position: absolute; top: -15px; left: -15px; width: 30px; height: 30px; background: linear-gradient(135deg, #ff6b6b, #ee5a52); border: 4px solid white; border-radius: 50%; cursor: nw-resize; display: none; box-shadow: 0 6px 20px rgba(255,107,107,0.4), 0 2px 8px rgba(0,0,0,0.2); z-index: 10; touch-action: none; transition: all 0.2s ease;"
                  title="Resize from top-left">
+              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
             </div>
             
             <!-- Top-Right -->
             <div class="resize-handle" data-direction="ne" 
-                 style="position: absolute; top: -12px; right: -12px; width: 24px; height: 24px; background: #ff6b6b; border: 3px solid white; border-radius: 50%; cursor: ne-resize; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 10; touch-action: none;"
+                 style="position: absolute; top: -15px; right: -15px; width: 30px; height: 30px; background: linear-gradient(135deg, #ff6b6b, #ee5a52); border: 4px solid white; border-radius: 50%; cursor: ne-resize; display: none; box-shadow: 0 6px 20px rgba(255,107,107,0.4), 0 2px 8px rgba(0,0,0,0.2); z-index: 10; touch-action: none; transition: all 0.2s ease;"
                  title="Resize from top-right">
+              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
             </div>
             
             <!-- Bottom-Left -->
             <div class="resize-handle" data-direction="sw" 
-                 style="position: absolute; bottom: -12px; left: -12px; width: 24px; height: 24px; background: #ff6b6b; border: 3px solid white; border-radius: 50%; cursor: sw-resize; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 10; touch-action: none;"
+                 style="position: absolute; bottom: -15px; left: -15px; width: 30px; height: 30px; background: linear-gradient(135deg, #ff6b6b, #ee5a52); border: 4px solid white; border-radius: 50%; cursor: sw-resize; display: none; box-shadow: 0 6px 20px rgba(255,107,107,0.4), 0 2px 8px rgba(0,0,0,0.2); z-index: 10; touch-action: none; transition: all 0.2s ease;"
                  title="Resize from bottom-left">
+              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
             </div>
             
             <!-- Bottom-Right -->
             <div class="resize-handle" data-direction="se" 
-                 style="position: absolute; bottom: -12px; right: -12px; width: 24px; height: 24px; background: #ff6b6b; border: 3px solid white; border-radius: 50%; cursor: se-resize; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 10; touch-action: none;"
+                 style="position: absolute; bottom: -15px; right: -15px; width: 30px; height: 30px; background: linear-gradient(135deg, #ff6b6b, #ee5a52); border: 4px solid white; border-radius: 50%; cursor: se-resize; display: none; box-shadow: 0 6px 20px rgba(255,107,107,0.4), 0 2px 8px rgba(0,0,0,0.2); z-index: 10; touch-action: none; transition: all 0.2s ease;"
                  title="Resize from bottom-right">
+              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
             </div>
             
-            <!-- Side Handles (Hidden by default, shown when selected) -->
+            <!-- Edge Handles (Teal) -->
             <!-- Top -->
             <div class="resize-handle" data-direction="n" 
-                 style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); width: 24px; height: 24px; background: #4ecdc4; border: 3px solid white; border-radius: 50%; cursor: n-resize; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 10; touch-action: none;"
+                 style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 30px; height: 30px; background: linear-gradient(135deg, #4ecdc4, #44a08d); border: 4px solid white; border-radius: 50%; cursor: n-resize; display: none; box-shadow: 0 6px 20px rgba(78,205,196,0.4), 0 2px 8px rgba(0,0,0,0.2); z-index: 10; touch-action: none; transition: all 0.2s ease;"
                  title="Resize from top">
+              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
             </div>
             
             <!-- Bottom -->
             <div class="resize-handle" data-direction="s" 
-                 style="position: absolute; bottom: -12px; left: 50%; transform: translateX(-50%); width: 24px; height: 24px; background: #4ecdc4; border: 3px solid white; border-radius: 50%; cursor: s-resize; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 10; touch-action: none;"
+                 style="position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%); width: 30px; height: 30px; background: linear-gradient(135deg, #4ecdc4, #44a08d); border: 4px solid white; border-radius: 50%; cursor: s-resize; display: none; box-shadow: 0 6px 20px rgba(78,205,196,0.4), 0 2px 8px rgba(0,0,0,0.2); z-index: 10; touch-action: none; transition: all 0.2s ease;"
                  title="Resize from bottom">
+              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
             </div>
             
             <!-- Left -->
             <div class="resize-handle" data-direction="w" 
-                 style="position: absolute; left: -12px; top: 50%; transform: translateY(-50%); width: 24px; height: 24px; background: #4ecdc4; border: 3px solid white; border-radius: 50%; cursor: w-resize; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 10; touch-action: none;"
+                 style="position: absolute; left: -15px; top: 50%; transform: translateY(-50%); width: 30px; height: 30px; background: linear-gradient(135deg, #4ecdc4, #44a08d); border: 4px solid white; border-radius: 50%; cursor: w-resize; display: none; box-shadow: 0 6px 20px rgba(78,205,196,0.4), 0 2px 8px rgba(0,0,0,0.2); z-index: 10; touch-action: none; transition: all 0.2s ease;"
                  title="Resize from left">
+              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
             </div>
             
             <!-- Right -->
             <div class="resize-handle" data-direction="e" 
-                 style="position: absolute; right: -12px; top: 50%; transform: translateY(-50%); width: 24px; height: 24px; background: #4ecdc4; border: 3px solid white; border-radius: 50%; cursor: e-resize; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 10; touch-action: none;"
+                 style="position: absolute; right: -15px; top: 50%; transform: translateY(-50%); width: 30px; height: 30px; background: linear-gradient(135deg, #4ecdc4, #44a08d); border: 4px solid white; border-radius: 50%; cursor: e-resize; display: none; box-shadow: 0 6px 20px rgba(78,205,196,0.4), 0 2px 8px rgba(0,0,0,0.2); z-index: 10; touch-action: none; transition: all 0.2s ease;"
                  title="Resize from right">
+              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
             </div>
             
           </div>
@@ -445,6 +527,40 @@ Enhanced Interactive Product Mockup
 
 .nt-mockup__canvas.dragging {
   cursor: grabbing !important;
+}
+
+/* Enhanced Resize Handle Styles */
+.resize-handle {
+  transition: all 0.2s ease !important;
+}
+
+.resize-handle:hover {
+  transform: scale(1.1) !important;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.2) !important;
+}
+
+.resize-handle:active {
+  transform: scale(0.95) !important;
+}
+
+.resize-handle[data-direction*="nw"], 
+.resize-handle[data-direction*="se"] {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a52) !important;
+}
+
+.resize-handle[data-direction*="ne"], 
+.resize-handle[data-direction*="sw"] {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a52) !important;
+}
+
+.resize-handle[data-direction="n"], 
+.resize-handle[data-direction="s"] {
+  background: linear-gradient(135deg, #4ecdc4, #44a08d) !important;
+}
+
+.resize-handle[data-direction="w"], 
+.resize-handle[data-direction="e"] {
+  background: linear-gradient(135deg, #4ecdc4, #44a08d) !important;
 }
 
 /* Design Selection Styles */
@@ -715,6 +831,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     bindEvents() {
       const rootId = "nt-mockup-{{ section.id }}";
+      
+      // Keyboard event handling for delete/backspace
+      document.addEventListener('keydown', (e) => {
+        if ((e.key === 'Delete' || e.key === 'Backspace') && this.placementState.hasUploadedDesign && this.placementState.designSelected) {
+          e.preventDefault();
+          this.removeDesign();
+          this.showMessage('🗑️ Design deleted with keyboard', 'info');
+        }
+      });
       
       // View buttons
       const viewBtns = Array.from(document.querySelectorAll(`#${rootId} .nt-btn--view`));
