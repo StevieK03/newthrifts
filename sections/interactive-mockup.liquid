@@ -3307,8 +3307,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const timestamp = Date.now();
         const filename = `mockup_${timestamp}.png`;
         
+        // Get Supabase client
+        const client = window.supabaseClient;
+        if (!client) {
+          throw new Error('Supabase client not available');
+        }
+        
         // Upload to Supabase storage
-        const { data, error } = await this.supabaseClient
+        const { data, error } = await client
           .storage
           .from('mockup-previews')
           .upload(filename, blob, {
@@ -3319,7 +3325,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (error) throw error;
         
         // Get public URL
-        const { data: urlData } = this.supabaseClient
+        const { data: urlData } = client
           .storage
           .from('mockup-previews')
           .getPublicUrl(filename);
@@ -3343,8 +3349,14 @@ document.addEventListener('DOMContentLoaded', function() {
           const timestamp = Date.now();
           const filename = `design_${timestamp}.png`;
           
+          // Get Supabase client
+          const client = window.supabaseClient;
+          if (!client) {
+            throw new Error('Supabase client not available');
+          }
+          
           // Upload to Supabase storage
-          const { data, error } = await this.supabaseClient
+          const { data, error } = await client
             .storage
             .from('design-uploads')
             .upload(filename, blob, {
@@ -3355,7 +3367,7 @@ document.addEventListener('DOMContentLoaded', function() {
           if (error) throw error;
           
           // Get public URL
-          const { data: urlData } = this.supabaseClient
+          const { data: urlData } = client
             .storage
             .from('design-uploads')
             .getPublicUrl(filename);
