@@ -1052,14 +1052,14 @@
             <!-- END Design Customization Controls Section -->
 
             <!-- Size Chart - Collapsible -->
-            <div class="size-chart-container" style="margin: 20px 0; max-width: 1200px; margin-left: auto; margin-right: auto;">
+            <div class="size-chart-container" style="margin: 20px auto; max-width: 1200px; display: flex; flex-direction: column; align-items: center; text-align: center;">
               <button id="size-chart-toggle-{{ section.id }}" style="width: 100%; padding: 16px; background: linear-gradient(135deg, #0ea5e9, #0284c7); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; position: relative; box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3); transition: all 0.3s ease;">
                 <span>📏 Size Chart</span>
                 <span id="size-chart-icon-{{ section.id }}" style="position: absolute; right: 16px; font-size: 18px; transition: transform 0.3s ease;">▼</span>
               </button>
-              <div id="size-chart-content-{{ section.id }}" style="display: none; margin-top: 16px; padding: 16px; background: #f0f9ff; border-radius: 12px; border: 1px solid #0ea5e9;">
-              <div style="overflow-x: auto;">
-                <table class="size-chart-table" style="width: 100%; border-collapse: collapse; font-size: 12px; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+              <div id="size-chart-content-{{ section.id }}" style="display: none; margin-top: 16px; padding: 16px; background: #f0f9ff; border-radius: 12px; border: 1px solid #0ea5e9; width: 100%;">
+              <div style="overflow-x: auto; display: flex; justify-content: center;">
+                <table class="size-chart-table" style="border-collapse: collapse; font-size: 12px; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); min-width: 600px;">
                   <thead>
                     <tr style="background: linear-gradient(135deg, #0ea5e9, #0284c7); color: white;">
                       <th style="padding: 8px; text-align: left; font-weight: 600;">Size</th>
@@ -1116,16 +1116,16 @@
                   </tbody>
                 </table>
               </div>
-              <div style="margin-top: 16px; padding: 12px; background: #fef3c7; border-radius: 8px; border-left: 4px solid #f59e0b;">
+              <div style="margin-top: 16px; padding: 12px; background: #fef3c7; border-radius: 8px; border-left: 4px solid #f59e0b; text-align: center;">
                 <p style="margin: 0; color: #92400e; font-size: 14px; font-weight: 500;">
                   <strong>💡 Size Guide Tip:</strong> Measure your chest at the fullest point, keeping the tape measure parallel to the ground. If you're between sizes, we recommend sizing up for a more comfortable fit.
                 </p>
               </div>
-              <div style="margin-top: 12px; padding: 12px; background: #ecfdf5; border-radius: 8px; border-left: 4px solid #10b981;">
+              <div style="margin-top: 12px; padding: 12px; background: #ecfdf5; border-radius: 8px; border-left: 4px solid #10b981; text-align: center;">
                 <p style="margin: 0; color: #065f46; font-size: 14px;">
                   <strong>📐 How to Measure:</strong>
                 </p>
-                <ul style="margin: 8px 0 0 0; padding-left: 20px; color: #065f46; font-size: 13px;">
+                <ul style="margin: 8px 0 0 0; padding-left: 20px; color: #065f46; font-size: 13px; text-align: left; display: inline-block;">
                   <li><strong>Chest:</strong> Measure around the fullest part of your chest</li>
                   <li><strong>Length:</strong> Measure from shoulder to bottom hem</li>
                   <li><strong>Sleeve:</strong> Measure from shoulder to wrist</li>
