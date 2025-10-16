@@ -3214,8 +3214,8 @@ document.addEventListener('DOMContentLoaded', function() {
           tshirt_color: requestData.design_data.color,
           submission_date: new Date().toLocaleString(),
           request_id: requestData.id || 'Pending',
-          design_image: 'Available in database',
-          mockup_image: 'Available in database'
+          design_image: requestData.design_image_url || 'Not uploaded',
+          mockup_image: requestData.mockup_image_url || 'Not generated'
         };
         
         // Send email via EmailJS
