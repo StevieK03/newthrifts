@@ -215,6 +215,16 @@
         "collection": "entire-collection",
         "max_products": 12
       }
+    },
+    "custom_tshirt_studio": {
+      "type": "custom-tshirt-studio",
+      "name": "Custom T-Shirt Studio",
+      "settings": {
+        "title": "Custom T-Shirt Studio",
+        "description": "Create stunning custom t-shirts with our advanced design tools. Upload your artwork, customize colors, adjust positioning, and see your design come to life in real-time.",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
     }
   },
   "order": [
@@ -226,6 +236,7 @@
     "smart_design_suggestions",
     "customizer_integration",
     "interactive_mockup",
+    "custom_tshirt_studio",
     "visitor_counter_section",
     "product_poll_section",
     "marquee",
