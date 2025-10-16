@@ -1279,9 +1279,17 @@ window.openCustomDesignStudio = function() {
     studio.style.display = 'block';
     studio.scrollIntoView({ behavior: 'smooth' });
     
-    // Initialize the mockup after the studio is visible
+    // Initialize the mockup and size chart after the studio is visible
     setTimeout(() => {
+      console.log('🎨 Studio opened, initializing mockup and size chart...');
       initializeMockup();
+      
+      // Initialize size chart
+      if (typeof initializeSizeChart === 'function') {
+        initializeSizeChart();
+      } else {
+        console.error('❌ initializeSizeChart function not found');
+      }
     }, 200);
   }
 };
@@ -2452,28 +2460,39 @@ function initializeMockup() {
   console.log('✅ testPerfectFit is now available! Type: testPerfectFit()');
 })();
 
-// Size Chart Toggle Functionality
-document.addEventListener('DOMContentLoaded', function() {
+// Size Chart Toggle Functionality - Initialize when studio opens
+function initializeSizeChart() {
+  console.log('📏 Initializing Size Chart...');
   const sizeChartToggle = document.getElementById('size-chart-toggle-{{ section.id }}');
   const sizeChartContent = document.getElementById('size-chart-content-{{ section.id }}');
   const sizeChartIcon = document.getElementById('size-chart-icon-{{ section.id }}');
   
   if (sizeChartToggle && sizeChartContent && sizeChartIcon) {
+    console.log('✅ Size Chart elements found, binding events...');
     sizeChartToggle.addEventListener('click', function() {
       if (sizeChartContent.style.display === 'none') {
         sizeChartContent.style.display = 'block';
         sizeChartIcon.style.transform = 'rotate(180deg)';
         // Use theme-appropriate open colors
         sizeChartToggle.style.background = 'linear-gradient(135deg, #059669, #047857)';
+        console.log('📏 Size Chart opened');
       } else {
         sizeChartContent.style.display = 'none';
         sizeChartIcon.style.transform = 'rotate(0deg)';
         // Reset to default - CSS will handle theme colors
         sizeChartToggle.style.background = '';
+        console.log('📏 Size Chart closed');
       }
     });
+    console.log('✅ Size Chart toggle functionality initialized');
+  } else {
+    console.error('❌ Size Chart elements not found:', {
+      toggle: !!sizeChartToggle,
+      content: !!sizeChartContent,
+      icon: !!sizeChartIcon
+    });
   }
-});
+}
 </script>
 
 {% schema %}
