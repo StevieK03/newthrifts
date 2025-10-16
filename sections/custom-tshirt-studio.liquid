@@ -884,49 +884,56 @@
                         onload="console.log('✅ T-shirt image loaded:', this.src);"
                       >
                     
-                    <!-- Design Overlay -->
-                    <div 
-                      id="nt-overlay-{{ section.id }}"
-                      style="
-                        position: absolute;
-                        inset: 0;
-                        pointer-events: none;
-                        z-index: 2;
-                      "
-                    >
-                      <!-- Design will be placed here -->
+                    <!-- Debug assets (hidden) -->
+                    <div id="debug-assets-{{ section.id }}" style="position: absolute; top: -100px; left: -100px; width: 1px; height: 1px; overflow: hidden;">
+                      <img src="{{ 'tshirt-view.png' | asset_url }}" onload="console.log('✅ Direct asset test - tshirt-view.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - tshirt-view.png failed:', this.src);">
+                      <img src="{{ 'Girl-Model.png' | asset_url }}" onload="console.log('✅ Direct asset test - Girl-Model.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - Girl-Model.png failed:', this.src);">
+                      <img src="{{ 'Women-side.png' | asset_url }}" onload="console.log('✅ Direct asset test - Women-side.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - Women-side.png failed:', this.src);">
                     </div>
                     
-                    <!-- Print Area Indicator -->
-                    <div 
-                      id="nt-print-area-{{ section.id }}"
-                      style="
-                        position: absolute;
-                        top: 20%;
-                        left: 25%;
-                        width: 50%;
-                        height: 60%;
-                        border: 2px dashed rgba(59, 130, 246, 0.5);
-                        border-radius: 8px;
-                        pointer-events: none;
-                        z-index: 0;
-                        background: rgba(59, 130, 246, 0.05);
-                      "
+                    <!-- Dynamic Design Overlay - Aligned with print area -->
+                    <div
+                      id="nt-overlay-{{ section.id }}"
+                      class="nt-mockup__overlay"
+                      style="position: absolute; width: var(--overlay-width); height: var(--overlay-height); left: 50%; top: var(--overlay-top); transform: translateX(-50%) rotate(var(--overlay-rotate)); inset: auto; display: flex; align-items: center; justify-content: center; cursor: grab; transition: all 0.1s ease; border: 2px dashed rgba(39, 225, 193, 0.3); border-radius: 8px; background: rgba(39, 225, 193, 0.05);"
                     >
-                      <div style="
-                        position: absolute;
-                        top: -20px;
-                        left: 50%;
-                        transform: translateX(-50%);
-                        background: rgba(59, 130, 246, 0.9);
-                        color: white;
-                        padding: 4px 12px;
-                        border-radius: 12px;
-                        font-size: 12px;
-                        font-weight: 600;
-                        white-space: nowrap;
-                      ">
-                        Print Area
+                      <span id="nt-design-text-{{ section.id }}" 
+                            style="font-family: 'Bebas Neue', sans-serif; font-size: 32px; font-weight: bold; color: #000000; text-align: center; white-space: nowrap; user-select: none; text-shadow: 1px 1px 2px rgba(255,255,255,0.8); pointer-events: none;">
+                        Your Design Here
+                      </span>
+                      
+                      <!-- Drag Handle (only visible when dragging) -->
+                      <div id="nt-drag-handle-{{ section.id }}" 
+                           style="position: absolute; top: -8px; right: -8px; width: 16px; height: 16px; background: #27e1c1; border: 2px solid white; border-radius: 50%; cursor: grab; display: none; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
+                      </div>
+                      
+                      <!-- Enhanced Resize Handles - All Directions (Hidden by default, shown when selected) -->
+                      <!-- Top-Left -->
+                      <div class="resize-handle" data-direction="nw" 
+                           style="position: absolute; top: -15px; left: -15px; width: 30px; height: 30px; background: linear-gradient(135deg, #ff6b6b, #ee5a52); border: 4px solid white; border-radius: 50%; cursor: nw-resize; display: none; box-shadow: 0 6px 20px rgba(255,107,107,0.4), 0 2px 8px rgba(0,0,0,0.2); z-index: 10; touch-action: none; transition: all 0.2s ease;"
+                           title="Resize from top-left">
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
+                      </div>
+                      
+                      <!-- Top-Right -->
+                      <div class="resize-handle" data-direction="ne" 
+                           style="position: absolute; top: -15px; right: -15px; width: 30px; height: 30px; background: linear-gradient(135deg, #ff6b6b, #ee5a52); border: 4px solid white; border-radius: 50%; cursor: ne-resize; display: none; box-shadow: 0 6px 20px rgba(255,107,107,0.4), 0 2px 8px rgba(0,0,0,0.2); z-index: 10; touch-action: none; transition: all 0.2s ease;"
+                           title="Resize from top-right">
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
+                      </div>
+                      
+                      <!-- Bottom-Left -->
+                      <div class="resize-handle" data-direction="sw" 
+                           style="position: absolute; bottom: -15px; left: -15px; width: 30px; height: 30px; background: linear-gradient(135deg, #ff6b6b, #ee5a52); border: 4px solid white; border-radius: 50%; cursor: sw-resize; display: none; box-shadow: 0 6px 20px rgba(255,107,107,0.4), 0 2px 8px rgba(0,0,0,0.2); z-index: 10; touch-action: none; transition: all 0.2s ease;"
+                           title="Resize from bottom-left">
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
+                      </div>
+                      
+                      <!-- Bottom-Right -->
+                      <div class="resize-handle" data-direction="se" 
+                           style="position: absolute; bottom: -15px; right: -15px; width: 30px; height: 30px; background: linear-gradient(135deg, #ff6b6b, #ee5a52); border: 4px solid white; border-radius: 50%; cursor: se-resize; display: none; box-shadow: 0 6px 20px rgba(255,107,107,0.4), 0 2px 8px rgba(0,0,0,0.2); z-index: 10; touch-action: none; transition: all 0.2s ease;"
+                           title="Resize from bottom-right">
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
                       </div>
                     </div>
                     
