@@ -3174,30 +3174,108 @@ document.addEventListener('DOMContentLoaded', function() {
         to: 'shopping@newthrifts.com',
         subject: `🎨 Custom T-Shirt Request from ${requestData.customer_name}`,
         body: `
-          New Custom T-Shirt Request from ${requestData.customer_name}
-          
-          Customer Details:
-          - Name: ${requestData.customer_name}
-          - Email: ${requestData.customer_email}
-          - Phone: ${requestData.customer_phone || 'Not provided'}
-          - T-Shirt Size: ${requestData.tshirt_size || 'Not specified'}
-          
-          Message:
-          ${requestData.customer_message || 'No special instructions'}
-          
-          Design Specifications:
-          - Position: Top ${requestData.design_data.position.top}%, Left ${requestData.design_data.position.left}%
-          - Size: ${requestData.design_data.position.width}% × ${requestData.design_data.position.height}%
-          - Rotation: ${requestData.design_data.position.rotation}°
-          - View: ${requestData.design_data.view}
-          - T-Shirt Color: ${requestData.design_data.color}
-          
-          Attachments:
-          - Original Design Image
-          - Generated Mockup Preview
-          
-          Submitted: ${new Date().toLocaleString()}
-          Request ID: ${requestData.id || 'Pending'}
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <style>
+              body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }
+              .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 8px; text-align: center; margin-bottom: 20px; }
+              .header h1 { margin: 0; font-size: 24px; }
+              .section { background: #f8f9fa; border-left: 4px solid #667eea; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+              .section h2 { margin: 0 0 10px 0; color: #667eea; font-size: 18px; }
+              .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0; }
+              .info-item { background: white; padding: 10px; border-radius: 4px; border: 1px solid #e9ecef; }
+              .info-label { font-weight: bold; color: #495057; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+              .info-value { color: #212529; font-size: 14px; margin-top: 2px; }
+              .message-box { background: white; padding: 15px; border-radius: 8px; border: 1px solid #e9ecef; font-style: italic; color: #6c757d; }
+              .specs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin: 10px 0; }
+              .spec-item { background: white; padding: 12px; border-radius: 6px; border: 1px solid #e9ecef; }
+              .spec-label { font-weight: bold; color: #495057; font-size: 12px; text-transform: uppercase; }
+              .spec-value { color: #212529; font-size: 14px; margin-top: 4px; }
+              .attachment-box { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; padding: 15px; border-radius: 8px; margin: 15px 0; }
+              .attachment-box h3 { margin: 0 0 10px 0; font-size: 16px; }
+              .attachment-link { color: white; text-decoration: none; font-weight: bold; padding: 8px 16px; background: rgba(255,255,255,0.2); border-radius: 4px; display: inline-block; margin: 5px 5px 0 0; transition: background 0.3s; }
+              .attachment-link:hover { background: rgba(255,255,255,0.3); }
+              .footer { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 20px; text-align: center; color: #6c757d; font-size: 12px; }
+              .request-id { background: #667eea; color: white; padding: 5px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; display: inline-block; }
+            </style>
+          </head>
+          <body>
+            <div class="header">
+              <h1>🎨 Custom T-Shirt Request</h1>
+              <p>New design submission from ${requestData.customer_name}</p>
+            </div>
+            
+            <div class="section">
+              <h2>👤 Customer Information</h2>
+              <div class="info-grid">
+                <div class="info-item">
+                  <div class="info-label">Name</div>
+                  <div class="info-value">${requestData.customer_name}</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Email</div>
+                  <div class="info-value">${requestData.customer_email}</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Phone</div>
+                  <div class="info-value">${requestData.customer_phone || 'Not provided'}</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">T-Shirt Size</div>
+                  <div class="info-value">${requestData.tshirt_size || 'Not specified'}</div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="section">
+              <h2>💬 Customer Message</h2>
+              <div class="message-box">
+                ${requestData.customer_message || 'No special instructions provided'}
+              </div>
+            </div>
+            
+            <div class="section">
+              <h2>🎯 Design Specifications</h2>
+              <div class="specs-grid">
+                <div class="spec-item">
+                  <div class="spec-label">Position</div>
+                  <div class="spec-value">Top ${requestData.design_data.position.top}%, Left ${requestData.design_data.position.left}%</div>
+                </div>
+                <div class="spec-item">
+                  <div class="spec-label">Size</div>
+                  <div class="spec-value">${requestData.design_data.position.width}% × ${requestData.design_data.position.height}%</div>
+                </div>
+                <div class="spec-item">
+                  <div class="spec-label">Rotation</div>
+                  <div class="spec-value">${requestData.design_data.position.rotation}°</div>
+                </div>
+                <div class="spec-item">
+                  <div class="spec-label">View</div>
+                  <div class="spec-value">${requestData.design_data.view}</div>
+                </div>
+                <div class="spec-item">
+                  <div class="spec-label">T-Shirt Color</div>
+                  <div class="spec-value">${requestData.design_data.color}</div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="attachment-box">
+              <h3>📎 Design Files</h3>
+              <p>Click the links below to view the uploaded designs:</p>
+              <a href="${requestData.design_image_url || '#'}" class="attachment-link" target="_blank">🎨 View Original Design</a>
+              <a href="${requestData.mockup_image_url || '#'}" class="attachment-link" target="_blank">👕 View Mockup Preview</a>
+            </div>
+            
+            <div class="footer">
+              <p><strong>Submitted:</strong> ${new Date().toLocaleString()}</p>
+              <p><strong>Request ID:</strong> <span class="request-id">${requestData.id || 'Pending'}</span></p>
+              <p><em>Source: NewThrift Custom T-Shirt Designer</em></p>
+            </div>
+          </body>
+          </html>
         `
       };
     },
