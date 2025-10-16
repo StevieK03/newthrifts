@@ -2763,6 +2763,14 @@ document.addEventListener('DOMContentLoaded', function() {
         this.showMessage('🎨 Generating design preview...', 'info');
         const mockupImageData = await this.generateMockupForSubmission();
         
+        // Upload mockup to storage and get URL
+        let mockupImageUrl = null;
+        try {
+          mockupImageUrl = await this.uploadMockupToStorage(mockupImageData);
+        } catch (error) {
+          console.warn('Could not upload mockup image:', error);
+        }
+        
         // Upload design to storage if available
         let designImageUrl = null;
         try {
@@ -2793,7 +2801,7 @@ document.addEventListener('DOMContentLoaded', function() {
             has_uploaded_design: this.placementState.hasUploadedDesign
           },
           design_image_url: designImageUrl,
-          mockup_image_url: mockupImageData
+          mockup_image_url: mockupImageUrl
         };
 
         // Submit to Supabase database
@@ -3104,21 +3112,20 @@ document.addEventListener('DOMContentLoaded', function() {
       try {
         console.log('📧 Preparing to send email with images to shopping@newthrifts.com...');
         
-        // Convert images to base64 for email attachment
-        const designImageBase64 = await this.convertImageToBase64(requestData.design_image_url);
-        const mockupImageBase64 = await this.convertImageToBase64(requestData.mockup_image_url);
+        // Images are now uploaded to Supabase storage with public URLs
+        // No need to convert to base64 since we have direct URLs
         
         // Create email content
         const emailContent = this.createEmailContent(requestData);
         
-        // Debug: Check what image URLs we have
-        console.log('🔍 Debug image URLs:');
-        console.log('Design image URL:', requestData.design_image_url);
-        console.log('Mockup image URL:', requestData.mockup_image_url);
+        // Log image URLs for verification
+        console.log('✅ Image URLs generated:');
+        console.log('Design URL:', requestData.design_image_url ? '✅ Uploaded' : '❌ Failed');
+        console.log('Mockup URL:', requestData.mockup_image_url ? '✅ Uploaded' : '❌ Failed');
         
         // Send email via EmailJS (browser-compatible)
         console.log('🎯 Sending email via EmailJS...');
-        const emailResult = await this.sendViaEmailJS(requestData, emailContent, designImageBase64, mockupImageBase64);
+        const emailResult = await this.sendViaEmailJS(requestData, emailContent);
         
         console.log('📊 EmailJS result:', emailResult);
         
@@ -3196,7 +3203,7 @@ document.addEventListener('DOMContentLoaded', function() {
     },
 
 
-    async sendViaEmailJS(requestData, emailContent, designImageBase64, mockupImageBase64) {
+    async sendViaEmailJS(requestData, emailContent) {
       try {
         console.log('📧 Attempting EmailJS email with images...');
         
@@ -3288,19 +3295,76 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     },
 
-    async uploadDesignToStorage() {
-      const overlayImg = document.querySelector(`#nt-overlay-{{ section.id }} img`);
-      if (overlayImg && overlayImg.src) {
-        // Convert data URL to blob
-        const response = await fetch(overlayImg.src);
+    async uploadMockupToStorage(base64Data) {
+      if (!base64Data) return null;
+      
+      try {
+        // Convert base64 to blob
+        const response = await fetch(base64Data);
         const blob = await response.blob();
         
         // Generate unique filename
         const timestamp = Date.now();
-        const filename = `design_${timestamp}.png`;
+        const filename = `mockup_${timestamp}.png`;
         
-        // For now, return the data URL (in production, upload to Supabase Storage)
-        return overlayImg.src;
+        // Upload to Supabase storage
+        const { data, error } = await this.supabaseClient
+          .storage
+          .from('mockup-previews')
+          .upload(filename, blob, {
+            contentType: 'image/png',
+            upsert: false
+          });
+          
+        if (error) throw error;
+        
+        // Get public URL
+        const { data: urlData } = this.supabaseClient
+          .storage
+          .from('mockup-previews')
+          .getPublicUrl(filename);
+          
+        return urlData.publicUrl;
+      } catch (error) {
+        console.error('Mockup upload error:', error);
+        return null;
+      }
+    },
+
+    async uploadDesignToStorage() {
+      const overlayImg = document.querySelector(`#nt-overlay-{{ section.id }} img`);
+      if (overlayImg && overlayImg.src) {
+        try {
+          // Convert data URL to blob
+          const response = await fetch(overlayImg.src);
+          const blob = await response.blob();
+          
+          // Generate unique filename
+          const timestamp = Date.now();
+          const filename = `design_${timestamp}.png`;
+          
+          // Upload to Supabase storage
+          const { data, error } = await this.supabaseClient
+            .storage
+            .from('design-uploads')
+            .upload(filename, blob, {
+              contentType: 'image/png',
+              upsert: false
+            });
+            
+          if (error) throw error;
+          
+          // Get public URL
+          const { data: urlData } = this.supabaseClient
+            .storage
+            .from('design-uploads')
+            .getPublicUrl(filename);
+            
+          return urlData.publicUrl;
+        } catch (error) {
+          console.error('Design upload error:', error);
+          return null;
+        }
       }
       return null;
     },
