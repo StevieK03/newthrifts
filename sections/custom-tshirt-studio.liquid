@@ -1427,7 +1427,39 @@ function initializeMockup() {
     // Add keyboard shortcuts for precise control
     bindKeyboardShortcuts() {
       document.addEventListener('keydown', (e) => {
-        if (!this.placementState.hasUploadedDesign || !this.placementState.designSelected) return;
+        // Arrow key movement only works with uploaded design
+        const hasDesign = this.placementState.hasUploadedDesign && this.placementState.designSelected;
+        
+        // Zoom shortcuts work always
+        if (e.key === '+' || e.key === '=' || e.key === '-' || (e.key === '0' && e.shiftKey)) {
+          e.preventDefault();
+          switch (e.key) {
+            case '+':
+            case '=':
+              if (e.shiftKey) {
+                this.zoomIn(); // Shift+Plus = Canvas Zoom In
+              } else if (hasDesign) {
+                this.resizeDesign(1); // Regular Plus = Resize Design
+              }
+              break;
+            case '-':
+              if (e.shiftKey) {
+                this.zoomOut(); // Shift+Minus = Canvas Zoom Out
+              } else if (hasDesign) {
+                this.resizeDesign(-1); // Regular Minus = Resize Design
+              }
+              break;
+            case '0':
+              if (e.shiftKey) {
+                this.resetZoom(); // Shift+0 = Reset Canvas Zoom
+              }
+              break;
+          }
+          return;
+        }
+        
+        // Arrow key movement requires uploaded design
+        if (!hasDesign) return;
         
         // Ultra-precise movement with different step sizes
         let step = 0.5; // Default: ultra-precise (0.5px)
@@ -1441,104 +1473,123 @@ function initializeMockup() {
             this.placementState.topPct = Math.max(0, this.placementState.topPct - step);
             this.updatePlacementDisplay();
             this.updateDesignPosition();
-            this.showMessage(`⬆️ Moved up ${step}px`, 'info');
+            this.showMessage(`⬆️ Design moved up ${step}px`, 'info');
             break;
           case 'ArrowDown':
             e.preventDefault();
             this.placementState.topPct = Math.min(100, this.placementState.topPct + step);
             this.updatePlacementDisplay();
             this.updateDesignPosition();
-            this.showMessage(`⬇️ Moved down ${step}px`, 'info');
+            this.showMessage(`⬇️ Design moved down ${step}px`, 'info');
             break;
           case 'ArrowLeft':
             e.preventDefault();
             this.placementState.leftPct = Math.max(0, this.placementState.leftPct - step);
             this.updatePlacementDisplay();
             this.updateDesignPosition();
-            this.showMessage(`⬅️ Moved left ${step}px`, 'info');
+            this.showMessage(`⬅️ Design moved left ${step}px`, 'info');
             break;
           case 'ArrowRight':
             e.preventDefault();
             this.placementState.leftPct = Math.min(100, this.placementState.leftPct + step);
             this.updatePlacementDisplay();
             this.updateDesignPosition();
-            this.showMessage(`➡️ Moved right ${step}px`, 'info');
-            break;
-          case '+':
-          case '=':
-            e.preventDefault();
-            if (e.shiftKey) {
-              this.zoomIn(); // Shift+Plus = Zoom In
-            } else {
-              this.resizeDesign(1); // Regular Plus = Resize
-            }
-            break;
-          case '-':
-            e.preventDefault();
-            if (e.shiftKey) {
-              this.zoomOut(); // Shift+Minus = Zoom Out
-            } else {
-              this.resizeDesign(-1); // Regular Minus = Resize
-            }
-            break;
-          case '0':
-            if (e.shiftKey) {
-              e.preventDefault();
-              this.resetZoom(); // Shift+0 = Reset Zoom
-            }
+            this.showMessage(`➡️ Design moved right ${step}px`, 'info');
             break;
         }
       });
     },
 
-    // Zoom functionality for design studio
+    // Zoom functionality for design studio - zooms the entire canvas view
     zoomIn() {
-      if (!this.placementState.hasUploadedDesign) {
-        this.showMessage('⚠️ Please upload a design first!', 'warning');
-        return;
-      }
-      
-      const newZoom = Math.min(this.placementState.zoomLevel + 0.1, 2.0); // Max 200%
+      const newZoom = Math.min(this.placementState.zoomLevel + 0.2, 3.0); // Max 300%
       this.setZoom(newZoom);
-      this.showMessage(`🔍+ Zoomed in to ${Math.round(newZoom * 100)}%`, 'success');
+      this.showMessage(`🔍+ Canvas zoomed in to ${Math.round(newZoom * 100)}%`, 'success');
     },
 
     zoomOut() {
-      if (!this.placementState.hasUploadedDesign) {
-        this.showMessage('⚠️ Please upload a design first!', 'warning');
-        return;
-      }
-      
-      const newZoom = Math.max(this.placementState.zoomLevel - 0.1, 0.3); // Min 30%
+      const newZoom = Math.max(this.placementState.zoomLevel - 0.2, 0.2); // Min 20%
       this.setZoom(newZoom);
-      this.showMessage(`🔍- Zoomed out to ${Math.round(newZoom * 100)}%`, 'success');
+      this.showMessage(`🔍- Canvas zoomed out to ${Math.round(newZoom * 100)}%`, 'success');
     },
 
     resetZoom() {
-      if (!this.placementState.hasUploadedDesign) {
-        this.showMessage('⚠️ Please upload a design first!', 'warning');
-        return;
-      }
-      
       this.setZoom(1.0);
-      this.showMessage('🎯 Zoom reset to 100%', 'success');
+      this.showMessage('🎯 Canvas zoom reset to 100%', 'success');
     },
 
     setZoom(zoomLevel) {
       this.placementState.zoomLevel = zoomLevel;
       
-      // Calculate new dimensions based on zoom
-      this.placementState.widthPct = this.placementState.baseWidthPct * zoomLevel;
-      this.placementState.heightPct = this.placementState.baseHeightPct * zoomLevel;
+      // Apply zoom to the entire canvas container
+      const canvas = document.getElementById('nt-mockup-canvas-{{ section.id }}');
+      const mockupContainer = document.getElementById('nt-mockup-{{ section.id }}');
       
-      // Constrain to canvas bounds
-      this.placementState.widthPct = Math.max(5, Math.min(95, this.placementState.widthPct));
-      this.placementState.heightPct = Math.max(5, Math.min(95, this.placementState.heightPct));
+      if (canvas && mockupContainer) {
+        // Apply CSS transform to zoom the entire canvas with smooth transition
+        canvas.style.transition = 'transform 0.3s ease, border-color 0.3s ease';
+        canvas.style.transform = `scale(${zoomLevel})`;
+        canvas.style.transformOrigin = 'center center';
+        
+        // Adjust container size to accommodate zoom
+        const containerPadding = 20; // Extra space around zoomed canvas
+        mockupContainer.style.padding = `${containerPadding}px`;
+        
+        // Update canvas container to show zoom level visually
+        canvas.style.border = `3px solid ${zoomLevel > 1 ? '#10b981' : zoomLevel < 1 ? '#ef4444' : '#6b7280'}`;
+        canvas.style.borderRadius = '12px';
+        
+        // Add zoom indicator overlay
+        this.updateZoomIndicator(zoomLevel);
+      }
       
       // Update display
-      this.updatePlacementDisplay();
-      this.updateDesignPosition();
       this.updateZoomLevelDisplay();
+    },
+
+    updateZoomIndicator(zoomLevel) {
+      // Remove existing zoom indicator
+      const existingIndicator = document.getElementById('nt-zoom-indicator-{{ section.id }}');
+      if (existingIndicator) {
+        existingIndicator.remove();
+      }
+      
+      // Add zoom indicator overlay
+      const canvas = document.getElementById('nt-mockup-canvas-{{ section.id }}');
+      if (canvas && zoomLevel !== 1.0) {
+        const indicator = document.createElement('div');
+        indicator.id = 'nt-zoom-indicator-{{ section.id }}';
+        indicator.style.cssText = `
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          background: ${zoomLevel > 1 ? 'rgba(16, 185, 129, 0.9)' : 'rgba(239, 68, 68, 0.9)'};
+          color: white;
+          padding: 8px 12px;
+          border-radius: 20px;
+          font-size: 12px;
+          font-weight: 600;
+          z-index: 1000;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+        `;
+        indicator.textContent = `${Math.round(zoomLevel * 100)}%`;
+        canvas.appendChild(indicator);
+        
+        // Auto-hide indicator after 3 seconds
+        setTimeout(() => {
+          if (indicator.parentNode) {
+            indicator.style.opacity = '0';
+            indicator.style.transition = 'opacity 0.5s ease';
+            setTimeout(() => {
+              if (indicator.parentNode) {
+                indicator.remove();
+              }
+            }, 500);
+          }
+        }, 3000);
+      }
     },
 
     updateZoomLevelDisplay() {
@@ -1792,13 +1843,8 @@ function initializeMockup() {
         this.placementState.hasUploadedDesign = true;
         this.placementState.designSelected = true;
         
-        // Set base dimensions for zoom calculations
-        this.placementState.baseWidthPct = this.placementState.widthPct;
-        this.placementState.baseHeightPct = this.placementState.heightPct;
-        this.placementState.zoomLevel = 1.0;
-        
         console.log('✅ Design applied to mockup');
-        this.showMessage('🎨 Design uploaded! Use zoom controls and precise arrow keys for fine-tuning.', 'success');
+        this.showMessage('🎨 Design uploaded! Use canvas zoom controls and precise arrow keys for fine-tuning.', 'success');
       }
     },
     
