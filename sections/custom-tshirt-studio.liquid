@@ -684,6 +684,79 @@
                         </div>
                       </div>
                       
+                      <!-- Zoom Controls -->
+                      <div class="nt-mockup__group" style="background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); padding: 16px; border-radius: 16px; border: 2px solid rgba(255,255,255,0.2); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); margin-bottom: 16px;">
+                        <span class="nt-mockup__label" style="font-weight: 600; font-size: 14px; color: #334155; margin-right: 12px; display: block; margin-bottom: 12px;">🔍 Zoom Controls</span>
+                        <div class="nt-mockup__buttons" style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;">
+                          <button class="nt-btn nt-btn--zoom-out enhanced-zoom-btn" id="nt-zoom-out-{{ section.id }}" style="
+                            padding: 12px 16px; 
+                            border: 2px solid transparent; 
+                            background: linear-gradient(135deg, #ef4444, #dc2626); 
+                            color: white; 
+                            border-radius: 12px; 
+                            font-size: 14px; 
+                            font-weight: 600; 
+                            cursor: pointer; 
+                            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+                            box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+                            backdrop-filter: blur(10px);
+                            -webkit-backdrop-filter: blur(10px);
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            gap: 6px;
+                            min-width: 120px;
+                          ">
+                            🔍- Zoom Out
+                          </button>
+                          <button class="nt-btn nt-btn--zoom-reset enhanced-zoom-btn" id="nt-zoom-reset-{{ section.id }}" style="
+                            padding: 12px 16px; 
+                            border: 2px solid transparent; 
+                            background: linear-gradient(135deg, #6b7280, #4b5563); 
+                            color: white; 
+                            border-radius: 12px; 
+                            font-size: 14px; 
+                            font-weight: 600; 
+                            cursor: pointer; 
+                            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+                            box-shadow: 0 4px 16px rgba(107, 114, 128, 0.3);
+                            backdrop-filter: blur(10px);
+                            -webkit-backdrop-filter: blur(10px);
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            gap: 6px;
+                            min-width: 120px;
+                          ">
+                            🎯 Reset Zoom
+                          </button>
+                          <button class="nt-btn nt-btn--zoom-in enhanced-zoom-btn" id="nt-zoom-in-{{ section.id }}" style="
+                            padding: 12px 16px; 
+                            border: 2px solid transparent; 
+                            background: linear-gradient(135deg, #10b981, #059669); 
+                            color: white; 
+                            border-radius: 12px; 
+                            font-size: 14px; 
+                            font-weight: 600; 
+                            cursor: pointer; 
+                            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+                            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+                            backdrop-filter: blur(10px);
+                            -webkit-backdrop-filter: blur(10px);
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            gap: 6px;
+                            min-width: 120px;
+                          ">
+                            🔍+ Zoom In
+                          </button>
+                        </div>
+                        <div style="margin-top: 8px; text-align: center;">
+                          <span id="nt-zoom-level-{{ section.id }}" style="font-size: 12px; color: #6b7280; font-weight: 500;">Zoom: 100%</span>
+                        </div>
+                      </div>
+                      
                       <!-- Action Buttons Grid -->
                       <div class="action-buttons-grid" style="
                         display: grid;
@@ -1083,7 +1156,10 @@ function initializeMockup() {
       lastX: 0,
       lastY: 0,
       hasUploadedDesign: false,
-      designSelected: false
+      designSelected: false,
+      zoomLevel: 1.0, // Zoom level (1.0 = 100%)
+      baseWidthPct: 50, // Original width for zoom calculations
+      baseHeightPct: 65 // Original height for zoom calculations
     },
 
     init() {
@@ -1092,10 +1168,12 @@ function initializeMockup() {
       this.bindDragResize();
       this.bindMouseWheelResize();
       this.bindKeyboardShortcuts();
+      this.bindZoomControls();
       this.updateBase();
       this.updateDesign();
       this.updatePlacementDisplay();
       this.updateDesignPosition();
+      this.updateZoomLevelDisplay();
       console.log('✅ Custom Studio Mockup initialized');
     },
 
@@ -1351,7 +1429,11 @@ function initializeMockup() {
       document.addEventListener('keydown', (e) => {
         if (!this.placementState.hasUploadedDesign || !this.placementState.designSelected) return;
         
-        const step = e.shiftKey ? 5 : 1; // Larger steps with Shift
+        // Ultra-precise movement with different step sizes
+        let step = 0.5; // Default: ultra-precise (0.5px)
+        if (e.shiftKey) step = 2; // Shift: medium steps (2px)
+        if (e.ctrlKey) step = 0.1; // Ctrl: micro-precise (0.1px)
+        if (e.shiftKey && e.ctrlKey) step = 5; // Shift+Ctrl: large steps (5px)
         
         switch (e.key) {
           case 'ArrowUp':
@@ -1359,36 +1441,137 @@ function initializeMockup() {
             this.placementState.topPct = Math.max(0, this.placementState.topPct - step);
             this.updatePlacementDisplay();
             this.updateDesignPosition();
+            this.showMessage(`⬆️ Moved up ${step}px`, 'info');
             break;
           case 'ArrowDown':
             e.preventDefault();
             this.placementState.topPct = Math.min(100, this.placementState.topPct + step);
             this.updatePlacementDisplay();
             this.updateDesignPosition();
+            this.showMessage(`⬇️ Moved down ${step}px`, 'info');
             break;
           case 'ArrowLeft':
             e.preventDefault();
             this.placementState.leftPct = Math.max(0, this.placementState.leftPct - step);
             this.updatePlacementDisplay();
             this.updateDesignPosition();
+            this.showMessage(`⬅️ Moved left ${step}px`, 'info');
             break;
           case 'ArrowRight':
             e.preventDefault();
             this.placementState.leftPct = Math.min(100, this.placementState.leftPct + step);
             this.updatePlacementDisplay();
             this.updateDesignPosition();
+            this.showMessage(`➡️ Moved right ${step}px`, 'info');
             break;
           case '+':
           case '=':
             e.preventDefault();
-            this.resizeDesign(1);
+            if (e.shiftKey) {
+              this.zoomIn(); // Shift+Plus = Zoom In
+            } else {
+              this.resizeDesign(1); // Regular Plus = Resize
+            }
             break;
           case '-':
             e.preventDefault();
-            this.resizeDesign(-1);
+            if (e.shiftKey) {
+              this.zoomOut(); // Shift+Minus = Zoom Out
+            } else {
+              this.resizeDesign(-1); // Regular Minus = Resize
+            }
+            break;
+          case '0':
+            if (e.shiftKey) {
+              e.preventDefault();
+              this.resetZoom(); // Shift+0 = Reset Zoom
+            }
             break;
         }
       });
+    },
+
+    // Zoom functionality for design studio
+    zoomIn() {
+      if (!this.placementState.hasUploadedDesign) {
+        this.showMessage('⚠️ Please upload a design first!', 'warning');
+        return;
+      }
+      
+      const newZoom = Math.min(this.placementState.zoomLevel + 0.1, 2.0); // Max 200%
+      this.setZoom(newZoom);
+      this.showMessage(`🔍+ Zoomed in to ${Math.round(newZoom * 100)}%`, 'success');
+    },
+
+    zoomOut() {
+      if (!this.placementState.hasUploadedDesign) {
+        this.showMessage('⚠️ Please upload a design first!', 'warning');
+        return;
+      }
+      
+      const newZoom = Math.max(this.placementState.zoomLevel - 0.1, 0.3); // Min 30%
+      this.setZoom(newZoom);
+      this.showMessage(`🔍- Zoomed out to ${Math.round(newZoom * 100)}%`, 'success');
+    },
+
+    resetZoom() {
+      if (!this.placementState.hasUploadedDesign) {
+        this.showMessage('⚠️ Please upload a design first!', 'warning');
+        return;
+      }
+      
+      this.setZoom(1.0);
+      this.showMessage('🎯 Zoom reset to 100%', 'success');
+    },
+
+    setZoom(zoomLevel) {
+      this.placementState.zoomLevel = zoomLevel;
+      
+      // Calculate new dimensions based on zoom
+      this.placementState.widthPct = this.placementState.baseWidthPct * zoomLevel;
+      this.placementState.heightPct = this.placementState.baseHeightPct * zoomLevel;
+      
+      // Constrain to canvas bounds
+      this.placementState.widthPct = Math.max(5, Math.min(95, this.placementState.widthPct));
+      this.placementState.heightPct = Math.max(5, Math.min(95, this.placementState.heightPct));
+      
+      // Update display
+      this.updatePlacementDisplay();
+      this.updateDesignPosition();
+      this.updateZoomLevelDisplay();
+    },
+
+    updateZoomLevelDisplay() {
+      const zoomDisplay = document.getElementById(`nt-zoom-level-{{ section.id }}`);
+      if (zoomDisplay) {
+        zoomDisplay.textContent = `Zoom: ${Math.round(this.placementState.zoomLevel * 100)}%`;
+      }
+    },
+
+    bindZoomControls() {
+      // Zoom In button
+      const zoomInBtn = document.getElementById(`nt-zoom-in-{{ section.id }}`);
+      if (zoomInBtn) {
+        zoomInBtn.addEventListener('click', () => {
+          this.zoomIn();
+        });
+      }
+
+      // Zoom Out button
+      const zoomOutBtn = document.getElementById(`nt-zoom-out-{{ section.id }}`);
+      if (zoomOutBtn) {
+        zoomOutBtn.addEventListener('click', () => {
+          this.zoomOut();
+        });
+      }
+
+      // Reset Zoom button
+      const zoomResetBtn = document.getElementById(`nt-zoom-reset-{{ section.id }}`);
+      if (zoomResetBtn) {
+        zoomResetBtn.addEventListener('click', () => {
+          this.resetZoom();
+        });
+      }
     },
 
     // Bind drag functionality to overlay
@@ -1609,8 +1792,13 @@ function initializeMockup() {
         this.placementState.hasUploadedDesign = true;
         this.placementState.designSelected = true;
         
+        // Set base dimensions for zoom calculations
+        this.placementState.baseWidthPct = this.placementState.widthPct;
+        this.placementState.baseHeightPct = this.placementState.heightPct;
+        this.placementState.zoomLevel = 1.0;
+        
         console.log('✅ Design applied to mockup');
-        this.showMessage('✅ Design uploaded successfully!', 'success');
+        this.showMessage('🎨 Design uploaded! Use zoom controls and precise arrow keys for fine-tuning.', 'success');
       }
     },
     
