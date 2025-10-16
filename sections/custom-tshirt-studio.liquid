@@ -1346,132 +1346,152 @@ function initializeMockup() {
     },
     
     handleFileUpload(file) {
+      console.log('📤 Processing file:', file.name, file.type, file.size);
+      
+      const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/svg+xml'];
+      if (!allowedTypes.includes(file.type)) {
+        this.showMessage('❌ Invalid file type. Please upload PNG, JPG, or SVG files.', 'error');
+        return;
+      }
+      
+      const maxSize = 10 * 1024 * 1024;
+      if (file.size > maxSize) {
+        this.showMessage('❌ File too large. Please upload files smaller than 10MB.', 'error');
+        return;
+      }
+      
+      this.showMessage('📁 Processing your design...', 'info');
+      
       const reader = new FileReader();
       reader.onload = (e) => {
-        const overlay = document.getElementById('nt-overlay-{{ section.id }}');
-        if (overlay) {
-          const img = document.createElement('img');
-          img.src = e.target.result;
-          img.style.cssText = `
-            position: absolute;
-            top: 30%;
-            left: 50%;
-            transform: translateX(-50%) rotate(0deg);
-            width: 50%;
-            height: 50%;
-            object-fit: contain;
-            pointer-events: auto;
-            cursor: move;
-          `;
-          
-          overlay.innerHTML = '';
-          overlay.appendChild(img);
-          
-          this.placementState.hasUploadedDesign = true;
-          this.placementState.designSelected = true;
-          
-          console.log('✅ Design uploaded successfully');
-          this.showMessage('✅ Design uploaded successfully!', 'success');
-        }
+        console.log('✅ File loaded, applying to mockup');
+        this.applyUploadedDesign(e.target.result);
       };
       reader.readAsDataURL(file);
     },
+
+    applyUploadedDesign(imageData) {
+      console.log('🎨 Applying design to mockup');
+      
+      const overlayDiv = document.getElementById(`nt-overlay-{{ section.id }}`);
+      const designText = document.getElementById(`nt-design-text-{{ section.id }}`);
+      
+      if (overlayDiv && designText) {
+        designText.style.display = 'none';
+        
+        // Remove any existing uploaded image
+        const existingImg = overlayDiv.querySelector('img');
+        if (existingImg) {
+          existingImg.remove();
+        }
+        
+        const uploadedImg = document.createElement('img');
+        uploadedImg.src = imageData;
+        uploadedImg.style.cssText = `
+          width: 100% !important;
+          height: 100% !important;
+          object-fit: contain !important;
+          display: block;
+          pointer-events: none;
+        `;
+        
+        overlayDiv.appendChild(uploadedImg);
+        
+        this.placementState.hasUploadedDesign = true;
+        this.placementState.designSelected = true;
+        
+        console.log('✅ Design applied to mockup');
+        this.showMessage('✅ Design uploaded successfully!', 'success');
+      }
+    },
     
-    async downloadComposite() {
-      if (!this.placementState.hasUploadedDesign) {
-        alert('⚠️ Please upload a design first!');
-        return;
-      }
+    downloadComposite() {
+      console.log('📥 Starting download composite...');
+      console.log('Current placement state:', this.placementState);
+      
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      
+      // Use higher resolution for better quality
+      canvas.width = 2000;
+      canvas.height = 2000;
+      
+      const baseImg = new Image();
+      baseImg.crossOrigin = "anonymous";
+      baseImg.src = document.getElementById("nt-base-{{ section.id }}").src;
+      
+      baseImg.onload = () => {
+        console.log('✅ Base image loaded, drawing to canvas');
+        ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
 
-      try {
-        this.showMessage('🎨 Generating mockup image...', 'info');
-        
-        // Get the canvas and overlay elements
-        const canvas = document.getElementById('nt-mockup-canvas-{{ section.id }}');
-        const baseImg = document.getElementById('nt-base-{{ section.id }}');
-        const overlay = document.getElementById('nt-overlay-{{ section.id }}');
-        
-        if (!canvas || !baseImg || !overlay) {
-          throw new Error('Required elements not found');
-        }
-
-        // Create a new canvas for the composite image
-        const compositeCanvas = document.createElement('canvas');
-        const ctx = compositeCanvas.getContext('2d');
-        
-        // Set canvas size (high resolution)
-        const scale = 2; // 2x resolution for better quality
-        compositeCanvas.width = 800 * scale;
-        compositeCanvas.height = 1000 * scale;
-        
-        // Scale the context
-        ctx.scale(scale, scale);
-        
-        // Fill with white background
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, 800, 1000);
-        
-        // Load and draw the base t-shirt image
-        await new Promise((resolve, reject) => {
-          const img = new Image();
-          img.crossOrigin = 'anonymous';
-          img.onload = () => {
-            // Draw the base t-shirt image centered
-            const imgWidth = 400;
-            const imgHeight = 500;
-            const x = (800 - imgWidth) / 2;
-            const y = (1000 - imgHeight) / 2;
-            ctx.drawImage(img, x, y, imgWidth, imgHeight);
-            resolve();
-          };
-          img.onerror = reject;
-          img.src = baseImg.src;
-        });
-        
-        // Load and draw the uploaded design
-        const designImg = overlay.querySelector('img');
-        if (designImg) {
-          await new Promise((resolve, reject) => {
-            const img = new Image();
-            img.crossOrigin = 'anonymous';
-            img.onload = () => {
-              // Calculate the design position on the canvas
-              const canvasRect = canvas.getBoundingClientRect();
-              const overlayRect = overlay.getBoundingClientRect();
-              
-              // Convert percentage positions to canvas coordinates
-              const designX = (overlayRect.left - canvasRect.left) / canvasRect.width * 400;
-              const designY = (overlayRect.top - canvasRect.top) / canvasRect.height * 500;
-              const designWidth = (overlayRect.width / canvasRect.width) * 400;
-              const designHeight = (overlayRect.height / canvasRect.height) * 500;
-              
-              // Draw the design image
-              ctx.drawImage(img, designX, designY, designWidth, designHeight);
-              resolve();
-            };
-            img.onerror = reject;
-            img.src = designImg.src;
-          });
-        }
-        
-        // Convert canvas to blob and download
-        compositeCanvas.toBlob((blob) => {
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = `custom-tshirt-mockup-${Date.now()}.png`;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          URL.revokeObjectURL(url);
+        const overlayImg = document.querySelector(`#nt-overlay-{{ section.id }} img`);
+        console.log('Overlay image found:', overlayImg);
+            
+        if (overlayImg && overlayImg.src && this.placementState.hasUploadedDesign) {
+          console.log('🎨 Processing uploaded design for download');
+          const designImg = new Image();
+          designImg.crossOrigin = "anonymous";
+          designImg.src = overlayImg.src;
           
-          this.showMessage('✅ Mockup downloaded successfully!', 'success');
-        }, 'image/png', 0.95);
-        
-      } catch (error) {
-        console.error('Download error:', error);
-        this.showMessage('❌ Failed to generate mockup. Please try again.', 'error');
-      }
+          designImg.onload = () => {
+            console.log('✅ Design image loaded, applying to canvas');
+            
+            // Use the current placement state values
+            const topPct = this.placementState.topPct / 100;
+            const leftPct = this.placementState.leftPct / 100;
+            const widthPct = this.placementState.widthPct / 100;
+            const heightPct = this.placementState.heightPct / 100;
+            const rotateDeg = this.placementState.rotateDeg || 0;
+
+            // Calculate design position and size on canvas
+            const designX = canvas.width * leftPct - (canvas.width * widthPct) / 2; // Center horizontally
+            const designY = canvas.height * topPct;
+            const designWidth = canvas.width * widthPct;
+            const designHeight = canvas.height * heightPct;
+            
+            console.log('Design positioning:', {
+              x: designX,
+              y: designY,
+              width: designWidth,
+              height: designHeight,
+              rotation: rotateDeg
+            });
+            
+            // Apply rotation and draw the design
+            ctx.save();
+            ctx.translate(designX + designWidth / 2, designY + designHeight / 2);
+            ctx.rotate(rotateDeg * Math.PI / 180);
+            ctx.drawImage(designImg, -designWidth / 2, -designHeight / 2, designWidth, designHeight);
+            ctx.restore();
+
+            console.log('✅ Design applied to canvas, starting download');
+            const a = document.createElement('a');
+            a.download = `custom_mockup_${this.state.view}_${this.state.color}.png`;
+            a.href = canvas.toDataURL("image/png");
+            a.click();
+            
+            this.showMessage('📥 Mockup downloaded with design!', 'success');
+          };
+
+          designImg.onerror = () => {
+            console.error('❌ Failed to load design image for download');
+            this.showMessage('❌ Failed to load design for download', 'error');
+          };
+        } else {
+          console.log('ℹ️ No uploaded design found, downloading base mockup only');
+          const a = document.createElement('a');
+          a.download = `custom_mockup_${this.state.view}_${this.state.color}.png`;
+          a.href = canvas.toDataURL("image/png");
+          a.click();
+          
+          this.showMessage('📥 Mockup downloaded (no design)', 'info');
+        }
+      };
+      
+      baseImg.onerror = () => {
+        console.error('❌ Failed to load base image for download');
+        this.showMessage('❌ Failed to load base image for download', 'error');
+      };
     },
 
     downloadMockup() {
