@@ -1,0 +1,288 @@
+{% comment %}
+  Custom Design Hero Section
+  A stunning hero banner for the home page to lead users to the custom t-shirt studio.
+{% endcomment %}
+
+<div class="custom-design-hero-section">
+  <style>
+    .custom-design-hero-section {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 80px 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      min-height: 500px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .hero-content {
+      max-width: 800px;
+      z-index: 2;
+      position: relative;
+    }
+    
+    .hero-title {
+      font-size: 4rem;
+      font-weight: 900;
+      color: white;
+      margin: 0 0 20px 0;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      background: linear-gradient(45deg, #fff, #f0f8ff, #fff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: titleGlow 3s ease-in-out infinite alternate;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.5rem;
+      color: rgba(255,255,255,0.9);
+      margin: 0 0 30px 0;
+      font-weight: 300;
+      letter-spacing: 1px;
+    }
+    
+    .hero-description {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.8);
+      margin: 0 0 40px 0;
+      line-height: 1.6;
+    }
+    
+    .hero-button {
+      background: linear-gradient(135deg, #27e1c1, #20b2aa);
+      color: white;
+      border: none;
+      padding: 20px 40px;
+      border-radius: 50px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 32px rgba(39, 225, 193, 0.4);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .hero-button:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 12px 40px rgba(39, 225, 193, 0.6);
+    }
+    
+    .hero-button .arrow {
+      font-size: 20px;
+      transition: transform 0.3s ease;
+    }
+    
+    .hero-button:hover .arrow {
+      transform: translateX(5px);
+    }
+    
+    .button-shine {
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.8s ease;
+    }
+    
+    .hero-button:hover .button-shine {
+      left: 100%;
+    }
+    
+    .button-sparkle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+      animation: sparkle-float 2s ease-in-out infinite;
+    }
+    
+    .button-sparkle:nth-child(2) {
+      top: -8px;
+      right: -12px;
+      animation-delay: 0.5s;
+    }
+    
+    .floating-elements {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 1;
+    }
+    
+    .shape {
+      position: absolute;
+      opacity: 0.1;
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    .shape-1 {
+      top: 20%;
+      left: 10%;
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+      border-radius: 50%;
+      animation-delay: 0s;
+    }
+    
+    .shape-2 {
+      top: 60%;
+      right: 15%;
+      width: 120px;
+      height: 120px;
+      background: linear-gradient(45deg, #a8edea, #fed6e3);
+      border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+      animation-delay: 2s;
+    }
+    
+    .sparkle {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 50%;
+      animation: sparkle-float 3s ease-in-out infinite;
+    }
+    
+    .sparkle-1 {
+      top: 30%;
+      left: 20%;
+      animation-delay: 1s;
+    }
+    
+    .sparkle-2 {
+      bottom: 30%;
+      right: 25%;
+      animation-delay: 2.5s;
+    }
+    
+    @keyframes titleGlow {
+      from {
+        filter: brightness(1) drop-shadow(0 0 10px rgba(255,255,255,0.5));
+      }
+      to {
+        filter: brightness(1.2) drop-shadow(0 0 20px rgba(255,255,255,0.8));
+      }
+    }
+    
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-20px) rotate(180deg);
+      }
+    }
+    
+    @keyframes sparkle-float {
+      0%, 100% {
+        transform: translateY(0px) scale(1);
+        opacity: 0.6;
+      }
+      50% {
+        transform: translateY(-12px) scale(1.3);
+        opacity: 1;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.5rem;
+      }
+      
+      .hero-subtitle {
+        font-size: 1.2rem;
+      }
+      
+      .hero-button {
+        font-size: 16px;
+        padding: 16px 32px;
+      }
+    }
+  </style>
+  
+  <div class="hero-content">
+    <h2 class="hero-title">{{ section.settings.title | default: "🎨 Design Your Dream T-Shirt" }}</h2>
+    <p class="hero-subtitle">{{ section.settings.subtitle | default: "Create Something Amazing" }}</p>
+    <p class="hero-description">{{ section.settings.description | default: "Unleash your creativity with our advanced design studio. Upload your artwork, customize colors, adjust positioning, and bring your vision to life with professional-quality custom t-shirts." }}</p>
+    <button class="hero-button" onclick="openCustomDesignStudio()">
+      START DESIGNING <span class="arrow">→</span>
+      <span class="button-shine"></span>
+      <span class="button-sparkle"></span>
+      <span class="button-sparkle"></span>
+    </button>
+  </div>
+
+  <div class="floating-elements">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="sparkle sparkle-1"></div>
+    <div class="sparkle sparkle-2"></div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Custom Design Hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "🎨 Design Your Dream T-Shirt"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Create Something Amazing"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Unleash your creativity with our advanced design studio. Upload your artwork, customize colors, adjust positioning, and bring your vision to life with professional-quality custom t-shirts.</p>"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 80
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Design Hero"
+    }
+  ]
+}
+{% endschema %}

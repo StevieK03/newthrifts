@@ -216,6 +216,17 @@
         "max_products": 12
       }
     },
+    "custom_design_hero": {
+      "type": "custom-design-hero",
+      "name": "Custom Design Hero",
+      "settings": {
+        "title": "🎨 Design Your Dream T-Shirt",
+        "subtitle": "Create Something Amazing",
+        "description": "<p>Unleash your creativity with our advanced design studio. Upload your artwork, customize colors, adjust positioning, and bring your vision to life with professional-quality custom t-shirts.</p>",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
     "custom_tshirt_studio": {
       "type": "custom-tshirt-studio",
       "name": "Custom T-Shirt Studio",
@@ -236,6 +247,7 @@
     "smart_design_suggestions",
     "customizer_integration",
     "interactive_mockup",
+    "custom_design_hero",
     "custom_tshirt_studio",
     "visitor_counter_section",
     "product_poll_section",
