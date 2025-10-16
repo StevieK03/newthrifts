@@ -934,6 +934,34 @@
                            title="Resize from bottom-right">
                         <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
                       </div>
+                      
+                      <!-- Top Edge -->
+                      <div class="resize-handle" data-direction="n" 
+                           style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 30px; height: 30px; background: linear-gradient(135deg, #20bf6b, #26a69a); border: 4px solid white; border-radius: 50%; cursor: n-resize; display: none; box-shadow: 0 6px 20px rgba(32,191,107,0.4), 0 2px 8px rgba(0,0,0,0.2); z-index: 10; touch-action: none; transition: all 0.2s ease;"
+                           title="Resize from top">
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
+                      </div>
+                      
+                      <!-- Bottom Edge -->
+                      <div class="resize-handle" data-direction="s" 
+                           style="position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%); width: 30px; height: 30px; background: linear-gradient(135deg, #20bf6b, #26a69a); border: 4px solid white; border-radius: 50%; cursor: s-resize; display: none; box-shadow: 0 6px 20px rgba(32,191,107,0.4), 0 2px 8px rgba(0,0,0,0.2); z-index: 10; touch-action: none; transition: all 0.2s ease;"
+                           title="Resize from bottom">
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
+                      </div>
+                      
+                      <!-- Left Edge -->
+                      <div class="resize-handle" data-direction="w" 
+                           style="position: absolute; left: -15px; top: 50%; transform: translateY(-50%); width: 30px; height: 30px; background: linear-gradient(135deg, #20bf6b, #26a69a); border: 4px solid white; border-radius: 50%; cursor: w-resize; display: none; box-shadow: 0 6px 20px rgba(32,191,107,0.4), 0 2px 8px rgba(0,0,0,0.2); z-index: 10; touch-action: none; transition: all 0.2s ease;"
+                           title="Resize from left">
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
+                      </div>
+                      
+                      <!-- Right Edge -->
+                      <div class="resize-handle" data-direction="e" 
+                           style="position: absolute; right: -15px; top: 50%; transform: translateY(-50%); width: 30px; height: 30px; background: linear-gradient(135deg, #20bf6b, #26a69a); border: 4px solid white; border-radius: 50%; cursor: e-resize; display: none; box-shadow: 0 6px 20px rgba(32,191,107,0.4), 0 2px 8px rgba(0,0,0,0.2); z-index: 10; touch-action: none; transition: all 0.2s ease;"
+                           title="Resize from right">
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
+                      </div>
                     </div>
                     
                     <!-- Close T-shirt Mockup Container -->
@@ -1062,6 +1090,8 @@ function initializeMockup() {
       console.log('🎯 Initializing Custom Studio Mockup...');
       this.bindEvents();
       this.bindDragResize();
+      this.bindMouseWheelResize();
+      this.bindKeyboardShortcuts();
       this.updateBase();
       this.updateDesign();
       this.updatePlacementDisplay();
@@ -1123,6 +1153,12 @@ function initializeMockup() {
       if (overlay) {
         overlay.style.borderColor = '#3b82f6';
         overlay.style.boxShadow = '0 0 0 2px rgba(59, 130, 246, 0.3)';
+        
+        // Show resize handles
+        const resizeHandles = overlay.querySelectorAll('.resize-handle');
+        resizeHandles.forEach(handle => {
+          handle.style.display = 'block';
+        });
       }
     },
 
@@ -1130,8 +1166,14 @@ function initializeMockup() {
       this.placementState.designSelected = false;
       const overlay = document.getElementById('nt-overlay-{{ section.id }}');
       if (overlay) {
-        overlay.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+        overlay.style.borderColor = 'rgba(39, 225, 193, 0.3)';
         overlay.style.boxShadow = 'inset 0 4px 12px rgba(0, 0, 0, 0.1)';
+        
+        // Hide resize handles
+        const resizeHandles = overlay.querySelectorAll('.resize-handle');
+        resizeHandles.forEach(handle => {
+          handle.style.display = 'none';
+        });
       }
     },
 
@@ -1187,6 +1229,168 @@ function initializeMockup() {
       document.removeEventListener('mouseup', this.stopDrag);
     },
 
+    startResize(e, direction) {
+      this.placementState.resizing = true;
+      this.placementState.resizeDirection = direction;
+      this.placementState.lastX = e.clientX;
+      this.placementState.lastY = e.clientY;
+
+      const handleResize = (e) => {
+        if (!this.placementState.resizing) return;
+        
+        const deltaX = e.clientX - this.placementState.lastX;
+        const deltaY = e.clientY - this.placementState.lastY;
+          
+        this.resizeDesignByDirection(direction, deltaX, deltaY);
+        
+        this.placementState.lastX = e.clientX;
+        this.placementState.lastY = e.clientY;
+      };
+
+      const stopResize = () => {
+        this.placementState.resizing = false;
+        document.removeEventListener('mousemove', handleResize);
+        document.removeEventListener('mouseup', stopResize);
+      };
+
+      document.addEventListener('mousemove', handleResize);
+      document.addEventListener('mouseup', stopResize);
+    },
+
+    resizeDesignByDirection(direction, deltaX, deltaY) {
+      const sensitivity = 0.5;
+      
+      switch (direction) {
+        case 'nw':
+          this.placementState.topPct += deltaY * sensitivity;
+          this.placementState.leftPct += deltaX * sensitivity;
+          this.placementState.widthPct -= deltaX * sensitivity;
+          this.placementState.heightPct -= deltaY * sensitivity;
+          break;
+        case 'ne':
+          this.placementState.topPct += deltaY * sensitivity;
+          this.placementState.widthPct += deltaX * sensitivity;
+          this.placementState.heightPct -= deltaY * sensitivity;
+          break;
+        case 'sw':
+          this.placementState.leftPct += deltaX * sensitivity;
+          this.placementState.widthPct -= deltaX * sensitivity;
+          this.placementState.heightPct += deltaY * sensitivity;
+          break;
+        case 'se':
+          this.placementState.widthPct += deltaX * sensitivity;
+          this.placementState.heightPct += deltaY * sensitivity;
+          break;
+        case 'n':
+          this.placementState.topPct += deltaY * sensitivity;
+          this.placementState.heightPct -= deltaY * sensitivity;
+          break;
+        case 's':
+          this.placementState.heightPct += deltaY * sensitivity;
+          break;
+        case 'w':
+          this.placementState.leftPct += deltaX * sensitivity;
+          this.placementState.widthPct -= deltaX * sensitivity;
+          break;
+        case 'e':
+          this.placementState.widthPct += deltaX * sensitivity;
+          break;
+      }
+
+      // Constrain values
+      this.placementState.topPct = Math.max(0, Math.min(100, this.placementState.topPct));
+      this.placementState.leftPct = Math.max(0, Math.min(100, this.placementState.leftPct));
+      this.placementState.widthPct = Math.max(10, Math.min(90, this.placementState.widthPct));
+      this.placementState.heightPct = Math.max(10, Math.min(90, this.placementState.heightPct));
+        
+      this.updatePlacementDisplay();
+      this.updateDesignPosition();
+    },
+
+    // Enhanced resize functionality for easier use
+    resizeDesign(delta) {
+      this.placementState.widthPct += delta;
+      this.placementState.heightPct += delta;
+      
+      // Constrain values
+      this.placementState.widthPct = Math.max(10, Math.min(90, this.placementState.widthPct));
+      this.placementState.heightPct = Math.max(10, Math.min(90, this.placementState.heightPct));
+      
+      this.updatePlacementDisplay();
+      this.updateDesignPosition();
+    },
+
+    // Add mouse wheel resizing for easier control
+    bindMouseWheelResize() {
+      const overlay = document.getElementById('nt-overlay-{{ section.id }}');
+      if (!overlay) return;
+
+      let isOverOverlay = false;
+      
+      overlay.addEventListener('mouseenter', () => {
+        isOverOverlay = true;
+      });
+      
+      overlay.addEventListener('mouseleave', () => {
+        isOverOverlay = false;
+      });
+
+      // Mouse wheel resize - ONLY when hovering over the overlay
+      document.addEventListener('wheel', (e) => {
+        if (isOverOverlay && this.placementState.hasUploadedDesign) {
+          e.preventDefault();
+          // Reduced sensitivity for better control
+          const delta = e.deltaY > 0 ? -1 : 1;
+          this.resizeDesign(delta);
+        }
+      }, { passive: false });
+    },
+
+    // Add keyboard shortcuts for precise control
+    bindKeyboardShortcuts() {
+      document.addEventListener('keydown', (e) => {
+        if (!this.placementState.hasUploadedDesign || !this.placementState.designSelected) return;
+        
+        const step = e.shiftKey ? 5 : 1; // Larger steps with Shift
+        
+        switch (e.key) {
+          case 'ArrowUp':
+            e.preventDefault();
+            this.placementState.topPct = Math.max(0, this.placementState.topPct - step);
+            this.updatePlacementDisplay();
+            this.updateDesignPosition();
+            break;
+          case 'ArrowDown':
+            e.preventDefault();
+            this.placementState.topPct = Math.min(100, this.placementState.topPct + step);
+            this.updatePlacementDisplay();
+            this.updateDesignPosition();
+            break;
+          case 'ArrowLeft':
+            e.preventDefault();
+            this.placementState.leftPct = Math.max(0, this.placementState.leftPct - step);
+            this.updatePlacementDisplay();
+            this.updateDesignPosition();
+            break;
+          case 'ArrowRight':
+            e.preventDefault();
+            this.placementState.leftPct = Math.min(100, this.placementState.leftPct + step);
+            this.updatePlacementDisplay();
+            this.updateDesignPosition();
+            break;
+          case '+':
+          case '=':
+            e.preventDefault();
+            this.resizeDesign(1);
+            break;
+          case '-':
+            e.preventDefault();
+            this.resizeDesign(-1);
+            break;
+        }
+      });
+    },
+
     // Bind drag functionality to overlay
     bindDragResize() {
       const overlay = document.getElementById('nt-overlay-{{ section.id }}');
@@ -1199,7 +1403,18 @@ function initializeMockup() {
       this.stopDrag = this.stopDrag.bind(this);
       
       overlay.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
         this.startDrag(e);
+      });
+
+      // Bind resize handles
+      const resizeHandles = document.querySelectorAll(`#nt-overlay-{{ section.id }} .resize-handle`);
+      resizeHandles.forEach(handle => {
+        handle.addEventListener('mousedown', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.startResize(e, handle.dataset.direction);
+        });
       });
       
       overlay.addEventListener('click', (e) => {
