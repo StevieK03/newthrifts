@@ -3111,6 +3111,11 @@ document.addEventListener('DOMContentLoaded', function() {
         // Create email content
         const emailContent = this.createEmailContent(requestData);
         
+        // Debug: Check what image URLs we have
+        console.log('🔍 Debug image URLs:');
+        console.log('Design image URL:', requestData.design_image_url);
+        console.log('Mockup image URL:', requestData.mockup_image_url);
+        
         // Send email via EmailJS (browser-compatible)
         console.log('🎯 Sending email via EmailJS...');
         const emailResult = await this.sendViaEmailJS(requestData, emailContent, designImageBase64, mockupImageBase64);
@@ -3214,8 +3219,8 @@ document.addEventListener('DOMContentLoaded', function() {
           tshirt_color: requestData.design_data.color,
           submission_date: new Date().toLocaleString(),
           request_id: requestData.id || 'Pending',
-          design_image: requestData.design_image_url || 'Not uploaded',
-          mockup_image: requestData.mockup_image_url || 'Not generated'
+          design_image: requestData.design_image_url || 'No design uploaded',
+          mockup_image: requestData.mockup_image_url || 'No mockup generated'
         };
         
         // Send email via EmailJS
