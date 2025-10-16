@@ -330,6 +330,122 @@
         transform: translateX(100%);
       }
     }
+
+    /* Theme-Responsive Size Chart Button */
+    @media (prefers-color-scheme: light) {
+      #size-chart-toggle-{{ section.id }} {
+        background: linear-gradient(135deg, #3b82f6, #1d4ed8) !important;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3) !important;
+      }
+      
+      #size-chart-toggle-{{ section.id }}:hover {
+        background: linear-gradient(135deg, #2563eb, #1e40af) !important;
+      }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      #size-chart-toggle-{{ section.id }} {
+        background: linear-gradient(135deg, #1e40af, #1e3a8a) !important;
+        box-shadow: 0 4px 12px rgba(30, 64, 175, 0.4) !important;
+      }
+      
+      #size-chart-toggle-{{ section.id }}:hover {
+        background: linear-gradient(135deg, #1d4ed8, #1e40af) !important;
+      }
+    }
+
+    /* Manual theme support */
+    .light #size-chart-toggle-{{ section.id }},
+    [data-theme="light"] #size-chart-toggle-{{ section.id }} {
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8) !important;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3) !important;
+    }
+
+    .dark #size-chart-toggle-{{ section.id }},
+    [data-theme="dark"] #size-chart-toggle-{{ section.id }} {
+      background: linear-gradient(135deg, #1e40af, #1e3a8a) !important;
+      box-shadow: 0 4px 12px rgba(30, 64, 175, 0.4) !important;
+    }
+
+    /* Dark Mode Support for Size Chart */
+    @media (prefers-color-scheme: dark) {
+      .size-chart-container {
+        background: #1e293b !important;
+        border-color: #334155 !important;
+      }
+      
+      .size-chart-container h5 {
+        color: #f1f5f9 !important;
+      }
+      
+      .size-chart-table {
+        background: #0f172a !important;
+        color: #f1f5f9 !important;
+      }
+      
+      .size-chart-table th {
+        background: linear-gradient(135deg, #1e40af, #1d4ed8) !important;
+        color: white !important;
+      }
+      
+      .size-chart-table td {
+        color: #f1f5f9 !important;
+        border-color: #334155 !important;
+      }
+      
+      .size-chart-table tr:nth-child(even) {
+        background: #1e293b !important;
+      }
+      
+      .size-chart-table tr:nth-child(odd) {
+        background: #0f172a !important;
+      }
+      
+      .size-chart-container p {
+        background: #fbbf24 !important;
+        color: #92400e !important;
+      }
+    }
+
+    /* Additional dark mode support for any dark theme */
+    .dark .size-chart-container,
+    [data-theme="dark"] .size-chart-container {
+      background: #1e293b !important;
+      border-color: #334155 !important;
+    }
+
+    .dark .size-chart-container h5,
+    [data-theme="dark"] .size-chart-container h5 {
+      color: #f1f5f9 !important;
+    }
+
+    .dark .size-chart-table,
+    [data-theme="dark"] .size-chart-table {
+      background: #0f172a !important;
+      color: #f1f5f9 !important;
+    }
+
+    .dark .size-chart-table th,
+    [data-theme="dark"] .size-chart-table th {
+      background: linear-gradient(135deg, #1e40af, #1d4ed8) !important;
+      color: white !important;
+    }
+
+    .dark .size-chart-table td,
+    [data-theme="dark"] .size-chart-table td {
+      color: #f1f5f9 !important;
+      border-color: #334155 !important;
+    }
+
+    .dark .size-chart-table tr:nth-child(even),
+    [data-theme="dark"] .size-chart-table tr:nth-child(even) {
+      background: #1e293b !important;
+    }
+
+    .dark .size-chart-table tr:nth-child(odd),
+    [data-theme="dark"] .size-chart-table tr:nth-child(odd) {
+      background: #0f172a !important;
+    }
   </style>
   
   <!-- Floating Background Shapes -->
@@ -915,6 +1031,89 @@
                   </div>
                 </div>
             <!-- END Design Customization Controls Section -->
+
+            <!-- Size Chart - Collapsible -->
+            <div class="size-chart-container" style="margin: 20px 0; max-width: 1200px; margin-left: auto; margin-right: auto;">
+              <button id="size-chart-toggle-{{ section.id }}" style="width: 100%; padding: 16px; background: linear-gradient(135deg, #0ea5e9, #0284c7); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; position: relative; box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3); transition: all 0.3s ease;">
+                <span>📏 Size Chart</span>
+                <span id="size-chart-icon-{{ section.id }}" style="position: absolute; right: 16px; font-size: 18px; transition: transform 0.3s ease;">▼</span>
+              </button>
+              <div id="size-chart-content-{{ section.id }}" style="display: none; margin-top: 16px; padding: 16px; background: #f0f9ff; border-radius: 12px; border: 1px solid #0ea5e9;">
+              <div style="overflow-x: auto;">
+                <table class="size-chart-table" style="width: 100%; border-collapse: collapse; font-size: 12px; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                  <thead>
+                    <tr style="background: linear-gradient(135deg, #0ea5e9, #0284c7); color: white;">
+                      <th style="padding: 8px; text-align: left; font-weight: 600;">Size</th>
+                      <th style="padding: 8px; text-align: center; font-weight: 600;">XS</th>
+                      <th style="padding: 8px; text-align: center; font-weight: 600;">S</th>
+                      <th style="padding: 8px; text-align: center; font-weight: 600;">M</th>
+                      <th style="padding: 8px; text-align: center; font-weight: 600;">L</th>
+                      <th style="padding: 8px; text-align: center; font-weight: 600;">XL</th>
+                      <th style="padding: 8px; text-align: center; font-weight: 600;">2XL</th>
+                      <th style="padding: 8px; text-align: center; font-weight: 600;">3XL</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="border-bottom: 1px solid #e5e7eb;">
+                      <td style="padding: 8px; font-weight: 600; background: #f9fafb;">Chest (inches)</td>
+                      <td style="padding: 8px; text-align: center;">32-34</td>
+                      <td style="padding: 8px; text-align: center;">35-37</td>
+                      <td style="padding: 8px; text-align: center;">38-40</td>
+                      <td style="padding: 8px; text-align: center;">41-43</td>
+                      <td style="padding: 8px; text-align: center;">44-46</td>
+                      <td style="padding: 8px; text-align: center;">47-49</td>
+                      <td style="padding: 8px; text-align: center;">50-52</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e5e7eb;">
+                      <td style="padding: 8px; font-weight: 600; background: #f9fafb;">Length (inches)</td>
+                      <td style="padding: 8px; text-align: center;">26</td>
+                      <td style="padding: 8px; text-align: center;">27</td>
+                      <td style="padding: 8px; text-align: center;">28</td>
+                      <td style="padding: 8px; text-align: center;">29</td>
+                      <td style="padding: 8px; text-align: center;">30</td>
+                      <td style="padding: 8px; text-align: center;">31</td>
+                      <td style="padding: 8px; text-align: center;">32</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e5e7eb;">
+                      <td style="padding: 8px; font-weight: 600; background: #f9fafb;">Sleeve Length</td>
+                      <td style="padding: 8px; text-align: center;">8</td>
+                      <td style="padding: 8px; text-align: center;">8.5</td>
+                      <td style="padding: 8px; text-align: center;">9</td>
+                      <td style="padding: 8px; text-align: center;">9.5</td>
+                      <td style="padding: 8px; text-align: center;">10</td>
+                      <td style="padding: 8px; text-align: center;">10.5</td>
+                      <td style="padding: 8px; text-align: center;">11</td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 8px; font-weight: 600; background: #f9fafb;">Fit</td>
+                      <td style="padding: 8px; text-align: center;">Slim</td>
+                      <td style="padding: 8px; text-align: center;">Slim</td>
+                      <td style="padding: 8px; text-align: center;">Regular</td>
+                      <td style="padding: 8px; text-align: center;">Regular</td>
+                      <td style="padding: 8px; text-align: center;">Regular</td>
+                      <td style="padding: 8px; text-align: center;">Relaxed</td>
+                      <td style="padding: 8px; text-align: center;">Relaxed</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div style="margin-top: 16px; padding: 12px; background: #fef3c7; border-radius: 8px; border-left: 4px solid #f59e0b;">
+                <p style="margin: 0; color: #92400e; font-size: 14px; font-weight: 500;">
+                  <strong>💡 Size Guide Tip:</strong> Measure your chest at the fullest point, keeping the tape measure parallel to the ground. If you're between sizes, we recommend sizing up for a more comfortable fit.
+                </p>
+              </div>
+              <div style="margin-top: 12px; padding: 12px; background: #ecfdf5; border-radius: 8px; border-left: 4px solid #10b981;">
+                <p style="margin: 0; color: #065f46; font-size: 14px;">
+                  <strong>📐 How to Measure:</strong>
+                </p>
+                <ul style="margin: 8px 0 0 0; padding-left: 20px; color: #065f46; font-size: 13px;">
+                  <li><strong>Chest:</strong> Measure around the fullest part of your chest</li>
+                  <li><strong>Length:</strong> Measure from shoulder to bottom hem</li>
+                  <li><strong>Sleeve:</strong> Measure from shoulder to wrist</li>
+                </ul>
+              </div>
+              </div>
+            </div>
 
             <!-- Enhanced Preview Stage -->
             <div class="nt-mockup__stage" style="width: 100%; display: grid; place-items: center; margin-top: 60px !important; margin-bottom: 100px !important; padding: 0 20px;">
@@ -2252,6 +2451,29 @@ function initializeMockup() {
   
   console.log('✅ testPerfectFit is now available! Type: testPerfectFit()');
 })();
+
+// Size Chart Toggle Functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const sizeChartToggle = document.getElementById('size-chart-toggle-{{ section.id }}');
+  const sizeChartContent = document.getElementById('size-chart-content-{{ section.id }}');
+  const sizeChartIcon = document.getElementById('size-chart-icon-{{ section.id }}');
+  
+  if (sizeChartToggle && sizeChartContent && sizeChartIcon) {
+    sizeChartToggle.addEventListener('click', function() {
+      if (sizeChartContent.style.display === 'none') {
+        sizeChartContent.style.display = 'block';
+        sizeChartIcon.style.transform = 'rotate(180deg)';
+        // Use theme-appropriate open colors
+        sizeChartToggle.style.background = 'linear-gradient(135deg, #059669, #047857)';
+      } else {
+        sizeChartContent.style.display = 'none';
+        sizeChartIcon.style.transform = 'rotate(0deg)';
+        // Reset to default - CSS will handle theme colors
+        sizeChartToggle.style.background = '';
+      }
+    });
+  }
+});
 </script>
 
 {% schema %}
