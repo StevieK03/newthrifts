@@ -379,8 +379,8 @@
       }
       
       .size-chart-table {
-        background: #0f172a !important;
-        color: #f1f5f9 !important;
+        background: #1e293b !important;
+        color: #ffffff !important;
       }
       
       .size-chart-table th {
@@ -389,16 +389,25 @@
       }
       
       .size-chart-table td {
-        color: #f1f5f9 !important;
-        border-color: #334155 !important;
+        color: #ffffff !important;
+        border-color: #475569 !important;
+        background: #334155 !important;
       }
       
-      .size-chart-table tr:nth-child(even) {
-        background: #1e293b !important;
+      .size-chart-table tr:nth-child(even) td {
+        background: #475569 !important;
+        color: #ffffff !important;
       }
       
-      .size-chart-table tr:nth-child(odd) {
-        background: #0f172a !important;
+      .size-chart-table tr:nth-child(odd) td {
+        background: #334155 !important;
+        color: #ffffff !important;
+      }
+      
+      .size-chart-table tr td:first-child {
+        background: #f8fafc !important;
+        color: #1e293b !important;
+        font-weight: 600 !important;
       }
       
       .size-chart-container p {
@@ -421,8 +430,8 @@
 
     .dark .size-chart-table,
     [data-theme="dark"] .size-chart-table {
-      background: #0f172a !important;
-      color: #f1f5f9 !important;
+      background: #1e293b !important;
+      color: #ffffff !important;
     }
 
     .dark .size-chart-table th,
@@ -433,18 +442,28 @@
 
     .dark .size-chart-table td,
     [data-theme="dark"] .size-chart-table td {
-      color: #f1f5f9 !important;
-      border-color: #334155 !important;
+      color: #ffffff !important;
+      border-color: #475569 !important;
+      background: #334155 !important;
     }
 
-    .dark .size-chart-table tr:nth-child(even),
-    [data-theme="dark"] .size-chart-table tr:nth-child(even) {
-      background: #1e293b !important;
+    .dark .size-chart-table tr:nth-child(even) td,
+    [data-theme="dark"] .size-chart-table tr:nth-child(even) td {
+      background: #475569 !important;
+      color: #ffffff !important;
     }
 
-    .dark .size-chart-table tr:nth-child(odd),
-    [data-theme="dark"] .size-chart-table tr:nth-child(odd) {
-      background: #0f172a !important;
+    .dark .size-chart-table tr:nth-child(odd) td,
+    [data-theme="dark"] .size-chart-table tr:nth-child(odd) td {
+      background: #334155 !important;
+      color: #ffffff !important;
+    }
+
+    .dark .size-chart-table tr td:first-child,
+    [data-theme="dark"] .size-chart-table tr td:first-child {
+      background: #f8fafc !important;
+      color: #1e293b !important;
+      font-weight: 600 !important;
     }
   </style>
   
