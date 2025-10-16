@@ -758,7 +758,7 @@
                           justify-content: center;
                           gap: 8px;
                         ">
-                          📍 Placement Guide
+                          📐 <span id="nt-guide-text-{{ section.id }}">Show</span> Placement Guide
                         </button>
                         <button class="nt-btn nt-btn--remove" id="nt-remove-{{ section.id }}" style="
                           padding: 14px 20px; 
@@ -1285,13 +1285,7 @@ function initializeMockup() {
       }
 
       // Placement Guide button
-      const placementBtn = document.getElementById(`nt-toggle-guide-{{ section.id }}`);
-      if (placementBtn) {
-        placementBtn.addEventListener("click", () => {
-          console.log('📍 Placement Guide button clicked');
-          alert('📍 Placement Guide:\n\n• Drag your design to position it\n• Use scroll wheel to resize\n• Use rotation controls to adjust angle\n• Keep design within the print area for best results');
-        });
-      }
+      this.bindPlacementGuide();
 
       // Perfect Fit button
       const perfectFitBtn = document.getElementById(`nt-perfect-fit-btn-{{ section.id }}`);
@@ -1496,6 +1490,72 @@ function initializeMockup() {
 
     downloadMockup() {
       this.downloadComposite();
+    },
+
+    bindPlacementGuide() {
+      const toggleBtn = document.getElementById(`nt-toggle-guide-{{ section.id }}`);
+      const guideText = document.getElementById(`nt-guide-text-{{ section.id }}`);
+      const overlay = document.getElementById(`nt-overlay-{{ section.id }}`);
+      let guideVisible = false;
+      
+      if (toggleBtn && overlay) {
+        toggleBtn.addEventListener('click', () => {
+          guideVisible = !guideVisible;
+          
+          if (guideVisible) {
+            // Show guide - add red border and crosshairs
+            overlay.style.border = '2px dashed #ef4444';
+            overlay.style.boxShadow = '0 0 0 2px rgba(239, 68, 68, 0.2), inset 0 0 0 2px rgba(239, 68, 68, 0.1)';
+            
+            // Add crosshairs using pseudo-elements via a style element
+            if (!document.getElementById('placement-guide-style-{{ section.id }}')) {
+              const styleEl = document.createElement('style');
+              styleEl.id = 'placement-guide-style-{{ section.id }}';
+              styleEl.textContent = `
+                #nt-overlay-{{ section.id }}::before,
+                #nt-overlay-{{ section.id }}::after {
+                  content: '';
+                  position: absolute;
+                  background: rgba(239, 68, 68, 0.5);
+                  z-index: 1000;
+                  pointer-events: none;
+                }
+                #nt-overlay-{{ section.id }}::before {
+                  top: 50%;
+                  left: 0;
+                  right: 0;
+                  height: 2px;
+                  transform: translateY(-50%);
+                }
+                #nt-overlay-{{ section.id }}::after {
+                  left: 50%;
+                  top: 0;
+                  bottom: 0;
+                  width: 2px;
+                  transform: translateX(-50%);
+                }
+              `;
+              document.head.appendChild(styleEl);
+            }
+            
+            if (guideText) guideText.textContent = 'Hide';
+            this.showMessage('📐 Placement guide enabled - red border shows print area', 'success');
+          } else {
+            // Hide guide - remove border and crosshairs
+            overlay.style.border = '2px dashed rgba(39, 225, 193, 0.3)';
+            overlay.style.boxShadow = 'inset 0 4px 12px rgba(0, 0, 0, 0.1)';
+            
+            // Remove crosshairs style
+            const styleEl = document.getElementById('placement-guide-style-{{ section.id }}');
+            if (styleEl) {
+              styleEl.remove();
+            }
+            
+            if (guideText) guideText.textContent = 'Show';
+            this.showMessage('📐 Placement guide disabled', 'success');
+          }
+        });
+      }
     },
     
     removeDesign() {
