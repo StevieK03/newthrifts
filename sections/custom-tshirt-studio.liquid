@@ -850,33 +850,39 @@
                      id="nt-mockup-canvas-{{ section.id }}"
                      style="
                        position: relative;
-                       width: 100%;
-                       max-width: 600px;
+                       width: min(1400px, 100%);
+                       max-width: 98vw;
                        aspect-ratio: 1;
-                       background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+                       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                        border-radius: 20px;
-                       box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-                       border: 2px solid rgba(226, 232, 240, 0.5);
+                       overflow: visible;
+                       box-shadow: 0 25px 80px rgba(102, 126, 234, 0.3), 0 10px 30px rgba(0,0,0,0.2);
+                       padding: 40px;
+                       --overlay-top: 30%;
+                       --overlay-left: 50%;
+                       --overlay-width: 50%;
+                       --overlay-height: 65%;
+                       --overlay-rotate: 0deg;
                        overflow: hidden;
                        backdrop-filter: blur(10px);
                        -webkit-backdrop-filter: blur(10px);
                      ">
                     
-                    <!-- Base T-shirt Image -->
-                    <img 
-                      id="nt-base-{{ section.id }}"
-                      src="{{ 'tshirt-view.png' | asset_url }}"
-                      alt="T-shirt mockup"
-                      style="
-                        position: absolute;
-                        inset: 0;
-                        width: 100%;
-                        height: 100%;
-                        object-fit: contain;
-                        pointer-events: none;
-                        z-index: 1;
-                      "
-                    >
+                    <!-- T-shirt Mockup Container -->
+                    <div style="position: relative; width: 100%; aspect-ratio: 1 / 1; cursor: grab;">
+                  
+                      <!-- Base Mockup (swapped by JS) -->
+                      <img
+                        id="nt-base-{{ section.id }}"
+                        class="nt-mockup__base"
+                        src="{{ 'tshirt-view.png' | asset_url }}"
+                        alt="T-shirt mockup"
+                        loading="eager"
+                        decoding="async"
+                        style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none;"
+                        onerror="console.error('❌ Failed to load t-shirt image:', this.src);"
+                        onload="console.log('✅ T-shirt image loaded:', this.src);"
+                      >
                     
                     <!-- Design Overlay -->
                     <div 
@@ -922,6 +928,9 @@
                       ">
                         Print Area
                       </div>
+                    </div>
+                    
+                    <!-- Close T-shirt Mockup Container -->
                     </div>
                 </div>
             </div>
