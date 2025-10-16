@@ -3200,39 +3200,22 @@ document.addEventListener('DOMContentLoaded', function() {
           throw new Error('EmailJS not loaded. Please include EmailJS script.');
         }
         
-        // Create email template parameters (without large image data)
+        // Create email template parameters (matching your EmailJS template)
         const templateParams = {
-          to_email: emailContent.to,
           name: requestData.customer_name,
           email: requestData.customer_email,
           phone: requestData.customer_phone || 'Not provided',
-          message: `
-Custom T-Shirt Request Details:
-
-Customer Information:
-- Name: ${requestData.customer_name}
-- Email: ${requestData.customer_email}
-- Phone: ${requestData.customer_phone || 'Not provided'}
-- T-Shirt Size: ${requestData.tshirt_size || 'Not specified'}
-
-Customer Message: ${requestData.customer_message || 'No special instructions'}
-
-Design Specifications:
-- Position: Top ${requestData.design_data.position.top}%, Left ${requestData.design_data.position.left}%
-- Size: ${requestData.design_data.position.width}% × ${requestData.design_data.position.height}%
-- Rotation: ${requestData.design_data.position.rotation}°
-- View: ${requestData.design_data.view}
-- T-Shirt Color: ${requestData.design_data.color}
-
-Design Images: 
-- Original design and mockup images are available in the database
-- Request ID: ${requestData.id || 'Pending'}
-- You can view/download images from Supabase dashboard
-
-Submitted: ${new Date().toLocaleString()}
-Source: NewThrifts Custom T-Shirt Designer
-          `,
-          title: 'Custom T-Shirt Request'
+          tshirt_size: requestData.tshirt_size || 'Not specified',
+          message: requestData.customer_message || 'No special instructions',
+          design_position: `Top ${requestData.design_data.position.top}%, Left ${requestData.design_data.position.left}%`,
+          design_size: `${requestData.design_data.position.width}% × ${requestData.design_data.position.height}%`,
+          design_rotation: `${requestData.design_data.position.rotation}°`,
+          design_view: requestData.design_data.view,
+          tshirt_color: requestData.design_data.color,
+          submission_date: new Date().toLocaleString(),
+          request_id: requestData.id || 'Pending',
+          design_image: 'Available in database',
+          mockup_image: 'Available in database'
         };
         
         // Send email via EmailJS
