@@ -1178,120 +1178,258 @@
                 </div>
             </div>
             
-            <!-- Action Buttons Section - Below Canvas -->
-            <div class="canvas-action-buttons" style="
+            <!-- 3-Step Workflow Section - Below Canvas -->
+            <div class="canvas-action-buttons workflow-steps" style="
               display: flex;
               flex-direction: column;
               align-items: center;
-              gap: 16px;
-              margin-top: 40px;
-              max-width: 600px;
+              gap: 32px;
+              margin-top: 50px;
+              max-width: 650px;
               margin-left: auto;
               margin-right: auto;
               padding: 0 20px;
             ">
               
-              <!-- Upload Your Design Button -->
-              <button class="nt-btn nt-btn--upload upload-hero-btn" id="nt-upload-{{ section.id }}" style="
+              <!-- Step 1: Upload Your Design -->
+              <div class="workflow-step step-1" style="
                 width: 100%;
-                padding: 20px 40px; 
-                border: 2px solid transparent; 
-                background: linear-gradient(135deg, #1e40af, #3b82f6, #1d4ed8, #1e40af); 
-                background-size: 300% 300%;
-                color: white; 
-                border-radius: 20px; 
-                font-size: 18px; 
-                font-weight: 700; 
-                cursor: pointer; 
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-                box-shadow: 0 8px 32px rgba(30, 64, 175, 0.4);
-                backdrop-filter: blur(10px);
-                -webkit-backdrop-filter: blur(10px);
-                position: relative;
-                overflow: hidden;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-                animation: upload-royal-flow 3s ease-in-out infinite;
-              ">
-                <span style="position: relative; z-index: 2; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                  📁 Upload Your Design
-                  <span class="upload-sparkle" style="
-                    position: absolute;
-                    width: 4px;
-                    height: 4px;
-                    background: rgba(255, 255, 255, 0.8);
-                    border-radius: 50%;
-                    animation: sparkle-float 2s ease-in-out infinite;
-                  "></span>
-                  <span class="upload-sparkle" style="
-                    position: absolute;
-                    width: 3px;
-                    height: 3px;
-                    background: rgba(255, 255, 255, 0.6);
-                    border-radius: 50%;
-                    animation: sparkle-float 2s ease-in-out infinite 0.5s;
-                  "></span>
-                </span>
-              </button>
-              
-              <!-- Perfect Fit Button -->
-              <button class="nt-btn nt-btn--perfect-fit" id="nt-perfect-fit-btn-{{ section.id }}" style="
-                width: 100%;
-                padding: 18px 36px; 
-                border: 2px solid transparent; 
-                background: linear-gradient(135deg, #06b6d4, #0891b2); 
-                color: white; 
-                border-radius: 18px; 
-                font-size: 16px; 
-                font-weight: 600; 
-                cursor: pointer; 
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-                box-shadow: 0 6px 24px rgba(6, 182, 212, 0.3);
-                backdrop-filter: blur(10px);
-                -webkit-backdrop-filter: blur(10px);
                 display: flex;
+                flex-direction: column;
                 align-items: center;
-                justify-content: center;
-                gap: 8px;
+                text-align: center;
               ">
-                ✨ Perfect Fit
-              </button>
-              
-              <!-- Submit Request Button -->
-              <button class="nt-btn nt-btn--submit-request submit-request-hero-btn" id="nt-submit-request-btn-{{ section.id }}" style="
-                width: 100%;
-                padding: 20px 40px; 
-                border: 2px solid transparent; 
-                background: linear-gradient(135deg, #dc2626, #ef4444, #dc2626); 
-                background-size: 200% 200%;
-                color: white; 
-                border-radius: 20px; 
-                font-size: 18px; 
-                font-weight: 700; 
-                cursor: pointer; 
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-                box-shadow: 0 8px 32px rgba(220, 38, 38, 0.4);
-                backdrop-filter: blur(10px);
-                -webkit-backdrop-filter: blur(10px);
-                position: relative;
-                overflow: hidden;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-                animation: submit-pulse 2s ease-in-out infinite;
-              ">
-                <span style="position: relative; z-index: 2; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                  🚀 Submit Request
-                </span>
-                <div style="
-                  position: absolute;
-                  top: 0;
-                  left: -100%;
+                <div class="step-label" style="
+                  font-size: 1rem;
+                  font-weight: 700;
+                  color: #667eea;
+                  text-transform: uppercase;
+                  letter-spacing: 1.5px;
+                  margin-bottom: 12px;
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                ">
+                  <span style="
+                    background: linear-gradient(135deg, #667eea, #764ba2);
+                    color: white;
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 50%;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: 800;
+                    font-size: 16px;
+                    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+                  ">1</span>
+                  <span style="background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Step 1</span>
+                </div>
+                
+                <button class="nt-btn nt-btn--upload upload-hero-btn" id="nt-upload-{{ section.id }}" style="
                   width: 100%;
-                  height: 100%;
-                  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-                  transition: left 0.5s;
-                "></div>
-              </button>
+                  padding: 20px 40px; 
+                  border: 2px solid transparent; 
+                  background: linear-gradient(135deg, #1e40af, #3b82f6, #1d4ed8, #1e40af); 
+                  background-size: 300% 300%;
+                  color: white; 
+                  border-radius: 20px; 
+                  font-size: 18px; 
+                  font-weight: 700; 
+                  cursor: pointer; 
+                  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+                  box-shadow: 0 8px 32px rgba(30, 64, 175, 0.4);
+                  backdrop-filter: blur(10px);
+                  -webkit-backdrop-filter: blur(10px);
+                  position: relative;
+                  overflow: hidden;
+                  text-transform: uppercase;
+                  letter-spacing: 1px;
+                  animation: upload-royal-flow 3s ease-in-out infinite;
+                  margin-bottom: 10px;
+                ">
+                  <span style="position: relative; z-index: 2; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    📁 Upload Your Design
+                    <span class="upload-sparkle" style="
+                      position: absolute;
+                      width: 4px;
+                      height: 4px;
+                      background: rgba(255, 255, 255, 0.8);
+                      border-radius: 50%;
+                      animation: sparkle-float 2s ease-in-out infinite;
+                    "></span>
+                    <span class="upload-sparkle" style="
+                      position: absolute;
+                      width: 3px;
+                      height: 3px;
+                      background: rgba(255, 255, 255, 0.6);
+                      border-radius: 50%;
+                      animation: sparkle-float 2s ease-in-out infinite 0.5s;
+                    "></span>
+                  </span>
+                </button>
+                
+                <p class="step-description" style="
+                  font-size: 0.9rem;
+                  color: #64748b;
+                  line-height: 1.6;
+                  margin: 0;
+                  max-width: 90%;
+                ">
+                  Upload your custom artwork or image to preview it on the shirt.
+                </p>
+              </div>
+              
+              <!-- Step 2: Perfect Fit -->
+              <div class="workflow-step step-2" style="
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+              ">
+                <div class="step-label" style="
+                  font-size: 1rem;
+                  font-weight: 700;
+                  color: #06b6d4;
+                  text-transform: uppercase;
+                  letter-spacing: 1.5px;
+                  margin-bottom: 12px;
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                ">
+                  <span style="
+                    background: linear-gradient(135deg, #06b6d4, #0891b2);
+                    color: white;
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 50%;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: 800;
+                    font-size: 16px;
+                    box-shadow: 0 4px 12px rgba(6, 182, 212, 0.4);
+                  ">2</span>
+                  <span style="background: linear-gradient(135deg, #06b6d4, #0891b2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Step 2</span>
+                </div>
+                
+                <button class="nt-btn nt-btn--perfect-fit" id="nt-perfect-fit-btn-{{ section.id }}" style="
+                  width: 100%;
+                  padding: 18px 36px; 
+                  border: 2px solid transparent; 
+                  background: linear-gradient(135deg, #06b6d4, #0891b2); 
+                  color: white; 
+                  border-radius: 18px; 
+                  font-size: 16px; 
+                  font-weight: 600; 
+                  cursor: pointer; 
+                  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+                  box-shadow: 0 6px 24px rgba(6, 182, 212, 0.3);
+                  backdrop-filter: blur(10px);
+                  -webkit-backdrop-filter: blur(10px);
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  gap: 8px;
+                  margin-bottom: 10px;
+                ">
+                  ✨ Perfect Fit
+                </button>
+                
+                <p class="step-description" style="
+                  font-size: 0.9rem;
+                  color: #64748b;
+                  line-height: 1.6;
+                  margin: 0;
+                  max-width: 90%;
+                ">
+                  Adjust your design to align perfectly within the print area.
+                </p>
+              </div>
+              
+              <!-- Step 3: Submit Request -->
+              <div class="workflow-step step-3" style="
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+              ">
+                <div class="step-label" style="
+                  font-size: 1rem;
+                  font-weight: 700;
+                  color: #dc2626;
+                  text-transform: uppercase;
+                  letter-spacing: 1.5px;
+                  margin-bottom: 12px;
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                ">
+                  <span style="
+                    background: linear-gradient(135deg, #dc2626, #ef4444);
+                    color: white;
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 50%;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: 800;
+                    font-size: 16px;
+                    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+                  ">3</span>
+                  <span style="background: linear-gradient(135deg, #dc2626, #ef4444); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Step 3</span>
+                </div>
+                
+                <button class="nt-btn nt-btn--submit-request submit-request-hero-btn" id="nt-submit-request-btn-{{ section.id }}" style="
+                  width: 100%;
+                  padding: 20px 40px; 
+                  border: 2px solid transparent; 
+                  background: linear-gradient(135deg, #dc2626, #ef4444, #dc2626); 
+                  background-size: 200% 200%;
+                  color: white; 
+                  border-radius: 20px; 
+                  font-size: 18px; 
+                  font-weight: 700; 
+                  cursor: pointer; 
+                  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+                  box-shadow: 0 8px 32px rgba(220, 38, 38, 0.4);
+                  backdrop-filter: blur(10px);
+                  -webkit-backdrop-filter: blur(10px);
+                  position: relative;
+                  overflow: hidden;
+                  text-transform: uppercase;
+                  letter-spacing: 1px;
+                  animation: submit-pulse 2s ease-in-out infinite;
+                  margin-bottom: 10px;
+                ">
+                  <span style="position: relative; z-index: 2; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    🚀 Submit Request
+                  </span>
+                  <div style="
+                    position: absolute;
+                    top: 0;
+                    left: -100%;
+                    width: 100%;
+                    height: 100%;
+                    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+                    transition: left 0.5s;
+                  "></div>
+                </button>
+                
+                <p class="step-description" style="
+                  font-size: 0.9rem;
+                  color: #64748b;
+                  line-height: 1.6;
+                  margin: 0;
+                  max-width: 90%;
+                ">
+                  Send your finalized design for review or printing.
+                </p>
+              </div>
               
             </div>
             
@@ -2763,27 +2901,49 @@ function initializeSizeChart() {
     box-sizing: border-box !important;
   }
   
-  /* Canvas Action Buttons - Below Canvas */
-  .canvas-action-buttons {
-    margin-top: 30px !important;
+  /* 3-Step Workflow - Below Canvas */
+  .workflow-steps {
+    margin-top: 40px !important;
     max-width: 100% !important;
     padding: 0 16px !important;
-    gap: 14px !important;
+    gap: 28px !important;
   }
   
-  .canvas-action-buttons .nt-btn--upload {
+  .workflow-step {
+    width: 100% !important;
+  }
+  
+  .step-label {
+    font-size: 0.95rem !important;
+    margin-bottom: 10px !important;
+    gap: 6px !important;
+  }
+  
+  .step-label span:first-child {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 14px !important;
+  }
+  
+  .step-description {
+    font-size: 0.85rem !important;
+    max-width: 95% !important;
+    line-height: 1.5 !important;
+  }
+  
+  .workflow-steps .nt-btn--upload {
     width: 100% !important;
     padding: 18px 32px !important;
     font-size: 1rem !important;
   }
   
-  .canvas-action-buttons .nt-btn--perfect-fit {
+  .workflow-steps .nt-btn--perfect-fit {
     width: 100% !important;
     padding: 16px 28px !important;
     font-size: 0.95rem !important;
   }
   
-  .canvas-action-buttons .nt-btn--submit-request {
+  .workflow-steps .nt-btn--submit-request {
     width: 100% !important;
     padding: 18px 32px !important;
     font-size: 1rem !important;
@@ -2877,24 +3037,41 @@ function initializeSizeChart() {
     font-size: 0.9rem !important;
   }
   
-  /* Canvas Action Buttons */
-  .canvas-action-buttons {
-    margin-top: 24px !important;
+  /* 3-Step Workflow */
+  .workflow-steps {
+    margin-top: 32px !important;
     padding: 0 12px !important;
-    gap: 12px !important;
+    gap: 24px !important;
   }
   
-  .canvas-action-buttons .nt-btn--upload {
+  .step-label {
+    font-size: 0.9rem !important;
+    margin-bottom: 8px !important;
+    gap: 6px !important;
+  }
+  
+  .step-label span:first-child {
+    width: 26px !important;
+    height: 26px !important;
+    font-size: 13px !important;
+  }
+  
+  .step-description {
+    font-size: 0.8rem !important;
+    max-width: 100% !important;
+  }
+  
+  .workflow-steps .nt-btn--upload {
     padding: 16px 28px !important;
     font-size: 0.95rem !important;
   }
   
-  .canvas-action-buttons .nt-btn--perfect-fit {
+  .workflow-steps .nt-btn--perfect-fit {
     padding: 15px 24px !important;
     font-size: 0.9rem !important;
   }
   
-  .canvas-action-buttons .nt-btn--submit-request {
+  .workflow-steps .nt-btn--submit-request {
     padding: 16px 28px !important;
     font-size: 0.95rem !important;
   }
@@ -2977,24 +3154,44 @@ function initializeSizeChart() {
     font-size: 0.85rem !important;
   }
   
-  /* Canvas Action Buttons */
-  .canvas-action-buttons {
-    margin-top: 20px !important;
+  /* 3-Step Workflow */
+  .workflow-steps {
+    margin-top: 28px !important;
     padding: 0 10px !important;
-    gap: 10px !important;
+    gap: 20px !important;
   }
   
-  .canvas-action-buttons .nt-btn--upload {
+  .step-label {
+    font-size: 0.85rem !important;
+    margin-bottom: 8px !important;
+    gap: 5px !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+  }
+  
+  .step-label span:first-child {
+    width: 24px !important;
+    height: 24px !important;
+    font-size: 12px !important;
+  }
+  
+  .step-description {
+    font-size: 0.75rem !important;
+    max-width: 100% !important;
+    line-height: 1.5 !important;
+  }
+  
+  .workflow-steps .nt-btn--upload {
     padding: 15px 24px !important;
     font-size: 0.9rem !important;
   }
   
-  .canvas-action-buttons .nt-btn--perfect-fit {
+  .workflow-steps .nt-btn--perfect-fit {
     padding: 14px 20px !important;
     font-size: 0.85rem !important;
   }
   
-  .canvas-action-buttons .nt-btn--submit-request {
+  .workflow-steps .nt-btn--submit-request {
     padding: 15px 24px !important;
     font-size: 0.9rem !important;
   }
