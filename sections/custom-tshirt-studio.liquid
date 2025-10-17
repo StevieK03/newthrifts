@@ -1053,7 +1053,7 @@
             </div>
 
             <!-- Enhanced Preview Stage -->
-            <div class="nt-mockup__stage" style="width: 100%; display: grid; place-items: center; margin-top: 30px !important; margin-bottom: 40px !important; padding: 0 20px;">
+            <div class="nt-mockup__stage" style="width: 100%; display: flex; justify-content: center; align-items: center; margin-top: 30px !important; margin-bottom: 40px !important; padding: 0; box-sizing: border-box;">
                 <div class="nt-mockup__canvas" 
                      id="nt-mockup-canvas-{{ section.id }}"
                      style="
@@ -1061,6 +1061,7 @@
                        width: min(900px, 90%);
                        max-width: 90vw;
                        aspect-ratio: 1;
+                       margin: 0 auto;
                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                        border-radius: 20px;
                        overflow: visible;
@@ -2911,6 +2912,10 @@ function initializeSizeChart() {
   .nt-mockup__stage {
     margin-top: 20px !important;
     margin-bottom: 25px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 0 !important;
   }
   
   /* 3-Step Workflow - Below Canvas */
@@ -3027,11 +3032,16 @@ function initializeSizeChart() {
   .nt-mockup__stage {
     margin-top: 15px !important;
     margin-bottom: 20px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 0 !important;
   }
   
   .nt-mockup__canvas {
     width: min(95vw, 500px) !important;
     margin: 10px auto 20px auto !important;
+    box-sizing: border-box !important;
   }
   
   /* Controls */
@@ -3166,11 +3176,16 @@ function initializeSizeChart() {
   .nt-mockup__stage {
     margin-top: 12px !important;
     margin-bottom: 15px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 0 !important;
   }
   
   .nt-mockup__canvas {
     width: min(95vw, 400px) !important;
     margin: 8px auto 15px auto !important;
+    box-sizing: border-box !important;
   }
   
   /* Controls */
