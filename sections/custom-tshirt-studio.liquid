@@ -789,68 +789,8 @@
                     </div>
 
                     <!-- Action Buttons - Organized Grid Layout -->
+                    <!-- NOTE: Upload, Perfect Fit, and Submit buttons moved below canvas -->
                     <div class="nt-mockup__group">
-                      <!-- Upload Section - PROMINENT -->
-                      <div class="upload-section" style="display: flex; flex-direction: column; gap: 8px; align-items: center; margin-bottom: 24px;">
-                        <button class="nt-btn nt-btn--upload upload-hero-btn" id="nt-upload-{{ section.id }}" style="
-                          padding: 18px 32px; 
-                          border: 2px solid transparent; 
-                          background: linear-gradient(135deg, #1e40af, #3b82f6, #1d4ed8, #1e40af); 
-                          background-size: 300% 300%;
-                          color: white; 
-                          border-radius: 20px; 
-                          font-size: 16px; 
-                          font-weight: 700; 
-                          cursor: pointer; 
-                          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-                          box-shadow: 0 8px 32px rgba(30, 64, 175, 0.4);
-                          backdrop-filter: blur(10px);
-                          -webkit-backdrop-filter: blur(10px);
-                          position: relative;
-                          overflow: hidden;
-                          text-transform: uppercase;
-                          letter-spacing: 1px;
-                          animation: upload-royal-flow 3s ease-in-out infinite;
-                        ">
-                          <span style="position: relative; z-index: 2; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                            📁 Upload Your Design
-                            <span class="upload-sparkle" style="
-                              position: absolute;
-                              width: 4px;
-                              height: 4px;
-                              background: rgba(255, 255, 255, 0.8);
-                              border-radius: 50%;
-                              animation: sparkle-float 2s ease-in-out infinite;
-                            "></span>
-                            <span class="upload-sparkle" style="
-                              position: absolute;
-                              width: 3px;
-                              height: 3px;
-                              background: rgba(255, 255, 255, 0.6);
-                              border-radius: 50%;
-                              animation: sparkle-float 2s ease-in-out infinite 0.5s;
-                            "></span>
-                          </span>
-                        </button>
-                        <div style="display: flex; gap: 8px;">
-                          <button class="nt-btn nt-btn--help" style="
-                            padding: 8px 16px; 
-                            border: 2px solid transparent; 
-                            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); 
-                            color: #374151; 
-                            border-radius: 12px; 
-                            font-size: 12px; 
-                            font-weight: 600; 
-                            cursor: pointer; 
-                            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-                            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-                            backdrop-filter: blur(10px);
-                            -webkit-backdrop-filter: blur(10px);
-                          ">
-                            ℹ️ Help
-                          </button>
-                        </div>
-                      </div>
                       
                       <!-- Zoom Controls -->
                       <div class="nt-mockup__group" style="background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); padding: 16px; border-radius: 16px; border: 2px solid rgba(255,255,255,0.2); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); margin-bottom: 16px;">
@@ -1023,62 +963,7 @@
                         </button>
                       </div>
                       
-                      <!-- Perfect Fit Button -->
-                      <button class="nt-btn nt-btn--perfect-fit" id="nt-perfect-fit-btn-{{ section.id }}" style="
-                        padding: 14px 20px; 
-                        border: 2px solid transparent; 
-                        background: linear-gradient(135deg, #06b6d4, #0891b2); 
-                        color: white; 
-                        border-radius: 16px; 
-                        font-size: 14px; 
-                        font-weight: 600; 
-                        cursor: pointer; 
-                        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-                        box-shadow: 0 4px 16px rgba(6, 182, 212, 0.3);
-                        backdrop-filter: blur(10px);
-                        -webkit-backdrop-filter: blur(10px);
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        gap: 8px;
-                        width: 100%;
-                        margin-bottom: 12px;
-                      ">
-                        ✨ Perfect Fit
-                      </button>
-                      
-                      <!-- Submit Request Button - HERO -->
-                      <button class="nt-btn nt-btn--submit-request submit-request-hero-btn" id="nt-submit-request-btn-{{ section.id }}" style="
-                        padding: 18px 32px; 
-                        border: 2px solid transparent; 
-                        background: linear-gradient(135deg, #dc2626, #ef4444, #dc2626); 
-                        background-size: 200% 200%;
-                        color: white; 
-                        border-radius: 16px; 
-                        font-size: 16px; 
-                        font-weight: 700; 
-                        cursor: pointer; 
-                        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-                        box-shadow: 0 8px 32px rgba(220, 38, 38, 0.4);
-                        backdrop-filter: blur(10px);
-                        -webkit-backdrop-filter: blur(10px);
-                        position: relative;
-                        overflow: hidden;
-                        animation: submit-pulse 2s ease-in-out infinite;
-                      ">
-                        <span style="position: relative; z-index: 2; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                          🚀 Submit Request
-                        </span>
-                        <div style="
-                          position: absolute;
-                          top: 0;
-                          left: -100%;
-                          width: 100%;
-                          height: 100%;
-                          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-                          transition: left 0.5s;
-                        "></div>
-                      </button>
+                      <!-- Perfect Fit and Submit Request buttons moved below canvas -->
                     </div>
                   </div>
                 </div>
@@ -1292,6 +1177,124 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- Action Buttons Section - Below Canvas -->
+            <div class="canvas-action-buttons" style="
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              gap: 16px;
+              margin-top: 40px;
+              max-width: 600px;
+              margin-left: auto;
+              margin-right: auto;
+              padding: 0 20px;
+            ">
+              
+              <!-- Upload Your Design Button -->
+              <button class="nt-btn nt-btn--upload upload-hero-btn" id="nt-upload-{{ section.id }}" style="
+                width: 100%;
+                padding: 20px 40px; 
+                border: 2px solid transparent; 
+                background: linear-gradient(135deg, #1e40af, #3b82f6, #1d4ed8, #1e40af); 
+                background-size: 300% 300%;
+                color: white; 
+                border-radius: 20px; 
+                font-size: 18px; 
+                font-weight: 700; 
+                cursor: pointer; 
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+                box-shadow: 0 8px 32px rgba(30, 64, 175, 0.4);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                position: relative;
+                overflow: hidden;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                animation: upload-royal-flow 3s ease-in-out infinite;
+              ">
+                <span style="position: relative; z-index: 2; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                  📁 Upload Your Design
+                  <span class="upload-sparkle" style="
+                    position: absolute;
+                    width: 4px;
+                    height: 4px;
+                    background: rgba(255, 255, 255, 0.8);
+                    border-radius: 50%;
+                    animation: sparkle-float 2s ease-in-out infinite;
+                  "></span>
+                  <span class="upload-sparkle" style="
+                    position: absolute;
+                    width: 3px;
+                    height: 3px;
+                    background: rgba(255, 255, 255, 0.6);
+                    border-radius: 50%;
+                    animation: sparkle-float 2s ease-in-out infinite 0.5s;
+                  "></span>
+                </span>
+              </button>
+              
+              <!-- Perfect Fit Button -->
+              <button class="nt-btn nt-btn--perfect-fit" id="nt-perfect-fit-btn-{{ section.id }}" style="
+                width: 100%;
+                padding: 18px 36px; 
+                border: 2px solid transparent; 
+                background: linear-gradient(135deg, #06b6d4, #0891b2); 
+                color: white; 
+                border-radius: 18px; 
+                font-size: 16px; 
+                font-weight: 600; 
+                cursor: pointer; 
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+                box-shadow: 0 6px 24px rgba(6, 182, 212, 0.3);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+              ">
+                ✨ Perfect Fit
+              </button>
+              
+              <!-- Submit Request Button -->
+              <button class="nt-btn nt-btn--submit-request submit-request-hero-btn" id="nt-submit-request-btn-{{ section.id }}" style="
+                width: 100%;
+                padding: 20px 40px; 
+                border: 2px solid transparent; 
+                background: linear-gradient(135deg, #dc2626, #ef4444, #dc2626); 
+                background-size: 200% 200%;
+                color: white; 
+                border-radius: 20px; 
+                font-size: 18px; 
+                font-weight: 700; 
+                cursor: pointer; 
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+                box-shadow: 0 8px 32px rgba(220, 38, 38, 0.4);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                position: relative;
+                overflow: hidden;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                animation: submit-pulse 2s ease-in-out infinite;
+              ">
+                <span style="position: relative; z-index: 2; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                  🚀 Submit Request
+                </span>
+                <div style="
+                  position: absolute;
+                  top: 0;
+                  left: -100%;
+                  width: 100%;
+                  height: 100%;
+                  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+                  transition: left 0.5s;
+                "></div>
+              </button>
+              
+            </div>
+            
           </div>
         </div>
       </div>
@@ -2760,6 +2763,32 @@ function initializeSizeChart() {
     box-sizing: border-box !important;
   }
   
+  /* Canvas Action Buttons - Below Canvas */
+  .canvas-action-buttons {
+    margin-top: 30px !important;
+    max-width: 100% !important;
+    padding: 0 16px !important;
+    gap: 14px !important;
+  }
+  
+  .canvas-action-buttons .nt-btn--upload {
+    width: 100% !important;
+    padding: 18px 32px !important;
+    font-size: 1rem !important;
+  }
+  
+  .canvas-action-buttons .nt-btn--perfect-fit {
+    width: 100% !important;
+    padding: 16px 28px !important;
+    font-size: 0.95rem !important;
+  }
+  
+  .canvas-action-buttons .nt-btn--submit-request {
+    width: 100% !important;
+    padding: 18px 32px !important;
+    font-size: 1rem !important;
+  }
+  
   /* Size Chart */
   .size-chart-container {
     margin: 20px 10px !important;
@@ -2848,6 +2877,28 @@ function initializeSizeChart() {
     font-size: 0.9rem !important;
   }
   
+  /* Canvas Action Buttons */
+  .canvas-action-buttons {
+    margin-top: 24px !important;
+    padding: 0 12px !important;
+    gap: 12px !important;
+  }
+  
+  .canvas-action-buttons .nt-btn--upload {
+    padding: 16px 28px !important;
+    font-size: 0.95rem !important;
+  }
+  
+  .canvas-action-buttons .nt-btn--perfect-fit {
+    padding: 15px 24px !important;
+    font-size: 0.9rem !important;
+  }
+  
+  .canvas-action-buttons .nt-btn--submit-request {
+    padding: 16px 28px !important;
+    font-size: 0.95rem !important;
+  }
+  
   /* View Buttons - Stack to single column on small phones */
   .nt-mockup__group:has(.nt-btn--view) .nt-mockup__buttons {
     grid-template-columns: 1fr !important;
@@ -2924,6 +2975,28 @@ function initializeSizeChart() {
   .submit-request-btn {
     padding: 14px 18px !important;
     font-size: 0.85rem !important;
+  }
+  
+  /* Canvas Action Buttons */
+  .canvas-action-buttons {
+    margin-top: 20px !important;
+    padding: 0 10px !important;
+    gap: 10px !important;
+  }
+  
+  .canvas-action-buttons .nt-btn--upload {
+    padding: 15px 24px !important;
+    font-size: 0.9rem !important;
+  }
+  
+  .canvas-action-buttons .nt-btn--perfect-fit {
+    padding: 14px 20px !important;
+    font-size: 0.85rem !important;
+  }
+  
+  .canvas-action-buttons .nt-btn--submit-request {
+    padding: 15px 24px !important;
+    font-size: 0.9rem !important;
   }
   
   /* All buttons stack in single column on very small screens */
