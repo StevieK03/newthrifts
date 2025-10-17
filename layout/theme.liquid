@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    {{ 'base.css' | asset_url | stylesheet_tag }}
+    <link rel="stylesheet" href="{{ 'base.css' | asset_url }}?v={{ 'now' | date: '%s' }}" />
 
     {%- comment -%} ✅ Dark Mode styles {%- endcomment -%}
     {{ 'dark-mode.css' | asset_url | stylesheet_tag }}
