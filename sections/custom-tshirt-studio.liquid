@@ -2999,8 +2999,24 @@ function initializeMockup() {
         console.log('✅ Converted to blob, size:', blob.size, 'type:', blob.type);
         
         const timestamp = Date.now();
-        const filename = `design_${timestamp}.png`;
-        console.log('📝 Uploading as:', filename);
+        
+        // Determine file extension and content type based on blob type
+        let fileExtension = 'png';
+        let contentType = 'image/png';
+        
+        if (blob.type === 'image/svg+xml') {
+          fileExtension = 'svg';
+          contentType = 'image/svg+xml';
+        } else if (blob.type === 'image/jpeg' || blob.type === 'image/jpg') {
+          fileExtension = 'jpg';
+          contentType = 'image/jpeg';
+        } else if (blob.type === 'image/png') {
+          fileExtension = 'png';
+          contentType = 'image/png';
+        }
+        
+        const filename = `design_${timestamp}.${fileExtension}`;
+        console.log('📝 Uploading as:', filename, 'with content type:', contentType);
         
         const client = window.supabaseClient;
         if (!client) {
@@ -3011,7 +3027,7 @@ function initializeMockup() {
           .storage
           .from('design-uploads')
           .upload(filename, blob, {
-            contentType: 'image/png',
+            contentType: contentType,
             upsert: false
           });
           
