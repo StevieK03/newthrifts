@@ -2857,22 +2857,34 @@ function initializeMockup() {
           throw new Error('EmailJS not loaded. Please include EmailJS script.');
         }
         
-        // Create email template parameters
+        // Helper function to safely convert values to strings
+        const s = v => (v == null || v === "") ? "—" : String(v);
+        
+        // Ensure URLs are absolute HTTPS links
+        const ensureAbsoluteUrl = (url) => {
+          if (!url || url === '#') return '—';
+          if (url.startsWith('http://') || url.startsWith('https://')) return url;
+          // If relative URL, make it absolute (shouldn't happen, but just in case)
+          return url.startsWith('/') ? `https://newthrifts.com${url}` : url;
+        };
+        
+        // Create email template parameters with proper formatting
         const templateParams = {
-          name: requestData.customer_name,
-          email: requestData.customer_email,
-          phone: requestData.customer_phone || 'Not provided',
-          tshirt_size: requestData.tshirt_size || 'Not specified',
-          message: requestData.customer_message || 'No special instructions',
-          design_position: `Top ${requestData.design_data.position.top}%, Left ${requestData.design_data.position.left}%`,
-          design_size: `${requestData.design_data.position.width}% × ${requestData.design_data.position.height}%`,
-          design_rotation: `${requestData.design_data.position.rotation}°`,
-          design_view: requestData.design_data.view,
-          tshirt_color: requestData.design_data.color,
-          submission_date: new Date().toLocaleString(),
-          request_id: requestData.id || 'Pending',
-          design_image: requestData.design_image_url || '#',
-          mockup_image: requestData.mockup_image_url || '#'
+          name: s(requestData.customer_name),
+          email: s(requestData.customer_email),
+          phone: s(requestData.customer_phone),
+          tshirt_size: s(requestData.tshirt_size),
+          message: s(requestData.customer_message),
+          design_position: s(`Top ${requestData.design_data.position.top.toFixed(2)}%, Left ${requestData.design_data.position.left.toFixed(2)}%`),
+          design_size: s(`${requestData.design_data.position.width.toFixed(0)}% × ${requestData.design_data.position.height.toFixed(0)}%`),
+          design_rotation: s(`${requestData.design_data.position.rotation}°`),
+          design_view: s(requestData.design_data.view),
+          tshirt_color: s(requestData.design_data.color),
+          submission_date: s(new Date().toLocaleString()),
+          request_id: s(requestData.id || 'Pending'),
+          design_url: ensureAbsoluteUrl(requestData.design_image_url),
+          mockup_url: ensureAbsoluteUrl(requestData.mockup_image_url),
+          logo_url: s('https://cdn.shopify.com/s/files/1/0644/9525/5650/files/NewThriftsLogo.svg?v=1760718145')
         };
         
         // Send email via EmailJS
@@ -2883,6 +2895,7 @@ function initializeMockup() {
         );
         
         console.log('✅ EmailJS email sent successfully:', result);
+        console.debug('[email params]', templateParams);
         return { success: true, method: 'EmailJS', messageId: result.text };
         
       } catch (error) {
