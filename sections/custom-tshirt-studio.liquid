@@ -2558,10 +2558,32 @@ function initializeMockup() {
     },
 
     async submitTShirtRequest() {
+      console.log('🚀 === Starting submitTShirtRequest ===');
+      console.log('📋 Checking prerequisites...');
+      
+      // Check if design is uploaded
       if (!this.placementState.hasUploadedDesign) {
+        console.error('❌ No design uploaded');
         this.showMessage('❌ Please upload a design first', 'error');
         return;
       }
+      console.log('✅ Design is uploaded');
+      
+      // Check if Supabase client is available
+      if (!window.supabaseClient) {
+        console.error('❌ Supabase client not available');
+        this.showMessage('❌ Database connection not available. Please refresh the page and try again.', 'error');
+        return;
+      }
+      console.log('✅ Supabase client is available');
+      
+      // Check if EmailJS is available
+      if (typeof emailjs === 'undefined') {
+        console.error('❌ EmailJS not loaded');
+        this.showMessage('❌ Email service not available. Please refresh the page and try again.', 'error');
+        return;
+      }
+      console.log('✅ EmailJS is available');
 
       // Get form data
       const customerName = document.getElementById(`nt-customer-name-{{ section.id }}`).value.trim();
