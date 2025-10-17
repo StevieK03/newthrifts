@@ -2547,6 +2547,424 @@ function initializeSizeChart() {
 }
 </script>
 
+<style>
+/* ========================================
+   MOBILE RESPONSIVE DESIGN WORKSPACE
+   ======================================== */
+
+/* Tablet & Medium Screens (768px and below) */
+@media (max-width: 768px) {
+  /* Main Studio Container */
+  .custom-tshirt-studio {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+  }
+  
+  /* Studio Header */
+  .studio-title {
+    font-size: 2.25rem !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    line-height: 1.2 !important;
+    padding: 0 15px !important;
+  }
+  
+  .studio-subtitle {
+    font-size: 1rem !important;
+    padding: 0 15px !important;
+  }
+  
+  .studio-description {
+    font-size: 0.95rem !important;
+    padding: 0 15px !important;
+  }
+  
+  /* Design Workspace */
+  .design-workspace {
+    padding: 20px 12px !important;
+    margin: 0 10px !important;
+    border-radius: 16px !important;
+    overflow-x: hidden !important;
+    max-width: calc(100% - 20px) !important;
+    box-sizing: border-box !important;
+  }
+  
+  .workspace-header {
+    flex-wrap: wrap !important;
+    gap: 15px !important;
+  }
+  
+  .workspace-title {
+    font-size: 1.5rem !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    flex: 1 1 100% !important;
+    text-align: center !important;
+  }
+  
+  .close-studio-btn {
+    flex: 0 0 auto !important;
+    margin: 0 auto !important;
+  }
+  
+  /* Mockup Section */
+  #nt-mockup-{{ section.id }} {
+    padding: 30px 0 !important;
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+  }
+  
+  .container {
+    padding: 0 12px !important;
+    max-width: 100% !important;
+  }
+  
+  /* Mockup Header */
+  .mockup-header h1 {
+    font-size: 2rem !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    padding: 0 15px !important;
+    line-height: 1.2 !important;
+  }
+  
+  .mockup-header p {
+    font-size: 1rem !important;
+    padding: 0 15px !important;
+    line-height: 1.6 !important;
+  }
+  
+  /* Canvas Hint Text */
+  .canvas-hint-text {
+    font-size: 0.85rem !important;
+    padding: 0 12px !important;
+  }
+  
+  /* Controls Title */
+  .canvas-controls-title {
+    font-size: 1.5rem !important;
+    padding: 0 12px !important;
+  }
+  
+  .canvas-controls-subtitle {
+    font-size: 0.85rem !important;
+    padding: 0 12px !important;
+  }
+  
+  /* Design Customization Controls Container */
+  .nt-mockup__controls {
+    flex-direction: column !important;
+    padding: 16px 12px !important;
+    gap: 16px !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Control Groups */
+  .nt-mockup__group {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+  
+  .nt-mockup__label {
+    display: block !important;
+    text-align: center !important;
+    margin: 0 0 8px 0 !important;
+    font-size: 0.9rem !important;
+  }
+  
+  /* Button Containers - Grid Layout for Better Organization */
+  .nt-mockup__buttons {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+  
+  /* View Buttons - 2 columns on tablet */
+  .nt-mockup__group:has(.nt-btn--view) .nt-mockup__buttons {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  
+  /* Color Buttons - 2 columns */
+  .nt-mockup__group:has(.nt-btn--color) .nt-mockup__buttons {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  
+  /* 3D Controls - 2 columns */
+  .nt-mockup__group:has(.nt-btn--3d) .nt-mockup__buttons {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  
+  /* Zoom Controls - Full width stack */
+  .nt-mockup__group:has(.nt-btn--zoom-out) .nt-mockup__buttons {
+    grid-template-columns: 1fr !important;
+  }
+  
+  /* All Buttons - Mobile Optimized */
+  .nt-btn {
+    padding: 12px 16px !important;
+    font-size: 0.85rem !important;
+    border-radius: 12px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    white-space: nowrap !important;
+    text-align: center !important;
+    justify-content: center !important;
+  }
+  
+  /* Upload Section */
+  .upload-section {
+    width: 100% !important;
+    margin-bottom: 16px !important;
+  }
+  
+  .nt-btn--upload {
+    width: 100% !important;
+    padding: 16px 24px !important;
+    font-size: 0.95rem !important;
+    border-radius: 16px !important;
+  }
+  
+  /* Action Buttons Grid */
+  .action-buttons-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+  
+  /* Primary Actions */
+  .primary-actions {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+  
+  /* Submit Request Button */
+  .submit-request-btn {
+    width: 100% !important;
+    padding: 16px 24px !important;
+    font-size: 0.95rem !important;
+    border-radius: 16px !important;
+  }
+  
+  /* Canvas Container */
+  .nt-mockup__canvas {
+    max-width: 100% !important;
+    margin: 20px auto !important;
+    padding: 0 10px !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Size Chart */
+  .size-chart-container {
+    margin: 20px 10px !important;
+    max-width: calc(100% - 20px) !important;
+  }
+  
+  .size-chart-table {
+    font-size: 0.7rem !important;
+  }
+  
+  .size-chart-table th,
+  .size-chart-table td {
+    padding: 6px 4px !important;
+  }
+}
+
+/* Mobile Phones (480px and below) */
+@media (max-width: 480px) {
+  /* Studio Header */
+  .studio-title {
+    font-size: 1.85rem !important;
+    padding: 0 12px !important;
+  }
+  
+  .studio-subtitle {
+    font-size: 0.95rem !important;
+  }
+  
+  .studio-description {
+    font-size: 0.9rem !important;
+  }
+  
+  /* Design Workspace */
+  .design-workspace {
+    padding: 16px 10px !important;
+    margin: 0 8px !important;
+  }
+  
+  .workspace-title {
+    font-size: 1.35rem !important;
+  }
+  
+  /* Mockup Section */
+  #nt-mockup-{{ section.id }} {
+    padding: 20px 0 !important;
+  }
+  
+  .mockup-header h1 {
+    font-size: 1.75rem !important;
+    padding: 0 12px !important;
+  }
+  
+  .mockup-header p {
+    font-size: 0.9rem !important;
+    padding: 0 12px !important;
+  }
+  
+  /* Controls */
+  .nt-mockup__controls {
+    padding: 12px 10px !important;
+    gap: 12px !important;
+  }
+  
+  .canvas-controls-title {
+    font-size: 1.35rem !important;
+  }
+  
+  .canvas-controls-subtitle {
+    font-size: 0.8rem !important;
+  }
+  
+  /* Buttons */
+  .nt-btn {
+    padding: 11px 14px !important;
+    font-size: 0.8rem !important;
+    border-radius: 10px !important;
+  }
+  
+  .nt-btn--upload {
+    padding: 15px 20px !important;
+    font-size: 0.9rem !important;
+  }
+  
+  .submit-request-btn {
+    padding: 15px 20px !important;
+    font-size: 0.9rem !important;
+  }
+  
+  /* View Buttons - Stack to single column on small phones */
+  .nt-mockup__group:has(.nt-btn--view) .nt-mockup__buttons {
+    grid-template-columns: 1fr !important;
+  }
+  
+  /* Color Buttons - Keep 2 columns */
+  .nt-mockup__group:has(.nt-btn--color) .nt-mockup__buttons {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  
+  /* 3D Controls - Keep 2 columns */
+  .nt-mockup__group:has(.nt-btn--3d) .nt-mockup__buttons {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  
+  /* Size Chart */
+  .size-chart-table {
+    font-size: 0.65rem !important;
+  }
+  
+  .size-chart-table th,
+  .size-chart-table td {
+    padding: 5px 3px !important;
+  }
+}
+
+/* Very Small Phones (375px and below) */
+@media (max-width: 375px) {
+  /* Studio Header */
+  .studio-title {
+    font-size: 1.65rem !important;
+    padding: 0 10px !important;
+  }
+  
+  .studio-subtitle {
+    font-size: 0.9rem !important;
+  }
+  
+  .studio-description {
+    font-size: 0.85rem !important;
+  }
+  
+  /* Mockup Header */
+  .mockup-header h1 {
+    font-size: 1.6rem !important;
+    padding: 0 10px !important;
+  }
+  
+  .mockup-header p {
+    font-size: 0.85rem !important;
+    padding: 0 10px !important;
+  }
+  
+  /* Controls */
+  .canvas-controls-title {
+    font-size: 1.25rem !important;
+  }
+  
+  .canvas-controls-subtitle {
+    font-size: 0.75rem !important;
+  }
+  
+  /* Buttons */
+  .nt-btn {
+    padding: 10px 12px !important;
+    font-size: 0.75rem !important;
+  }
+  
+  .nt-btn--upload {
+    padding: 14px 18px !important;
+    font-size: 0.85rem !important;
+  }
+  
+  .submit-request-btn {
+    padding: 14px 18px !important;
+    font-size: 0.85rem !important;
+  }
+  
+  /* All buttons stack in single column on very small screens */
+  .nt-mockup__buttons {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Extra optimizations for horizontal overflow prevention */
+@media (max-width: 768px) {
+  * {
+    max-width: 100vw;
+  }
+  
+  body,
+  html {
+    overflow-x: hidden !important;
+  }
+  
+  .custom-designer-container {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+  }
+  
+  /* Ensure feature highlights wrap properly */
+  div[style*="display: flex"][style*="gap: 25px"] {
+    gap: 12px !important;
+    padding: 15px 10px !important;
+  }
+  
+  div[style*="display: flex"][style*="gap: 25px"] > div {
+    font-size: 0.85rem !important;
+  }
+  
+  div[style*="display: flex"][style*="gap: 25px"] span[style*="padding: 8px 12px"] {
+    padding: 6px 10px !important;
+    font-size: 0.75rem !important;
+  }
+}
+</style>
+
 {% schema %}
 {
   "name": "Custom T-Shirt Studio",
