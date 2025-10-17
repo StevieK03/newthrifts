@@ -144,16 +144,17 @@
   }
 
   /* ===== Modern Glassmorphism Header ===== */
-  #Header-{{ section.id }}{
+  #Header-{{ section.id }},
+  [data-theme="light"] #Header-{{ section.id }}{
     background: var(--glass-bg) !important;
     backdrop-filter: var(--glass-backdrop) saturate(180%);
     -webkit-backdrop-filter: var(--glass-backdrop) saturate(180%);
     position: relative;
     z-index: 50;
-    box-shadow: var(--shadow-lg), 0 4px 20px rgba(39, 225, 193, 0.15);
-    border: 1px solid rgba(39, 225, 193, 0.2);
+    box-shadow: var(--shadow-lg), 0 4px 20px rgba(39, 225, 193, 0.15) !important;
+    border: 1px solid rgba(39, 225, 193, 0.2) !important;
     border-radius: 0 0 20px 20px;
-    border-bottom: 2px solid rgba(39, 225, 193, 0.3);
+    border-bottom: 2px solid rgba(39, 225, 193, 0.3) !important;
   }
   
   /* Dark mode header styling */
@@ -1177,17 +1178,19 @@
   }
 
   /* Shop Button - Light Mode with Teal Accent */
-  #Header-{{ section.id }} .nt-header__link {
+  #Header-{{ section.id }} .nt-header__link,
+  [data-theme="light"] #Header-{{ section.id }} .nt-header__link {
     background: rgba(0, 0, 0, 0.8) !important;
     border: 1px solid rgba(39, 225, 193, 0.3) !important;
     color: white !important;
   }
 
-  #Header-{{ section.id }} .nt-header__link:hover {
-    background: rgba(39, 225, 193, 0.2) !important;
-    border-color: rgba(39, 225, 193, 0.6) !important;
+  #Header-{{ section.id }} .nt-header__link:hover,
+  [data-theme="light"] #Header-{{ section.id }} .nt-header__link:hover {
+    background: rgba(39, 225, 193, 0.25) !important;
+    border-color: rgba(39, 225, 193, 0.7) !important;
     color: #27e1c1 !important;
-    box-shadow: 0 0 20px rgba(39, 225, 193, 0.5);
+    box-shadow: 0 0 25px rgba(39, 225, 193, 0.6) !important;
   }
 
   /* Dark Mode - Shop Button */
@@ -1207,11 +1210,11 @@
 </style>
 
 <script>
-// Set dark theme immediately to prevent flash of light theme
+// Set light theme as default
 (function() {
-  // Check if user has a stored preference, otherwise default to dark
+  // Check if user has a stored preference, otherwise default to light
   const storedTheme = localStorage.getItem('theme');
-  const theme = storedTheme || 'dark';
+  const theme = storedTheme || 'light';
   document.documentElement.setAttribute('data-theme', theme);
   
   // Remove any white boxes from header
