@@ -94,11 +94,11 @@
     --text-primary: #1e293b;
     --text-secondary: #475569;
     --text-muted: #64748b;
-    --text-accent: #3b82f6;
+    --text-accent: #27e1c1;
     --border-primary: #e2e8f0;
     --border-secondary: #cbd5e1;
-    --button-primary: #3b82f6;
-    --button-primary-hover: #2563eb;
+    --button-primary: #27e1c1;
+    --button-primary-hover: #1fb89a;
     --button-secondary: #475569;
     --button-secondary-hover: #334155;
     --success: #10b981;
@@ -123,11 +123,11 @@
     --text-primary: #f8fafc;
     --text-secondary: #e2e8f0;
     --text-muted: #94a3b8;
-    --text-accent: #60a5fa;
+    --text-accent: #27e1c1;
     --border-primary: #334155;
     --border-secondary: #475569;
-    --button-primary: #3b82f6;
-    --button-primary-hover: #2563eb;
+    --button-primary: #27e1c1;
+    --button-primary-hover: #5fe9d0;
     --button-secondary: #475569;
     --button-secondary-hover: #334155;
     --success: #10b981;
@@ -150,9 +150,10 @@
     -webkit-backdrop-filter: var(--glass-backdrop) saturate(180%);
     position: relative;
     z-index: 50;
-    box-shadow: var(--shadow-lg);
-    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-lg), 0 4px 20px rgba(39, 225, 193, 0.15);
+    border: 1px solid rgba(39, 225, 193, 0.2);
     border-radius: 0 0 20px 20px;
+    border-bottom: 2px solid rgba(39, 225, 193, 0.3);
   }
   
   /* Dark mode header styling */
@@ -1114,10 +1115,11 @@
   }
   
   #Header-{{ section.id }} .nt-header__link:hover{
-    background: rgba(255, 255, 255, 0.25);
-    color: #1f2937 !important;
+    background: rgba(39, 225, 193, 0.2);
+    color: #27e1c1 !important;
     transform: translateY(-1px);
-    border-color: rgba(255, 255, 255, 0.4);
+    border-color: rgba(39, 225, 193, 0.5);
+    box-shadow: 0 0 15px rgba(39, 225, 193, 0.3);
   }
   
   /* Removed shine effect to clean up header */
@@ -1195,10 +1197,10 @@
   }
 
   [data-theme="dark"] #Header-{{ section.id }} .nt-header__link:hover {
-    background: rgba(59, 130, 246, 0.2) !important;
+    background: rgba(39, 225, 193, 0.2) !important;
     border-color: var(--button-primary) !important;
-    color: var(--text-accent) !important;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    color: #27e1c1 !important;
+    box-shadow: 0 0 20px rgba(39, 225, 193, 0.4), 0 6px 20px rgba(0, 0, 0, 0.4);
   }
 </style>
 
