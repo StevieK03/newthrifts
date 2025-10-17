@@ -2994,29 +2994,50 @@ function initializeMockup() {
       console.log('✅ Found overlay image, src:', overlayImg.src.substring(0, 100) + '...');
       
       try {
+        // First, fetch the image to check its type
         const response = await fetch(overlayImg.src);
-        const blob = await response.blob();
-        console.log('✅ Converted to blob, size:', blob.size, 'type:', blob.type);
+        const originalBlob = await response.blob();
+        console.log('✅ Original blob, size:', originalBlob.size, 'type:', originalBlob.type);
         
-        const timestamp = Date.now();
+        let uploadBlob = originalBlob;
         
-        // Determine file extension and content type based on blob type
-        let fileExtension = 'png';
-        let contentType = 'image/png';
-        
-        if (blob.type === 'image/svg+xml') {
-          fileExtension = 'svg';
-          contentType = 'image/svg+xml';
-        } else if (blob.type === 'image/jpeg' || blob.type === 'image/jpg') {
-          fileExtension = 'jpg';
-          contentType = 'image/jpeg';
-        } else if (blob.type === 'image/png') {
-          fileExtension = 'png';
-          contentType = 'image/png';
+        // If it's an SVG or if the blob type suggests SVG, convert it to PNG using canvas
+        if (originalBlob.type === 'image/svg+xml' || overlayImg.src.includes('data:image/svg')) {
+          console.log('🔄 Converting SVG to PNG...');
+          
+          // Create a canvas to convert SVG to PNG
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          
+          // Set canvas size to match the image display size or a reasonable default
+          canvas.width = overlayImg.naturalWidth || overlayImg.width || 1000;
+          canvas.height = overlayImg.naturalHeight || overlayImg.height || 1000;
+          
+          // Create a new image to draw on canvas
+          const img = new Image();
+          img.crossOrigin = 'anonymous';
+          
+          // Wait for image to load
+          await new Promise((resolve, reject) => {
+            img.onload = () => {
+              ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+              resolve();
+            };
+            img.onerror = reject;
+            img.src = overlayImg.src;
+          });
+          
+          // Convert canvas to PNG blob
+          uploadBlob = await new Promise((resolve) => {
+            canvas.toBlob((blob) => resolve(blob), 'image/png', 1.0);
+          });
+          
+          console.log('✅ Converted to PNG blob, size:', uploadBlob.size, 'type:', uploadBlob.type);
         }
         
-        const filename = `design_${timestamp}.${fileExtension}`;
-        console.log('📝 Uploading as:', filename, 'with content type:', contentType);
+        const timestamp = Date.now();
+        const filename = `design_${timestamp}.png`;
+        console.log('📝 Uploading as:', filename);
         
         const client = window.supabaseClient;
         if (!client) {
@@ -3026,8 +3047,8 @@ function initializeMockup() {
         const { data, error} = await client
           .storage
           .from('design-uploads')
-          .upload(filename, blob, {
-            contentType: contentType,
+          .upload(filename, uploadBlob, {
+            contentType: 'image/png',
             upsert: false
           });
           
