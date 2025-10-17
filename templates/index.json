@@ -164,6 +164,7 @@
     },
     "visitor_counter_section": {
       "type": "visitor-counter",
+      "disabled": true,
       "name": "Visitor Counter",
       "settings": {
         "show_heading": true,
