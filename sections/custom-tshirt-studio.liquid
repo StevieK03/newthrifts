@@ -2991,27 +2991,33 @@ function initializeMockup() {
         return null;
       }
       
-      console.log('✅ Found overlay image, src:', overlayImg.src.substring(0, 100) + '...');
+      console.log('✅ Found overlay image');
+      console.log('📋 Image src type:', overlayImg.src.substring(0, 30));
       
       try {
-        // First, fetch the image to check its type
-        const response = await fetch(overlayImg.src);
-        const originalBlob = await response.blob();
-        console.log('✅ Original blob, size:', originalBlob.size, 'type:', originalBlob.type);
+        // Check if it's an SVG by examining the data URL or src
+        const isSVG = overlayImg.src.includes('data:image/svg+xml') || 
+                      overlayImg.src.includes('.svg') ||
+                      overlayImg.src.toLowerCase().includes('svg');
         
-        let uploadBlob = originalBlob;
+        console.log('🔍 Is SVG?', isSVG);
         
-        // If it's an SVG or if the blob type suggests SVG, convert it to PNG using canvas
-        if (originalBlob.type === 'image/svg+xml' || overlayImg.src.includes('data:image/svg')) {
-          console.log('🔄 Converting SVG to PNG...');
+        let uploadBlob;
+        
+        if (isSVG) {
+          console.log('🔄 Converting SVG to PNG using canvas...');
           
           // Create a canvas to convert SVG to PNG
           const canvas = document.createElement('canvas');
           const ctx = canvas.getContext('2d');
           
-          // Set canvas size to match the image display size or a reasonable default
-          canvas.width = overlayImg.naturalWidth || overlayImg.width || 1000;
-          canvas.height = overlayImg.naturalHeight || overlayImg.height || 1000;
+          // Set canvas size - use a high resolution for quality
+          const targetWidth = 2000;
+          const targetHeight = 2000;
+          canvas.width = targetWidth;
+          canvas.height = targetHeight;
+          
+          console.log(`📐 Canvas size: ${canvas.width}x${canvas.height}`);
           
           // Create a new image to draw on canvas
           const img = new Image();
@@ -3020,19 +3026,37 @@ function initializeMockup() {
           // Wait for image to load
           await new Promise((resolve, reject) => {
             img.onload = () => {
+              console.log('✅ SVG image loaded into temporary image element');
+              // Draw with white background
+              ctx.fillStyle = 'white';
+              ctx.fillRect(0, 0, canvas.width, canvas.height);
+              // Draw the SVG
               ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+              console.log('✅ SVG drawn to canvas');
               resolve();
             };
-            img.onerror = reject;
+            img.onerror = (err) => {
+              console.error('❌ Failed to load SVG into image element:', err);
+              reject(err);
+            };
             img.src = overlayImg.src;
           });
           
           // Convert canvas to PNG blob
           uploadBlob = await new Promise((resolve) => {
-            canvas.toBlob((blob) => resolve(blob), 'image/png', 1.0);
+            canvas.toBlob((blob) => {
+              console.log('✅ Canvas converted to PNG blob');
+              resolve(blob);
+            }, 'image/png', 1.0);
           });
           
-          console.log('✅ Converted to PNG blob, size:', uploadBlob.size, 'type:', uploadBlob.type);
+          console.log('✅ Final PNG blob - size:', uploadBlob.size, 'type:', uploadBlob.type);
+        } else {
+          // Not an SVG, just fetch and upload as-is
+          console.log('📥 Not an SVG, fetching original image...');
+          const response = await fetch(overlayImg.src);
+          uploadBlob = await response.blob();
+          console.log('✅ Original blob - size:', uploadBlob.size, 'type:', uploadBlob.type);
         }
         
         const timestamp = Date.now();
@@ -3068,6 +3092,7 @@ function initializeMockup() {
         return urlData.publicUrl;
       } catch (error) {
         console.error('❌ Design upload error:', error);
+        console.error('Error details:', error);
         return null;
       }
     },
