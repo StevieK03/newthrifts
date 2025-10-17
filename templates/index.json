@@ -129,6 +129,7 @@
     },
     "interactive_mockup": {
       "type": "interactive-mockup",
+      "disabled": true,
       "name": "Live Preview",
       "settings": {
         "overlay_top": 28,
@@ -138,6 +139,27 @@
         "allow_download": true,
         "padding_top": 40,
         "padding_bottom": 40
+      }
+    },
+    "custom_design_hero": {
+      "type": "custom-design-hero",
+      "name": "Custom Design Hero",
+      "settings": {
+        "title": "🎨 Design Your Dream T-Shirt",
+        "subtitle": "Create Something Amazing",
+        "description": "<p>Unleash your creativity with our advanced design studio. Upload your artwork, customize colors, adjust positioning, and bring your vision to life with professional-quality custom t-shirts.</p>",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "custom_tshirt_studio": {
+      "type": "custom-tshirt-studio",
+      "name": "Custom T-Shirt Studio",
+      "settings": {
+        "title": "Custom T-Shirt Studio",
+        "description": "Create stunning custom t-shirts with our advanced design tools. Upload your artwork, customize colors, adjust positioning, and see your design come to life in real-time.",
+        "padding_top": 36,
+        "padding_bottom": 36
       }
     },
     "visitor_counter_section": {
@@ -214,27 +236,6 @@
         "subheading": "",
         "collection": "entire-collection",
         "max_products": 12
-      }
-    },
-    "custom_design_hero": {
-      "type": "custom-design-hero",
-      "name": "Custom Design Hero",
-      "settings": {
-        "title": "🎨 Design Your Dream T-Shirt",
-        "subtitle": "Create Something Amazing",
-        "description": "<p>Unleash your creativity with our advanced design studio. Upload your artwork, customize colors, adjust positioning, and bring your vision to life with professional-quality custom t-shirts.</p>",
-        "padding_top": 80,
-        "padding_bottom": 80
-      }
-    },
-    "custom_tshirt_studio": {
-      "type": "custom-tshirt-studio",
-      "name": "Custom T-Shirt Studio",
-      "settings": {
-        "title": "Custom T-Shirt Studio",
-        "description": "Create stunning custom t-shirts with our advanced design tools. Upload your artwork, customize colors, adjust positioning, and see your design come to life in real-time.",
-        "padding_top": 36,
-        "padding_bottom": 36
       }
     }
   },
