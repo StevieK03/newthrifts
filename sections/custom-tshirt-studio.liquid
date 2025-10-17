@@ -1436,6 +1436,69 @@
             
           </div>
         </div>
+
+        <!-- Customer Information Form (Hidden by default, shown when Submit Request is clicked) -->
+        <div id="nt-submit-request-{{ section.id }}" style="display: none; margin-top: 40px; padding: 24px; background: linear-gradient(135deg, rgba(220, 38, 38, 0.1), rgba(239, 68, 68, 0.1)); border-radius: 16px; border: 2px solid rgba(220, 38, 38, 0.3); max-width: 600px; margin-left: auto; margin-right: auto;">
+          <h4 style="margin: 0 0 16px 0; font-size: 18px; font-weight: 700; color: #dc2626; text-align: center;">👤 Customer Information</h4>
+          <p style="margin: 0 0 20px 0; font-size: 14px; color: #6b7280; text-align: center;">Please fill in your details to submit your custom t-shirt request</p>
+          
+          <form id="nt-request-form-{{ section.id }}" style="display: grid; gap: 12px;">
+            <!-- Customer Details -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div>
+                <label style="display: block; margin-bottom: 4px; font-size: 12px; font-weight: 600; color: #374151;">Full Name *</label>
+                <input type="text" id="nt-customer-name-{{ section.id }}" required 
+                       style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 12px; background: white; box-sizing: border-box;">
+              </div>
+              <div>
+                <label style="display: block; margin-bottom: 4px; font-size: 12px; font-weight: 600; color: #374151;">Email *</label>
+                <input type="email" id="nt-customer-email-{{ section.id }}" required 
+                       style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 12px; background: white; box-sizing: border-box;">
+              </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div>
+                <label style="display: block; margin-bottom: 4px; font-size: 12px; font-weight: 600; color: #374151;">Phone Number</label>
+                <input type="tel" id="nt-customer-phone-{{ section.id }}" 
+                       style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 12px; background: white; box-sizing: border-box;">
+              </div>
+              <div>
+                <label style="display: block; margin-bottom: 4px; font-size: 12px; font-weight: 600; color: #374151;">T-Shirt Size</label>
+                <select id="nt-tshirt-size-{{ section.id }}" 
+                        style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 12px; background: white; box-sizing: border-box;">
+                  <option value="">Select Size</option>
+                  <option value="XXS">XXS</option>
+                  <option value="XS">XS</option>
+                  <option value="S">S</option>
+                  <option value="M">M</option>
+                  <option value="L">L</option>
+                  <option value="XL">XL</option>
+                  <option value="XXL">XXL</option>
+                </select>
+              </div>
+            </div>
+            
+            <div>
+              <label style="display: block; margin-bottom: 4px; font-size: 12px; font-weight: 600; color: #374151;">Special Instructions or Message</label>
+              <textarea id="nt-customer-message-{{ section.id }}" rows="3" placeholder="Any special requirements, color preferences, or additional details..."
+                        style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 12px; background: white; resize: vertical; box-sizing: border-box;"></textarea>
+            </div>
+            
+            <!-- Submit Button -->
+            <div style="display: flex; gap: 8px; justify-content: flex-end;">
+              <button type="button" id="nt-cancel-request-{{ section.id }}" 
+                      style="padding: 8px 16px; background: #6b7280; color: white; border: none; border-radius: 6px; font-size: 12px; cursor: pointer;">
+                Cancel
+              </button>
+              <button type="submit" id="nt-submit-request-form-btn-{{ section.id }}" 
+                      style="padding: 8px 16px; background: #dc2626; color: white; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 600;">
+                🚀 Submit Request
+              </button>
+            </div>
+          </form>
+        </div>
+
       </div>
     </div>
   </div>
@@ -2146,12 +2209,30 @@ function initializeMockup() {
         });
       }
 
-      // Submit Request button
+      // Submit Request button (shows the customer form)
       const submitBtn = document.getElementById(`nt-submit-request-btn-{{ section.id }}`);
       if (submitBtn) {
         submitBtn.addEventListener("click", () => {
           console.log('🚀 Submit Request button clicked');
           this.submitRequest();
+        });
+      }
+
+      // Customer form submit
+      const requestForm = document.getElementById(`nt-request-form-{{ section.id }}`);
+      if (requestForm) {
+        requestForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          this.submitTShirtRequest();
+        });
+      }
+
+      // Cancel button
+      const cancelBtn = document.getElementById(`nt-cancel-request-{{ section.id }}`);
+      if (cancelBtn) {
+        cancelBtn.addEventListener('click', () => {
+          document.getElementById(`nt-submit-request-{{ section.id }}`).style.display = 'none';
+          this.resetRequestForm();
         });
       }
 
@@ -2464,23 +2545,453 @@ function initializeMockup() {
     
     submitRequest() {
       if (!this.placementState.hasUploadedDesign) {
-        alert('⚠️ Please upload a design first!');
+        this.showMessage('❌ Please upload a design first', 'error');
         return;
       }
       
-      const name = prompt('👤 Please enter your name:');
-      if (!name) return;
+      // Show the customer information form
+      const formSection = document.getElementById(`nt-submit-request-{{ section.id }}`);
+      if (formSection) {
+        formSection.style.display = 'block';
+        formSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    },
+
+    async submitTShirtRequest() {
+      if (!this.placementState.hasUploadedDesign) {
+        this.showMessage('❌ Please upload a design first', 'error');
+        return;
+      }
+
+      // Get form data
+      const customerName = document.getElementById(`nt-customer-name-{{ section.id }}`).value.trim();
+      const customerEmail = document.getElementById(`nt-customer-email-{{ section.id }}`).value.trim();
+      const customerPhone = document.getElementById(`nt-customer-phone-{{ section.id }}`).value.trim();
+      const tshirtSize = document.getElementById(`nt-tshirt-size-{{ section.id }}`).value;
+      const customerMessage = document.getElementById(`nt-customer-message-{{ section.id }}`).value.trim();
+
+      // Validate required fields
+      if (!customerName || !customerEmail) {
+        this.showMessage('❌ Please fill in all required fields', 'error');
+        return;
+      }
+
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(customerEmail)) {
+        this.showMessage('❌ Please enter a valid email address', 'error');
+        return;
+      }
+
+      try {
+        // Add loading state to button
+        const submitBtn = document.getElementById(`nt-submit-request-form-btn-{{ section.id }}`);
+        if (submitBtn) {
+          submitBtn.classList.add('loading');
+          submitBtn.style.pointerEvents = 'none';
+          submitBtn.textContent = '⏳ Submitting...';
+        }
+        
+        this.showMessage('📤 Submitting your request...', 'info');
+        
+        // Generate mockup image for submission
+        this.showMessage('🎨 Generating design preview...', 'info');
+        const mockupImageData = await this.generateMockupForSubmission();
+        
+        // Upload mockup to storage and get URL
+        let mockupImageUrl = null;
+        try {
+          mockupImageUrl = await this.uploadMockupToStorage(mockupImageData);
+        } catch (error) {
+          console.warn('Could not upload mockup image:', error);
+        }
+        
+        // Upload design to storage if available
+        let designImageUrl = null;
+        try {
+          designImageUrl = await this.uploadDesignToStorage();
+        } catch (error) {
+          console.warn('Could not upload design image:', error);
+        }
+        
+        // Prepare request data
+        const requestData = {
+          customer_name: customerName,
+          customer_email: customerEmail,
+          customer_phone: customerPhone || null,
+          customer_message: customerMessage || null,
+          tshirt_size: tshirtSize || null,
+          design_data: {
+            position: {
+              top: this.placementState.topPct,
+              left: this.placementState.leftPct,
+              width: this.placementState.widthPct,
+              height: this.placementState.heightPct,
+              rotation: this.placementState.rotateDeg
+            },
+            view: this.state.view,
+            color: this.state.color,
+            canvas_size: { width: 2000, height: 2000 },
+            has_uploaded_design: this.placementState.hasUploadedDesign
+          },
+          design_image_url: designImageUrl,
+          mockup_image_url: mockupImageUrl
+        };
+
+        // Submit to Supabase database
+        const supabaseResult = await this.submitToSupabase(requestData);
+        
+        if (supabaseResult.success) {
+          const requestId = supabaseResult.requestId ? ` (Request #${supabaseResult.requestId.slice(-8)})` : '';
+          
+          // Send email with images to shopping@newthrifts.com
+          console.log('📧 Sending email with images to shopping@newthrifts.com...');
+          const emailResult = await this.sendEmailWithImages(requestData);
+          
+          if (emailResult.success) {
+            this.showMessage(`🎉 Request submitted successfully! Email sent to our team. We'll contact you within 24 hours.${requestId}`, 'success');
+            console.log('✅ Email with images sent to shopping@newthrifts.com');
+          } else {
+            this.showMessage(`🎉 Request submitted successfully! However, email notification failed. We'll still process your request.${requestId}`, 'warning');
+            console.warn('⚠️ Email sending failed:', emailResult.error);
+          }
+          
+          console.log('✅ Custom t-shirt request submitted:', {
+            requestId: supabaseResult.requestId,
+            customerEmail: customerEmail,
+            hasDesign: this.placementState.hasUploadedDesign,
+            emailSent: emailResult.success
+          });
+        } else {
+          throw new Error(supabaseResult.error || 'Failed to save request to database');
+        }
+        
+        // Hide form and reset
+        document.getElementById(`nt-submit-request-{{ section.id }}`).style.display = 'none';
+        this.resetRequestForm();
+        
+        // Remove loading state
+        if (submitBtn) {
+          submitBtn.classList.remove('loading');
+          submitBtn.style.pointerEvents = 'auto';
+          submitBtn.textContent = '🚀 Submit Request';
+        }
+
+      } catch (error) {
+        console.error('Error submitting request:', error);
+        this.showMessage('❌ Failed to submit request. Please try again.', 'error');
+        
+        // Remove loading state on error
+        const submitBtn = document.getElementById(`nt-submit-request-form-btn-{{ section.id }}`);
+        if (submitBtn) {
+          submitBtn.classList.remove('loading');
+          submitBtn.style.pointerEvents = 'auto';
+          submitBtn.textContent = '🚀 Submit Request';
+        }
+      }
+    },
+
+    resetRequestForm() {
+      document.getElementById(`nt-customer-name-{{ section.id }}`).value = '';
+      document.getElementById(`nt-customer-email-{{ section.id }}`).value = '';
+      document.getElementById(`nt-customer-phone-{{ section.id }}`).value = '';
+      document.getElementById(`nt-tshirt-size-{{ section.id }}`).value = '';
+      document.getElementById(`nt-customer-message-{{ section.id }}`).value = '';
+    },
+
+    async submitToSupabase(requestData) {
+      try {
+        console.log('🔍 Debugging submitToSupabase...');
+        console.log('Request data:', requestData);
+        
+        // Check if Supabase is available
+        if (typeof window.NewThriftsCustomRequests === 'undefined') {
+          console.warn('❌ Supabase custom requests API not loaded');
+          console.log('Available window objects:', Object.keys(window).filter(k => k.includes('supabase') || k.includes('NewThrifts')));
+          return { success: false, error: 'Database service not available' };
+        }
+
+        console.log('✅ NewThriftsCustomRequests API found');
+        
+        // Try the existing Supabase API first
+        console.log('📤 Calling submitCustomRequest...');
+        const result = await window.NewThriftsCustomRequests.submitCustomRequest(requestData);
+        
+        console.log('📥 Result from submitCustomRequest:', result);
+        
+        if (result.success) {
+          console.log('✅ Request saved to Supabase:', result.requestId);
+          return { success: true, requestId: result.requestId };
+        } else {
+          console.error('❌ Supabase submission failed:', result.error);
+          
+          // Try direct Supabase connection as fallback
+          console.log('🔄 Trying direct Supabase connection...');
+          return await this.submitWithGlobalClient(requestData);
+        }
+        
+      } catch (error) {
+        console.error('❌ Error in submitToSupabase:', error);
+        console.error('Error stack:', error.stack);
+        return { success: false, error: error.message || 'Submission failed' };
+      }
+    },
+
+    async submitWithGlobalClient(requestData) {
+      try {
+        console.log('🔧 Using global Supabase client for submission...');
+        
+        const client = window.supabaseClient;
+        
+        if (!client) {
+          console.error('❌ Global Supabase client not available');
+          return { success: false, error: 'Global client not available' };
+        }
+
+        console.log('✅ Global Supabase client found, submitting data...');
+
+        // Insert request into database (simplified)
+        const insertData = {
+          customer_email: requestData.customer_email,
+          customer_name: requestData.customer_name,
+          status: 'pending'
+        };
+        
+        // Add optional fields only if they exist
+        if (requestData.customer_phone) insertData.customer_phone = requestData.customer_phone;
+        if (requestData.customer_message) insertData.customer_message = requestData.customer_message;
+        if (requestData.design_image_url) insertData.design_image_url = requestData.design_image_url;
+        if (requestData.mockup_image_url) insertData.mockup_image_url = requestData.mockup_image_url;
+        if (requestData.design_data) insertData.design_data = requestData.design_data;
+        if (requestData.tshirt_size) insertData.tshirt_size = requestData.tshirt_size;
+        
+        console.log('📤 Inserting data:', insertData);
+        
+        const { data, error } = await client
+          .from('custom_tshirt_requests')
+          .insert([insertData])
+          .select()
+          .single();
+
+        if (error) {
+          console.error('❌ Global client Supabase error:', error);
+          return { success: false, error: error.message };
+        }
+
+        console.log('✅ Global client submission successful:', data);
+        return { success: true, requestId: data.id };
+
+      } catch (error) {
+        console.error('❌ Error in global client submission:', error);
+        return { success: false, error: error.message || 'Global client submission failed' };
+      }
+    },
+
+    async sendEmailWithImages(requestData) {
+      try {
+        console.log('📧 Preparing to send email with images to shopping@newthrifts.com...');
+        
+        // Images are now uploaded to Supabase storage with public URLs
+        const emailContent = this.createEmailContent(requestData);
+        
+        console.log('✅ Image URLs generated:');
+        console.log('Design URL:', requestData.design_image_url ? '✅ Uploaded' : '❌ Failed');
+        console.log('Mockup URL:', requestData.mockup_image_url ? '✅ Uploaded' : '❌ Failed');
+        
+        // Send email via EmailJS
+        console.log('🎯 Sending email via EmailJS...');
+        const emailResult = await this.sendViaEmailJS(requestData, emailContent);
+        
+        console.log('📊 EmailJS result:', emailResult);
+        
+        if (emailResult.success) {
+          console.log('✅ EmailJS email with images sent successfully to shopping@newthrifts.com');
+          return { success: true, message: 'Email sent with images attached via EmailJS' };
+        } else {
+          console.error('❌ EmailJS email failed:', emailResult.error);
+          return { success: false, error: 'Failed to send email via EmailJS: ' + emailResult.error };
+        }
+        
+      } catch (error) {
+        console.error('❌ Error sending email with images:', error);
+        return { success: false, error: error.message };
+      }
+    },
+
+    createEmailContent(requestData) {
+      return {
+        to: 'shopping@newthrifts.com',
+        subject: `🎨 Custom T-Shirt Request from ${requestData.customer_name}`,
+        body: `Email content will be handled by EmailJS template`
+      };
+    },
+
+    async sendViaEmailJS(requestData, emailContent) {
+      try {
+        console.log('📧 Attempting EmailJS email with images...');
+        
+        // Check if EmailJS is available
+        if (typeof emailjs === 'undefined') {
+          throw new Error('EmailJS not loaded. Please include EmailJS script.');
+        }
+        
+        // Create email template parameters
+        const templateParams = {
+          name: requestData.customer_name,
+          email: requestData.customer_email,
+          phone: requestData.customer_phone || 'Not provided',
+          tshirt_size: requestData.tshirt_size || 'Not specified',
+          message: requestData.customer_message || 'No special instructions',
+          design_position: `Top ${requestData.design_data.position.top}%, Left ${requestData.design_data.position.left}%`,
+          design_size: `${requestData.design_data.position.width}% × ${requestData.design_data.position.height}%`,
+          design_rotation: `${requestData.design_data.position.rotation}°`,
+          design_view: requestData.design_data.view,
+          tshirt_color: requestData.design_data.color,
+          submission_date: new Date().toLocaleString(),
+          request_id: requestData.id || 'Pending',
+          design_image: requestData.design_image_url || 'No design uploaded',
+          mockup_image: requestData.mockup_image_url || 'No mockup generated'
+        };
+        
+        // Send email via EmailJS
+        const result = await emailjs.send(
+          'service_f4r34d3', // EmailJS service ID
+          'template_qiquke8', // EmailJS template ID
+          templateParams
+        );
+        
+        console.log('✅ EmailJS email sent successfully:', result);
+        return { success: true, method: 'EmailJS', messageId: result.text };
+        
+      } catch (error) {
+        console.warn('⚠️ EmailJS email failed:', error);
+        return { success: false, error: error.message, method: 'EmailJS' };
+      }
+    },
+
+    async generateMockupForSubmission() {
+      return new Promise((resolve) => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        
+        canvas.width = 2000;
+        canvas.height = 2000;
+        
+        const baseImg = new Image();
+        baseImg.crossOrigin = "anonymous";
+        baseImg.src = document.getElementById("nt-base-{{ section.id }}").src;
+        
+        baseImg.onload = () => {
+          ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
+
+          const overlayImg = document.querySelector(`#nt-overlay-{{ section.id }} img`);
+          
+          if (overlayImg && overlayImg.src) {
+            const designImg = new Image();
+            designImg.crossOrigin = "anonymous";
+            designImg.src = overlayImg.src;
+            
+            designImg.onload = () => {
+              const topPct = this.placementState.topPct / 100;
+              const leftPct = this.placementState.leftPct / 100;
+              const widthPct = this.placementState.widthPct / 100;
+              const heightPct = this.placementState.heightPct / 100;
+              const rotateDeg = this.placementState.rotateDeg || 0;
+
+              const designX = canvas.width * leftPct - (canvas.width * widthPct) / 2;
+              const designY = canvas.height * topPct;
+              const designWidth = canvas.width * widthPct;
+              const designHeight = canvas.height * heightPct;
+              
+              ctx.save();
+              ctx.translate(designX + designWidth / 2, designY + designHeight / 2);
+              ctx.rotate(rotateDeg * Math.PI / 180);
+              ctx.drawImage(designImg, -designWidth / 2, -designHeight / 2, designWidth, designHeight);
+              ctx.restore();
+
+              resolve(canvas.toDataURL("image/png"));
+            };
+          } else {
+            resolve(canvas.toDataURL("image/png"));
+          }
+        };
+      });
+    },
+
+    async uploadMockupToStorage(base64Data) {
+      if (!base64Data) return null;
       
-      const email = prompt('📧 Please enter your email:');
-      if (!email) return;
-      
-      const phone = prompt('📞 Please enter your phone number (optional):') || '';
-      const size = prompt('👕 Please enter your t-shirt size (XS, S, M, L, XL, XXL):') || 'M';
-      const message = prompt('💬 Any special instructions (optional):') || '';
-      
-      alert(`🎉 Request submitted successfully!\n\nName: ${name}\nEmail: ${email}\nSize: ${size}\n\nWe'll contact you within 24 hours to process your custom t-shirt order!`);
-      
-      console.log('🚀 Request submitted:', { name, email, phone, size, message, view: this.state.view, color: this.state.color });
+      try {
+        const response = await fetch(base64Data);
+        const blob = await response.blob();
+        
+        const timestamp = Date.now();
+        const filename = `mockup_${timestamp}.png`;
+        
+        const client = window.supabaseClient;
+        if (!client) {
+          throw new Error('Supabase client not available');
+        }
+        
+        const { data, error } = await client
+          .storage
+          .from('mockup-previews')
+          .upload(filename, blob, {
+            contentType: 'image/png',
+            upsert: false
+          });
+          
+        if (error) throw error;
+        
+        const { data: urlData } = client
+          .storage
+          .from('mockup-previews')
+          .getPublicUrl(filename);
+          
+        return urlData.publicUrl;
+      } catch (error) {
+        console.error('Mockup upload error:', error);
+        return null;
+      }
+    },
+
+    async uploadDesignToStorage() {
+      const overlayImg = document.querySelector(`#nt-overlay-{{ section.id }} img`);
+      if (overlayImg && overlayImg.src) {
+        try {
+          const response = await fetch(overlayImg.src);
+          const blob = await response.blob();
+          
+          const timestamp = Date.now();
+          const filename = `design_${timestamp}.png`;
+          
+          const client = window.supabaseClient;
+          if (!client) {
+            throw new Error('Supabase client not available');
+          }
+          
+          const { data, error} = await client
+            .storage
+            .from('design-uploads')
+            .upload(filename, blob, {
+              contentType: 'image/png',
+              upsert: false
+            });
+            
+          if (error) throw error;
+          
+          const { data: urlData } = client
+            .storage
+            .from('design-uploads')
+            .getPublicUrl(filename);
+            
+          return urlData.publicUrl;
+        } catch (error) {
+          console.error('Design upload error:', error);
+          return null;
+        }
+      }
+      return null;
     },
     
     rotateDesign() {
