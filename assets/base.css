@@ -2,11 +2,11 @@
    Palette: Neon Pink #ff4fa3, Miami Teal #27e1c1, Night Sky #0f172a, Surf White #f8fafc, Sunset Peach #ffb38a
 */
 :root{
-  --color-bg:rgb(13, 220, 243);
-  --color-text: #f8fafc;
+  --color-bg: #ffffff; /* Clean White Background */
+  --color-text: #0f172a; /* Dark text for contrast */
   --color-accent: #27e1c1; /* Miami Teal - Primary Accent */
-  --color-accent-2: #ff4fa3;
-  --color-soft: #ffb38a;
+  --color-accent-2: #1fb89a;
+  --color-soft: #f8fafc;
   --color-teal: #27e1c1;
   --color-teal-dark: #1fb89a;
   --color-teal-light: #5fe9d0;
@@ -20,9 +20,7 @@
 html,body{
   margin:0;
   padding:0;
-  background: radial-gradient(1500px 800px at 80% -10%, rgba(255, 255, 255, 0.18), transparent),
-              radial-gradient(1200px 900px at 10% 110%, rgba(255, 255, 255, 0.12), transparent),
-              var(--color-bg);
+  background: #ffffff;
   color: var(--color-text);
   font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
   line-height: 1.6;
@@ -81,16 +79,16 @@ a:hover{
 }
 
 .card{
-  background: rgba(248,250,252,.04);
-  border: 1px solid rgba(39, 225, 193, 0.15);
+  background: #ffffff;
+  border: 2px solid #e5e7eb;
   border-radius: var(--radius-xl);
   padding: 24px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1), 0 0 0 1px rgba(39, 225, 193, 0.1);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
   transition: all 0.3s ease;
 }
 .card:hover{
-  border-color: rgba(39, 225, 193, 0.3);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.15), 0 0 20px rgba(39, 225, 193, 0.2);
+  border-color: #27e1c1;
+  box-shadow: 0 4px 16px rgba(39, 225, 193, 0.15), 0 0 0 3px rgba(39, 225, 193, 0.1);
   transform: translateY(-2px);
 }
 

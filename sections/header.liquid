@@ -86,17 +86,17 @@
 <style>
   /* ===== Dark Mode CSS Variables ===== */
   :root {
-    /* Light mode defaults */
+    /* Light mode defaults - Clean & Teal Accented */
     --bg-primary: #ffffff;
-    --bg-secondary: #f8fafc;
-    --bg-tertiary: #e2e8f0;
-    --bg-accent: #cbd5e1;
-    --text-primary: #1e293b;
-    --text-secondary: #475569;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #f8fafc;
+    --bg-accent: #27e1c1;
+    --text-primary: #0f172a;
+    --text-secondary: #1e293b;
     --text-muted: #64748b;
     --text-accent: #27e1c1;
-    --border-primary: #e2e8f0;
-    --border-secondary: #cbd5e1;
+    --border-primary: #e5e7eb;
+    --border-secondary: #27e1c1;
     --button-primary: #27e1c1;
     --button-primary-hover: #1fb89a;
     --button-secondary: #475569;
@@ -143,18 +143,18 @@
     --glass-backdrop: blur(16px);
   }
 
-  /* ===== Modern Glassmorphism Header ===== */
+  /* ===== Modern Clean Header ===== */
   #Header-{{ section.id }},
   [data-theme="light"] #Header-{{ section.id }}{
-    background: var(--glass-bg) !important;
-    backdrop-filter: var(--glass-backdrop) saturate(180%);
-    -webkit-backdrop-filter: var(--glass-backdrop) saturate(180%);
+    background: #ffffff !important;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     position: relative;
     z-index: 50;
-    box-shadow: var(--shadow-lg), 0 4px 20px rgba(39, 225, 193, 0.15) !important;
-    border: 1px solid rgba(39, 225, 193, 0.2) !important;
-    border-radius: 0 0 20px 20px;
-    border-bottom: 2px solid rgba(39, 225, 193, 0.3) !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(39, 225, 193, 0.1) !important;
+    border: none !important;
+    border-radius: 0;
+    border-bottom: 3px solid #27e1c1 !important;
   }
   
   /* Dark mode header styling */
