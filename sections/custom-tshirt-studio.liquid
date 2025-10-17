@@ -2849,8 +2849,8 @@ function initializeMockup() {
           tshirt_color: requestData.design_data.color,
           submission_date: new Date().toLocaleString(),
           request_id: requestData.id || 'Pending',
-          design_image: requestData.design_image_url || 'No design uploaded',
-          mockup_image: requestData.mockup_image_url || 'No mockup generated'
+          design_image: requestData.design_image_url || '#',
+          mockup_image: requestData.mockup_image_url || '#'
         };
         
         // Send email via EmailJS
@@ -2956,42 +2956,61 @@ function initializeMockup() {
     },
 
     async uploadDesignToStorage() {
+      console.log('🎨 Starting design upload to storage...');
       const overlayImg = document.querySelector(`#nt-overlay-{{ section.id }} img`);
-      if (overlayImg && overlayImg.src) {
-        try {
-          const response = await fetch(overlayImg.src);
-          const blob = await response.blob();
-          
-          const timestamp = Date.now();
-          const filename = `design_${timestamp}.png`;
-          
-          const client = window.supabaseClient;
-          if (!client) {
-            throw new Error('Supabase client not available');
-          }
-          
-          const { data, error} = await client
-            .storage
-            .from('design-uploads')
-            .upload(filename, blob, {
-              contentType: 'image/png',
-              upsert: false
-            });
-            
-          if (error) throw error;
-          
-          const { data: urlData } = client
-            .storage
-            .from('design-uploads')
-            .getPublicUrl(filename);
-            
-          return urlData.publicUrl;
-        } catch (error) {
-          console.error('Design upload error:', error);
-          return null;
-        }
+      
+      if (!overlayImg) {
+        console.warn('⚠️ No overlay image element found');
+        return null;
       }
-      return null;
+      
+      if (!overlayImg.src) {
+        console.warn('⚠️ Overlay image has no src');
+        return null;
+      }
+      
+      console.log('✅ Found overlay image, src:', overlayImg.src.substring(0, 100) + '...');
+      
+      try {
+        const response = await fetch(overlayImg.src);
+        const blob = await response.blob();
+        console.log('✅ Converted to blob, size:', blob.size, 'type:', blob.type);
+        
+        const timestamp = Date.now();
+        const filename = `design_${timestamp}.png`;
+        console.log('📝 Uploading as:', filename);
+        
+        const client = window.supabaseClient;
+        if (!client) {
+          throw new Error('Supabase client not available');
+        }
+        
+        const { data, error} = await client
+          .storage
+          .from('design-uploads')
+          .upload(filename, blob, {
+            contentType: 'image/png',
+            upsert: false
+          });
+          
+        if (error) {
+          console.error('❌ Supabase upload error:', error);
+          throw error;
+        }
+        
+        console.log('✅ Design uploaded to Supabase:', data);
+        
+        const { data: urlData } = client
+          .storage
+          .from('design-uploads')
+          .getPublicUrl(filename);
+        
+        console.log('✅ Public URL generated:', urlData.publicUrl);
+        return urlData.publicUrl;
+      } catch (error) {
+        console.error('❌ Design upload error:', error);
+        return null;
+      }
     },
     
     rotateDesign() {
