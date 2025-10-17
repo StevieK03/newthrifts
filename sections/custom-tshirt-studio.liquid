@@ -230,21 +230,54 @@
     }
     
     @media (max-width: 768px) {
+      .custom-tshirt-studio {
+        overflow-x: hidden;
+        max-width: 100vw;
+      }
+      
       .studio-title {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        line-height: 1.2;
+        padding: 0 15px;
       }
       
       .studio-subtitle {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
+        padding: 0 15px;
+      }
+      
+      .studio-description {
+        font-size: 1rem;
+        padding: 0 15px;
       }
       
       .design-workspace {
-        padding: 20px;
+        padding: 25px 20px;
         margin: 0 10px;
+        border-radius: 20px;
+        overflow-x: hidden;
+        max-width: calc(100% - 20px);
+        box-sizing: border-box;
+      }
+      
+      .workspace-header {
+        flex-wrap: wrap;
+        gap: 15px;
       }
       
       .workspace-title {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        flex: 1 1 100%;
+        text-align: center;
+      }
+      
+      .close-studio-btn {
+        flex: 0 0 auto;
+        margin: 0 auto;
       }
     }
 
