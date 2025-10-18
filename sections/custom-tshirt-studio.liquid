@@ -3924,22 +3924,48 @@ function initEditModal() {
   // Function to populate/update the preview
   function populatePreview() {
     const previewContainer = document.getElementById('edit-preview-{{ section.id }}');
-    if (!previewContainer) return;
+    if (!previewContainer) {
+      console.warn('⚠️ Preview container not found');
+      return;
+    }
     
-    // Find the canvas container with the design
-    const canvasContainer = document.getElementById('nt-mockup-canvas-{{ section.id }}');
+    console.log('🔍 Looking for canvas/design to preview...');
+    
+    // Try multiple methods to find the canvas/design
+    
+    // Method 1: Find the main canvas container
+    let canvasContainer = document.getElementById('nt-mockup-canvas-{{ section.id }}');
+    
+    // Method 2: Try finding by class
+    if (!canvasContainer) {
+      canvasContainer = document.querySelector('.nt-mockup__canvas');
+      console.log('📦 Trying class selector:', !!canvasContainer);
+    }
+    
+    // Method 3: Find any element with the canvas in its ID
+    if (!canvasContainer) {
+      canvasContainer = document.querySelector('[id*="mockup-canvas"]');
+      console.log('🎯 Trying wildcard selector:', !!canvasContainer);
+    }
     
     if (canvasContainer) {
+      console.log('✅ Found canvas container:', canvasContainer.id || canvasContainer.className);
+      
       // Clone the entire canvas container
       const clonedCanvas = canvasContainer.cloneNode(true);
+      
+      // Remove any IDs to avoid conflicts
+      clonedCanvas.id = '';
+      clonedCanvas.querySelectorAll('[id]').forEach(el => el.id = '');
       
       // Style the clone to fit the preview
       clonedCanvas.style.cssText = `
         max-width: 100%;
         max-height: 400px;
         margin: 0 auto;
-        transform: scale(0.8);
+        transform: scale(0.7);
         transform-origin: center;
+        pointer-events: none;
       `;
       
       // Clear preview and add clone
@@ -3947,23 +3973,64 @@ function initEditModal() {
       previewContainer.appendChild(clonedCanvas);
       
       console.log('✅ Preview populated with canvas');
-    } else {
-      // Fallback: show just the uploaded image
-      const overlayImg = document.querySelector('#nt-overlay-{{ section.id }} img');
-      if (overlayImg) {
-        const clonedImg = overlayImg.cloneNode(true);
-        clonedImg.style.cssText = `
-          max-width: 80%;
-          max-height: 350px;
-          object-fit: contain;
-        `;
-        previewContainer.innerHTML = '';
-        previewContainer.appendChild(clonedImg);
-        console.log('✅ Preview populated with design image');
-      } else {
-        previewContainer.innerHTML = '<p style="color: #94a3b8;">No design found</p>';
-      }
+      return;
     }
+    
+    // Fallback 1: Show just the uploaded image from overlay
+    console.log('🔍 Canvas not found, trying overlay image...');
+    const overlayImg = document.querySelector('#nt-overlay-{{ section.id }} img');
+    
+    if (overlayImg) {
+      console.log('✅ Found overlay image');
+      
+      // Create a wrapper that mimics the t-shirt view
+      const wrapper = document.createElement('div');
+      wrapper.style.cssText = `
+        position: relative;
+        max-width: 400px;
+        margin: 0 auto;
+      `;
+      
+      // Clone the t-shirt base if available
+      const tshirtBase = document.querySelector('#nt-base-{{ section.id }} img');
+      if (tshirtBase) {
+        const clonedBase = tshirtBase.cloneNode(true);
+        clonedBase.style.cssText = `
+          width: 100%;
+          height: auto;
+          display: block;
+        `;
+        wrapper.appendChild(clonedBase);
+      }
+      
+      // Add the design overlay
+      const clonedImg = overlayImg.cloneNode(true);
+      clonedImg.style.cssText = `
+        position: ${tshirtBase ? 'absolute' : 'relative'};
+        top: ${tshirtBase ? '30%' : '0'};
+        left: ${tshirtBase ? '50%' : '50%'};
+        transform: translateX(-50%);
+        max-width: ${tshirtBase ? '40%' : '80%'};
+        max-height: 350px;
+        object-fit: contain;
+        pointer-events: none;
+      `;
+      wrapper.appendChild(clonedImg);
+      
+      previewContainer.innerHTML = '';
+      previewContainer.appendChild(wrapper);
+      console.log('✅ Preview populated with design image + base');
+      return;
+    }
+    
+    // Fallback 2: Show message
+    console.warn('⚠️ No canvas or image found');
+    previewContainer.innerHTML = `
+      <div style="text-align: center; padding: 40px;">
+        <p style="color: #94a3b8; margin-bottom: 12px;">No design preview available</p>
+        <p style="color: #cbd5e1; font-size: 13px;">Your changes will be applied to the main canvas</p>
+      </div>
+    `;
   }
   
   // Close modal
