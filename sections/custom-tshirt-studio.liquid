@@ -678,6 +678,41 @@
         transition: none !important;
       }
     }
+
+    /* ===== SCALE SLIDER STYLING (FOR EDIT MODAL) ===== */
+    #scale-slider-{{ section.id }}::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #fff;
+      border: 2px solid #27e1c1;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    #scale-slider-{{ section.id }}::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+      box-shadow: 0 4px 12px rgba(39, 225, 193, 0.4);
+    }
+    
+    #scale-slider-{{ section.id }}::-moz-range-thumb {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #fff;
+      border: 2px solid #27e1c1;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    #scale-slider-{{ section.id }}::-moz-range-thumb:hover {
+      transform: scale(1.15);
+      box-shadow: 0 4px 12px rgba(39, 225, 193, 0.4);
+    }
   </style>
   
   <!-- Floating Background Shapes -->
@@ -1941,7 +1976,7 @@
           </div>
           
           <div style="display: grid; gap: 20px;">
-            <!-- Scale -->
+            <!-- Scale with Synced Slider -->
             <div>
               <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #334155;">Scale (%)</label>
               <input type="number" id="scale-input-{{ section.id }}" min="1" max="500" value="100" style="
@@ -1950,7 +1985,37 @@
                 border: 2px solid #e2e8f0;
                 border-radius: 10px;
                 font-size: 14px;
+                margin-bottom: 12px;
               ">
+              
+              <!-- Scale Slider (Synced) -->
+              <div style="
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 12px 16px;
+                background: rgba(15, 23, 42, 0.05);
+                border-radius: 10px;
+                border: 1px solid rgba(39, 225, 193, 0.2);
+              ">
+                <span style="font-size: 20px;">🔍</span>
+                <input type="range" id="scale-slider-{{ section.id }}" min="1" max="500" value="100" style="
+                  flex: 1;
+                  height: 6px;
+                  border-radius: 999px;
+                  background: linear-gradient(90deg, #27e1c1, #1aa394);
+                  outline: none;
+                  -webkit-appearance: none;
+                  appearance: none;
+                ">
+                <output id="scale-output-{{ section.id }}" style="
+                  min-width: 52px;
+                  text-align: right;
+                  font-weight: 600;
+                  color: #0f172a;
+                  font-size: 14px;
+                ">100%</output>
+              </div>
             </div>
 
             <!-- Rotation -->
@@ -1993,19 +2058,126 @@
               </button>
             </div>
 
-            <!-- Nudge Controls -->
+            <!-- Styled Nudge Controls (Same as Main Canvas) -->
             <div>
-              <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #334155;">Nudge (Arrow Keys)</label>
-              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 200px; margin: 0 auto;">
-                <div></div>
-                <button id="nudge-up-{{ section.id }}" style="padding: 10px; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer;">↑</button>
-                <div></div>
-                <button id="nudge-left-{{ section.id }}" style="padding: 10px; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer;">←</button>
-                <div></div>
-                <button id="nudge-right-{{ section.id }}" style="padding: 10px; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer;">→</button>
-                <div></div>
-                <button id="nudge-down-{{ section.id }}" style="padding: 10px; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer;">↓</button>
-                <div></div>
+              <label style="display: block; margin-bottom: 12px; font-weight: 600; color: #334155;">Nudge (Arrow Keys)</label>
+              <div style="
+                display: flex;
+                justify-content: center;
+                padding: 16px;
+                background: rgba(15, 23, 42, 0.03);
+                border-radius: 12px;
+              ">
+                <div style="
+                  background: rgba(15, 23, 42, 0.95);
+                  border: 2px solid #27e1c1;
+                  border-radius: 16px;
+                  padding: 12px;
+                  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(39, 225, 193, 0.3);
+                  backdrop-filter: blur(10px);
+                  -webkit-backdrop-filter: blur(10px);
+                ">
+                  <div style="
+                    color: #27e1c1;
+                    font-size: 11px;
+                    font-weight: 600;
+                    text-align: center;
+                    margin-bottom: 8px;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                  ">Nudge (Arrow Keys)</div>
+                  
+                  <div style="
+                    display: grid;
+                    grid-template-columns: repeat(3, 40px);
+                    grid-template-rows: repeat(3, 40px);
+                    gap: 4px;
+                  ">
+                    <!-- Top Row -->
+                    <div></div>
+                    <button id="nudge-up-{{ section.id }}" style="
+                      background: rgba(39, 225, 193, 0.15);
+                      border: 2px solid rgba(39, 225, 193, 0.6);
+                      border-radius: 8px;
+                      cursor: pointer;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      transition: all 0.2s ease;
+                      padding: 0;
+                    " onmouseover="this.style.background='rgba(39, 225, 193, 0.35)'; this.style.transform='translateY(-2px)'" 
+                       onmouseout="this.style.background='rgba(39, 225, 193, 0.15)'; this.style.transform='translateY(0)'">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#27e1c1" stroke-width="3">
+                        <path d="M12 19V5m0 0l-7 7m7-7l7 7"/>
+                      </svg>
+                    </button>
+                    <div></div>
+                    
+                    <!-- Middle Row -->
+                    <button id="nudge-left-{{ section.id }}" style="
+                      background: rgba(39, 225, 193, 0.15);
+                      border: 2px solid rgba(39, 225, 193, 0.6);
+                      border-radius: 8px;
+                      cursor: pointer;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      transition: all 0.2s ease;
+                      padding: 0;
+                    " onmouseover="this.style.background='rgba(39, 225, 193, 0.35)'; this.style.transform='translateX(-2px)'" 
+                       onmouseout="this.style.background='rgba(39, 225, 193, 0.15)'; this.style.transform='translateX(0)'">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#27e1c1" stroke-width="3">
+                        <path d="M19 12H5m0 0l7-7m-7 7l7 7"/>
+                      </svg>
+                    </button>
+                    <div style="
+                      background: rgba(39, 225, 193, 0.1);
+                      border: 2px dashed rgba(39, 225, 193, 0.3);
+                      border-radius: 8px;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                    ">
+                      <div style="width: 8px; height: 8px; border-radius: 50%; background: rgba(39, 225, 193, 0.6);"></div>
+                    </div>
+                    <button id="nudge-right-{{ section.id }}" style="
+                      background: rgba(39, 225, 193, 0.15);
+                      border: 2px solid rgba(39, 225, 193, 0.6);
+                      border-radius: 8px;
+                      cursor: pointer;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      transition: all 0.2s ease;
+                      padding: 0;
+                    " onmouseover="this.style.background='rgba(39, 225, 193, 0.35)'; this.style.transform='translateX(2px)'" 
+                       onmouseout="this.style.background='rgba(39, 225, 193, 0.15)'; this.style.transform='translateX(0)'">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#27e1c1" stroke-width="3">
+                        <path d="M5 12h14m0 0l-7-7m7 7l-7 7"/>
+                      </svg>
+                    </button>
+                    
+                    <!-- Bottom Row -->
+                    <div></div>
+                    <button id="nudge-down-{{ section.id }}" style="
+                      background: rgba(39, 225, 193, 0.15);
+                      border: 2px solid rgba(39, 225, 193, 0.6);
+                      border-radius: 8px;
+                      cursor: pointer;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      transition: all 0.2s ease;
+                      padding: 0;
+                    " onmouseover="this.style.background='rgba(39, 225, 193, 0.35)'; this.style.transform='translateY(2px)'" 
+                       onmouseout="this.style.background='rgba(39, 225, 193, 0.15)'; this.style.transform='translateY(0)'">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#27e1c1" stroke-width="3">
+                        <path d="M12 5v14m0 0l7-7m-7 7l-7-7"/>
+                      </svg>
+                    </button>
+                    <div></div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -4715,7 +4887,10 @@ function initEditModal() {
     // Initialize transform values if using Fabric.js
     const obj = studio.currentDesignObj;
     if (obj) {
-      document.getElementById('scale-input-{{ section.id }}').value = Math.round((obj.scaleX || 1) * 100);
+      const scaleValue = Math.round((obj.scaleX || 1) * 100);
+      document.getElementById('scale-input-{{ section.id }}').value = scaleValue;
+      document.getElementById('scale-slider-{{ section.id }}').value = scaleValue;
+      document.getElementById('scale-output-{{ section.id }}').textContent = scaleValue + '%';
       document.getElementById('rotation-input-{{ section.id }}').value = Math.round(obj.angle || 0);
     }
     
@@ -4874,11 +5049,28 @@ function initEditModal() {
   });
   
   // ========================================
-  // TRANSFORM TAB
+  // TRANSFORM TAB - WITH SYNCED SCALE SLIDER
   // ========================================
-  document.getElementById('scale-input-{{ section.id }}').addEventListener('input', (e) => {
-    studio.editOps?.scale(parseFloat(e.target.value));
-    setTimeout(populatePreview, 100); // Update preview after transform
+  const scaleInput = document.getElementById('scale-input-{{ section.id }}');
+  const scaleSlider = document.getElementById('scale-slider-{{ section.id }}');
+  const scaleOutput = document.getElementById('scale-output-{{ section.id }}');
+  
+  // Sync scale input → slider & output
+  scaleInput.addEventListener('input', (e) => {
+    const value = parseFloat(e.target.value);
+    scaleSlider.value = value;
+    scaleOutput.textContent = Math.round(value) + '%';
+    studio.editOps?.scale(value);
+    setTimeout(populatePreview, 100);
+  });
+  
+  // Sync scale slider → input & output
+  scaleSlider.addEventListener('input', (e) => {
+    const value = parseFloat(e.target.value);
+    scaleInput.value = value;
+    scaleOutput.textContent = Math.round(value) + '%';
+    studio.editOps?.scale(value);
+    setTimeout(populatePreview, 100);
   });
   
   document.getElementById('rotation-input-{{ section.id }}').addEventListener('input', (e) => {
@@ -4896,31 +5088,32 @@ function initEditModal() {
     setTimeout(populatePreview, 100); // Update preview after transform
   });
   
-  // Nudge controls
+  // Nudge controls with 0.25 step (same as main canvas)
+  const NUDGE_STEP = 0.25;
   document.getElementById('nudge-up-{{ section.id }}').addEventListener('click', () => {
-    studio.editOps?.nudge(0, -1);
+    studio.editOps?.nudge(0, -1, NUDGE_STEP);
     setTimeout(populatePreview, 100);
   });
   document.getElementById('nudge-down-{{ section.id }}').addEventListener('click', () => {
-    studio.editOps?.nudge(0, 1);
+    studio.editOps?.nudge(0, 1, NUDGE_STEP);
     setTimeout(populatePreview, 100);
   });
   document.getElementById('nudge-left-{{ section.id }}').addEventListener('click', () => {
-    studio.editOps?.nudge(-1, 0);
+    studio.editOps?.nudge(-1, 0, NUDGE_STEP);
     setTimeout(populatePreview, 100);
   });
   document.getElementById('nudge-right-{{ section.id }}').addEventListener('click', () => {
-    studio.editOps?.nudge(1, 0);
+    studio.editOps?.nudge(1, 0, NUDGE_STEP);
     setTimeout(populatePreview, 100);
   });
   
-  // Arrow key support
+  // Arrow key support with 0.25 step
   document.addEventListener('keydown', (e) => {
     if (modal.style.display === 'block') {
-      if (e.key === 'ArrowUp') { e.preventDefault(); studio.editOps?.nudge(0, -1); setTimeout(populatePreview, 100); }
-      if (e.key === 'ArrowDown') { e.preventDefault(); studio.editOps?.nudge(0, 1); setTimeout(populatePreview, 100); }
-      if (e.key === 'ArrowLeft') { e.preventDefault(); studio.editOps?.nudge(-1, 0); setTimeout(populatePreview, 100); }
-      if (e.key === 'ArrowRight') { e.preventDefault(); studio.editOps?.nudge(1, 0); setTimeout(populatePreview, 100); }
+      if (e.key === 'ArrowUp') { e.preventDefault(); studio.editOps?.nudge(0, -1, NUDGE_STEP); setTimeout(populatePreview, 100); }
+      if (e.key === 'ArrowDown') { e.preventDefault(); studio.editOps?.nudge(0, 1, NUDGE_STEP); setTimeout(populatePreview, 100); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); studio.editOps?.nudge(-1, 0, NUDGE_STEP); setTimeout(populatePreview, 100); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); studio.editOps?.nudge(1, 0, NUDGE_STEP); setTimeout(populatePreview, 100); }
       if (e.key === 'Escape') { closeEditModal(); }
     }
   });
