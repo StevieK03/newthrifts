@@ -4935,6 +4935,22 @@ function initEditModal() {
       clonedCanvas.id = 'preview-clone';
       clonedCanvas.querySelectorAll('[id]').forEach(el => el.id = '');
       
+      // REMOVE zoom slider and nudge controls from the preview
+      // Remove zoom slider (.zoom-bar or any element with "zoom" in class)
+      const zoomElements = clonedCanvas.querySelectorAll('.zoom-bar, [class*="zoom"]');
+      zoomElements.forEach(el => {
+        // Only remove if it's a slider control, not zoom text labels
+        if (el.classList.contains('zoom-bar') || el.querySelector('input[type="range"]')) {
+          el.remove();
+        }
+      });
+      
+      // Remove nudge controls (canvas-nudge-controls, nudge-pad, etc.)
+      const nudgeElements = clonedCanvas.querySelectorAll('[id*="nudge"], [class*="nudge"]');
+      nudgeElements.forEach(el => el.remove());
+      
+      console.log('🗑️ Removed zoom slider and nudge controls from preview');
+      
       // Force explicit display and dimensions
       clonedCanvas.style.cssText = `
         display: block !important;

@@ -44,6 +44,19 @@ window.studio = window.studio || {};
     return null;
   }
 
+  // Get the canvas container (for CSS variable manipulation)
+  function getCanvasContainer() {
+    // Try multiple selection methods
+    const containers = document.querySelectorAll('[id*="nt-mockup-canvas"]');
+    if (containers.length > 0) return containers[0];
+    
+    const container = document.querySelector('.nt-mockup__canvas');
+    if (container) return container;
+    
+    console.warn('⚠️ Could not find canvas container element');
+    return null;
+  }
+
   // Apply all transforms to the overlay
   function applyTransforms() {
     const overlay = getOverlay();
@@ -124,15 +137,37 @@ window.studio = window.studio || {};
   // Auto-fit design to safe area
   function autoFitDesign() {
     const overlay = getOverlay();
-    if (!overlay) return;
+    const canvasContainer = getCanvasContainer();
+    if (!overlay || !canvasContainer) return;
     
-    // Reset to optimal size for print area
-    designState.scale = 80;
-    designState.rotation = 0;
-    applyTransforms();
-    centerDesign();
+    // Use Perfect Fit dimensions (same as main canvas Perfect Fit button)
+    const perfectDimensions = {
+      topPct: 29.142857142856876,   // Exact optimal top position
+      leftPct: 49.96,                // Adjusted left position
+      widthPct: 37,                  // Optimal width for design proportions
+      heightPct: 42,                 // Optimal height for design proportions
+      rotateDeg: 0                   // No rotation for perfect fit
+    };
     
-    console.log('📐 Design auto-fitted');
+    // Apply the perfect dimensions via CSS variables
+    canvasContainer.style.setProperty('--overlay-top', `${perfectDimensions.topPct}%`);
+    canvasContainer.style.setProperty('--overlay-left', `${perfectDimensions.leftPct}%`);
+    canvasContainer.style.setProperty('--overlay-width', `${perfectDimensions.widthPct}%`);
+    canvasContainer.style.setProperty('--overlay-height', `${perfectDimensions.heightPct}%`);
+    canvasContainer.style.setProperty('--overlay-rotate', `${perfectDimensions.rotateDeg}deg`);
+    
+    // Update internal state to match
+    designState.rotation = perfectDimensions.rotateDeg;
+    designState.scale = perfectDimensions.widthPct; // Use width as scale reference
+    
+    // Add animation effect
+    overlay.style.transition = 'transform 0.3s ease';
+    overlay.style.transform = `translateX(-50%) rotate(${perfectDimensions.rotateDeg}deg) scale(1.05)`;
+    setTimeout(() => {
+      overlay.style.transform = `translateX(-50%) rotate(${perfectDimensions.rotateDeg}deg) scale(1)`;
+    }, 200);
+    
+    console.log('✨ Perfect Fit applied via Auto-Fit!');
   }
 
   // Get DPI/quality info
