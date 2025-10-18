@@ -1678,6 +1678,30 @@
         <div id="tab-transform-{{ section.id }}" class="edit-tab-content" style="display: block;">
           <h3 style="margin: 0 0 20px 0; font-size: 18px; color: #0f172a;">Transform Controls</h3>
           
+          <!-- LIVE PREVIEW -->
+          <div style="
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 2px solid #27e1c1;
+          ">
+            <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #334155; text-align: center;">Live Preview</h4>
+            <div id="edit-preview-{{ section.id }}" style="
+              background: white;
+              border-radius: 12px;
+              min-height: 300px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              position: relative;
+              overflow: hidden;
+            ">
+              <!-- Preview will be cloned here -->
+              <p style="color: #94a3b8; text-align: center;">Loading preview...</p>
+            </div>
+          </div>
+          
           <div style="display: grid; gap: 20px;">
             <!-- Scale -->
             <div>
@@ -3892,6 +3916,54 @@ function initEditModal() {
       document.getElementById('scale-input-{{ section.id }}').value = Math.round((obj.scaleX || 1) * 100);
       document.getElementById('rotation-input-{{ section.id }}').value = Math.round(obj.angle || 0);
     }
+    
+    // Populate the live preview with the canvas
+    populatePreview();
+  }
+  
+  // Function to populate/update the preview
+  function populatePreview() {
+    const previewContainer = document.getElementById('edit-preview-{{ section.id }}');
+    if (!previewContainer) return;
+    
+    // Find the canvas container with the design
+    const canvasContainer = document.getElementById('nt-mockup-canvas-{{ section.id }}');
+    
+    if (canvasContainer) {
+      // Clone the entire canvas container
+      const clonedCanvas = canvasContainer.cloneNode(true);
+      
+      // Style the clone to fit the preview
+      clonedCanvas.style.cssText = `
+        max-width: 100%;
+        max-height: 400px;
+        margin: 0 auto;
+        transform: scale(0.8);
+        transform-origin: center;
+      `;
+      
+      // Clear preview and add clone
+      previewContainer.innerHTML = '';
+      previewContainer.appendChild(clonedCanvas);
+      
+      console.log('✅ Preview populated with canvas');
+    } else {
+      // Fallback: show just the uploaded image
+      const overlayImg = document.querySelector('#nt-overlay-{{ section.id }} img');
+      if (overlayImg) {
+        const clonedImg = overlayImg.cloneNode(true);
+        clonedImg.style.cssText = `
+          max-width: 80%;
+          max-height: 350px;
+          object-fit: contain;
+        `;
+        previewContainer.innerHTML = '';
+        previewContainer.appendChild(clonedImg);
+        console.log('✅ Preview populated with design image');
+      } else {
+        previewContainer.innerHTML = '<p style="color: #94a3b8;">No design found</p>';
+      }
+    }
   }
   
   // Close modal
@@ -3923,51 +3995,61 @@ function initEditModal() {
   // ========================================
   document.getElementById('scale-input-{{ section.id }}').addEventListener('input', (e) => {
     studio.editOps?.scale(parseFloat(e.target.value));
+    setTimeout(populatePreview, 100); // Update preview after transform
   });
   
   document.getElementById('rotation-input-{{ section.id }}').addEventListener('input', (e) => {
     studio.editOps?.rotate(parseFloat(e.target.value));
+    setTimeout(populatePreview, 100); // Update preview after transform
   });
   
   document.getElementById('flip-h-btn-{{ section.id }}').addEventListener('click', () => {
     studio.editOps?.flipX();
+    setTimeout(populatePreview, 100); // Update preview after transform
   });
   
   document.getElementById('flip-v-btn-{{ section.id }}').addEventListener('click', () => {
     studio.editOps?.flipY();
+    setTimeout(populatePreview, 100); // Update preview after transform
   });
   
   // Nudge controls
   document.getElementById('nudge-up-{{ section.id }}').addEventListener('click', () => {
     studio.editOps?.nudge(0, -1);
+    setTimeout(populatePreview, 100);
   });
   document.getElementById('nudge-down-{{ section.id }}').addEventListener('click', () => {
     studio.editOps?.nudge(0, 1);
+    setTimeout(populatePreview, 100);
   });
   document.getElementById('nudge-left-{{ section.id }}').addEventListener('click', () => {
     studio.editOps?.nudge(-1, 0);
+    setTimeout(populatePreview, 100);
   });
   document.getElementById('nudge-right-{{ section.id }}').addEventListener('click', () => {
     studio.editOps?.nudge(1, 0);
+    setTimeout(populatePreview, 100);
   });
   
   // Arrow key support
   document.addEventListener('keydown', (e) => {
     if (modal.style.display === 'block') {
-      if (e.key === 'ArrowUp') { e.preventDefault(); studio.editOps?.nudge(0, -1); }
-      if (e.key === 'ArrowDown') { e.preventDefault(); studio.editOps?.nudge(0, 1); }
-      if (e.key === 'ArrowLeft') { e.preventDefault(); studio.editOps?.nudge(-1, 0); }
-      if (e.key === 'ArrowRight') { e.preventDefault(); studio.editOps?.nudge(1, 0); }
+      if (e.key === 'ArrowUp') { e.preventDefault(); studio.editOps?.nudge(0, -1); setTimeout(populatePreview, 100); }
+      if (e.key === 'ArrowDown') { e.preventDefault(); studio.editOps?.nudge(0, 1); setTimeout(populatePreview, 100); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); studio.editOps?.nudge(-1, 0); setTimeout(populatePreview, 100); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); studio.editOps?.nudge(1, 0); setTimeout(populatePreview, 100); }
       if (e.key === 'Escape') { closeEditModal(); }
     }
   });
   
   document.getElementById('center-btn-{{ section.id }}').addEventListener('click', () => {
     studio.editOps?.center();
+    setTimeout(populatePreview, 100);
   });
   
   document.getElementById('autofit-btn-{{ section.id }}').addEventListener('click', () => {
     studio.editOps?.autoFit();
+    setTimeout(populatePreview, 100);
   });
   
   // ========================================
