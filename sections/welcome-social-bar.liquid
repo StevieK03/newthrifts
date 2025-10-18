@@ -418,15 +418,9 @@ Welcome / Social Bar — Modern Redesign
       font-family: 'Bebas Neue','Anton',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       font-size: 24px;
       font-weight: 700;
+      color: #ffffff;
       margin: 0 0 8px 0;
       text-align: center;
-      /* Animated teal gradient effect - same as "Design Your Dream T-Shirt" */
-      background: linear-gradient(45deg, #27E1C1, #20b2aa, #27E1C1);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-shadow: 0 2px 8px rgba(39, 225, 193, 0.3);
-      animation: titleGlow 3s ease-in-out infinite alternate;
     }
 
     #welcome-{{ section.id }} .newsletter-description {
@@ -502,19 +496,9 @@ Welcome / Social Bar — Modern Redesign
       50% { transform: translateY(-15px); opacity: 0.8; }
     }
 
-    @keyframes titleGlow {
-      0% { 
-        filter: brightness(1) drop-shadow(0 2px 8px rgba(39, 225, 193, 0.3));
-      }
-      100% { 
-        filter: brightness(1.15) drop-shadow(0 2px 12px rgba(39, 225, 193, 0.6));
-      }
-    }
-
     @media (prefers-reduced-motion: reduce) {
       #welcome-{{ section.id }} .floating-shape,
-      #welcome-{{ section.id }} .floating-dot,
-      #welcome-{{ section.id }} .newsletter-title {
+      #welcome-{{ section.id }} .floating-dot {
         animation: none;
       }
     }
