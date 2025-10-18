@@ -4017,7 +4017,7 @@ function initCanvasNudgeControls() {
       }
       
       if (studio.editOps) {
-        studio.editOps.nudge(dx, dy, 1); // Use step of 1 for finer control
+        studio.editOps.nudge(dx, dy, 0.25); // Use step of 0.25 for ultra-fine control
         console.log(`🎮 Nudged ${direction}`);
       }
     });
@@ -4041,7 +4041,7 @@ function initCanvasNudgeControls() {
     }
     
     if (studio.editOps && (dx !== 0 || dy !== 0)) {
-      studio.editOps.nudge(dx, dy, 1);
+      studio.editOps.nudge(dx, dy, 0.25);
       console.log(`⌨️ Keyboard nudge: ${e.key}`);
     }
   });
