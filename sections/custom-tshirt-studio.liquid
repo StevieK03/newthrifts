@@ -4931,25 +4931,40 @@ function initEditModal() {
       // Clone the entire canvas container
       const clonedCanvas = canvasContainer.cloneNode(true);
       
-      // Remove any IDs to avoid conflicts
-      clonedCanvas.id = 'preview-clone';
-      clonedCanvas.querySelectorAll('[id]').forEach(el => el.id = '');
-      
-      // REMOVE zoom slider and nudge controls from the preview
+      // REMOVE zoom slider and nudge controls from the preview FIRST (before removing IDs)
       // Remove zoom slider (.zoom-bar or any element with "zoom" in class)
       const zoomElements = clonedCanvas.querySelectorAll('.zoom-bar, [class*="zoom"]');
       zoomElements.forEach(el => {
         // Only remove if it's a slider control, not zoom text labels
         if (el.classList.contains('zoom-bar') || el.querySelector('input[type="range"]')) {
+          console.log('🗑️ Removing zoom element:', el.id || el.className);
           el.remove();
         }
       });
       
-      // Remove nudge controls (canvas-nudge-controls, nudge-pad, etc.)
-      const nudgeElements = clonedCanvas.querySelectorAll('[id*="nudge"], [class*="nudge"]');
-      nudgeElements.forEach(el => el.remove());
+      // Remove nudge controls - multiple selectors to catch everything
+      // IMPORTANT: Do this BEFORE removing IDs so we can find them by ID
+      const nudgeSelectors = [
+        '[id*="canvas-nudge-controls"]',
+        '[id*="nudge-pad"]',
+        '[id*="nudge"]',
+        '[class*="nudge"]',
+        '.canvas-nudge-btn'
+      ];
       
-      console.log('🗑️ Removed zoom slider and nudge controls from preview');
+      nudgeSelectors.forEach(selector => {
+        const elements = clonedCanvas.querySelectorAll(selector);
+        elements.forEach(el => {
+          console.log('🗑️ Removing nudge element:', el.id || el.className);
+          el.remove();
+        });
+      });
+      
+      console.log('✅ Cleaned preview - removed zoom slider and all nudge controls');
+      
+      // NOW remove any remaining IDs to avoid conflicts
+      clonedCanvas.id = 'preview-clone';
+      clonedCanvas.querySelectorAll('[id]').forEach(el => el.id = '');
       
       // Force explicit display and dimensions
       clonedCanvas.style.cssText = `
