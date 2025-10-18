@@ -1160,15 +1160,36 @@
   }
 }
 
-/* Shopify cleanslate specific overrides */
-[data-theme="dark"] .shopify-cleanslate .shopify-cleanslate {
-  color: #f8fafc !important;
-}
+/* ===== NUCLEAR OPTION: Shopify Cookie Consent Banner Text Override ===== */
 
+/* Target Shopify's cleanslate system - Manual dark mode */
+[data-theme="dark"] .shopify-cleanslate,
+[data-theme="dark"] .shopify-cleanslate *,
 [data-theme="dark"] .shopify-cleanslate p,
 [data-theme="dark"] .shopify-cleanslate span,
-[data-theme="dark"] .shopify-cleanslate div:not([class*="button"]) {
-  color: #f8fafc !important;
+[data-theme="dark"] .shopify-cleanslate div,
+[data-theme="dark"] .shopify-cleanslate h1,
+[data-theme="dark"] .shopify-cleanslate h2,
+[data-theme="dark"] .shopify-cleanslate h3,
+[data-theme="dark"] .shopify-cleanslate label {
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.8) !important;
+}
+
+/* Target Shopify's cleanslate system - System dark mode */
+@media (prefers-color-scheme: dark) {
+  .shopify-cleanslate,
+  .shopify-cleanslate *,
+  .shopify-cleanslate p,
+  .shopify-cleanslate span,
+  .shopify-cleanslate div,
+  .shopify-cleanslate h1,
+  .shopify-cleanslate h2,
+  .shopify-cleanslate h3,
+  .shopify-cleanslate label {
+    color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.8) !important;
+  }
 }
 
 /* Target any iframe content (if accessible) */
@@ -1176,13 +1197,56 @@
   background: var(--bg-secondary) !important;
 }
 
-/* Nuclear option - target everything at bottom of viewport */
+/* ===== ULTRA-AGGRESSIVE: Bottom viewport elements (cookie banners) ===== */
+
+/* Manual dark mode */
 [data-theme="dark"] body > div[style*="bottom: 0"],
-[data-theme="dark"] body > div[style*="bottom:0"] {
-  background: var(--bg-secondary) !important;
+[data-theme="dark"] body > div[style*="bottom:0"],
+[data-theme="dark"] div[style*="position: fixed"][style*="bottom"] {
+  background: #1e293b !important;
+  border-color: #334155 !important;
 }
 
 [data-theme="dark"] body > div[style*="bottom: 0"] *,
-[data-theme="dark"] body > div[style*="bottom:0"] * {
-  color: #f8fafc !important;
+[data-theme="dark"] body > div[style*="bottom:0"] *,
+[data-theme="dark"] div[style*="position: fixed"][style*="bottom"] * {
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.8) !important;
+}
+
+/* Ensure buttons remain visible - Manual dark mode */
+[data-theme="dark"] body > div[style*="bottom: 0"] button,
+[data-theme="dark"] body > div[style*="bottom:0"] button,
+[data-theme="dark"] div[style*="position: fixed"][style*="bottom"] button {
+  background: #27e1c1 !important;
+  color: #0f172a !important;
+  font-weight: 600 !important;
+  text-shadow: none !important;
+}
+
+/* System dark mode */
+@media (prefers-color-scheme: dark) {
+  body > div[style*="bottom: 0"],
+  body > div[style*="bottom:0"],
+  div[style*="position: fixed"][style*="bottom"] {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+  }
+
+  body > div[style*="bottom: 0"] *,
+  body > div[style*="bottom:0"] *,
+  div[style*="position: fixed"][style*="bottom"] * {
+    color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.8) !important;
+  }
+  
+  /* Ensure buttons remain visible - System dark mode */
+  body > div[style*="bottom: 0"] button,
+  body > div[style*="bottom:0"] button,
+  div[style*="position: fixed"][style*="bottom"] button {
+    background: #27e1c1 !important;
+    color: #0f172a !important;
+    font-weight: 600 !important;
+    text-shadow: none !important;
+  }
 }
