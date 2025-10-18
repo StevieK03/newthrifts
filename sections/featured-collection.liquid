@@ -196,7 +196,7 @@
     transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease !important;
   }
   
-  /* Glowing teal ring on hover */
+  /* Enhanced glowing teal ring with drop-shadow filters */
   #sec-{{ section.id }} .product-card::after,
   #sec-{{ section.id }} .enhanced-product-card::after {
     content: "" !important;
@@ -204,14 +204,16 @@
     inset: -1px !important;
     border-radius: 18px !important;
     padding: 1px !important;
-    background: linear-gradient(135deg, #27E1C1, #00C9A7) !important;
+    background: linear-gradient(135deg, var(--nt-teal, #27E1C1), rgba(39, 225, 193, 0.9)) !important;
     -webkit-mask:
       linear-gradient(#000 0 0) content-box,
       linear-gradient(#000 0 0) !important;
     -webkit-mask-composite: xor !important;
     mask-composite: exclude !important;
     opacity: 0 !important;
-    transition: opacity .18s ease !important;
+    transition: opacity 0.2s ease, filter 0.3s ease !important;
+    filter: drop-shadow(0 0 12px rgba(39, 225, 193, 0.5))
+            drop-shadow(0 0 24px rgba(39, 225, 193, 0.35)) !important;
     pointer-events: none !important;
     z-index: 10 !important;
   }
@@ -224,8 +226,18 @@
   }
   
   #sec-{{ section.id }} .product-card:hover::after,
-  #sec-{{ section.id }} .enhanced-product-card:hover::after {
+  #sec-{{ section.id }} .enhanced-product-card:hover::after,
+  #sec-{{ section.id }} .product-card:focus-visible::after,
+  #sec-{{ section.id }} .enhanced-product-card:focus-visible::after {
     opacity: 1 !important;
+  }
+  
+  /* Keyboard accessibility */
+  #sec-{{ section.id }} .product-card:focus-visible,
+  #sec-{{ section.id }} .enhanced-product-card:focus-visible {
+    outline: none !important;
+    border-color: transparent !important;
+    box-shadow: 0 0 0 3px rgba(39, 225, 193, 0.3) inset, var(--nt-shadow-hover, 0 12px 30px rgba(15,23,42,0.14)) !important;
   }
   
   /* Restore swatch borders for visibility and bubble effects */

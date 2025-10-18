@@ -14,23 +14,33 @@
   --radius-lg: 14px;
   --radius-md: 10px;
   
-  /* New Thrifts Brand Variables */
-  --nt-teal: #27E1C1;
+  /* New Thrifts Brand Variables - Enhanced */
+  --nt-teal: #27E1C1;             /* New Thrifts signature teal */
+  --nt-teal-rgb: 39, 225, 193;    /* RGB values for rgba() usage */
   --nt-teal-soft: rgba(39,225,193,0.25);
   --nt-ink: #0F172A;
-  --nt-card-bg: #FFFFFF;
-  --nt-border: var(--nt-teal-soft);
-  --nt-shadow: 0 6px 20px rgba(15,23,42,0.08);
-  --nt-shadow-hover: 0 12px 30px rgba(15,23,42,0.14);
+  --nt-card-bg: #ffffff;          /* light theme background */
+  --nt-border: rgba(39, 225, 193, 0.25);
+  --nt-shadow: 0 6px 20px rgba(15, 23, 42, 0.08);
+  --nt-shadow-hover: 0 12px 30px rgba(15, 23, 42, 0.14);
 }
 
+/* Dark theme (navy background, teal accents) */
 @media (prefers-color-scheme: dark) {
   :root {
-    --nt-card-bg: #0F172A;
-    --nt-border: rgba(39,225,193,0.35);
-    --nt-shadow: 0 6px 20px rgba(0,0,0,0.45);
-    --nt-shadow-hover: 0 14px 36px rgba(0,0,0,0.58);
+    --nt-card-bg: #0F172A;        /* dark navy card */
+    --nt-border: rgba(39, 225, 193, 0.35);
+    --nt-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+    --nt-shadow-hover: 0 14px 36px rgba(0, 0, 0, 0.58);
   }
+}
+
+/* Data-theme attribute support (for manual dark mode toggle) */
+[data-theme="dark"] {
+  --nt-card-bg: #0F172A;
+  --nt-border: rgba(39, 225, 193, 0.35);
+  --nt-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+  --nt-shadow-hover: 0 14px 36px rgba(0, 0, 0, 0.58);
 }
 
 *{ box-sizing: border-box; }
@@ -188,7 +198,7 @@ a:hover{
 .grid--3{ grid-template-columns: repeat(3, minmax(0,1fr)); }
 @media (max-width: 900px){ .grid--2, .grid--3{ grid-template-columns: 1fr; } }
 
-/* ===== New Thrifts Product Card - Teal Glow Design ===== */
+/* ===== New Thrifts Product Card - Enhanced Teal Glow Design ===== */
 .product-card,
 .nt-product-card,
 .enhanced-product-card {
@@ -198,10 +208,19 @@ a:hover{
   border: 1px solid var(--nt-border);
   box-shadow: var(--nt-shadow);
   overflow: hidden;
-  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
-/* Glowing teal ring on hover */
+/* Hover lift and glow */
+.product-card:hover,
+.nt-product-card:hover,
+.enhanced-product-card:hover {
+  transform: translateY(-3px);
+  border-color: transparent;
+  box-shadow: var(--nt-shadow-hover);
+}
+
+/* Enhanced teal glow effect with drop-shadow filters */
 .product-card::after,
 .nt-product-card::after,
 .enhanced-product-card::after {
@@ -210,24 +229,18 @@ a:hover{
   inset: -1px;
   border-radius: 18px;
   padding: 1px;
-  background: linear-gradient(135deg, var(--nt-teal), #00C9A7);
+  background: linear-gradient(135deg, var(--nt-teal), rgba(var(--nt-teal-rgb), 0.9));
   -webkit-mask:
     linear-gradient(#000 0 0) content-box,
     linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
           mask-composite: exclude;
   opacity: 0;
-  transition: opacity .18s ease;
+  transition: opacity 0.2s ease, filter 0.3s ease;
+  filter: drop-shadow(0 0 12px rgba(var(--nt-teal-rgb), 0.5))
+          drop-shadow(0 0 24px rgba(var(--nt-teal-rgb), 0.35));
   pointer-events: none;
   z-index: 1;
-}
-
-.product-card:hover,
-.nt-product-card:hover,
-.enhanced-product-card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--nt-shadow-hover);
-  border-color: transparent;
 }
 
 .product-card:hover::after,
@@ -239,28 +252,33 @@ a:hover{
   opacity: 1;
 }
 
+/* Keyboard accessibility */
 .product-card:focus-visible,
 .nt-product-card:focus-visible,
 .enhanced-product-card:focus-visible {
   outline: none;
   border-color: transparent;
-  box-shadow: 0 0 0 3px var(--nt-teal-soft);
+  box-shadow: 0 0 0 3px rgba(var(--nt-teal-rgb), 0.3) inset, var(--nt-shadow-hover);
 }
 
-.product-card__image {
+/* Image corners match card */
+.product-card__image,
+.nt-product-image {
   position: relative;
   overflow: hidden;
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
 }
 
-.product-card__img { 
+.product-card__img,
+.nt-product-image img { 
   aspect-ratio: 1/1; 
   width: 100%; 
   object-fit: cover; 
   display: block;
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
+  height: auto;
 }
 
 .product-card__body { 
