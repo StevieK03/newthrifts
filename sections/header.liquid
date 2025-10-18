@@ -40,13 +40,13 @@
           <span class="signin-text">Account</span>
         </a>
       {% else %}
-        <button type="button" class="nt-header__signin-link" id="header-profile-trigger" aria-label="Sign in / Create Profile" style="background: none; border: none; cursor: pointer;">
+        <a href="{{ routes.account_login_url }}" class="nt-header__signin-link" aria-label="Sign in">
           <svg class="user-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
             <circle cx="12" cy="7" r="4"/>
           </svg>
           <span class="signin-text">Sign in</span>
-        </button>
+        </a>
       {% endif %}
     </div>
 
@@ -1351,22 +1351,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
-<script>
-// Connect header Sign in button to profile modal
-document.addEventListener('DOMContentLoaded', function() {
-  const headerTrigger = document.getElementById('header-profile-trigger');
-  const profileModal = document.getElementById('profile-modal');
-  
-  if (headerTrigger && profileModal) {
-    headerTrigger.addEventListener('click', function() {
-      console.log('📍 Header Sign in button clicked - opening profile modal');
-      profileModal.style.setProperty('display', 'flex', 'important');
-      document.body.style.overflow = 'hidden';
-    });
-    console.log('✅ Header profile trigger connected to modal');
-  }
-});
-</script>
 
 {% schema %}
 {
