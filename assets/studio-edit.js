@@ -10,6 +10,8 @@ window.studio = window.studio || {};
   // Track current design state
   let designState = {
     scale: 100,
+    baseWidth: 37,  // Base width percentage (matching Perfect Fit default)
+    baseHeight: 42, // Base height percentage (matching Perfect Fit default)
     rotation: 0,
     flipH: false,
     flipV: false,
@@ -64,7 +66,7 @@ window.studio = window.studio || {};
 
     const img = getDesignImage();
     
-    // Build transform string
+    // Build transform string (rotation and flip only, NOT scale)
     const transforms = [];
     
     // Base positioning (keep the translateX(-50%) for centering)
@@ -75,14 +77,21 @@ window.studio = window.studio || {};
       transforms.push(`rotate(${designState.rotation}deg)`);
     }
     
-    // Flip
+    // Flip (without affecting scale - scale is handled by width/height)
     const scaleX = designState.flipH ? -1 : 1;
     const scaleY = designState.flipV ? -1 : 1;
-    const scale = designState.scale / 100;
-    transforms.push(`scale(${scaleX * scale}, ${scaleY * scale})`);
+    if (scaleX !== 1 || scaleY !== 1) {
+      transforms.push(`scale(${scaleX}, ${scaleY})`);
+    }
     
-    // Apply to overlay
+    // Apply transform (rotation and flip only)
     overlay.style.transform = transforms.join(' ');
+    
+    // Handle scale by adjusting width/height (same as main canvas)
+    // Always scale from the BASE dimensions, not the current ones
+    const scaleFactor = designState.scale / 100;
+    overlay.style.width = (designState.baseWidth * scaleFactor) + '%';
+    overlay.style.height = (designState.baseHeight * scaleFactor) + '%';
     
     // Apply image filters if image exists
     if (img) {
@@ -156,9 +165,17 @@ window.studio = window.studio || {};
     canvasContainer.style.setProperty('--overlay-height', `${perfectDimensions.heightPct}%`);
     canvasContainer.style.setProperty('--overlay-rotate', `${perfectDimensions.rotateDeg}deg`);
     
-    // Update internal state to match
+    // Apply dimensions directly to overlay
+    overlay.style.top = `${perfectDimensions.topPct}%`;
+    overlay.style.left = `${perfectDimensions.leftPct}%`;
+    overlay.style.width = `${perfectDimensions.widthPct}%`;
+    overlay.style.height = `${perfectDimensions.heightPct}%`;
+    
+    // Update internal state to match - these are now the new BASE dimensions
+    designState.baseWidth = perfectDimensions.widthPct;
+    designState.baseHeight = perfectDimensions.heightPct;
     designState.rotation = perfectDimensions.rotateDeg;
-    designState.scale = perfectDimensions.widthPct; // Use width as scale reference
+    designState.scale = 100; // Reset scale to 100% since we're at the base dimensions
     
     // Add animation effect
     overlay.style.transition = 'transform 0.3s ease';
@@ -167,7 +184,7 @@ window.studio = window.studio || {};
       overlay.style.transform = `translateX(-50%) rotate(${perfectDimensions.rotateDeg}deg) scale(1)`;
     }, 200);
     
-    console.log('✨ Perfect Fit applied via Auto-Fit!');
+    console.log('✨ Perfect Fit applied via Auto-Fit! New base: ' + designState.baseWidth + '% × ' + designState.baseHeight + '%');
   }
 
   // Get DPI/quality info
@@ -197,7 +214,16 @@ window.studio = window.studio || {};
   studio.editOps = {
     open() {
       console.log('📝 Edit mode opened');
-      // Could add visual indicators here
+      
+      // Capture current overlay dimensions as base dimensions
+      const overlay = getOverlay();
+      if (overlay) {
+        const currentWidth = parseFloat(overlay.style.width) || 37;
+        const currentHeight = parseFloat(overlay.style.height) || 42;
+        designState.baseWidth = currentWidth;
+        designState.baseHeight = currentHeight;
+        console.log(`📏 Base dimensions set: ${currentWidth}% × ${currentHeight}%`);
+      }
     },
     
     close() {
