@@ -615,26 +615,27 @@
       font-weight: 600 !important;
     }
 
-    /* ===== MOBILE NUDGE CONTROLS - REPOSITIONED WITH MAGNIFY EFFECT ===== */
+    /* ===== MOBILE NUDGE CONTROLS - BOTTOM-RIGHT CORNER, CLEAR OF T-SHIRT ===== */
     @media (max-width: 768px) {
       #canvas-nudge-controls-{{ section.id }} {
-        /* Reposition to bottom-center, below the canvas to avoid t-shirt overlap */
+        /* Reposition to bottom-right corner, completely clear of canvas/t-shirt */
         position: fixed !important;
-        bottom: 120px !important; /* Clear of zoom slider */
-        right: auto !important;
-        left: 50% !important;
-        transform: translateX(-50%) scale(0.85);
-        transform-origin: bottom center;
+        bottom: 16px !important; /* Near bottom of viewport */
+        right: 16px !important;
+        left: auto !important;
+        transform: scale(0.7); /* More compact for mobile */
+        transform-origin: bottom right;
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        z-index: 100 !important;
+        z-index: 1000 !important; /* Above everything */
         touch-action: manipulation;
         -webkit-tap-highlight-color: transparent;
+        max-width: none !important;
       }
       
-      /* Magnify on tap/press/hover for easier mobile interaction */
+      /* Magnify on tap/press for easier mobile interaction */
       #canvas-nudge-controls-{{ section.id }}:active,
       #canvas-nudge-controls-{{ section.id }}.magnified {
-        transform: translateX(-50%) scale(1.15);
+        transform: scale(1.0); /* Grow to normal size */
       }
       
       /* Ensure touch targets are at least 44px */
@@ -653,13 +654,14 @@
     /* Small phones - even more compact */
     @media (max-width: 480px) {
       #canvas-nudge-controls-{{ section.id }} {
-        bottom: 100px !important;
-        transform: translateX(-50%) scale(0.75);
+        bottom: 12px !important;
+        right: 12px !important;
+        transform: scale(0.65); /* Extra compact */
       }
       
       #canvas-nudge-controls-{{ section.id }}:active,
       #canvas-nudge-controls-{{ section.id }}.magnified {
-        transform: translateX(-50%) scale(1.05);
+        transform: scale(0.95); /* Slightly larger on tap */
       }
     }
     
