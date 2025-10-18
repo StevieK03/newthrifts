@@ -184,15 +184,48 @@
 
 <!-- Enhanced Product Cards Styles -->
 <style id="enhanced-cards-{{ section.id }}">
-  /* Remove borders from product cards but keep swatch borders */
-  #sec-{{ section.id }} .product-card {
-    border: none !important;
-    outline: none !important;
+  /* Teal-Themed Product Cards with Glow Effect */
+  #sec-{{ section.id }} .product-card,
+  #sec-{{ section.id }} .enhanced-product-card {
+    position: relative !important;
+    border-radius: 16px !important;
+    background: var(--nt-card-bg, #FFFFFF) !important;
+    border: 1px solid var(--nt-border, rgba(39,225,193,0.25)) !important;
+    box-shadow: var(--nt-shadow, 0 6px 20px rgba(15,23,42,0.08)) !important;
+    overflow: hidden !important;
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease !important;
   }
   
-  #sec-{{ section.id }} .product-card * {
-    border: none !important;
-    outline: none !important;
+  /* Glowing teal ring on hover */
+  #sec-{{ section.id }} .product-card::after,
+  #sec-{{ section.id }} .enhanced-product-card::after {
+    content: "" !important;
+    position: absolute !important;
+    inset: -1px !important;
+    border-radius: 18px !important;
+    padding: 1px !important;
+    background: linear-gradient(135deg, #27E1C1, #00C9A7) !important;
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0) !important;
+    -webkit-mask-composite: xor !important;
+    mask-composite: exclude !important;
+    opacity: 0 !important;
+    transition: opacity .18s ease !important;
+    pointer-events: none !important;
+    z-index: 10 !important;
+  }
+  
+  #sec-{{ section.id }} .product-card:hover,
+  #sec-{{ section.id }} .enhanced-product-card:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: var(--nt-shadow-hover, 0 12px 30px rgba(15,23,42,0.14)) !important;
+    border-color: transparent !important;
+  }
+  
+  #sec-{{ section.id }} .product-card:hover::after,
+  #sec-{{ section.id }} .enhanced-product-card:hover::after {
+    opacity: 1 !important;
   }
   
   /* Restore swatch borders for visibility and bubble effects */
@@ -210,9 +243,9 @@
   
   #sec-{{ section.id }} .swatch:hover,
   #sec-{{ section.id }} .swatch.is-selected {
-    border-color: #000 !important;
+    border-color: #27E1C1 !important;
     transform: scale(1.05) !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
+    box-shadow: 0 2px 8px rgba(39, 225, 193, 0.3) !important;
   }
   
   /* Product card links */
@@ -264,26 +297,9 @@
     box-shadow: 0 4px 20px rgba(0,0,0,0.08);
   }
   
-  /* Remove hover effects from entire card - only apply to image area */
-  #sec-{{ section.id }} .enhanced-product-card:hover {
-    transform: none;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-  }
-  
-  /* Card Glow Effect - Removed neon colors */
+  /* Card glow elements - keep for compatibility but make invisible */
   #sec-{{ section.id }} .card-glow {
-    position: absolute;
-    inset: -2px;
-    background: linear-gradient(45deg, rgba(0,0,0,0.05), rgba(0,0,0,0.1));
-    border-radius: 18px;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    z-index: -1;
-    filter: blur(8px);
-  }
-  
-  #sec-{{ section.id }} .enhanced-product-card:hover .card-glow {
-    opacity: 0.3;
+    display: none !important;
   }
   
   /* Card Shine Effect */
