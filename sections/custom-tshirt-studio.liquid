@@ -2690,14 +2690,9 @@ function initializeMockup() {
         });
       }
 
-      // Edit button
-      const editBtn = document.getElementById(`nt-edit-{{ section.id }}`);
-      if (editBtn) {
-        editBtn.addEventListener("click", () => {
-          console.log('✏️ Edit button clicked');
-          alert('Edit functionality coming soon!');
-        });
-      }
+      // Edit button - handled by initEditModal() function below
+      // const editBtn = document.getElementById(`nt-edit-{{ section.id }}`);
+      // Removed old "coming soon" alert - now opens advanced Edit Modal
 
       // Remove button
       const removeBtn = document.getElementById(`nt-remove-{{ section.id }}`);
@@ -3842,7 +3837,6 @@ document.head.appendChild(studioEditScript);
 // ========================================
 function initEditModal() {
   const modal = document.getElementById('edit-modal-{{ section.id }}');
-  const editBtn = document.querySelector('[id*="edit-design-btn"]') || document.querySelector('button:has-text("Edit Design")');
   const closeBtn = document.getElementById('edit-modal-close-{{ section.id }}');
   const doneBtn = document.getElementById('edit-done-btn-{{ section.id }}');
   
@@ -3901,19 +3895,14 @@ function initEditModal() {
     studio.editOps?.close();
   }
   
-  // Find Edit Design button (it might have different IDs)
-  const possibleEditButtons = [
-    document.getElementById('edit-design-btn-{{ section.id }}'),
-    document.querySelector('[style*="Edit Design"]'),
-    ...Array.from(document.querySelectorAll('button')).filter(b => b.textContent.includes('Edit Design'))
-  ];
+  // Find Edit Design button - ID is nt-edit-{{ section.id }}
+  const actualEditBtn = document.getElementById('nt-edit-{{ section.id }}');
   
-  const actualEditBtn = possibleEditButtons.find(b => b !== null);
   if (actualEditBtn) {
     actualEditBtn.addEventListener('click', openEditModal);
-    console.log('✅ Edit Design button wired to modal');
+    console.log('✅ Edit Design button (nt-edit-{{ section.id }}) wired to modal');
   } else {
-    console.warn('⚠️ Could not find Edit Design button');
+    console.warn('⚠️ Could not find Edit Design button with ID: nt-edit-{{ section.id }}');
   }
   
   closeBtn.addEventListener('click', closeEditModal);
