@@ -158,26 +158,38 @@
       {{ content_for_layout }}
     </main>
 
-    <footer class="footer">
-      <div class="container grid grid--3">
-        <div>
-          <h4 style="margin:0 0 10px 0;">About</h4>
-          <p style="opacity:.85;">{{ settings.footer_about | default: "Sunset palettes, neon nights, and beach-breeze basics." }}</p>
+    <footer class="nt-footer">
+      <div class="nt-footer__top-glow"></div>
+      <div class="container">
+        <div class="nt-footer__grid">
+          <div class="nt-footer__column">
+            <h4 class="nt-footer__heading">About</h4>
+            <p class="nt-footer__text">{{ settings.footer_about | default: "Sunset palettes, neon nights, and beach-breeze basics." }}</p>
+          </div>
+          <div class="nt-footer__column">
+            <h4 class="nt-footer__heading">Links</h4>
+            <div class="nt-footer__links">
+              {% render 'menu', menu: settings.footer_menu %}
+            </div>
+          </div>
+          <div class="nt-footer__column">
+            <h4 class="nt-footer__heading">Newsletter</h4>
+            {% form 'customer', class: 'nt-footer__form' %}
+              <div class="nt-footer__input-wrapper">
+                <input type="email" name="contact[email]" placeholder="Your email" class="nt-footer__input" required>
+                <button class="nt-footer__button" type="submit">
+                  <span>Subscribe</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14m-7-7l7 7-7 7"/>
+                  </svg>
+                </button>
+              </div>
+            {% endform %}
+          </div>
         </div>
-        <div>
-          <h4 style="margin:0 0 10px 0;">Links</h4>
-          {% render 'menu', menu: settings.footer_menu %}
+        <div class="nt-footer__bottom">
+          <small class="nt-footer__copyright">© {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</small>
         </div>
-        <div>
-          <h4 style="margin:0 0 10px 0;">Newsletter</h4>
-          {% form 'customer' %}
-            <input type="email" name="contact[email]" placeholder="Your email" style="padding:12px; border-radius:12px; border:1px solid rgba(0,0,0,.2); background:#fff; color:#0f172a; width:100%; margin-bottom:10px;" required>
-            <button class="button button--primary" type="submit">Subscribe</button>
-          {% endform %}
-        </div>
-      </div>
-      <div class="container" style="margin-top:20px;">
-        <small>© {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</small>
       </div>
     </footer>
 
