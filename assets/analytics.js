@@ -96,19 +96,21 @@ async function trackSupabasePageView(meta = {}) {
     if (productInfo.product_price) trackingData.product_price = productInfo.product_price;
     if (productInfo.image_count) trackingData.image_count = productInfo.image_count;
     
-    // Track event and log result
-    const result = await window.supabaseClient.trackEvent('page_view', trackingData);
+    // Track event using proper Supabase insert method
+    const { data, error } = await window.supabaseClient
+      .from('analytics')
+      .insert([trackingData]);
     
-    if (result.error) {
-      console.error('📊 Supabase tracking failed:', result.error);
+    if (error) {
+      console.error('📊 Supabase tracking failed:', error);
       console.error('📊 Error details:', {
-        message: result.error.message,
-        code: result.error.code,
-        hint: result.error.hint
+        message: error.message,
+        code: error.code,
+        hint: error.hint
       });
     } else {
       console.log('📊 Page view tracked successfully:', window.location.pathname);
-      console.log('📊 Insert result:', result);
+      console.log('📊 Insert result:', data);
     }
   } catch (error) {
     console.error('📊 Page view tracking exception:', error);
