@@ -867,6 +867,31 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   });
+
+  // Force teal button colors - override any conflicting styles
+  function forceButtonColors() {
+    const buttons = document.querySelectorAll('#signup-submit, #login-submit, .btn-primary');
+    buttons.forEach(btn => {
+      if (btn) {
+        btn.style.setProperty('background', '#27e1c1', 'important');
+        btn.style.setProperty('background-color', '#27e1c1', 'important');
+        btn.style.setProperty('background-image', 'none', 'important');
+        btn.style.setProperty('color', '#0f172a', 'important');
+      }
+    });
+  }
+  
+  // Apply immediately
+  forceButtonColors();
+  
+  // Apply after a short delay in case other scripts run
+  setTimeout(forceButtonColors, 100);
+  setTimeout(forceButtonColors, 500);
+  setTimeout(forceButtonColors, 1000);
+  
+  // Watch for DOM changes and reapply
+  const observer = new MutationObserver(forceButtonColors);
+  observer.observe(document.body, { childList: true, subtree: true });
 });
 </script>
 <!-- User Profile System Active -->
