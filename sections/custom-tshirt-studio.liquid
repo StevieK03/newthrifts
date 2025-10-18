@@ -4053,45 +4053,135 @@ function initCanvasNudgeControls() {
 // DEBUG UTILITIES
 // ========================================
 window.debugImageSizes = function() {
-  console.log('🔍 DEBUG: Image Sizes');
+  console.log('🔍 DEBUG: Image Sizes (DETAILED)');
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   
   // Find all images in the canvas
   const canvasContainer = document.querySelector('[id*="nt-mockup-canvas"]');
   const overlay = document.querySelector('[id*="nt-overlay"]');
   
+  // Canvas Container Details
   if (canvasContainer) {
-    console.log('📦 Canvas Container:', {
-      width: canvasContainer.offsetWidth,
-      height: canvasContainer.offsetHeight,
-      computedWidth: window.getComputedStyle(canvasContainer).width,
-      computedHeight: window.getComputedStyle(canvasContainer).height
+    const canvasStyle = window.getComputedStyle(canvasContainer);
+    const canvasRect = canvasContainer.getBoundingClientRect();
+    
+    console.log('📦 Canvas Container (Detailed):', {
+      dimensions: {
+        offsetWidth: canvasContainer.offsetWidth,
+        offsetHeight: canvasContainer.offsetHeight,
+        clientWidth: canvasContainer.clientWidth,
+        clientHeight: canvasContainer.clientHeight,
+        scrollWidth: canvasContainer.scrollWidth,
+        scrollHeight: canvasContainer.scrollHeight
+      },
+      boundingRect: {
+        width: canvasRect.width,
+        height: canvasRect.height,
+        top: canvasRect.top,
+        left: canvasRect.left,
+        right: canvasRect.right,
+        bottom: canvasRect.bottom
+      },
+      computedStyle: {
+        width: canvasStyle.width,
+        height: canvasStyle.height,
+        padding: canvasStyle.padding,
+        margin: canvasStyle.margin,
+        border: canvasStyle.border,
+        boxSizing: canvasStyle.boxSizing,
+        aspectRatio: canvasStyle.aspectRatio,
+        position: canvasStyle.position
+      },
+      aspectRatio: (canvasContainer.offsetWidth / canvasContainer.offsetHeight).toFixed(3)
     });
   }
   
+  // Design Image Details
   if (overlay) {
     const overlayImg = overlay.querySelector('img');
     if (overlayImg) {
-      console.log('🎨 Design Image:', {
-        naturalWidth: overlayImg.naturalWidth,
-        naturalHeight: overlayImg.naturalHeight,
-        displayWidth: overlayImg.offsetWidth,
-        displayHeight: overlayImg.offsetHeight,
-        src: overlayImg.src.substring(0, 100) + '...'
-      });
-      
-      // Calculate DPI
+      const imgStyle = window.getComputedStyle(overlayImg);
+      const imgRect = overlayImg.getBoundingClientRect();
       const canvasWidth = canvasContainer ? canvasContainer.offsetWidth : 0;
-      const designWidthPct = (overlayImg.offsetWidth / canvasWidth) * 100;
-      const printWidthInches = 8; // Assume 8" print width
-      const effectiveWidth = overlayImg.naturalWidth * (designWidthPct / 100);
-      const dpi = Math.round(effectiveWidth / printWidthInches);
+      const canvasHeight = canvasContainer ? canvasContainer.offsetHeight : 0;
       
-      console.log('📐 Quality:', {
-        designWidthPercent: designWidthPct.toFixed(2) + '%',
-        estimatedDPI: dpi,
-        quality: dpi >= 300 ? '✅ Excellent' : dpi >= 200 ? '✅ Good' : dpi >= 150 ? '⚠️ OK' : '❌ Low'
+      // Calculate percentages
+      const widthPct = (overlayImg.offsetWidth / canvasWidth) * 100;
+      const heightPct = (overlayImg.offsetHeight / canvasHeight) * 100;
+      
+      // Calculate scaling
+      const scaleX = overlayImg.offsetWidth / overlayImg.naturalWidth;
+      const scaleY = overlayImg.offsetHeight / overlayImg.naturalHeight;
+      
+      console.log('🎨 Design Image (Detailed):', {
+        naturalDimensions: {
+          width: overlayImg.naturalWidth,
+          height: overlayImg.naturalHeight,
+          aspectRatio: (overlayImg.naturalWidth / overlayImg.naturalHeight).toFixed(3),
+          totalPixels: (overlayImg.naturalWidth * overlayImg.naturalHeight).toLocaleString(),
+          megapixels: ((overlayImg.naturalWidth * overlayImg.naturalHeight) / 1000000).toFixed(2) + 'MP'
+        },
+        displayDimensions: {
+          width: overlayImg.offsetWidth,
+          height: overlayImg.offsetHeight,
+          clientWidth: overlayImg.clientWidth,
+          clientHeight: overlayImg.clientHeight,
+          aspectRatio: (overlayImg.offsetWidth / overlayImg.offsetHeight).toFixed(3)
+        },
+        boundingRect: {
+          width: imgRect.width,
+          height: imgRect.height,
+          top: imgRect.top,
+          left: imgRect.left
+        },
+        percentageOfCanvas: {
+          width: widthPct.toFixed(2) + '%',
+          height: heightPct.toFixed(2) + '%',
+          area: ((widthPct * heightPct) / 100).toFixed(2) + '%'
+        },
+        scaling: {
+          scaleX: scaleX.toFixed(4),
+          scaleY: scaleY.toFixed(4),
+          scaleFactor: ((scaleX + scaleY) / 2).toFixed(4),
+          isScaledDown: scaleX < 1 || scaleY < 1,
+          isScaledUp: scaleX > 1 || scaleY > 1,
+          compressionRatio: (1 / scaleX).toFixed(2) + 'x'
+        },
+        computedStyle: {
+          objectFit: imgStyle.objectFit,
+          transform: imgStyle.transform,
+          filter: imgStyle.filter,
+          opacity: imgStyle.opacity
+        },
+        fileInfo: {
+          src: overlayImg.src.substring(0, 80) + '...',
+          complete: overlayImg.complete,
+          currentSrc: overlayImg.currentSrc ? overlayImg.currentSrc.substring(0, 80) + '...' : 'N/A'
+        }
       });
+      
+      // DPI Quality Analysis
+      const printWidths = [6, 8, 10, 12]; // Common print sizes in inches
+      console.log('📐 Quality Analysis (Multiple Print Sizes):');
+      printWidths.forEach(printWidth => {
+        const effectiveWidth = overlayImg.naturalWidth * (widthPct / 100);
+        const dpi = Math.round(effectiveWidth / printWidth);
+        const quality = dpi >= 300 ? '✅ Excellent' : dpi >= 200 ? '✅ Good' : dpi >= 150 ? '⚠️ OK' : dpi >= 100 ? '⚠️ Low' : '❌ Poor';
+        console.log(`  ${printWidth}" print:`, {
+          dpi: dpi,
+          quality: quality,
+          actualSize: `${(effectiveWidth / dpi).toFixed(2)}" x ${(overlayImg.naturalHeight * (heightPct / 100) / dpi).toFixed(2)}"`
+        });
+      });
+      
+      // Recommend optimal print size
+      const optimalPrintWidth = (overlayImg.naturalWidth * (widthPct / 100)) / 300;
+      console.log('💡 Recommendation:', {
+        optimalPrintSize: `${optimalPrintWidth.toFixed(2)}" wide at 300 DPI`,
+        currentDesignSize: `${widthPct.toFixed(2)}% of canvas (${overlayImg.offsetWidth}px)`,
+        suggestion: optimalPrintWidth < 6 ? '⚠️ Consider higher resolution image' : '✅ Resolution is good'
+      });
+      
     } else {
       console.log('⚠️ No design image found in overlay');
     }
@@ -4099,15 +4189,44 @@ window.debugImageSizes = function() {
     console.log('⚠️ No overlay element found');
   }
   
-  // Base t-shirt image
+  // Base T-shirt Image Details
   const baseImg = document.querySelector('[id*="nt-base"]');
   if (baseImg) {
-    console.log('👕 Base T-shirt Image:', {
-      naturalWidth: baseImg.naturalWidth,
-      naturalHeight: baseImg.naturalHeight,
-      displayWidth: baseImg.offsetWidth,
-      displayHeight: baseImg.offsetHeight,
-      src: baseImg.src.substring(baseImg.src.lastIndexOf('/') + 1)
+    const baseStyle = window.getComputedStyle(baseImg);
+    const baseRect = baseImg.getBoundingClientRect();
+    
+    console.log('👕 Base T-shirt Image (Detailed):', {
+      naturalDimensions: {
+        width: baseImg.naturalWidth,
+        height: baseImg.naturalHeight,
+        aspectRatio: (baseImg.naturalWidth / baseImg.naturalHeight).toFixed(3),
+        totalPixels: (baseImg.naturalWidth * baseImg.naturalHeight).toLocaleString()
+      },
+      displayDimensions: {
+        width: baseImg.offsetWidth,
+        height: baseImg.offsetHeight,
+        clientWidth: baseImg.clientWidth,
+        clientHeight: baseImg.clientHeight
+      },
+      boundingRect: {
+        width: baseRect.width,
+        height: baseRect.height,
+        top: baseRect.top,
+        left: baseRect.left
+      },
+      scaling: {
+        scaleX: (baseImg.offsetWidth / baseImg.naturalWidth).toFixed(4),
+        scaleY: (baseImg.offsetHeight / baseImg.naturalHeight).toFixed(4)
+      },
+      computedStyle: {
+        objectFit: baseStyle.objectFit,
+        transform: baseStyle.transform,
+        position: baseStyle.position
+      },
+      fileInfo: {
+        filename: baseImg.src.substring(baseImg.src.lastIndexOf('/') + 1),
+        complete: baseImg.complete
+      }
     });
   }
   
@@ -4115,7 +4234,7 @@ window.debugImageSizes = function() {
 };
 
 window.debugCanvasSize = function() {
-  console.log('🔍 DEBUG: Canvas Dimensions');
+  console.log('🔍 DEBUG: Canvas Dimensions (DETAILED)');
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   
   const canvasContainer = document.querySelector('[id*="nt-mockup-canvas"]');
@@ -4123,26 +4242,143 @@ window.debugCanvasSize = function() {
   if (canvasContainer) {
     const rect = canvasContainer.getBoundingClientRect();
     const computed = window.getComputedStyle(canvasContainer);
+    const parent = canvasContainer.parentElement;
     
-    console.log('📦 Canvas Container:', {
-      offsetWidth: canvasContainer.offsetWidth,
-      offsetHeight: canvasContainer.offsetHeight,
-      clientWidth: canvasContainer.clientWidth,
-      clientHeight: canvasContainer.clientHeight,
+    console.log('📦 Canvas Container (Detailed):', {
+      elementInfo: {
+        id: canvasContainer.id,
+        className: canvasContainer.className,
+        tagName: canvasContainer.tagName
+      },
+      dimensions: {
+        offsetWidth: canvasContainer.offsetWidth,
+        offsetHeight: canvasContainer.offsetHeight,
+        clientWidth: canvasContainer.clientWidth,
+        clientHeight: canvasContainer.clientHeight,
+        scrollWidth: canvasContainer.scrollWidth,
+        scrollHeight: canvasContainer.scrollHeight,
+        aspectRatio: (canvasContainer.offsetWidth / canvasContainer.offsetHeight).toFixed(3)
+      },
       boundingRect: {
         width: rect.width,
         height: rect.height,
         top: rect.top,
-        left: rect.left
+        left: rect.left,
+        right: rect.right,
+        bottom: rect.bottom,
+        x: rect.x,
+        y: rect.y
       },
       computedStyle: {
         width: computed.width,
         height: computed.height,
+        minWidth: computed.minWidth,
+        minHeight: computed.minHeight,
+        maxWidth: computed.maxWidth,
+        maxHeight: computed.maxHeight,
         padding: computed.padding,
+        paddingTop: computed.paddingTop,
+        paddingRight: computed.paddingRight,
+        paddingBottom: computed.paddingBottom,
+        paddingLeft: computed.paddingLeft,
         margin: computed.margin,
-        aspectRatio: computed.aspectRatio
+        border: computed.border,
+        borderRadius: computed.borderRadius,
+        boxSizing: computed.boxSizing,
+        aspectRatio: computed.aspectRatio,
+        position: computed.position,
+        display: computed.display,
+        overflow: computed.overflow,
+        transform: computed.transform,
+        transformOrigin: computed.transformOrigin
+      },
+      background: {
+        background: computed.background,
+        backgroundColor: computed.backgroundColor,
+        backgroundImage: computed.backgroundImage.substring(0, 100) + (computed.backgroundImage.length > 100 ? '...' : ''),
+        backgroundSize: computed.backgroundSize,
+        backgroundPosition: computed.backgroundPosition,
+        backgroundRepeat: computed.backgroundRepeat
+      },
+      effects: {
+        boxShadow: computed.boxShadow,
+        filter: computed.filter,
+        backdropFilter: computed.backdropFilter,
+        opacity: computed.opacity,
+        visibility: computed.visibility
       }
     });
+    
+    if (parent) {
+      const parentRect = parent.getBoundingClientRect();
+      console.log('👨‍👦 Parent Container:', {
+        id: parent.id || 'No ID',
+        className: parent.className,
+        tagName: parent.tagName,
+        dimensions: {
+          offsetWidth: parent.offsetWidth,
+          offsetHeight: parent.offsetHeight
+        },
+        boundingRect: {
+          width: parentRect.width,
+          height: parentRect.height
+        },
+        canvasPercentage: {
+          width: ((canvasContainer.offsetWidth / parent.offsetWidth) * 100).toFixed(2) + '%',
+          height: ((canvasContainer.offsetHeight / parent.offsetHeight) * 100).toFixed(2) + '%'
+        }
+      });
+    }
+    
+    // Viewport information
+    console.log('🖥️ Viewport Info:', {
+      windowSize: {
+        innerWidth: window.innerWidth,
+        innerHeight: window.innerHeight,
+        outerWidth: window.outerWidth,
+        outerHeight: window.outerHeight
+      },
+      canvasPercentageOfViewport: {
+        width: ((canvasContainer.offsetWidth / window.innerWidth) * 100).toFixed(2) + '%',
+        height: ((canvasContainer.offsetHeight / window.innerHeight) * 100).toFixed(2) + '%'
+      },
+      scrollPosition: {
+        scrollX: window.scrollX,
+        scrollY: window.scrollY,
+        pageXOffset: window.pageXOffset,
+        pageYOffset: window.pageYOffset
+      },
+      devicePixelRatio: window.devicePixelRatio
+    });
+    
+    // CSS Variables (if any)
+    const cssVars = [
+      '--overlay-top',
+      '--overlay-left',
+      '--overlay-width',
+      '--overlay-height',
+      '--overlay-rotate'
+    ];
+    const extractedVars = {};
+    cssVars.forEach(varName => {
+      const value = computed.getPropertyValue(varName);
+      if (value) extractedVars[varName] = value;
+    });
+    
+    if (Object.keys(extractedVars).length > 0) {
+      console.log('🎨 CSS Variables:', extractedVars);
+    }
+    
+    // Child elements count
+    console.log('📊 Structure:', {
+      childElementCount: canvasContainer.childElementCount,
+      children: Array.from(canvasContainer.children).map(child => ({
+        tagName: child.tagName,
+        id: child.id || 'No ID',
+        className: child.className
+      }))
+    });
+    
   } else {
     console.log('⚠️ Canvas container not found');
   }
