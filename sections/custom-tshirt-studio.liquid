@@ -4000,6 +4000,52 @@ document.head.appendChild(studioEditScript);
 function initCanvasNudgeControls() {
   const nudgeButtons = document.querySelectorAll('.canvas-nudge-btn');
   
+  // Helper function to log current position after nudge
+  function logDesignPosition(action) {
+    setTimeout(() => {
+      const overlay = document.querySelector('[id*="nt-overlay"]');
+      const canvasContainer = document.querySelector('[id*="nt-mockup-canvas"]');
+      
+      if (overlay && canvasContainer) {
+        const computed = window.getComputedStyle(canvasContainer);
+        const overlayStyle = window.getComputedStyle(overlay);
+        
+        // Get CSS variables
+        const cssVars = {
+          '--overlay-top': computed.getPropertyValue('--overlay-top'),
+          '--overlay-left': computed.getPropertyValue('--overlay-left'),
+          '--overlay-width': computed.getPropertyValue('--overlay-width'),
+          '--overlay-height': computed.getPropertyValue('--overlay-height'),
+          '--overlay-rotate': computed.getPropertyValue('--overlay-rotate')
+        };
+        
+        // Get computed position
+        const rect = overlay.getBoundingClientRect();
+        const canvasRect = canvasContainer.getBoundingClientRect();
+        
+        console.log(`📍 ${action}`);
+        console.log({
+          cssVariables: cssVars,
+          computedPosition: {
+            top: overlayStyle.top,
+            left: overlayStyle.left,
+            transform: overlayStyle.transform
+          },
+          dimensions: {
+            width: overlay.offsetWidth + 'px',
+            height: overlay.offsetHeight + 'px'
+          },
+          percentageOfCanvas: {
+            top: (((rect.top - canvasRect.top) / canvasRect.height) * 100).toFixed(2) + '%',
+            left: (((rect.left - canvasRect.left) / canvasRect.width) * 100).toFixed(2) + '%',
+            width: ((overlay.offsetWidth / canvasContainer.offsetWidth) * 100).toFixed(2) + '%',
+            height: ((overlay.offsetHeight / canvasContainer.offsetHeight) * 100).toFixed(2) + '%'
+          }
+        });
+      }
+    }, 50); // Small delay to ensure DOM has updated
+  }
+  
   // Wire up button clicks
   nudgeButtons.forEach(btn => {
     btn.addEventListener('click', (e) => {
@@ -4018,7 +4064,7 @@ function initCanvasNudgeControls() {
       
       if (studio.editOps) {
         studio.editOps.nudge(dx, dy, 0.25); // Use step of 0.25 for ultra-fine control
-        console.log(`🎮 Nudged ${direction}`);
+        logDesignPosition(`🎮 Nudged ${direction}`);
       }
     });
   });
@@ -4031,18 +4077,19 @@ function initCanvasNudgeControls() {
         document.activeElement.tagName === 'TEXTAREA') return;
     
     let dx = 0, dy = 0;
+    let direction = '';
     
     switch(e.key) {
-      case 'ArrowUp': dy = -1; e.preventDefault(); break;
-      case 'ArrowDown': dy = 1; e.preventDefault(); break;
-      case 'ArrowLeft': dx = -1; e.preventDefault(); break;
-      case 'ArrowRight': dx = 1; e.preventDefault(); break;
+      case 'ArrowUp': dy = -1; direction = 'up'; e.preventDefault(); break;
+      case 'ArrowDown': dy = 1; direction = 'down'; e.preventDefault(); break;
+      case 'ArrowLeft': dx = -1; direction = 'left'; e.preventDefault(); break;
+      case 'ArrowRight': dx = 1; direction = 'right'; e.preventDefault(); break;
       default: return; // Exit if not an arrow key
     }
     
     if (studio.editOps && (dx !== 0 || dy !== 0)) {
       studio.editOps.nudge(dx, dy, 0.25);
-      console.log(`⌨️ Keyboard nudge: ${e.key}`);
+      logDesignPosition(`⌨️ Keyboard nudge: ${direction}`);
     }
   });
   
