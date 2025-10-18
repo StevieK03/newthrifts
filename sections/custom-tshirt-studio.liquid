@@ -1530,6 +1530,489 @@
       </div>
     </div>
   </div>
+
+  <!-- ========================================
+       ADVANCED EDIT MODAL WITH 7 TABS
+       ======================================== -->
+  <div id="edit-modal-{{ section.id }}" class="edit-modal" style="
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.95);
+    z-index: 10000;
+    overflow-y: auto;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  ">
+    <div class="edit-modal__container" style="
+      max-width: 900px;
+      margin: 40px auto;
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 25px 80px rgba(39, 225, 193, 0.3);
+      overflow: hidden;
+    ">
+      <!-- Modal Header -->
+      <div class="edit-modal__header" style="
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px 32px;
+        background: linear-gradient(135deg, #27e1c1 0%, #20b2aa 100%);
+        color: #0f172a;
+      ">
+        <h2 style="margin: 0; font-size: 24px; font-weight: 700;">✏️ Advanced Editor</h2>
+        <button id="edit-modal-close-{{ section.id }}" style="
+          background: rgba(15, 23, 42, 0.2);
+          border: none;
+          color: #0f172a;
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          cursor: pointer;
+          font-size: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.2s;
+        " onmouseover="this.style.background='rgba(15, 23, 42, 0.3)'" onmouseout="this.style.background='rgba(15, 23, 42, 0.2)'">
+          ✕
+        </button>
+      </div>
+
+      <!-- Tab Navigation -->
+      <div class="edit-tabs" style="
+        display: flex;
+        gap: 8px;
+        padding: 16px 24px;
+        background: #f8fafc;
+        border-bottom: 2px solid #e2e8f0;
+        overflow-x: auto;
+      ">
+        <button class="edit-tab active" data-tab="transform" style="
+          padding: 10px 16px;
+          background: #27e1c1;
+          color: #0f172a;
+          border: none;
+          border-radius: 10px;
+          font-weight: 600;
+          cursor: pointer;
+          white-space: nowrap;
+          transition: all 0.2s;
+        ">Transform</button>
+        <button class="edit-tab" data-tab="crop" style="
+          padding: 10px 16px;
+          background: transparent;
+          color: #64748b;
+          border: none;
+          border-radius: 10px;
+          font-weight: 600;
+          cursor: pointer;
+          white-space: nowrap;
+          transition: all 0.2s;
+        ">Crop</button>
+        <button class="edit-tab" data-tab="background" style="
+          padding: 10px 16px;
+          background: transparent;
+          color: #64748b;
+          border: none;
+          border-radius: 10px;
+          font-weight: 600;
+          cursor: pointer;
+          white-space: nowrap;
+          transition: all 0.2s;
+        ">Background</button>
+        <button class="edit-tab" data-tab="adjust" style="
+          padding: 10px 16px;
+          background: transparent;
+          color: #64748b;
+          border: none;
+          border-radius: 10px;
+          font-weight: 600;
+          cursor: pointer;
+          white-space: nowrap;
+          transition: all 0.2s;
+        ">Adjust</button>
+        <button class="edit-tab" data-tab="warp" style="
+          padding: 10px 16px;
+          background: transparent;
+          color: #64748b;
+          border: none;
+          border-radius: 10px;
+          font-weight: 600;
+          cursor: pointer;
+          white-space: nowrap;
+          transition: all 0.2s;
+        ">Warp</button>
+        <button class="edit-tab" data-tab="replace" style="
+          padding: 10px 16px;
+          background: transparent;
+          color: #64748b;
+          border: none;
+          border-radius: 10px;
+          font-weight: 600;
+          cursor: pointer;
+          white-space: nowrap;
+          transition: all 0.2s;
+        ">Replace</button>
+        <button class="edit-tab" data-tab="quality" style="
+          padding: 10px 16px;
+          background: transparent;
+          color: #64748b;
+          border: none;
+          border-radius: 10px;
+          font-weight: 600;
+          cursor: pointer;
+          white-space: nowrap;
+          transition: all 0.2s;
+        ">Quality</button>
+      </div>
+
+      <!-- Tab Content -->
+      <div class="edit-content" style="padding: 32px;">
+        
+        <!-- TRANSFORM TAB -->
+        <div id="tab-transform-{{ section.id }}" class="edit-tab-content" style="display: block;">
+          <h3 style="margin: 0 0 20px 0; font-size: 18px; color: #0f172a;">Transform Controls</h3>
+          
+          <div style="display: grid; gap: 20px;">
+            <!-- Scale -->
+            <div>
+              <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #334155;">Scale (%)</label>
+              <input type="number" id="scale-input-{{ section.id }}" min="1" max="500" value="100" style="
+                width: 100%;
+                padding: 12px;
+                border: 2px solid #e2e8f0;
+                border-radius: 10px;
+                font-size: 14px;
+              ">
+            </div>
+
+            <!-- Rotation -->
+            <div>
+              <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #334155;">Rotation (°)</label>
+              <input type="number" id="rotation-input-{{ section.id }}" min="-180" max="180" value="0" style="
+                width: 100%;
+                padding: 12px;
+                border: 2px solid #e2e8f0;
+                border-radius: 10px;
+                font-size: 14px;
+              ">
+            </div>
+
+            <!-- Flip & Position -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <button id="flip-h-btn-{{ section.id }}" style="
+                padding: 12px;
+                background: #f8fafc;
+                border: 2px solid #e2e8f0;
+                border-radius: 10px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.2s;
+              " onmouseover="this.style.background='#27e1c1'; this.style.borderColor='#27e1c1'" 
+                 onmouseout="this.style.background='#f8fafc'; this.style.borderColor='#e2e8f0'">
+                ↔ Flip H
+              </button>
+              <button id="flip-v-btn-{{ section.id }}" style="
+                padding: 12px;
+                background: #f8fafc;
+                border: 2px solid #e2e8f0;
+                border-radius: 10px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.2s;
+              " onmouseover="this.style.background='#27e1c1'; this.style.borderColor='#27e1c1'" 
+                 onmouseout="this.style.background='#f8fafc'; this.style.borderColor='#e2e8f0'">
+                ↕ Flip V
+              </button>
+            </div>
+
+            <!-- Nudge Controls -->
+            <div>
+              <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #334155;">Nudge (Arrow Keys)</label>
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 200px; margin: 0 auto;">
+                <div></div>
+                <button id="nudge-up-{{ section.id }}" style="padding: 10px; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer;">↑</button>
+                <div></div>
+                <button id="nudge-left-{{ section.id }}" style="padding: 10px; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer;">←</button>
+                <div></div>
+                <button id="nudge-right-{{ section.id }}" style="padding: 10px; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer;">→</button>
+                <div></div>
+                <button id="nudge-down-{{ section.id }}" style="padding: 10px; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer;">↓</button>
+                <div></div>
+              </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <button id="center-btn-{{ section.id }}" style="
+                padding: 14px;
+                background: #27e1c1;
+                color: #0f172a;
+                border: none;
+                border-radius: 12px;
+                font-weight: 700;
+                cursor: pointer;
+                transition: all 0.2s;
+              " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                ⊙ Center
+              </button>
+              <button id="autofit-btn-{{ section.id }}" style="
+                padding: 14px;
+                background: #27e1c1;
+                color: #0f172a;
+                border: none;
+                border-radius: 12px;
+                font-weight: 700;
+                cursor: pointer;
+                transition: all 0.2s;
+              " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                ⚡ Auto-Fit
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CROP TAB -->
+        <div id="tab-crop-{{ section.id }}" class="edit-tab-content" style="display: none;">
+          <h3 style="margin: 0 0 20px 0; font-size: 18px; color: #0f172a;">Crop Tool</h3>
+          <p style="color: #64748b; margin-bottom: 20px;">Click "Start Crop" to begin. Adjust the box, then click "Apply" to commit.</p>
+          
+          <div style="display: flex; gap: 12px;">
+            <button id="crop-init-btn-{{ section.id }}" style="
+              flex: 1;
+              padding: 14px;
+              background: #27e1c1;
+              color: #0f172a;
+              border: none;
+              border-radius: 12px;
+              font-weight: 700;
+              cursor: pointer;
+            ">✂️ Start Crop</button>
+            <button id="crop-apply-btn-{{ section.id }}" style="
+              flex: 1;
+              padding: 14px;
+              background: #10b981;
+              color: white;
+              border: none;
+              border-radius: 12px;
+              font-weight: 700;
+              cursor: pointer;
+              opacity: 0.5;
+            " disabled>✓ Apply</button>
+            <button id="crop-cancel-btn-{{ section.id }}" style="
+              flex: 1;
+              padding: 14px;
+              background: #ef4444;
+              color: white;
+              border: none;
+              border-radius: 12px;
+              font-weight: 700;
+              cursor: pointer;
+              opacity: 0.5;
+            " disabled>✕ Cancel</button>
+          </div>
+        </div>
+
+        <!-- BACKGROUND TAB -->
+        <div id="tab-background-{{ section.id }}" class="edit-tab-content" style="display: none;">
+          <h3 style="margin: 0 0 20px 0; font-size: 18px; color: #0f172a;">Background Removal</h3>
+          
+          <div style="display: grid; gap: 20px;">
+            <div>
+              <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #334155;">Target Color</label>
+              <input type="color" id="bg-color-{{ section.id }}" value="#ffffff" style="
+                width: 100%;
+                height: 50px;
+                border: 2px solid #e2e8f0;
+                border-radius: 10px;
+                cursor: pointer;
+              ">
+            </div>
+
+            <div>
+              <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #334155;">Tolerance: <span id="tolerance-value-{{ section.id }}">30</span></label>
+              <input type="range" id="bg-tolerance-{{ section.id }}" min="0" max="100" value="30" style="
+                width: 100%;
+              ">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <button id="remove-bg-btn-{{ section.id }}" style="
+                padding: 14px;
+                background: #27e1c1;
+                color: #0f172a;
+                border: none;
+                border-radius: 12px;
+                font-weight: 700;
+                cursor: pointer;
+              ">🎨 Remove BG</button>
+              <button id="revert-bg-btn-{{ section.id }}" style="
+                padding: 14px;
+                background: #f59e0b;
+                color: white;
+                border: none;
+                border-radius: 12px;
+                font-weight: 700;
+                cursor: pointer;
+              ">↶ Revert BG</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ADJUST TAB -->
+        <div id="tab-adjust-{{ section.id }}" class="edit-tab-content" style="display: none;">
+          <h3 style="margin: 0 0 20px 0; font-size: 18px; color: #0f172a;">Image Adjustments</h3>
+          
+          <div style="display: grid; gap: 20px;">
+            <!-- Opacity -->
+            <div>
+              <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #334155;">Opacity: <span id="opacity-value-{{ section.id }}">100</span>%</label>
+              <input type="range" id="opacity-slider-{{ section.id }}" min="0" max="100" value="100" style="width: 100%;">
+            </div>
+
+            <!-- Brightness -->
+            <div>
+              <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #334155;">Brightness: <span id="brightness-value-{{ section.id }}">0</span></label>
+              <input type="range" id="brightness-slider-{{ section.id }}" min="-1" max="1" step="0.1" value="0" style="width: 100%;">
+            </div>
+
+            <!-- Contrast -->
+            <div>
+              <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #334155;">Contrast: <span id="contrast-value-{{ section.id }}">0</span></label>
+              <input type="range" id="contrast-slider-{{ section.id }}" min="-1" max="1" step="0.1" value="0" style="width: 100%;">
+            </div>
+
+            <!-- Grayscale -->
+            <div>
+              <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                <input type="checkbox" id="grayscale-check-{{ section.id }}" style="width: 20px; height: 20px; cursor: pointer;">
+                <span style="font-weight: 600; color: #334155;">Grayscale</span>
+              </label>
+            </div>
+
+            <!-- Outline -->
+            <div>
+              <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #334155;">Outline Width: <span id="outline-value-{{ section.id }}">0</span>px</label>
+              <input type="range" id="outline-slider-{{ section.id }}" min="0" max="20" value="0" style="width: 100%;">
+            </div>
+          </div>
+        </div>
+
+        <!-- WARP TAB -->
+        <div id="tab-warp-{{ section.id }}" class="edit-tab-content" style="display: none;">
+          <h3 style="margin: 0 0 20px 0; font-size: 18px; color: #0f172a;">Perspective Warp</h3>
+          <p style="color: #64748b; margin-bottom: 20px;">🚧 Advanced perspective warping coming soon! This will allow 4-corner distortion for creative effects.</p>
+          
+          <button style="
+            padding: 14px;
+            background: #94a3b8;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: not-allowed;
+            width: 100%;
+          " disabled>🔧 Enable Warp (Coming Soon)</button>
+        </div>
+
+        <!-- REPLACE TAB -->
+        <div id="tab-replace-{{ section.id }}" class="edit-tab-content" style="display: none;">
+          <h3 style="margin: 0 0 20px 0; font-size: 18px; color: #0f172a;">Replace Design</h3>
+          <p style="color: #64748b; margin-bottom: 20px;">Upload a new image while preserving position, scale, and rotation.</p>
+          
+          <div style="
+            border: 3px dashed #e2e8f0;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+          " id="replace-dropzone-{{ section.id }}"
+             onmouseover="this.style.borderColor='#27e1c1'; this.style.background='#f0fdfa'" 
+             onmouseout="this.style.borderColor='#e2e8f0'; this.style.background='transparent'">
+            <div style="font-size: 48px; margin-bottom: 12px;">📁</div>
+            <p style="margin: 0; font-weight: 600; color: #334155;">Click or drag to replace design</p>
+            <input type="file" id="replace-input-{{ section.id }}" accept="image/*" style="display: none;">
+          </div>
+        </div>
+
+        <!-- QUALITY TAB -->
+        <div id="tab-quality-{{ section.id }}" class="edit-tab-content" style="display: none;">
+          <h3 style="margin: 0 0 20px 0; font-size: 18px; color: #0f172a;">Print Quality Analysis</h3>
+          
+          <div style="
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+          ">
+            <div style="font-size: 64px; font-weight: 900; margin-bottom: 12px;" id="dpi-display-{{ section.id }}">
+              <span id="dpi-number-{{ section.id }}" style="color: #27e1c1;">300</span>
+              <span style="font-size: 24px; color: #64748b;">DPI</span>
+            </div>
+            
+            <div style="
+              padding: 12px 24px;
+              background: #27e1c1;
+              color: #0f172a;
+              border-radius: 12px;
+              font-weight: 700;
+              display: inline-block;
+              margin-bottom: 16px;
+            " id="quality-badge-{{ section.id }}">
+              ✓ EXCELLENT QUALITY
+            </div>
+
+            <p style="color: #64748b; margin: 0; font-size: 14px;">
+              <strong>Tip:</strong> Aim for ≥300 DPI for best print results
+            </p>
+          </div>
+
+          <div style="
+            margin-top: 20px;
+            padding: 16px;
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            border-radius: 8px;
+          " id="quality-warning-{{ section.id }}" style="display: none;">
+            <strong>⚠️ Warning:</strong> Your design may appear pixelated when printed. Consider uploading a higher resolution image.
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="edit-modal__footer" style="
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        padding: 24px 32px;
+        background: #f8fafc;
+        border-top: 2px solid #e2e8f0;
+      ">
+        <button id="edit-done-btn-{{ section.id }}" style="
+          padding: 14px 32px;
+          background: #27e1c1;
+          color: #0f172a;
+          border: none;
+          border-radius: 12px;
+          font-weight: 700;
+          font-size: 16px;
+          cursor: pointer;
+          transition: all 0.2s;
+        " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(39, 225, 193, 0.4)'" 
+           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+          ✓ Done Editing
+        </button>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -3341,6 +3824,326 @@ function initializeSizeChart() {
       icon: !!sizeChartIcon
     });
   }
+}
+
+// ========================================
+// LOAD STUDIO EDIT OPERATIONS
+// ========================================
+const studioEditScript = document.createElement('script');
+studioEditScript.src = '{{ "studio-edit.js" | asset_url }}';
+studioEditScript.onload = function() {
+  console.log('✅ Studio Edit Operations loaded');
+  initEditModal();
+};
+document.head.appendChild(studioEditScript);
+
+// ========================================
+// EDIT MODAL FUNCTIONALITY
+// ========================================
+function initEditModal() {
+  const modal = document.getElementById('edit-modal-{{ section.id }}');
+  const editBtn = document.querySelector('[id*="edit-design-btn"]') || document.querySelector('button:has-text("Edit Design")');
+  const closeBtn = document.getElementById('edit-modal-close-{{ section.id }}');
+  const doneBtn = document.getElementById('edit-done-btn-{{ section.id }}');
+  
+  // Tab switching
+  const tabs = document.querySelectorAll('.edit-tab');
+  const tabContents = document.querySelectorAll('.edit-tab-content');
+  
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const tabName = tab.getAttribute('data-tab');
+      
+      // Update tab styles
+      tabs.forEach(t => {
+        t.style.background = 'transparent';
+        t.style.color = '#64748b';
+        t.classList.remove('active');
+      });
+      tab.style.background = '#27e1c1';
+      tab.style.color = '#0f172a';
+      tab.classList.add('active');
+      
+      // Show corresponding content
+      tabContents.forEach(content => {
+        content.style.display = 'none';
+      });
+      document.getElementById(`tab-${tabName}-{{ section.id }}`).style.display = 'block';
+      
+      // Update quality meter when switching to quality tab
+      if (tabName === 'quality') {
+        updateQualityMeter();
+      }
+    });
+  });
+  
+  // Open modal
+  function openEditModal() {
+    if (!studio.currentDesignObj) {
+      alert('⚠️ Please upload a design first before editing.');
+      return;
+    }
+    modal.style.display = 'block';
+    studio.editOps?.open();
+    updateQualityMeter();
+    
+    // Initialize transform values
+    const obj = studio.currentDesignObj;
+    if (obj) {
+      document.getElementById('scale-input-{{ section.id }}').value = Math.round((obj.scaleX || 1) * 100);
+      document.getElementById('rotation-input-{{ section.id }}').value = Math.round(obj.angle || 0);
+    }
+  }
+  
+  // Close modal
+  function closeEditModal() {
+    modal.style.display = 'none';
+    studio.editOps?.close();
+  }
+  
+  // Find Edit Design button (it might have different IDs)
+  const possibleEditButtons = [
+    document.getElementById('edit-design-btn-{{ section.id }}'),
+    document.querySelector('[style*="Edit Design"]'),
+    ...Array.from(document.querySelectorAll('button')).filter(b => b.textContent.includes('Edit Design'))
+  ];
+  
+  const actualEditBtn = possibleEditButtons.find(b => b !== null);
+  if (actualEditBtn) {
+    actualEditBtn.addEventListener('click', openEditModal);
+    console.log('✅ Edit Design button wired to modal');
+  } else {
+    console.warn('⚠️ Could not find Edit Design button');
+  }
+  
+  closeBtn.addEventListener('click', closeEditModal);
+  doneBtn.addEventListener('click', closeEditModal);
+  
+  // Close on backdrop click
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeEditModal();
+  });
+  
+  // ========================================
+  // TRANSFORM TAB
+  // ========================================
+  document.getElementById('scale-input-{{ section.id }}').addEventListener('input', (e) => {
+    studio.editOps?.scale(parseFloat(e.target.value));
+  });
+  
+  document.getElementById('rotation-input-{{ section.id }}').addEventListener('input', (e) => {
+    studio.editOps?.rotate(parseFloat(e.target.value));
+  });
+  
+  document.getElementById('flip-h-btn-{{ section.id }}').addEventListener('click', () => {
+    studio.editOps?.flipX();
+  });
+  
+  document.getElementById('flip-v-btn-{{ section.id }}').addEventListener('click', () => {
+    studio.editOps?.flipY();
+  });
+  
+  // Nudge controls
+  document.getElementById('nudge-up-{{ section.id }}').addEventListener('click', () => {
+    studio.editOps?.nudge(0, -1);
+  });
+  document.getElementById('nudge-down-{{ section.id }}').addEventListener('click', () => {
+    studio.editOps?.nudge(0, 1);
+  });
+  document.getElementById('nudge-left-{{ section.id }}').addEventListener('click', () => {
+    studio.editOps?.nudge(-1, 0);
+  });
+  document.getElementById('nudge-right-{{ section.id }}').addEventListener('click', () => {
+    studio.editOps?.nudge(1, 0);
+  });
+  
+  // Arrow key support
+  document.addEventListener('keydown', (e) => {
+    if (modal.style.display === 'block') {
+      if (e.key === 'ArrowUp') { e.preventDefault(); studio.editOps?.nudge(0, -1); }
+      if (e.key === 'ArrowDown') { e.preventDefault(); studio.editOps?.nudge(0, 1); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); studio.editOps?.nudge(-1, 0); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); studio.editOps?.nudge(1, 0); }
+      if (e.key === 'Escape') { closeEditModal(); }
+    }
+  });
+  
+  document.getElementById('center-btn-{{ section.id }}').addEventListener('click', () => {
+    studio.editOps?.center();
+  });
+  
+  document.getElementById('autofit-btn-{{ section.id }}').addEventListener('click', () => {
+    studio.editOps?.autoFit();
+  });
+  
+  // ========================================
+  // CROP TAB
+  // ========================================
+  const cropInitBtn = document.getElementById('crop-init-btn-{{ section.id }}');
+  const cropApplyBtn = document.getElementById('crop-apply-btn-{{ section.id }}');
+  const cropCancelBtn = document.getElementById('crop-cancel-btn-{{ section.id }}');
+  
+  cropInitBtn.addEventListener('click', () => {
+    const success = studio.editOps?.initCrop();
+    if (success) {
+      cropApplyBtn.disabled = false;
+      cropApplyBtn.style.opacity = '1';
+      cropCancelBtn.disabled = false;
+      cropCancelBtn.style.opacity = '1';
+      cropInitBtn.disabled = true;
+      cropInitBtn.style.opacity = '0.5';
+    }
+  });
+  
+  cropApplyBtn.addEventListener('click', () => {
+    studio.editOps?.applyCrop();
+    cropInitBtn.disabled = false;
+    cropInitBtn.style.opacity = '1';
+    cropApplyBtn.disabled = true;
+    cropApplyBtn.style.opacity = '0.5';
+    cropCancelBtn.disabled = true;
+    cropCancelBtn.style.opacity = '0.5';
+  });
+  
+  cropCancelBtn.addEventListener('click', () => {
+    studio.editOps?.cancelCrop();
+    cropInitBtn.disabled = false;
+    cropInitBtn.style.opacity = '1';
+    cropApplyBtn.disabled = true;
+    cropApplyBtn.style.opacity = '0.5';
+    cropCancelBtn.disabled = true;
+    cropCancelBtn.style.opacity = '0.5';
+  });
+  
+  // ========================================
+  // BACKGROUND TAB
+  // ========================================
+  const bgToleranceSlider = document.getElementById('bg-tolerance-{{ section.id }}');
+  const toleranceValue = document.getElementById('tolerance-value-{{ section.id }}');
+  
+  bgToleranceSlider.addEventListener('input', (e) => {
+    toleranceValue.textContent = e.target.value;
+  });
+  
+  document.getElementById('remove-bg-btn-{{ section.id }}').addEventListener('click', () => {
+    const color = document.getElementById('bg-color-{{ section.id }}').value;
+    const tolerance = parseInt(bgToleranceSlider.value);
+    studio.editOps?.removeBackground(color, tolerance);
+  });
+  
+  document.getElementById('revert-bg-btn-{{ section.id }}').addEventListener('click', () => {
+    studio.editOps?.revertBackground();
+  });
+  
+  // ========================================
+  // ADJUST TAB
+  // ========================================
+  const opacitySlider = document.getElementById('opacity-slider-{{ section.id }}');
+  const opacityValue = document.getElementById('opacity-value-{{ section.id }}');
+  
+  opacitySlider.addEventListener('input', (e) => {
+    const val = e.target.value;
+    opacityValue.textContent = val;
+    studio.editOps?.setOpacity(val / 100);
+  });
+  
+  const brightnessSlider = document.getElementById('brightness-slider-{{ section.id }}');
+  const brightnessValue = document.getElementById('brightness-value-{{ section.id }}');
+  
+  brightnessSlider.addEventListener('input', (e) => {
+    const val = e.target.value;
+    brightnessValue.textContent = val;
+    studio.editOps?.setBrightness(parseFloat(val));
+  });
+  
+  const contrastSlider = document.getElementById('contrast-slider-{{ section.id }}');
+  const contrastValue = document.getElementById('contrast-value-{{ section.id }}');
+  
+  contrastSlider.addEventListener('input', (e) => {
+    const val = e.target.value;
+    contrastValue.textContent = val;
+    studio.editOps?.setContrast(parseFloat(val));
+  });
+  
+  const grayscaleCheck = document.getElementById('grayscale-check-{{ section.id }}');
+  grayscaleCheck.addEventListener('change', (e) => {
+    studio.editOps?.setGrayscale(e.target.checked);
+  });
+  
+  const outlineSlider = document.getElementById('outline-slider-{{ section.id }}');
+  const outlineValue = document.getElementById('outline-value-{{ section.id }}');
+  
+  outlineSlider.addEventListener('input', (e) => {
+    const val = e.target.value;
+    outlineValue.textContent = val;
+    studio.editOps?.addOutline(parseInt(val), '#000000');
+  });
+  
+  // ========================================
+  // REPLACE TAB
+  // ========================================
+  const replaceDropzone = document.getElementById('replace-dropzone-{{ section.id }}');
+  const replaceInput = document.getElementById('replace-input-{{ section.id }}');
+  
+  replaceDropzone.addEventListener('click', () => {
+    replaceInput.click();
+  });
+  
+  replaceInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        // This would replace the design while preserving transforms
+        // Implementation depends on your existing upload system
+        alert('🚧 Replace functionality coming soon! Will preserve your position, scale, and rotation.');
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+  
+  // ========================================
+  // QUALITY TAB
+  // ========================================
+  function updateQualityMeter() {
+    const info = studio.editOps?.qualityInfo();
+    if (!info || !info.dpi) return;
+    
+    const dpiNumber = document.getElementById('dpi-number-{{ section.id }}');
+    const qualityBadge = document.getElementById('quality-badge-{{ section.id }}');
+    const qualityWarning = document.getElementById('quality-warning-{{ section.id }}');
+    
+    dpiNumber.textContent = info.dpi || '---';
+    
+    // Color coding
+    if (info.level === 'excellent') {
+      dpiNumber.style.color = '#27e1c1';
+      qualityBadge.style.background = '#27e1c1';
+      qualityBadge.style.color = '#0f172a';
+      qualityBadge.textContent = '✓ EXCELLENT QUALITY';
+      qualityWarning.style.display = 'none';
+    } else if (info.level === 'ok') {
+      dpiNumber.style.color = '#f59e0b';
+      qualityBadge.style.background = '#f59e0b';
+      qualityBadge.style.color = 'white';
+      qualityBadge.textContent = '⚠ ACCEPTABLE QUALITY';
+      qualityWarning.style.display = 'none';
+    } else if (info.level === 'low') {
+      dpiNumber.style.color = '#ef4444';
+      qualityBadge.style.background = '#ef4444';
+      qualityBadge.style.color = 'white';
+      qualityBadge.textContent = '⚠ LOW QUALITY';
+      qualityWarning.style.display = 'block';
+    } else {
+      dpiNumber.style.color = '#dc2626';
+      qualityBadge.style.background = '#dc2626';
+      qualityBadge.style.color = 'white';
+      qualityBadge.textContent = '❌ POOR QUALITY';
+      qualityWarning.style.display = 'block';
+    }
+  }
+  
+  console.log('✅ Edit Modal fully initialized with all 7 tabs');
 }
 </script>
 
