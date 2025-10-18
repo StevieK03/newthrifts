@@ -13,6 +13,24 @@
   --radius-xl: 18px;
   --radius-lg: 14px;
   --radius-md: 10px;
+  
+  /* New Thrifts Brand Variables */
+  --nt-teal: #27E1C1;
+  --nt-teal-soft: rgba(39,225,193,0.25);
+  --nt-ink: #0F172A;
+  --nt-card-bg: #FFFFFF;
+  --nt-border: var(--nt-teal-soft);
+  --nt-shadow: 0 6px 20px rgba(15,23,42,0.08);
+  --nt-shadow-hover: 0 12px 30px rgba(15,23,42,0.14);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --nt-card-bg: #0F172A;
+    --nt-border: rgba(39,225,193,0.35);
+    --nt-shadow: 0 6px 20px rgba(0,0,0,0.45);
+    --nt-shadow-hover: 0 14px 36px rgba(0,0,0,0.58);
+  }
 }
 
 *{ box-sizing: border-box; }
@@ -170,23 +188,110 @@ a:hover{
 .grid--3{ grid-template-columns: repeat(3, minmax(0,1fr)); }
 @media (max-width: 900px){ .grid--2, .grid--3{ grid-template-columns: 1fr; } }
 
-.product-card {
-  border-radius: var(--radius-xl);
+/* ===== New Thrifts Product Card - Teal Glow Design ===== */
+.product-card,
+.nt-product-card,
+.enhanced-product-card {
+  position: relative;
+  border-radius: 16px;
+  background: var(--nt-card-bg);
+  border: 1px solid var(--nt-border);
+  box-shadow: var(--nt-shadow);
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.89);
-  border: 1px solid rgba(0, 0, 0, 0.9);
-  transition: transform .2s ease, box-shadow .2s ease;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
 }
 
-.product-card:hover{ transform: translateY(-3px); box-shadow: var(--shadow-soft); }
-.product-card__img{ aspect-ratio: 1/1; width: 100%; object-fit: cover; display:block; }
-.product-card__body{ padding: 14px 16px 18px; }
+/* Glowing teal ring on hover */
+.product-card::after,
+.nt-product-card::after,
+.enhanced-product-card::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 18px;
+  padding: 1px;
+  background: linear-gradient(135deg, var(--nt-teal), #00C9A7);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  opacity: 0;
+  transition: opacity .18s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.product-card:hover,
+.nt-product-card:hover,
+.enhanced-product-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--nt-shadow-hover);
+  border-color: transparent;
+}
+
+.product-card:hover::after,
+.product-card:focus-visible::after,
+.nt-product-card:hover::after,
+.nt-product-card:focus-visible::after,
+.enhanced-product-card:hover::after,
+.enhanced-product-card:focus-visible::after {
+  opacity: 1;
+}
+
+.product-card:focus-visible,
+.nt-product-card:focus-visible,
+.enhanced-product-card:focus-visible {
+  outline: none;
+  border-color: transparent;
+  box-shadow: 0 0 0 3px var(--nt-teal-soft);
+}
+
+.product-card__image {
+  position: relative;
+  overflow: hidden;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+.product-card__img { 
+  aspect-ratio: 1/1; 
+  width: 100%; 
+  object-fit: cover; 
+  display: block;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+.product-card__body { 
+  padding: 14px 16px 18px;
+  position: relative;
+  z-index: 2;
+}
+
+.product-card__content {
+  position: relative;
+  z-index: 2;
+}
+
 .product-card h3,
 .product-card__title { 
   color: #1e293b !important; 
   font-weight: 600; 
 }
-.price{ font-weight: 700; color: var(--color-accent); }
+
+.price { 
+  font-weight: 700; 
+  color: var(--color-accent); 
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .product-card h3,
+  .product-card__title {
+    color: #f8fafc !important;
+  }
+}
 
 .footer{ margin-top: 40px; padding: 40px 0; border-top: 1px solid rgba(255,255,255,.08); background: rgba(15,23,42,.6); }
 .footer a{ opacity:.9; }
