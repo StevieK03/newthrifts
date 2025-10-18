@@ -1133,13 +1133,13 @@
                     </div>
                     
                     <!-- Canvas Zoom Controls -->
-                    <div id="canvas-zoom-controls-{{ section.id }}" style="
+                    <div id="canvas-zoom-controls-{{ section.id }}" class="canvas-zoom-controls" style="
                       position: absolute;
                       top: 20px;
                       left: 20px;
                       z-index: 100;
                     ">
-                      <div style="
+                      <div class="zoom-controls-inner" style="
                         background: rgba(15, 23, 42, 0.95);
                         border: 2px solid #27e1c1;
                         border-radius: 16px;
@@ -1148,7 +1148,7 @@
                         backdrop-filter: blur(10px);
                         -webkit-backdrop-filter: blur(10px);
                       ">
-                        <div style="
+                        <div class="zoom-controls-label" style="
                           color: #27e1c1;
                           font-size: 11px;
                           font-weight: 600;
@@ -1159,12 +1159,12 @@
                         ">🔍 Zoom</div>
                         
                         <!-- Zoom Buttons Grid -->
-                        <div style="
+                        <div class="zoom-controls-buttons" style="
                           display: flex;
                           flex-direction: column;
                           gap: 6px;
                         ">
-                          <button class="nt-btn nt-btn--zoom-in enhanced-zoom-btn" id="nt-zoom-in-{{ section.id }}" style="
+                          <button class="nt-btn nt-btn--zoom-in enhanced-zoom-btn zoom-btn" id="nt-zoom-in-{{ section.id }}" style="
                             background: rgba(39, 225, 193, 0.95);
                             border: 2px solid #27e1c1;
                             border-radius: 8px;
@@ -1179,16 +1179,16 @@
                             font-size: 12px;
                           " onmouseover="this.style.background='#27e1c1'; this.style.transform='scale(1.05)'" 
                              onmouseout="this.style.background='rgba(39, 225, 193, 0.95)'; this.style.transform='scale(1)'">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                            <svg class="zoom-btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
                               <circle cx="11" cy="11" r="8"/>
                               <path d="m21 21-4.35-4.35"/>
                               <line x1="11" y1="8" x2="11" y2="14"/>
                               <line x1="8" y1="11" x2="14" y2="11"/>
                             </svg>
-                            <span style="margin-left: 6px;">+</span>
+                            <span class="zoom-btn-text" style="margin-left: 6px;">+</span>
                           </button>
                           
-                          <button class="nt-btn nt-btn--zoom-reset enhanced-zoom-btn" id="nt-zoom-reset-{{ section.id }}" style="
+                          <button class="nt-btn nt-btn--zoom-reset enhanced-zoom-btn zoom-btn" id="nt-zoom-reset-{{ section.id }}" style="
                             background: rgba(255, 255, 255, 0.95);
                             border: 2px solid #27e1c1;
                             border-radius: 8px;
@@ -1206,7 +1206,7 @@
                             <span id="nt-zoom-level-{{ section.id }}">100%</span>
                           </button>
                           
-                          <button class="nt-btn nt-btn--zoom-out enhanced-zoom-btn" id="nt-zoom-out-{{ section.id }}" style="
+                          <button class="nt-btn nt-btn--zoom-out enhanced-zoom-btn zoom-btn" id="nt-zoom-out-{{ section.id }}" style="
                             background: rgba(239, 68, 68, 0.95);
                             border: 2px solid #ef4444;
                             border-radius: 8px;
@@ -1221,12 +1221,12 @@
                             font-size: 12px;
                           " onmouseover="this.style.background='#ef4444'; this.style.transform='scale(1.05)'" 
                              onmouseout="this.style.background='rgba(239, 68, 68, 0.95)'; this.style.transform='scale(1)'">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                            <svg class="zoom-btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
                               <circle cx="11" cy="11" r="8"/>
                               <path d="m21 21-4.35-4.35"/>
                               <line x1="8" y1="11" x2="14" y2="11"/>
                             </svg>
-                            <span style="margin-left: 6px;">-</span>
+                            <span class="zoom-btn-text" style="margin-left: 6px;">-</span>
                           </button>
                         </div>
                       </div>
@@ -4969,6 +4969,54 @@ function initEditModal() {
     max-width: 100vw !important;
   }
   
+  /* ===== CANVAS ZOOM CONTROLS - MOBILE ===== */
+  .canvas-zoom-controls {
+    top: 8px !important;
+    left: 8px !important;
+    transform: scale(0.75) !important;
+    transform-origin: top left !important;
+  }
+  
+  .zoom-controls-inner {
+    padding: 6px !important;
+    border-radius: 10px !important;
+    border-width: 1.5px !important;
+  }
+  
+  .zoom-controls-label {
+    font-size: 8px !important;
+    margin-bottom: 4px !important;
+    letter-spacing: 0.3px !important;
+  }
+  
+  .zoom-controls-buttons {
+    gap: 3px !important;
+  }
+  
+  .zoom-btn {
+    padding: 4px 6px !important;
+    border-radius: 6px !important;
+    border-width: 1.5px !important;
+    min-width: 32px !important;
+    font-size: 9px !important;
+  }
+  
+  .zoom-btn-icon {
+    width: 12px !important;
+    height: 12px !important;
+  }
+  
+  .zoom-btn-text {
+    margin-left: 3px !important;
+    font-size: 10px !important;
+  }
+  
+  .nt-btn--zoom-reset {
+    padding: 3px 6px !important;
+    font-size: 8px !important;
+  }
+  /* ===== END ZOOM CONTROLS ===== */
+  
   /* Studio Header */
   .studio-title {
     font-size: 2.25rem !important;
@@ -5251,6 +5299,49 @@ function initEditModal() {
 
 /* Mobile Phones (480px and below) */
 @media (max-width: 480px) {
+  /* ===== CANVAS ZOOM CONTROLS - EXTRA SMALL MOBILE ===== */
+  .canvas-zoom-controls {
+    top: 6px !important;
+    left: 6px !important;
+    transform: scale(0.65) !important;
+  }
+  
+  .zoom-controls-inner {
+    padding: 5px !important;
+    border-radius: 8px !important;
+  }
+  
+  .zoom-controls-label {
+    font-size: 7px !important;
+    margin-bottom: 3px !important;
+  }
+  
+  .zoom-controls-buttons {
+    gap: 2px !important;
+  }
+  
+  .zoom-btn {
+    padding: 3px 5px !important;
+    min-width: 28px !important;
+    font-size: 8px !important;
+  }
+  
+  .zoom-btn-icon {
+    width: 10px !important;
+    height: 10px !important;
+  }
+  
+  .zoom-btn-text {
+    margin-left: 2px !important;
+    font-size: 9px !important;
+  }
+  
+  .nt-btn--zoom-reset {
+    padding: 2px 5px !important;
+    font-size: 7px !important;
+  }
+  /* ===== END ZOOM CONTROLS ===== */
+  
   /* Studio Header */
   .studio-title {
     font-size: 1.85rem !important;
