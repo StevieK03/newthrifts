@@ -615,16 +615,16 @@
       font-weight: 600 !important;
     }
 
-    /* ===== MOBILE NUDGE CONTROLS - REPOSITIONED OUTSIDE CANVAS ===== */
+    /* ===== MOBILE NUDGE CONTROLS - BOTTOM-RIGHT CORNER, COMPACT ===== */
     @media (max-width: 768px) {
       #canvas-nudge-controls-{{ section.id }} {
-        /* Move completely outside canvas - horizontal below zoom */
+        /* Position in bottom-right corner, very compact */
         position: fixed !important;
-        bottom: 80px !important; /* Above zoom slider, outside canvas */
-        left: 50% !important;
-        right: auto !important;
-        transform: translateX(-50%) scale(0.75);
-        transform-origin: bottom center;
+        bottom: 80px !important; /* Just above zoom slider */
+        right: 12px !important;
+        left: auto !important;
+        transform: scale(0.6); /* Shrunk to 60% size */
+        transform-origin: bottom right;
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         z-index: 50 !important;
         touch-action: manipulation;
@@ -634,7 +634,7 @@
       /* Magnify on tap/press for easier mobile interaction */
       #canvas-nudge-controls-{{ section.id }}:active,
       #canvas-nudge-controls-{{ section.id }}.magnified {
-        transform: translateX(-50%) scale(0.95);
+        transform: scale(0.85); /* Grows to 85% when tapped */
       }
       
       /* Update button styling - darker transparent theme instead of white */
@@ -658,16 +658,17 @@
       }
     }
     
-    /* Small phones - even more compact */
+    /* Small phones - even more compact and lower */
     @media (max-width: 480px) {
       #canvas-nudge-controls-{{ section.id }} {
-        bottom: 70px !important;
-        transform: translateX(-50%) scale(0.65);
+        bottom: 75px !important;
+        right: 8px !important;
+        transform: scale(0.55); /* Extra compact at 55% */
       }
       
       #canvas-nudge-controls-{{ section.id }}:active,
       #canvas-nudge-controls-{{ section.id }}.magnified {
-        transform: translateX(-50%) scale(0.85);
+        transform: scale(0.75); /* Grows to 75% when tapped */
       }
     }
     
