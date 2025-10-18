@@ -1959,7 +1959,25 @@
             margin-bottom: 24px;
             border: 2px solid #27e1c1;
           ">
-            <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #334155; text-align: center;">Live Preview</h4>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+              <h4 style="margin: 0; font-size: 14px; font-weight: 600; color: #334155;">Live Preview</h4>
+              
+              <!-- Preview Zoom Controls -->
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 12px; color: #64748b;">Zoom:</span>
+                <input 
+                  type="range" 
+                  id="preview-zoom-range-{{ section.id }}" 
+                  min="50" 
+                  max="150" 
+                  value="100" 
+                  step="10"
+                  style="width: 80px; height: 4px; cursor: pointer;"
+                />
+                <output id="preview-zoom-label-{{ section.id }}" style="min-width: 40px; text-align: right; font-size: 12px; font-weight: 600; color: #27e1c1;">100%</output>
+              </div>
+            </div>
+            
             <div id="edit-preview-{{ section.id }}" style="
               background: white;
               border-radius: 12px;
@@ -1968,7 +1986,7 @@
               align-items: center;
               justify-content: center;
               position: relative;
-              overflow: hidden;
+              overflow: auto;
             ">
               <!-- Preview will be cloned here -->
               <p style="color: #94a3b8; text-align: center;">Loading preview...</p>
@@ -4967,6 +4985,9 @@ function initEditModal() {
       clonedCanvas.querySelectorAll('[id]').forEach(el => el.id = '');
       
       // Force explicit display and dimensions
+      // Preserve the current preview zoom level when refreshing (default to 100%)
+      const currentZoom = typeof previewZoomLevel !== 'undefined' ? previewZoomLevel : 1.0;
+      
       clonedCanvas.style.cssText = `
         display: block !important;
         visibility: visible !important;
@@ -4976,11 +4997,12 @@ function initEditModal() {
         height: 350px !important;
         max-width: 100% !important;
         margin: 0 auto !important;
-        transform: scale(0.9) !important;
+        transform: scale(${currentZoom}) !important;
         transform-origin: center !important;
         pointer-events: none !important;
         border-radius: 12px !important;
         overflow: visible !important;
+        transition: transform 0.2s ease !important;
       `;
       
       // Clear preview and add clone
@@ -5103,6 +5125,35 @@ function initEditModal() {
     studio.editOps?.scale(value);
     setTimeout(populatePreview, 100);
   });
+  
+  // ========================================
+  // PREVIEW ZOOM CONTROLS
+  // ========================================
+  let previewZoomLevel = 1.0;
+  
+  const previewZoomRange = document.getElementById('preview-zoom-range-{{ section.id }}');
+  const previewZoomLabel = document.getElementById('preview-zoom-label-{{ section.id }}');
+  
+  if (previewZoomRange && previewZoomLabel) {
+    previewZoomRange.addEventListener('input', (e) => {
+      const percent = parseInt(e.target.value, 10);
+      previewZoomLevel = percent / 100;
+      previewZoomLabel.textContent = `${percent}%`;
+      
+      // Apply zoom to the preview container's content
+      const previewContainer = document.getElementById('edit-preview-{{ section.id }}');
+      const previewClone = previewContainer?.querySelector('#preview-clone');
+      
+      if (previewClone) {
+        previewClone.style.transform = `scale(${previewZoomLevel})`;
+        previewClone.style.transition = 'transform 0.2s ease';
+      }
+      
+      console.log(`🔍 Preview zoom: ${percent}%`);
+    });
+    
+    console.log('✅ Preview zoom controls initialized');
+  }
   
   document.getElementById('rotation-input-{{ section.id }}').addEventListener('input', (e) => {
     studio.editOps?.rotate(parseFloat(e.target.value));
