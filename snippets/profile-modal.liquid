@@ -731,11 +731,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Login form handling - Allow Shopify native authentication (stay in modal)
+  // Login form handling - Allow Shopify native authentication
   if (loginForm) {
-    loginForm.addEventListener('submit', async function(e) {
-      e.preventDefault(); // Prevent redirect - keep user in modal
-      
+    loginForm.addEventListener('submit', function(e) {
+      // Don't prevent default - let Shopify handle authentication
       const submitBtn = document.getElementById('login-submit');
       const btnText = submitBtn.querySelector('.btn-text');
       const btnLoading = submitBtn.querySelector('.btn-loading');
@@ -745,34 +744,8 @@ document.addEventListener('DOMContentLoaded', function() {
       btnText.style.display = 'none';
       btnLoading.style.display = 'inline';
       
-      // Submit the form via fetch to stay in modal
-      const formData = new FormData(loginForm);
-      
-      try {
-        const response = await fetch('/account/login', {
-          method: 'POST',
-          body: formData
-        });
-        
-        if (response.redirected || response.ok) {
-          // Login successful - redirect to account page
-          showSuccess('Login successful! Redirecting...');
-          setTimeout(() => {
-            window.location.href = '/account';
-          }, 1000);
-        } else {
-          // Login failed
-          submitBtn.disabled = false;
-          btnText.style.display = 'inline';
-          btnLoading.style.display = 'none';
-          showError('Invalid email or password. Please try again.');
-        }
-      } catch (error) {
-        submitBtn.disabled = false;
-        btnText.style.display = 'inline';
-        btnLoading.style.display = 'none';
-        showError('An error occurred. Please try again.');
-      }
+      // Let the form submit naturally to Shopify
+      // Shopify will handle authentication and redirect as needed
     });
   }
 
