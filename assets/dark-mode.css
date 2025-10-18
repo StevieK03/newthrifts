@@ -932,7 +932,7 @@
    COOKIE CONSENT BANNER DARK MODE FIX
    ======================================== */
 
-/* Shopify's cookie consent banner */
+/* Shopify's cookie consent banner - Manual dark mode */
 [data-theme="dark"] .cookie-banner,
 [data-theme="dark"] #shopify-cookie-banner,
 [data-theme="dark"] .shopify-cleanslate,
@@ -941,12 +941,28 @@
 [data-theme="dark"] .privacy-banner,
 [data-theme="dark"] .gdpr-banner,
 [data-theme="dark"] .consent-banner {
-  background: var(--bg-secondary) !important;
-  border: 1px solid var(--border-primary) !important;
-  box-shadow: var(--shadow-xl) !important;
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
 }
 
-/* Cookie banner text */
+/* Shopify's cookie consent banner - System dark mode */
+@media (prefers-color-scheme: dark) {
+  .cookie-banner,
+  #shopify-cookie-banner,
+  .shopify-cleanslate,
+  [class*="cookie"],
+  [id*="cookie"],
+  .privacy-banner,
+  .gdpr-banner,
+  .consent-banner {
+    background: #1e293b !important;
+    border: 1px solid #334155 !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
+  }
+}
+
+/* Cookie banner text - Manual dark mode */
 [data-theme="dark"] .cookie-banner *,
 [data-theme="dark"] #shopify-cookie-banner *,
 [data-theme="dark"] .shopify-cleanslate *,
@@ -955,11 +971,26 @@
 [data-theme="dark"] .privacy-banner *,
 [data-theme="dark"] .gdpr-banner *,
 [data-theme="dark"] .consent-banner * {
-  color: var(--text-primary) !important;
+  color: #f8fafc !important;
   background: transparent !important;
 }
 
-/* Cookie banner buttons */
+/* Cookie banner text - System dark mode */
+@media (prefers-color-scheme: dark) {
+  .cookie-banner *,
+  #shopify-cookie-banner *,
+  .shopify-cleanslate *,
+  [class*="cookie"] *,
+  [id*="cookie"] *,
+  .privacy-banner *,
+  .gdpr-banner *,
+  .consent-banner * {
+    color: #f8fafc !important;
+    background: transparent !important;
+  }
+}
+
+/* Cookie banner buttons - Manual dark mode */
 [data-theme="dark"] .cookie-banner button,
 [data-theme="dark"] #shopify-cookie-banner button,
 [data-theme="dark"] .shopify-cleanslate button,
@@ -968,10 +999,11 @@
 [data-theme="dark"] .privacy-banner button,
 [data-theme="dark"] .gdpr-banner button,
 [data-theme="dark"] .consent-banner button {
-  background: var(--button-primary) !important;
-  color: white !important;
-  border: 1px solid var(--button-primary) !important;
+  background: #27e1c1 !important;
+  color: #0f172a !important;
+  border: 1px solid #27e1c1 !important;
   transition: all 0.3s ease !important;
+  font-weight: 600 !important;
 }
 
 [data-theme="dark"] .cookie-banner button:hover,
@@ -982,11 +1014,41 @@
 [data-theme="dark"] .privacy-banner button:hover,
 [data-theme="dark"] .gdpr-banner button:hover,
 [data-theme="dark"] .consent-banner button:hover {
-  background: var(--button-primary-hover) !important;
-  box-shadow: 0 0 15px rgba(59, 130, 246, 0.4) !important;
+  background: #20b2aa !important;
+  box-shadow: 0 0 15px rgba(39, 225, 193, 0.5) !important;
 }
 
-/* Cookie banner links */
+/* Cookie banner buttons - System dark mode */
+@media (prefers-color-scheme: dark) {
+  .cookie-banner button,
+  #shopify-cookie-banner button,
+  .shopify-cleanslate button,
+  [class*="cookie"] button,
+  [id*="cookie"] button,
+  .privacy-banner button,
+  .gdpr-banner button,
+  .consent-banner button {
+    background: #27e1c1 !important;
+    color: #0f172a !important;
+    border: 1px solid #27e1c1 !important;
+    transition: all 0.3s ease !important;
+    font-weight: 600 !important;
+  }
+
+  .cookie-banner button:hover,
+  #shopify-cookie-banner button:hover,
+  .shopify-cleanslate button:hover,
+  [class*="cookie"] button:hover,
+  [id*="cookie"] button:hover,
+  .privacy-banner button:hover,
+  .gdpr-banner button:hover,
+  .consent-banner button:hover {
+    background: #20b2aa !important;
+    box-shadow: 0 0 15px rgba(39, 225, 193, 0.5) !important;
+  }
+}
+
+/* Cookie banner links - Manual dark mode */
 [data-theme="dark"] .cookie-banner a,
 [data-theme="dark"] #shopify-cookie-banner a,
 [data-theme="dark"] .shopify-cleanslate a,
@@ -995,7 +1057,7 @@
 [data-theme="dark"] .privacy-banner a,
 [data-theme="dark"] .gdpr-banner a,
 [data-theme="dark"] .consent-banner a {
-  color: var(--text-accent) !important;
+  color: #27e1c1 !important;
   text-decoration: underline !important;
 }
 
@@ -1007,16 +1069,50 @@
 [data-theme="dark"] .privacy-banner a:hover,
 [data-theme="dark"] .gdpr-banner a:hover,
 [data-theme="dark"] .consent-banner a:hover {
-  color: var(--button-primary) !important;
+  color: #20b2aa !important;
 }
 
-/* Additional generic consent banner styling */
+/* Cookie banner links - System dark mode */
+@media (prefers-color-scheme: dark) {
+  .cookie-banner a,
+  #shopify-cookie-banner a,
+  .shopify-cleanslate a,
+  [class*="cookie"] a,
+  [id*="cookie"] a,
+  .privacy-banner a,
+  .gdpr-banner a,
+  .consent-banner a {
+    color: #27e1c1 !important;
+    text-decoration: underline !important;
+  }
+
+  .cookie-banner a:hover,
+  #shopify-cookie-banner a:hover,
+  .shopify-cleanslate a:hover,
+  [class*="cookie"] a:hover,
+  [id*="cookie"] a:hover,
+  .privacy-banner a:hover,
+  .gdpr-banner a:hover,
+  .consent-banner a:hover {
+    color: #20b2aa !important;
+  }
+}
+
+/* Additional generic consent banner styling - Manual dark mode */
 [data-theme="dark"] div[style*="position: fixed"][style*="bottom"],
 [data-theme="dark"] div[style*="position: fixed"][style*="top"] {
-  background: var(--bg-secondary) !important;
+  background: #1e293b !important;
 }
 
-/* Ensure all text in fixed positioned elements (likely banners) is visible */
+/* Additional generic consent banner styling - System dark mode */
+@media (prefers-color-scheme: dark) {
+  div[style*="position: fixed"][style*="bottom"],
+  div[style*="position: fixed"][style*="top"] {
+    background: #1e293b !important;
+  }
+}
+
+/* Ensure all text in fixed positioned elements (likely banners) is visible - Manual dark mode */
 [data-theme="dark"] div[style*="position: fixed"] p,
 [data-theme="dark"] div[style*="position: fixed"] span,
 [data-theme="dark"] div[style*="position: fixed"] div,
@@ -1030,12 +1126,38 @@
 [data-theme="dark"] div[style*="position: fixed"] em,
 [data-theme="dark"] div[style*="position: fixed"] label,
 [data-theme="dark"] div[style*="position: fixed"] li {
-  color: var(--text-primary) !important;
+  color: #f8fafc !important;
 }
 
-/* Super aggressive - target ALL fixed position elements text */
+/* Ensure all text in fixed positioned elements is visible - System dark mode */
+@media (prefers-color-scheme: dark) {
+  div[style*="position: fixed"] p,
+  div[style*="position: fixed"] span,
+  div[style*="position: fixed"] div,
+  div[style*="position: fixed"] h1,
+  div[style*="position: fixed"] h2,
+  div[style*="position: fixed"] h3,
+  div[style*="position: fixed"] h4,
+  div[style*="position: fixed"] h5,
+  div[style*="position: fixed"] h6,
+  div[style*="position: fixed"] strong,
+  div[style*="position: fixed"] em,
+  div[style*="position: fixed"] label,
+  div[style*="position: fixed"] li {
+    color: #f8fafc !important;
+  }
+}
+
+/* Super aggressive - target ALL fixed position elements text - Manual dark mode */
 [data-theme="dark"] [style*="position: fixed"] *:not(button):not(a) {
   color: #f8fafc !important;
+}
+
+/* Super aggressive - target ALL fixed position elements text - System dark mode */
+@media (prefers-color-scheme: dark) {
+  [style*="position: fixed"] *:not(button):not(a) {
+    color: #f8fafc !important;
+  }
 }
 
 /* Shopify cleanslate specific overrides */
