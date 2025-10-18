@@ -98,7 +98,7 @@ async function trackSupabasePageView(meta = {}) {
     
     // Track event using proper Supabase insert method
     const { data, error } = await window.supabaseClient
-      .from('analytics')
+      .from('analytics_events')
       .insert([trackingData]);
     
     if (error) {
