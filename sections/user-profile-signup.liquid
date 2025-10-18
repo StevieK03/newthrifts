@@ -200,17 +200,6 @@ User Profile Signup Section - Only show for non-authenticated users
   pointer-events: none;
 }
 
-/* Light mode CTA styling */
-[data-theme="light"] .profile-cta-container {
-  background: #27e1c1;
-  box-shadow: 0 20px 40px rgba(39, 225, 193, 0.3);
-}
-
-[data-theme="light"] .cta-content h3,
-[data-theme="light"] .cta-content p {
-  color: #0f172a;
-}
-
 .cta-content h3 {
   font-size: 1.8rem;
   font-weight: 700;
@@ -232,10 +221,10 @@ User Profile Signup Section - Only show for non-authenticated users
   align-items: center;
   gap: 0.75rem;
   padding: 1rem 2rem;
-  background: #27e1c1;
+  background: #27e1c1 !important;
   border: none;
   border-radius: 50px;
-  color: #0f172a;
+  color: #0f172a !important;
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
@@ -245,7 +234,7 @@ User Profile Signup Section - Only show for non-authenticated users
 
 .profile-cta-btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 35px rgba(39, 225, 193, 0.5);
+  box-shadow: 0 12px 35px rgba(39, 225, 193, 0.5) !important;
 }
 
 .btn-icon {
@@ -307,8 +296,8 @@ User Profile Signup Section - Only show for non-authenticated users
 /* Light mode modal */
 [data-theme="light"] .modal-container {
   background: rgba(248, 250, 252, 0.95) !important;
-  border: 1px solid rgba(39, 225, 193, 0.3) !important;
-  box-shadow: 0 25px 50px rgba(39, 225, 193, 0.2), 0 0 0 1px rgba(39, 225, 193, 0.15) !important;
+  border: 1px solid rgba(59, 130, 246, 0.2) !important;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(59, 130, 246, 0.1) !important;
 }
 
 @keyframes modalSlideIn {
@@ -335,24 +324,6 @@ User Profile Signup Section - Only show for non-authenticated users
   font-weight: 700;
   color: #27e1c1;
   margin: 0;
-}
-
-/* Light mode modal header */
-[data-theme="light"] .modal-header {
-  border-bottom: 1px solid rgba(39, 225, 193, 0.2);
-}
-
-[data-theme="light"] .modal-header h2 {
-  color: #27e1c1;
-}
-
-[data-theme="light"] .modal-close {
-  color: rgba(15, 23, 42, 0.7);
-}
-
-[data-theme="light"] .modal-close:hover {
-  background: rgba(39, 225, 193, 0.1);
-  color: #0f172a;
 }
 
 .modal-close {
@@ -421,11 +392,6 @@ User Profile Signup Section - Only show for non-authenticated users
   color: rgba(255, 255, 255, 0.9);
 }
 
-/* Light mode form labels */
-[data-theme="light"] .form-group label {
-  color: #0f172a;
-}
-
 .form-group input[type="text"],
 .form-group input[type="email"],
 .form-group input[type="password"],
@@ -449,7 +415,7 @@ User Profile Signup Section - Only show for non-authenticated users
 [data-theme="light"] .form-group input[type="tel"],
 [data-theme="light"] .form-group input[type="date"] {
   background: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(39, 225, 193, 0.3);
+  border: 1px solid rgba(59, 130, 246, 0.3);
   color: var(--text-primary, #1e293b);
 }
 
@@ -462,8 +428,8 @@ User Profile Signup Section - Only show for non-authenticated users
 
 /* Light mode focus states */
 [data-theme="light"] .form-group input:focus {
-  border-color: #27e1c1;
-  box-shadow: 0 0 0 3px rgba(39, 225, 193, 0.2), 0 4px 12px rgba(39, 225, 193, 0.1);
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2), 0 4px 12px rgba(59, 130, 246, 0.1);
 }
 
 .preference-tags {
@@ -514,13 +480,13 @@ User Profile Signup Section - Only show for non-authenticated users
 }
 
 .btn-primary {
-  background: #27e1c1;
-  color: #0f172a;
+  background: #27e1c1 !important;
+  color: #0f172a !important;
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(39, 225, 193, 0.4);
+  box-shadow: 0 8px 25px rgba(39, 225, 193, 0.4) !important;
 }
 
 .btn:disabled {
