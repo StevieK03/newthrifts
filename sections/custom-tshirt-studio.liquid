@@ -3688,8 +3688,9 @@ function initializeMockup() {
     }
   };
   
-  // Initialize the mockup
+  // Initialize the mockup and make placementState globally accessible for Edit modal
   mockup.init();
+  window.placementState = mockup.placementState;
   
   console.log('🚀 Custom Studio Mockup initialized! 🎨');
 }
@@ -3873,15 +3874,19 @@ function initEditModal() {
   
   // Open modal
   function openEditModal() {
-    if (!studio.currentDesignObj) {
+    // Check if design is uploaded using the placement state
+    const hasDesign = window.placementState?.hasUploadedDesign || studio.currentDesignObj;
+    
+    if (!hasDesign) {
       alert('⚠️ Please upload a design first before editing.');
       return;
     }
+    
     modal.style.display = 'block';
     studio.editOps?.open();
     updateQualityMeter();
     
-    // Initialize transform values
+    // Initialize transform values if using Fabric.js
     const obj = studio.currentDesignObj;
     if (obj) {
       document.getElementById('scale-input-{{ section.id }}').value = Math.round((obj.scaleX || 1) * 100);
