@@ -614,6 +614,61 @@
       color: #1e293b !important;
       font-weight: 600 !important;
     }
+
+    /* ===== MOBILE NUDGE CONTROLS - REPOSITIONED WITH MAGNIFY EFFECT ===== */
+    @media (max-width: 768px) {
+      #canvas-nudge-controls-{{ section.id }} {
+        /* Reposition to bottom-center, below the canvas to avoid t-shirt overlap */
+        position: fixed !important;
+        bottom: 120px !important; /* Clear of zoom slider */
+        right: auto !important;
+        left: 50% !important;
+        transform: translateX(-50%) scale(0.85);
+        transform-origin: bottom center;
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 100 !important;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+      }
+      
+      /* Magnify on tap/press/hover for easier mobile interaction */
+      #canvas-nudge-controls-{{ section.id }}:active,
+      #canvas-nudge-controls-{{ section.id }}.magnified {
+        transform: translateX(-50%) scale(1.15);
+      }
+      
+      /* Ensure touch targets are at least 44px */
+      #canvas-nudge-controls-{{ section.id }} .canvas-nudge-btn {
+        min-width: 44px !important;
+        min-height: 44px !important;
+      }
+      
+      /* Enhanced button feedback on mobile */
+      #canvas-nudge-controls-{{ section.id }} .canvas-nudge-btn:active {
+        transform: scale(0.92);
+        background: rgba(39, 225, 193, 0.2) !important;
+      }
+    }
+    
+    /* Small phones - even more compact */
+    @media (max-width: 480px) {
+      #canvas-nudge-controls-{{ section.id }} {
+        bottom: 100px !important;
+        transform: translateX(-50%) scale(0.75);
+      }
+      
+      #canvas-nudge-controls-{{ section.id }}:active,
+      #canvas-nudge-controls-{{ section.id }}.magnified {
+        transform: translateX(-50%) scale(1.05);
+      }
+    }
+    
+    /* Reduce motion support */
+    @media (prefers-reduced-motion: reduce) {
+      #canvas-nudge-controls-{{ section.id }} {
+        transition: none !important;
+      }
+    }
   </style>
   
   <!-- Floating Background Shapes -->
@@ -4078,6 +4133,40 @@ document.head.appendChild(studioEditScript);
 // ========================================
 function initCanvasNudgeControls() {
   const nudgeButtons = document.querySelectorAll('.canvas-nudge-btn');
+  const nudgeContainer = document.querySelector('#canvas-nudge-controls-{{ section.id }}');
+  
+  // Mobile magnify-on-tap behavior
+  if (nudgeContainer && window.innerWidth <= 768) {
+    let magnifyTimer;
+    
+    const magnify = () => {
+      nudgeContainer.classList.add('magnified');
+      clearTimeout(magnifyTimer);
+      // Auto-shrink after 2 seconds of inactivity
+      magnifyTimer = setTimeout(() => {
+        nudgeContainer.classList.remove('magnified');
+      }, 2000);
+    };
+    
+    const shrink = () => {
+      clearTimeout(magnifyTimer);
+      magnifyTimer = setTimeout(() => {
+        nudgeContainer.classList.remove('magnified');
+      }, 300);
+    };
+    
+    // Magnify on touch/pointer interaction
+    ['pointerdown', 'touchstart'].forEach(evt => {
+      nudgeContainer.addEventListener(evt, magnify, { passive: true });
+    });
+    
+    // Shrink when interaction ends
+    ['pointerup', 'touchend', 'pointercancel'].forEach(evt => {
+      nudgeContainer.addEventListener(evt, shrink, { passive: true });
+    });
+    
+    console.log('✅ Mobile magnify-on-tap initialized for nudge controls');
+  }
   
   // Helper function to log current position after nudge
   function logDesignPosition(action) {
