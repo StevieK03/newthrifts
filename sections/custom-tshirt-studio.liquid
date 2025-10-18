@@ -4985,9 +4985,6 @@ function initEditModal() {
       clonedCanvas.querySelectorAll('[id]').forEach(el => el.id = '');
       
       // Force explicit display and dimensions
-      // Preserve the current preview zoom level when refreshing (default to 100%)
-      const currentZoom = typeof previewZoomLevel !== 'undefined' ? previewZoomLevel : 1.0;
-      
       clonedCanvas.style.cssText = `
         display: block !important;
         visibility: visible !important;
@@ -4997,13 +4994,17 @@ function initEditModal() {
         height: 350px !important;
         max-width: 100% !important;
         margin: 0 auto !important;
-        transform: scale(${currentZoom}) !important;
-        transform-origin: center !important;
+        transform-origin: center center !important;
         pointer-events: none !important;
         border-radius: 12px !important;
         overflow: visible !important;
         transition: transform 0.2s ease !important;
       `;
+      
+      // Apply zoom separately so it doesn't get overridden
+      const currentZoom = typeof previewZoomLevel !== 'undefined' ? previewZoomLevel : 1.0;
+      clonedCanvas.style.transform = `scale(${currentZoom})`;
+      clonedCanvas.style.transformOrigin = 'center center';
       
       // Clear preview and add clone
       previewContainer.innerHTML = '';

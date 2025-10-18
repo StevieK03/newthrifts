@@ -85,13 +85,8 @@ window.studio = window.studio || {};
     }
     
     // Apply transform (rotation and flip only)
+    // Scale is handled separately in the scale() function
     overlay.style.transform = transforms.join(' ');
-    
-    // Handle scale by adjusting width/height (same as main canvas)
-    // Always scale from the BASE dimensions, not the current ones
-    const scaleFactor = designState.scale / 100;
-    overlay.style.width = (designState.baseWidth * scaleFactor) + '%';
-    overlay.style.height = (designState.baseHeight * scaleFactor) + '%';
     
     // Apply image filters if image exists
     if (img) {
@@ -241,8 +236,23 @@ window.studio = window.studio || {};
     },
     
     scale(percent) {
-      designState.scale = Math.max(10, Math.min(500, parseFloat(percent) || 100));
-      applyTransforms();
+      const overlay = getOverlay();
+      if (!overlay) return;
+      
+      // Convert percent to a direct width/height adjustment (like main canvas resize)
+      // Percent 100 = base dimensions, 200 = double size, 50 = half size
+      const scaleFactor = (parseFloat(percent) || 100) / 100;
+      const newWidth = designState.baseWidth * scaleFactor;
+      const newHeight = designState.baseHeight * scaleFactor;
+      
+      // Apply directly to overlay (same as main canvas)
+      overlay.style.width = newWidth + '%';
+      overlay.style.height = newHeight + '%';
+      
+      // Update internal state
+      designState.scale = percent;
+      
+      console.log(`📏 Scale: ${percent}% → ${newWidth.toFixed(1)}% × ${newHeight.toFixed(1)}%`);
     },
     
     flipX() {
