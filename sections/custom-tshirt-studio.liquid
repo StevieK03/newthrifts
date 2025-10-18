@@ -322,44 +322,6 @@
       box-shadow: 0 0 0 4px rgba(39, 225, 193, 0.4);
     }
     
-    /* ===== NUDGE PAD - MOBILE ONLY WITH PRESS-TO-ENLARGE ===== */
-    /* Hidden by default on desktop, shown only on mobile */
-    @media (max-width: 768px) {
-      .nudge-pad {
-        display: block !important;
-        opacity: 1 !important;
-        pointer-events: auto !important;
-        transform: scale(0.9);
-      }
-      
-      /* Enlarge on hover/focus/press for better touch accessibility */
-      .nudge-pad:is(:hover, :focus-within),
-      .nudge-pad.enlarged {
-        transform: scale(1.08);
-      }
-      
-      /* Button hover effects */
-      .nudge-pad .canvas-nudge-btn:hover,
-      .nudge-pad .canvas-nudge-btn:focus {
-        background: #27e1c1 !important;
-        border-color: #20b69e !important;
-        transform: scale(1.05);
-        box-shadow: 0 4px 12px rgba(39, 225, 193, 0.4);
-      }
-      
-      .nudge-pad .canvas-nudge-btn:active {
-        transform: scale(0.95);
-      }
-    }
-    
-    /* Reduce motion support for accessibility */
-    @media (prefers-reduced-motion: reduce) {
-      .nudge-pad,
-      .nudge-pad .canvas-nudge-btn {
-        transition: none !important;
-      }
-    }
-    
     .pulse-ring {
       position: absolute;
       top: 50%;
@@ -1228,149 +1190,129 @@
                     <!-- Close T-shirt Mockup Container -->
                     </div>
                     
-                    <!-- Canvas Nudge Pad - Mobile Only -->
-                    <div id="nudge-pad-{{ section.id }}" class="nudge-pad" 
-                         aria-label="Nudge design controls"
-                         role="group"
-                         style="
+                    <!-- Canvas Nudge Controls -->
+                    <div id="canvas-nudge-controls-{{ section.id }}" style="
                       position: absolute;
-                      right: max(8px, env(safe-area-inset-right));
-                      bottom: 80px;
-                      z-index: 6;
-                      display: none;
-                      padding: 10px;
-                      border-radius: 14px;
-                      background: rgba(8, 18, 35, 0.92);
-                      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(39, 225, 193, 0.2);
-                      transform-origin: bottom right;
-                      touch-action: manipulation;
-                      -webkit-tap-highlight-color: transparent;
-                      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-                      backdrop-filter: blur(10px);
-                      -webkit-backdrop-filter: blur(10px);
+                      bottom: 20px;
+                      right: 20px;
                       opacity: 0;
                       pointer-events: none;
+                      transition: opacity 0.3s ease;
+                      z-index: 100;
                     ">
-                      <!-- Up Button -->
-                      <button class="canvas-nudge-btn nudge-up" 
-                              data-direction="up" 
-                              aria-label="Nudge design up"
-                              style="
-                        min-width: 44px;
-                        min-height: 44px;
-                        border-radius: 10px;
-                        border: 1.5px solid rgba(39, 225, 193, 0.9);
-                        background: #ffffff;
-                        font-weight: 700;
-                        line-height: 1;
-                        cursor: pointer;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        transition: all 0.2s ease;
-                        padding: 0;
-                        margin: 0 auto 8px;
+                      <div style="
+                        background: rgba(15, 23, 42, 0.95);
+                        border: 2px solid #27e1c1;
+                        border-radius: 16px;
+                        padding: 12px;
+                        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(39, 225, 193, 0.3);
+                        backdrop-filter: blur(10px);
+                        -webkit-backdrop-filter: blur(10px);
                       ">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                          <path d="M12 19V5m0 0l-7 7m7-7l7 7"/>
-                        </svg>
-                      </button>
-                      
-                      <!-- Middle Row (Left, Dot, Right) -->
-                      <div class="nudge-row" style="
-                        display: grid;
-                        grid-template-columns: 44px 24px 44px;
-                        align-items: center;
-                        justify-content: center;
-                        gap: 10px;
-                        margin: 8px 0;
-                      ">
-                        <!-- Left Button -->
-                        <button class="canvas-nudge-btn nudge-left" 
-                                data-direction="left" 
-                                aria-label="Nudge design left"
-                                style="
-                          min-width: 44px;
-                          min-height: 44px;
-                          border-radius: 10px;
-                          border: 1.5px solid rgba(39, 225, 193, 0.9);
-                          background: #ffffff;
-                          font-weight: 700;
-                          line-height: 1;
-                          cursor: pointer;
-                          display: flex;
-                          align-items: center;
-                          justify-content: center;
-                          transition: all 0.2s ease;
-                          padding: 0;
-                        ">
-                          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                            <path d="M19 12H5m0 0l7-7m-7 7l7 7"/>
-                          </svg>
-                        </button>
+                        <div style="
+                          color: #27e1c1;
+                          font-size: 11px;
+                          font-weight: 600;
+                          text-align: center;
+                          margin-bottom: 8px;
+                          text-transform: uppercase;
+                          letter-spacing: 0.5px;
+                        ">Nudge (Arrow Keys)</div>
                         
-                        <!-- Center Dot -->
-                        <div class="nudge-dot" aria-hidden="true" style="
-                          width: 24px;
-                          height: 24px;
-                          border-radius: 8px;
-                          border: 2px dashed rgba(39, 225, 193, 0.65);
-                          display: flex;
-                          align-items: center;
-                          justify-content: center;
+                        <!-- Arrow Controls Grid -->
+                        <div style="
+                          display: grid;
+                          grid-template-columns: repeat(3, 40px);
+                          grid-template-rows: repeat(3, 40px);
+                          gap: 4px;
                         ">
-                          <div style="width: 6px; height: 6px; border-radius: 50%; background: rgba(39, 225, 193, 0.8);"></div>
+                          <!-- Top Row -->
+                          <div></div>
+                          <button class="canvas-nudge-btn" data-direction="up" style="
+                            background: rgba(255, 255, 255, 0.95);
+                            border: 2px solid #27e1c1;
+                            border-radius: 8px;
+                            cursor: pointer;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            transition: all 0.2s ease;
+                            padding: 0;
+                          " onmouseover="this.style.background='#27e1c1'; this.style.transform='translateY(-2px)'" 
+                             onmouseout="this.style.background='rgba(255, 255, 255, 0.95)'; this.style.transform='translateY(0)'">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                              <path d="M12 19V5m0 0l-7 7m7-7l7 7"/>
+                            </svg>
+                          </button>
+                          <div></div>
+                          
+                          <!-- Middle Row -->
+                          <button class="canvas-nudge-btn" data-direction="left" style="
+                            background: rgba(255, 255, 255, 0.95);
+                            border: 2px solid #27e1c1;
+                            border-radius: 8px;
+                            cursor: pointer;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            transition: all 0.2s ease;
+                            padding: 0;
+                          " onmouseover="this.style.background='#27e1c1'; this.style.transform='translateX(-2px)'" 
+                             onmouseout="this.style.background='rgba(255, 255, 255, 0.95)'; this.style.transform='translateX(0)'">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                              <path d="M19 12H5m0 0l7-7m-7 7l7 7"/>
+                            </svg>
+                          </button>
+                          <div style="
+                            background: rgba(39, 225, 193, 0.1);
+                            border: 2px dashed rgba(39, 225, 193, 0.3);
+                            border-radius: 8px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                          ">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#27e1c1" stroke-width="2">
+                              <circle cx="12" cy="12" r="1"/>
+                            </svg>
+                          </div>
+                          <button class="canvas-nudge-btn" data-direction="right" style="
+                            background: rgba(255, 255, 255, 0.95);
+                            border: 2px solid #27e1c1;
+                            border-radius: 8px;
+                            cursor: pointer;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            transition: all 0.2s ease;
+                            padding: 0;
+                          " onmouseover="this.style.background='#27e1c1'; this.style.transform='translateX(2px)'" 
+                             onmouseout="this.style.background='rgba(255, 255, 255, 0.95)'; this.style.transform='translateX(0)'">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                              <path d="M5 12h14m0 0l-7-7m7 7l-7 7"/>
+                            </svg>
+                          </button>
+                          
+                          <!-- Bottom Row -->
+                          <div></div>
+                          <button class="canvas-nudge-btn" data-direction="down" style="
+                            background: rgba(255, 255, 255, 0.95);
+                            border: 2px solid #27e1c1;
+                            border-radius: 8px;
+                            cursor: pointer;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            transition: all 0.2s ease;
+                            padding: 0;
+                          " onmouseover="this.style.background='#27e1c1'; this.style.transform='translateY(2px)'" 
+                             onmouseout="this.style.background='rgba(255, 255, 255, 0.95)'; this.style.transform='translateY(0)'">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                              <path d="M12 5v14m0 0l7-7m-7 7l-7-7"/>
+                            </svg>
+                          </button>
+                          <div></div>
                         </div>
-                        
-                        <!-- Right Button -->
-                        <button class="canvas-nudge-btn nudge-right" 
-                                data-direction="right" 
-                                aria-label="Nudge design right"
-                                style="
-                          min-width: 44px;
-                          min-height: 44px;
-                          border-radius: 10px;
-                          border: 1.5px solid rgba(39, 225, 193, 0.9);
-                          background: #ffffff;
-                          font-weight: 700;
-                          line-height: 1;
-                          cursor: pointer;
-                          display: flex;
-                          align-items: center;
-                          justify-content: center;
-                          transition: all 0.2s ease;
-                          padding: 0;
-                        ">
-                          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                            <path d="M5 12h14m0 0l-7-7m7 7l-7 7"/>
-                          </svg>
-                        </button>
                       </div>
-                      
-                      <!-- Down Button -->
-                      <button class="canvas-nudge-btn nudge-down" 
-                              data-direction="down" 
-                              aria-label="Nudge design down"
-                              style="
-                        min-width: 44px;
-                        min-height: 44px;
-                        border-radius: 10px;
-                        border: 1.5px solid rgba(39, 225, 193, 0.9);
-                        background: #ffffff;
-                        font-weight: 700;
-                        line-height: 1;
-                        cursor: pointer;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        transition: all 0.2s ease;
-                        padding: 0;
-                        margin: 8px auto 0;
-                      ">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                          <path d="M12 5v14m0 0l7-7m-7 7l-7-7"/>
-                        </svg>
-                      </button>
                     </div>
                     
                     <!-- Canvas Zoom Slider - Inside Canvas Container -->
@@ -3122,14 +3064,14 @@ function initializeMockup() {
         
         console.log('✅ Design applied to mockup');
         
-        // Show canvas nudge pad (mobile only)
-        const nudgePad = document.getElementById('nudge-pad-{{ section.id }}');
-        if (nudgePad) {
-          nudgePad.style.opacity = '1';
-          nudgePad.style.pointerEvents = 'auto';
-          console.log('✅ Canvas nudge pad visible (mobile)');
+        // Show canvas nudge controls
+        const nudgeControls = document.getElementById('canvas-nudge-controls-{{ section.id }}');
+        if (nudgeControls) {
+          nudgeControls.style.opacity = '1';
+          nudgeControls.style.pointerEvents = 'auto';
+          console.log('✅ Canvas nudge controls visible');
         }
-        this.showMessage('🎨 Design uploaded! Use zoom slider and arrow keys for fine-tuning.', 'success');
+        this.showMessage('🎨 Design uploaded! Use canvas zoom controls and precise arrow keys for fine-tuning.', 'success');
       }
     },
     
@@ -4135,37 +4077,6 @@ document.head.appendChild(studioEditScript);
 // CANVAS NUDGE CONTROLS
 // ========================================
 function initCanvasNudgeControls() {
-  // Press-to-enlarge behavior for mobile nudge pad
-  const nudgePad = document.querySelector('.nudge-pad');
-  if (nudgePad) {
-    let shrinkTimer;
-    
-    const enlarge = () => {
-      nudgePad.classList.add('enlarged');
-      clearTimeout(shrinkTimer);
-      // Auto-shrink after 1.8 seconds of inactivity
-      shrinkTimer = setTimeout(() => {
-        nudgePad.classList.remove('enlarged');
-      }, 1800);
-    };
-    
-    const shrink = () => {
-      nudgePad.classList.remove('enlarged');
-    };
-    
-    // Enlarge on various interaction events
-    ['pointerdown', 'mouseenter', 'focusin'].forEach(evt => {
-      nudgePad.addEventListener(evt, enlarge, { passive: true });
-    });
-    
-    // Shrink on interaction end
-    ['pointerup', 'mouseleave', 'focusout'].forEach(evt => {
-      nudgePad.addEventListener(evt, shrink, { passive: true });
-    });
-    
-    console.log('✅ Nudge pad press-to-enlarge behavior initialized');
-  }
-  
   const nudgeButtons = document.querySelectorAll('.canvas-nudge-btn');
   
   // Helper function to log current position after nudge
