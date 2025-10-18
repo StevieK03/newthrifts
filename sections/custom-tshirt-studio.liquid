@@ -3955,22 +3955,36 @@ function initEditModal() {
       const clonedCanvas = canvasContainer.cloneNode(true);
       
       // Remove any IDs to avoid conflicts
-      clonedCanvas.id = '';
+      clonedCanvas.id = 'preview-clone';
       clonedCanvas.querySelectorAll('[id]').forEach(el => el.id = '');
       
-      // Style the clone to fit the preview
+      // Force explicit display and dimensions
       clonedCanvas.style.cssText = `
-        max-width: 100%;
-        max-height: 400px;
-        margin: 0 auto;
-        transform: scale(0.7);
-        transform-origin: center;
-        pointer-events: none;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        position: relative !important;
+        width: 350px !important;
+        height: 350px !important;
+        max-width: 100% !important;
+        margin: 0 auto !important;
+        transform: scale(0.9) !important;
+        transform-origin: center !important;
+        pointer-events: none !important;
+        border-radius: 12px !important;
+        overflow: visible !important;
       `;
       
       // Clear preview and add clone
       previewContainer.innerHTML = '';
       previewContainer.appendChild(clonedCanvas);
+      
+      // Log dimensions for debugging
+      setTimeout(() => {
+        const rect = clonedCanvas.getBoundingClientRect();
+        console.log('📐 Clone dimensions:', rect.width, 'x', rect.height);
+        console.log('📦 Clone in DOM:', document.getElementById('preview-clone') ? 'YES' : 'NO');
+      }, 100);
       
       console.log('✅ Preview populated with canvas');
       return;
