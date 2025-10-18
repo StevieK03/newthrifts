@@ -879,6 +879,16 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.style.setProperty('color', '#0f172a', 'important');
       }
     });
+    
+    // Force white input backgrounds with teal borders
+    const inputs = document.querySelectorAll('.form-group input[type="text"], .form-group input[type="email"], .form-group input[type="password"], .form-group input[type="tel"], .form-group input[type="date"]');
+    inputs.forEach(input => {
+      if (input) {
+        input.style.setProperty('background', '#ffffff', 'important');
+        input.style.setProperty('background-color', '#ffffff', 'important');
+        input.style.setProperty('border', '1px solid rgba(39, 225, 193, 0.3)', 'important');
+      }
+    });
   }
   
   // Apply immediately
