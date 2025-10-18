@@ -615,15 +615,15 @@
       font-weight: 600 !important;
     }
 
-    /* ===== MOBILE NUDGE CONTROLS - BOTTOM-RIGHT CORNER, COMPACT ===== */
+    /* ===== MOBILE NUDGE CONTROLS - ABOVE ZOOM BAR, RIGHT ALIGNED ===== */
     @media (max-width: 768px) {
       #canvas-nudge-controls-{{ section.id }} {
-        /* Position in bottom-right corner, very compact */
+        /* Position just above the right side of zoom bar (above 100% label) */
         position: fixed !important;
-        bottom: 80px !important; /* Just above zoom slider */
-        right: 12px !important;
+        bottom: 68px !important; /* Just above zoom slider */
+        right: 20px !important; /* Align with right side of zoom bar */
         left: auto !important;
-        transform: scale(0.6); /* Shrunk to 60% size */
+        transform: scale(0.5); /* Very compact at 50% size */
         transform-origin: bottom right;
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         z-index: 50 !important;
@@ -634,7 +634,7 @@
       /* Magnify on tap/press for easier mobile interaction */
       #canvas-nudge-controls-{{ section.id }}:active,
       #canvas-nudge-controls-{{ section.id }}.magnified {
-        transform: scale(0.85); /* Grows to 85% when tapped */
+        transform: scale(0.75); /* Grows to 75% when tapped */
       }
       
       /* Update button styling - darker transparent theme instead of white */
@@ -658,17 +658,17 @@
       }
     }
     
-    /* Small phones - even more compact and lower */
+    /* Small phones - even more compact */
     @media (max-width: 480px) {
       #canvas-nudge-controls-{{ section.id }} {
-        bottom: 75px !important;
-        right: 8px !important;
-        transform: scale(0.55); /* Extra compact at 55% */
+        bottom: 65px !important;
+        right: 16px !important;
+        transform: scale(0.45); /* Extra compact at 45% */
       }
       
       #canvas-nudge-controls-{{ section.id }}:active,
       #canvas-nudge-controls-{{ section.id }}.magnified {
-        transform: scale(0.75); /* Grows to 75% when tapped */
+        transform: scale(0.65); /* Grows to 65% when tapped */
       }
     }
     
