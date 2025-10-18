@@ -104,7 +104,7 @@ User Profile Signup Section - Only show for non-authenticated users
               </label>
             </div>
 
-            <button type="submit" class="btn btn-primary" id="signup-submit">
+            <button type="submit" class="btn btn-primary" id="signup-submit" style="background: #27e1c1 !important; background-image: none !important; color: #0f172a !important;">
               <span class="btn-text">Create Profile</span>
               <span class="btn-loading" style="display: none;">Creating...</span>
             </button>
@@ -142,7 +142,7 @@ User Profile Signup Section - Only show for non-authenticated users
               <a href="#" class="forgot-password">Forgot password?</a>
             </div>
 
-            <button type="submit" class="btn btn-primary" id="login-submit">
+            <button type="submit" class="btn btn-primary" id="login-submit" style="background: #27e1c1 !important; background-image: none !important; color: #0f172a !important;">
               <span class="btn-text">Sign In</span>
               <span class="btn-loading" style="display: none;">Signing in...</span>
             </button>
@@ -479,13 +479,25 @@ User Profile Signup Section - Only show for non-authenticated users
   overflow: hidden;
 }
 
-.btn-primary {
+.btn-primary,
+#signup-submit.btn-primary,
+#login-submit.btn-primary,
+button.btn-primary,
+.btn.btn-primary {
   background: #27e1c1 !important;
+  background-image: none !important;
+  background-color: #27e1c1 !important;
   color: #0f172a !important;
 }
 
-.btn-primary:hover {
+.btn-primary:hover,
+#signup-submit.btn-primary:hover,
+#login-submit.btn-primary:hover,
+button.btn-primary:hover,
+.btn.btn-primary:hover {
   transform: translateY(-2px);
+  background: #27e1c1 !important;
+  background-image: none !important;
   box-shadow: 0 8px 25px rgba(39, 225, 193, 0.4) !important;
 }
 
