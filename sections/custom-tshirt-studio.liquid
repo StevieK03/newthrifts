@@ -206,6 +206,17 @@
       }
     }
     
+    @keyframes canvasGradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    .canvas-gradient-animated {
+      animation: canvasGradientShift 15s ease infinite !important;
+      background-size: 300% 300% !important;
+    }
+    
     .pulse-ring {
       position: absolute;
       top: 50%;
@@ -1054,7 +1065,7 @@
 
             <!-- Enhanced Preview Stage -->
             <div class="nt-mockup__stage" style="width: 100%; display: flex; justify-content: center; align-items: center; margin-top: 30px !important; margin-bottom: 40px !important; padding: 0; box-sizing: border-box;">
-                <div class="nt-mockup__canvas" 
+                <div class="nt-mockup__canvas canvas-gradient-animated" 
                      id="nt-mockup-canvas-{{ section.id }}"
                      style="
                        position: relative;
@@ -1062,10 +1073,12 @@
                        max-width: 90vw;
                        aspect-ratio: 1;
                        margin: 0 auto;
-                       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                       background: linear-gradient(135deg, #27e1c1 0%, #667eea 20%, #764ba2 35%, #f093fb 50%, #4facfe 65%, #27e1c1 100%);
+                       background-size: 300% 300%;
+                       animation: canvasGradientShift 15s ease infinite;
                        border-radius: 20px;
                        overflow: visible;
-                       box-shadow: 0 25px 80px rgba(102, 126, 234, 0.3), 0 10px 30px rgba(0,0,0,0.2);
+                       box-shadow: 0 25px 80px rgba(39, 225, 193, 0.3), 0 10px 30px rgba(0,0,0,0.2);
                        padding: 40px;
                        --overlay-top: 45%;
                        --overlay-left: 25%;
