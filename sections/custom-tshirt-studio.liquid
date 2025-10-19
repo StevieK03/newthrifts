@@ -1200,7 +1200,7 @@
                        box-shadow: 0 25px 80px rgba(39, 225, 193, 0.3), 0 10px 30px rgba(0,0,0,0.2);
                        padding: 40px;
                        --overlay-top: 45%;
-                       --overlay-left: 25%;
+                       --overlay-left: 50%;
                        --overlay-width: 60%;
                        --overlay-height: 65%;
                        --overlay-rotate: 0deg;
@@ -6396,3 +6396,19 @@ function initEditModal() {
   ]
 }
 {% endschema %}
+
+<!-- Initialize mockup on page load -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Initialize mockup when page loads (studio is visible by default now)
+    if (typeof initializeMockup === 'function') {
+      console.log('📍 Auto-initializing mockup on page load...');
+      initializeMockup();
+      
+      // Initialize size chart if available
+      if (typeof initializeSizeChart === 'function') {
+        initializeSizeChart();
+      }
+    }
+  });
+</script>
