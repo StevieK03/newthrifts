@@ -863,7 +863,7 @@
 
                     <!-- Color Selection -->
                     <div class="nt-mockup__group">
-                      <span class="nt-mockup__label" style="font-weight: 600; font-size: 14px; color: #374151; margin-right: 12px;">Color</span>
+                      <span class="nt-mockup__label" style="font-weight: 600; font-size: 14px; color: #374151; margin-right: 12px;">T-Shirt Color</span>
                       <div class="nt-mockup__buttons" style="display: flex; gap: 8px; flex-wrap: wrap;">
                         <button class="nt-btn nt-btn--color enhanced-color-btn" data-color="white" style="
                           padding: 12px 16px; 
@@ -2525,23 +2525,23 @@ window.showCustomStudio = window.openCustomDesignStudio;
 // PRESERVE ALL OUR CURRENT WORKING JAVASCRIPT FUNCTIONALITY
 function initializeMockup() {
   const mockup = {
-    // Mockup images mapping - using tshirt-view.png as the base template
+    // Mockup images mapping - using tshirt-view.png for white, t-shirt-viewblack2.png for black
     mockupImages: {
       front: {
         white: "{{ 'tshirt-view.png' | asset_url }}",
-        black: "{{ 'tshirt-view.png' | asset_url }}",
+        black: "{{ 't-shirt-viewblack2.png' | asset_url }}",
         red: "{{ 'tshirt-view.png' | asset_url }}",
         blue: "{{ 'tshirt-view.png' | asset_url }}"
       },
       back: {
         white: "{{ 'tshirt-view.png' | asset_url }}",
-        black: "{{ 'tshirt-view.png' | asset_url }}",
+        black: "{{ 't-shirt-viewblack2.png' | asset_url }}",
         red: "{{ 'tshirt-view.png' | asset_url }}",
         blue: "{{ 'tshirt-view.png' | asset_url }}"
       },
       hanging: {
         white: "{{ 'tshirt-view.png' | asset_url }}",
-        black: "{{ 'tshirt-view.png' | asset_url }}",
+        black: "{{ 't-shirt-viewblack2.png' | asset_url }}",
         red: "{{ 'tshirt-view.png' | asset_url }}",
         blue: "{{ 'tshirt-view.png' | asset_url }}"
       },
