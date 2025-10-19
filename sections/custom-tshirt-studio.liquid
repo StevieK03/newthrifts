@@ -2578,6 +2578,9 @@ function initializeMockup() {
 
     init() {
       console.log('🎯 Initializing Custom Studio Mockup...');
+      console.log('📸 Mockup Images Configuration:', this.mockupImages);
+      console.log('📸 Base Mockup:', this.baseMockup);
+      console.log('📸 Initial State:', this.state);
       this.bindEvents();
       this.bindDragResize();
       this.bindMouseWheelResize();
@@ -2602,10 +2605,20 @@ function initializeMockup() {
 
     updateBase() {
       const baseImg = document.getElementById('nt-base-{{ section.id }}');
-      if (!baseImg) return;
+      if (!baseImg) {
+        console.error('❌ Base image element not found! ID:', 'nt-base-{{ section.id }}');
+        return;
+      }
       
       const imageSrc = this.mockupImages[this.state.view]?.[this.state.color] || this.baseMockup;
+      console.log('🎨 updateBase called:', {
+        view: this.state.view,
+        color: this.state.color,
+        imageSrc: imageSrc,
+        currentSrc: baseImg.src
+      });
       baseImg.src = imageSrc;
+      console.log('✅ Base image src updated to:', baseImg.src);
     },
 
     updateDesign() {
