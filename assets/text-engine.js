@@ -120,11 +120,28 @@
     createTextObject(initialContent = 'Your Text') {
       const printArea = this.getPrintAreaBounds();
       
+      // Use Perfect Fit dimensions (same as the main design canvas)
+      const perfectDimensions = {
+        topPct: 29.142857142856876,     // Exact optimal top position
+        leftPct: 49.96,                 // Adjusted left position
+        widthPct: 37,                   // Optimal width for design proportions
+        heightPct: 42,                  // Optimal height for design proportions
+        rotateDeg: 0                    // No rotation for perfect fit
+      };
+      
+      // Calculate position based on percentages relative to print area
+      const xPos = printArea.x + (perfectDimensions.leftPct / 100) * printArea.width;
+      const yPos = printArea.y + (perfectDimensions.topPct / 100) * printArea.height;
+      
+      // Calculate font size based on height percentage (adjust for text readability)
+      const targetHeight = (perfectDimensions.heightPct / 100) * printArea.height;
+      const fontSize = Math.max(24, Math.min(72, targetHeight * 0.4)); // Scale font to ~40% of target height
+      
       const textObj = {
         id: `text-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
         content: initialContent,
         fontFamily: 'Inter',
-        sizePx: 48,
+        sizePx: fontSize,
         color: { mode: 'solid', value: '#000000' },
         outline: null,
         shadow: null,
@@ -136,10 +153,10 @@
         variableAxes: {},
         path: { type: 'none' },
         transform: {
-          x: printArea.width / 2,
-          y: printArea.height / 2,
+          x: xPos,
+          y: yPos,
           scale: 1,
-          rotateDeg: 0
+          rotateDeg: perfectDimensions.rotateDeg
         },
         locked: false,
         hidden: false
@@ -150,7 +167,7 @@
       this.saveState();
       this.render();
       
-      console.log('✅ Created text object:', textObj.id);
+      console.log('✅ Created text object with Perfect Fit positioning:', textObj.id);
       return textObj;
     }
 
@@ -382,16 +399,22 @@
     // ===========================================
 
     getPrintAreaBounds() {
+      const canvas = document.getElementById(this.canvasId);
       const printArea = document.getElementById(this.printAreaId);
-      if (!printArea) {
+      
+      if (!canvas || !printArea) {
         return { x: 0, y: 0, width: 400, height: 500 }; // fallback
       }
-      const rect = printArea.getBoundingClientRect();
+      
+      const canvasRect = canvas.getBoundingClientRect();
+      const printRect = printArea.getBoundingClientRect();
+      
+      // Calculate print area position relative to canvas
       return {
-        x: rect.left,
-        y: rect.top,
-        width: rect.width,
-        height: rect.height
+        x: printRect.left - canvasRect.left,
+        y: printRect.top - canvasRect.top,
+        width: printRect.width,
+        height: printRect.height
       };
     }
 
