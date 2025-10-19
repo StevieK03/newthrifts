@@ -284,6 +284,11 @@
   text-shadow: 0 0 20px rgba(96, 165, 250, 0.3);
 }
 
+/* Override global h1 shadow for mockup header - uses gradient text instead */
+[data-theme="dark"] .mockup-header h1 {
+  text-shadow: none;
+}
+
 /* Dark mode paragraphs and text */
 [data-theme="dark"] p {
   color: var(--text-secondary);
