@@ -4479,6 +4479,17 @@ function initializeMockup() {
   }
 }
 
+// Auto-initialize mockup on page load (studio is visible by default)
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('📍 Auto-initializing mockup on page load...');
+  initializeMockup();
+  
+  // Initialize size chart if available
+  if (typeof initializeSizeChart === 'function') {
+    initializeSizeChart();
+  }
+});
+
 // Add the testPerfectFit function for debugging
 (function() {
   console.log('🎯 Registering testPerfectFit function...');
@@ -6396,19 +6407,3 @@ function initEditModal() {
   ]
 }
 {% endschema %}
-
-<!-- Initialize mockup on page load -->
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Initialize mockup when page loads (studio is visible by default now)
-    if (typeof initializeMockup === 'function') {
-      console.log('📍 Auto-initializing mockup on page load...');
-      initializeMockup();
-      
-      // Initialize size chart if available
-      if (typeof initializeSizeChart === 'function') {
-        initializeSizeChart();
-      }
-    }
-  });
-</script>
