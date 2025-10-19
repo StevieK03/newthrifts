@@ -1220,9 +1220,9 @@
                         alt="T-shirt mockup"
                         loading="eager"
                         decoding="async"
-                        style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none;"
-                        onerror="console.error('❌ Failed to load t-shirt image:', this.src);"
-                        onload="console.log('✅ T-shirt image loaded:', this.src);"
+                        style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; z-index: 1; display: block !important; opacity: 1 !important; visibility: visible !important;"
+                        onerror="console.error('❌ Failed to load t-shirt image:', this.src); alert('T-shirt image failed to load: ' + this.src);"
+                        onload="console.log('✅ T-shirt image loaded:', this.src); this.style.border = '2px solid green';"
                       >
                     
                     <!-- Debug assets (hidden) -->
