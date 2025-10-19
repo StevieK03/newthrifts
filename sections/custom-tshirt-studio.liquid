@@ -1024,6 +1024,26 @@
                         ">
                           ✏️ Edit Design
                         </button>
+                        <button class="nt-btn nt-btn--text" id="nt-text-{{ section.id }}" style="
+                          padding: 14px 20px; 
+                          border: 2px solid transparent; 
+                          background: linear-gradient(135deg, #7c3aed, #6d28d9); 
+                          color: white; 
+                          border-radius: 16px; 
+                          font-size: 14px; 
+                          font-weight: 600; 
+                          cursor: pointer; 
+                          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+                          box-shadow: 0 4px 16px rgba(124, 58, 237, 0.4);
+                          backdrop-filter: blur(10px);
+                          -webkit-backdrop-filter: blur(10px);
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                          gap: 8px;
+                        ">
+                          📝 Add Text
+                        </button>
                       </div>
                       
                       <!-- Primary Action Buttons -->
@@ -6043,3 +6063,8 @@ function initEditModal() {
   ]
 }
 {% endschema %}
+
+<!-- Load Text Engine CSS and JS -->
+<link rel="stylesheet" href="{{ 'text-engine.css' | asset_url }}">
+<script src="{{ 'text-engine.js' | asset_url }}" defer></script>
+<script src="{{ 'text-engine-init.js' | asset_url }}" defer></script>
