@@ -54,9 +54,9 @@
   // ===========================================
 
   class TextEngine {
-    constructor(canvasId, printAreaId) {
+    constructor(canvasId, overlayId) {
       this.canvasId = canvasId;
-      this.printAreaId = printAreaId;
+      this.overlayId = overlayId; // Overlay element represents the print area
       this.textObjects = [];
       this.selectedId = null;
       this.svgContainer = null;
@@ -400,22 +400,26 @@
 
     getPrintAreaBounds() {
       const canvas = document.getElementById(this.canvasId);
-      const printArea = document.getElementById(this.printAreaId);
+      const overlay = document.getElementById(this.overlayId);
       
-      if (!canvas || !printArea) {
+      if (!canvas || !overlay) {
+        console.warn('⚠️ Canvas or overlay not found, using fallback dimensions');
         return { x: 0, y: 0, width: 400, height: 500 }; // fallback
       }
       
       const canvasRect = canvas.getBoundingClientRect();
-      const printRect = printArea.getBoundingClientRect();
+      const overlayRect = overlay.getBoundingClientRect();
       
-      // Calculate print area position relative to canvas
-      return {
-        x: printRect.left - canvasRect.left,
-        y: printRect.top - canvasRect.top,
-        width: printRect.width,
-        height: printRect.height
+      // Calculate overlay (print area) position relative to canvas
+      const bounds = {
+        x: overlayRect.left - canvasRect.left,
+        y: overlayRect.top - canvasRect.top,
+        width: overlayRect.width,
+        height: overlayRect.height
       };
+      
+      console.log('📐 Print area bounds:', bounds);
+      return bounds;
     }
 
     buildFontFeatureSettings(opentype) {

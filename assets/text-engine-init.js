@@ -14,12 +14,12 @@
     console.log('📝 Initializing Text Engine...');
 
     const canvasId = `nt-mockup-canvas-${sectionId}`;
-    const printAreaId = `nt-print-area-${sectionId}`;
+    const overlayId = `nt-overlay-${sectionId}`; // Use overlay element as print area reference
 
     // Create Text Engine instance
     let textEngine;
     try {
-      textEngine = new window.TextEngine(canvasId, printAreaId);
+      textEngine = new window.TextEngine(canvasId, overlayId);
       window.textEngine = textEngine; // Make globally accessible
       console.log('✅ Text Engine instance created');
     } catch (error) {
