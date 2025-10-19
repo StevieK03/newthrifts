@@ -2,8 +2,6 @@
   Custom T-Shirt Design Studio Section
   A dedicated section for the custom t-shirt designer with amazing visuals
   Preserves all current working controls, JavaScript, and functionality
-  
-  Visibility: Hidden by default (display: none), shown via openCustomDesignStudio() JavaScript function
 {% endcomment %}
 
 <div class="custom-tshirt-studio" id="custom-tshirt-studio-{{ section.id }}" style="display: none;">
@@ -73,7 +71,7 @@
       
       .studio-title {
         color: #ffffff;
-        /* text-shadow removed - uses gradient text styling instead */
+        text-shadow: 0 2px 8px rgba(39, 225, 193, 0.3);
       }
       
       .studio-subtitle {
@@ -96,7 +94,7 @@
     
     [data-theme="dark"] .studio-title {
       color: #ffffff;
-      /* text-shadow removed - uses gradient text styling instead */
+      text-shadow: 0 2px 8px rgba(39, 225, 193, 0.3);
     }
     
     [data-theme="dark"] .studio-subtitle {
@@ -865,7 +863,7 @@
 
                     <!-- Color Selection -->
                     <div class="nt-mockup__group">
-                      <span class="nt-mockup__label" style="font-weight: 600; font-size: 14px; color: #374151; margin-right: 12px;">Color</span>
+                      <span class="nt-mockup__label" style="font-weight: 600; font-size: 14px; color: #374151; margin-right: 12px;">T-Shirt Color</span>
                       <div class="nt-mockup__buttons" style="display: flex; gap: 8px; flex-wrap: wrap;">
                         <button class="nt-btn nt-btn--color enhanced-color-btn" data-color="white" style="
                           padding: 12px 16px; 
@@ -1230,6 +1228,7 @@
                     <!-- Debug assets (hidden) -->
                     <div id="debug-assets-{{ section.id }}" style="position: absolute; top: -100px; left: -100px; width: 1px; height: 1px; overflow: hidden;">
                       <img src="{{ 'tshirt-view.png' | asset_url }}" onload="console.log('✅ Direct asset test - tshirt-view.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - tshirt-view.png failed:', this.src);">
+                      <img src="{{ 'tshirt-black-v2.png' | asset_url }}" onload="console.log('✅ Direct asset test - tshirt-black-v2.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - tshirt-black-v2.png failed:', this.src);">
                       <img src="{{ 'Girl-Model.png' | asset_url }}" onload="console.log('✅ Direct asset test - Girl-Model.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - Girl-Model.png failed:', this.src);">
                       <img src="{{ 'Women-side.png' | asset_url }}" onload="console.log('✅ Direct asset test - Women-side.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - Women-side.png failed:', this.src);">
                     </div>
@@ -1971,16 +1970,36 @@
             margin-bottom: 24px;
             border: 2px solid #27e1c1;
           ">
-            <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #334155; text-align: center;">Live Preview</h4>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+              <h4 style="margin: 0; font-size: 14px; font-weight: 600; color: #334155;">Live Preview</h4>
+              
+              <!-- Preview Zoom Controls -->
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 12px; color: #64748b;">Zoom:</span>
+                <input 
+                  type="range" 
+                  id="preview-zoom-range-{{ section.id }}" 
+                  min="50" 
+                  max="150" 
+                  value="100" 
+                  step="10"
+                  style="width: 80px; height: 4px; cursor: pointer;"
+                />
+                <output id="preview-zoom-label-{{ section.id }}" style="min-width: 40px; text-align: right; font-size: 12px; font-weight: 600; color: #27e1c1;">100%</output>
+              </div>
+            </div>
+            
             <div id="edit-preview-{{ section.id }}" style="
               background: white;
               border-radius: 12px;
-              min-height: 300px;
+              min-height: 800px;
+              max-height: 1200px;
               display: flex;
               align-items: center;
               justify-content: center;
               position: relative;
-              overflow: hidden;
+              overflow: auto;
+              padding: 40px;
             ">
               <!-- Preview will be cloned here -->
               <p style="color: #94a3b8; text-align: center;">Loading preview...</p>
@@ -2089,16 +2108,7 @@
                   backdrop-filter: blur(10px);
                   -webkit-backdrop-filter: blur(10px);
                 ">
-                  <div style="
-                    color: #27e1c1;
-                    font-size: 11px;
-                    font-weight: 600;
-                    text-align: center;
-                    margin-bottom: 8px;
-                    text-transform: uppercase;
-                    letter-spacing: 0.5px;
-                  ">Nudge (Arrow Keys)</div>
-                  
+                  <!-- Nudge controls (label removed for cleaner UI) -->
                   <div style="
                     display: grid;
                     grid-template-columns: repeat(3, 40px);
@@ -2459,10 +2469,292 @@
     </div>
   </div>
 
+  <!-- ========================================
+       TEXT DESIGN PANEL
+       ======================================== -->
+  <div id="text-panel-{{ section.id }}" class="nt-text-panel" style="
+    display: none;
+    position: fixed;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    width: 360px;
+    max-height: 85vh;
+    z-index: 9999;
+  ">
+    <div class="nt-text-panel__header">
+      <h2 class="nt-text-panel__title">📝 Text Tool</h2>
+      <button class="nt-text-panel__close" id="text-panel-close-{{ section.id }}" aria-label="Close text panel">✕</button>
+    </div>
+
+    <!-- Add Text Button -->
+    <div class="nt-text-section">
+      <button class="nt-text-add-btn" id="text-add-btn-{{ section.id }}">
+        ➕ Add New Text
+      </button>
+    </div>
+
+    <!-- Text Layers List -->
+    <div class="nt-text-section">
+      <div class="nt-text-section__title">Layers</div>
+      <div class="nt-text-layers" id="text-layers-{{ section.id }}">
+        <!-- Layers will be dynamically added here -->
+        <div style="text-align: center; padding: 20px; color: #94a3b8; font-size: 14px;">
+          No text objects yet.<br>Click "Add New Text" to start!
+        </div>
+      </div>
+    </div>
+
+    <!-- Text Content -->
+    <div class="nt-text-section" id="text-content-section-{{ section.id }}" style="display: none;">
+      <div class="nt-text-section__title">Content</div>
+      <div class="nt-text-section__content">
+        <div class="nt-text-control">
+          <label class="nt-text-control__label" for="text-content-{{ section.id }}">Text</label>
+          <textarea 
+            class="nt-text-control__textarea" 
+            id="text-content-{{ section.id }}" 
+            placeholder="Enter your text here..."
+          ></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Font & Style -->
+    <div class="nt-text-section" id="text-font-section-{{ section.id }}" style="display: none;">
+      <div class="nt-text-section__title">Font & Style</div>
+      <div class="nt-text-section__content">
+        <div class="nt-text-control">
+          <label class="nt-text-control__label" for="text-font-{{ section.id }}">Font Family</label>
+          <select class="nt-text-control__select" id="text-font-{{ section.id }}">
+            <option value="Inter">Inter (Modern & Clean)</option>
+            <option value="Roboto">Roboto (Professional)</option>
+            <option value="Montserrat">Montserrat (Geometric & Bold)</option>
+            <option value="Poppins">Poppins (Friendly & Round)</option>
+            <option value="Oswald">Oswald (Condensed & Strong)</option>
+            <option value="Playfair Display">Playfair Display (Elegant & Classic)</option>
+            <option value="Bebas Neue">Bebas Neue (BOLD HEADLINES)</option>
+            <option value="Pacifico">Pacifico (Casual Script)</option>
+            <option value="Satisfy">Satisfy (Handwritten)</option>
+            <option value="Anton">Anton (IMPACT STYLE)</option>
+            <option value="Permanent Marker">Permanent Marker (Marker Style)</option>
+            <option value="Raleway">Raleway (Thin & Elegant)</option>
+          </select>
+        </div>
+
+        <div class="nt-text-control">
+          <label class="nt-text-control__label" for="text-size-{{ section.id }}">Size (px)</label>
+          <input 
+            type="number" 
+            class="nt-text-control__input" 
+            id="text-size-{{ section.id }}" 
+            min="12" 
+            max="200" 
+            value="48"
+          >
+        </div>
+
+        <div class="nt-text-control">
+          <label class="nt-text-control__label">Color</label>
+          <div class="nt-text-color-picker">
+            <input 
+              type="color" 
+              class="nt-text-color-picker__swatch" 
+              id="text-color-{{ section.id }}" 
+              value="#000000"
+            >
+            <input 
+              type="text" 
+              class="nt-text-color-picker__input nt-text-control__input" 
+              id="text-color-hex-{{ section.id }}" 
+              value="#000000"
+              placeholder="#000000"
+            >
+          </div>
+        </div>
+
+        <div class="nt-text-control">
+          <label class="nt-text-control__label" for="text-tracking-{{ section.id }}">Letter Spacing (px)</label>
+          <input 
+            type="range" 
+            class="nt-text-control__range" 
+            id="text-tracking-{{ section.id }}" 
+            min="-10" 
+            max="50" 
+            value="0"
+            step="0.5"
+          >
+          <output id="text-tracking-output-{{ section.id }}">0px</output>
+        </div>
+
+        <div class="nt-text-control">
+          <label class="nt-text-control__label" for="text-leading-{{ section.id }}">Line Height</label>
+          <input 
+            type="range" 
+            class="nt-text-control__range" 
+            id="text-leading-{{ section.id }}" 
+            min="0.8" 
+            max="3" 
+            value="1.2"
+            step="0.1"
+          >
+          <output id="text-leading-output-{{ section.id }}">1.2</output>
+        </div>
+
+        <div class="nt-text-control">
+          <label class="nt-text-control__label">Text Alignment</label>
+          <div class="nt-text-btn-group">
+            <button class="nt-text-btn" data-align="left">Left</button>
+            <button class="nt-text-btn active" data-align="center">Center</button>
+            <button class="nt-text-btn" data-align="right">Right</button>
+          </div>
+        </div>
+
+        <div class="nt-text-control">
+          <label class="nt-text-control__label">Text Case</label>
+          <div class="nt-text-btn-group">
+            <button class="nt-text-btn active" data-case="normal">Normal</button>
+            <button class="nt-text-btn" data-case="upper">UPPER</button>
+            <button class="nt-text-btn" data-case="lower">lower</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Effects -->
+    <div class="nt-text-section" id="text-effects-section-{{ section.id }}" style="display: none;">
+      <div class="nt-text-section__title">Effects</div>
+      <div class="nt-text-section__content">
+        <div class="nt-text-toggle">
+          <label class="nt-text-toggle__label">Outline/Stroke</label>
+          <label class="nt-text-toggle__switch">
+            <input type="checkbox" class="nt-text-toggle__checkbox" id="text-outline-toggle-{{ section.id }}">
+            <span class="nt-text-toggle__slider"></span>
+          </label>
+        </div>
+        <div id="text-outline-controls-{{ section.id }}" style="display: none; padding-left: 16px;">
+          <div class="nt-text-control">
+            <label class="nt-text-control__label">Outline Color</label>
+            <input type="color" class="nt-text-color-picker__swatch" id="text-outline-color-{{ section.id }}" value="#ffffff">
+          </div>
+          <div class="nt-text-control">
+            <label class="nt-text-control__label">Outline Width (px)</label>
+            <input type="range" class="nt-text-control__range" id="text-outline-width-{{ section.id }}" min="1" max="20" value="3" step="0.5">
+            <output id="text-outline-width-output-{{ section.id }}">3px</output>
+          </div>
+        </div>
+
+        <div class="nt-text-toggle">
+          <label class="nt-text-toggle__label">Shadow</label>
+          <label class="nt-text-toggle__switch">
+            <input type="checkbox" class="nt-text-toggle__checkbox" id="text-shadow-toggle-{{ section.id }}">
+            <span class="nt-text-toggle__slider"></span>
+          </label>
+        </div>
+        <div id="text-shadow-controls-{{ section.id }}" style="display: none; padding-left: 16px;">
+          <div class="nt-text-control">
+            <label class="nt-text-control__label">Shadow X Offset (px)</label>
+            <input type="range" class="nt-text-control__range" id="text-shadow-x-{{ section.id }}" min="-20" max="20" value="2" step="1">
+            <output id="text-shadow-x-output-{{ section.id }}">2px</output>
+          </div>
+          <div class="nt-text-control">
+            <label class="nt-text-control__label">Shadow Y Offset (px)</label>
+            <input type="range" class="nt-text-control__range" id="text-shadow-y-{{ section.id }}" min="-20" max="20" value="2" step="1">
+            <output id="text-shadow-y-output-{{ section.id }}">2px</output>
+          </div>
+          <div class="nt-text-control">
+            <label class="nt-text-control__label">Shadow Blur (px)</label>
+            <input type="range" class="nt-text-control__range" id="text-shadow-blur-{{ section.id }}" min="0" max="20" value="4" step="1">
+            <output id="text-shadow-blur-output-{{ section.id }}">4px</output>
+          </div>
+        </div>
+
+        <div class="nt-text-toggle">
+          <label class="nt-text-toggle__label">Curved Text</label>
+          <label class="nt-text-toggle__switch">
+            <input type="checkbox" class="nt-text-toggle__checkbox" id="text-curve-toggle-{{ section.id }}">
+            <span class="nt-text-toggle__slider"></span>
+          </label>
+        </div>
+        <div id="text-curve-controls-{{ section.id }}" style="display: none; padding-left: 16px;">
+          <div class="nt-text-control">
+            <label class="nt-text-control__label">Arc Radius (px)</label>
+            <input type="range" class="nt-text-control__range" id="text-curve-radius-{{ section.id }}" min="50" max="300" value="100" step="10">
+            <output id="text-curve-radius-output-{{ section.id }}">100px</output>
+          </div>
+          <div class="nt-text-toggle">
+            <label class="nt-text-toggle__label">Invert Arc</label>
+            <label class="nt-text-toggle__switch">
+              <input type="checkbox" class="nt-text-toggle__checkbox" id="text-curve-invert-{{ section.id }}">
+              <span class="nt-text-toggle__slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Transform -->
+    <div class="nt-text-section" id="text-transform-section-{{ section.id }}" style="display: none;">
+      <div class="nt-text-section__title">Transform</div>
+      <div class="nt-text-section__content">
+        <div class="nt-text-control">
+          <label class="nt-text-control__label" for="text-rotate-{{ section.id }}">Rotation (degrees)</label>
+          <input 
+            type="range" 
+            class="nt-text-control__range" 
+            id="text-rotate-{{ section.id }}" 
+            min="-180" 
+            max="180" 
+            value="0"
+            step="1"
+          >
+          <output id="text-rotate-output-{{ section.id }}">0°</output>
+        </div>
+
+        <div class="nt-text-control">
+          <label class="nt-text-control__label" for="text-scale-{{ section.id }}">Scale</label>
+          <input 
+            type="range" 
+            class="nt-text-control__range" 
+            id="text-scale-{{ section.id }}" 
+            min="0.5" 
+            max="2" 
+            value="1"
+            step="0.05"
+          >
+          <output id="text-scale-output-{{ section.id }}">1.0</output>
+        </div>
+
+        <div class="nt-text-btn-group">
+          <button class="nt-text-btn" id="text-center-btn-{{ section.id }}">📍 Center</button>
+          <button class="nt-text-btn" id="text-reset-btn-{{ section.id }}">↺ Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Export -->
+    <div class="nt-text-section" id="text-export-section-{{ section.id }}" style="display: none;">
+      <div class="nt-text-section__title">Export</div>
+      <div class="nt-text-section__content">
+        <div class="nt-text-btn-group">
+          <button class="nt-text-btn" id="text-export-svg-{{ section.id }}">SVG</button>
+          <button class="nt-text-btn" id="text-export-png-{{ section.id }}">PNG</button>
+          <button class="nt-text-btn" id="text-export-json-{{ section.id }}">JSON</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
 </div>
 
 <!-- Load Studio Edit Operations -->
 <script src="{{ 'studio-edit.js' | asset_url }}" defer></script>
+
+<!-- Load Text Engine System -->
+<link rel="stylesheet" href="{{ 'text-engine.css' | asset_url }}">
+<script src="{{ 'text-engine.js' | asset_url }}" defer></script>
+<script src="{{ 'text-engine-init.js' | asset_url }}" defer></script>
 
 <script>
 function closeCustomStudio() {
@@ -2517,7 +2809,7 @@ window.showCustomStudio = window.openCustomDesignStudio;
 // PRESERVE ALL OUR CURRENT WORKING JAVASCRIPT FUNCTIONALITY
 function initializeMockup() {
   const mockup = {
-    // Mockup images mapping - white and black t-shirt images
+    // Mockup images mapping - using tshirt-view.png for white, tshirt-black-v2.png for black
     mockupImages: {
       front: {
         white: "{{ 'tshirt-view.png' | asset_url }}",
@@ -2588,9 +2880,6 @@ function initializeMockup() {
 
     init() {
       console.log('🎯 Initializing Custom Studio Mockup...');
-      console.log('📸 Mockup Images Configuration:', this.mockupImages);
-      console.log('📸 Base Mockup:', this.baseMockup);
-      console.log('📸 Initial State:', this.state);
       this.bindEvents();
       this.bindDragResize();
       this.bindMouseWheelResize();
@@ -2615,20 +2904,10 @@ function initializeMockup() {
 
     updateBase() {
       const baseImg = document.getElementById('nt-base-{{ section.id }}');
-      if (!baseImg) {
-        console.error('❌ Base image element not found! ID:', 'nt-base-{{ section.id }}');
-        return;
-      }
+      if (!baseImg) return;
       
       const imageSrc = this.mockupImages[this.state.view]?.[this.state.color] || this.baseMockup;
-      console.log('🎨 updateBase called:', {
-        view: this.state.view,
-        color: this.state.color,
-        imageSrc: imageSrc,
-        currentSrc: baseImg.src
-      });
       baseImg.src = imageSrc;
-      console.log('✅ Base image src updated to:', baseImg.src);
     },
 
     updateDesign() {
@@ -4193,6 +4472,11 @@ function initializeMockup() {
   window.placementState = mockup.placementState;
   
   console.log('🚀 Custom Studio Mockup initialized! 🎨');
+  
+  // Initialize Text Engine (external function)
+  if (typeof window.initializeTextEngine === 'function') {
+    window.initializeTextEngine('{{ section.id }}');
+  }
 }
 
 // Add the testPerfectFit function for debugging
@@ -4956,25 +5240,40 @@ function initEditModal() {
       // Clone the entire canvas container
       const clonedCanvas = canvasContainer.cloneNode(true);
       
-      // Remove any IDs to avoid conflicts
-      clonedCanvas.id = 'preview-clone';
-      clonedCanvas.querySelectorAll('[id]').forEach(el => el.id = '');
-      
-      // REMOVE zoom slider and nudge controls from the preview
+      // REMOVE zoom slider and nudge controls from the preview FIRST (before removing IDs)
       // Remove zoom slider (.zoom-bar or any element with "zoom" in class)
       const zoomElements = clonedCanvas.querySelectorAll('.zoom-bar, [class*="zoom"]');
       zoomElements.forEach(el => {
         // Only remove if it's a slider control, not zoom text labels
         if (el.classList.contains('zoom-bar') || el.querySelector('input[type="range"]')) {
+          console.log('🗑️ Removing zoom element:', el.id || el.className);
           el.remove();
         }
       });
       
-      // Remove nudge controls (canvas-nudge-controls, nudge-pad, etc.)
-      const nudgeElements = clonedCanvas.querySelectorAll('[id*="nudge"], [class*="nudge"]');
-      nudgeElements.forEach(el => el.remove());
+      // Remove nudge controls - multiple selectors to catch everything
+      // IMPORTANT: Do this BEFORE removing IDs so we can find them by ID
+      const nudgeSelectors = [
+        '[id*="canvas-nudge-controls"]',
+        '[id*="nudge-pad"]',
+        '[id*="nudge"]',
+        '[class*="nudge"]',
+        '.canvas-nudge-btn'
+      ];
       
-      console.log('🗑️ Removed zoom slider and nudge controls from preview');
+      nudgeSelectors.forEach(selector => {
+        const elements = clonedCanvas.querySelectorAll(selector);
+        elements.forEach(el => {
+          console.log('🗑️ Removing nudge element:', el.id || el.className);
+          el.remove();
+        });
+      });
+      
+      console.log('✅ Cleaned preview - removed zoom slider and all nudge controls');
+      
+      // NOW remove any remaining IDs to avoid conflicts
+      clonedCanvas.id = 'preview-clone';
+      clonedCanvas.querySelectorAll('[id]').forEach(el => el.id = '');
       
       // Force explicit display and dimensions
       clonedCanvas.style.cssText = `
@@ -4982,16 +5281,21 @@ function initEditModal() {
         visibility: visible !important;
         opacity: 1 !important;
         position: relative !important;
-        width: 350px !important;
-        height: 350px !important;
+        width: 700px !important;
+        height: 700px !important;
         max-width: 100% !important;
         margin: 0 auto !important;
-        transform: scale(0.9) !important;
-        transform-origin: center !important;
+        transform-origin: center center !important;
         pointer-events: none !important;
         border-radius: 12px !important;
         overflow: visible !important;
+        transition: transform 0.2s ease !important;
       `;
+      
+      // Apply zoom separately so it doesn't get overridden
+      const currentZoom = typeof previewZoomLevel !== 'undefined' ? previewZoomLevel : 1.0;
+      clonedCanvas.style.transform = `scale(${currentZoom})`;
+      clonedCanvas.style.transformOrigin = 'center center';
       
       // Clear preview and add clone
       previewContainer.innerHTML = '';
@@ -5113,6 +5417,35 @@ function initEditModal() {
     studio.editOps?.scale(value);
     setTimeout(populatePreview, 100);
   });
+  
+  // ========================================
+  // PREVIEW ZOOM CONTROLS
+  // ========================================
+  let previewZoomLevel = 1.0;
+  
+  const previewZoomRange = document.getElementById('preview-zoom-range-{{ section.id }}');
+  const previewZoomLabel = document.getElementById('preview-zoom-label-{{ section.id }}');
+  
+  if (previewZoomRange && previewZoomLabel) {
+    previewZoomRange.addEventListener('input', (e) => {
+      const percent = parseInt(e.target.value, 10);
+      previewZoomLevel = percent / 100;
+      previewZoomLabel.textContent = `${percent}%`;
+      
+      // Apply zoom to the preview container's content
+      const previewContainer = document.getElementById('edit-preview-{{ section.id }}');
+      const previewClone = previewContainer?.querySelector('#preview-clone');
+      
+      if (previewClone) {
+        previewClone.style.transform = `scale(${previewZoomLevel})`;
+        previewClone.style.transition = 'transform 0.2s ease';
+      }
+      
+      console.log(`🔍 Preview zoom: ${percent}%`);
+    });
+    
+    console.log('✅ Preview zoom controls initialized');
+  }
   
   document.getElementById('rotation-input-{{ section.id }}').addEventListener('input', (e) => {
     studio.editOps?.rotate(parseFloat(e.target.value));
@@ -6063,8 +6396,3 @@ function initEditModal() {
   ]
 }
 {% endschema %}
-
-<!-- Load Text Engine CSS and JS -->
-<link rel="stylesheet" href="{{ 'text-engine.css' | asset_url }}">
-<script src="{{ 'text-engine.js' | asset_url }}" defer></script>
-<script src="{{ 'text-engine-init.js' | asset_url }}" defer></script>
