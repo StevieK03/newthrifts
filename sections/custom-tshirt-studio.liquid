@@ -1208,7 +1208,7 @@
                     <!-- Debug assets (hidden) -->
                     <div id="debug-assets-{{ section.id }}" style="position: absolute; top: -100px; left: -100px; width: 1px; height: 1px; overflow: hidden;">
                       <img src="{{ 'tshirt-view.png' | asset_url }}" onload="console.log('✅ Direct asset test - tshirt-view.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - tshirt-view.png failed:', this.src);">
-                      <img src="{{ 'tshirt-viewblack2.png' | asset_url }}" onload="console.log('✅ Direct asset test - tshirt-viewblack2.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - tshirt-viewblack2.png failed:', this.src);">
+                      <img src="{{ 'tshirt-black.png' | asset_url }}" onload="console.log('✅ Direct asset test - tshirt-black.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - tshirt-black.png failed:', this.src);">
                       <img src="{{ 'Girl-Model.png' | asset_url }}" onload="console.log('✅ Direct asset test - Girl-Model.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - Girl-Model.png failed:', this.src);">
                       <img src="{{ 'Women-side.png' | asset_url }}" onload="console.log('✅ Direct asset test - Women-side.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - Women-side.png failed:', this.src);">
                     </div>
@@ -2526,23 +2526,23 @@ window.showCustomStudio = window.openCustomDesignStudio;
 // PRESERVE ALL OUR CURRENT WORKING JAVASCRIPT FUNCTIONALITY
 function initializeMockup() {
   const mockup = {
-    // Mockup images mapping - using tshirt-view.png for white, tshirt-viewblack2.png for black
+    // Mockup images mapping - using tshirt-view.png for white, tshirt-black.png for black
     mockupImages: {
       front: {
         white: "{{ 'tshirt-view.png' | asset_url }}",
-        black: "{{ 'tshirt-viewblack2.png' | asset_url }}",
+        black: "{{ 'tshirt-black.png' | asset_url }}",
         red: "{{ 'tshirt-view.png' | asset_url }}",
         blue: "{{ 'tshirt-view.png' | asset_url }}"
       },
       back: {
         white: "{{ 'tshirt-view.png' | asset_url }}",
-        black: "{{ 'tshirt-viewblack2.png' | asset_url }}",
+        black: "{{ 'tshirt-black.png' | asset_url }}",
         red: "{{ 'tshirt-view.png' | asset_url }}",
         blue: "{{ 'tshirt-view.png' | asset_url }}"
       },
       hanging: {
         white: "{{ 'tshirt-view.png' | asset_url }}",
-        black: "{{ 'tshirt-viewblack2.png' | asset_url }}",
+        black: "{{ 'tshirt-black.png' | asset_url }}",
         red: "{{ 'tshirt-view.png' | asset_url }}",
         blue: "{{ 'tshirt-view.png' | asset_url }}"
       },
