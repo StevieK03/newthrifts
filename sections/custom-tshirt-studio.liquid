@@ -2776,17 +2776,41 @@ function closeCustomStudio() {
 
 // Show custom studio function (called from home page button)
 window.openCustomDesignStudio = function() {
+  console.log('🚀 openCustomDesignStudio() called');
+  
   // Hide main content
   const mainContent = document.querySelector('.main-content');
   if (mainContent) {
     mainContent.style.display = 'none';
+    console.log('✅ Main content hidden');
+  } else {
+    console.log('⚠️ Main content not found');
   }
   
   // Show the custom studio
   const studio = document.getElementById('custom-tshirt-studio-{{ section.id }}');
+  console.log('🎨 Studio element:', studio);
+  
   if (studio) {
     studio.style.display = 'block';
+    console.log('✅ Studio display set to block');
+    console.log('📊 Studio computed display:', window.getComputedStyle(studio).display);
+    console.log('📊 Studio visibility:', window.getComputedStyle(studio).visibility);
+    console.log('📊 Studio opacity:', window.getComputedStyle(studio).opacity);
+    
     studio.scrollIntoView({ behavior: 'smooth' });
+    
+    // Check for base image immediately
+    const baseImage = document.getElementById('nt-base-{{ section.id }}');
+    console.log('🖼️ Base image element:', baseImage);
+    if (baseImage) {
+      console.log('🖼️ Base image src:', baseImage.src);
+      console.log('🖼️ Base image display:', window.getComputedStyle(baseImage).display);
+      console.log('🖼️ Base image visibility:', window.getComputedStyle(baseImage).visibility);
+      console.log('🖼️ Base image opacity:', window.getComputedStyle(baseImage).opacity);
+      console.log('🖼️ Base image complete:', baseImage.complete);
+      console.log('🖼️ Base image naturalWidth:', baseImage.naturalWidth);
+    }
     
     // Initialize the mockup and size chart after the studio is visible
     setTimeout(() => {
@@ -2800,6 +2824,8 @@ window.openCustomDesignStudio = function() {
         console.error('❌ initializeSizeChart function not found');
       }
     }, 200);
+  } else {
+    console.error('❌ Studio element not found!');
   }
 };
 
@@ -2880,12 +2906,20 @@ function initializeMockup() {
 
     init() {
       console.log('🎯 Initializing Custom Studio Mockup...');
+      console.log('📊 Studio visible?', document.getElementById('custom-tshirt-studio-{{ section.id }}')?.style.display);
+      console.log('📊 Canvas exists?', document.getElementById('nt-mockup-canvas-{{ section.id }}'));
+      console.log('📊 Base image exists?', document.getElementById('nt-base-{{ section.id }}'));
+      console.log('📊 Overlay exists?', document.getElementById('nt-overlay-{{ section.id }}'));
+      
       this.bindEvents();
       this.bindDragResize();
       this.bindMouseWheelResize();
       this.bindKeyboardShortcuts();
       this.bindZoomControls();
+      
+      console.log('🔄 About to call updateBase()...');
       this.updateBase();
+      
       this.updateDesign();
       this.updatePlacementDisplay();
       this.updateDesignPosition();
@@ -2903,11 +2937,42 @@ function initializeMockup() {
     },
 
     updateBase() {
+      console.log('🔄 updateBase() called');
+      console.log('📍 Current state:', this.state);
+      
       const baseImg = document.getElementById('nt-base-{{ section.id }}');
-      if (!baseImg) return;
+      console.log('🖼️ Base image element in updateBase:', baseImg);
+      
+      if (!baseImg) {
+        console.error('❌ Base image element not found in updateBase!');
+        return;
+      }
+      
+      console.log('🖼️ Before update - baseImg.src:', baseImg.src);
+      console.log('🖼️ Before update - baseImg.style.display:', baseImg.style.display);
+      console.log('🖼️ Before update - computed display:', window.getComputedStyle(baseImg).display);
+      console.log('🖼️ Before update - computed visibility:', window.getComputedStyle(baseImg).visibility);
+      console.log('🖼️ Before update - computed opacity:', window.getComputedStyle(baseImg).opacity);
       
       const imageSrc = this.mockupImages[this.state.view]?.[this.state.color] || this.baseMockup;
+      console.log('🎨 New image source:', imageSrc);
+      console.log('🎨 View:', this.state.view, 'Color:', this.state.color);
+      
       baseImg.src = imageSrc;
+      console.log('✅ Image src updated to:', baseImg.src);
+      
+      // Force display
+      baseImg.style.display = 'block';
+      baseImg.style.visibility = 'visible';
+      baseImg.style.opacity = '1';
+      console.log('✅ Forced image display properties');
+      
+      // Check after update
+      setTimeout(() => {
+        console.log('🖼️ After update - baseImg.complete:', baseImg.complete);
+        console.log('🖼️ After update - baseImg.naturalWidth:', baseImg.naturalWidth);
+        console.log('🖼️ After update - computed display:', window.getComputedStyle(baseImg).display);
+      }, 100);
     },
 
     updateDesign() {
