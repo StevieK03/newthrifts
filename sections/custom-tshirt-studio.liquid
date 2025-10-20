@@ -3176,8 +3176,19 @@ function initializeMockup() {
     // Add keyboard shortcuts for precise control
     bindKeyboardShortcuts() {
       document.addEventListener('keydown', (e) => {
+        // Don't trigger shortcuts if user is typing in an input field
+        if (this.isInputFocused()) return;
+        
         // Arrow key movement only works with uploaded design
         const hasDesign = this.placementState.hasUploadedDesign && this.placementState.designSelected;
+        
+        // Delete/Backspace to remove design
+        if ((e.key === 'Delete' || e.key === 'Backspace') && hasDesign) {
+          e.preventDefault();
+          console.log(`🗑️ ${e.key} key pressed - removing design`);
+          this.removeDesign();
+          return;
+        }
         
         // Zoom shortcuts work always
         if (e.key === '+' || e.key === '=' || e.key === '-' || (e.key === '0' && e.shiftKey)) {
