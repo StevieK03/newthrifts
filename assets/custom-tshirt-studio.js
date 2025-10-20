@@ -98,39 +98,39 @@ function initializeMockup() {
     // Mockup images mapping - using tshirt-view.png for white, tshirt-black-v2.png for black
     mockupImages: {
       front: {
-        white: "{{ 'tshirt-view.png' | asset_url }}",
-        black: "{{ 'tshirt-black-v2.png' | asset_url }}",
-        red: "{{ 'tshirt-view.png' | asset_url }}",
-        blue: "{{ 'tshirt-view.png' | asset_url }}"
+        white: window.STUDIO_ASSETS.tshirtView,
+        black: window.STUDIO_ASSETS.tshirtBlackV2,
+        red: window.STUDIO_ASSETS.tshirtView,
+        blue: window.STUDIO_ASSETS.tshirtView
       },
       back: {
-        white: "{{ 'tshirt-view.png' | asset_url }}",
-        black: "{{ 'tshirt-black-v2.png' | asset_url }}",
-        red: "{{ 'tshirt-view.png' | asset_url }}",
-        blue: "{{ 'tshirt-view.png' | asset_url }}"
+        white: window.STUDIO_ASSETS.tshirtView,
+        black: window.STUDIO_ASSETS.tshirtBlackV2,
+        red: window.STUDIO_ASSETS.tshirtView,
+        blue: window.STUDIO_ASSETS.tshirtView
       },
       hanging: {
-        white: "{{ 'tshirt-view.png' | asset_url }}",
-        black: "{{ 'tshirt-black-v2.png' | asset_url }}",
-        red: "{{ 'tshirt-view.png' | asset_url }}",
-        blue: "{{ 'tshirt-view.png' | asset_url }}"
+        white: window.STUDIO_ASSETS.tshirtView,
+        black: window.STUDIO_ASSETS.tshirtBlackV2,
+        red: window.STUDIO_ASSETS.tshirtView,
+        blue: window.STUDIO_ASSETS.tshirtView
       },
       person1: {
-        white: "{{ 'Girl-Model.png' | asset_url }}",
-        black: "{{ 'Girl-Model.png' | asset_url }}",
-        red: "{{ 'Girl-Model.png' | asset_url }}",
-        blue: "{{ 'Girl-Model.png' | asset_url }}"
+        white: window.STUDIO_ASSETS.girlModel,
+        black: window.STUDIO_ASSETS.girlModel,
+        red: window.STUDIO_ASSETS.girlModel,
+        blue: window.STUDIO_ASSETS.girlModel
       },
       person2: {
-        white: "{{ 'Women-side.png' | asset_url }}",
-        black: "{{ 'Women-side.png' | asset_url }}",
-        red: "{{ 'Women-side.png' | asset_url }}",
-        blue: "{{ 'Women-side.png' | asset_url }}"
+        white: window.STUDIO_ASSETS.womenSide,
+        black: window.STUDIO_ASSETS.womenSide,
+        red: window.STUDIO_ASSETS.womenSide,
+        blue: window.STUDIO_ASSETS.womenSide
       }
     },
     
     // Current base mockup image - using tshirt-view.png as the default template
-    baseMockup: "{{ 'tshirt-view.png' | asset_url }}",
+    baseMockup: window.STUDIO_ASSETS.tshirtView,
 
     // Current design state
     designState: {
@@ -2079,7 +2079,7 @@ function initializeSizeChart() {
 // LOAD STUDIO EDIT OPERATIONS
 // ========================================
 const studioEditScript = document.createElement('script');
-studioEditScript.src = '{{ "studio-edit.js" | asset_url }}';
+studioEditScript.src = window.STUDIO_ASSETS.studioEdit;
 studioEditScript.onload = function() {
   console.log('✅ Studio Edit Operations loaded');
   initEditModal();

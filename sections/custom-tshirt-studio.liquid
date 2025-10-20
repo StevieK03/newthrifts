@@ -2779,9 +2779,16 @@
 
 <script src="{{ 'background-remover.js' | asset_url }}" defer></script>
 
-<!-- Define section ID globally for external JS -->
+<!-- Define section ID and asset URLs globally for external JS -->
 <script>
 window.STUDIO_SECTION_ID = '{{ section.id }}';
+window.STUDIO_ASSETS = {
+  tshirtView: "{{ 'tshirt-view.png' | asset_url }}",
+  tshirtBlackV2: "{{ 'tshirt-black-v2.png' | asset_url }}",
+  girlModel: "{{ 'Girl-Model.png' | asset_url }}",
+  womenSide: "{{ 'Women-side.png' | asset_url }}",
+  studioEdit: "{{ 'studio-edit.js' | asset_url }}"
+};
 </script>
 
 <!-- Load studio JS without defer to ensure it's available immediately -->
