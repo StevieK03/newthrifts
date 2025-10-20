@@ -1062,6 +1062,7 @@
                         ">
                           🔄 Invert Colors
                         </button>
+                        <button class="nt-btn nt-btn--remove-bg" id="nt-remove-bg-{{ section.id }}" style="padding: 14px 20px; border: 2px solid transparent; background: linear-gradient(135deg, #10b981, #059669); color: white; border-radius: 16px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4); backdrop-filter: blur(10px); display: flex; align-items: center; gap: 8px;">✂️ Remove BG</button>
                       </div>
                       
                       <!-- Primary Action Buttons -->
@@ -2776,6 +2777,8 @@
 <script src="{{ 'text-engine.js' | asset_url }}" defer></script>
 <script src="{{ 'text-engine-init.js' | asset_url }}" defer></script>
 
+<script src="{{ 'background-remover.js' | asset_url }}" defer></script>
+
 <script>
 function closeCustomStudio() {
   // Hide the custom studio section
@@ -3527,7 +3530,9 @@ function initializeMockup() {
         });
       }
 
-      // Placement Guide button
+      const removeBgBtn = document.getElementById(`nt-remove-bg-{{ section.id }}`);
+      if (removeBgBtn) removeBgBtn.addEventListener("click", () => { if (this.removeBackground) this.removeBackground(); else this.showMessage('❌ Loading...', 'error'); });
+
       this.bindPlacementGuide();
 
       // Perfect Fit button
@@ -4604,9 +4609,9 @@ function initializeMockup() {
     }
   };
   
-  // Initialize the mockup and make placementState globally accessible for Edit modal
   mockup.init();
   window.placementState = mockup.placementState;
+  window.mockupInstance = mockup;
   
   console.log('🚀 Custom Studio Mockup initialized! 🎨');
   
