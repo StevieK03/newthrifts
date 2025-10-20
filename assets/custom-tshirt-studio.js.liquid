@@ -59,6 +59,14 @@ window.openCustomDesignStudio = function() {
       initializeMockup();
       console.log('✅ initializeMockup() called');
       
+      // Apply perfect fit positioning for overlay (with slight delay to ensure DOM is ready)
+      setTimeout(() => {
+        if (typeof window.testPerfectFit === 'function') {
+          window.testPerfectFit();
+          console.log('✅ Perfect fit positioning applied');
+        }
+      }, 100);
+      
       // Initialize size chart
       if (typeof initializeSizeChart === 'function') {
         initializeSizeChart();
