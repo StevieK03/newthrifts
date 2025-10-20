@@ -6,18 +6,23 @@
 
 <div class="custom-tshirt-studio" id="custom-tshirt-studio-{{ section.id }}" style="display: none;">
   <style>
-    /* ===== Z-INDEX HIERARCHY (DO NOT MODIFY WITHOUT READING) ===== 
-     * Canvas container: z-index: 1 (base layer)
-     * T-shirt mockup image: z-index: 2 (shows t-shirt)
-     * Design overlay: z-index: 3 (your uploaded design sits on top of shirt)
-     * Nudge controls: z-index: 4 (interactive controls above design)
-     * Zoom bar: z-index: 5 (topmost UI element in canvas)
-     * Text panel: z-index: 9999 (floating sidebar)
-     * Edit modal: z-index: 10000 (fullscreen modal overlay)
+    /* ===== MODERN STACKING APPROACH (NO Z-INDEX HELL!) ===== 
+     * Instead of arbitrary z-index values, we use:
+     * 1. Natural DOM order (elements later in HTML appear on top)
+     * 2. CSS isolation to create stacking contexts
+     * 3. CSS contain for performance and predictability
      * 
-     * ⚠️ WARNING: Changing these values may cause elements to disappear!
-     * The t-shirt must be BELOW the design overlay (z-index 2 < 3)
-     * All UI controls must be ABOVE the design (z-index 4+)
+     * Structure:
+     * - Canvas container (isolation: isolate)
+     *   - T-shirt mockup image (first in DOM = bottom layer)
+     *   - Design overlay (second in DOM = middle layer)
+     *   - UI controls (last in DOM = top layer)
+     * 
+     * Benefits:
+     * ✅ No z-index conflicts
+     * ✅ Predictable stacking
+     * ✅ Easier to maintain
+     * ✅ Better performance
      * ============================================================ */
     
     /* ===== CRITICAL: ENSURE MOCKUP IMAGE IS ALWAYS VISIBLE ===== */
@@ -28,7 +33,6 @@
       height: 100% !important;
       object-fit: contain !important;
       pointer-events: none !important;
-      z-index: 2 !important;
       display: block !important;
       opacity: 1 !important;
       visibility: visible !important;
@@ -37,12 +41,39 @@
       image-rendering: auto;
       -webkit-user-select: none;
       user-select: none;
+      /* No z-index needed - it's first in DOM order */
     }
     
-    /* Ensure canvas container has proper stacking */
+    /* Ensure canvas container creates isolated stacking context */
     .nt-mockup__canvas {
       position: relative !important;
-      isolation: isolate;
+      isolation: isolate; /* Creates new stacking context */
+      contain: layout style; /* Improves performance and predictability */
+    }
+    
+    /* Design overlay - naturally stacks above image due to DOM order */
+    .nt-mockup__overlay {
+      position: absolute !important;
+      /* No z-index needed - it's second in DOM order */
+    }
+    
+    /* UI controls - naturally stack on top due to being last in DOM */
+    .zoom-bar,
+    .canvas-nudge-btn {
+      position: absolute;
+      /* No z-index needed - they're last in DOM order */
+    }
+    
+    /* Modal and panels use isolation instead of high z-index */
+    .edit-modal {
+      position: fixed;
+      inset: 0;
+      isolation: isolate; /* Creates independent stacking context */
+    }
+    
+    .nt-text-panel {
+      position: fixed;
+      isolation: isolate; /* Creates independent stacking context */
     }
     
     .custom-tshirt-studio {
@@ -745,9 +776,9 @@
         transform: scale(0.4); /* Very compact at 40% size */
         transform-origin: bottom right;
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        z-index: 50 !important;
         touch-action: manipulation;
         -webkit-tap-highlight-color: transparent;
+        isolation: isolate; /* Create own stacking context */
       }
       
       /* Magnify on tap/press for easier mobile interaction */
@@ -1341,7 +1372,7 @@
 
             <!-- Enhanced Preview Stage -->
             <div class="nt-mockup__stage" style="width: 100%; display: flex; justify-content: center; align-items: center; margin-top: 30px !important; margin-bottom: 40px !important; padding: 0; box-sizing: border-box;">
-                <div class="nt-mockup__canvas" 
+                <div class="nt-mockup__canvas canvas-gradient-animated" 
                      id="nt-mockup-canvas-{{ section.id }}"
                      style="
                        position: relative;
@@ -1349,22 +1380,26 @@
                        max-width: 90vw;
                        aspect-ratio: 1;
                        margin: 0 auto;
-                       background: rgba(248, 250, 252, 0.5);
+                       background: linear-gradient(135deg, #27e1c1 0%, #667eea 20%, #764ba2 35%, #f093fb 50%, #4facfe 65%, #27e1c1 100%);
+                       background-size: 300% 300%;
+                       animation: canvasGradientShift 15s ease infinite;
                        border-radius: 20px;
-                       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+                       box-shadow: 0 25px 80px rgba(39, 225, 193, 0.3), 0 10px 30px rgba(0,0,0,0.2);
                        padding: 40px;
                        --overlay-top: 29.142857%;
                        --overlay-left: 50.214286%;
                        --overlay-width: 37%;
                        --overlay-height: 42%;
                        --overlay-rotate: 0deg;
-                       overflow: visible;
+                       overflow: hidden;
+                       backdrop-filter: blur(10px);
+                       -webkit-backdrop-filter: blur(10px);
                      ">
                     
-                    <!-- T-shirt Mockup Container -->
-                    <div style="position: relative; width: 100%; aspect-ratio: 1 / 1; cursor: grab; z-index: 1; background: transparent;">
+                    <!-- T-shirt Mockup Container with Isolated Stacking -->
+                    <div style="position: relative; width: 100%; aspect-ratio: 1 / 1; cursor: grab; isolation: isolate; background: transparent;">
                   
-                      <!-- Base Mockup (swapped by JS) -->
+                      <!-- 1. Base Mockup (FIRST = BOTTOM LAYER) -->
                       <img
                         id="nt-base-{{ section.id }}"
                         class="nt-mockup__base"
@@ -1373,7 +1408,7 @@
                         loading="eager"
                         decoding="async"
                         fetchpriority="high"
-                        style="position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; object-fit: contain !important; pointer-events: none !important; z-index: 2 !important; display: block !important; opacity: 1 !important; visibility: visible !important; max-width: 100% !important; max-height: 100% !important;"
+                        style="position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; object-fit: contain !important; pointer-events: none !important; display: block !important; opacity: 1 !important; visibility: visible !important; max-width: 100% !important; max-height: 100% !important;"
                         onerror="console.error('❌ Failed to load t-shirt image:', this.src); this.style.border='2px solid red';"
                         onload="console.log('✅ T-shirt image loaded:', this.src); this.style.opacity='1';"
                       >
@@ -1386,11 +1421,11 @@
                       <img src="{{ 'Women-side.png' | asset_url }}" onload="console.log('✅ Direct asset test - Women-side.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - Women-side.png failed:', this.src);">
                     </div>
                     
-                    <!-- Dynamic Design Overlay - Aligned with print area -->
+                    <!-- 2. Dynamic Design Overlay (SECOND = MIDDLE LAYER) -->
                     <div
                       id="nt-overlay-{{ section.id }}"
                       class="nt-mockup__overlay"
-                      style="position: absolute !important; width: 37% !important; height: 42% !important; left: 50.214286% !important; top: 29.142857% !important; transform: translateX(-50%) rotate(0deg) !important; inset: auto !important; display: flex !important; align-items: center !important; justify-content: center !important; cursor: grab; transition: all 0.1s ease; border: 2px dashed rgba(39, 225, 193, 0.3); border-radius: 8px; background: transparent !important; z-index: 100 !important; pointer-events: auto !important;"
+                      style="position: absolute !important; width: 37% !important; height: 42% !important; left: 50.214286% !important; top: 29.142857% !important; transform: translateX(-50%) rotate(0deg) !important; inset: auto !important; display: flex !important; align-items: center !important; justify-content: center !important; cursor: grab; transition: all 0.1s ease; border: 2px dashed rgba(39, 225, 193, 0.3); border-radius: 8px; background: rgba(39, 225, 193, 0.05);"
                     >
                       <span id="nt-design-text-{{ section.id }}" 
                             style="position: relative; z-index: 2; font-family: 'Bebas Neue', sans-serif; font-size: 32px; font-weight: bold; color: #000000; text-align: center; white-space: nowrap; user-select: none; text-shadow: 1px 1px 2px rgba(255,255,255,0.8); pointer-events: none;">
@@ -1463,7 +1498,7 @@
                     <!-- Close T-shirt Mockup Container -->
                     </div>
                     
-                    <!-- Canvas Nudge Controls -->
+                    <!-- 3. Canvas Nudge Controls (THIRD = TOP LAYER) -->
                     <div id="canvas-nudge-controls-{{ section.id }}" style="
                       position: absolute;
                       bottom: 20px;
@@ -1471,7 +1506,6 @@
                       opacity: 1;
                       pointer-events: auto;
                       transition: opacity 0.3s ease;
-                      z-index: 4;
                     ">
                       <div style="
                         background: rgba(15, 23, 42, 0.95);
@@ -1578,7 +1612,7 @@
                       </div>
                     </div>
                     
-                    <!-- Canvas Zoom Slider - Inside Canvas Container -->
+                    <!-- 4. Canvas Zoom Slider (FOURTH = TOPMOST LAYER) -->
                     <div class="zoom-bar" role="group" aria-label="Zoom controls" style="
                       position: absolute;
                       left: 50%;
@@ -1593,7 +1627,6 @@
                       backdrop-filter: blur(8px);
                       -webkit-backdrop-filter: blur(8px);
                       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(39, 225, 193, 0.2);
-                      z-index: 5;
                       transition: all 0.3s ease;
                     ">
                       <!-- Magnifying Glass Icon -->
@@ -1754,7 +1787,7 @@
                   onfocus="this.style.borderColor='#667eea';"
                   onblur="this.style.borderColor='#e2e8f0';"
                 >
-                </div>
+              </div>
             </div>
             
             <!-- 3-Step Workflow Section - Below Canvas -->
@@ -2083,6 +2116,7 @@
 
   <!-- ========================================
        ADVANCED EDIT MODAL WITH 7 TABS
+       Uses isolation instead of z-index
        ======================================== -->
   <div id="edit-modal-{{ section.id }}" class="edit-modal" style="
     display: none;
@@ -2092,7 +2126,7 @@
     width: 100%;
     height: 100%;
     background: rgba(15, 23, 42, 0.95);
-    z-index: 10000;
+    isolation: isolate;
     overflow-y: auto;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -2737,6 +2771,7 @@
 
   <!-- ========================================
        TEXT DESIGN PANEL
+       Uses isolation instead of z-index
        ======================================== -->
   <div id="text-panel-{{ section.id }}" class="nt-text-panel" style="
     display: none;
@@ -2746,7 +2781,7 @@
     transform: translateY(-50%);
     width: 360px;
     max-height: 85vh;
-    z-index: 9999;
+    isolation: isolate;
   ">
     <div class="nt-text-panel__header">
       <h2 class="nt-text-panel__title">📝 Text Tool</h2>
