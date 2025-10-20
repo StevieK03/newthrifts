@@ -56,23 +56,30 @@ window.openCustomDesignStudio = function() {
     
     // Initialize the mockup and size chart after the studio is visible
     setTimeout(() => {
-      initializeMockup();
-      console.log('✅ initializeMockup() called');
-      
-      // Apply perfect fit positioning for overlay (with slight delay to ensure DOM is ready)
-      setTimeout(() => {
-        if (typeof window.testPerfectFit === 'function') {
-          window.testPerfectFit();
-          console.log('✅ Perfect fit positioning applied');
+      try {
+        initializeMockup();
+        console.log('✅ initializeMockup() called');
+        console.log('✅ Mockup instance available:', window.mockupInstance ? 'YES' : 'NO');
+        
+        // Apply perfect fit positioning after mockup is initialized
+        setTimeout(() => {
+          if (typeof window.testPerfectFit === 'function') {
+            window.testPerfectFit();
+            console.log('✅ Perfect fit positioning applied');
+          } else {
+            console.warn('⚠️ testPerfectFit function not found');
+          }
+        }, 300);
+        
+        // Initialize size chart
+        if (typeof initializeSizeChart === 'function') {
+          initializeSizeChart();
+          console.log('✅ initializeSizeChart() called');
         }
-      }, 100);
-      
-      // Initialize size chart
-      if (typeof initializeSizeChart === 'function') {
-        initializeSizeChart();
-        console.log('✅ initializeSizeChart() called');
+      } catch (error) {
+        console.error('❌ Error initializing mockup:', error);
       }
-    }, 200);
+    }, 300);
   } else {
     console.error('❌ Studio element not found! Looked for ID:', 'custom-tshirt-studio-{{ section.id }}');
     console.log('🔍 Available elements with "studio" in ID:');
