@@ -1062,26 +1062,6 @@
                         ">
                           🔄 Invert Colors
                         </button>
-                        <button class="nt-btn nt-btn--remove-bg" id="nt-remove-bg-{{ section.id }}" style="
-                          padding: 14px 20px; 
-                          border: 2px solid transparent; 
-                          background: linear-gradient(135deg, #10b981, #059669); 
-                          color: white; 
-                          border-radius: 16px; 
-                          font-size: 14px; 
-                          font-weight: 600; 
-                          cursor: pointer; 
-                          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-                          box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
-                          backdrop-filter: blur(10px);
-                          -webkit-backdrop-filter: blur(10px);
-                          display: flex;
-                          align-items: center;
-                          justify-content: center;
-                          gap: 8px;
-                        ">
-                          ✂️ Remove Background
-                        </button>
                       </div>
                       
                       <!-- Primary Action Buttons -->
@@ -3547,15 +3527,6 @@ function initializeMockup() {
         });
       }
 
-      // Remove Background button
-      const removeBgBtn = document.getElementById(`nt-remove-bg-{{ section.id }}`);
-      if (removeBgBtn) {
-        removeBgBtn.addEventListener("click", () => {
-          console.log('✂️ Remove Background button clicked');
-          this.removeBackground();
-        });
-      }
-
       // Placement Guide button
       this.bindPlacementGuide();
 
@@ -3948,50 +3919,6 @@ function initializeMockup() {
           console.log(`🔄 Text color inverted: ${currentColor} → ${invertedColor}`);
           this.showMessage(`🔄 Text color inverted to ${invertedColor}`, 'success');
         }
-      }
-    },
-    
-    removeBackground() {
-      const img = document.querySelector(`#nt-overlay-{{ section.id }} img`);
-      if (!img || !this.placementState.hasUploadedDesign) {
-        this.showMessage('❌ Please upload a design first', 'error');
-        return;
-      }
-      
-      this.showMessage('✂️ Processing...', 'info');
-      try {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = img.naturalWidth || img.width;
-        canvas.height = img.naturalHeight || img.height;
-        ctx.drawImage(img, 0, 0);
-        
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        const d = imageData.data;
-        const bgColor = prompt('Background color? (white/black or #FF0000):', 'white');
-        if (!bgColor) return this.showMessage('❌ Cancelled', 'info');
-        
-        let tr = 255, tg = 255, tb = 255;
-        if (bgColor.toLowerCase() === 'black') tr = tg = tb = 0;
-        else if (bgColor.startsWith('#')) {
-          const h = bgColor.replace('#', '');
-          tr = parseInt(h.substr(0, 2), 16);
-          tg = parseInt(h.substr(2, 2), 16);
-          tb = parseInt(h.substr(4, 2), 16);
-        }
-        
-        const thresh = 40;
-        for (let i = 0; i < d.length; i += 4) {
-          const diff = Math.sqrt(Math.pow(d[i] - tr, 2) + Math.pow(d[i+1] - tg, 2) + Math.pow(d[i+2] - tb, 2));
-          if (diff < thresh) d[i + 3] = 0;
-          else if (diff < thresh * 2) d[i + 3] = Math.min(d[i + 3], ((diff - thresh) / thresh) * 255);
-        }
-        
-        ctx.putImageData(imageData, 0, 0);
-        img.src = canvas.toDataURL('image/png');
-        this.showMessage('✂️ Background removed!', 'success');
-      } catch (e) {
-        this.showMessage('❌ Error removing background', 'error');
       }
     },
     
