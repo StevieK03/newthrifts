@@ -1,0 +1,203 @@
+
+>        TEXT DESIGN PANEL
+         ======================================== -->
+    <div id="text-panel-{{ section.id }}" class="nt-text-panel" style="
+      display: none;
+      position: fixed;
+      top: 50%;
+      right: 20px;
+      transform: translateY(-50%);
+      width: 360px;
+      max-height: 85vh;
+      z-index: 9999;
+    ">
+      <div class="nt-text-panel__header">
+        <h2 class="nt-text-panel__title">≡ƒô¥ Text Tool</h2>
+        <button class="nt-text-panel__close" id="text-panel-close-{{ section.id }}" aria-label="Close text panel">Γ£ò</button>
+      </div>
+  
+      <!-- Add Text Button -->
+      <div class="nt-text-section">
+        <button class="nt-text-add-btn" id="text-add-btn-{{ section.id }}">
+          Γ₧ò Add New Text
+        </button>
+      </div>
+  
+      <!-- Text Layers List -->
+      <div class="nt-text-section">
+        <div class="nt-text-section__title">Layers</div>
+        <div class="nt-text-layers" id="text-layers-{{ section.id }}">
+          <!-- Layers will be dynamically added here -->
+          <div style="text-align: center; padding: 20px; color: #94a3b8; font-size: 14px;">
+            No text objects yet.<br>Click "Add New Text" to start!
+          </div>
+        </div>
+      </div>
+  
+      <!-- Text Content -->
+      <div class="nt-text-section" id="text-content-section-{{ section.id }}" style="display: none;">
+        <div class="nt-text-section__title">Content</div>
+        <div class="nt-text-section__content">
+          <div class="nt-text-control">
+            <label class="nt-text-control__label" for="text-content-{{ section.id }}">Text</label>
+            <textarea 
+              class="nt-text-control__textarea" 
+              id="text-content-{{ section.id }}" 
+              placeholder="Enter your text here..."
+            ></textarea>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Font & Style -->
+      <div class="nt-text-section" id="text-font-section-{{ section.id }}" style="display: none;">
+        <div class="nt-text-section__title">Font & Style</div>
+        <div class="nt-text-section__content">
+          <div class="nt-text-control">
+            <label class="nt-text-control__label" for="text-font-{{ section.id }}">Font Family</label>
+            <select class="nt-text-control__select" id="text-font-{{ section.id }}">
+              <option value="Inter">Inter (Modern & Clean)</option>
+              <option value="Roboto">Roboto (Professional)</option>
+              <option value="Montserrat">Montserrat (Geometric & Bold)</option>
+              <option value="Poppins">Poppins (Friendly & Round)</option>
+              <option value="Oswald">Oswald (Condensed & Strong)</option>
+              <option value="Playfair Display">Playfair Display (Elegant & Classic)</option>
+              <option value="Bebas Neue">Bebas Neue (BOLD HEADLINES)</option>
+              <option value="Pacifico">Pacifico (Casual Script)</option>
+              <option value="Satisfy">Satisfy (Handwritten)</option>
+              <option value="Anton">Anton (IMPACT STYLE)</option>
+              <option value="Permanent Marker">Permanent Marker (Marker Style)</option>
+              <option value="Raleway">Raleway (Thin & Elegant)</option>
+            </select>
+          </div>
+  
+          <div class="nt-text-control">
+            <label class="nt-text-control__label" for="text-size-{{ section.id }}">Size (px)</label>
+            <input 
+              type="number" 
+              class="nt-text-control__input" 
+              id="text-size-{{ section.id }}" 
+              min="12" 
+              max="200" 
+              value="48"
+            >
+          </div>
+  
+          <div class="nt-text-control">
+            <label class="nt-text-control__label">Color</label>
+            <div class="nt-text-color-picker">
+              <input 
+                type="color" 
+                class="nt-text-color-picker__swatch" 
+                id="text-color-{{ section.id }}" 
+                value="#000000"
+              >
+              <input 
+                type="text" 
+                class="nt-text-color-picker__input nt-text-control__input" 
+                id="text-color-hex-{{ section.id }}" 
+                value="#000000"
+                placeholder="#000000"
+              >
+            </div>
+          </div>
+  
+          <div class="nt-text-control">
+            <label class="nt-text-control__label" for="text-tracking-{{ section.id }}">Letter Spacing (px)</label>
+            <input 
+              type="range" 
+              class="nt-text-control__range" 
+              id="text-tracking-{{ section.id }}" 
+              min="-10" 
+              max="50" 
+              value="0"
+              step="0.5"
+            >
+            <output id="text-tracking-output-{{ section.id }}">0px</output>
+          </div>
+  
+          <div class="nt-text-control">
+            <label class="nt-text-control__label" for="text-leading-{{ section.id }}">Line Height</label>
+            <input 
+              type="range" 
+              class="nt-text-control__range" 
+              id="text-leading-{{ section.id }}" 
+              min="0.8" 
+              max="3" 
+              value="1.2"
+              step="0.1"
+            >
+            <output id="text-leading-output-{{ section.id }}">1.2</output>
+          </div>
+  
+          <div class="nt-text-control">
+            <label class="nt-text-control__label">Text Alignment</label>
+            <div class="nt-text-btn-group">
+              <button class="nt-text-btn" data-align="left">Left</button>
+              <button class="nt-text-btn active" data-align="center">Center</button>
+              <button class="nt-text-btn" data-align="right">Right</button>
+            </div>
+          </div>
+  
+          <div class="nt-text-control">
+            <label class="nt-text-control__label">Text Case</label>
+            <div class="nt-text-btn-group">
+              <button class="nt-text-btn active" data-case="normal">Normal</button>
+              <button class="nt-text-btn" data-case="upper">UPPER</button>
+              <button class="nt-text-btn" data-case="lower">lower</button>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Effects -->
+      <div class="nt-text-section" id="text-effects-section-{{ section.id }}" style="display: none;">
+        <div class="nt-text-section__title">Effects</div>
+        <div class="nt-text-section__content">
+          <div class="nt-text-toggle">
+            <label class="nt-text-toggle__label">Outline/Stroke</label>
+            <label class="nt-text-toggle__switch">
+              <input type="checkbox" class="nt-text-toggle__checkbox" id="text-outline-toggle-{{ section.id }}">
+              <span class="nt-text-toggle__slider"></span>
+            </label>
+          </div>
+          <div id="text-outline-controls-{{ section.id }}" style="display: none; padding-left: 16px;">
+            <div class="nt-text-control">
+              <label class="nt-text-control__label">Outline Color</label>
+              <input type="color" class="nt-text-color-picker__swatch" id="text-outline-color-{{ section.id }}" value="#ffffff">
+            </div>
+            <div class="nt-text-control">
+              <label class="nt-text-control__label">Outline Width (px)</label>
+              <input type="range" class="nt-text-control__range" id="text-outline-width-{{ section.id }}" min="1" max="20" value="3" step="0.5">
+              <output id="text-outline-width-output-{{ section.id }}">3px</output>
+            </div>
+          </div>
+  
+          <div class="nt-text-toggle">
+            <label class="nt-text-toggle__label">Shadow</label>
+            <label class="nt-text-toggle__switch">
+              <input type="checkbox" class="nt-text-toggle__checkbox" id="text-shadow-toggle-{{ section.id }}">
+              <span class="nt-text-toggle__slider"></span>
+            </label>
+          </div>
+          <div id="text-shadow-controls-{{ section.id }}" style="display: none; padding-left: 16px;">
+            <div class="nt-text-control">
+              <label class="nt-text-control__label">Shadow X Offset (px)</label>
+              <input type="range" class="nt-text-control__range" id="text-shadow-x-{{ section.id }}" min="-20" max="20" value="2" step="1">
+              <output id="text-shadow-x-output-{{ section.id }}">2px</output>
+            </div>
+            <div class="nt-text-control">
+              <label class="nt-text-control__label">Shadow Y Offset (px)</label>
+              <input type="range" class="nt-text-control__range" id="text-shadow-y-{{ section.id }}" min="-20" max="20" value="2" step="1">
+              <output id="text-shadow-y-output-{{ section.id }}">2px</output>
+            </div>
+            <div class="nt-text-control">
+              <label class="nt-text-control__label">Shadow Blur (px)</label>
+              <input type="range" class="nt-text-control__range" id="text-shadow-blur-{{ section.id }}" min="0" max="20" value="4" step="1">
+              <output id="text-shadow-blur-output-{{ section.id }}">4px</output>
+            </div>
+          </div>
+  
+          <div class="nt-text-toggle">
+            <label class="nt-text-toggle__label">Curved Text</label>
+
