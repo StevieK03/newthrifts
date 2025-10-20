@@ -1,7 +1,7 @@
 
 function closeCustomStudio() {
   // Hide the custom studio section
-  const studio = document.getElementById('custom-tshirt-studio-" + window.STUDIO_SECTION_ID + "');
+  const studio = document.getElementById('custom-tshirt-studio-' + window.STUDIO_SECTION_ID);
   if (studio) {
     studio.style.display = 'none';
   }
@@ -28,8 +28,8 @@ window.openCustomDesignStudio = function() {
   }
   
   // Show the custom studio
-  const studio = document.getElementById('custom-tshirt-studio-" + window.STUDIO_SECTION_ID + "');
-  console.log('🔍 Looking for studio element with ID:', 'custom-tshirt-studio-" + window.STUDIO_SECTION_ID + "');
+  const studio = document.getElementById('custom-tshirt-studio-' + window.STUDIO_SECTION_ID);
+  console.log('🔍 Looking for studio element with ID:', 'custom-tshirt-studio-' + window.STUDIO_SECTION_ID);
   
   if (studio) {
     console.log('✅ Studio element found:', studio);
@@ -40,7 +40,7 @@ window.openCustomDesignStudio = function() {
     console.log('📊 Studio new display:', window.getComputedStyle(studio).display);
     
     // Check if canvas is visible
-    const canvas = document.getElementById('nt-mockup-canvas-" + window.STUDIO_SECTION_ID + "');
+    const canvas = document.getElementById('nt-mockup-canvas-' + window.STUDIO_SECTION_ID);
     if (canvas) {
       console.log('🎨 Canvas found:', canvas);
       console.log('📐 Canvas dimensions:', canvas.offsetWidth, 'x', canvas.offsetHeight);
@@ -81,7 +81,7 @@ window.openCustomDesignStudio = function() {
       }
     }, 300);
   } else {
-    console.error('❌ Studio element not found! Looked for ID:', 'custom-tshirt-studio-" + window.STUDIO_SECTION_ID + "');
+    console.error('❌ Studio element not found! Looked for ID:', 'custom-tshirt-studio-' + window.STUDIO_SECTION_ID);
     console.log('🔍 Available elements with "studio" in ID:');
     document.querySelectorAll('[id*="studio"]').forEach(el => {
       console.log('  -', el.id, el);
@@ -194,7 +194,7 @@ function initializeMockup() {
     },
 
     updateBase() {
-      const baseImg = document.getElementById('nt-base-" + window.STUDIO_SECTION_ID + "');
+      const baseImg = document.getElementById('nt-base-' + window.STUDIO_SECTION_ID);
       
       if (!baseImg) {
         console.error('❌ Base image element not found');
@@ -230,7 +230,7 @@ function initializeMockup() {
     },
 
     updateDesignPosition() {
-      const overlay = document.getElementById('nt-overlay-" + window.STUDIO_SECTION_ID + "');
+      const overlay = document.getElementById('nt-overlay-' + window.STUDIO_SECTION_ID);
       if (!overlay) return;
 
       // Apply the placement state to the overlay
@@ -243,7 +243,7 @@ function initializeMockup() {
 
     selectDesign() {
       this.placementState.designSelected = true;
-      const overlay = document.getElementById('nt-overlay-" + window.STUDIO_SECTION_ID + "');
+      const overlay = document.getElementById('nt-overlay-' + window.STUDIO_SECTION_ID);
       if (overlay) {
         overlay.style.borderColor = '#3b82f6';
         overlay.style.boxShadow = '0 0 0 2px rgba(59, 130, 246, 0.3)';
@@ -258,7 +258,7 @@ function initializeMockup() {
 
     deselectDesign() {
       this.placementState.designSelected = false;
-      const overlay = document.getElementById('nt-overlay-" + window.STUDIO_SECTION_ID + "');
+      const overlay = document.getElementById('nt-overlay-' + window.STUDIO_SECTION_ID);
       if (overlay) {
         overlay.style.borderColor = 'rgba(39, 225, 193, 0.3)';
         overlay.style.boxShadow = 'inset 0 4px 12px rgba(0, 0, 0, 0.1)';
@@ -294,8 +294,8 @@ function initializeMockup() {
         const imageUrl = e.target.result;
         
         // Get the overlay and replace text with image
-        const overlay = document.getElementById('nt-overlay-" + window.STUDIO_SECTION_ID + "');
-        const textElement = document.getElementById('nt-design-text-" + window.STUDIO_SECTION_ID + "');
+        const overlay = document.getElementById('nt-overlay-' + window.STUDIO_SECTION_ID);
+        const textElement = document.getElementById('nt-design-text-' + window.STUDIO_SECTION_ID);
         
         if (overlay && textElement) {
           // Hide the text
@@ -336,7 +336,7 @@ function initializeMockup() {
       this.placementState.lastX = e.clientX;
       this.placementState.lastY = e.clientY;
       
-      const overlay = document.getElementById('nt-overlay-" + window.STUDIO_SECTION_ID + "');
+      const overlay = document.getElementById('nt-overlay-' + window.STUDIO_SECTION_ID);
       if (overlay) {
         overlay.style.cursor = 'grabbing';
       }
@@ -351,7 +351,7 @@ function initializeMockup() {
       const deltaX = e.clientX - this.placementState.lastX;
       const deltaY = e.clientY - this.placementState.lastY;
       
-      const canvas = document.getElementById('nt-mockup-canvas-" + window.STUDIO_SECTION_ID + "');
+      const canvas = document.getElementById('nt-mockup-canvas-' + window.STUDIO_SECTION_ID);
       if (canvas) {
         const rect = canvas.getBoundingClientRect();
         const deltaXPercent = (deltaX / rect.width) * 100;
@@ -374,7 +374,7 @@ function initializeMockup() {
     stopDrag() {
       this.placementState.dragging = false;
       
-      const overlay = document.getElementById('nt-overlay-" + window.STUDIO_SECTION_ID + "');
+      const overlay = document.getElementById('nt-overlay-' + window.STUDIO_SECTION_ID);
       if (overlay) {
         overlay.style.cursor = 'grab';
       }
@@ -476,7 +476,7 @@ function initializeMockup() {
 
     // Add mouse wheel resizing for easier control
     bindMouseWheelResize() {
-      const overlay = document.getElementById('nt-overlay-" + window.STUDIO_SECTION_ID + "');
+      const overlay = document.getElementById('nt-overlay-' + window.STUDIO_SECTION_ID);
       if (!overlay) return;
 
       let isOverOverlay = false;
@@ -609,8 +609,8 @@ function initializeMockup() {
       this.placementState.zoomLevel = zoomLevel;
       
       // Apply zoom to the entire canvas container
-      const canvas = document.getElementById('nt-mockup-canvas-" + window.STUDIO_SECTION_ID + "');
-      const mockupContainer = document.getElementById('nt-mockup-" + window.STUDIO_SECTION_ID + "');
+      const canvas = document.getElementById('nt-mockup-canvas-' + window.STUDIO_SECTION_ID);
+      const mockupContainer = document.getElementById('nt-mockup-' + window.STUDIO_SECTION_ID);
       
       if (canvas && mockupContainer) {
         // Apply CSS transform to zoom the entire canvas with smooth transition
@@ -636,16 +636,16 @@ function initializeMockup() {
 
     updateZoomIndicator(zoomLevel) {
       // Remove existing zoom indicator
-      const existingIndicator = document.getElementById('nt-zoom-indicator-" + window.STUDIO_SECTION_ID + "');
+      const existingIndicator = document.getElementById('nt-zoom-indicator-' + window.STUDIO_SECTION_ID);
       if (existingIndicator) {
         existingIndicator.remove();
       }
       
       // Add zoom indicator overlay
-      const canvas = document.getElementById('nt-mockup-canvas-" + window.STUDIO_SECTION_ID + "');
+      const canvas = document.getElementById('nt-mockup-canvas-' + window.STUDIO_SECTION_ID);
       if (canvas && zoomLevel !== 1.0) {
         const indicator = document.createElement('div');
-        indicator.id = 'nt-zoom-indicator-" + window.STUDIO_SECTION_ID + "';
+        indicator.id = 'nt-zoom-indicator-' + window.STUDIO_SECTION_ID;
         indicator.style.cssText = `
           position: absolute;
           top: 10px;
@@ -744,8 +744,8 @@ function initializeMockup() {
 
     // Bind drag functionality to overlay
     bindDragResize() {
-      const overlay = document.getElementById('nt-overlay-" + window.STUDIO_SECTION_ID + "');
-      const canvas = document.getElementById('nt-mockup-canvas-" + window.STUDIO_SECTION_ID + "');
+      const overlay = document.getElementById('nt-overlay-' + window.STUDIO_SECTION_ID);
+      const canvas = document.getElementById('nt-mockup-canvas-' + window.STUDIO_SECTION_ID);
       
       if (!overlay || !canvas) return;
       
@@ -987,7 +987,7 @@ function initializeMockup() {
         console.log('✅ Design applied to mockup');
         
         // Show canvas nudge controls
-        const nudgeControls = document.getElementById('canvas-nudge-controls-" + window.STUDIO_SECTION_ID + "');
+        const nudgeControls = document.getElementById('canvas-nudge-controls-' + window.STUDIO_SECTION_ID);
         if (nudgeControls) {
           nudgeControls.style.opacity = '1';
           nudgeControls.style.pointerEvents = 'auto';
@@ -1106,9 +1106,9 @@ function initializeMockup() {
             overlay.style.boxShadow = '0 0 0 2px rgba(239, 68, 68, 0.2), inset 0 0 0 2px rgba(239, 68, 68, 0.1)';
             
             // Add crosshairs using pseudo-elements via a style element
-            if (!document.getElementById('placement-guide-style-" + window.STUDIO_SECTION_ID + "')) {
+            if (!document.getElementById('placement-guide-style-' + window.STUDIO_SECTION_ID)) {
               const styleEl = document.createElement('style');
-              styleEl.id = 'placement-guide-style-" + window.STUDIO_SECTION_ID + "';
+              styleEl.id = 'placement-guide-style-' + window.STUDIO_SECTION_ID;
               styleEl.textContent = `
                 #nt-overlay-" + window.STUDIO_SECTION_ID + "::before,
                 #nt-overlay-" + window.STUDIO_SECTION_ID + "::after {
@@ -1144,7 +1144,7 @@ function initializeMockup() {
             overlay.style.boxShadow = 'inset 0 4px 12px rgba(0, 0, 0, 0.1)';
             
             // Remove crosshairs style
-            const styleEl = document.getElementById('placement-guide-style-" + window.STUDIO_SECTION_ID + "');
+            const styleEl = document.getElementById('placement-guide-style-' + window.STUDIO_SECTION_ID);
             if (styleEl) {
               styleEl.remove();
             }
@@ -1157,7 +1157,7 @@ function initializeMockup() {
     },
     
     removeDesign() {
-      const overlay = document.getElementById('nt-overlay-" + window.STUDIO_SECTION_ID + "');
+      const overlay = document.getElementById('nt-overlay-' + window.STUDIO_SECTION_ID);
       if (overlay) {
         overlay.innerHTML = '';
         this.placementState.hasUploadedDesign = false;
@@ -1240,7 +1240,7 @@ function initializeMockup() {
           
           this.designState.textColor = invertedColor;
           
-          const textElement = document.getElementById('nt-design-text-" + window.STUDIO_SECTION_ID + "');
+          const textElement = document.getElementById('nt-design-text-' + window.STUDIO_SECTION_ID);
           if (textElement) {
             textElement.style.color = invertedColor;
           }
@@ -1274,7 +1274,7 @@ function initializeMockup() {
       this.updateDesignPosition();
 
       // Add animation effect
-      const overlay = document.getElementById('nt-overlay-" + window.STUDIO_SECTION_ID + "');
+      const overlay = document.getElementById('nt-overlay-' + window.STUDIO_SECTION_ID);
       if (overlay) {
         overlay.style.transition = 'transform 0.3s ease';
         overlay.style.transform = `translateX(-50%) rotate(${perfectDimensions.rotateDeg}deg) scale(1.05)`;
@@ -1941,7 +1941,7 @@ function initializeMockup() {
   
   // Initialize Text Engine (external function)
   if (typeof window.initializeTextEngine === 'function') {
-    window.initializeTextEngine('" + window.STUDIO_SECTION_ID + "');
+    window.initializeTextEngine('' + window.STUDIO_SECTION_ID);
   }
 }
 
@@ -1956,15 +1956,15 @@ function initializeMockup() {
     console.log('🎯 Testing Perfect Fit with exact dimensions...');
     
     // Find the mockup section
-    const section = document.getElementById('nt-mockup-" + window.STUDIO_SECTION_ID + "');
+    const section = document.getElementById('nt-mockup-' + window.STUDIO_SECTION_ID);
     if (!section) {
       console.error('❌ Mockup section not found!');
       return;
     }
     
     // Get the overlay and canvas
-    const overlay = document.getElementById('nt-overlay-" + window.STUDIO_SECTION_ID + "');
-    const canvas = document.getElementById('nt-mockup-canvas-" + window.STUDIO_SECTION_ID + "');
+    const overlay = document.getElementById('nt-overlay-' + window.STUDIO_SECTION_ID);
+    const canvas = document.getElementById('nt-mockup-canvas-' + window.STUDIO_SECTION_ID);
     
     if (!overlay || !canvas) {
       console.error('❌ Overlay or canvas not found!');
@@ -2044,9 +2044,9 @@ function initializeMockup() {
 // Size Chart Toggle Functionality - Initialize when studio opens
 function initializeSizeChart() {
   console.log('📏 Initializing Size Chart...');
-  const sizeChartToggle = document.getElementById('size-chart-toggle-" + window.STUDIO_SECTION_ID + "');
-  const sizeChartContent = document.getElementById('size-chart-content-" + window.STUDIO_SECTION_ID + "');
-  const sizeChartIcon = document.getElementById('size-chart-icon-" + window.STUDIO_SECTION_ID + "');
+  const sizeChartToggle = document.getElementById('size-chart-toggle-' + window.STUDIO_SECTION_ID);
+  const sizeChartContent = document.getElementById('size-chart-content-' + window.STUDIO_SECTION_ID);
+  const sizeChartIcon = document.getElementById('size-chart-icon-' + window.STUDIO_SECTION_ID);
   
   if (sizeChartToggle && sizeChartContent && sizeChartIcon) {
     console.log('✅ Size Chart elements found, binding events...');
@@ -2092,7 +2092,7 @@ document.head.appendChild(studioEditScript);
 // ========================================
 function initCanvasNudgeControls() {
   const nudgeButtons = document.querySelectorAll('.canvas-nudge-btn');
-  const nudgeContainer = document.querySelector('#canvas-nudge-controls-" + window.STUDIO_SECTION_ID + "');
+  const nudgeContainer = document.querySelector('#canvas-nudge-controls-' + window.STUDIO_SECTION_ID);
   
   // Mobile magnify-on-tap behavior
   if (nudgeContainer && window.innerWidth <= 768) {
@@ -2613,9 +2613,9 @@ console.log('  • debugDesignPosition() - Check design overlay position');
 // EDIT MODAL FUNCTIONALITY
 // ========================================
 function initEditModal() {
-  const modal = document.getElementById('edit-modal-" + window.STUDIO_SECTION_ID + "');
-  const closeBtn = document.getElementById('edit-modal-close-" + window.STUDIO_SECTION_ID + "');
-  const doneBtn = document.getElementById('edit-done-btn-" + window.STUDIO_SECTION_ID + "');
+  const modal = document.getElementById('edit-modal-' + window.STUDIO_SECTION_ID);
+  const closeBtn = document.getElementById('edit-modal-close-' + window.STUDIO_SECTION_ID);
+  const doneBtn = document.getElementById('edit-done-btn-' + window.STUDIO_SECTION_ID);
   
   // Tab switching
   const tabs = document.querySelectorAll('.edit-tab');
@@ -2666,10 +2666,10 @@ function initEditModal() {
     const obj = studio.currentDesignObj;
     if (obj) {
       const scaleValue = Math.round((obj.scaleX || 1) * 100);
-      document.getElementById('scale-input-" + window.STUDIO_SECTION_ID + "').value = scaleValue;
-      document.getElementById('scale-slider-" + window.STUDIO_SECTION_ID + "').value = scaleValue;
-      document.getElementById('scale-output-" + window.STUDIO_SECTION_ID + "').textContent = scaleValue + '%';
-      document.getElementById('rotation-input-" + window.STUDIO_SECTION_ID + "').value = Math.round(obj.angle || 0);
+      document.getElementById('scale-input-' + window.STUDIO_SECTION_ID).value = scaleValue;
+      document.getElementById('scale-slider-' + window.STUDIO_SECTION_ID).value = scaleValue;
+      document.getElementById('scale-output-' + window.STUDIO_SECTION_ID).textContent = scaleValue + '%';
+      document.getElementById('rotation-input-' + window.STUDIO_SECTION_ID).value = Math.round(obj.angle || 0);
     }
     
     // Populate the live preview with the canvas
@@ -2678,7 +2678,7 @@ function initEditModal() {
   
   // Function to populate/update the preview
   function populatePreview() {
-    const previewContainer = document.getElementById('edit-preview-" + window.STUDIO_SECTION_ID + "');
+    const previewContainer = document.getElementById('edit-preview-' + window.STUDIO_SECTION_ID);
     if (!previewContainer) {
       console.warn('⚠️ Preview container not found');
       return;
@@ -2689,7 +2689,7 @@ function initEditModal() {
     // Try multiple methods to find the canvas/design
     
     // Method 1: Find the main canvas container
-    let canvasContainer = document.getElementById('nt-mockup-canvas-" + window.STUDIO_SECTION_ID + "');
+    let canvasContainer = document.getElementById('nt-mockup-canvas-' + window.STUDIO_SECTION_ID);
     
     // Method 2: Try finding by class
     if (!canvasContainer) {
@@ -2783,7 +2783,7 @@ function initEditModal() {
     
     // Fallback 1: Show just the uploaded image from overlay
     console.log('🔍 Canvas not found, trying overlay image...');
-    const overlayImg = document.querySelector('#nt-overlay-" + window.STUDIO_SECTION_ID + " img');
+    const overlayImg = document.querySelector('#nt-overlay-' + window.STUDIO_SECTION_ID + ' img');
     
     if (overlayImg) {
       console.log('✅ Found overlay image');
@@ -2797,7 +2797,7 @@ function initEditModal() {
       `;
       
       // Clone the t-shirt base if available
-      const tshirtBase = document.querySelector('#nt-base-" + window.STUDIO_SECTION_ID + " img');
+      const tshirtBase = document.querySelector('#nt-base-' + window.STUDIO_SECTION_ID + ' img');
       if (tshirtBase) {
         const clonedBase = tshirtBase.cloneNode(true);
         clonedBase.style.cssText = `
@@ -2845,13 +2845,13 @@ function initEditModal() {
   }
   
   // Find Edit Design button - ID is nt-edit-" + window.STUDIO_SECTION_ID + "
-  const actualEditBtn = document.getElementById('nt-edit-" + window.STUDIO_SECTION_ID + "');
+  const actualEditBtn = document.getElementById('nt-edit-' + window.STUDIO_SECTION_ID);
   
   if (actualEditBtn) {
     actualEditBtn.addEventListener('click', openEditModal);
-    console.log('✅ Edit Design button (nt-edit-" + window.STUDIO_SECTION_ID + ") wired to modal');
+    console.log('✅ Edit Design button (nt-edit-' + window.STUDIO_SECTION_ID + ') wired to modal');
   } else {
-    console.warn('⚠️ Could not find Edit Design button with ID: nt-edit-" + window.STUDIO_SECTION_ID + "');
+    console.warn('⚠️ Could not find Edit Design button with ID: nt-edit-' + window.STUDIO_SECTION_ID);
   }
   
   closeBtn.addEventListener('click', closeEditModal);
@@ -2865,9 +2865,9 @@ function initEditModal() {
   // ========================================
   // TRANSFORM TAB - WITH SYNCED SCALE SLIDER
   // ========================================
-  const scaleInput = document.getElementById('scale-input-" + window.STUDIO_SECTION_ID + "');
-  const scaleSlider = document.getElementById('scale-slider-" + window.STUDIO_SECTION_ID + "');
-  const scaleOutput = document.getElementById('scale-output-" + window.STUDIO_SECTION_ID + "');
+  const scaleInput = document.getElementById('scale-input-' + window.STUDIO_SECTION_ID);
+  const scaleSlider = document.getElementById('scale-slider-' + window.STUDIO_SECTION_ID);
+  const scaleOutput = document.getElementById('scale-output-' + window.STUDIO_SECTION_ID);
   
   // Sync scale input → slider & output
   scaleInput.addEventListener('input', (e) => {
@@ -2892,8 +2892,8 @@ function initEditModal() {
   // ========================================
   let previewZoomLevel = 1.0;
   
-  const previewZoomRange = document.getElementById('preview-zoom-range-" + window.STUDIO_SECTION_ID + "');
-  const previewZoomLabel = document.getElementById('preview-zoom-label-" + window.STUDIO_SECTION_ID + "');
+  const previewZoomRange = document.getElementById('preview-zoom-range-' + window.STUDIO_SECTION_ID);
+  const previewZoomLabel = document.getElementById('preview-zoom-label-' + window.STUDIO_SECTION_ID);
   
   if (previewZoomRange && previewZoomLabel) {
     previewZoomRange.addEventListener('input', (e) => {
@@ -2902,7 +2902,7 @@ function initEditModal() {
       previewZoomLabel.textContent = `${percent}%`;
       
       // Apply zoom to the preview container's content
-      const previewContainer = document.getElementById('edit-preview-" + window.STUDIO_SECTION_ID + "');
+      const previewContainer = document.getElementById('edit-preview-' + window.STUDIO_SECTION_ID);
       const previewClone = previewContainer?.querySelector('#preview-clone');
       
       if (previewClone) {
@@ -2916,36 +2916,36 @@ function initEditModal() {
     console.log('✅ Preview zoom controls initialized');
   }
   
-  document.getElementById('rotation-input-" + window.STUDIO_SECTION_ID + "').addEventListener('input', (e) => {
+  document.getElementById('rotation-input-' + window.STUDIO_SECTION_ID).addEventListener('input', (e) => {
     studio.editOps?.rotate(parseFloat(e.target.value));
     setTimeout(populatePreview, 100); // Update preview after transform
   });
   
-  document.getElementById('flip-h-btn-" + window.STUDIO_SECTION_ID + "').addEventListener('click', () => {
+  document.getElementById('flip-h-btn-' + window.STUDIO_SECTION_ID).addEventListener('click', () => {
     studio.editOps?.flipX();
     setTimeout(populatePreview, 100); // Update preview after transform
   });
   
-  document.getElementById('flip-v-btn-" + window.STUDIO_SECTION_ID + "').addEventListener('click', () => {
+  document.getElementById('flip-v-btn-' + window.STUDIO_SECTION_ID).addEventListener('click', () => {
     studio.editOps?.flipY();
     setTimeout(populatePreview, 100); // Update preview after transform
   });
   
   // Nudge controls with 0.25 step (same as main canvas)
   const NUDGE_STEP = 0.25;
-  document.getElementById('nudge-up-" + window.STUDIO_SECTION_ID + "').addEventListener('click', () => {
+  document.getElementById('nudge-up-' + window.STUDIO_SECTION_ID).addEventListener('click', () => {
     studio.editOps?.nudge(0, -1, NUDGE_STEP);
     setTimeout(populatePreview, 100);
   });
-  document.getElementById('nudge-down-" + window.STUDIO_SECTION_ID + "').addEventListener('click', () => {
+  document.getElementById('nudge-down-' + window.STUDIO_SECTION_ID).addEventListener('click', () => {
     studio.editOps?.nudge(0, 1, NUDGE_STEP);
     setTimeout(populatePreview, 100);
   });
-  document.getElementById('nudge-left-" + window.STUDIO_SECTION_ID + "').addEventListener('click', () => {
+  document.getElementById('nudge-left-' + window.STUDIO_SECTION_ID).addEventListener('click', () => {
     studio.editOps?.nudge(-1, 0, NUDGE_STEP);
     setTimeout(populatePreview, 100);
   });
-  document.getElementById('nudge-right-" + window.STUDIO_SECTION_ID + "').addEventListener('click', () => {
+  document.getElementById('nudge-right-' + window.STUDIO_SECTION_ID).addEventListener('click', () => {
     studio.editOps?.nudge(1, 0, NUDGE_STEP);
     setTimeout(populatePreview, 100);
   });
@@ -2961,12 +2961,12 @@ function initEditModal() {
     }
   });
   
-  document.getElementById('center-btn-" + window.STUDIO_SECTION_ID + "').addEventListener('click', () => {
+  document.getElementById('center-btn-' + window.STUDIO_SECTION_ID).addEventListener('click', () => {
     studio.editOps?.center();
     setTimeout(populatePreview, 100);
   });
   
-  document.getElementById('autofit-btn-" + window.STUDIO_SECTION_ID + "').addEventListener('click', () => {
+  document.getElementById('autofit-btn-' + window.STUDIO_SECTION_ID).addEventListener('click', () => {
     studio.editOps?.autoFit();
     setTimeout(populatePreview, 100);
   });
@@ -2974,9 +2974,9 @@ function initEditModal() {
   // ========================================
   // CROP TAB
   // ========================================
-  const cropInitBtn = document.getElementById('crop-init-btn-" + window.STUDIO_SECTION_ID + "');
-  const cropApplyBtn = document.getElementById('crop-apply-btn-" + window.STUDIO_SECTION_ID + "');
-  const cropCancelBtn = document.getElementById('crop-cancel-btn-" + window.STUDIO_SECTION_ID + "');
+  const cropInitBtn = document.getElementById('crop-init-btn-' + window.STUDIO_SECTION_ID);
+  const cropApplyBtn = document.getElementById('crop-apply-btn-' + window.STUDIO_SECTION_ID);
+  const cropCancelBtn = document.getElementById('crop-cancel-btn-' + window.STUDIO_SECTION_ID);
   
   cropInitBtn.addEventListener('click', () => {
     const success = studio.editOps?.initCrop();
@@ -3013,28 +3013,28 @@ function initEditModal() {
   // ========================================
   // BACKGROUND TAB
   // ========================================
-  const bgToleranceSlider = document.getElementById('bg-tolerance-" + window.STUDIO_SECTION_ID + "');
-  const toleranceValue = document.getElementById('tolerance-value-" + window.STUDIO_SECTION_ID + "');
+  const bgToleranceSlider = document.getElementById('bg-tolerance-' + window.STUDIO_SECTION_ID);
+  const toleranceValue = document.getElementById('tolerance-value-' + window.STUDIO_SECTION_ID);
   
   bgToleranceSlider.addEventListener('input', (e) => {
     toleranceValue.textContent = e.target.value;
   });
   
-  document.getElementById('remove-bg-btn-" + window.STUDIO_SECTION_ID + "').addEventListener('click', () => {
-    const color = document.getElementById('bg-color-" + window.STUDIO_SECTION_ID + "').value;
+  document.getElementById('remove-bg-btn-' + window.STUDIO_SECTION_ID).addEventListener('click', () => {
+    const color = document.getElementById('bg-color-' + window.STUDIO_SECTION_ID).value;
     const tolerance = parseInt(bgToleranceSlider.value);
     studio.editOps?.removeBackground(color, tolerance);
   });
   
-  document.getElementById('revert-bg-btn-" + window.STUDIO_SECTION_ID + "').addEventListener('click', () => {
+  document.getElementById('revert-bg-btn-' + window.STUDIO_SECTION_ID).addEventListener('click', () => {
     studio.editOps?.revertBackground();
   });
   
   // ========================================
   // ADJUST TAB
   // ========================================
-  const opacitySlider = document.getElementById('opacity-slider-" + window.STUDIO_SECTION_ID + "');
-  const opacityValue = document.getElementById('opacity-value-" + window.STUDIO_SECTION_ID + "');
+  const opacitySlider = document.getElementById('opacity-slider-' + window.STUDIO_SECTION_ID);
+  const opacityValue = document.getElementById('opacity-value-' + window.STUDIO_SECTION_ID);
   
   opacitySlider.addEventListener('input', (e) => {
     const val = e.target.value;
@@ -3042,8 +3042,8 @@ function initEditModal() {
     studio.editOps?.setOpacity(val / 100);
   });
   
-  const brightnessSlider = document.getElementById('brightness-slider-" + window.STUDIO_SECTION_ID + "');
-  const brightnessValue = document.getElementById('brightness-value-" + window.STUDIO_SECTION_ID + "');
+  const brightnessSlider = document.getElementById('brightness-slider-' + window.STUDIO_SECTION_ID);
+  const brightnessValue = document.getElementById('brightness-value-' + window.STUDIO_SECTION_ID);
   
   brightnessSlider.addEventListener('input', (e) => {
     const val = e.target.value;
@@ -3051,8 +3051,8 @@ function initEditModal() {
     studio.editOps?.setBrightness(parseFloat(val));
   });
   
-  const contrastSlider = document.getElementById('contrast-slider-" + window.STUDIO_SECTION_ID + "');
-  const contrastValue = document.getElementById('contrast-value-" + window.STUDIO_SECTION_ID + "');
+  const contrastSlider = document.getElementById('contrast-slider-' + window.STUDIO_SECTION_ID);
+  const contrastValue = document.getElementById('contrast-value-' + window.STUDIO_SECTION_ID);
   
   contrastSlider.addEventListener('input', (e) => {
     const val = e.target.value;
@@ -3060,13 +3060,13 @@ function initEditModal() {
     studio.editOps?.setContrast(parseFloat(val));
   });
   
-  const grayscaleCheck = document.getElementById('grayscale-check-" + window.STUDIO_SECTION_ID + "');
+  const grayscaleCheck = document.getElementById('grayscale-check-' + window.STUDIO_SECTION_ID);
   grayscaleCheck.addEventListener('change', (e) => {
     studio.editOps?.setGrayscale(e.target.checked);
   });
   
-  const outlineSlider = document.getElementById('outline-slider-" + window.STUDIO_SECTION_ID + "');
-  const outlineValue = document.getElementById('outline-value-" + window.STUDIO_SECTION_ID + "');
+  const outlineSlider = document.getElementById('outline-slider-' + window.STUDIO_SECTION_ID);
+  const outlineValue = document.getElementById('outline-value-' + window.STUDIO_SECTION_ID);
   
   outlineSlider.addEventListener('input', (e) => {
     const val = e.target.value;
@@ -3077,8 +3077,8 @@ function initEditModal() {
   // ========================================
   // REPLACE TAB
   // ========================================
-  const replaceDropzone = document.getElementById('replace-dropzone-" + window.STUDIO_SECTION_ID + "');
-  const replaceInput = document.getElementById('replace-input-" + window.STUDIO_SECTION_ID + "');
+  const replaceDropzone = document.getElementById('replace-dropzone-' + window.STUDIO_SECTION_ID);
+  const replaceInput = document.getElementById('replace-input-' + window.STUDIO_SECTION_ID);
   
   replaceDropzone.addEventListener('click', () => {
     replaceInput.click();
@@ -3104,9 +3104,9 @@ function initEditModal() {
     const info = studio.editOps?.qualityInfo();
     if (!info || !info.dpi) return;
     
-    const dpiNumber = document.getElementById('dpi-number-" + window.STUDIO_SECTION_ID + "');
-    const qualityBadge = document.getElementById('quality-badge-" + window.STUDIO_SECTION_ID + "');
-    const qualityWarning = document.getElementById('quality-warning-" + window.STUDIO_SECTION_ID + "');
+    const dpiNumber = document.getElementById('dpi-number-' + window.STUDIO_SECTION_ID);
+    const qualityBadge = document.getElementById('quality-badge-' + window.STUDIO_SECTION_ID);
+    const qualityWarning = document.getElementById('quality-warning-' + window.STUDIO_SECTION_ID);
     
     dpiNumber.textContent = info.dpi || '---';
     
@@ -3140,5 +3140,7 @@ function initEditModal() {
   
   console.log('✅ Edit Modal fully initialized with all 7 tabs');
 }
+
+
 
 
