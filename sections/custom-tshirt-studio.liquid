@@ -615,6 +615,86 @@
       font-weight: 600 !important;
     }
 
+    /* ===== DARK MODE SUPPORT FOR NUDGE CONTROLS ===== */
+    @media (prefers-color-scheme: dark) {
+      .canvas-nudge-btn {
+        background: rgba(30, 41, 59, 0.95) !important;
+        border-color: rgba(39, 225, 193, 0.7) !important;
+      }
+      
+      .canvas-nudge-btn:hover {
+        background: rgba(39, 225, 193, 0.25) !important;
+        border-color: rgba(39, 225, 193, 0.9) !important;
+      }
+      
+      .canvas-nudge-btn svg {
+        stroke: #27e1c1 !important;
+      }
+    }
+
+    [data-theme="dark"] .canvas-nudge-btn {
+      background: rgba(30, 41, 59, 0.95) !important;
+      border-color: rgba(39, 225, 193, 0.7) !important;
+    }
+    
+    [data-theme="dark"] .canvas-nudge-btn:hover {
+      background: rgba(39, 225, 193, 0.25) !important;
+      border-color: rgba(39, 225, 193, 0.9) !important;
+    }
+    
+    [data-theme="dark"] .canvas-nudge-btn svg {
+      stroke: #27e1c1 !important;
+    }
+
+    /* Dark mode for Edit Modal nudge controls */
+    @media (prefers-color-scheme: dark) {
+      #nudge-up-{{ section.id }},
+      #nudge-down-{{ section.id }},
+      #nudge-left-{{ section.id }},
+      #nudge-right-{{ section.id }} {
+        background: rgba(30, 41, 59, 0.8) !important;
+        border-color: rgba(39, 225, 193, 0.8) !important;
+      }
+      
+      #nudge-up-{{ section.id }}:hover,
+      #nudge-down-{{ section.id }}:hover,
+      #nudge-left-{{ section.id }}:hover,
+      #nudge-right-{{ section.id }}:hover {
+        background: rgba(39, 225, 193, 0.3) !important;
+        border-color: rgba(39, 225, 193, 1) !important;
+      }
+      
+      #nudge-up-{{ section.id }} svg,
+      #nudge-down-{{ section.id }} svg,
+      #nudge-left-{{ section.id }} svg,
+      #nudge-right-{{ section.id }} svg {
+        stroke: #27e1c1 !important;
+      }
+    }
+
+    [data-theme="dark"] #nudge-up-{{ section.id }},
+    [data-theme="dark"] #nudge-down-{{ section.id }},
+    [data-theme="dark"] #nudge-left-{{ section.id }},
+    [data-theme="dark"] #nudge-right-{{ section.id }} {
+      background: rgba(30, 41, 59, 0.8) !important;
+      border-color: rgba(39, 225, 193, 0.8) !important;
+    }
+    
+    [data-theme="dark"] #nudge-up-{{ section.id }}:hover,
+    [data-theme="dark"] #nudge-down-{{ section.id }}:hover,
+    [data-theme="dark"] #nudge-left-{{ section.id }}:hover,
+    [data-theme="dark"] #nudge-right-{{ section.id }}:hover {
+      background: rgba(39, 225, 193, 0.3) !important;
+      border-color: rgba(39, 225, 193, 1) !important;
+    }
+    
+    [data-theme="dark"] #nudge-up-{{ section.id }} svg,
+    [data-theme="dark"] #nudge-down-{{ section.id }} svg,
+    [data-theme="dark"] #nudge-left-{{ section.id }} svg,
+    [data-theme="dark"] #nudge-right-{{ section.id }} svg {
+      stroke: #27e1c1 !important;
+    }
+
     /* ===== MOBILE NUDGE CONTROLS - ABOVE ZOOM BAR, FAR RIGHT ===== */
     @media (max-width: 768px) {
       #canvas-nudge-controls-{{ section.id }} {
