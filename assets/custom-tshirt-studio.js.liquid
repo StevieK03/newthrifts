@@ -24,26 +24,53 @@ window.openCustomDesignStudio = function() {
   const mainContent = document.querySelector('.main-content');
   if (mainContent) {
     mainContent.style.display = 'none';
+    console.log('✅ Hid main content');
   }
   
   // Show the custom studio
   const studio = document.getElementById('custom-tshirt-studio-{{ section.id }}');
+  console.log('🔍 Looking for studio element with ID:', 'custom-tshirt-studio-{{ section.id }}');
   
   if (studio) {
+    console.log('✅ Studio element found:', studio);
+    console.log('📊 Studio current display:', window.getComputedStyle(studio).display);
+    
     studio.style.display = 'block';
+    console.log('✅ Set studio display to block');
+    console.log('📊 Studio new display:', window.getComputedStyle(studio).display);
+    
+    // Check if canvas is visible
+    const canvas = document.getElementById('nt-mockup-canvas-{{ section.id }}');
+    if (canvas) {
+      console.log('🎨 Canvas found:', canvas);
+      console.log('📐 Canvas dimensions:', canvas.offsetWidth, 'x', canvas.offsetHeight);
+      console.log('🎨 Canvas background:', window.getComputedStyle(canvas).background);
+      console.log('👁️ Canvas visibility:', window.getComputedStyle(canvas).visibility);
+      console.log('👁️ Canvas display:', window.getComputedStyle(canvas).display);
+    } else {
+      console.error('❌ Canvas not found!');
+    }
+    
     studio.scrollIntoView({ behavior: 'smooth' });
+    console.log('📜 Scrolling to studio');
     
     // Initialize the mockup and size chart after the studio is visible
     setTimeout(() => {
       initializeMockup();
+      console.log('✅ initializeMockup() called');
       
       // Initialize size chart
       if (typeof initializeSizeChart === 'function') {
         initializeSizeChart();
+        console.log('✅ initializeSizeChart() called');
       }
     }, 200);
   } else {
-    console.error('❌ Studio element not found!');
+    console.error('❌ Studio element not found! Looked for ID:', 'custom-tshirt-studio-{{ section.id }}');
+    console.log('🔍 Available elements with "studio" in ID:');
+    document.querySelectorAll('[id*="studio"]').forEach(el => {
+      console.log('  -', el.id, el);
+    });
   }
 };
 
