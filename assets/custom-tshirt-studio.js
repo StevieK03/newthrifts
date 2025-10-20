@@ -216,11 +216,11 @@ function initializeMockup() {
 
     updatePlacementDisplay() {
       // Update placement display controls
-      const topSlider = document.getElementById(`nt-placement-top-" + window.STUDIO_SECTION_ID + "`);
-      const leftSlider = document.getElementById(`nt-placement-left-" + window.STUDIO_SECTION_ID + "`);
-      const widthSlider = document.getElementById(`nt-placement-width-" + window.STUDIO_SECTION_ID + "`);
-      const heightSlider = document.getElementById(`nt-placement-height-" + window.STUDIO_SECTION_ID + "`);
-      const rotationSlider = document.getElementById(`nt-placement-rotation-" + window.STUDIO_SECTION_ID + "`);
+      const topSlider = document.getElementById(`nt-placement-top-${window.STUDIO_SECTION_ID}`);
+      const leftSlider = document.getElementById(`nt-placement-left-${window.STUDIO_SECTION_ID}`);
+      const widthSlider = document.getElementById(`nt-placement-width-${window.STUDIO_SECTION_ID}`);
+      const heightSlider = document.getElementById(`nt-placement-height-${window.STUDIO_SECTION_ID}`);
+      const rotationSlider = document.getElementById(`nt-placement-rotation-${window.STUDIO_SECTION_ID}`);
 
       if (topSlider) topSlider.value = this.placementState.topPct;
       if (leftSlider) leftSlider.value = this.placementState.leftPct;
@@ -680,7 +680,7 @@ function initializeMockup() {
     },
 
     updateZoomLevelDisplay() {
-      const zoomDisplay = document.getElementById(`nt-zoom-level-" + window.STUDIO_SECTION_ID + "`);
+      const zoomDisplay = document.getElementById(`nt-zoom-level-${window.STUDIO_SECTION_ID}`);
       if (zoomDisplay) {
         zoomDisplay.textContent = `Zoom: ${Math.round(this.placementState.zoomLevel * 100)}%`;
       }
@@ -689,8 +689,8 @@ function initializeMockup() {
     bindZoomControls() {
       // Zoom In button
       // Zoom Slider (replaces old +/- buttons)
-      const zoomRange = document.getElementById(`nt-zoom-range-" + window.STUDIO_SECTION_ID + "`);
-      const zoomLabel = document.getElementById(`nt-zoom-label-" + window.STUDIO_SECTION_ID + "`);
+      const zoomRange = document.getElementById(`nt-zoom-range-${window.STUDIO_SECTION_ID}`);
+      const zoomLabel = document.getElementById(`nt-zoom-label-${window.STUDIO_SECTION_ID}`);
       
       if (zoomRange && zoomLabel) {
         // Update zoom when slider changes
@@ -759,7 +759,7 @@ function initializeMockup() {
       });
 
       // Bind resize handles
-      const resizeHandles = document.querySelectorAll(`#nt-overlay-" + window.STUDIO_SECTION_ID + " .resize-handle`);
+      const resizeHandles = document.querySelectorAll(`#nt-overlay-${window.STUDIO_SECTION_ID} .resize-handle`);
       resizeHandles.forEach(handle => {
         handle.addEventListener('mousedown', (e) => {
           e.preventDefault();
@@ -781,7 +781,7 @@ function initializeMockup() {
     },
 
     bindEvents() {
-      const rootId = "nt-mockup-" + window.STUDIO_SECTION_ID + "";
+      const rootId = 'nt-mockup-' + window.STUDIO_SECTION_ID;
       
       // View buttons
       const viewBtns = Array.from(document.querySelectorAll(`#${rootId} .nt-btn--view`));
@@ -806,7 +806,7 @@ function initializeMockup() {
       });
 
       // Upload button
-      const uploadBtn = document.getElementById(`nt-upload-" + window.STUDIO_SECTION_ID + "`);
+      const uploadBtn = document.getElementById(`nt-upload-${window.STUDIO_SECTION_ID}`);
       if (uploadBtn) {
         uploadBtn.addEventListener("click", (e) => {
           console.log('📁 Upload button clicked');
@@ -824,7 +824,7 @@ function initializeMockup() {
       }
 
       // Download button
-      const downloadBtn = document.getElementById(`nt-download-" + window.STUDIO_SECTION_ID + "`);
+      const downloadBtn = document.getElementById(`nt-download-${window.STUDIO_SECTION_ID}`);
       if (downloadBtn) {
         downloadBtn.addEventListener("click", () => {
           console.log('💾 Download button clicked');
@@ -833,11 +833,11 @@ function initializeMockup() {
       }
 
       // Edit button - handled by initEditModal() function below
-      // const editBtn = document.getElementById(`nt-edit-" + window.STUDIO_SECTION_ID + "`);
+      // const editBtn = document.getElementById(`nt-edit-${window.STUDIO_SECTION_ID}`);
       // Removed old "coming soon" alert - now opens advanced Edit Modal
 
       // Remove button
-      const removeBtn = document.getElementById(`nt-remove-" + window.STUDIO_SECTION_ID + "`);
+      const removeBtn = document.getElementById(`nt-remove-${window.STUDIO_SECTION_ID}`);
       if (removeBtn) {
         removeBtn.addEventListener("click", () => {
           console.log('🗑️ Remove button clicked');
@@ -846,7 +846,7 @@ function initializeMockup() {
       }
 
       // Invert Colors button
-      const invertBtn = document.getElementById(`nt-invert-" + window.STUDIO_SECTION_ID + "`);
+      const invertBtn = document.getElementById(`nt-invert-${window.STUDIO_SECTION_ID}`);
       if (invertBtn) {
         invertBtn.addEventListener("click", () => {
           console.log('🔄 Invert Colors button clicked');
@@ -854,13 +854,13 @@ function initializeMockup() {
         });
       }
 
-      const removeBgBtn = document.getElementById(`nt-remove-bg-" + window.STUDIO_SECTION_ID + "`);
+      const removeBgBtn = document.getElementById(`nt-remove-bg-${window.STUDIO_SECTION_ID}`);
       if (removeBgBtn) removeBgBtn.addEventListener("click", () => { if (this.removeBackground) this.removeBackground(); else this.showMessage('❌ Loading...', 'error'); });
 
       this.bindPlacementGuide();
 
       // Perfect Fit button
-      const perfectFitBtn = document.getElementById(`nt-perfect-fit-btn-" + window.STUDIO_SECTION_ID + "`);
+      const perfectFitBtn = document.getElementById(`nt-perfect-fit-btn-${window.STUDIO_SECTION_ID}`);
       if (perfectFitBtn) {
         perfectFitBtn.addEventListener("click", () => {
           console.log('🎯 Perfect Fit button clicked');
@@ -869,7 +869,7 @@ function initializeMockup() {
       }
 
       // Submit Request button (shows the customer form)
-      const submitBtn = document.getElementById(`nt-submit-request-btn-" + window.STUDIO_SECTION_ID + "`);
+      const submitBtn = document.getElementById(`nt-submit-request-btn-${window.STUDIO_SECTION_ID}`);
       if (submitBtn) {
         submitBtn.addEventListener("click", () => {
           console.log('🚀 Submit Request button clicked');
@@ -878,7 +878,7 @@ function initializeMockup() {
       }
 
       // Customer form submit
-      const requestForm = document.getElementById(`nt-request-form-" + window.STUDIO_SECTION_ID + "`);
+      const requestForm = document.getElementById(`nt-request-form-${window.STUDIO_SECTION_ID}`);
       if (requestForm) {
         requestForm.addEventListener('submit', (e) => {
           e.preventDefault();
@@ -887,16 +887,16 @@ function initializeMockup() {
       }
 
       // Cancel button
-      const cancelBtn = document.getElementById(`nt-cancel-request-" + window.STUDIO_SECTION_ID + "`);
+      const cancelBtn = document.getElementById(`nt-cancel-request-${window.STUDIO_SECTION_ID}`);
       if (cancelBtn) {
         cancelBtn.addEventListener('click', () => {
-          document.getElementById(`nt-submit-request-" + window.STUDIO_SECTION_ID + "`).style.display = 'none';
+          document.getElementById(`nt-submit-request-${window.STUDIO_SECTION_ID}`).style.display = 'none';
           this.resetRequestForm();
         });
       }
 
       // 3D Controls
-      const rotateBtn = document.getElementById(`nt-3d-rotate-" + window.STUDIO_SECTION_ID + "`);
+      const rotateBtn = document.getElementById(`nt-3d-rotate-${window.STUDIO_SECTION_ID}`);
       if (rotateBtn) {
         rotateBtn.addEventListener("click", () => {
           console.log('↺ Rotate button clicked');
@@ -904,7 +904,7 @@ function initializeMockup() {
         });
       }
 
-      const zoomBtn = document.getElementById(`nt-zoom-" + window.STUDIO_SECTION_ID + "`);
+      const zoomBtn = document.getElementById(`nt-zoom-${window.STUDIO_SECTION_ID}`);
       if (zoomBtn) {
         zoomBtn.addEventListener("click", () => {
           console.log('🔍 Zoom button clicked');
@@ -912,7 +912,7 @@ function initializeMockup() {
         });
       }
 
-      const validateBtn = document.getElementById(`nt-validate-" + window.STUDIO_SECTION_ID + "`);
+      const validateBtn = document.getElementById(`nt-validate-${window.STUDIO_SECTION_ID}`);
       if (validateBtn) {
         validateBtn.addEventListener("click", () => {
           console.log('✅ Validate button clicked');
@@ -920,7 +920,7 @@ function initializeMockup() {
         });
       }
 
-      const resetBtn = document.getElementById(`nt-reset-" + window.STUDIO_SECTION_ID + "`);
+      const resetBtn = document.getElementById(`nt-reset-${window.STUDIO_SECTION_ID}`);
       if (resetBtn) {
         resetBtn.addEventListener("click", () => {
           console.log('🔄 Reset button clicked');
@@ -957,8 +957,8 @@ function initializeMockup() {
     applyUploadedDesign(imageData) {
       console.log('🎨 Applying design to mockup');
       
-      const overlayDiv = document.getElementById(`nt-overlay-" + window.STUDIO_SECTION_ID + "`);
-      const designText = document.getElementById(`nt-design-text-" + window.STUDIO_SECTION_ID + "`);
+      const overlayDiv = document.getElementById(`nt-overlay-${window.STUDIO_SECTION_ID}`);
+      const designText = document.getElementById(`nt-design-text-${window.STUDIO_SECTION_ID}`);
       
       if (overlayDiv && designText) {
         designText.style.display = 'none';
@@ -1010,13 +1010,13 @@ function initializeMockup() {
       
       const baseImg = new Image();
       baseImg.crossOrigin = "anonymous";
-      baseImg.src = document.getElementById("nt-base-" + window.STUDIO_SECTION_ID + "").src;
+      baseImg.src = document.getElementById("nt-base-${window.STUDIO_SECTION_ID}").src;
       
       baseImg.onload = () => {
         console.log('✅ Base image loaded, drawing to canvas');
         ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
 
-        const overlayImg = document.querySelector(`#nt-overlay-" + window.STUDIO_SECTION_ID + " img`);
+        const overlayImg = document.querySelector(`#nt-overlay-${window.STUDIO_SECTION_ID} img`);
         console.log('Overlay image found:', overlayImg);
             
         if (overlayImg && overlayImg.src && this.placementState.hasUploadedDesign) {
@@ -1091,9 +1091,9 @@ function initializeMockup() {
     },
 
     bindPlacementGuide() {
-      const toggleBtn = document.getElementById(`nt-toggle-guide-" + window.STUDIO_SECTION_ID + "`);
-      const guideText = document.getElementById(`nt-guide-text-" + window.STUDIO_SECTION_ID + "`);
-      const overlay = document.getElementById(`nt-overlay-" + window.STUDIO_SECTION_ID + "`);
+      const toggleBtn = document.getElementById(`nt-toggle-guide-${window.STUDIO_SECTION_ID}`);
+      const guideText = document.getElementById(`nt-guide-text-${window.STUDIO_SECTION_ID}`);
+      const overlay = document.getElementById(`nt-overlay-${window.STUDIO_SECTION_ID}`);
       let guideVisible = false;
       
       if (toggleBtn && overlay) {
@@ -1110,22 +1110,22 @@ function initializeMockup() {
               const styleEl = document.createElement('style');
               styleEl.id = 'placement-guide-style-' + window.STUDIO_SECTION_ID;
               styleEl.textContent = `
-                #nt-overlay-" + window.STUDIO_SECTION_ID + "::before,
-                #nt-overlay-" + window.STUDIO_SECTION_ID + "::after {
+                #nt-overlay-${window.STUDIO_SECTION_ID}::before,
+                #nt-overlay-${window.STUDIO_SECTION_ID}::after {
                   content: '';
                   position: absolute;
                   background: rgba(239, 68, 68, 0.5);
                   z-index: 1000;
                   pointer-events: none;
                 }
-                #nt-overlay-" + window.STUDIO_SECTION_ID + "::before {
+                #nt-overlay-${window.STUDIO_SECTION_ID}::before {
                   top: 50%;
                   left: 0;
                   right: 0;
                   height: 2px;
                   transform: translateY(-50%);
                 }
-                #nt-overlay-" + window.STUDIO_SECTION_ID + "::after {
+                #nt-overlay-${window.STUDIO_SECTION_ID}::after {
                   left: 50%;
                   top: 0;
                   bottom: 0;
@@ -1169,7 +1169,7 @@ function initializeMockup() {
     
     invertColors() {
       // Check if there's an uploaded design image
-      const overlayImg = document.querySelector(`#nt-overlay-" + window.STUDIO_SECTION_ID + " img`);
+      const overlayImg = document.querySelector(`#nt-overlay-${window.STUDIO_SECTION_ID} img`);
       
       if (overlayImg && this.placementState.hasUploadedDesign) {
         // Invert uploaded image colors using Canvas API
@@ -1301,7 +1301,7 @@ function initializeMockup() {
       }
       
       // Show the customer information form
-      const formSection = document.getElementById(`nt-submit-request-" + window.STUDIO_SECTION_ID + "`);
+      const formSection = document.getElementById(`nt-submit-request-${window.STUDIO_SECTION_ID}`);
       if (formSection) {
         formSection.style.display = 'block';
         formSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -1337,11 +1337,11 @@ function initializeMockup() {
       console.log('✅ EmailJS is available');
 
       // Get form data
-      const customerName = document.getElementById(`nt-customer-name-" + window.STUDIO_SECTION_ID + "`).value.trim();
-      const customerEmail = document.getElementById(`nt-customer-email-" + window.STUDIO_SECTION_ID + "`).value.trim();
-      const customerPhone = document.getElementById(`nt-customer-phone-" + window.STUDIO_SECTION_ID + "`).value.trim();
-      const tshirtSize = document.getElementById(`nt-tshirt-size-" + window.STUDIO_SECTION_ID + "`).value;
-      const customerMessage = document.getElementById(`nt-customer-message-" + window.STUDIO_SECTION_ID + "`).value.trim();
+      const customerName = document.getElementById(`nt-customer-name-${window.STUDIO_SECTION_ID}`).value.trim();
+      const customerEmail = document.getElementById(`nt-customer-email-${window.STUDIO_SECTION_ID}`).value.trim();
+      const customerPhone = document.getElementById(`nt-customer-phone-${window.STUDIO_SECTION_ID}`).value.trim();
+      const tshirtSize = document.getElementById(`nt-tshirt-size-${window.STUDIO_SECTION_ID}`).value;
+      const customerMessage = document.getElementById(`nt-customer-message-${window.STUDIO_SECTION_ID}`).value.trim();
 
       // Validate required fields
       if (!customerName || !customerEmail) {
@@ -1358,7 +1358,7 @@ function initializeMockup() {
 
       try {
         // Add loading state to button
-        const submitBtn = document.getElementById(`nt-submit-request-form-btn-" + window.STUDIO_SECTION_ID + "`);
+        const submitBtn = document.getElementById(`nt-submit-request-form-btn-${window.STUDIO_SECTION_ID}`);
         if (submitBtn) {
           submitBtn.classList.add('loading');
           submitBtn.style.pointerEvents = 'none';
@@ -1440,7 +1440,7 @@ function initializeMockup() {
         }
         
         // Hide form and reset
-        document.getElementById(`nt-submit-request-" + window.STUDIO_SECTION_ID + "`).style.display = 'none';
+        document.getElementById(`nt-submit-request-${window.STUDIO_SECTION_ID}`).style.display = 'none';
         this.resetRequestForm();
         
         // Remove loading state
@@ -1455,7 +1455,7 @@ function initializeMockup() {
         this.showMessage('❌ Failed to submit request. Please try again.', 'error');
         
         // Remove loading state on error
-        const submitBtn = document.getElementById(`nt-submit-request-form-btn-" + window.STUDIO_SECTION_ID + "`);
+        const submitBtn = document.getElementById(`nt-submit-request-form-btn-${window.STUDIO_SECTION_ID}`);
         if (submitBtn) {
           submitBtn.classList.remove('loading');
           submitBtn.style.pointerEvents = 'auto';
@@ -1465,11 +1465,11 @@ function initializeMockup() {
     },
 
     resetRequestForm() {
-      document.getElementById(`nt-customer-name-" + window.STUDIO_SECTION_ID + "`).value = '';
-      document.getElementById(`nt-customer-email-" + window.STUDIO_SECTION_ID + "`).value = '';
-      document.getElementById(`nt-customer-phone-" + window.STUDIO_SECTION_ID + "`).value = '';
-      document.getElementById(`nt-tshirt-size-" + window.STUDIO_SECTION_ID + "`).value = '';
-      document.getElementById(`nt-customer-message-" + window.STUDIO_SECTION_ID + "`).value = '';
+      document.getElementById(`nt-customer-name-${window.STUDIO_SECTION_ID}`).value = '';
+      document.getElementById(`nt-customer-email-${window.STUDIO_SECTION_ID}`).value = '';
+      document.getElementById(`nt-customer-phone-${window.STUDIO_SECTION_ID}`).value = '';
+      document.getElementById(`nt-tshirt-size-${window.STUDIO_SECTION_ID}`).value = '';
+      document.getElementById(`nt-customer-message-${window.STUDIO_SECTION_ID}`).value = '';
     },
 
     async submitToSupabase(requestData) {
@@ -1665,12 +1665,12 @@ function initializeMockup() {
         
         const baseImg = new Image();
         baseImg.crossOrigin = "anonymous";
-        baseImg.src = document.getElementById("nt-base-" + window.STUDIO_SECTION_ID + "").src;
+        baseImg.src = document.getElementById("nt-base-${window.STUDIO_SECTION_ID}").src;
         
         baseImg.onload = () => {
           ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
 
-          const overlayImg = document.querySelector(`#nt-overlay-" + window.STUDIO_SECTION_ID + " img`);
+          const overlayImg = document.querySelector(`#nt-overlay-${window.STUDIO_SECTION_ID} img`);
           
           if (overlayImg && overlayImg.src) {
             const designImg = new Image();
@@ -1743,7 +1743,7 @@ function initializeMockup() {
 
     async uploadDesignToStorage() {
       console.log('🎨 Starting design upload to storage...');
-      const overlayImg = document.querySelector(`#nt-overlay-" + window.STUDIO_SECTION_ID + " img`);
+      const overlayImg = document.querySelector(`#nt-overlay-${window.STUDIO_SECTION_ID} img`);
       
       if (!overlayImg) {
         console.warn('⚠️ No overlay image element found');
@@ -2639,7 +2639,7 @@ function initEditModal() {
       tabContents.forEach(content => {
         content.style.display = 'none';
       });
-      document.getElementById(`tab-${tabName}-" + window.STUDIO_SECTION_ID + "`).style.display = 'block';
+      document.getElementById(`tab-${tabName}-${window.STUDIO_SECTION_ID}`).style.display = 'block';
       
       // Update quality meter when switching to quality tab
       if (tabName === 'quality') {
@@ -2783,7 +2783,7 @@ function initEditModal() {
     
     // Fallback 1: Show just the uploaded image from overlay
     console.log('🔍 Canvas not found, trying overlay image...');
-    const overlayImg = document.querySelector('#nt-overlay-' + window.STUDIO_SECTION_ID + ' img');
+    const overlayImg = document.querySelector(`#nt-overlay-${window.STUDIO_SECTION_ID} img`);
     
     if (overlayImg) {
       console.log('✅ Found overlay image');
@@ -2797,7 +2797,7 @@ function initEditModal() {
       `;
       
       // Clone the t-shirt base if available
-      const tshirtBase = document.querySelector('#nt-base-' + window.STUDIO_SECTION_ID + ' img');
+      const tshirtBase = document.querySelector(`#nt-base-${window.STUDIO_SECTION_ID} img`);
       if (tshirtBase) {
         const clonedBase = tshirtBase.cloneNode(true);
         clonedBase.style.cssText = `
@@ -2844,14 +2844,14 @@ function initEditModal() {
     studio.editOps?.close();
   }
   
-  // Find Edit Design button - ID is nt-edit-" + window.STUDIO_SECTION_ID + "
+  // Find Edit Design button - ID is nt-edit-${window.STUDIO_SECTION_ID}
   const actualEditBtn = document.getElementById('nt-edit-' + window.STUDIO_SECTION_ID);
   
   if (actualEditBtn) {
     actualEditBtn.addEventListener('click', openEditModal);
-    console.log('✅ Edit Design button (nt-edit-' + window.STUDIO_SECTION_ID + ') wired to modal');
+    console.log(`✅ Edit Design button (nt-edit-${window.STUDIO_SECTION_ID}) wired to modal`);
   } else {
-    console.warn('⚠️ Could not find Edit Design button with ID: nt-edit-' + window.STUDIO_SECTION_ID);
+    console.warn(`⚠️ Could not find Edit Design button with ID: nt-edit-${window.STUDIO_SECTION_ID}`);
   }
   
   closeBtn.addEventListener('click', closeEditModal);
@@ -3140,6 +3140,7 @@ function initEditModal() {
   
   console.log('✅ Edit Modal fully initialized with all 7 tabs');
 }
+
 
 
 
