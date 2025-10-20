@@ -1042,6 +1042,26 @@
                         ">
                           📝 Add Text
                         </button>
+                        <button class="nt-btn nt-btn--invert" id="nt-invert-{{ section.id }}" style="
+                          padding: 14px 20px; 
+                          border: 2px solid transparent; 
+                          background: linear-gradient(135deg, #f59e0b, #d97706); 
+                          color: white; 
+                          border-radius: 16px; 
+                          font-size: 14px; 
+                          font-weight: 600; 
+                          cursor: pointer; 
+                          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+                          box-shadow: 0 4px 16px rgba(245, 158, 11, 0.4);
+                          backdrop-filter: blur(10px);
+                          -webkit-backdrop-filter: blur(10px);
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                          gap: 8px;
+                        ">
+                          🔄 Invert Colors
+                        </button>
                       </div>
                       
                       <!-- Primary Action Buttons -->
@@ -3487,6 +3507,15 @@ function initializeMockup() {
         });
       }
 
+      // Invert Colors button
+      const invertBtn = document.getElementById(`nt-invert-{{ section.id }}`);
+      if (invertBtn) {
+        invertBtn.addEventListener("click", () => {
+          console.log('🔄 Invert Colors button clicked');
+          this.invertColors();
+        });
+      }
+
       // Placement Guide button
       this.bindPlacementGuide();
 
@@ -3795,6 +3824,47 @@ function initializeMockup() {
         this.placementState.designSelected = false;
         console.log('🗑️ Design removed');
         this.showMessage('🗑️ Design removed', 'info');
+      }
+    },
+    
+    invertColors() {
+      // Convert hex to RGB
+      const hexToRgb = (hex) => {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+          r: parseInt(result[1], 16),
+          g: parseInt(result[2], 16),
+          b: parseInt(result[3], 16)
+        } : null;
+      };
+      
+      // Convert RGB to hex
+      const rgbToHex = (r, g, b) => {
+        return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+      };
+      
+      // Get current color
+      const currentColor = this.designState.textColor;
+      const rgb = hexToRgb(currentColor);
+      
+      if (rgb) {
+        // Invert the color
+        const invertedR = 255 - rgb.r;
+        const invertedG = 255 - rgb.g;
+        const invertedB = 255 - rgb.b;
+        const invertedColor = rgbToHex(invertedR, invertedG, invertedB);
+        
+        // Update design state
+        this.designState.textColor = invertedColor;
+        
+        // Update the text element
+        const textElement = document.getElementById('nt-design-text-{{ section.id }}');
+        if (textElement) {
+          textElement.style.color = invertedColor;
+        }
+        
+        console.log(`🔄 Colors inverted: ${currentColor} → ${invertedColor}`);
+        this.showMessage(`🔄 Colors inverted to ${invertedColor}`, 'success');
       }
     },
     
