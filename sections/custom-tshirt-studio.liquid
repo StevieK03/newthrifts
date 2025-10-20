@@ -3828,43 +3828,86 @@ function initializeMockup() {
     },
     
     invertColors() {
-      // Convert hex to RGB
-      const hexToRgb = (hex) => {
-        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-        return result ? {
-          r: parseInt(result[1], 16),
-          g: parseInt(result[2], 16),
-          b: parseInt(result[3], 16)
-        } : null;
-      };
+      // Check if there's an uploaded design image
+      const overlayImg = document.querySelector(`#nt-overlay-{{ section.id }} img`);
       
-      // Convert RGB to hex
-      const rgbToHex = (r, g, b) => {
-        return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
-      };
-      
-      // Get current color
-      const currentColor = this.designState.textColor;
-      const rgb = hexToRgb(currentColor);
-      
-      if (rgb) {
-        // Invert the color
-        const invertedR = 255 - rgb.r;
-        const invertedG = 255 - rgb.g;
-        const invertedB = 255 - rgb.b;
-        const invertedColor = rgbToHex(invertedR, invertedG, invertedB);
+      if (overlayImg && this.placementState.hasUploadedDesign) {
+        // Invert uploaded image colors using Canvas API
+        console.log('🔄 Inverting uploaded design image...');
         
-        // Update design state
-        this.designState.textColor = invertedColor;
-        
-        // Update the text element
-        const textElement = document.getElementById('nt-design-text-{{ section.id }}');
-        if (textElement) {
-          textElement.style.color = invertedColor;
+        try {
+          // Create a canvas to process the image
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          
+          // Set canvas size to match image
+          canvas.width = overlayImg.naturalWidth || overlayImg.width;
+          canvas.height = overlayImg.naturalHeight || overlayImg.height;
+          
+          // Draw the original image onto the canvas
+          ctx.drawImage(overlayImg, 0, 0);
+          
+          // Get image data
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          const data = imageData.data;
+          
+          // Invert each pixel's color
+          for (let i = 0; i < data.length; i += 4) {
+            data[i] = 255 - data[i];         // Red
+            data[i + 1] = 255 - data[i + 1]; // Green
+            data[i + 2] = 255 - data[i + 2]; // Blue
+            // data[i + 3] is alpha, leave it unchanged
+          }
+          
+          // Put the inverted image data back
+          ctx.putImageData(imageData, 0, 0);
+          
+          // Convert canvas to data URL and update the image
+          const invertedDataUrl = canvas.toDataURL('image/png');
+          overlayImg.src = invertedDataUrl;
+          
+          console.log('✅ Design image colors inverted');
+          this.showMessage('🔄 Design colors inverted!', 'success');
+          
+        } catch (error) {
+          console.error('❌ Error inverting image:', error);
+          this.showMessage('❌ Could not invert image colors. Try re-uploading.', 'error');
         }
         
-        console.log(`🔄 Colors inverted: ${currentColor} → ${invertedColor}`);
-        this.showMessage(`🔄 Colors inverted to ${invertedColor}`, 'success');
+      } else {
+        // Invert text color (original functionality)
+        const hexToRgb = (hex) => {
+          const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+          return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+          } : null;
+        };
+        
+        const rgbToHex = (r, g, b) => {
+          return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+        };
+        
+        const currentColor = this.designState.textColor;
+        const rgb = hexToRgb(currentColor);
+        
+        if (rgb) {
+          const invertedR = 255 - rgb.r;
+          const invertedG = 255 - rgb.g;
+          const invertedB = 255 - rgb.b;
+          const invertedColor = rgbToHex(invertedR, invertedG, invertedB);
+          
+          this.designState.textColor = invertedColor;
+          
+          const textElement = document.getElementById('nt-design-text-{{ section.id }}');
+          if (textElement) {
+            textElement.style.color = invertedColor;
+          }
+          
+          console.log(`🔄 Text color inverted: ${currentColor} → ${invertedColor}`);
+          this.showMessage(`🔄 Text color inverted to ${invertedColor}`, 'success');
+        }
       }
     },
     
