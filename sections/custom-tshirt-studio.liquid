@@ -1210,7 +1210,7 @@
                      ">
                     
                     <!-- T-shirt Mockup Container -->
-                    <div style="position: relative; width: 100%; aspect-ratio: 1 / 1; cursor: grab;">
+                    <div style="position: relative; width: 100%; aspect-ratio: 1 / 1; cursor: grab; background: rgba(255, 0, 0, 0.2); border: 5px solid red;">
                   
                       <!-- Base Mockup (swapped by JS) -->
                       <img
@@ -1220,9 +1220,9 @@
                         alt="T-shirt mockup"
                         loading="eager"
                         decoding="async"
-                        style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; z-index: 5; display: block !important; opacity: 1 !important; visibility: visible !important;"
+                        style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; z-index: 9999; display: block !important; opacity: 1 !important; visibility: visible !important; background: yellow !important; border: 10px solid lime !important;"
                         onerror="console.error('❌ Failed to load t-shirt image:', this.src); alert('T-shirt image failed to load: ' + this.src);"
-                        onload="console.log('✅ T-shirt image loaded:', this.src); this.style.border = '2px solid green';"
+                        onload="console.log('✅ T-shirt image loaded:', this.src); this.style.border = '10px solid lime';"
                       >
                     
                     <!-- Debug assets (hidden) -->
