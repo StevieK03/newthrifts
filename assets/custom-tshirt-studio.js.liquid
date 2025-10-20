@@ -132,7 +132,10 @@ function initializeMockup() {
       fontFamily: "'Bebas Neue', sans-serif",
       textColor: '#000000',
       shirtColor: 'white',
-      effect: 'none'
+      effect: 'none',
+      hasUpload: false,
+      uploadUrl: null,
+      fileName: null
     },
 
     // Current view state
@@ -259,6 +262,66 @@ function initializeMockup() {
           handle.style.display = 'none';
         });
       }
+    },
+
+    handleFileUpload(file) {
+      console.log('📁 File selected:', file.name);
+      
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        alert('Please upload an image file (PNG, JPG, etc.)');
+        return;
+      }
+      
+      // Validate file size (max 10MB)
+      const maxSize = 10 * 1024 * 1024;
+      if (file.size > maxSize) {
+        alert('File is too large. Please upload an image under 10MB.');
+        return;
+      }
+      
+      // Read the file
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        console.log('✅ File loaded successfully');
+        const imageUrl = e.target.result;
+        
+        // Get the overlay and replace text with image
+        const overlay = document.getElementById('nt-overlay-{{ section.id }}');
+        const textElement = document.getElementById('nt-design-text-{{ section.id }}');
+        
+        if (overlay && textElement) {
+          // Hide the text
+          textElement.style.display = 'none';
+          
+          // Check if image already exists, if so replace it
+          let designImg = overlay.querySelector('.uploaded-design-img');
+          if (!designImg) {
+            designImg = document.createElement('img');
+            designImg.className = 'uploaded-design-img';
+            designImg.style.cssText = 'width: 100%; height: 100%; object-fit: contain; pointer-events: none;';
+            overlay.appendChild(designImg);
+          }
+          
+          designImg.src = imageUrl;
+          console.log('✅ Design image displayed in overlay');
+          
+          // Store the design state
+          this.designState.hasUpload = true;
+          this.designState.uploadUrl = imageUrl;
+          this.designState.fileName = file.name;
+          
+          // Select the design automatically
+          this.selectDesign();
+        }
+      };
+      
+      reader.onerror = () => {
+        console.error('❌ Error reading file');
+        alert('Error loading image. Please try again.');
+      };
+      
+      reader.readAsDataURL(file);
     },
 
     startDrag(e) {
