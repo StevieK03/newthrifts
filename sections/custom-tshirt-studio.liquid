@@ -6,6 +6,20 @@
 
 <div class="custom-tshirt-studio" id="custom-tshirt-studio-{{ section.id }}" style="display: none;">
   <style>
+    /* ===== Z-INDEX HIERARCHY (DO NOT MODIFY WITHOUT READING) ===== 
+     * Canvas container: z-index: 1 (base layer)
+     * T-shirt mockup image: z-index: 2 (shows t-shirt)
+     * Design overlay: z-index: 3 (your uploaded design sits on top of shirt)
+     * Nudge controls: z-index: 4 (interactive controls above design)
+     * Zoom bar: z-index: 5 (topmost UI element in canvas)
+     * Text panel: z-index: 9999 (floating sidebar)
+     * Edit modal: z-index: 10000 (fullscreen modal overlay)
+     * 
+     * ⚠️ WARNING: Changing these values may cause elements to disappear!
+     * The t-shirt must be BELOW the design overlay (z-index 2 < 3)
+     * All UI controls must be ABOVE the design (z-index 4+)
+     * ============================================================ */
+    
     .custom-tshirt-studio {
       min-height: 100vh;
       background: #ffffff;
@@ -793,6 +807,23 @@
       transform: scale(1.15);
       box-shadow: 0 4px 12px rgba(39, 225, 193, 0.4);
     }
+
+    /* ===== LAYER CONTROLS STYLING ===== */
+    .layer-hidden {
+      opacity: 0.5 !important;
+      background: #94a3b8 !important;
+      position: relative;
+    }
+    
+    .layer-hidden::after {
+      content: '👁️';
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+      opacity: 0.7;
+    }
   </style>
   
   <!-- Floating Background Shapes -->
@@ -998,7 +1029,7 @@
                           backdrop-filter: blur(10px);
                           -webkit-backdrop-filter: blur(10px);
                         ">
-                          ↺ Rotate
+                          ↻ Rotate
                         </button>
                         <button class="nt-btn nt-btn--zoom enhanced-3d-btn" id="nt-zoom-{{ section.id }}" style="
                           padding: 12px 20px; 
@@ -1272,7 +1303,7 @@
               </div>
               <div style="margin-top: 12px; padding: 12px; background: #ecfdf5; border-radius: 8px; border-left: 4px solid #10b981; text-align: center;">
                 <p style="margin: 0; color: #065f46; font-size: 14px;">
-                  <strong>📐 How to Measure:</strong>
+                  <strong>📏 How to Measure:</strong>
                 </p>
                 <ul style="margin: 8px 0 0 0; padding-left: 20px; color: #065f46; font-size: 13px; text-align: left; display: inline-block;">
                   <li><strong>Chest:</strong> Measure around the fullest part of your chest</li>
@@ -1311,7 +1342,7 @@
                      ">
                     
                     <!-- T-shirt Mockup Container -->
-                    <div style="position: relative; width: 100%; aspect-ratio: 1 / 1; cursor: grab;">
+                    <div style="position: relative; width: 100%; aspect-ratio: 1 / 1; cursor: grab; z-index: 1;">
                   
                       <!-- Base Mockup (swapped by JS) -->
                       <img
@@ -1321,7 +1352,7 @@
                         alt="T-shirt mockup"
                         loading="eager"
                         decoding="async"
-                        style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; z-index: 100; display: block !important; opacity: 1 !important; visibility: visible !important;"
+                        style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; z-index: 2; display: block !important; opacity: 1 !important; visibility: visible !important;"
                         onerror="console.error('❌ Failed to load t-shirt image:', this.src);"
                         onload="console.log('✅ T-shirt image loaded:', this.src);"
                       >
@@ -1338,10 +1369,10 @@
                     <div
                       id="nt-overlay-{{ section.id }}"
                       class="nt-mockup__overlay"
-                      style="position: absolute !important; width: 37% !important; height: 42% !important; left: 50.214286% !important; top: 29.142857% !important; transform: translateX(-50%) rotate(0deg) !important; inset: auto !important; display: flex !important; align-items: center !important; justify-content: center !important; cursor: grab; transition: all 0.1s ease; border: 2px dashed rgba(39, 225, 193, 0.3); border-radius: 8px; background: rgba(39, 225, 193, 0.05); z-index: 200 !important;"
+                      style="position: absolute !important; width: 37% !important; height: 42% !important; left: 50.214286% !important; top: 29.142857% !important; transform: translateX(-50%) rotate(0deg) !important; inset: auto !important; display: flex !important; align-items: center !important; justify-content: center !important; cursor: grab; transition: all 0.1s ease; border: 2px dashed rgba(39, 225, 193, 0.3); border-radius: 8px; background: rgba(39, 225, 193, 0.05); z-index: 3 !important;"
                     >
                       <span id="nt-design-text-{{ section.id }}" 
-                            style="font-family: 'Bebas Neue', sans-serif; font-size: 32px; font-weight: bold; color: #000000; text-align: center; white-space: nowrap; user-select: none; text-shadow: 1px 1px 2px rgba(255,255,255,0.8); pointer-events: none;">
+                            style="position: relative; z-index: 2; font-family: 'Bebas Neue', sans-serif; font-size: 32px; font-weight: bold; color: #000000; text-align: center; white-space: nowrap; user-select: none; text-shadow: 1px 1px 2px rgba(255,255,255,0.8); pointer-events: none;">
                         Your Design Here
                       </span>
                       
@@ -1419,7 +1450,7 @@
                       opacity: 1;
                       pointer-events: auto;
                       transition: opacity 0.3s ease;
-                      z-index: 100;
+                      z-index: 4;
                     ">
                       <div style="
                         background: rgba(15, 23, 42, 0.95);
@@ -1541,7 +1572,7 @@
                       backdrop-filter: blur(8px);
                       -webkit-backdrop-filter: blur(8px);
                       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(39, 225, 193, 0.2);
-                      z-index: 300;
+                      z-index: 5;
                       transition: all 0.3s ease;
                     ">
                       <!-- Magnifying Glass Icon -->
@@ -1590,6 +1621,119 @@
                       >100%</output>
                     </div>
                 </div>
+            </div>
+            
+            <!-- Layer Controls (Hidden by default, shown when both image and text exist) -->
+            <div id="layer-controls-{{ section.id }}" style="
+              display: none;
+              max-width: 500px;
+              margin: 20px auto 0;
+              padding: 16px 20px;
+              background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+              border-radius: 16px;
+              border: 2px solid rgba(102, 126, 234, 0.3);
+            ">
+              <div style="
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 12px;
+              ">
+                <h4 style="
+                  margin: 0;
+                  font-size: 14px;
+                  font-weight: 700;
+                  color: #667eea;
+                  text-transform: uppercase;
+                  letter-spacing: 1px;
+                ">🎨 Layer Controls</h4>
+                <span style="font-size: 12px; color: #64748b;">Toggle visibility</span>
+              </div>
+              
+              <div style="display: flex; gap: 12px; justify-content: center;">
+                <!-- Text Layer Toggle -->
+                <button 
+                  id="toggle-text-layer-{{ section.id }}" 
+                  onclick="window.mockupInstance.toggleTextLayer(); this.classList.toggle('layer-hidden');"
+                  style="
+                    flex: 1;
+                    padding: 12px 20px;
+                    background: linear-gradient(135deg, #667eea, #764ba2);
+                    color: white;
+                    border: 2px solid transparent;
+                    border-radius: 12px;
+                    font-size: 14px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 8px;
+                  "
+                  onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(102, 126, 234, 0.4)';"
+                  onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';"
+                >
+                  <span style="font-size: 18px;">📝</span>
+                  <span>Text Layer</span>
+                </button>
+                
+                <!-- Image Layer Toggle -->
+                <button 
+                  id="toggle-image-layer-{{ section.id }}" 
+                  onclick="window.mockupInstance.toggleImageLayer(); this.classList.toggle('layer-hidden');"
+                  style="
+                    flex: 1;
+                    padding: 12px 20px;
+                    background: linear-gradient(135deg, #06b6d4, #0891b2);
+                    color: white;
+                    border: 2px solid transparent;
+                    border-radius: 12px;
+                    font-size: 14px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 8px;
+                  "
+                  onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(6, 182, 212, 0.4)';"
+                  onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';"
+                >
+                  <span style="font-size: 18px;">🖼️</span>
+                  <span>Image Layer</span>
+                </button>
+              </div>
+              
+              <!-- Text Input Field -->
+              <div style="margin-top: 12px;">
+                <label style="
+                  display: block;
+                  font-size: 12px;
+                  font-weight: 600;
+                  color: #64748b;
+                  margin-bottom: 6px;
+                ">Edit Text:</label>
+                <input 
+                  type="text" 
+                  id="layer-text-input-{{ section.id }}"
+                  value="Your Design Here"
+                  placeholder="Enter your text..."
+                  oninput="window.mockupInstance.updateTextContent(this.value);"
+                  style="
+                    width: 100%;
+                    padding: 10px 12px;
+                    border: 2px solid #e2e8f0;
+                    border-radius: 8px;
+                    font-size: 14px;
+                    box-sizing: border-box;
+                    transition: border-color 0.2s;
+                  "
+                  onfocus="this.style.borderColor='#667eea';"
+                  onblur="this.style.borderColor='#e2e8f0';"
+                >
+              </div>
             </div>
             
             <!-- 3-Step Workflow Section - Below Canvas -->
@@ -2360,7 +2504,7 @@
               font-weight: 700;
               cursor: pointer;
               opacity: 0.5;
-            " disabled>✓ Apply</button>
+            " disabled>✔ Apply</button>
             <button id="crop-cancel-btn-{{ section.id }}" style="
               flex: 1;
               padding: 14px;
@@ -2522,7 +2666,7 @@
               display: inline-block;
               margin-bottom: 16px;
             " id="quality-badge-{{ section.id }}">
-              ✓ EXCELLENT QUALITY
+              ✔ EXCELLENT QUALITY
             </div>
 
             <p style="color: #64748b; margin: 0; font-size: 14px;">
@@ -2564,7 +2708,7 @@
           transition: all 0.2s;
         " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(39, 225, 193, 0.4)'" 
            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-          ✓ Done Editing
+          ✔ Done Editing
         </button>
       </div>
     </div>
@@ -2828,7 +2972,7 @@
 
         <div class="nt-text-btn-group">
           <button class="nt-text-btn" id="text-center-btn-{{ section.id }}">📍 Center</button>
-          <button class="nt-text-btn" id="text-reset-btn-{{ section.id }}">↺ Reset</button>
+          <button class="nt-text-btn" id="text-reset-btn-{{ section.id }}">↻ Reset</button>
         </div>
       </div>
     </div>
