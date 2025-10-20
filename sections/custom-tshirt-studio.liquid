@@ -2972,6 +2972,32 @@ function initializeMockup() {
         console.log('🖼️ After update - baseImg.complete:', baseImg.complete);
         console.log('🖼️ After update - baseImg.naturalWidth:', baseImg.naturalWidth);
         console.log('🖼️ After update - computed display:', window.getComputedStyle(baseImg).display);
+        
+        // Check dimensions and positioning
+        const rect = baseImg.getBoundingClientRect();
+        console.log('📐 Image bounding rect:', rect);
+        console.log('📐 Image offsetWidth:', baseImg.offsetWidth, 'offsetHeight:', baseImg.offsetHeight);
+        console.log('📐 Image clientWidth:', baseImg.clientWidth, 'clientHeight:', baseImg.clientHeight);
+        
+        // Check parent canvas container
+        const canvas = document.getElementById('nt-mockup-canvas-{{ section.id }}');
+        if (canvas) {
+          const canvasRect = canvas.getBoundingClientRect();
+          console.log('📦 Canvas bounding rect:', canvasRect);
+          console.log('📦 Canvas offsetWidth:', canvas.offsetWidth, 'offsetHeight:', canvas.offsetHeight);
+          console.log('📦 Canvas computed display:', window.getComputedStyle(canvas).display);
+          console.log('📦 Canvas computed width:', window.getComputedStyle(canvas).width);
+          console.log('📦 Canvas computed height:', window.getComputedStyle(canvas).height);
+        }
+        
+        // Check stage container
+        const stage = document.querySelector('.nt-mockup__stage');
+        if (stage) {
+          const stageRect = stage.getBoundingClientRect();
+          console.log('🎬 Stage bounding rect:', stageRect);
+          console.log('🎬 Stage offsetWidth:', stage.offsetWidth, 'offsetHeight:', stage.offsetHeight);
+          console.log('🎬 Stage computed display:', window.getComputedStyle(stage).display);
+        }
       }, 100);
     },
 
