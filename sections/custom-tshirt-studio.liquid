@@ -1210,7 +1210,7 @@
                      ">
                     
                     <!-- T-shirt Mockup Container -->
-                    <div style="position: relative; width: 100%; aspect-ratio: 1 / 1; cursor: grab; background: rgba(255, 0, 0, 0.2); border: 5px solid red;">
+                    <div style="position: relative; width: 100%; aspect-ratio: 1 / 1; cursor: grab;">
                   
                       <!-- Base Mockup (swapped by JS) -->
                       <img
@@ -1220,9 +1220,9 @@
                         alt="T-shirt mockup"
                         loading="eager"
                         decoding="async"
-                        style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; z-index: 9999; display: block !important; opacity: 1 !important; visibility: visible !important; background: yellow !important; border: 10px solid lime !important;"
-                        onerror="console.error('❌ Failed to load t-shirt image:', this.src); alert('T-shirt image failed to load: ' + this.src);"
-                        onload="console.log('✅ T-shirt image loaded:', this.src); this.style.border = '10px solid lime';"
+                        style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; z-index: 100; display: block !important; opacity: 1 !important; visibility: visible !important;"
+                        onerror="console.error('❌ Failed to load t-shirt image:', this.src);"
+                        onload="console.log('✅ T-shirt image loaded:', this.src);"
                       >
                     
                     <!-- Debug assets (hidden) -->
@@ -1237,7 +1237,7 @@
                     <div
                       id="nt-overlay-{{ section.id }}"
                       class="nt-mockup__overlay"
-                      style="position: absolute; width: var(--overlay-width); height: var(--overlay-height); left: 50%; top: var(--overlay-top); transform: translateX(-50%) rotate(var(--overlay-rotate)); inset: auto; display: flex; align-items: center; justify-content: center; cursor: grab; transition: all 0.1s ease; border: 2px dashed rgba(39, 225, 193, 0.3); border-radius: 8px; background: rgba(39, 225, 193, 0.05); z-index: 10;"
+                      style="position: absolute; width: var(--overlay-width); height: var(--overlay-height); left: 50%; top: var(--overlay-top); transform: translateX(-50%) rotate(var(--overlay-rotate)); inset: auto; display: flex; align-items: center; justify-content: center; cursor: grab; transition: all 0.1s ease; border: 2px dashed rgba(39, 225, 193, 0.3); border-radius: 8px; background: rgba(39, 225, 193, 0.05); z-index: 200;"
                     >
                       <span id="nt-design-text-{{ section.id }}" 
                             style="font-family: 'Bebas Neue', sans-serif; font-size: 32px; font-weight: bold; color: #000000; text-align: center; white-space: nowrap; user-select: none; text-shadow: 1px 1px 2px rgba(255,255,255,0.8); pointer-events: none;">
@@ -2776,52 +2776,28 @@ function closeCustomStudio() {
 
 // Show custom studio function (called from home page button)
 window.openCustomDesignStudio = function() {
-  console.log('🚀 openCustomDesignStudio() called');
+  console.log('🎨 Opening Custom Design Studio...');
   
   // Hide main content
   const mainContent = document.querySelector('.main-content');
   if (mainContent) {
     mainContent.style.display = 'none';
-    console.log('✅ Main content hidden');
-  } else {
-    console.log('⚠️ Main content not found');
   }
   
   // Show the custom studio
   const studio = document.getElementById('custom-tshirt-studio-{{ section.id }}');
-  console.log('🎨 Studio element:', studio);
   
   if (studio) {
     studio.style.display = 'block';
-    console.log('✅ Studio display set to block');
-    console.log('📊 Studio computed display:', window.getComputedStyle(studio).display);
-    console.log('📊 Studio visibility:', window.getComputedStyle(studio).visibility);
-    console.log('📊 Studio opacity:', window.getComputedStyle(studio).opacity);
-    
     studio.scrollIntoView({ behavior: 'smooth' });
-    
-    // Check for base image immediately
-    const baseImage = document.getElementById('nt-base-{{ section.id }}');
-    console.log('🖼️ Base image element:', baseImage);
-    if (baseImage) {
-      console.log('🖼️ Base image src:', baseImage.src);
-      console.log('🖼️ Base image display:', window.getComputedStyle(baseImage).display);
-      console.log('🖼️ Base image visibility:', window.getComputedStyle(baseImage).visibility);
-      console.log('🖼️ Base image opacity:', window.getComputedStyle(baseImage).opacity);
-      console.log('🖼️ Base image complete:', baseImage.complete);
-      console.log('🖼️ Base image naturalWidth:', baseImage.naturalWidth);
-    }
     
     // Initialize the mockup and size chart after the studio is visible
     setTimeout(() => {
-      console.log('🎨 Studio opened, initializing mockup and size chart...');
       initializeMockup();
       
       // Initialize size chart
       if (typeof initializeSizeChart === 'function') {
         initializeSizeChart();
-      } else {
-        console.error('❌ initializeSizeChart function not found');
       }
     }, 200);
   } else {
@@ -2906,24 +2882,18 @@ function initializeMockup() {
 
     init() {
       console.log('🎯 Initializing Custom Studio Mockup...');
-      console.log('📊 Studio visible?', document.getElementById('custom-tshirt-studio-{{ section.id }}')?.style.display);
-      console.log('📊 Canvas exists?', document.getElementById('nt-mockup-canvas-{{ section.id }}'));
-      console.log('📊 Base image exists?', document.getElementById('nt-base-{{ section.id }}'));
-      console.log('📊 Overlay exists?', document.getElementById('nt-overlay-{{ section.id }}'));
       
       this.bindEvents();
       this.bindDragResize();
       this.bindMouseWheelResize();
       this.bindKeyboardShortcuts();
       this.bindZoomControls();
-      
-      console.log('🔄 About to call updateBase()...');
       this.updateBase();
-      
       this.updateDesign();
       this.updatePlacementDisplay();
       this.updateDesignPosition();
       this.updateZoomLevelDisplay();
+      
       console.log('✅ Custom Studio Mockup initialized');
     },
 
@@ -2937,68 +2907,20 @@ function initializeMockup() {
     },
 
     updateBase() {
-      console.log('🔄 updateBase() called');
-      console.log('📍 Current state:', this.state);
-      
       const baseImg = document.getElementById('nt-base-{{ section.id }}');
-      console.log('🖼️ Base image element in updateBase:', baseImg);
       
       if (!baseImg) {
-        console.error('❌ Base image element not found in updateBase!');
+        console.error('❌ Base image element not found');
         return;
       }
       
-      console.log('🖼️ Before update - baseImg.src:', baseImg.src);
-      console.log('🖼️ Before update - baseImg.style.display:', baseImg.style.display);
-      console.log('🖼️ Before update - computed display:', window.getComputedStyle(baseImg).display);
-      console.log('🖼️ Before update - computed visibility:', window.getComputedStyle(baseImg).visibility);
-      console.log('🖼️ Before update - computed opacity:', window.getComputedStyle(baseImg).opacity);
-      
       const imageSrc = this.mockupImages[this.state.view]?.[this.state.color] || this.baseMockup;
-      console.log('🎨 New image source:', imageSrc);
-      console.log('🎨 View:', this.state.view, 'Color:', this.state.color);
-      
       baseImg.src = imageSrc;
-      console.log('✅ Image src updated to:', baseImg.src);
       
-      // Force display
+      // Ensure image is visible
       baseImg.style.display = 'block';
       baseImg.style.visibility = 'visible';
       baseImg.style.opacity = '1';
-      console.log('✅ Forced image display properties');
-      
-      // Check after update
-      setTimeout(() => {
-        console.log('🖼️ After update - baseImg.complete:', baseImg.complete);
-        console.log('🖼️ After update - baseImg.naturalWidth:', baseImg.naturalWidth);
-        console.log('🖼️ After update - computed display:', window.getComputedStyle(baseImg).display);
-        
-        // Check dimensions and positioning
-        const rect = baseImg.getBoundingClientRect();
-        console.log('📐 Image bounding rect:', rect);
-        console.log('📐 Image offsetWidth:', baseImg.offsetWidth, 'offsetHeight:', baseImg.offsetHeight);
-        console.log('📐 Image clientWidth:', baseImg.clientWidth, 'clientHeight:', baseImg.clientHeight);
-        
-        // Check parent canvas container
-        const canvas = document.getElementById('nt-mockup-canvas-{{ section.id }}');
-        if (canvas) {
-          const canvasRect = canvas.getBoundingClientRect();
-          console.log('📦 Canvas bounding rect:', canvasRect);
-          console.log('📦 Canvas offsetWidth:', canvas.offsetWidth, 'offsetHeight:', canvas.offsetHeight);
-          console.log('📦 Canvas computed display:', window.getComputedStyle(canvas).display);
-          console.log('📦 Canvas computed width:', window.getComputedStyle(canvas).width);
-          console.log('📦 Canvas computed height:', window.getComputedStyle(canvas).height);
-        }
-        
-        // Check stage container
-        const stage = document.querySelector('.nt-mockup__stage');
-        if (stage) {
-          const stageRect = stage.getBoundingClientRect();
-          console.log('🎬 Stage bounding rect:', stageRect);
-          console.log('🎬 Stage offsetWidth:', stage.offsetWidth, 'offsetHeight:', stage.offsetHeight);
-          console.log('🎬 Stage computed display:', window.getComputedStyle(stage).display);
-        }
-      }, 100);
     },
 
     updateDesign() {
