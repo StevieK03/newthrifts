@@ -20,6 +20,31 @@
      * All UI controls must be ABOVE the design (z-index 4+)
      * ============================================================ */
     
+    /* ===== CRITICAL: ENSURE MOCKUP IMAGE IS ALWAYS VISIBLE ===== */
+    .nt-mockup__base {
+      position: absolute !important;
+      inset: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: contain !important;
+      pointer-events: none !important;
+      z-index: 2 !important;
+      display: block !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      max-width: 100% !important;
+      max-height: 100% !important;
+      image-rendering: auto;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    
+    /* Ensure canvas container has proper stacking */
+    .nt-mockup__canvas {
+      position: relative !important;
+      isolation: isolate;
+    }
+    
     .custom-tshirt-studio {
       min-height: 100vh;
       background: #ffffff;
@@ -1328,7 +1353,6 @@
                        background-size: 300% 300%;
                        animation: canvasGradientShift 15s ease infinite;
                        border-radius: 20px;
-                       overflow: visible;
                        box-shadow: 0 25px 80px rgba(39, 225, 193, 0.3), 0 10px 30px rgba(0,0,0,0.2);
                        padding: 40px;
                        --overlay-top: 29.142857%;
@@ -1342,7 +1366,7 @@
                      ">
                     
                     <!-- T-shirt Mockup Container -->
-                    <div style="position: relative; width: 100%; aspect-ratio: 1 / 1; cursor: grab; z-index: 1;">
+                    <div style="position: relative; width: 100%; aspect-ratio: 1 / 1; cursor: grab; z-index: 1; background: transparent;">
                   
                       <!-- Base Mockup (swapped by JS) -->
                       <img
@@ -1352,9 +1376,10 @@
                         alt="T-shirt mockup"
                         loading="eager"
                         decoding="async"
-                        style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; z-index: 2; display: block !important; opacity: 1 !important; visibility: visible !important;"
-                        onerror="console.error('❌ Failed to load t-shirt image:', this.src);"
-                        onload="console.log('✅ T-shirt image loaded:', this.src);"
+                        fetchpriority="high"
+                        style="position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; object-fit: contain !important; pointer-events: none !important; z-index: 2 !important; display: block !important; opacity: 1 !important; visibility: visible !important; max-width: 100% !important; max-height: 100% !important;"
+                        onerror="console.error('❌ Failed to load t-shirt image:', this.src); this.style.border='2px solid red';"
+                        onload="console.log('✅ T-shirt image loaded:', this.src); this.style.opacity='1';"
                       >
                     
                     <!-- Debug assets (hidden) -->
