@@ -4,7 +4,7 @@
   Preserves all current working controls, JavaScript, and functionality
 {% endcomment %}
 
-<div class="custom-tshirt-studio" id="custom-tshirt-studio-{{ section.id }}">
+<div class="custom-tshirt-studio" id="custom-tshirt-studio-{{ section.id }}" style="display: none;">
   <style>
     .custom-tshirt-studio {
       min-height: 100vh;
@@ -4479,30 +4479,8 @@ function initializeMockup() {
   }
 }
 
-// Auto-initialize mockup on page load (studio is visible by default)
-document.addEventListener('DOMContentLoaded', function() {
-  console.log('📍 Auto-initializing mockup on page load...');
-  console.log('📍 Studio element:', document.getElementById('custom-tshirt-studio-{{ section.id }}'));
-  console.log('📍 Canvas element:', document.getElementById('nt-mockup-canvas-{{ section.id }}'));
-  console.log('📍 Base image element:', document.getElementById('nt-base-{{ section.id }}'));
-  
-  try {
-    initializeMockup();
-    console.log('✅ Mockup initialization completed');
-  } catch (error) {
-    console.error('❌ Error initializing mockup:', error);
-  }
-  
-  // Initialize size chart if available
-  if (typeof initializeSizeChart === 'function') {
-    try {
-      initializeSizeChart();
-      console.log('✅ Size chart initialized');
-    } catch (error) {
-      console.error('❌ Error initializing size chart:', error);
-    }
-  }
-});
+// Studio initialization is handled by openCustomDesignStudio() when user clicks the button
+// No auto-initialization needed - this prevents the studio from appearing on page load
 
 // Add the testPerfectFit function for debugging
 (function() {
