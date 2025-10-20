@@ -578,28 +578,7 @@
   </div>
 </div>
 
-<script>
-// Ensure the openCustomDesignStudio function is available globally
-window.openCustomDesignStudio = window.openCustomDesignStudio || function() {
-  console.log('🎨 Opening Custom Design Studio...');
-  
-  // Hide main content
-  const mainContent = document.querySelector('.main-content');
-  if (mainContent) {
-    mainContent.style.display = 'none';
-  }
-  
-  // Show the custom studio
-  const studio = document.querySelector('[id*="custom-tshirt-studio"]');
-  if (studio) {
-    studio.style.display = 'block';
-    studio.scrollIntoView({ behavior: 'smooth' });
-  }
-  
-  // Scroll to top
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-};
-</script>
+<!-- openCustomDesignStudio function is defined in custom-tshirt-studio.js.liquid -->
 
 {% schema %}
 {

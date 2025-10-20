@@ -2779,7 +2779,8 @@
 
 <script src="{{ 'background-remover.js' | asset_url }}" defer></script>
 
-<script src="{{ 'custom-tshirt-studio.js.liquid' | asset_url }}" defer></script>
+<!-- Load studio JS without defer to ensure it's available immediately -->
+<script src="{{ 'custom-tshirt-studio.js.liquid' | asset_url }}"></script>
 
 <style>
 /* ========================================
