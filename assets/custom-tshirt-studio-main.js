@@ -1,7 +1,7 @@
 
 function closeCustomStudio() {
   // Hide the custom studio section
-  const studio = document.getElementById('custom-tshirt-studio-" + window.STUDIO_SECTION_ID + "');
+  const studio = document.getElementById('custom-tshirt-studio-{{ section.id }}');
   if (studio) {
     studio.style.display = 'none';
   }
@@ -28,8 +28,8 @@ window.openCustomDesignStudio = function() {
   }
   
   // Show the custom studio
-  const studio = document.getElementById('custom-tshirt-studio-" + window.STUDIO_SECTION_ID + "');
-  console.log('🔍 Looking for studio element with ID:', 'custom-tshirt-studio-" + window.STUDIO_SECTION_ID + "');
+  const studio = document.getElementById('custom-tshirt-studio-{{ section.id }}');
+  console.log('🔍 Looking for studio element with ID:', 'custom-tshirt-studio-{{ section.id }}');
   
   if (studio) {
     console.log('✅ Studio element found:', studio);
@@ -40,7 +40,7 @@ window.openCustomDesignStudio = function() {
     console.log('📊 Studio new display:', window.getComputedStyle(studio).display);
     
     // Check if canvas is visible
-    const canvas = document.getElementById('nt-mockup-canvas-" + window.STUDIO_SECTION_ID + "');
+    const canvas = document.getElementById('nt-mockup-canvas-{{ section.id }}');
     if (canvas) {
       console.log('🎨 Canvas found:', canvas);
       console.log('📐 Canvas dimensions:', canvas.offsetWidth, 'x', canvas.offsetHeight);
@@ -81,7 +81,7 @@ window.openCustomDesignStudio = function() {
       }
     }, 300);
   } else {
-    console.error('❌ Studio element not found! Looked for ID:', 'custom-tshirt-studio-" + window.STUDIO_SECTION_ID + "');
+    console.error('❌ Studio element not found! Looked for ID:', 'custom-tshirt-studio-{{ section.id }}');
     console.log('🔍 Available elements with "studio" in ID:');
     document.querySelectorAll('[id*="studio"]').forEach(el => {
       console.log('  -', el.id, el);
@@ -194,7 +194,7 @@ function initializeMockup() {
     },
 
     updateBase() {
-      const baseImg = document.getElementById('nt-base-" + window.STUDIO_SECTION_ID + "');
+      const baseImg = document.getElementById('nt-base-{{ section.id }}');
       
       if (!baseImg) {
         console.error('❌ Base image element not found');
@@ -216,11 +216,11 @@ function initializeMockup() {
 
     updatePlacementDisplay() {
       // Update placement display controls
-      const topSlider = document.getElementById(`nt-placement-top-" + window.STUDIO_SECTION_ID + "`);
-      const leftSlider = document.getElementById(`nt-placement-left-" + window.STUDIO_SECTION_ID + "`);
-      const widthSlider = document.getElementById(`nt-placement-width-" + window.STUDIO_SECTION_ID + "`);
-      const heightSlider = document.getElementById(`nt-placement-height-" + window.STUDIO_SECTION_ID + "`);
-      const rotationSlider = document.getElementById(`nt-placement-rotation-" + window.STUDIO_SECTION_ID + "`);
+      const topSlider = document.getElementById(`nt-placement-top-{{ section.id }}`);
+      const leftSlider = document.getElementById(`nt-placement-left-{{ section.id }}`);
+      const widthSlider = document.getElementById(`nt-placement-width-{{ section.id }}`);
+      const heightSlider = document.getElementById(`nt-placement-height-{{ section.id }}`);
+      const rotationSlider = document.getElementById(`nt-placement-rotation-{{ section.id }}`);
 
       if (topSlider) topSlider.value = this.placementState.topPct;
       if (leftSlider) leftSlider.value = this.placementState.leftPct;
@@ -230,7 +230,7 @@ function initializeMockup() {
     },
 
     updateDesignPosition() {
-      const overlay = document.getElementById('nt-overlay-" + window.STUDIO_SECTION_ID + "');
+      const overlay = document.getElementById('nt-overlay-{{ section.id }}');
       if (!overlay) return;
 
       // Apply the placement state to the overlay
@@ -243,7 +243,7 @@ function initializeMockup() {
 
     selectDesign() {
       this.placementState.designSelected = true;
-      const overlay = document.getElementById('nt-overlay-" + window.STUDIO_SECTION_ID + "');
+      const overlay = document.getElementById('nt-overlay-{{ section.id }}');
       if (overlay) {
         overlay.style.borderColor = '#3b82f6';
         overlay.style.boxShadow = '0 0 0 2px rgba(59, 130, 246, 0.3)';
@@ -258,7 +258,7 @@ function initializeMockup() {
 
     deselectDesign() {
       this.placementState.designSelected = false;
-      const overlay = document.getElementById('nt-overlay-" + window.STUDIO_SECTION_ID + "');
+      const overlay = document.getElementById('nt-overlay-{{ section.id }}');
       if (overlay) {
         overlay.style.borderColor = 'rgba(39, 225, 193, 0.3)';
         overlay.style.boxShadow = 'inset 0 4px 12px rgba(0, 0, 0, 0.1)';
@@ -294,8 +294,8 @@ function initializeMockup() {
         const imageUrl = e.target.result;
         
         // Get the overlay and replace text with image
-        const overlay = document.getElementById('nt-overlay-" + window.STUDIO_SECTION_ID + "');
-        const textElement = document.getElementById('nt-design-text-" + window.STUDIO_SECTION_ID + "');
+        const overlay = document.getElementById('nt-overlay-{{ section.id }}');
+        const textElement = document.getElementById('nt-design-text-{{ section.id }}');
         
         if (overlay && textElement) {
           // Hide the text
@@ -336,7 +336,7 @@ function initializeMockup() {
       this.placementState.lastX = e.clientX;
       this.placementState.lastY = e.clientY;
       
-      const overlay = document.getElementById('nt-overlay-" + window.STUDIO_SECTION_ID + "');
+      const overlay = document.getElementById('nt-overlay-{{ section.id }}');
       if (overlay) {
         overlay.style.cursor = 'grabbing';
       }
@@ -351,7 +351,7 @@ function initializeMockup() {
       const deltaX = e.clientX - this.placementState.lastX;
       const deltaY = e.clientY - this.placementState.lastY;
       
-      const canvas = document.getElementById('nt-mockup-canvas-" + window.STUDIO_SECTION_ID + "');
+      const canvas = document.getElementById('nt-mockup-canvas-{{ section.id }}');
       if (canvas) {
         const rect = canvas.getBoundingClientRect();
         const deltaXPercent = (deltaX / rect.width) * 100;
@@ -374,7 +374,7 @@ function initializeMockup() {
     stopDrag() {
       this.placementState.dragging = false;
       
-      const overlay = document.getElementById('nt-overlay-" + window.STUDIO_SECTION_ID + "');
+      const overlay = document.getElementById('nt-overlay-{{ section.id }}');
       if (overlay) {
         overlay.style.cursor = 'grab';
       }
@@ -476,7 +476,7 @@ function initializeMockup() {
 
     // Add mouse wheel resizing for easier control
     bindMouseWheelResize() {
-      const overlay = document.getElementById('nt-overlay-" + window.STUDIO_SECTION_ID + "');
+      const overlay = document.getElementById('nt-overlay-{{ section.id }}');
       if (!overlay) return;
 
       let isOverOverlay = false;
@@ -609,8 +609,8 @@ function initializeMockup() {
       this.placementState.zoomLevel = zoomLevel;
       
       // Apply zoom to the entire canvas container
-      const canvas = document.getElementById('nt-mockup-canvas-" + window.STUDIO_SECTION_ID + "');
-      const mockupContainer = document.getElementById('nt-mockup-" + window.STUDIO_SECTION_ID + "');
+      const canvas = document.getElementById('nt-mockup-canvas-{{ section.id }}');
+      const mockupContainer = document.getElementById('nt-mockup-{{ section.id }}');
       
       if (canvas && mockupContainer) {
         // Apply CSS transform to zoom the entire canvas with smooth transition
@@ -636,16 +636,16 @@ function initializeMockup() {
 
     updateZoomIndicator(zoomLevel) {
       // Remove existing zoom indicator
-      const existingIndicator = document.getElementById('nt-zoom-indicator-" + window.STUDIO_SECTION_ID + "');
+      const existingIndicator = document.getElementById('nt-zoom-indicator-{{ section.id }}');
       if (existingIndicator) {
         existingIndicator.remove();
       }
       
       // Add zoom indicator overlay
-      const canvas = document.getElementById('nt-mockup-canvas-" + window.STUDIO_SECTION_ID + "');
+      const canvas = document.getElementById('nt-mockup-canvas-{{ section.id }}');
       if (canvas && zoomLevel !== 1.0) {
         const indicator = document.createElement('div');
-        indicator.id = 'nt-zoom-indicator-" + window.STUDIO_SECTION_ID + "';
+        indicator.id = 'nt-zoom-indicator-{{ section.id }}';
         indicator.style.cssText = `
           position: absolute;
           top: 10px;
@@ -680,7 +680,7 @@ function initializeMockup() {
     },
 
     updateZoomLevelDisplay() {
-      const zoomDisplay = document.getElementById(`nt-zoom-level-" + window.STUDIO_SECTION_ID + "`);
+      const zoomDisplay = document.getElementById(`nt-zoom-level-{{ section.id }}`);
       if (zoomDisplay) {
         zoomDisplay.textContent = `Zoom: ${Math.round(this.placementState.zoomLevel * 100)}%`;
       }
@@ -689,8 +689,8 @@ function initializeMockup() {
     bindZoomControls() {
       // Zoom In button
       // Zoom Slider (replaces old +/- buttons)
-      const zoomRange = document.getElementById(`nt-zoom-range-" + window.STUDIO_SECTION_ID + "`);
-      const zoomLabel = document.getElementById(`nt-zoom-label-" + window.STUDIO_SECTION_ID + "`);
+      const zoomRange = document.getElementById(`nt-zoom-range-{{ section.id }}`);
+      const zoomLabel = document.getElementById(`nt-zoom-label-{{ section.id }}`);
       
       if (zoomRange && zoomLabel) {
         // Update zoom when slider changes
@@ -744,8 +744,8 @@ function initializeMockup() {
 
     // Bind drag functionality to overlay
     bindDragResize() {
-      const overlay = document.getElementById('nt-overlay-" + window.STUDIO_SECTION_ID + "');
-      const canvas = document.getElementById('nt-mockup-canvas-" + window.STUDIO_SECTION_ID + "');
+      const overlay = document.getElementById('nt-overlay-{{ section.id }}');
+      const canvas = document.getElementById('nt-mockup-canvas-{{ section.id }}');
       
       if (!overlay || !canvas) return;
       
@@ -759,7 +759,7 @@ function initializeMockup() {
       });
 
       // Bind resize handles
-      const resizeHandles = document.querySelectorAll(`#nt-overlay-" + window.STUDIO_SECTION_ID + " .resize-handle`);
+      const resizeHandles = document.querySelectorAll(`#nt-overlay-{{ section.id }} .resize-handle`);
       resizeHandles.forEach(handle => {
         handle.addEventListener('mousedown', (e) => {
           e.preventDefault();
@@ -781,7 +781,7 @@ function initializeMockup() {
     },
 
     bindEvents() {
-      const rootId = "nt-mockup-" + window.STUDIO_SECTION_ID + "";
+      const rootId = "nt-mockup-{{ section.id }}";
       
       // View buttons
       const viewBtns = Array.from(document.querySelectorAll(`#${rootId} .nt-btn--view`));
@@ -806,7 +806,7 @@ function initializeMockup() {
       });
 
       // Upload button
-      const uploadBtn = document.getElementById(`nt-upload-" + window.STUDIO_SECTION_ID + "`);
+      const uploadBtn = document.getElementById(`nt-upload-{{ section.id }}`);
       if (uploadBtn) {
         uploadBtn.addEventListener("click", (e) => {
           console.log('📁 Upload button clicked');
@@ -824,7 +824,7 @@ function initializeMockup() {
       }
 
       // Download button
-      const downloadBtn = document.getElementById(`nt-download-" + window.STUDIO_SECTION_ID + "`);
+      const downloadBtn = document.getElementById(`nt-download-{{ section.id }}`);
       if (downloadBtn) {
         downloadBtn.addEventListener("click", () => {
           console.log('💾 Download button clicked');
@@ -833,11 +833,11 @@ function initializeMockup() {
       }
 
       // Edit button - handled by initEditModal() function below
-      // const editBtn = document.getElementById(`nt-edit-" + window.STUDIO_SECTION_ID + "`);
+      // const editBtn = document.getElementById(`nt-edit-{{ section.id }}`);
       // Removed old "coming soon" alert - now opens advanced Edit Modal
 
       // Remove button
-      const removeBtn = document.getElementById(`nt-remove-" + window.STUDIO_SECTION_ID + "`);
+      const removeBtn = document.getElementById(`nt-remove-{{ section.id }}`);
       if (removeBtn) {
         removeBtn.addEventListener("click", () => {
           console.log('🗑️ Remove button clicked');
@@ -846,7 +846,7 @@ function initializeMockup() {
       }
 
       // Invert Colors button
-      const invertBtn = document.getElementById(`nt-invert-" + window.STUDIO_SECTION_ID + "`);
+      const invertBtn = document.getElementById(`nt-invert-{{ section.id }}`);
       if (invertBtn) {
         invertBtn.addEventListener("click", () => {
           console.log('🔄 Invert Colors button clicked');
@@ -854,13 +854,13 @@ function initializeMockup() {
         });
       }
 
-      const removeBgBtn = document.getElementById(`nt-remove-bg-" + window.STUDIO_SECTION_ID + "`);
+      const removeBgBtn = document.getElementById(`nt-remove-bg-{{ section.id }}`);
       if (removeBgBtn) removeBgBtn.addEventListener("click", () => { if (this.removeBackground) this.removeBackground(); else this.showMessage('❌ Loading...', 'error'); });
 
       this.bindPlacementGuide();
 
       // Perfect Fit button
-      const perfectFitBtn = document.getElementById(`nt-perfect-fit-btn-" + window.STUDIO_SECTION_ID + "`);
+      const perfectFitBtn = document.getElementById(`nt-perfect-fit-btn-{{ section.id }}`);
       if (perfectFitBtn) {
         perfectFitBtn.addEventListener("click", () => {
           console.log('🎯 Perfect Fit button clicked');
@@ -869,7 +869,7 @@ function initializeMockup() {
       }
 
       // Submit Request button (shows the customer form)
-      const submitBtn = document.getElementById(`nt-submit-request-btn-" + window.STUDIO_SECTION_ID + "`);
+      const submitBtn = document.getElementById(`nt-submit-request-btn-{{ section.id }}`);
       if (submitBtn) {
         submitBtn.addEventListener("click", () => {
           console.log('🚀 Submit Request button clicked');
@@ -878,7 +878,7 @@ function initializeMockup() {
       }
 
       // Customer form submit
-      const requestForm = document.getElementById(`nt-request-form-" + window.STUDIO_SECTION_ID + "`);
+      const requestForm = document.getElementById(`nt-request-form-{{ section.id }}`);
       if (requestForm) {
         requestForm.addEventListener('submit', (e) => {
           e.preventDefault();
@@ -887,16 +887,16 @@ function initializeMockup() {
       }
 
       // Cancel button
-      const cancelBtn = document.getElementById(`nt-cancel-request-" + window.STUDIO_SECTION_ID + "`);
+      const cancelBtn = document.getElementById(`nt-cancel-request-{{ section.id }}`);
       if (cancelBtn) {
         cancelBtn.addEventListener('click', () => {
-          document.getElementById(`nt-submit-request-" + window.STUDIO_SECTION_ID + "`).style.display = 'none';
+          document.getElementById(`nt-submit-request-{{ section.id }}`).style.display = 'none';
           this.resetRequestForm();
         });
       }
 
       // 3D Controls
-      const rotateBtn = document.getElementById(`nt-3d-rotate-" + window.STUDIO_SECTION_ID + "`);
+      const rotateBtn = document.getElementById(`nt-3d-rotate-{{ section.id }}`);
       if (rotateBtn) {
         rotateBtn.addEventListener("click", () => {
           console.log('↺ Rotate button clicked');
@@ -904,7 +904,7 @@ function initializeMockup() {
         });
       }
 
-      const zoomBtn = document.getElementById(`nt-zoom-" + window.STUDIO_SECTION_ID + "`);
+      const zoomBtn = document.getElementById(`nt-zoom-{{ section.id }}`);
       if (zoomBtn) {
         zoomBtn.addEventListener("click", () => {
           console.log('🔍 Zoom button clicked');
@@ -912,7 +912,7 @@ function initializeMockup() {
         });
       }
 
-      const validateBtn = document.getElementById(`nt-validate-" + window.STUDIO_SECTION_ID + "`);
+      const validateBtn = document.getElementById(`nt-validate-{{ section.id }}`);
       if (validateBtn) {
         validateBtn.addEventListener("click", () => {
           console.log('✅ Validate button clicked');
@@ -920,7 +920,7 @@ function initializeMockup() {
         });
       }
 
-      const resetBtn = document.getElementById(`nt-reset-" + window.STUDIO_SECTION_ID + "`);
+      const resetBtn = document.getElementById(`nt-reset-{{ section.id }}`);
       if (resetBtn) {
         resetBtn.addEventListener("click", () => {
           console.log('🔄 Reset button clicked');
@@ -957,8 +957,8 @@ function initializeMockup() {
     applyUploadedDesign(imageData) {
       console.log('🎨 Applying design to mockup');
       
-      const overlayDiv = document.getElementById(`nt-overlay-" + window.STUDIO_SECTION_ID + "`);
-      const designText = document.getElementById(`nt-design-text-" + window.STUDIO_SECTION_ID + "`);
+      const overlayDiv = document.getElementById(`nt-overlay-{{ section.id }}`);
+      const designText = document.getElementById(`nt-design-text-{{ section.id }}`);
       
       if (overlayDiv && designText) {
         designText.style.display = 'none';
@@ -987,7 +987,7 @@ function initializeMockup() {
         console.log('✅ Design applied to mockup');
         
         // Show canvas nudge controls
-        const nudgeControls = document.getElementById('canvas-nudge-controls-" + window.STUDIO_SECTION_ID + "');
+        const nudgeControls = document.getElementById('canvas-nudge-controls-{{ section.id }}');
         if (nudgeControls) {
           nudgeControls.style.opacity = '1';
           nudgeControls.style.pointerEvents = 'auto';
@@ -1010,13 +1010,13 @@ function initializeMockup() {
       
       const baseImg = new Image();
       baseImg.crossOrigin = "anonymous";
-      baseImg.src = document.getElementById("nt-base-" + window.STUDIO_SECTION_ID + "").src;
+      baseImg.src = document.getElementById("nt-base-{{ section.id }}").src;
       
       baseImg.onload = () => {
         console.log('✅ Base image loaded, drawing to canvas');
         ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
 
-        const overlayImg = document.querySelector(`#nt-overlay-" + window.STUDIO_SECTION_ID + " img`);
+        const overlayImg = document.querySelector(`#nt-overlay-{{ section.id }} img`);
         console.log('Overlay image found:', overlayImg);
             
         if (overlayImg && overlayImg.src && this.placementState.hasUploadedDesign) {
@@ -1091,9 +1091,9 @@ function initializeMockup() {
     },
 
     bindPlacementGuide() {
-      const toggleBtn = document.getElementById(`nt-toggle-guide-" + window.STUDIO_SECTION_ID + "`);
-      const guideText = document.getElementById(`nt-guide-text-" + window.STUDIO_SECTION_ID + "`);
-      const overlay = document.getElementById(`nt-overlay-" + window.STUDIO_SECTION_ID + "`);
+      const toggleBtn = document.getElementById(`nt-toggle-guide-{{ section.id }}`);
+      const guideText = document.getElementById(`nt-guide-text-{{ section.id }}`);
+      const overlay = document.getElementById(`nt-overlay-{{ section.id }}`);
       let guideVisible = false;
       
       if (toggleBtn && overlay) {
@@ -1106,26 +1106,26 @@ function initializeMockup() {
             overlay.style.boxShadow = '0 0 0 2px rgba(239, 68, 68, 0.2), inset 0 0 0 2px rgba(239, 68, 68, 0.1)';
             
             // Add crosshairs using pseudo-elements via a style element
-            if (!document.getElementById('placement-guide-style-" + window.STUDIO_SECTION_ID + "')) {
+            if (!document.getElementById('placement-guide-style-{{ section.id }}')) {
               const styleEl = document.createElement('style');
-              styleEl.id = 'placement-guide-style-" + window.STUDIO_SECTION_ID + "';
+              styleEl.id = 'placement-guide-style-{{ section.id }}';
               styleEl.textContent = `
-                #nt-overlay-" + window.STUDIO_SECTION_ID + "::before,
-                #nt-overlay-" + window.STUDIO_SECTION_ID + "::after {
+                #nt-overlay-{{ section.id }}::before,
+                #nt-overlay-{{ section.id }}::after {
                   content: '';
                   position: absolute;
                   background: rgba(239, 68, 68, 0.5);
                   z-index: 1000;
                   pointer-events: none;
                 }
-                #nt-overlay-" + window.STUDIO_SECTION_ID + "::before {
+                #nt-overlay-{{ section.id }}::before {
                   top: 50%;
                   left: 0;
                   right: 0;
                   height: 2px;
                   transform: translateY(-50%);
                 }
-                #nt-overlay-" + window.STUDIO_SECTION_ID + "::after {
+                #nt-overlay-{{ section.id }}::after {
                   left: 50%;
                   top: 0;
                   bottom: 0;
@@ -1144,7 +1144,7 @@ function initializeMockup() {
             overlay.style.boxShadow = 'inset 0 4px 12px rgba(0, 0, 0, 0.1)';
             
             // Remove crosshairs style
-            const styleEl = document.getElementById('placement-guide-style-" + window.STUDIO_SECTION_ID + "');
+            const styleEl = document.getElementById('placement-guide-style-{{ section.id }}');
             if (styleEl) {
               styleEl.remove();
             }
@@ -1157,7 +1157,7 @@ function initializeMockup() {
     },
     
     removeDesign() {
-      const overlay = document.getElementById('nt-overlay-" + window.STUDIO_SECTION_ID + "');
+      const overlay = document.getElementById('nt-overlay-{{ section.id }}');
       if (overlay) {
         overlay.innerHTML = '';
         this.placementState.hasUploadedDesign = false;
@@ -1169,7 +1169,7 @@ function initializeMockup() {
     
     invertColors() {
       // Check if there's an uploaded design image
-      const overlayImg = document.querySelector(`#nt-overlay-" + window.STUDIO_SECTION_ID + " img`);
+      const overlayImg = document.querySelector(`#nt-overlay-{{ section.id }} img`);
       
       if (overlayImg && this.placementState.hasUploadedDesign) {
         // Invert uploaded image colors using Canvas API
@@ -1240,7 +1240,7 @@ function initializeMockup() {
           
           this.designState.textColor = invertedColor;
           
-          const textElement = document.getElementById('nt-design-text-" + window.STUDIO_SECTION_ID + "');
+          const textElement = document.getElementById('nt-design-text-{{ section.id }}');
           if (textElement) {
             textElement.style.color = invertedColor;
           }
@@ -1274,7 +1274,7 @@ function initializeMockup() {
       this.updateDesignPosition();
 
       // Add animation effect
-      const overlay = document.getElementById('nt-overlay-" + window.STUDIO_SECTION_ID + "');
+      const overlay = document.getElementById('nt-overlay-{{ section.id }}');
       if (overlay) {
         overlay.style.transition = 'transform 0.3s ease';
         overlay.style.transform = `translateX(-50%) rotate(${perfectDimensions.rotateDeg}deg) scale(1.05)`;
@@ -1301,7 +1301,7 @@ function initializeMockup() {
       }
       
       // Show the customer information form
-      const formSection = document.getElementById(`nt-submit-request-" + window.STUDIO_SECTION_ID + "`);
+      const formSection = document.getElementById(`nt-submit-request-{{ section.id }}`);
       if (formSection) {
         formSection.style.display = 'block';
         formSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -1337,11 +1337,11 @@ function initializeMockup() {
       console.log('✅ EmailJS is available');
 
       // Get form data
-      const customerName = document.getElementById(`nt-customer-name-" + window.STUDIO_SECTION_ID + "`).value.trim();
-      const customerEmail = document.getElementById(`nt-customer-email-" + window.STUDIO_SECTION_ID + "`).value.trim();
-      const customerPhone = document.getElementById(`nt-customer-phone-" + window.STUDIO_SECTION_ID + "`).value.trim();
-      const tshirtSize = document.getElementById(`nt-tshirt-size-" + window.STUDIO_SECTION_ID + "`).value;
-      const customerMessage = document.getElementById(`nt-customer-message-" + window.STUDIO_SECTION_ID + "`).value.trim();
+      const customerName = document.getElementById(`nt-customer-name-{{ section.id }}`).value.trim();
+      const customerEmail = document.getElementById(`nt-customer-email-{{ section.id }}`).value.trim();
+      const customerPhone = document.getElementById(`nt-customer-phone-{{ section.id }}`).value.trim();
+      const tshirtSize = document.getElementById(`nt-tshirt-size-{{ section.id }}`).value;
+      const customerMessage = document.getElementById(`nt-customer-message-{{ section.id }}`).value.trim();
 
       // Validate required fields
       if (!customerName || !customerEmail) {
@@ -1358,7 +1358,7 @@ function initializeMockup() {
 
       try {
         // Add loading state to button
-        const submitBtn = document.getElementById(`nt-submit-request-form-btn-" + window.STUDIO_SECTION_ID + "`);
+        const submitBtn = document.getElementById(`nt-submit-request-form-btn-{{ section.id }}`);
         if (submitBtn) {
           submitBtn.classList.add('loading');
           submitBtn.style.pointerEvents = 'none';
@@ -1440,7 +1440,7 @@ function initializeMockup() {
         }
         
         // Hide form and reset
-        document.getElementById(`nt-submit-request-" + window.STUDIO_SECTION_ID + "`).style.display = 'none';
+        document.getElementById(`nt-submit-request-{{ section.id }}`).style.display = 'none';
         this.resetRequestForm();
         
         // Remove loading state
@@ -1455,7 +1455,7 @@ function initializeMockup() {
         this.showMessage('❌ Failed to submit request. Please try again.', 'error');
         
         // Remove loading state on error
-        const submitBtn = document.getElementById(`nt-submit-request-form-btn-" + window.STUDIO_SECTION_ID + "`);
+        const submitBtn = document.getElementById(`nt-submit-request-form-btn-{{ section.id }}`);
         if (submitBtn) {
           submitBtn.classList.remove('loading');
           submitBtn.style.pointerEvents = 'auto';
@@ -1465,11 +1465,11 @@ function initializeMockup() {
     },
 
     resetRequestForm() {
-      document.getElementById(`nt-customer-name-" + window.STUDIO_SECTION_ID + "`).value = '';
-      document.getElementById(`nt-customer-email-" + window.STUDIO_SECTION_ID + "`).value = '';
-      document.getElementById(`nt-customer-phone-" + window.STUDIO_SECTION_ID + "`).value = '';
-      document.getElementById(`nt-tshirt-size-" + window.STUDIO_SECTION_ID + "`).value = '';
-      document.getElementById(`nt-customer-message-" + window.STUDIO_SECTION_ID + "`).value = '';
+      document.getElementById(`nt-customer-name-{{ section.id }}`).value = '';
+      document.getElementById(`nt-customer-email-{{ section.id }}`).value = '';
+      document.getElementById(`nt-customer-phone-{{ section.id }}`).value = '';
+      document.getElementById(`nt-tshirt-size-{{ section.id }}`).value = '';
+      document.getElementById(`nt-customer-message-{{ section.id }}`).value = '';
     },
 
     async submitToSupabase(requestData) {
@@ -1665,12 +1665,12 @@ function initializeMockup() {
         
         const baseImg = new Image();
         baseImg.crossOrigin = "anonymous";
-        baseImg.src = document.getElementById("nt-base-" + window.STUDIO_SECTION_ID + "").src;
+        baseImg.src = document.getElementById("nt-base-{{ section.id }}").src;
         
         baseImg.onload = () => {
           ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
 
-          const overlayImg = document.querySelector(`#nt-overlay-" + window.STUDIO_SECTION_ID + " img`);
+          const overlayImg = document.querySelector(`#nt-overlay-{{ section.id }} img`);
           
           if (overlayImg && overlayImg.src) {
             const designImg = new Image();
@@ -1743,7 +1743,7 @@ function initializeMockup() {
 
     async uploadDesignToStorage() {
       console.log('🎨 Starting design upload to storage...');
-      const overlayImg = document.querySelector(`#nt-overlay-" + window.STUDIO_SECTION_ID + " img`);
+      const overlayImg = document.querySelector(`#nt-overlay-{{ section.id }} img`);
       
       if (!overlayImg) {
         console.warn('⚠️ No overlay image element found');
@@ -1941,7 +1941,7 @@ function initializeMockup() {
   
   // Initialize Text Engine (external function)
   if (typeof window.initializeTextEngine === 'function') {
-    window.initializeTextEngine('" + window.STUDIO_SECTION_ID + "');
+    window.initializeTextEngine('{{ section.id }}');
   }
 }
 
@@ -1956,15 +1956,15 @@ function initializeMockup() {
     console.log('🎯 Testing Perfect Fit with exact dimensions...');
     
     // Find the mockup section
-    const section = document.getElementById('nt-mockup-" + window.STUDIO_SECTION_ID + "');
+    const section = document.getElementById('nt-mockup-{{ section.id }}');
     if (!section) {
       console.error('❌ Mockup section not found!');
       return;
     }
     
     // Get the overlay and canvas
-    const overlay = document.getElementById('nt-overlay-" + window.STUDIO_SECTION_ID + "');
-    const canvas = document.getElementById('nt-mockup-canvas-" + window.STUDIO_SECTION_ID + "');
+    const overlay = document.getElementById('nt-overlay-{{ section.id }}');
+    const canvas = document.getElementById('nt-mockup-canvas-{{ section.id }}');
     
     if (!overlay || !canvas) {
       console.error('❌ Overlay or canvas not found!');
@@ -2044,9 +2044,9 @@ function initializeMockup() {
 // Size Chart Toggle Functionality - Initialize when studio opens
 function initializeSizeChart() {
   console.log('📏 Initializing Size Chart...');
-  const sizeChartToggle = document.getElementById('size-chart-toggle-" + window.STUDIO_SECTION_ID + "');
-  const sizeChartContent = document.getElementById('size-chart-content-" + window.STUDIO_SECTION_ID + "');
-  const sizeChartIcon = document.getElementById('size-chart-icon-" + window.STUDIO_SECTION_ID + "');
+  const sizeChartToggle = document.getElementById('size-chart-toggle-{{ section.id }}');
+  const sizeChartContent = document.getElementById('size-chart-content-{{ section.id }}');
+  const sizeChartIcon = document.getElementById('size-chart-icon-{{ section.id }}');
   
   if (sizeChartToggle && sizeChartContent && sizeChartIcon) {
     console.log('✅ Size Chart elements found, binding events...');
@@ -2092,7 +2092,7 @@ document.head.appendChild(studioEditScript);
 // ========================================
 function initCanvasNudgeControls() {
   const nudgeButtons = document.querySelectorAll('.canvas-nudge-btn');
-  const nudgeContainer = document.querySelector('#canvas-nudge-controls-" + window.STUDIO_SECTION_ID + "');
+  const nudgeContainer = document.querySelector('#canvas-nudge-controls-{{ section.id }}');
   
   // Mobile magnify-on-tap behavior
   if (nudgeContainer && window.innerWidth <= 768) {
@@ -2613,9 +2613,9 @@ console.log('  • debugDesignPosition() - Check design overlay position');
 // EDIT MODAL FUNCTIONALITY
 // ========================================
 function initEditModal() {
-  const modal = document.getElementById('edit-modal-" + window.STUDIO_SECTION_ID + "');
-  const closeBtn = document.getElementById('edit-modal-close-" + window.STUDIO_SECTION_ID + "');
-  const doneBtn = document.getElementById('edit-done-btn-" + window.STUDIO_SECTION_ID + "');
+  const modal = document.getElementById('edit-modal-{{ section.id }}');
+  const closeBtn = document.getElementById('edit-modal-close-{{ section.id }}');
+  const doneBtn = document.getElementById('edit-done-btn-{{ section.id }}');
   
   // Tab switching
   const tabs = document.querySelectorAll('.edit-tab');
@@ -2639,7 +2639,7 @@ function initEditModal() {
       tabContents.forEach(content => {
         content.style.display = 'none';
       });
-      document.getElementById(`tab-${tabName}-" + window.STUDIO_SECTION_ID + "`).style.display = 'block';
+      document.getElementById(`tab-${tabName}-{{ section.id }}`).style.display = 'block';
       
       // Update quality meter when switching to quality tab
       if (tabName === 'quality') {
@@ -2666,10 +2666,10 @@ function initEditModal() {
     const obj = studio.currentDesignObj;
     if (obj) {
       const scaleValue = Math.round((obj.scaleX || 1) * 100);
-      document.getElementById('scale-input-" + window.STUDIO_SECTION_ID + "').value = scaleValue;
-      document.getElementById('scale-slider-" + window.STUDIO_SECTION_ID + "').value = scaleValue;
-      document.getElementById('scale-output-" + window.STUDIO_SECTION_ID + "').textContent = scaleValue + '%';
-      document.getElementById('rotation-input-" + window.STUDIO_SECTION_ID + "').value = Math.round(obj.angle || 0);
+      document.getElementById('scale-input-{{ section.id }}').value = scaleValue;
+      document.getElementById('scale-slider-{{ section.id }}').value = scaleValue;
+      document.getElementById('scale-output-{{ section.id }}').textContent = scaleValue + '%';
+      document.getElementById('rotation-input-{{ section.id }}').value = Math.round(obj.angle || 0);
     }
     
     // Populate the live preview with the canvas
@@ -2678,7 +2678,7 @@ function initEditModal() {
   
   // Function to populate/update the preview
   function populatePreview() {
-    const previewContainer = document.getElementById('edit-preview-" + window.STUDIO_SECTION_ID + "');
+    const previewContainer = document.getElementById('edit-preview-{{ section.id }}');
     if (!previewContainer) {
       console.warn('⚠️ Preview container not found');
       return;
@@ -2689,7 +2689,7 @@ function initEditModal() {
     // Try multiple methods to find the canvas/design
     
     // Method 1: Find the main canvas container
-    let canvasContainer = document.getElementById('nt-mockup-canvas-" + window.STUDIO_SECTION_ID + "');
+    let canvasContainer = document.getElementById('nt-mockup-canvas-{{ section.id }}');
     
     // Method 2: Try finding by class
     if (!canvasContainer) {
@@ -2783,7 +2783,7 @@ function initEditModal() {
     
     // Fallback 1: Show just the uploaded image from overlay
     console.log('🔍 Canvas not found, trying overlay image...');
-    const overlayImg = document.querySelector('#nt-overlay-" + window.STUDIO_SECTION_ID + " img');
+    const overlayImg = document.querySelector('#nt-overlay-{{ section.id }} img');
     
     if (overlayImg) {
       console.log('✅ Found overlay image');
@@ -2797,7 +2797,7 @@ function initEditModal() {
       `;
       
       // Clone the t-shirt base if available
-      const tshirtBase = document.querySelector('#nt-base-" + window.STUDIO_SECTION_ID + " img');
+      const tshirtBase = document.querySelector('#nt-base-{{ section.id }} img');
       if (tshirtBase) {
         const clonedBase = tshirtBase.cloneNode(true);
         clonedBase.style.cssText = `
@@ -2844,14 +2844,14 @@ function initEditModal() {
     studio.editOps?.close();
   }
   
-  // Find Edit Design button - ID is nt-edit-" + window.STUDIO_SECTION_ID + "
-  const actualEditBtn = document.getElementById('nt-edit-" + window.STUDIO_SECTION_ID + "');
+  // Find Edit Design button - ID is nt-edit-{{ section.id }}
+  const actualEditBtn = document.getElementById('nt-edit-{{ section.id }}');
   
   if (actualEditBtn) {
     actualEditBtn.addEventListener('click', openEditModal);
-    console.log('✅ Edit Design button (nt-edit-" + window.STUDIO_SECTION_ID + ") wired to modal');
+    console.log('✅ Edit Design button (nt-edit-{{ section.id }}) wired to modal');
   } else {
-    console.warn('⚠️ Could not find Edit Design button with ID: nt-edit-" + window.STUDIO_SECTION_ID + "');
+    console.warn('⚠️ Could not find Edit Design button with ID: nt-edit-{{ section.id }}');
   }
   
   closeBtn.addEventListener('click', closeEditModal);
@@ -2865,9 +2865,9 @@ function initEditModal() {
   // ========================================
   // TRANSFORM TAB - WITH SYNCED SCALE SLIDER
   // ========================================
-  const scaleInput = document.getElementById('scale-input-" + window.STUDIO_SECTION_ID + "');
-  const scaleSlider = document.getElementById('scale-slider-" + window.STUDIO_SECTION_ID + "');
-  const scaleOutput = document.getElementById('scale-output-" + window.STUDIO_SECTION_ID + "');
+  const scaleInput = document.getElementById('scale-input-{{ section.id }}');
+  const scaleSlider = document.getElementById('scale-slider-{{ section.id }}');
+  const scaleOutput = document.getElementById('scale-output-{{ section.id }}');
   
   // Sync scale input → slider & output
   scaleInput.addEventListener('input', (e) => {
@@ -2892,8 +2892,8 @@ function initEditModal() {
   // ========================================
   let previewZoomLevel = 1.0;
   
-  const previewZoomRange = document.getElementById('preview-zoom-range-" + window.STUDIO_SECTION_ID + "');
-  const previewZoomLabel = document.getElementById('preview-zoom-label-" + window.STUDIO_SECTION_ID + "');
+  const previewZoomRange = document.getElementById('preview-zoom-range-{{ section.id }}');
+  const previewZoomLabel = document.getElementById('preview-zoom-label-{{ section.id }}');
   
   if (previewZoomRange && previewZoomLabel) {
     previewZoomRange.addEventListener('input', (e) => {
@@ -2902,7 +2902,7 @@ function initEditModal() {
       previewZoomLabel.textContent = `${percent}%`;
       
       // Apply zoom to the preview container's content
-      const previewContainer = document.getElementById('edit-preview-" + window.STUDIO_SECTION_ID + "');
+      const previewContainer = document.getElementById('edit-preview-{{ section.id }}');
       const previewClone = previewContainer?.querySelector('#preview-clone');
       
       if (previewClone) {
@@ -2916,36 +2916,36 @@ function initEditModal() {
     console.log('✅ Preview zoom controls initialized');
   }
   
-  document.getElementById('rotation-input-" + window.STUDIO_SECTION_ID + "').addEventListener('input', (e) => {
+  document.getElementById('rotation-input-{{ section.id }}').addEventListener('input', (e) => {
     studio.editOps?.rotate(parseFloat(e.target.value));
     setTimeout(populatePreview, 100); // Update preview after transform
   });
   
-  document.getElementById('flip-h-btn-" + window.STUDIO_SECTION_ID + "').addEventListener('click', () => {
+  document.getElementById('flip-h-btn-{{ section.id }}').addEventListener('click', () => {
     studio.editOps?.flipX();
     setTimeout(populatePreview, 100); // Update preview after transform
   });
   
-  document.getElementById('flip-v-btn-" + window.STUDIO_SECTION_ID + "').addEventListener('click', () => {
+  document.getElementById('flip-v-btn-{{ section.id }}').addEventListener('click', () => {
     studio.editOps?.flipY();
     setTimeout(populatePreview, 100); // Update preview after transform
   });
   
   // Nudge controls with 0.25 step (same as main canvas)
   const NUDGE_STEP = 0.25;
-  document.getElementById('nudge-up-" + window.STUDIO_SECTION_ID + "').addEventListener('click', () => {
+  document.getElementById('nudge-up-{{ section.id }}').addEventListener('click', () => {
     studio.editOps?.nudge(0, -1, NUDGE_STEP);
     setTimeout(populatePreview, 100);
   });
-  document.getElementById('nudge-down-" + window.STUDIO_SECTION_ID + "').addEventListener('click', () => {
+  document.getElementById('nudge-down-{{ section.id }}').addEventListener('click', () => {
     studio.editOps?.nudge(0, 1, NUDGE_STEP);
     setTimeout(populatePreview, 100);
   });
-  document.getElementById('nudge-left-" + window.STUDIO_SECTION_ID + "').addEventListener('click', () => {
+  document.getElementById('nudge-left-{{ section.id }}').addEventListener('click', () => {
     studio.editOps?.nudge(-1, 0, NUDGE_STEP);
     setTimeout(populatePreview, 100);
   });
-  document.getElementById('nudge-right-" + window.STUDIO_SECTION_ID + "').addEventListener('click', () => {
+  document.getElementById('nudge-right-{{ section.id }}').addEventListener('click', () => {
     studio.editOps?.nudge(1, 0, NUDGE_STEP);
     setTimeout(populatePreview, 100);
   });
@@ -2961,12 +2961,12 @@ function initEditModal() {
     }
   });
   
-  document.getElementById('center-btn-" + window.STUDIO_SECTION_ID + "').addEventListener('click', () => {
+  document.getElementById('center-btn-{{ section.id }}').addEventListener('click', () => {
     studio.editOps?.center();
     setTimeout(populatePreview, 100);
   });
   
-  document.getElementById('autofit-btn-" + window.STUDIO_SECTION_ID + "').addEventListener('click', () => {
+  document.getElementById('autofit-btn-{{ section.id }}').addEventListener('click', () => {
     studio.editOps?.autoFit();
     setTimeout(populatePreview, 100);
   });
@@ -2974,9 +2974,9 @@ function initEditModal() {
   // ========================================
   // CROP TAB
   // ========================================
-  const cropInitBtn = document.getElementById('crop-init-btn-" + window.STUDIO_SECTION_ID + "');
-  const cropApplyBtn = document.getElementById('crop-apply-btn-" + window.STUDIO_SECTION_ID + "');
-  const cropCancelBtn = document.getElementById('crop-cancel-btn-" + window.STUDIO_SECTION_ID + "');
+  const cropInitBtn = document.getElementById('crop-init-btn-{{ section.id }}');
+  const cropApplyBtn = document.getElementById('crop-apply-btn-{{ section.id }}');
+  const cropCancelBtn = document.getElementById('crop-cancel-btn-{{ section.id }}');
   
   cropInitBtn.addEventListener('click', () => {
     const success = studio.editOps?.initCrop();
@@ -3013,28 +3013,28 @@ function initEditModal() {
   // ========================================
   // BACKGROUND TAB
   // ========================================
-  const bgToleranceSlider = document.getElementById('bg-tolerance-" + window.STUDIO_SECTION_ID + "');
-  const toleranceValue = document.getElementById('tolerance-value-" + window.STUDIO_SECTION_ID + "');
+  const bgToleranceSlider = document.getElementById('bg-tolerance-{{ section.id }}');
+  const toleranceValue = document.getElementById('tolerance-value-{{ section.id }}');
   
   bgToleranceSlider.addEventListener('input', (e) => {
     toleranceValue.textContent = e.target.value;
   });
   
-  document.getElementById('remove-bg-btn-" + window.STUDIO_SECTION_ID + "').addEventListener('click', () => {
-    const color = document.getElementById('bg-color-" + window.STUDIO_SECTION_ID + "').value;
+  document.getElementById('remove-bg-btn-{{ section.id }}').addEventListener('click', () => {
+    const color = document.getElementById('bg-color-{{ section.id }}').value;
     const tolerance = parseInt(bgToleranceSlider.value);
     studio.editOps?.removeBackground(color, tolerance);
   });
   
-  document.getElementById('revert-bg-btn-" + window.STUDIO_SECTION_ID + "').addEventListener('click', () => {
+  document.getElementById('revert-bg-btn-{{ section.id }}').addEventListener('click', () => {
     studio.editOps?.revertBackground();
   });
   
   // ========================================
   // ADJUST TAB
   // ========================================
-  const opacitySlider = document.getElementById('opacity-slider-" + window.STUDIO_SECTION_ID + "');
-  const opacityValue = document.getElementById('opacity-value-" + window.STUDIO_SECTION_ID + "');
+  const opacitySlider = document.getElementById('opacity-slider-{{ section.id }}');
+  const opacityValue = document.getElementById('opacity-value-{{ section.id }}');
   
   opacitySlider.addEventListener('input', (e) => {
     const val = e.target.value;
@@ -3042,8 +3042,8 @@ function initEditModal() {
     studio.editOps?.setOpacity(val / 100);
   });
   
-  const brightnessSlider = document.getElementById('brightness-slider-" + window.STUDIO_SECTION_ID + "');
-  const brightnessValue = document.getElementById('brightness-value-" + window.STUDIO_SECTION_ID + "');
+  const brightnessSlider = document.getElementById('brightness-slider-{{ section.id }}');
+  const brightnessValue = document.getElementById('brightness-value-{{ section.id }}');
   
   brightnessSlider.addEventListener('input', (e) => {
     const val = e.target.value;
@@ -3051,8 +3051,8 @@ function initEditModal() {
     studio.editOps?.setBrightness(parseFloat(val));
   });
   
-  const contrastSlider = document.getElementById('contrast-slider-" + window.STUDIO_SECTION_ID + "');
-  const contrastValue = document.getElementById('contrast-value-" + window.STUDIO_SECTION_ID + "');
+  const contrastSlider = document.getElementById('contrast-slider-{{ section.id }}');
+  const contrastValue = document.getElementById('contrast-value-{{ section.id }}');
   
   contrastSlider.addEventListener('input', (e) => {
     const val = e.target.value;
@@ -3060,13 +3060,13 @@ function initEditModal() {
     studio.editOps?.setContrast(parseFloat(val));
   });
   
-  const grayscaleCheck = document.getElementById('grayscale-check-" + window.STUDIO_SECTION_ID + "');
+  const grayscaleCheck = document.getElementById('grayscale-check-{{ section.id }}');
   grayscaleCheck.addEventListener('change', (e) => {
     studio.editOps?.setGrayscale(e.target.checked);
   });
   
-  const outlineSlider = document.getElementById('outline-slider-" + window.STUDIO_SECTION_ID + "');
-  const outlineValue = document.getElementById('outline-value-" + window.STUDIO_SECTION_ID + "');
+  const outlineSlider = document.getElementById('outline-slider-{{ section.id }}');
+  const outlineValue = document.getElementById('outline-value-{{ section.id }}');
   
   outlineSlider.addEventListener('input', (e) => {
     const val = e.target.value;
@@ -3077,8 +3077,8 @@ function initEditModal() {
   // ========================================
   // REPLACE TAB
   // ========================================
-  const replaceDropzone = document.getElementById('replace-dropzone-" + window.STUDIO_SECTION_ID + "');
-  const replaceInput = document.getElementById('replace-input-" + window.STUDIO_SECTION_ID + "');
+  const replaceDropzone = document.getElementById('replace-dropzone-{{ section.id }}');
+  const replaceInput = document.getElementById('replace-input-{{ section.id }}');
   
   replaceDropzone.addEventListener('click', () => {
     replaceInput.click();
@@ -3104,9 +3104,9 @@ function initEditModal() {
     const info = studio.editOps?.qualityInfo();
     if (!info || !info.dpi) return;
     
-    const dpiNumber = document.getElementById('dpi-number-" + window.STUDIO_SECTION_ID + "');
-    const qualityBadge = document.getElementById('quality-badge-" + window.STUDIO_SECTION_ID + "');
-    const qualityWarning = document.getElementById('quality-warning-" + window.STUDIO_SECTION_ID + "');
+    const dpiNumber = document.getElementById('dpi-number-{{ section.id }}');
+    const qualityBadge = document.getElementById('quality-badge-{{ section.id }}');
+    const qualityWarning = document.getElementById('quality-warning-{{ section.id }}');
     
     dpiNumber.textContent = info.dpi || '---';
     
@@ -3140,5 +3140,4 @@ function initEditModal() {
   
   console.log('✅ Edit Modal fully initialized with all 7 tabs');
 }
-
 
