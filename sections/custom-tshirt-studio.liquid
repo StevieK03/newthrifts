@@ -118,10 +118,12 @@
         height: 100%;
         background: #f8fafc;
         border-radius: 16px;
-        overflow: hidden;
+        overflow: auto; /* Changed from hidden to allow scrolling when zoomed */
         display: flex;
         align-items: center;
         justify-content: center;
+        transform-origin: center center;
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .cts-tshirt-container-{{ section.id }} {
@@ -202,6 +204,115 @@
         font-weight: 700;
         color: rgba(96, 165, 250, 0.8);
         letter-spacing: 2px;
+    }
+
+    /* Canvas Zoom Control Styles */
+    .cts-zoom-control-{{ section.id }} {
+        margin-top: 20px;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .cts-zoom-label-{{ section.id }} {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 15px;
+        font-weight: 600;
+        color: white;
+        margin-bottom: 12px;
+    }
+    
+    .cts-zoom-label-{{ section.id }} span:first-child {
+        font-size: 20px;
+    }
+    
+    .cts-zoom-slider-group-{{ section.id }} {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    
+    .cts-zoom-slider-{{ section.id }} {
+        flex: 1;
+        height: 6px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.1);
+        outline: none;
+        cursor: pointer;
+        -webkit-appearance: none;
+        appearance: none;
+    }
+    
+    .cts-zoom-slider-{{ section.id }}::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #27e1c1, #667eea);
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(39, 225, 193, 0.4);
+        transition: transform 0.2s;
+    }
+    
+    .cts-zoom-slider-{{ section.id }}::-webkit-slider-thumb:hover {
+        transform: scale(1.15);
+    }
+    
+    .cts-zoom-slider-{{ section.id }}::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #27e1c1, #667eea);
+        cursor: pointer;
+        border: none;
+        box-shadow: 0 2px 8px rgba(39, 225, 193, 0.4);
+        transition: transform 0.2s;
+    }
+    
+    .cts-zoom-slider-{{ section.id }}::-moz-range-thumb:hover {
+        transform: scale(1.15);
+    }
+    
+    .cts-zoom-btn-{{ section.id }} {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        font-size: 20px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+    }
+    
+    .cts-zoom-btn-{{ section.id }}:hover {
+        background: rgba(39, 225, 193, 0.2);
+        border-color: #27e1c1;
+        transform: scale(1.05);
+    }
+    
+    .cts-zoom-btn-{{ section.id }}:active {
+        transform: scale(0.95);
+    }
+    
+    .cts-zoom-value-{{ section.id }} {
+        min-width: 60px;
+        text-align: center;
+        font-size: 15px;
+        font-weight: 700;
+        color: white;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 8px 12px;
+        border-radius: 8px;
     }
 
     .cts-quick-actions-{{ section.id }} {
@@ -694,6 +805,17 @@
             min-height: 44px;
         }
         
+        /* Zoom Control - Mobile Optimized */
+        .cts-zoom-control-{{ section.id }} {
+            padding: 16px;
+            margin-top: 16px;
+        }
+        
+        .cts-zoom-btn-{{ section.id }} {
+            min-width: 44px;
+            min-height: 44px;
+        }
+        
         /* Workflow Steps - Stack on Mobile */
         .cts-workflow-steps-{{ section.id }} {
             flex-direction: column;
@@ -898,6 +1020,26 @@
                                 <span class="cts-design-text-{{ section.id }}" id="designText-{{ section.id }}">YOUR DESIGN HERE</span>
                             </div>
                         </div>
+                    </div>
+                </div>
+                
+                <!-- Canvas Zoom Control -->
+                <div class="cts-zoom-control-{{ section.id }}">
+                    <label class="cts-zoom-label-{{ section.id }}">
+                        <span>🔍</span>
+                        <span>Canvas Zoom</span>
+                    </label>
+                    <div class="cts-zoom-slider-group-{{ section.id }}">
+                        <button class="cts-zoom-btn-{{ section.id }}" id="zoomOutBtn-{{ section.id }}" title="Zoom Out">−</button>
+                        <input type="range" 
+                               class="cts-zoom-slider-{{ section.id }}" 
+                               id="canvasZoom-{{ section.id }}" 
+                               min="50" 
+                               max="200" 
+                               value="100" 
+                               step="5">
+                        <button class="cts-zoom-btn-{{ section.id }}" id="zoomInBtn-{{ section.id }}" title="Zoom In">+</button>
+                        <span class="cts-zoom-value-{{ section.id }}" id="zoomValue-{{ section.id }}">100%</span>
                     </div>
                 </div>
             </div>
@@ -1185,6 +1327,13 @@
     const flipVBtn = document.getElementById(`flipVBtn-${sectionId}`);
     const invertBtn = document.getElementById(`invertBtn-${sectionId}`);
     const tshirtImage = document.getElementById(`tshirtImage-${sectionId}`);
+    
+    // Canvas Zoom Elements
+    const canvasZoomSlider = document.getElementById(`canvasZoom-${sectionId}`);
+    const zoomValue = document.getElementById(`zoomValue-${sectionId}`);
+    const zoomInBtn = document.getElementById(`zoomInBtn-${sectionId}`);
+    const zoomOutBtn = document.getElementById(`zoomOutBtn-${sectionId}`);
+    const mockupCanvas = document.getElementById(`mockupCanvas-${sectionId}`);
 
     let uploadedImage = null;
     let currentFont = "'Bebas Neue', sans-serif";
@@ -1684,6 +1833,87 @@
     rotateSlider.addEventListener('change', () => {
         saveState();
     });
+
+    // ============================================
+    // CANVAS ZOOM FUNCTIONALITY
+    // ============================================
+    
+    // Update canvas zoom
+    function updateCanvasZoom() {
+        const zoomLevel = canvasZoomSlider.value / 100;
+        const tshirtContainer = document.getElementById(`tshirtContainer-${sectionId}`);
+        
+        if (mockupCanvas && tshirtContainer) {
+            // Scale the t-shirt container
+            tshirtContainer.style.transform = `scale(${zoomLevel})`;
+            tshirtContainer.style.transformOrigin = 'center center';
+            
+            // Update zoom display
+            zoomValue.textContent = `${canvasZoomSlider.value}%`;
+            
+            console.log(`🔍 Canvas zoom: ${canvasZoomSlider.value}%`);
+        }
+    }
+    
+    // Canvas zoom slider
+    if (canvasZoomSlider) {
+        canvasZoomSlider.addEventListener('input', (e) => {
+            updateCanvasZoom();
+        });
+    }
+    
+    // Zoom in button
+    if (zoomInBtn) {
+        zoomInBtn.addEventListener('click', () => {
+            const currentZoom = parseInt(canvasZoomSlider.value);
+            const newZoom = Math.min(200, currentZoom + 10);
+            canvasZoomSlider.value = newZoom;
+            updateCanvasZoom();
+        });
+    }
+    
+    // Zoom out button
+    if (zoomOutBtn) {
+        zoomOutBtn.addEventListener('click', () => {
+            const currentZoom = parseInt(canvasZoomSlider.value);
+            const newZoom = Math.max(50, currentZoom - 10);
+            canvasZoomSlider.value = newZoom;
+            updateCanvasZoom();
+        });
+    }
+    
+    // Keyboard shortcuts for zoom (Ctrl/Cmd + Plus/Minus)
+    document.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && !e.shiftKey) {
+            if (e.key === '=' || e.key === '+') {
+                e.preventDefault();
+                zoomInBtn.click();
+            } else if (e.key === '-' || e.key === '_') {
+                e.preventDefault();
+                zoomOutBtn.click();
+            } else if (e.key === '0') {
+                e.preventDefault();
+                canvasZoomSlider.value = 100;
+                updateCanvasZoom();
+            }
+        }
+    });
+    
+    // Mouse wheel zoom (Ctrl + Scroll)
+    if (mockupCanvas) {
+        mockupCanvas.addEventListener('wheel', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                e.preventDefault();
+                
+                const currentZoom = parseInt(canvasZoomSlider.value);
+                const delta = e.deltaY > 0 ? -5 : 5;
+                const newZoom = Math.max(50, Math.min(200, currentZoom + delta));
+                
+                canvasZoomSlider.value = newZoom;
+                updateCanvasZoom();
+            }
+        }, { passive: false });
+    }
 
     function updateTransform() {
         const scale = sizeSlider.value / 100;
