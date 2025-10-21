@@ -93,6 +93,7 @@
         border-radius: 24px;
         padding: 40px;
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        overflow: visible; /* Allow zoomed content to expand beyond card */
     }
 
     .cts-mockup-stage-{{ section.id }} {
@@ -105,6 +106,8 @@
         border-radius: 20px;
         padding: 30px;
         box-shadow: 0 25px 80px rgba(39, 225, 193, 0.2);
+        transition: width 0.3s ease, height 0.3s ease;
+        min-width: 0; /* Allow shrinking below 100% */
     }
 
     @keyframes gradientShift-{{ section.id }} {
@@ -1838,20 +1841,52 @@
     // CANVAS ZOOM FUNCTIONALITY
     // ============================================
     
+    // Store original dimensions
+    const mockupStage = document.querySelector(`.cts-mockup-stage-${sectionId}`);
+    let originalStageWidth = null;
+    let originalStageHeight = null;
+    
+    // Capture original dimensions on load
+    if (mockupStage) {
+        setTimeout(() => {
+            originalStageWidth = mockupStage.offsetWidth;
+            originalStageHeight = mockupStage.offsetHeight;
+            console.log(`📐 Original canvas dimensions: ${originalStageWidth}x${originalStageHeight}`);
+        }, 100);
+    }
+    
     // Update canvas zoom
     function updateCanvasZoom() {
         const zoomLevel = canvasZoomSlider.value / 100;
         const tshirtContainer = document.getElementById(`tshirtContainer-${sectionId}`);
         
-        if (mockupCanvas && tshirtContainer) {
+        if (mockupCanvas && tshirtContainer && mockupStage && originalStageWidth) {
+            // Expand the mockup stage based on original dimensions
+            const newWidth = originalStageWidth * zoomLevel;
+            const newHeight = originalStageHeight * zoomLevel;
+            
+            mockupStage.style.width = `${newWidth}px`;
+            mockupStage.style.height = `${newHeight}px`;
+            mockupStage.style.maxWidth = 'none';
+            mockupStage.style.maxHeight = 'none';
+            
             // Scale the t-shirt container
             tshirtContainer.style.transform = `scale(${zoomLevel})`;
             tshirtContainer.style.transformOrigin = 'center center';
             
+            // Make canvas scrollable when zoomed
+            mockupCanvas.style.overflow = zoomLevel > 1 ? 'auto' : 'hidden';
+            
+            // Center the content when zoomed in
+            if (zoomLevel > 1) {
+                mockupCanvas.scrollLeft = (mockupCanvas.scrollWidth - mockupCanvas.clientWidth) / 2;
+                mockupCanvas.scrollTop = (mockupCanvas.scrollHeight - mockupCanvas.clientHeight) / 2;
+            }
+            
             // Update zoom display
             zoomValue.textContent = `${canvasZoomSlider.value}%`;
             
-            console.log(`🔍 Canvas zoom: ${canvasZoomSlider.value}%`);
+            console.log(`🔍 Canvas zoom: ${canvasZoomSlider.value}% (${newWidth.toFixed(0)}x${newHeight.toFixed(0)}px)`);
         }
     }
     
