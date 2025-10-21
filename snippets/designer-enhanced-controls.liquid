@@ -286,7 +286,15 @@
             }
             
             const layers = window.designerGetLayers();
+            console.log('🎨 Exporting SVG with layers:', layers);
+            
+            if (!layers || layers.length === 0) {
+                alert('⚠️ No design to export! Add text or upload an image first.');
+                return;
+            }
+            
             const svg = DesignerEnhancements.Export.exportToSVG(layers, 400, 400);
+            console.log('📄 SVG generated:', svg.substring(0, 200) + '...');
             DesignerEnhancements.Export.downloadFile(svg, 'design.svg', 'image/svg+xml');
         });
         
@@ -297,17 +305,25 @@
                 return;
             }
             
+            const layers = window.designerGetLayers();
+            console.log('🎨 Exporting PNG with layers:', layers);
+            
+            if (!layers || layers.length === 0) {
+                alert('⚠️ No design to export! Add text or upload an image first.');
+                return;
+            }
+            
             this.disabled = true;
             this.textContent = '⏳ Exporting...';
             
             try {
-                const layers = window.designerGetLayers();
                 const blob = await DesignerEnhancements.Export.exportToPNG(layers, 400, 400, 300);
+                console.log('🖼️ PNG blob generated:', blob.size, 'bytes');
                 DesignerEnhancements.Export.downloadFile(blob, 'design.png', 'image/png');
                 this.textContent = '✓ Downloaded!';
             } catch (e) {
-                console.error('Export failed:', e);
-                alert('Export failed. Please try again.');
+                console.error('❌ Export failed:', e);
+                alert('Export failed: ' + e.message);
                 this.textContent = '🖼️ PNG (300 DPI)';
             } finally {
                 this.disabled = false;
@@ -325,7 +341,15 @@
             }
             
             const state = window.designerGetState();
+            console.log('💾 Exporting state:', state);
+            
+            if (!state.layers || state.layers.length === 0) {
+                alert('⚠️ No design to export! Add text or upload an image first.');
+                return;
+            }
+            
             const json = JSON.stringify(state, null, 2);
+            console.log('📝 JSON size:', json.length, 'chars');
             DesignerEnhancements.Export.downloadFile(json, 'design.json', 'application/json');
         });
         
