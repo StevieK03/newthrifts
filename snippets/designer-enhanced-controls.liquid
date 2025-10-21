@@ -278,7 +278,8 @@
         
         const Enhancements = window.DesignerEnhancements;
         
-        // Enhanced SVG Export
+        // Enhanced SVG Export - NOTE: SVG export uses layers (original design only)
+        // For mockup with t-shirt, use PNG export instead
         document.getElementById(`exportSVGEnhanced-${sectionId}`)?.addEventListener('click', function() {
             if (!window.designerGetLayers) {
                 alert('Designer not ready');
@@ -286,7 +287,7 @@
             }
             
             const layers = window.designerGetLayers();
-            console.log('🎨 Exporting SVG with layers:', layers);
+            console.log('🎨 Exporting SVG with layers (original design only):', layers);
             
             if (!layers || layers.length === 0) {
                 alert('⚠️ No design to export! Add text or upload an image first.');
@@ -295,31 +296,58 @@
             
             const svg = DesignerEnhancements.Export.exportToSVG(layers, 400, 400);
             console.log('📄 SVG generated:', svg.substring(0, 200) + '...');
-            DesignerEnhancements.Export.downloadFile(svg, 'design.svg', 'image/svg+xml');
+            DesignerEnhancements.Export.downloadFile(svg, 'design-original.svg', 'image/svg+xml');
+            
+            // Show info about mockup export
+            setTimeout(() => {
+                alert('ℹ️ SVG exported the original design.\n\nFor t-shirt mockup, use PNG export instead!');
+            }, 100);
         });
         
-        // Enhanced PNG Export
+        // Enhanced PNG Export - Captures FULL MOCKUP (t-shirt with design)
         document.getElementById(`exportPNGEnhanced-${sectionId}`)?.addEventListener('click', async function() {
-            if (!window.designerGetLayers) {
+            if (!window.designerCaptureMockup) {
                 alert('Designer not ready');
                 return;
             }
             
             const layers = window.designerGetLayers();
-            console.log('🎨 Exporting PNG with layers:', layers);
-            
             if (!layers || layers.length === 0) {
                 alert('⚠️ No design to export! Add text or upload an image first.');
                 return;
             }
             
             this.disabled = true;
-            this.textContent = '⏳ Exporting...';
+            this.textContent = '⏳ Capturing mockup...';
             
             try {
-                const blob = await DesignerEnhancements.Export.exportToPNG(layers, 400, 400, 300);
-                console.log('🖼️ PNG blob generated:', blob.size, 'bytes');
-                DesignerEnhancements.Export.downloadFile(blob, 'design.png', 'image/png');
+                console.log('📸 Capturing full t-shirt mockup...');
+                
+                // Capture the complete mockup (t-shirt + design)
+                const mockupDataUrl = await window.designerCaptureMockup();
+                
+                if (!mockupDataUrl) {
+                    throw new Error('Failed to capture mockup');
+                }
+                
+                console.log('✅ Mockup captured successfully');
+                
+                // Convert data URL to blob for download
+                const response = await fetch(mockupDataUrl);
+                const blob = await response.blob();
+                
+                console.log('🖼️ PNG mockup generated:', blob.size, 'bytes');
+                
+                // Download the file
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'tshirt-mockup.png';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
                 this.textContent = '✓ Downloaded!';
             } catch (e) {
                 console.error('❌ Export failed:', e);
