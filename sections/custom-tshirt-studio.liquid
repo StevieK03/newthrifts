@@ -911,9 +911,13 @@
     </div>
 </div>
 
+<!-- Supabase Scripts for Image Upload (optional - falls back to base64 if not available) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="{{ 'supabase-config.js' | asset_url }}"></script>
+<script src="{{ 'supabase-custom-requests.js' | asset_url }}"></script>
+
 <!-- EmailJS Script -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-<script src="{{ 'emailjs-with-attachments.js' | asset_url }}"></script>
 
 <script>
 (function() {
@@ -1654,23 +1658,28 @@
             const mockupContainer = document.getElementById(`nt-mockup-canvas-${sectionId}`);
             
             if (!mockupContainer) {
+                console.error('❌ Mockup container not found');
                 resolve(null);
                 return;
             }
             
-            // Set canvas size to match the mockup container
+            // Set canvas size to match the mockup container (higher resolution for email)
             const rect = mockupContainer.getBoundingClientRect();
-            canvas.width = rect.width;
-            canvas.height = rect.height;
+            const scale = 2; // 2x resolution for better quality
+            canvas.width = rect.width * scale;
+            canvas.height = rect.height * scale;
+            
+            // Scale context for high-res rendering
+            ctx.scale(scale, scale);
             
             // Draw white background
             ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillRect(0, 0, rect.width, rect.height);
             
             // Draw the t-shirt image
             const tshirtImg = tshirtImage;
             if (tshirtImg && tshirtImg.complete) {
-                ctx.drawImage(tshirtImg, 0, 0, canvas.width, canvas.height);
+                ctx.drawImage(tshirtImg, 0, 0, rect.width, rect.height);
             }
             
             // Draw the design overlay
@@ -1705,9 +1714,33 @@
                 ctx.restore();
             }
             
-            // Convert to base64
-            resolve(canvas.toDataURL('image/png'));
+            console.log('✅ Design preview captured', `${canvas.width}x${canvas.height}`);
+            
+            // Convert to base64 with good quality
+            resolve(canvas.toDataURL('image/png', 0.95));
         });
+    }
+    
+    // Function to upload image to Supabase Storage (if available) or use base64
+    async function uploadDesignImage(dataUrl) {
+        // Check if Supabase is available
+        if (window.NewThriftsCustomRequests && window.NewThriftsCustomRequests.uploadImageToStorage) {
+            try {
+                console.log('📤 Uploading design to Supabase Storage...');
+                const imageUrl = await window.NewThriftsCustomRequests.uploadImageToStorage(
+                    dataUrl, 
+                    'mockup-previews'
+                );
+                console.log('✅ Image uploaded:', imageUrl);
+                return imageUrl;
+            } catch (error) {
+                console.warn('⚠️ Supabase upload failed, using base64 fallback:', error);
+                return dataUrl; // Fallback to base64
+            }
+        } else {
+            console.log('ℹ️ Supabase not available, using base64 data');
+            return dataUrl; // Use base64 if Supabase not available
+        }
     }
     
     // Initialize EmailJS
@@ -1739,7 +1772,14 @@
             
             try {
                 // Capture design preview
-                const designPreview = await captureDesignPreview();
+                const designPreviewDataUrl = await captureDesignPreview();
+                
+                if (!designPreviewDataUrl) {
+                    throw new Error('Failed to capture design preview');
+                }
+                
+                // Upload image to Supabase Storage (or use base64 fallback)
+                const designPreviewUrl = await uploadDesignImage(designPreviewDataUrl);
                 
                 // Prepare email data
                 const emailData = {
@@ -1757,7 +1797,8 @@
                     rotation: rotateSlider.value + '°',
                     has_uploaded_image: uploadedImage ? 'Yes' : 'No',
                     submission_date: new Date().toLocaleString(),
-                    design_preview: designPreview || 'No preview available'
+                    design_preview_url: designPreviewUrl, // URL for email template
+                    design_preview: designPreviewUrl // Backwards compatible
                 };
                 
                 console.log('📧 Sending design request email...', emailData);
