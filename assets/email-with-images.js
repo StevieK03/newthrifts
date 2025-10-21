@@ -156,6 +156,7 @@ window.EmailWithImages = {
 
   /**
    * Send email via EmailJS (if configured)
+   * ⭐ UPDATED - Now uses Supabase URLs and matches EmailJS template variables
    */
   async sendViaEmailJS(requestData, emailContent, designImageBase64, mockupImageBase64) {
     try {
@@ -164,17 +165,33 @@ window.EmailWithImages = {
       }
       
       const templateParams = {
-        to_email: emailContent.to,
-        subject: emailContent.subject,
-        message: emailContent.text,
-        customer_name: requestData.customer_name,
-        customer_email: requestData.customer_email,
-        customer_phone: requestData.customer_phone,
-        tshirt_size: requestData.tshirt_size,
-        customer_message: requestData.customer_message,
-        design_image: designImageBase64,
-        mockup_image: mockupImageBase64
+        // Customer details - matching template variable names
+        name: requestData.customer_name,
+        email: requestData.customer_email,
+        phone: requestData.customer_phone || 'Not provided',
+        tshirt_size: requestData.tshirt_size || 'Not specified',
+        message: requestData.customer_message || 'No special instructions',
+        
+        // Design specifications
+        design_position: `Top ${requestData.design_data.position.top}%, Left ${requestData.design_data.position.left}%`,
+        design_size: `${requestData.design_data.position.width}% × ${requestData.design_data.position.height}%`,
+        design_rotation: `${requestData.design_data.position.rotation}°`,
+        design_view: requestData.design_data.view,
+        tshirt_color: requestData.design_data.color,
+        
+        // ⭐ KEY FIX: Use Supabase URLs instead of base64
+        design_url: requestData.design_image_url,
+        mockup_preview_url: requestData.mockup_image_url,
+        
+        // Logo URL - Update with your actual logo
+        logo_url: 'https://cdn.shopify.com/s/files/1/0624/0424/5697/files/newthrifts-logo.png',
+        
+        // Metadata
+        submission_date: new Date().toLocaleString(),
+        request_id: requestData.id || `REQ-${Date.now()}`
       };
+      
+      console.log('📧 Sending email via EmailJS with params:', templateParams);
       
       const result = await emailjs.send(
         'service_f4r34d3', // Your EmailJS service ID
