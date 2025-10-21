@@ -383,51 +383,39 @@
         box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
     }
 
-    /* Hexagonal Color Picker */
+    /* SVG Hexagonal Color Picker */
     .hex-picker-container-{{ section.id }} {
         position: relative;
     }
 
-    .hex-grid-{{ section.id }} {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0;
-        margin-bottom: 16px;
+    .hex-svg-container-{{ section.id }} {
+        width: 100%;
         padding: 20px;
         background: rgba(0, 0, 0, 0.2);
         border-radius: 12px;
+        margin-bottom: 16px;
     }
 
-    .hex-row-{{ section.id }} {
-        display: flex;
-        gap: 2px;
-        margin-bottom: -8px;
+    .hex-svg-{{ section.id }} {
+        width: 100%;
+        height: auto;
+        display: block;
     }
 
-    .hex-row-{{ section.id }}.offset {
-        margin-left: 18px;
-    }
-
-    .hex-color-{{ section.id }} {
-        width: 28px;
-        height: 32px;
-        clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    .hex-svg-{{ section.id }} polygon {
         cursor: pointer;
-        transition: all 0.2s ease;
-        position: relative;
+        transition: transform 0.15s ease;
     }
 
-    .hex-color-{{ section.id }}:hover {
-        transform: scale(1.15);
-        filter: brightness(1.2);
-        z-index: 10;
+    .hex-svg-{{ section.id }} polygon:hover {
+        transform: scale(1.03);
+        filter: brightness(1.1);
     }
 
-    .hex-color-{{ section.id }}.selected {
-        transform: scale(1.2);
-        filter: brightness(1.3) drop-shadow(0 0 8px rgba(255, 255, 255, 0.8));
-        z-index: 11;
+    .hex-svg-{{ section.id }} polygon.selected {
+        stroke: #60a5fa !important;
+        stroke-width: 2.5 !important;
+        filter: brightness(1.2) drop-shadow(0 0 6px rgba(96, 165, 250, 0.6));
     }
 
     .hex-display-{{ section.id }} {
@@ -665,8 +653,19 @@
                 <h3>🎨 Text Color</h3>
                 
                 <div class="hex-picker-container-{{ section.id }}">
-                    <!-- Hexagonal Color Grid -->
-                    <div class="hex-grid-{{ section.id }}" id="hexGrid-{{ section.id }}"></div>
+                    <!-- SVG Hexagonal Color Grid -->
+                    <div class="hex-svg-container-{{ section.id }}">
+                        <svg id="hexSvg-{{ section.id }}" 
+                             class="hex-svg-{{ section.id }}" 
+                             role="img" 
+                             aria-label="Hexagonal color picker">
+                            <defs>
+                                <filter id="hexShadow-{{ section.id }}" x="-50%" y="-50%" width="200%" height="200%">
+                                    <feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.3"/>
+                                </filter>
+                            </defs>
+                        </svg>
+                    </div>
                     
                     <!-- Hex Display with Input -->
                     <div class="hex-display-{{ section.id }}">
@@ -760,131 +759,142 @@
     const MAX_UNDO = 20;
 
     // ============================================
-    // HEXAGONAL COLOR PICKER
+    // SVG HEXAGONAL COLOR PICKER (Axial Coordinates)
     // ============================================
     
-    // Generate hexagonal color palette based on HSL color wheel
-    function generateHexagonalPalette() {
-        const colors = [];
-        const rows = 13; // Number of rows in the hexagon
-        
-        // Define the structure: number of hexagons per row
-        const structure = [7, 8, 9, 10, 11, 12, 13, 12, 11, 10, 9, 8, 7];
-        
-        let colorIndex = 0;
-        const totalColors = structure.reduce((a, b) => a + b, 0);
-        
-        structure.forEach((count, rowIndex) => {
-            const row = [];
-            const isOffset = count <= 12 && rowIndex >= 1 && rowIndex <= 11;
-            
-            for (let i = 0; i < count; i++) {
-                // Calculate position in color wheel
-                const progress = colorIndex / totalColors;
-                
-                // Create a spiral pattern from outer edge to center
-                let hue, saturation, lightness;
-                
-                // Determine distance from center
-                const centerRow = 6;
-                const rowFromCenter = Math.abs(rowIndex - centerRow);
-                const colFromCenter = Math.abs(i - count / 2);
-                const distanceFromCenter = Math.sqrt(rowFromCenter * rowFromCenter + colFromCenter * colFromCenter);
-                const maxDistance = 8;
-                
-                // Hue based on angle around the wheel
-                const angle = Math.atan2(rowIndex - centerRow, i - count / 2);
-                hue = ((angle + Math.PI) / (2 * Math.PI)) * 360;
-                
-                // Saturation decreases toward center
-                saturation = Math.min(100, (distanceFromCenter / maxDistance) * 100);
-                
-                // Lightness varies to create depth
-                lightness = 50 + (Math.sin(progress * Math.PI * 2) * 20);
-                
-                // Adjust for white center and darker edges
-                if (distanceFromCenter < 2) {
-                    saturation = saturation * 0.3;
-                    lightness = 70 + (2 - distanceFromCenter) * 15;
-                } else if (distanceFromCenter > 6) {
-                    lightness = Math.max(20, lightness - (distanceFromCenter - 6) * 8);
-                }
-                
-                const color = hslToHex(hue, saturation, lightness);
-                row.push(color);
-                colorIndex++;
-            }
-            
-            colors.push({ hexes: row, offset: isOffset });
-        });
-        
-        return colors;
+    const SQRT3 = Math.sqrt(3);
+    const HEX_RADIUS = 5;      // Number of hexagon rings
+    const HEX_SIZE = 22;       // Pixel radius of each hexagon
+    const HEX_PADDING = 24;    // Padding around the grid
+    
+    // Convert axial coordinates (q, r) to pixel position (pointy-top hex)
+    function axialToPixel(q, r, size) {
+        const x = size * (1.5 * q);
+        const y = size * (SQRT3 * (r + q / 2));
+        return { x, y };
     }
-
+    
+    // Generate polygon points for a hexagon
+    function polygonPoints(cx, cy, size) {
+        const points = [];
+        for (let i = 0; i < 6; i++) {
+            const angle = (Math.PI / 180) * (60 * i - 30);
+            const x = cx + size * Math.cos(angle);
+            const y = cy + size * Math.sin(angle);
+            points.push(`${x},${y}`);
+        }
+        return points.join(' ');
+    }
+    
     // Convert HSL to HEX
     function hslToHex(h, s, l) {
         s /= 100;
         l /= 100;
-        
         const k = n => (n + h / 30) % 12;
         const a = s * Math.min(l, 1 - l);
         const f = n => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
-        
         const r = Math.round(255 * f(0));
         const g = Math.round(255 * f(8));
         const b = Math.round(255 * f(4));
-        
-        return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`.toUpperCase();
+        return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
     }
-
-    // Update selection state in hexagonal grid
-    function updateHexSelection(selectedColor) {
-        document.querySelectorAll(`.hex-color-${sectionId}`).forEach(swatch => {
-            if (swatch.dataset.color && swatch.dataset.color.toUpperCase() === selectedColor.toUpperCase()) {
-                swatch.classList.add('selected');
+    
+    // Map axial coordinate to a color (hue by angle, lightness by distance)
+    function colorForAxial(q, r, radius) {
+        const x = q;
+        const y = -q - r;
+        const z = r;
+        const dist = Math.max(Math.abs(x), Math.abs(y), Math.abs(z));
+        const angle = Math.atan2(SQRT3 * (r + q / 2), 1.5 * q);
+        const hue = ((angle * 180) / Math.PI + 360) % 360;
+        const l = 85 - (dist / radius) * 40; // 85% at center to ~45% at edge
+        const s = dist === 0 ? 0 : 80; // Neutral center
+        return hslToHex(hue, s, l);
+    }
+    
+    // Build all hex cells in a disk of given radius
+    function buildAxialHexDisk(radius) {
+        const cells = [];
+        for (let q = -radius; q <= radius; q++) {
+            const r1 = Math.max(-radius, -q - radius);
+            const r2 = Math.min(radius, -q + radius);
+            for (let r = r1; r <= r2; r++) {
+                cells.push({ q, r });
+            }
+        }
+        return cells;
+    }
+    
+    // Initialize SVG hexagonal picker
+    function initSVGHexagonalPicker() {
+        const svg = document.getElementById(`hexSvg-${sectionId}`);
+        const cells = buildAxialHexDisk(HEX_RADIUS);
+        
+        // Calculate viewBox dimensions
+        let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+        cells.forEach(({ q, r }) => {
+            const { x, y } = axialToPixel(q, r, HEX_SIZE);
+            minX = Math.min(minX, x - HEX_SIZE);
+            maxX = Math.max(maxX, x + HEX_SIZE);
+            minY = Math.min(minY, y - HEX_SIZE);
+            maxY = Math.max(maxY, y + HEX_SIZE);
+        });
+        
+        const viewBoxX = minX - HEX_PADDING;
+        const viewBoxY = minY - HEX_PADDING;
+        const viewBoxWidth = (maxX - minX) + 2 * HEX_PADDING;
+        const viewBoxHeight = (maxY - minY) + 2 * HEX_PADDING;
+        
+        svg.setAttribute('viewBox', `${viewBoxX} ${viewBoxY} ${viewBoxWidth} ${viewBoxHeight}`);
+        
+        // Create hexagon polygons
+        cells.forEach(({ q, r }) => {
+            const { x, y } = axialToPixel(q, r, HEX_SIZE);
+            const fill = colorForAxial(q, r, HEX_RADIUS);
+            const points = polygonPoints(x, y, HEX_SIZE * 0.95);
+            const isCenter = q === 0 && r === 0;
+            const stroke = isCenter ? '#ffffff' : '#111827';
+            const strokeWidth = isCenter ? 1.25 : 1;
+            
+            const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+            polygon.setAttribute('points', points);
+            polygon.setAttribute('fill', fill);
+            polygon.setAttribute('stroke', stroke);
+            polygon.setAttribute('stroke-width', strokeWidth);
+            polygon.setAttribute('filter', `url(#hexShadow-${sectionId})`);
+            polygon.dataset.color = fill.toUpperCase();
+            
+            polygon.addEventListener('click', () => {
+                saveState();
+                currentColor = fill.toUpperCase();
+                designText.style.color = currentColor;
+                hexInput.value = currentColor;
+                hexPreview.style.background = currentColor;
+                updateSVGHexSelection(currentColor);
+            });
+            
+            svg.appendChild(polygon);
+        });
+        
+        // Set initial selection
+        updateSVGHexSelection(currentColor);
+    }
+    
+    // Update selection state in SVG hexagonal grid
+    function updateSVGHexSelection(selectedColor) {
+        const svg = document.getElementById(`hexSvg-${sectionId}`);
+        const polygons = svg.querySelectorAll('polygon');
+        polygons.forEach(polygon => {
+            if (polygon.dataset.color && polygon.dataset.color.toUpperCase() === selectedColor.toUpperCase()) {
+                polygon.classList.add('selected');
             } else {
-                swatch.classList.remove('selected');
+                polygon.classList.remove('selected');
             }
         });
     }
-
-    // Initialize hexagonal color picker
-    function initHexagonalPicker() {
-        const hexGrid = document.getElementById(`hexGrid-${sectionId}`);
-        const palette = generateHexagonalPalette();
-        
-        // Create hexagonal grid
-        palette.forEach(rowData => {
-            const rowDiv = document.createElement('div');
-            rowDiv.className = `hex-row-${sectionId}` + (rowData.offset ? ' offset' : '');
-            
-            rowData.hexes.forEach(color => {
-                const hex = document.createElement('div');
-                hex.className = `hex-color-${sectionId}`;
-                hex.style.background = color;
-                hex.dataset.color = color;
-                
-                hex.addEventListener('click', () => {
-                    saveState();
-                    currentColor = color;
-                    designText.style.color = color;
-                    hexInput.value = color;
-                    hexPreview.style.background = color;
-                    updateHexSelection(color);
-                });
-                
-                rowDiv.appendChild(hex);
-            });
-            
-            hexGrid.appendChild(rowDiv);
-        });
-
-        // Set initial selection
-        updateHexSelection(currentColor);
-    }
-
-    // Initialize the hexagonal picker on load
-    initHexagonalPicker();
+    
+    // Initialize the SVG hexagonal picker on load
+    initSVGHexagonalPicker();
 
     // Save state for undo
     function saveState() {
@@ -1011,7 +1021,7 @@
             currentColor = hex.toUpperCase();
             designText.style.color = currentColor;
             hexPreview.style.background = currentColor;
-            updateHexSelection(currentColor);
+            updateSVGHexSelection(currentColor);
         }
     });
 
