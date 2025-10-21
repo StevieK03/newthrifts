@@ -93,7 +93,8 @@
         border-radius: 24px;
         padding: 40px;
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        overflow: visible; /* Allow zoomed content to expand beyond card */
+        overflow: auto; /* Allow scrolling for zoomed content */
+        max-height: none; /* Remove any max-height constraints */
     }
 
     .cts-mockup-stage-{{ section.id }} {
@@ -1841,52 +1842,51 @@
     // CANVAS ZOOM FUNCTIONALITY
     // ============================================
     
-    // Store original dimensions
+    // Store references
     const mockupStage = document.querySelector(`.cts-mockup-stage-${sectionId}`);
-    let originalStageWidth = null;
-    let originalStageHeight = null;
-    
-    // Capture original dimensions on load
-    if (mockupStage) {
-        setTimeout(() => {
-            originalStageWidth = mockupStage.offsetWidth;
-            originalStageHeight = mockupStage.offsetHeight;
-            console.log(`📐 Original canvas dimensions: ${originalStageWidth}x${originalStageHeight}`);
-        }, 100);
-    }
+    const tshirtContainer = document.getElementById(`tshirtContainer-${sectionId}`);
     
     // Update canvas zoom
     function updateCanvasZoom() {
         const zoomLevel = canvasZoomSlider.value / 100;
-        const tshirtContainer = document.getElementById(`tshirtContainer-${sectionId}`);
         
-        if (mockupCanvas && tshirtContainer && mockupStage && originalStageWidth) {
-            // Expand the mockup stage based on original dimensions
-            const newWidth = originalStageWidth * zoomLevel;
-            const newHeight = originalStageHeight * zoomLevel;
-            
-            mockupStage.style.width = `${newWidth}px`;
-            mockupStage.style.height = `${newHeight}px`;
-            mockupStage.style.maxWidth = 'none';
-            mockupStage.style.maxHeight = 'none';
-            
-            // Scale the t-shirt container
-            tshirtContainer.style.transform = `scale(${zoomLevel})`;
-            tshirtContainer.style.transformOrigin = 'center center';
-            
-            // Make canvas scrollable when zoomed
-            mockupCanvas.style.overflow = zoomLevel > 1 ? 'auto' : 'hidden';
-            
-            // Center the content when zoomed in
-            if (zoomLevel > 1) {
-                mockupCanvas.scrollLeft = (mockupCanvas.scrollWidth - mockupCanvas.clientWidth) / 2;
-                mockupCanvas.scrollTop = (mockupCanvas.scrollHeight - mockupCanvas.clientHeight) / 2;
+        if (mockupCanvas && tshirtContainer && mockupStage) {
+            // Remove aspect-ratio constraint when zooming
+            if (zoomLevel !== 1) {
+                mockupStage.style.aspectRatio = 'unset';
+            } else {
+                mockupStage.style.aspectRatio = '1';
             }
+            
+            // Get the natural dimensions of the container
+            const parentWidth = mockupStage.parentElement.offsetWidth;
+            
+            // Calculate scaled dimensions
+            const baseSize = parentWidth - 80; // Account for padding
+            const scaledSize = baseSize * zoomLevel;
+            
+            // Apply dimensions to mockup stage
+            mockupStage.style.width = `${scaledSize}px`;
+            mockupStage.style.height = `${scaledSize}px`;
+            mockupStage.style.minWidth = `${scaledSize}px`;
+            mockupStage.style.minHeight = `${scaledSize}px`;
             
             // Update zoom display
             zoomValue.textContent = `${canvasZoomSlider.value}%`;
             
-            console.log(`🔍 Canvas zoom: ${canvasZoomSlider.value}% (${newWidth.toFixed(0)}x${newHeight.toFixed(0)}px)`);
+            // Make canvas scrollable when zoomed
+            if (zoomLevel > 1) {
+                mockupCanvas.style.overflow = 'auto';
+                // Center the scrolled content
+                setTimeout(() => {
+                    mockupCanvas.scrollLeft = (mockupCanvas.scrollWidth - mockupCanvas.clientWidth) / 2;
+                    mockupCanvas.scrollTop = (mockupCanvas.scrollHeight - mockupCanvas.clientHeight) / 2;
+                }, 50);
+            } else {
+                mockupCanvas.style.overflow = 'hidden';
+            }
+            
+            console.log(`🔍 Canvas zoom: ${canvasZoomSlider.value}% - Stage: ${scaledSize.toFixed(0)}px`);
         }
     }
     
