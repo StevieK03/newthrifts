@@ -1650,8 +1650,60 @@
         });
     }
     
-    // Function to capture the current design as an image
-    async function captureDesignPreview() {
+    // Function to capture JUST the original design (no t-shirt)
+    async function captureOriginalDesign() {
+        return new Promise((resolve) => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const overlay = designOverlay;
+            
+            if (!overlay) {
+                console.error('❌ Design overlay not found');
+                resolve(null);
+                return;
+            }
+            
+            const overlayRect = overlay.getBoundingClientRect();
+            const scale = 2; // 2x resolution for better quality
+            canvas.width = overlayRect.width * scale;
+            canvas.height = overlayRect.height * scale;
+            
+            // Scale context for high-res rendering
+            ctx.scale(scale, scale);
+            
+            // Transparent background for original design
+            ctx.clearRect(0, 0, overlayRect.width, overlayRect.height);
+            
+            // Save context state
+            ctx.save();
+            
+            // Center the design
+            ctx.translate(overlayRect.width / 2, overlayRect.height / 2);
+            ctx.rotate((rotateSlider.value * Math.PI) / 180);
+            
+            // Draw text or image
+            if (uploadedImage) {
+                ctx.drawImage(uploadedImage, -overlayRect.width / 2, -overlayRect.height / 2, overlayRect.width, overlayRect.height);
+            } else if (designText) {
+                const fontSize = parseInt(window.getComputedStyle(designText).fontSize);
+                ctx.font = `bold ${fontSize}px ${currentFont}`;
+                ctx.fillStyle = currentColor;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(textInput.value, 0, 0);
+            }
+            
+            ctx.restore();
+            
+            console.log('✅ Original design captured', `${canvas.width}x${canvas.height}`);
+            
+            // Convert to base64 with good quality
+            resolve(canvas.toDataURL('image/png', 0.95));
+        });
+    }
+    
+    // Function to capture the mockup (t-shirt with design)
+    async function captureMockupPreview() {
         return new Promise((resolve) => {
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
@@ -1716,7 +1768,7 @@
                 ctx.restore();
             }
             
-            console.log('✅ Design preview captured', `${canvas.width}x${canvas.height}`);
+            console.log('✅ Mockup preview captured', `${canvas.width}x${canvas.height}`);
             
             // Convert to base64 with good quality
             resolve(canvas.toDataURL('image/png', 0.95));
@@ -1773,15 +1825,23 @@
             formStatus.innerHTML = '⏳ Capturing your design and sending request...';
             
             try {
-                // Capture design preview
-                const designPreviewDataUrl = await captureDesignPreview();
+                // Capture BOTH images: original design and mockup
+                console.log('📸 Capturing original design...');
+                const originalDesignDataUrl = await captureOriginalDesign();
                 
-                if (!designPreviewDataUrl) {
-                    throw new Error('Failed to capture design preview');
+                console.log('📸 Capturing mockup preview...');
+                const mockupPreviewDataUrl = await captureMockupPreview();
+                
+                if (!originalDesignDataUrl || !mockupPreviewDataUrl) {
+                    throw new Error('Failed to capture design images');
                 }
                 
-                // Upload image to Supabase Storage (or use base64 fallback)
-                const designPreviewUrl = await uploadDesignImage(designPreviewDataUrl);
+                // Upload both images to Supabase Storage (or use base64 fallback)
+                console.log('📤 Uploading original design...');
+                const originalDesignUrl = await uploadDesignImage(originalDesignDataUrl);
+                
+                console.log('📤 Uploading mockup preview...');
+                const mockupPreviewUrl = await uploadDesignImage(mockupPreviewDataUrl);
                 
                 // Helper function to safely convert values to strings (from working code)
                 const s = v => (v == null || v === "") ? "-" : String(v);
@@ -1818,21 +1878,20 @@
                     rotation: s(rotateSlider.value + '°'),
                     has_uploaded_image: uploadedImage ? 'Yes' : 'No',
                     
-                    // Metadata
-                    submission_date: s(new Date().toLocaleString()),
-                    request_id: s(`REQ-${Date.now().toString().slice(-8)}`),
-                    
-                    // Image URLs - THE CRITICAL FIX
-                    design_url: ensureAbsoluteUrl(designPreviewUrl),
-                    mockup_url: ensureAbsoluteUrl(designPreviewUrl),
-                    logo_url: 'https://cdn.shopify.com/s/files/1/0624/0424/5697/files/newthrifts-logo.png'
-                };
+                // Metadata
+                submission_date: s(new Date().toLocaleString()),
+                request_id: s(`REQ-${Date.now().toString().slice(-8)}`),
                 
-                console.log('📧 Sending design request email...', emailData);
-                console.log('🖼️ Image URLs:', {
-                    design_url: emailData.design_url,
-                    mockup_url: emailData.mockup_url
-                });
+                // Image URLs - SEPARATE IMAGES FOR ORIGINAL AND MOCKUP
+                design_url: ensureAbsoluteUrl(originalDesignUrl),  // Just the design
+                mockup_url: ensureAbsoluteUrl(mockupPreviewUrl),   // T-shirt with design
+                logo_url: 'https://cdn.shopify.com/s/files/1/0624/0424/5697/files/newthrifts-logo.png'
+            };
+            
+            console.log('📧 Sending design request email...', emailData);
+            console.log('🖼️ Image URLs (SEPARATE):');
+            console.log('   🎨 Original Design:', emailData.design_url);
+            console.log('   👕 Mockup Preview:', emailData.mockup_url);
                 
                 // Send email via EmailJS
                 const result = await emailjs.send(
