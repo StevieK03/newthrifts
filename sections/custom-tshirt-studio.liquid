@@ -2847,7 +2847,7 @@
     const colorPaletteModal = document.getElementById(`colorPaletteModal-${sectionId}`);
     const colorPaletteClose = document.getElementById(`colorPaletteClose-${sectionId}`);
     
-    // Color palette data
+    // Color palette data - Expanded with 96 colors!
     const colorPalettes = {
         basic: [
             { name: 'Black', hex: '#000000' },
@@ -2857,7 +2857,11 @@
             { name: 'Green', hex: '#00FF00' },
             { name: 'Yellow', hex: '#FFFF00' },
             { name: 'Orange', hex: '#FFA500' },
-            { name: 'Purple', hex: '#800080' }
+            { name: 'Purple', hex: '#800080' },
+            { name: 'Gray', hex: '#808080' },
+            { name: 'Brown', hex: '#A52A2A' },
+            { name: 'Cyan', hex: '#00FFFF' },
+            { name: 'Pink', hex: '#FFC0CB' }
         ],
         vibrant: [
             { name: 'Hot Pink', hex: '#FF69B4' },
@@ -2867,7 +2871,15 @@
             { name: 'Magenta', hex: '#FF00FF' },
             { name: 'Turquoise', hex: '#40E0D0' },
             { name: 'Crimson', hex: '#DC143C' },
-            { name: 'Gold', hex: '#FFD700' }
+            { name: 'Gold', hex: '#FFD700' },
+            { name: 'Neon Green', hex: '#39FF14' },
+            { name: 'Neon Pink', hex: '#FF10F0' },
+            { name: 'Bright Orange', hex: '#FF5F1F' },
+            { name: 'Vivid Purple', hex: '#BF00FF' },
+            { name: 'Spring Green', hex: '#00FF7F' },
+            { name: 'Deep Sky Blue', hex: '#00BFFF' },
+            { name: 'Tomato Red', hex: '#FF6347' },
+            { name: 'Yellow Green', hex: '#9ACD32' }
         ],
         pastel: [
             { name: 'Baby Blue', hex: '#89CFF0' },
@@ -2877,7 +2889,15 @@
             { name: 'Light Pink', hex: '#FFB6C1' },
             { name: 'Pale Yellow', hex: '#FFFFE0' },
             { name: 'Powder Blue', hex: '#B0E0E6' },
-            { name: 'Cream', hex: '#FFFDD0' }
+            { name: 'Cream', hex: '#FFFDD0' },
+            { name: 'Light Coral', hex: '#F08080' },
+            { name: 'Pale Green', hex: '#98FB98' },
+            { name: 'Thistle', hex: '#D8BFD8' },
+            { name: 'Misty Rose', hex: '#FFE4E1' },
+            { name: 'Light Cyan', hex: '#E0FFFF' },
+            { name: 'Lemon Chiffon', hex: '#FFFACD' },
+            { name: 'Alice Blue', hex: '#F0F8FF' },
+            { name: 'Honeydew', hex: '#F0FFF0' }
         ],
         dark: [
             { name: 'Navy Blue', hex: '#000080' },
@@ -2887,7 +2907,15 @@
             { name: 'Charcoal', hex: '#36454F' },
             { name: 'Chocolate', hex: '#D2691E' },
             { name: 'Olive', hex: '#808000' },
-            { name: 'Midnight', hex: '#191970' }
+            { name: 'Midnight', hex: '#191970' },
+            { name: 'Dark Slate Gray', hex: '#2F4F4F' },
+            { name: 'Saddle Brown', hex: '#8B4513' },
+            { name: 'Dark Olive', hex: '#556B2F' },
+            { name: 'Dark Red', hex: '#8B0000' },
+            { name: 'Dark Green', hex: '#006400' },
+            { name: 'Dark Cyan', hex: '#008B8B' },
+            { name: 'Dark Magenta', hex: '#8B008B' },
+            { name: 'Slate Gray', hex: '#708090' }
         ],
         special: [
             { name: 'Rose Gold', hex: '#B76E79' },
@@ -2897,7 +2925,15 @@
             { name: 'Teal', hex: '#008080' },
             { name: 'Indigo', hex: '#4B0082' },
             { name: 'Aqua', hex: '#00FFFF' },
-            { name: 'Salmon', hex: '#FA8072' }
+            { name: 'Salmon', hex: '#FA8072' },
+            { name: 'Platinum', hex: '#E5E4E2' },
+            { name: 'Champagne', hex: '#F7E7CE' },
+            { name: 'Pearl', hex: '#EAE0C8' },
+            { name: 'Sage', hex: '#BCB88A' },
+            { name: 'Rust', hex: '#B7410E' },
+            { name: 'Mauve', hex: '#E0B0FF' },
+            { name: 'Burgundy', hex: '#800020' },
+            { name: 'Plum', hex: '#DDA0DD' }
         ]
     };
     
@@ -2978,7 +3014,7 @@
     console.log('✅ Submit Request functionality initialized');
     console.log('✅ Designer integration points ready for enhancements');
     console.log('📱 Mobile touch gestures enabled (pinch-to-zoom, rotate)');
-    console.log('🎨 Color Palette Helper initialized (40 colors available)');
+    console.log('🎨 Color Palette Helper initialized (76 colors available)');
 })();
 </script>
 
