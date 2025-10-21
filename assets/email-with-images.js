@@ -156,7 +156,6 @@ window.EmailWithImages = {
 
   /**
    * Send email via EmailJS (if configured)
-   * ⭐ UPDATED TO USE SUPABASE URLs INSTEAD OF BASE64
    */
   async sendViaEmailJS(requestData, emailContent, designImageBase64, mockupImageBase64) {
     try {
@@ -165,40 +164,20 @@ window.EmailWithImages = {
       }
       
       const templateParams = {
-        // Email metadata
         to_email: emailContent.to,
         subject: emailContent.subject,
-        
-        // Customer details (matching template variable names)
-        name: requestData.customer_name,
-        email: requestData.customer_email,
-        phone: requestData.customer_phone || 'Not provided',
-        tshirt_size: requestData.tshirt_size || 'Not specified',
-        message: requestData.customer_message || 'No special instructions',
-        
-        // Design specifications
-        design_position: `Top ${requestData.design_data.position.top}%, Left ${requestData.design_data.position.left}%`,
-        design_size: `${requestData.design_data.position.width}% × ${requestData.design_data.position.height}%`,
-        design_rotation: `${requestData.design_data.position.rotation}°`,
-        design_view: requestData.design_data.view,
-        tshirt_color: requestData.design_data.color,
-        
-        // ⭐ USE SUPABASE URLs INSTEAD OF BASE64 - THIS IS THE KEY FIX!
-        design_url: requestData.design_image_url,
-        mockup_preview_url: requestData.mockup_image_url,
-        
-        // Logo URL - UPDATE THIS WITH YOUR ACTUAL LOGO URL
-        logo_url: 'https://cdn.shopify.com/s/files/1/0624/0424/5697/files/newthrifts-logo.png',
-        
-        // Metadata
-        submission_date: new Date().toLocaleString(),
-        request_id: requestData.id || `REQ-${Date.now()}`
+        message: emailContent.text,
+        customer_name: requestData.customer_name,
+        customer_email: requestData.customer_email,
+        customer_phone: requestData.customer_phone,
+        tshirt_size: requestData.tshirt_size,
+        customer_message: requestData.customer_message,
+        design_image: designImageBase64,
+        mockup_image: mockupImageBase64
       };
       
-      console.log('📧 Sending EmailJS with params:', templateParams);
-      
       const result = await emailjs.send(
-        'service_7q2aokn', // Your EmailJS service ID
+        'service_f4r34d3', // Your EmailJS service ID
         'template_qiquke8', // Your EmailJS template ID
         templateParams
       );
