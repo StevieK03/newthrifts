@@ -1081,6 +1081,19 @@
             height: auto !important;
         }
         
+        /* Mobile Touch Feedback - Zoom & Highlight */
+        #hexColorPicker-{{ section.id }} polygon {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        #hexColorPicker-{{ section.id }} polygon.touching {
+            transform: scale(1.5);
+            stroke-width: 4 !important;
+            filter: drop-shadow(0 0 8px currentColor) brightness(1.2);
+            z-index: 100;
+        }
+        
         /* Quick Actions - Full Width Buttons */
         .cts-quick-actions-{{ section.id }} {
             grid-template-columns: 1fr;
@@ -1761,6 +1774,36 @@
                 hexPreview.style.background = currentColor;
                 updateSVGHexSelection(currentColor);
                 updateBrightnessSliderGradient();
+            });
+            
+            // MOBILE: Add touch zoom & highlight effect
+            polygon.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                polygon.classList.add('touching');
+                console.log('🎨 Touch zoom active:', fill);
+            }, { passive: false });
+            
+            polygon.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                polygon.classList.remove('touching');
+                
+                // Trigger color selection
+                saveState();
+                pickerHue = hueFromAxial(q, r);
+                pickerSat = satFromAxial(q, r, HEX_RADIUS);
+                const newColor = hsvToHex(pickerHue, pickerSat, pickerVal).toUpperCase();
+                currentColor = newColor;
+                designText.style.color = currentColor;
+                hexInput.value = currentColor;
+                hexPreview.style.background = currentColor;
+                updateSVGHexSelection(currentColor);
+                updateBrightnessSliderGradient();
+                
+                console.log('✅ Color selected:', newColor);
+            }, { passive: false });
+            
+            polygon.addEventListener('touchcancel', () => {
+                polygon.classList.remove('touching');
             });
             
             svg.appendChild(polygon);
