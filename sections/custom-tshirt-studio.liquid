@@ -1796,21 +1796,35 @@
                 
                 // Prepare email data with correct variable names matching EmailJS template
                 const emailData = {
+                    // Customer info
                     name: s(customerName),
                     email: s(customerEmail),
                     phone: s(customerPhone),
                     tshirt_size: s(tshirtSizeValue),
                     message: s(customerMessage),
+                    
+                    // Design specifications (matching template variables)
+                    design_position: s('Center'),  // Placeholder - update if you track position
+                    design_size: s(sizeSlider.value + '%'),
+                    design_rotation: s(rotateSlider.value + '°'),
+                    design_view: s('Front'),  // Placeholder - update if you track view
                     tshirt_color: s(tshirtColor),
+                    
+                    // Additional design details
                     design_text: s(textInput.value),
                     text_color: s(currentColor),
                     font_family: s(currentFont),
                     font_size: s(sizeSlider.value + '%'),
                     rotation: s(rotateSlider.value + '°'),
                     has_uploaded_image: uploadedImage ? 'Yes' : 'No',
+                    
+                    // Metadata
                     submission_date: s(new Date().toLocaleString()),
-                    design_url: ensureAbsoluteUrl(designPreviewUrl), // KEY FIX: Use design_url
-                    mockup_url: ensureAbsoluteUrl(designPreviewUrl), // KEY FIX: Use mockup_url
+                    request_id: s(`REQ-${Date.now().toString().slice(-8)}`),
+                    
+                    // Image URLs - THE CRITICAL FIX
+                    design_url: ensureAbsoluteUrl(designPreviewUrl),
+                    mockup_url: ensureAbsoluteUrl(designPreviewUrl),
                     logo_url: 'https://cdn.shopify.com/s/files/1/0624/0424/5697/files/newthrifts-logo.png'
                 };
                 
