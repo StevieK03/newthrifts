@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
     <title>{% if page_title %}{{ page_title }} – {% endif %}{{ shop.name }}</title>
 
+    {%- comment -%} ✅ Mobile Optimization for all devices {%- endcomment -%}
+    {% render 'mobile-optimization' %}
+
     {%- comment -%} Use Primary accent for browser UI color (falls back if not set) {%- endcomment -%}
     <meta name="theme-color" content="{{ settings.accent | default: '#27e1c1' }}">
 
