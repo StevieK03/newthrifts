@@ -25,10 +25,15 @@
      * ✅ Better performance
      * ============================================================ */
     
-    /* ===== CRITICAL: ENSURE MOCKUP IMAGE IS ALWAYS VISIBLE ===== */
-    .nt-mockup__base {
+    /* ===== CRITICAL: FORCE MOCKUP IMAGE VISIBILITY ===== */
+    .nt-mockup__base,
+    #nt-base-{{ section.id }},
+    img[id*="nt-base"] {
       position: absolute !important;
-      inset: 0 !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
       width: 100% !important;
       height: 100% !important;
       object-fit: contain !important;
@@ -38,10 +43,44 @@
       visibility: visible !important;
       max-width: 100% !important;
       max-height: 100% !important;
-      image-rendering: auto;
-      -webkit-user-select: none;
-      user-select: none;
+      image-rendering: auto !important;
+      -webkit-user-select: none !important;
+      user-select: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: none !important;
+      outline: none !important;
+      background: transparent !important;
+      filter: none !important;
+      transform: none !important;
+      clip-path: none !important;
+      mask: none !important;
+      mix-blend-mode: normal !important;
       /* No z-index needed - it's first in DOM order */
+    }
+    
+    /* Force visibility even if hidden by parent */
+    .nt-mockup__base[style*="display: none"],
+    .nt-mockup__base[style*="visibility: hidden"],
+    .nt-mockup__base[style*="opacity: 0"] {
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+    
+    /* Ensure parent container doesn't hide the image */
+    .nt-mockup__canvas > div:first-child {
+      position: relative !important;
+      width: 100% !important;
+      height: 100% !important;
+      isolation: isolate !important;
+      background: transparent !important;
+    }
+    
+    /* Debug: Add temporary red border to see if image exists */
+    .nt-mockup__base[src*="tshirt"] {
+      border: 2px solid rgba(255, 0, 0, 0.3) !important;
+      box-sizing: border-box !important;
     }
     
     /* Ensure canvas container creates isolated stacking context */
@@ -1371,44 +1410,60 @@
             </div>
 
             <!-- Enhanced Preview Stage -->
-            <div class="nt-mockup__stage" style="width: 100%; display: flex; justify-content: center; align-items: center; margin-top: 30px; margin-bottom: 40px; padding: 0;">
-                
-                <!-- Clean Canvas Container with Proper Layering -->
-                <div class="nt-mockup__canvas" 
+            <div class="nt-mockup__stage" style="width: 100%; display: flex; justify-content: center; align-items: center; margin-top: 30px !important; margin-bottom: 40px !important; padding: 0; box-sizing: border-box;">
+                <div class="nt-mockup__canvas canvas-gradient-animated" 
                      id="nt-mockup-canvas-{{ section.id }}"
                      style="
                        position: relative;
-                       width: 800px;
+                       width: min(900px, 90%);
                        max-width: 90vw;
-                       height: 800px;
-                       max-height: 90vw;
+                       aspect-ratio: 1;
                        margin: 0 auto;
-                       background: linear-gradient(to bottom, #f8f9fa 0%, #e9ecef 100%);
-                       border: 1px solid #dee2e6;
-                       border-radius: 12px;
-                       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-                       padding: 60px;
-                       box-sizing: border-box;
+                       background: linear-gradient(135deg, #27e1c1 0%, #667eea 20%, #764ba2 35%, #f093fb 50%, #4facfe 65%, #27e1c1 100%);
+                       background-size: 300% 300%;
+                       animation: canvasGradientShift 15s ease infinite;
+                       border-radius: 20px;
+                       box-shadow: 0 25px 80px rgba(39, 225, 193, 0.3), 0 10px 30px rgba(0,0,0,0.2);
+                       padding: 40px;
                        --overlay-top: 29.142857%;
                        --overlay-left: 50.214286%;
                        --overlay-width: 37%;
                        --overlay-height: 42%;
                        --overlay-rotate: 0deg;
+                       overflow: hidden;
+                       backdrop-filter: blur(10px);
+                       -webkit-backdrop-filter: blur(10px);
                      ">
                     
-                    <!-- T-shirt Layer (Bottom) - Direct positioning within canvas -->
-                    <img
-                      id="nt-base-{{ section.id }}"
-                      class="nt-mockup__base"
-                      src="{{ 'tshirt-view.png' | asset_url }}"
-                      alt="T-shirt mockup"
-                      loading="eager"
-                      decoding="async"
-                      fetchpriority="high"
-                      style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; display: block; opacity: 1; visibility: visible; z-index: 1;"
-                      onerror="console.error('❌ Failed to load t-shirt image:', this.src); this.style.border='2px solid red';"
-                      onload="console.log('✅ T-shirt image loaded:', this.src); this.style.opacity='1';"
-                    >
+                    <!-- T-shirt Mockup Container with Isolated Stacking -->
+                    <div style="position: relative; width: 100%; aspect-ratio: 1 / 1; cursor: grab; isolation: isolate; background: transparent;" id="nt-mockup-container-{{ section.id }}">
+                  
+                      <!-- 1. Base Mockup (FIRST = BOTTOM LAYER) -->
+                      <!-- Using both <img> and background-image as fallback -->
+                      <div style="
+                        position: absolute !important;
+                        inset: 0 !important;
+                        width: 100% !important;
+                        height: 100% !important;
+                        background-image: url('{{ 'tshirt-view.png' | asset_url }}');
+                        background-size: contain;
+                        background-position: center;
+                        background-repeat: no-repeat;
+                        pointer-events: none !important;
+                      ">
+                        <img
+                          id="nt-base-{{ section.id }}"
+                          class="nt-mockup__base"
+                          src="{{ 'tshirt-view.png' | asset_url }}"
+                          alt="T-shirt mockup"
+                          loading="eager"
+                          decoding="async"
+                          fetchpriority="high"
+                          style="position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; object-fit: contain !important; pointer-events: none !important; display: block !important; opacity: 1 !important; visibility: visible !important; max-width: 100% !important; max-height: 100% !important;"
+                          onerror="console.error('❌ IMG Failed, using background-image fallback:', this.src); this.style.display='none'; this.parentElement.style.border='2px solid blue';"
+                          onload="console.log('✅ T-shirt IMG loaded successfully:', this.src); this.style.border='2px solid green';"
+                        >
+                      </div>
                     
                     <!-- Debug assets (hidden) -->
                     <div id="debug-assets-{{ section.id }}" style="position: absolute; top: -100px; left: -100px; width: 1px; height: 1px; overflow: hidden;">
@@ -1418,11 +1473,11 @@
                       <img src="{{ 'Women-side.png' | asset_url }}" onload="console.log('✅ Direct asset test - Women-side.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - Women-side.png failed:', this.src);">
                     </div>
                     
-                    <!-- 2. Dynamic Design Overlay (Above T-shirt) -->
+                    <!-- 2. Dynamic Design Overlay (SECOND = MIDDLE LAYER) -->
                     <div
                       id="nt-overlay-{{ section.id }}"
                       class="nt-mockup__overlay"
-                      style="position: absolute; width: 37%; height: 42%; left: 50.214286%; top: 29.142857%; transform: translateX(-50%) rotate(0deg); display: flex; align-items: center; justify-content: center; cursor: grab; transition: all 0.1s ease; border: 2px dashed rgba(102, 126, 234, 0.4); border-radius: 8px; background: transparent; z-index: 10;"
+                      style="position: absolute !important; width: 37% !important; height: 42% !important; left: 50.214286% !important; top: 29.142857% !important; transform: translateX(-50%) rotate(0deg) !important; inset: auto !important; display: flex !important; align-items: center !important; justify-content: center !important; cursor: grab; transition: all 0.1s ease; border: 2px dashed rgba(39, 225, 193, 0.3); border-radius: 8px; background: rgba(39, 225, 193, 0.05);"
                     >
                       <span id="nt-design-text-{{ section.id }}" 
                             style="position: relative; z-index: 2; font-family: 'Bebas Neue', sans-serif; font-size: 32px; font-weight: bold; color: #000000; text-align: center; white-space: nowrap; user-select: none; text-shadow: 1px 1px 2px rgba(255,255,255,0.8); pointer-events: none;">
