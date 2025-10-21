@@ -381,6 +381,150 @@
         margin-bottom: 16px;
         color: #f1f5f9;
     }
+    
+    /* Color Palette Helper Button */
+    .cts-palette-helper-btn-{{ section.id }} {
+        padding: 6px 12px;
+        background: rgba(39, 225, 193, 0.1);
+        border: 1px solid rgba(39, 225, 193, 0.3);
+        border-radius: 8px;
+        color: #27e1c1;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .cts-palette-helper-btn-{{ section.id }}:hover {
+        background: rgba(39, 225, 193, 0.2);
+        border-color: #27e1c1;
+        transform: translateY(-1px);
+    }
+    
+    /* Color Palette Modal */
+    .cts-color-palette-modal-{{ section.id }} {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(10px);
+        z-index: 10000;
+        padding: 20px;
+        overflow-y: auto;
+    }
+    
+    .cts-color-palette-modal-{{ section.id }}.active {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .cts-color-palette-content-{{ section.id }} {
+        background: linear-gradient(135deg, #1e293b, #0f172a);
+        border: 2px solid rgba(39, 225, 193, 0.3);
+        border-radius: 20px;
+        padding: 30px;
+        max-width: 700px;
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        position: relative;
+        box-shadow: 0 25px 80px rgba(39, 225, 193, 0.3);
+    }
+    
+    .cts-color-palette-header-{{ section.id }} {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+        padding-bottom: 16px;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .cts-color-palette-header-{{ section.id }} h2 {
+        margin: 0;
+        font-size: 24px;
+        font-weight: 700;
+        color: white;
+    }
+    
+    .cts-color-palette-close-{{ section.id }} {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .cts-color-palette-close-{{ section.id }}:hover {
+        background: rgba(239, 68, 68, 0.2);
+        border-color: #ef4444;
+        transform: rotate(90deg);
+    }
+    
+    .cts-color-category-{{ section.id }} {
+        margin-bottom: 24px;
+    }
+    
+    .cts-color-category-{{ section.id }} h4 {
+        font-size: 14px;
+        font-weight: 600;
+        color: #27e1c1;
+        margin: 0 0 12px 0;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    .cts-color-samples-{{ section.id }} {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 12px;
+    }
+    
+    .cts-color-sample-{{ section.id }} {
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-align: center;
+    }
+    
+    .cts-color-sample-{{ section.id }}:hover {
+        border-color: #27e1c1;
+        background: rgba(39, 225, 193, 0.1);
+        transform: translateY(-2px);
+    }
+    
+    .cts-color-sample-box-{{ section.id }} {
+        width: 100%;
+        height: 60px;
+        border-radius: 8px;
+        margin-bottom: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    
+    .cts-color-sample-name-{{ section.id }} {
+        font-size: 12px;
+        font-weight: 600;
+        color: white;
+        margin-bottom: 4px;
+    }
+    
+    .cts-color-sample-hex-{{ section.id }} {
+        font-size: 11px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.6);
+        font-family: 'Courier New', monospace;
+    }
 
     .cts-control-group-{{ section.id }} {
         margin-bottom: 20px;
@@ -1119,7 +1263,14 @@
             </div>
 
             <div class="cts-control-card-{{ section.id }}">
-                <h3>🎨 Text Color</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <h3 style="margin: 0;">🎨 Text Color</h3>
+                    <button id="colorPaletteHelperBtn-{{ section.id }}" 
+                            class="cts-palette-helper-btn-{{ section.id }}"
+                            title="View common colors">
+                        📋 Color Guide
+                    </button>
+                </div>
                 
                 <div class="hex-picker-container-{{ section.id }}">
                     <!-- SVG Hexagonal Color Grid + Brightness Slider -->
@@ -1299,6 +1450,46 @@
         
         <!-- Loading/Success Message -->
         <div id="formStatus-{{ section.id }}" style="display: none; margin-top: 20px; padding: 16px; border-radius: 10px; text-align: center; font-weight: 600;"></div>
+    </div>
+</div>
+
+<!-- Color Palette Helper Modal -->
+<div class="cts-color-palette-modal-{{ section.id }}" id="colorPaletteModal-{{ section.id }}">
+    <div class="cts-color-palette-content-{{ section.id }}">
+        <div class="cts-color-palette-header-{{ section.id }}">
+            <h2>🎨 Color Guide</h2>
+            <button class="cts-color-palette-close-{{ section.id }}" id="colorPaletteClose-{{ section.id }}">✕</button>
+        </div>
+        
+        <!-- Common Colors -->
+        <div class="cts-color-category-{{ section.id }}">
+            <h4>🔹 Basic Colors</h4>
+            <div class="cts-color-samples-{{ section.id }}" id="basicColors-{{ section.id }}"></div>
+        </div>
+        
+        <!-- Vibrant Colors -->
+        <div class="cts-color-category-{{ section.id }}">
+            <h4>🌈 Vibrant Colors</h4>
+            <div class="cts-color-samples-{{ section.id }}" id="vibrantColors-{{ section.id }}"></div>
+        </div>
+        
+        <!-- Pastel Colors -->
+        <div class="cts-color-category-{{ section.id }}">
+            <h4>🌸 Pastel Colors</h4>
+            <div class="cts-color-samples-{{ section.id }}" id="pastelColors-{{ section.id }}"></div>
+        </div>
+        
+        <!-- Dark Colors -->
+        <div class="cts-color-category-{{ section.id }}">
+            <h4>🌑 Dark Colors</h4>
+            <div class="cts-color-samples-{{ section.id }}" id="darkColors-{{ section.id }}"></div>
+        </div>
+        
+        <!-- Metallic/Special -->
+        <div class="cts-color-category-{{ section.id }}">
+            <h4>✨ Special Colors</h4>
+            <div class="cts-color-samples-{{ section.id }}" id="specialColors-{{ section.id }}"></div>
+        </div>
     </div>
 </div>
 
@@ -2648,9 +2839,146 @@
         });
     }
     
+    // ============================================
+    // COLOR PALETTE HELPER MODAL
+    // ============================================
+    
+    const colorPaletteHelperBtn = document.getElementById(`colorPaletteHelperBtn-${sectionId}`);
+    const colorPaletteModal = document.getElementById(`colorPaletteModal-${sectionId}`);
+    const colorPaletteClose = document.getElementById(`colorPaletteClose-${sectionId}`);
+    
+    // Color palette data
+    const colorPalettes = {
+        basic: [
+            { name: 'Black', hex: '#000000' },
+            { name: 'White', hex: '#FFFFFF' },
+            { name: 'Red', hex: '#FF0000' },
+            { name: 'Blue', hex: '#0000FF' },
+            { name: 'Green', hex: '#00FF00' },
+            { name: 'Yellow', hex: '#FFFF00' },
+            { name: 'Orange', hex: '#FFA500' },
+            { name: 'Purple', hex: '#800080' }
+        ],
+        vibrant: [
+            { name: 'Hot Pink', hex: '#FF69B4' },
+            { name: 'Electric Blue', hex: '#00FFFF' },
+            { name: 'Lime Green', hex: '#32CD32' },
+            { name: 'Coral', hex: '#FF7F50' },
+            { name: 'Magenta', hex: '#FF00FF' },
+            { name: 'Turquoise', hex: '#40E0D0' },
+            { name: 'Crimson', hex: '#DC143C' },
+            { name: 'Gold', hex: '#FFD700' }
+        ],
+        pastel: [
+            { name: 'Baby Blue', hex: '#89CFF0' },
+            { name: 'Mint Green', hex: '#98FF98' },
+            { name: 'Lavender', hex: '#E6E6FA' },
+            { name: 'Peach', hex: '#FFDAB9' },
+            { name: 'Light Pink', hex: '#FFB6C1' },
+            { name: 'Pale Yellow', hex: '#FFFFE0' },
+            { name: 'Powder Blue', hex: '#B0E0E6' },
+            { name: 'Cream', hex: '#FFFDD0' }
+        ],
+        dark: [
+            { name: 'Navy Blue', hex: '#000080' },
+            { name: 'Forest Green', hex: '#228B22' },
+            { name: 'Maroon', hex: '#800000' },
+            { name: 'Dark Purple', hex: '#301934' },
+            { name: 'Charcoal', hex: '#36454F' },
+            { name: 'Chocolate', hex: '#D2691E' },
+            { name: 'Olive', hex: '#808000' },
+            { name: 'Midnight', hex: '#191970' }
+        ],
+        special: [
+            { name: 'Rose Gold', hex: '#B76E79' },
+            { name: 'Silver', hex: '#C0C0C0' },
+            { name: 'Bronze', hex: '#CD7F32' },
+            { name: 'Copper', hex: '#B87333' },
+            { name: 'Teal', hex: '#008080' },
+            { name: 'Indigo', hex: '#4B0082' },
+            { name: 'Aqua', hex: '#00FFFF' },
+            { name: 'Salmon', hex: '#FA8072' }
+        ]
+    };
+    
+    // Populate color samples
+    function populateColorSamples() {
+        Object.keys(colorPalettes).forEach(category => {
+            const container = document.getElementById(`${category}Colors-${sectionId}`);
+            if (container) {
+                container.innerHTML = colorPalettes[category].map(color => `
+                    <div class="cts-color-sample-${sectionId}" data-hex="${color.hex}">
+                        <div class="cts-color-sample-box-${sectionId}" style="background: ${color.hex};"></div>
+                        <div class="cts-color-sample-name-${sectionId}">${color.name}</div>
+                        <div class="cts-color-sample-hex-${sectionId}">${color.hex}</div>
+                    </div>
+                `).join('');
+            }
+        });
+        
+        // Add click handlers to color samples
+        document.querySelectorAll(`.cts-color-sample-${sectionId}`).forEach(sample => {
+            sample.addEventListener('click', () => {
+                const hex = sample.getAttribute('data-hex');
+                selectColor(hex);
+                closeModal();
+            });
+        });
+    }
+    
+    // Select color
+    function selectColor(hex) {
+        currentColor = hex;
+        designText.style.color = hex;
+        hexInput.value = hex;
+        hexPreview.style.background = hex;
+        console.log(`🎨 Color selected from palette: ${hex}`);
+    }
+    
+    // Open modal
+    function openModal() {
+        colorPaletteModal.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    }
+    
+    // Close modal
+    function closeModal() {
+        colorPaletteModal.classList.remove('active');
+        document.body.style.overflow = ''; // Restore scrolling
+    }
+    
+    // Event listeners
+    if (colorPaletteHelperBtn) {
+        colorPaletteHelperBtn.addEventListener('click', openModal);
+    }
+    
+    if (colorPaletteClose) {
+        colorPaletteClose.addEventListener('click', closeModal);
+    }
+    
+    // Close modal when clicking outside content
+    if (colorPaletteModal) {
+        colorPaletteModal.addEventListener('click', (e) => {
+            if (e.target === colorPaletteModal) {
+                closeModal();
+            }
+        });
+    }
+    
+    // Close modal with Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && colorPaletteModal.classList.contains('active')) {
+            closeModal();
+        }
+    });
+    
+    // Initialize color samples
+    populateColorSamples();
+    
     console.log('✅ Submit Request functionality initialized');
     console.log('✅ Designer integration points ready for enhancements');
     console.log('📱 Mobile touch gestures enabled (pinch-to-zoom, rotate)');
+    console.log('🎨 Color Palette Helper initialized (40 colors available)');
 })();
 </script>
 
