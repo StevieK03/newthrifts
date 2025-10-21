@@ -1,7 +1,10 @@
 {% comment %}
   Custom T-Shirt Design Studio Section
   Enhanced with hex color picker, undo, invert, flip, placement guide, and more
+  PLUS: Image layers, Curved text, Full export, Animations, Gradients, Templates, Auto-save
 {% endcomment %}
+
+<script src="{{ 'designer-enhancements.js' | asset_url }}" defer></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -667,6 +670,9 @@
                 </div>
             </div>
 
+            {% comment %} ENHANCED FEATURES - Image layers, Curved text, Animations, Gradients, Templates, Auto-save {% endcomment %}
+            {% render 'designer-enhanced-controls', section: section %}
+
             <button class="cts-primary-btn-{{ section.id }}" id="addToCartBtn-{{ section.id }}">🛒 Add to Cart - $24.99</button>
         </div>
     </div>
@@ -1087,6 +1093,74 @@
 
     // Initialize
     checkBoundary();
+    
+    // ============================================
+    // INTEGRATION POINTS FOR ENHANCEMENTS
+    // ============================================
+    
+    // Create a state object that enhancements can access
+    const state = {
+        layers: uploadedImage ? [{ type: 'image', src: uploadedImage.src, transform: { x: 50, y: 50 } }] : [],
+        selectedLayerId: null,
+        designText: textInput.value,
+        fontSize: parseInt(sizeSlider.value),
+        rotation: parseInt(rotateSlider.value),
+        inverted: invertBtn.classList.contains('active'),
+        flippedH: flipHBtn.classList.contains('active'),
+        flippedV: flipVBtn.classList.contains('active')
+    };
+    
+    // Expose functions for enhanced features to use
+    window.designerGetState = function() {
+        return {
+            layers: state.layers,
+            designText: textInput.value,
+            fontSize: parseInt(sizeSlider.value),
+            rotation: parseInt(rotateSlider.value),
+            uploadedImage: uploadedImage ? uploadedImage.src : null
+        };
+    };
+    
+    window.designerLoadState = function(newState) {
+        if (newState.layers) state.layers = newState.layers;
+        if (newState.designText) textInput.value = newState.designText;
+        if (newState.fontSize) sizeSlider.value = newState.fontSize;
+        if (newState.rotation) rotateSlider.value = newState.rotation;
+        updateTransform();
+    };
+    
+    window.designerGetLayers = function() {
+        return state.layers;
+    };
+    
+    window.designerGetSelectedLayer = function() {
+        return state.layers.find(l => l.id === state.selectedLayerId);
+    };
+    
+    window.designerLoadTemplate = function(layers) {
+        if (!Array.isArray(layers)) return;
+        state.layers = layers;
+        // Apply first text layer if exists
+        const firstTextLayer = layers.find(l => l.type === 'text');
+        if (firstTextLayer) {
+            textInput.value = firstTextLayer.text || 'YOUR DESIGN HERE';
+            designText.textContent = textInput.value;
+            if (firstTextLayer.fontSize) sizeSlider.value = firstTextLayer.fontSize;
+            if (firstTextLayer.transform && firstTextLayer.transform.rotation !== undefined) {
+                rotateSlider.value = firstTextLayer.transform.rotation;
+            }
+            updateTransform();
+        }
+    };
+    
+    window.designerApplyGradient = function(gradient) {
+        // Apply gradient to text using the Gradients enhancement
+        if (window.DesignerEnhancements && window.DesignerEnhancements.Gradients) {
+            window.DesignerEnhancements.Gradients.applyGradientToText(designText, gradient);
+        }
+    };
+    
+    console.log('✅ Designer integration points ready for enhancements');
 })();
 </script>
 
