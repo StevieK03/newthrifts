@@ -1360,7 +1360,7 @@
                     <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; z-index: 1; pointer-events: none;" id="nt-mockup-container-{{ section.id }}">
                   
                       <!-- Base T-shirt Image -->
-                      <img id="nt-base-{{ section.id }}" class="nt-mockup__base" src="{{ 'tshirt-view.png' | asset_url }}" alt="T-shirt mockup" loading="eager" decoding="async" fetchpriority="high" style="width: 85%; height: 85%; max-width: 85%; max-height: 85%; object-fit: contain; pointer-events: auto; display: block; z-index: 1;" onerror="console.error('❌ T-shirt failed to load:', this.src);" onload="console.log('✅ T-shirt loaded:', this.src);">
+                      <img id="nt-base-{{ section.id }}" class="nt-mockup__base" src="{{ 'tshirt-view.png' | asset_url }}" alt="T-shirt mockup" loading="eager" decoding="async" fetchpriority="high" style="width: 85% !important; height: 85% !important; max-width: 85% !important; max-height: 85% !important; object-fit: contain !important; pointer-events: auto !important; display: block !important; visibility: visible !important; opacity: 1 !important; z-index: 1 !important;" onerror="console.error('❌ T-shirt failed to load:', this.src); alert('T-shirt failed to load!');" onload="console.log('✅ T-shirt loaded:', this.src); console.log('T-shirt dimensions:', this.offsetWidth, 'x', this.offsetHeight);">
                       
                       <!-- Debug assets (hidden) -->
                       <div id="debug-assets-{{ section.id }}" style="position: absolute; top: -100px; left: -100px; width: 1px; height: 1px; overflow: hidden;">
