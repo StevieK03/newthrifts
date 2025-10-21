@@ -581,7 +581,7 @@
 <script>
 // Ensure the openCustomDesignStudio function is available globally
 window.openCustomDesignStudio = window.openCustomDesignStudio || function() {
-  console.log('🎨 Opening Custom Design Studio...');
+  console.log('🎨 Opening Advanced Design Studio...');
   
   // Hide hero section
   const hero = document.querySelector('[id*="shopify-section-template--"]');
@@ -595,8 +595,12 @@ window.openCustomDesignStudio = window.openCustomDesignStudio || function() {
     mainContent.style.display = 'none';
   }
   
-  // Show the custom studio
-  const studio = document.querySelector('[id*="custom-tshirt-studio"]');
+  // Try to show advanced studio first, then fall back to basic
+  let studio = document.querySelector('[id*="cts-advanced"]');
+  if (!studio) {
+    studio = document.querySelector('[id*="custom-tshirt-studio"]');
+  }
+  
   if (studio) {
     console.log('✅ Studio found, showing it...');
     studio.style.display = 'block';
