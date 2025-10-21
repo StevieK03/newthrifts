@@ -350,38 +350,40 @@
             reader.readAsText(file);
         });
         
-        // Auto-save initialization
-        if (window.designerGetState && window.designerLoadState) {
-            const indicator = document.getElementById(`autosaveIndicator-${sectionId}`);
-            
-            // Start auto-save every 30 seconds
-            Enhancements.AutoSave.startAutoSave(
-                () => window.designerGetState(),
-                30000
-            );
-            
-            // Show indicator on save
-            const originalSave = Enhancements.AutoSave.save;
-            Enhancements.AutoSave.save = function(state) {
-                const result = originalSave.call(this, state);
-                if (result && indicator) {
-                    indicator.classList.add('show');
-                    setTimeout(() => indicator.classList.remove('show'), 2000);
-                }
-                return result;
-            };
-            
-            // Check for saved state on load
-            const savedState = Enhancements.AutoSave.load();
-            const lastSave = Enhancements.AutoSave.getLastSaveTime();
-            
-            if (savedState && lastSave) {
-                const minutesAgo = Math.round((Date.now() - lastSave.getTime()) / 60000);
-                if (confirm(`Found auto-saved design from ${minutesAgo} minute(s) ago. Restore it?`)) {
-                    window.designerLoadState(savedState);
-                }
-            }
-        }
+        // Auto-save initialization (DISABLED - was too intrusive)
+        // if (window.designerGetState && window.designerLoadState) {
+        //     const indicator = document.getElementById(`autosaveIndicator-${sectionId}`);
+        //     
+        //     // Start auto-save every 30 seconds
+        //     Enhancements.AutoSave.startAutoSave(
+        //         () => window.designerGetState(),
+        //         30000
+        //     );
+        //     
+        //     // Show indicator on save
+        //     const originalSave = Enhancements.AutoSave.save;
+        //     Enhancements.AutoSave.save = function(state) {
+        //         const result = originalSave.call(this, state);
+        //         if (result && indicator) {
+        //             indicator.classList.add('show');
+        //             setTimeout(() => indicator.classList.remove('show'), 2000);
+        //         }
+        //         return result;
+        //     };
+        //     
+        //     // Check for saved state on load
+        //     const savedState = Enhancements.AutoSave.load();
+        //     const lastSave = Enhancements.AutoSave.getLastSaveTime();
+        //     
+        //     if (savedState && lastSave) {
+        //         const minutesAgo = Math.round((Date.now() - lastSave.getTime()) / 60000);
+        //         if (confirm(`Found auto-saved design from ${minutesAgo} minute(s) ago. Restore it?`)) {
+        //             window.designerLoadState(savedState);
+        //         }
+        //     }
+        // }
+        
+        console.log('Auto-save disabled for better UX');
         
         // Animation preview
         document.getElementById(`previewAnimation-${sectionId}`)?.addEventListener('click', function() {
