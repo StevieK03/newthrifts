@@ -605,8 +605,10 @@ window.openCustomDesignStudio = window.openCustomDesignStudio || function() {
     console.log('✅ Studio found, showing it...');
     studio.style.display = 'block';
     
-    // Scroll to top of page smoothly
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Wait a moment for the display change to take effect, then scroll to the studio
+    setTimeout(() => {
+      studio.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
   } else {
     console.error('❌ Studio element not found!');
   }
