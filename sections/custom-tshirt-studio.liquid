@@ -1783,27 +1783,42 @@
                 // Upload image to Supabase Storage (or use base64 fallback)
                 const designPreviewUrl = await uploadDesignImage(designPreviewDataUrl);
                 
-                // Prepare email data
+                // Helper function to safely convert values to strings (from working code)
+                const s = v => (v == null || v === "") ? "-" : String(v);
+                
+                // Ensure URLs are absolute HTTPS links (from working code)
+                const ensureAbsoluteUrl = (url) => {
+                    if (!url || url === '#') return '-';
+                    if (url.startsWith('http://') || url.startsWith('https://')) return url;
+                    // If relative URL, make it absolute (shouldn't happen, but just in case)
+                    return url.startsWith('/') ? `https://newthrifts.com${url}` : url;
+                };
+                
+                // Prepare email data with correct variable names matching EmailJS template
                 const emailData = {
-                    to_email: 'shopping@newthrifts.com',
-                    customer_name: customerName,
-                    customer_email: customerEmail,
-                    customer_phone: customerPhone,
-                    tshirt_size: tshirtSizeValue,
-                    tshirt_color: tshirtColor,
-                    customer_message: customerMessage,
-                    design_text: textInput.value,
-                    text_color: currentColor,
-                    font_family: currentFont,
-                    font_size: sizeSlider.value + '%',
-                    rotation: rotateSlider.value + '°',
+                    name: s(customerName),
+                    email: s(customerEmail),
+                    phone: s(customerPhone),
+                    tshirt_size: s(tshirtSizeValue),
+                    message: s(customerMessage),
+                    tshirt_color: s(tshirtColor),
+                    design_text: s(textInput.value),
+                    text_color: s(currentColor),
+                    font_family: s(currentFont),
+                    font_size: s(sizeSlider.value + '%'),
+                    rotation: s(rotateSlider.value + '°'),
                     has_uploaded_image: uploadedImage ? 'Yes' : 'No',
-                    submission_date: new Date().toLocaleString(),
-                    design_preview_url: designPreviewUrl, // URL for email template
-                    design_preview: designPreviewUrl // Backwards compatible
+                    submission_date: s(new Date().toLocaleString()),
+                    design_url: ensureAbsoluteUrl(designPreviewUrl), // KEY FIX: Use design_url
+                    mockup_url: ensureAbsoluteUrl(designPreviewUrl), // KEY FIX: Use mockup_url
+                    logo_url: 'https://cdn.shopify.com/s/files/1/0624/0424/5697/files/newthrifts-logo.png'
                 };
                 
                 console.log('📧 Sending design request email...', emailData);
+                console.log('🖼️ Image URLs:', {
+                    design_url: emailData.design_url,
+                    mockup_url: emailData.mockup_url
+                });
                 
                 // Send email via EmailJS
                 const result = await emailjs.send(
