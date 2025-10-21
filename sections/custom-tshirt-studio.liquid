@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<style>
+  <style>
     .custom-tshirt-studio-{{ section.id }} * {
         margin: 0;
         padding: 0;
@@ -23,7 +23,7 @@
         min-height: 100vh;
         color: #e2e8f0;
         padding: 0;
-        width: 100%;
+      width: 100%;
         overflow-x: hidden; /* Prevent horizontal scroll */
         box-sizing: border-box;
     }
@@ -33,18 +33,18 @@
         backdrop-filter: blur(10px);
         padding: 20px 40px;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        display: flex;
+      display: flex;
         justify-content: space-between;
-        align-items: center;
+      align-items: center;
     }
-
+    
     .cts-header-{{ section.id }} h1 {
         font-size: 24px;
         font-weight: 700;
         background: linear-gradient(135deg, #60a5fa, #a78bfa);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .cts-header-actions-{{ section.id }} {
@@ -122,14 +122,14 @@
     }
 
     .cts-mockup-canvas-{{ section.id }} {
-        position: relative;
-        width: 100%;
+      position: relative;
+      width: 100%;
         height: 100%;
         background: #f8fafc;
         border-radius: 16px;
         overflow: auto; /* Changed from hidden to allow scrolling when zoomed */
-        display: flex;
-        align-items: center;
+      display: flex;
+      align-items: center;
         justify-content: center;
         transform-origin: center center;
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -147,14 +147,14 @@
     }
 
     .cts-tshirt-image-{{ section.id }} {
-        width: 100%;
-        height: 100%;
+      width: 100%;
+      height: 100%;
         object-fit: contain;
         transition: opacity 0.3s ease;
     }
-
+    
     .cts-design-overlay-{{ section.id }} {
-        position: absolute;
+      position: absolute;
         width: 37%;
         height: 42%;
         left: 50%;
@@ -261,34 +261,34 @@
     }
     
     .cts-zoom-slider-{{ section.id }}::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        appearance: none;
+      -webkit-appearance: none;
+      appearance: none;
         width: 20px;
         height: 20px;
-        border-radius: 50%;
+      border-radius: 50%;
         background: linear-gradient(135deg, #27e1c1, #667eea);
-        cursor: pointer;
+      cursor: pointer;
         box-shadow: 0 2px 8px rgba(39, 225, 193, 0.4);
         transition: transform 0.2s;
     }
     
     .cts-zoom-slider-{{ section.id }}::-webkit-slider-thumb:hover {
-        transform: scale(1.15);
+      transform: scale(1.15);
     }
     
     .cts-zoom-slider-{{ section.id }}::-moz-range-thumb {
         width: 20px;
         height: 20px;
-        border-radius: 50%;
+      border-radius: 50%;
         background: linear-gradient(135deg, #27e1c1, #667eea);
-        cursor: pointer;
+      cursor: pointer;
         border: none;
         box-shadow: 0 2px 8px rgba(39, 225, 193, 0.4);
         transition: transform 0.2s;
     }
     
     .cts-zoom-slider-{{ section.id }}::-moz-range-thumb:hover {
-        transform: scale(1.15);
+      transform: scale(1.15);
     }
     
     .cts-zoom-btn-{{ section.id }} {
@@ -311,7 +311,7 @@
     .cts-zoom-btn-{{ section.id }}:hover {
         background: rgba(39, 225, 193, 0.2);
         border-color: #27e1c1;
-        transform: scale(1.05);
+      transform: scale(1.05);
     }
     
     .cts-zoom-btn-{{ section.id }}:active {
@@ -873,7 +873,7 @@
         padding: 20px;
         border-radius: 12px;
         text-align: center;
-        cursor: pointer;
+      cursor: pointer;
         transition: all 0.3s ease;
         display: flex;
         align-items: center;
@@ -952,13 +952,13 @@
         
         .cts-transform-btn-{{ section.id }},
         .cts-tshirt-color-btn-{{ section.id }} {
-            padding: 12px 16px;
-            font-size: 14px;
+                          padding: 12px 16px; 
+                          font-size: 14px; 
             min-height: 44px; /* Touch-friendly */
         }
         
         .cts-file-upload-btn-{{ section.id }} {
-            padding: 14px 20px;
+                          padding: 14px 20px; 
             font-size: 15px;
             min-height: 44px;
         }
@@ -971,7 +971,7 @@
             bottom: 0;
             z-index: 100;
             background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(10px);
+                          backdrop-filter: blur(10px);
             box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
         }
         
@@ -1067,28 +1067,59 @@
         .cts-zoom-control-{{ section.id }} {
             position: sticky;
             bottom: 0;
-            z-index: 100;
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(10px);
+                      z-index: 100;
+                        background: rgba(15, 23, 42, 0.95);
+                        backdrop-filter: blur(10px);
             box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
             padding: 12px;
             margin-top: 12px;
         }
         
-        /* Hex Color Picker - Scale Down */
+        /* Hex Color Picker - Mobile Optimized */
+        #hexColorPicker-{{ section.id }} {
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        
         #hexColorPicker-{{ section.id }} svg {
-            max-width: 200px !important;
+            max-width: 300px !important;
+            min-width: 280px !important;
             height: auto !important;
+            margin: 0 auto;
+            display: block;
+            touch-action: manipulation;
+        }
+        
+        /* Increase touch target size for hexagons */
+        #hexColorPicker-{{ section.id }} polygon {
+            stroke-width: 3;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        #hexColorPicker-{{ section.id }} polygon:hover {
+            filter: brightness(1.15);
+            stroke-width: 4;
+        }
+        
+        #hexColorPicker-{{ section.id }} polygon:active {
+            transform: scale(1.15);
+            filter: brightness(1.3);
+            stroke-width: 4;
         }
         
         /* Quick Actions - Full Width Buttons */
         .cts-quick-actions-{{ section.id }} {
             grid-template-columns: 1fr;
-            gap: 10px;
+                      gap: 10px;
         }
         
         .cts-action-btn-{{ section.id }} {
-            font-size: 14px;
+                          font-size: 14px;
             padding: 14px 20px;
         }
         
@@ -1104,7 +1135,7 @@
         }
         
         .cts-workflow-step-{{ section.id }} h3 {
-            font-size: 16px;
+                    font-size: 16px;
         }
         
         .cts-workflow-step-{{ section.id }} p {
@@ -1120,7 +1151,7 @@
     /* Mobile Styles - Small Phones (iPhone SE, etc.) */
     @media (max-width: 375px) {
         .cts-header-{{ section.id }} h1 {
-            font-size: 18px;
+                  font-size: 18px; 
         }
         
         .cts-control-card-{{ section.id }} h3 {
@@ -1129,20 +1160,20 @@
         
         .cts-transform-group-{{ section.id }} {
             grid-template-columns: 1fr;
-            gap: 8px;
+                  gap: 8px;
         }
         
         .cts-transform-btn-{{ section.id }} {
-            width: 100%;
+                  width: 100%;
         }
         
         .cts-tshirt-color-options-{{ section.id }} {
             grid-template-columns: 1fr;
-            gap: 8px;
+                  gap: 8px;
         }
         
         .cts-tshirt-color-btn-{{ section.id }} {
-            width: 100%;
+                  width: 100%;
         }
         
         /* Color Palette - Larger Touch Targets */
@@ -1194,9 +1225,9 @@
         <div class="cts-header-actions-{{ section.id }}">
             <button class="cts-header-btn-{{ section.id }}" id="undoBtn-{{ section.id }}" disabled>↶ Undo</button>
             <button class="cts-header-btn-{{ section.id }}" id="guideBtn-{{ section.id }}">📐 Placement Guide</button>
-        </div>
-    </div>
-
+              </div>
+            </div>
+            
     <div class="cts-container-{{ section.id }}">
         <div class="cts-preview-section-{{ section.id }}">
             <div class="cts-preview-card-{{ section.id }}">
@@ -1214,11 +1245,11 @@
                             
                             <div class="cts-design-overlay-{{ section.id }}" id="designOverlay-{{ section.id }}">
                                 <span class="cts-design-text-{{ section.id }}" id="designText-{{ section.id }}">YOUR DESIGN HERE</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
+      </div>
+    </div>
+  </div>
+      </div>
+
                 <!-- Canvas Zoom Control -->
                 <div class="cts-zoom-control-{{ section.id }}">
                     <label class="cts-zoom-label-{{ section.id }}">
@@ -1230,47 +1261,47 @@
                         <input type="range" 
                                class="cts-zoom-slider-{{ section.id }}" 
                                id="canvasZoom-{{ section.id }}" 
-                               min="50" 
+                  min="50" 
                                max="200" 
-                               value="100" 
+                  value="100" 
                                step="5">
                         <button class="cts-zoom-btn-{{ section.id }}" id="zoomInBtn-{{ section.id }}" title="Zoom In">+</button>
                         <span class="cts-zoom-value-{{ section.id }}" id="zoomValue-{{ section.id }}">100%</span>
-                    </div>
-                </div>
+              </div>
             </div>
-
+          </div>
+          
             <div class="cts-quick-actions-{{ section.id }}">
                 <button class="cts-quick-action-btn-{{ section.id }}" id="downloadBtn-{{ section.id }}">📥 Download Preview</button>
                 <button class="cts-quick-action-btn-{{ section.id }}" id="shareBtn-{{ section.id }}">🔗 Share Design</button>
                 <button class="cts-quick-action-btn-{{ section.id }}" id="resetBtn-{{ section.id }}">🔄 Reset All</button>
             </div>
-            
+
             <!-- Submit Request Button - Primary CTA -->
             <div class="cts-quick-actions-{{ section.id }}" style="margin-top: 20px;">
                 <button class="cts-submit-request-btn-{{ section.id }}" id="submitRequestBtn-{{ section.id }}" style="
-                    width: 100%;
+                width: 100%;
                     padding: 18px 36px;
                     background: linear-gradient(135deg, #dc2626, #ef4444);
                     color: white;
                     border: none;
-                    border-radius: 16px;
+                  border-radius: 16px;
                     font-size: 18px;
                     font-weight: 700;
-                    cursor: pointer;
+                      cursor: pointer;
                     transition: all 0.3s ease;
                     box-shadow: 0 8px 32px rgba(220, 38, 38, 0.4);
                     text-transform: uppercase;
                     letter-spacing: 1px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
                     gap: 10px;
                 ">
                     🚀 Submit Your Design Request
-                </button>
+                    </button>
+              </div>
             </div>
-        </div>
 
         <div class="cts-controls-panel-{{ section.id }}">
             <div class="cts-control-card-{{ section.id }}">
@@ -1278,16 +1309,16 @@
                 <div class="cts-control-group-{{ section.id }}">
                     <label>Your Text</label>
                     <textarea class="cts-text-input-{{ section.id }}" id="textInput-{{ section.id }}" placeholder="Enter your custom text...">YOUR DESIGN HERE</textarea>
-                </div>
+            </div>
                 <div class="cts-control-group-{{ section.id }}">
                     <label>Font Style</label>
                     <div class="cts-font-selector-{{ section.id }}">
                         <div class="cts-font-option-{{ section.id }} active" data-font="'Bebas Neue', sans-serif" style="font-family: 'Bebas Neue', sans-serif;">Bebas</div>
                         <div class="cts-font-option-{{ section.id }}" data-font="'Inter', sans-serif" style="font-family: 'Inter', sans-serif; font-weight: 700;">Inter</div>
                         <div class="cts-font-option-{{ section.id }}" data-font="Arial, sans-serif" style="font-family: Arial, sans-serif; font-weight: bold;">Arial</div>
-                    </div>
-                </div>
-            </div>
+          </div>
+          </div>
+        </div>
 
             <div class="cts-control-card-{{ section.id }}">
                 <h3>👕 T-Shirt Color</h3>
@@ -1299,16 +1330,16 @@
                              style="background: white; border: 2px solid rgba(0, 0, 0, 0.1);"
                              title="White T-Shirt">
                             <span style="color: #64748b; font-size: 12px; font-weight: 600;">White</span>
-                        </div>
+            </div>
                         <div class="cts-tshirt-color-option-{{ section.id }}" 
                              data-color="black" 
                              style="background: #000000; border: 2px solid rgba(255, 255, 255, 0.1);"
                              title="Black T-Shirt">
                             <span style="color: #ffffff; font-size: 12px; font-weight: 600;">Black</span>
-                        </div>
-                    </div>
-                </div>
             </div>
+            </div>
+          </div>
+        </div>
 
             <div class="cts-control-card-{{ section.id }}">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
@@ -1318,8 +1349,8 @@
                             title="View common colors">
                         📋 Color Guide
                     </button>
-                </div>
-                
+            </div>
+
                 <div class="hex-picker-container-{{ section.id }}">
                     <!-- SVG Hexagonal Color Grid + Brightness Slider -->
                     <div class="hex-picker-grid-wrapper-{{ section.id }}">
@@ -1334,8 +1365,8 @@
                                     </filter>
                                 </defs>
                             </svg>
-                        </div>
-                        
+            </div>
+
                         <!-- Brightness Slider -->
                         <div class="brightness-slider-container-{{ section.id }}">
                             <div class="brightness-slider-track-{{ section.id }}" id="brightnessTrack-{{ section.id }}">
@@ -1346,11 +1377,11 @@
                                        max="100" 
                                        value="100"
                                        orient="vertical">
-                            </div>
+            </div>
                             <div class="brightness-slider-label-{{ section.id }}">Brightness</div>
-                        </div>
-                    </div>
-                    
+          </div>
+        </div>
+
                     <!-- Hex Display with Input -->
                     <div class="hex-display-{{ section.id }}">
                         <div class="cts-hex-preview-{{ section.id }}" id="hexPreview-{{ section.id }}" style="background: #000000;"></div>
@@ -1360,9 +1391,9 @@
                                placeholder="#000000" 
                                maxlength="7"
                                value="#000000">
-                    </div>
-                </div>
-            </div>
+        </div>
+          </div>
+        </div>
 
             <div class="cts-control-card-{{ section.id }}">
                 <h3>🔄 Transform</h3>
@@ -1370,7 +1401,7 @@
                     <button class="cts-transform-btn-{{ section.id }}" id="flipHBtn-{{ section.id }}">↔️ Flip H</button>
                     <button class="cts-transform-btn-{{ section.id }}" id="flipVBtn-{{ section.id }}">↕️ Flip V</button>
                     <button class="cts-transform-btn-{{ section.id }}" id="invertBtn-{{ section.id }}">🔁 Invert</button>
-                </div>
+            </div>
             </div>
 
             <div class="cts-control-card-{{ section.id }}">
@@ -1382,8 +1413,8 @@
                 <p style="font-size: 12px; color: rgba(255, 255, 255, 0.6); margin: 8px 0 0 0; text-align: center; line-height: 1.4;">
                     Supported: PNG, JPG, JPEG, GIF, WebP, SVG<br>
                     <span style="font-size: 11px; opacity: 0.8;">Max size: 10MB</span>
-                </p>
-            </div>
+            </p>
+          </div>
 
             <div class="cts-control-card-{{ section.id }}">
                 <h3>⚙️ Adjustments</h3>
@@ -1392,16 +1423,16 @@
                     <div class="cts-slider-container-{{ section.id }}">
                         <input type="range" class="cts-slider-{{ section.id }}" id="sizeSlider-{{ section.id }}" min="50" max="200" value="100">
                         <span class="cts-slider-value-{{ section.id }}" id="sizeValue-{{ section.id }}">100%</span>
-                    </div>
-                </div>
+          </div>
+        </div>
                 <div class="cts-control-group-{{ section.id }}">
                     <label>Rotation</label>
                     <div class="cts-slider-container-{{ section.id }}">
                         <input type="range" class="cts-slider-{{ section.id }}" id="rotateSlider-{{ section.id }}" min="-45" max="45" value="0">
                         <span class="cts-slider-value-{{ section.id }}" id="rotateValue-{{ section.id }}">0°</span>
-                    </div>
-                </div>
-            </div>
+      </div>
+    </div>
+  </div>
 
             {% comment %} ENHANCED FEATURES - Image layers, Curved text, Animations, Gradients, Templates, Auto-save {% endcomment %}
             {% render 'designer-enhanced-controls', section: section %}
@@ -1409,19 +1440,19 @@
             <button class="cts-primary-btn-{{ section.id }}" id="addToCartBtn-{{ section.id }}">🛒 Add to Cart - $24.99</button>
         </div>
     </div>
-    
+
     <!-- Customer Information Form (Hidden by default) -->
     <div id="customerInfoForm-{{ section.id }}" style="display: none; margin: 40px auto; padding: 32px; background: linear-gradient(135deg, rgba(220, 38, 38, 0.05), rgba(239, 68, 68, 0.05)); border-radius: 20px; border: 2px solid rgba(220, 38, 38, 0.2); max-width: 700px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);">
         <div style="text-align: center; margin-bottom: 24px;">
             <div style="display: inline-flex; align-items: center; gap: 12px; margin-bottom: 8px;">
                 <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #dc2626, #ef4444); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px;">
                     👤
-                </div>
-                <h2 style="margin: 0; font-size: 28px; font-weight: 800; color: #dc2626;">Customer Information</h2>
-            </div>
-            <p style="margin: 0; font-size: 15px; color: #6b7280;">Please fill in your details to submit your custom t-shirt request</p>
         </div>
-        
+                <h2 style="margin: 0; font-size: 28px; font-weight: 800; color: #dc2626;">Customer Information</h2>
+      </div>
+            <p style="margin: 0; font-size: 15px; color: #6b7280;">Please fill in your details to submit your custom t-shirt request</p>
+    </div>
+
         <form id="requestForm-{{ section.id }}" style="display: grid; gap: 16px;">
             <!-- Customer Details Row 1 -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
@@ -1431,16 +1462,16 @@
                            style="width: 100%; padding: 12px; border: 2px solid #d1d5db; border-radius: 10px; font-size: 14px; background: white; box-sizing: border-box; transition: all 0.2s;"
                            onfocus="this.style.borderColor='#dc2626'; this.style.boxShadow='0 0 0 3px rgba(220, 38, 38, 0.1)'"
                            onblur="this.style.borderColor='#d1d5db'; this.style.boxShadow='none'">
-                </div>
+        </div>
                 <div>
                     <label style="display: block; margin-bottom: 6px; font-size: 13px; font-weight: 700; color: #374151;">Email *</label>
                     <input type="email" id="customerEmail-{{ section.id }}" required 
                            style="width: 100%; padding: 12px; border: 2px solid #d1d5db; border-radius: 10px; font-size: 14px; background: white; box-sizing: border-box; transition: all 0.2s;"
                            onfocus="this.style.borderColor='#dc2626'; this.style.boxShadow='0 0 0 3px rgba(220, 38, 38, 0.1)'"
                            onblur="this.style.borderColor='#d1d5db'; this.style.boxShadow='none'">
-                </div>
-            </div>
-            
+      </div>
+    </div>
+
             <!-- Customer Details Row 2 -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                 <div>
@@ -1465,10 +1496,10 @@
                         <option value="XL">XL</option>
                         <option value="XXL">XXL</option>
                         <option value="3XL">3XL</option>
-                    </select>
-                </div>
-            </div>
-            
+          </select>
+        </div>
+        </div>
+
             <!-- Special Instructions -->
             <div>
                 <label style="display: block; margin-bottom: 6px; font-size: 13px; font-weight: 700; color: #374151;">Special Instructions or Message</label>
@@ -1477,8 +1508,8 @@
                           style="width: 100%; padding: 12px; border: 2px solid #d1d5db; border-radius: 10px; font-size: 14px; background: white; resize: vertical; box-sizing: border-box; font-family: inherit; transition: all 0.2s;"
                           onfocus="this.style.borderColor='#dc2626'; this.style.boxShadow='0 0 0 3px rgba(220, 38, 38, 0.1)'"
                           onblur="this.style.borderColor='#d1d5db'; this.style.boxShadow='none'"></textarea>
-            </div>
-            
+        </div>
+
             <!-- Action Buttons -->
             <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 8px;">
                 <button type="button" id="cancelRequestBtn-{{ section.id }}" 
@@ -1493,13 +1524,13 @@
                         onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 16px rgba(220, 38, 38, 0.3)'">
                     🚀 Submit Request
                 </button>
-            </div>
+        </div>
         </form>
         
         <!-- Loading/Success Message -->
         <div id="formStatus-{{ section.id }}" style="display: none; margin-top: 20px; padding: 16px; border-radius: 10px; text-align: center; font-weight: 600;"></div>
-    </div>
-</div>
+          </div>
+        </div>
 
 <!-- Color Palette Helper Modal -->
 <div class="cts-color-palette-modal-{{ section.id }}" id="colorPaletteModal-{{ section.id }}">
@@ -1507,39 +1538,39 @@
         <div class="cts-color-palette-header-{{ section.id }}">
             <h2>🎨 Color Guide</h2>
             <button class="cts-color-palette-close-{{ section.id }}" id="colorPaletteClose-{{ section.id }}">✕</button>
-        </div>
-        
+    </div>
+
         <!-- Common Colors -->
         <div class="cts-color-category-{{ section.id }}">
             <h4>🔹 Basic Colors</h4>
             <div class="cts-color-samples-{{ section.id }}" id="basicColors-{{ section.id }}"></div>
         </div>
-        
+
         <!-- Vibrant Colors -->
         <div class="cts-color-category-{{ section.id }}">
             <h4>🌈 Vibrant Colors</h4>
             <div class="cts-color-samples-{{ section.id }}" id="vibrantColors-{{ section.id }}"></div>
         </div>
-        
+
         <!-- Pastel Colors -->
         <div class="cts-color-category-{{ section.id }}">
             <h4>🌸 Pastel Colors</h4>
             <div class="cts-color-samples-{{ section.id }}" id="pastelColors-{{ section.id }}"></div>
-        </div>
-        
+    </div>
+
         <!-- Dark Colors -->
         <div class="cts-color-category-{{ section.id }}">
             <h4>🌑 Dark Colors</h4>
             <div class="cts-color-samples-{{ section.id }}" id="darkColors-{{ section.id }}"></div>
         </div>
-        
+
         <!-- Metallic/Special -->
         <div class="cts-color-category-{{ section.id }}">
             <h4>✨ Special Colors</h4>
             <div class="cts-color-samples-{{ section.id }}" id="specialColors-{{ section.id }}"></div>
         </div>
+      </div>
     </div>
-</div>
 
 <!-- Supabase Scripts for Image Upload (optional - falls back to base64 if not available) -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1597,8 +1628,11 @@
     
     const SQRT3 = Math.sqrt(3);
     const HEX_RADIUS = 5;      // Number of hexagon rings
-    const HEX_SIZE = 22;       // Pixel radius of each hexagon
-    const HEX_PADDING = 24;    // Padding around the grid
+    
+    // MOBILE FIX: Make hexagons larger on mobile for easier tapping
+    const isMobile = window.innerWidth <= 768;
+    const HEX_SIZE = isMobile ? 16 : 22;       // Smaller base size for mobile, will scale up
+    const HEX_PADDING = isMobile ? 20 : 24;    // Padding around the grid
     
     // HSV state for brightness control
     let pickerHue = 0;
@@ -1745,7 +1779,10 @@
             polygon.setAttribute('filter', `url(#hexShadow-${sectionId})`);
             polygon.dataset.color = fill.toUpperCase();
             
-            polygon.addEventListener('click', () => {
+            // MOBILE FIX: Add touch event handling for better mobile responsiveness
+            const handleColorSelect = (e) => {
+                if (e) e.preventDefault(); // Prevent double-firing on mobile
+                
                 saveState();
                 
                 // Update HSV state from axial coordinates
@@ -1761,6 +1798,20 @@
                 hexPreview.style.background = currentColor;
                 updateSVGHexSelection(currentColor);
                 updateBrightnessSliderGradient();
+            };
+            
+            // Add both click and touch events for better mobile support
+            polygon.addEventListener('click', handleColorSelect);
+            polygon.addEventListener('touchend', handleColorSelect, { passive: false });
+            
+            // Add visual feedback on touch
+            polygon.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                polygon.style.filter = 'brightness(1.3)';
+            }, { passive: false });
+            
+            polygon.addEventListener('touchcancel', () => {
+                polygon.style.filter = '';
             });
             
             svg.appendChild(polygon);
@@ -1899,8 +1950,8 @@
                 tshirtImage.style.filter = 'none';
             }
         });
-    });
-
+      });
+      
     // Text input with boundary control
     textInput.addEventListener('input', (e) => {
         if (!uploadedImage) {
@@ -2022,21 +2073,21 @@
             if (!isValidType) {
                 alert('❌ Invalid file format!\n\nSupported formats:\n✅ PNG (.png)\n✅ JPG/JPEG (.jpg, .jpeg)\n✅ GIF (.gif)\n✅ WebP (.webp)\n✅ SVG (.svg)');
                 imageUpload.value = ''; // Clear the input
-                return;
-            }
-            
+        return;
+      }
+      
             // Validate file size (max 10MB)
             const maxSize = 10 * 1024 * 1024; // 10MB in bytes
-            if (file.size > maxSize) {
+      if (file.size > maxSize) {
                 alert('❌ File too large!\n\nMaximum file size: 10MB\nYour file: ' + (file.size / 1024 / 1024).toFixed(2) + 'MB');
                 imageUpload.value = ''; // Clear the input
-                return;
-            }
-            
+        return;
+      }
+      
             console.log('✅ Valid image uploaded:', file.name, file.type, (file.size / 1024).toFixed(2) + 'KB');
-            
+      
             saveState();
-            const reader = new FileReader();
+      const reader = new FileReader();
             reader.onload = (event) => {
                 if (uploadedImage) {
                     uploadedImage.remove();
@@ -2108,7 +2159,7 @@
                     mockupCanvas.scrollLeft = (mockupCanvas.scrollWidth - mockupCanvas.clientWidth) / 2;
                     mockupCanvas.scrollTop = (mockupCanvas.scrollHeight - mockupCanvas.clientHeight) / 2;
                 }, 50);
-            } else {
+      } else {
                 mockupCanvas.style.overflow = 'hidden';
             }
             
@@ -2232,7 +2283,7 @@
         
         if (isOutside) {
             designOverlay.style.outline = '2px solid rgba(239, 68, 68, 0.8)';
-        } else {
+          } else {
             designOverlay.style.outline = '';
         }
     }
@@ -2361,7 +2412,7 @@
                 btn.textContent = originalText;
                 btn.style.background = '';
             }, 2000);
-        } catch (error) {
+      } catch (error) {
             console.error('❌ Download failed:', error);
             alert('⚠️ Unable to download. Please try again.');
         }
@@ -2404,7 +2455,7 @@
                         files: [file]
                     });
                     console.log('✅ Design shared successfully!');
-                } else {
+        } else {
                     // Share without file
                     await navigator.share({
                         title: shareTitle,
@@ -2428,8 +2479,8 @@
             // If share was cancelled, don't show error
             if (error.name === 'AbortError') {
                 console.log('Share cancelled by user');
-                return;
-            }
+        return;
+      }
             
             alert('⚠️ Unable to share. Try downloading the design instead!');
         }
@@ -2737,8 +2788,8 @@
             } catch (error) {
                 console.warn('⚠️ Supabase upload failed, using base64 fallback:', error);
                 return dataUrl; // Fallback to base64
-            }
-        } else {
+    }
+  } else {
             console.log('ℹ️ Supabase not available, using base64 data');
             return dataUrl; // Use base64 if Supabase not available
         }
@@ -2762,9 +2813,9 @@
             // Validate required fields
             if (!customerName || !customerEmail) {
                 alert('❌ Please fill in all required fields (Name and Email)');
-                return;
-            }
-            
+      return;
+    }
+    
             // Show loading status
             formStatus.style.display = 'block';
             formStatus.style.background = 'linear-gradient(135deg, #3b82f6, #2563eb)';
@@ -2859,7 +2910,7 @@
                 `;
                 
                 // Reset form after 3 seconds
-                setTimeout(() => {
+      setTimeout(() => {
                     requestForm.reset();
                     customerInfoForm.style.display = 'none';
                     formStatus.style.display = 'none';
