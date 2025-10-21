@@ -286,8 +286,8 @@
             }
             
             const layers = window.designerGetLayers();
-            const svg = Enhancements.Export.exportToSVG(layers, 400, 400);
-            Enhancements.Export.downloadFile(svg, 'design.svg', 'image/svg+xml');
+            const svg = DesignerEnhancements.Export.exportToSVG(layers, 400, 400);
+            DesignerEnhancements.Export.downloadFile(svg, 'design.svg', 'image/svg+xml');
         });
         
         // Enhanced PNG Export
@@ -302,8 +302,8 @@
             
             try {
                 const layers = window.designerGetLayers();
-                const blob = await Enhancements.Export.exportToPNG(layers, 400, 400, 300);
-                Enhancements.Export.downloadFile(blob, 'design.png', 'image/png');
+                const blob = await DesignerEnhancements.Export.exportToPNG(layers, 400, 400, 300);
+                DesignerEnhancements.Export.downloadFile(blob, 'design.png', 'image/png');
                 this.textContent = '✓ Downloaded!';
             } catch (e) {
                 console.error('Export failed:', e);
@@ -326,7 +326,7 @@
             
             const state = window.designerGetState();
             const json = JSON.stringify(state, null, 2);
-            Enhancements.Export.downloadFile(json, 'design.json', 'application/json');
+            DesignerEnhancements.Export.downloadFile(json, 'design.json', 'application/json');
         });
         
         // Import JSON
