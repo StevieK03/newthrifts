@@ -1075,41 +1075,10 @@
             margin-top: 12px;
         }
         
-        /* Hex Color Picker - Mobile Optimized */
-        #hexColorPicker-{{ section.id }} {
-            overflow-x: auto;
-            overflow-y: hidden;
-            -webkit-overflow-scrolling: touch;
-            padding: 10px;
-            margin: 10px 0;
-        }
-        
+        /* Hex Color Picker - Scale Down */
         #hexColorPicker-{{ section.id }} svg {
-            max-width: 300px !important;
-            min-width: 280px !important;
+            max-width: 200px !important;
             height: auto !important;
-            margin: 0 auto;
-            display: block;
-            touch-action: manipulation;
-        }
-        
-        /* Increase touch target size for hexagons */
-        #hexColorPicker-{{ section.id }} polygon {
-            stroke-width: 3;
-            transition: all 0.2s ease;
-            cursor: pointer;
-            -webkit-tap-highlight-color: transparent;
-        }
-        
-        #hexColorPicker-{{ section.id }} polygon:hover {
-            filter: brightness(1.15);
-            stroke-width: 4;
-        }
-        
-        #hexColorPicker-{{ section.id }} polygon:active {
-            transform: scale(1.15);
-            filter: brightness(1.3);
-            stroke-width: 4;
         }
         
         /* Quick Actions - Full Width Buttons */
@@ -1628,11 +1597,8 @@
     
     const SQRT3 = Math.sqrt(3);
     const HEX_RADIUS = 5;      // Number of hexagon rings
-    
-    // MOBILE FIX: Make hexagons larger on mobile for easier tapping
-    const isMobile = window.innerWidth <= 768;
-    const HEX_SIZE = isMobile ? 16 : 22;       // Smaller base size for mobile, will scale up
-    const HEX_PADDING = isMobile ? 20 : 24;    // Padding around the grid
+    const HEX_SIZE = 22;       // Pixel radius of each hexagon
+    const HEX_PADDING = 24;    // Padding around the grid
     
     // HSV state for brightness control
     let pickerHue = 0;
@@ -1779,10 +1745,7 @@
             polygon.setAttribute('filter', `url(#hexShadow-${sectionId})`);
             polygon.dataset.color = fill.toUpperCase();
             
-            // MOBILE FIX: Add touch event handling for better mobile responsiveness
-            const handleColorSelect = (e) => {
-                if (e) e.preventDefault(); // Prevent double-firing on mobile
-                
+            polygon.addEventListener('click', () => {
                 saveState();
                 
                 // Update HSV state from axial coordinates
@@ -1798,20 +1761,6 @@
                 hexPreview.style.background = currentColor;
                 updateSVGHexSelection(currentColor);
                 updateBrightnessSliderGradient();
-            };
-            
-            // Add both click and touch events for better mobile support
-            polygon.addEventListener('click', handleColorSelect);
-            polygon.addEventListener('touchend', handleColorSelect, { passive: false });
-            
-            // Add visual feedback on touch
-            polygon.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                polygon.style.filter = 'brightness(1.3)';
-            }, { passive: false });
-            
-            polygon.addEventListener('touchcancel', () => {
-                polygon.style.filter = '';
             });
             
             svg.appendChild(polygon);
