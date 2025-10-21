@@ -583,6 +583,12 @@
 window.openCustomDesignStudio = window.openCustomDesignStudio || function() {
   console.log('🎨 Opening Custom Design Studio...');
   
+  // Hide hero section
+  const hero = document.querySelector('[id*="shopify-section-template--"]');
+  if (hero) {
+    hero.style.display = 'none';
+  }
+  
   // Hide main content
   const mainContent = document.querySelector('.main-content');
   if (mainContent) {
@@ -592,13 +598,18 @@ window.openCustomDesignStudio = window.openCustomDesignStudio || function() {
   // Show the custom studio
   const studio = document.querySelector('[id*="custom-tshirt-studio"]');
   if (studio) {
+    console.log('✅ Studio found, showing it...');
     studio.style.display = 'block';
-    studio.scrollIntoView({ behavior: 'smooth' });
+    
+    // Scroll to top of page smoothly
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else {
+    console.error('❌ Studio element not found!');
   }
-  
-  // Scroll to top
-  window.scrollTo({ top: 0, behavior: 'smooth' });
 };
+
+// Log when this script loads
+console.log('✅ openCustomDesignStudio function loaded');
 </script>
 
 {% schema %}
