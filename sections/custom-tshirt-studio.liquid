@@ -1353,16 +1353,16 @@
             <div class="nt-mockup__stage" style="width: 100%; display: flex; justify-content: center; align-items: center; margin-top: 30px !important; margin-bottom: 40px !important; padding: 0; box-sizing: border-box;">
                 
                 <!-- Colorful Gradient Wrapper (ALWAYS VISIBLE) -->
-                <div class="canvas-gradient-wrapper" style="position: relative; width: min(900px, 90%); max-width: 90vw; aspect-ratio: 1; margin: 0 auto; background: linear-gradient(135deg, #27e1c1 0%, #667eea 20%, #764ba2 35%, #f093fb 50%, #4facfe 65%, #27e1c1 100%); background-size: 300% 300%; animation: canvasGradientShift 15s ease infinite; border-radius: 20px; box-shadow: 0 25px 80px rgba(39, 225, 193, 0.3), 0 10px 30px rgba(0,0,0,0.2); padding: 40px; overflow: visible;">
+                <div class="canvas-gradient-wrapper" style="position: relative; width: min(900px, 90%); max-width: 90vw; aspect-ratio: 1; margin: 0 auto; background: linear-gradient(135deg, #27e1c1 0%, #667eea 20%, #764ba2 35%, #f093fb 50%, #4facfe 65%, #27e1c1 100%); background-size: 300% 300%; animation: canvasGradientShift 15s ease infinite; border-radius: 20px; box-shadow: 0 25px 80px rgba(39, 225, 193, 0.3), 0 10px 30px rgba(0,0,0,0.2); padding: 40px; overflow: hidden;">
                   
-                  <!-- White Canvas Container -->
-                  <div class="nt-mockup__canvas" id="nt-mockup-canvas-{{ section.id }}" style="position: relative; width: 100%; height: 100%; background: #ffffff; border-radius: 12px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); --overlay-top: 29.142857%; --overlay-left: 50.214286%; --overlay-width: 37%; --overlay-height: 42%; --overlay-rotate: 0deg; overflow: hidden;">
+                  <!-- White Canvas Container (Clean display area) -->
+                  <div class="nt-mockup__canvas" id="nt-mockup-canvas-{{ section.id }}" style="position: relative; width: 100%; height: 100%; background: #f8fafc; border-radius: 12px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); --overlay-top: 29.142857%; --overlay-left: 50.214286%; --overlay-width: 37%; --overlay-height: 42%; --overlay-rotate: 0deg; overflow: hidden;">
                     
-                    <!-- T-shirt Container -->
-                    <div style="position: relative; width: 100%; height: 100%; cursor: grab; isolation: isolate; display: flex; align-items: center; justify-content: center;" id="nt-mockup-container-{{ section.id }}">
-                      
-                      <!-- T-shirt Image -->
-                      <img id="nt-base-{{ section.id }}" class="nt-mockup__base" src="{{ 'tshirt-view.png' | asset_url }}" alt="T-shirt mockup" loading="eager" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; height: 85%; object-fit: contain; pointer-events: none; display: block;" onerror="console.error('❌ T-shirt failed to load:', this.src);" onload="console.log('✅ T-shirt loaded:', this.src);">
+                    <!-- T-shirt Mockup Container -->
+                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; z-index: 1; pointer-events: none;" id="nt-mockup-container-{{ section.id }}">
+                  
+                      <!-- Base T-shirt Image -->
+                      <img id="nt-base-{{ section.id }}" class="nt-mockup__base" src="{{ 'tshirt-view.png' | asset_url }}" alt="T-shirt mockup" loading="eager" decoding="async" fetchpriority="high" style="width: 85%; height: 85%; max-width: 85%; max-height: 85%; object-fit: contain; pointer-events: auto; display: block; z-index: 1;" onerror="console.error('❌ T-shirt failed to load:', this.src);" onload="console.log('✅ T-shirt loaded:', this.src);">
                       
                       <!-- Debug assets (hidden) -->
                       <div id="debug-assets-{{ section.id }}" style="position: absolute; top: -100px; left: -100px; width: 1px; height: 1px; overflow: hidden;">
@@ -1376,7 +1376,7 @@
                     <div
                       id="nt-overlay-{{ section.id }}"
                       class="nt-mockup__overlay"
-                      style="position: absolute !important; width: 37% !important; height: 42% !important; left: 50.214286% !important; top: 29.142857% !important; transform: translateX(-50%) rotate(0deg) !important; inset: auto !important; display: flex !important; align-items: center !important; justify-content: center !important; cursor: grab; transition: all 0.1s ease; border: 2px dashed rgba(39, 225, 193, 0.3); border-radius: 8px; background: rgba(39, 225, 193, 0.05);"
+                      style="position: absolute !important; width: 37% !important; height: 42% !important; left: 50.214286% !important; top: 29.142857% !important; transform: translateX(-50%) rotate(0deg) !important; inset: auto !important; display: flex !important; align-items: center !important; justify-content: center !important; cursor: grab; transition: all 0.1s ease; border: 2px dashed rgba(39, 225, 193, 0.3); border-radius: 8px; background: rgba(39, 225, 193, 0.05); z-index: 2; pointer-events: auto;"
                     >
                       <span id="nt-design-text-{{ section.id }}" 
                             style="position: relative; z-index: 2; font-family: 'Bebas Neue', sans-serif; font-size: 32px; font-weight: bold; color: #000000; text-align: center; white-space: nowrap; user-select: none; text-shadow: 1px 1px 2px rgba(255,255,255,0.8); pointer-events: none;">
@@ -1449,14 +1449,15 @@
                     <!-- Close T-shirt Mockup Container -->
                     </div>
                     
-                    <!-- 3. Canvas Nudge Controls (THIRD = TOP LAYER) -->
+                    <!-- Canvas Nudge Controls - Positioned outside white canvas -->
                     <div id="canvas-nudge-controls-{{ section.id }}" style="
                       position: absolute;
-                      bottom: 20px;
+                      bottom: 60px;
                       right: 20px;
                       opacity: 1;
                       pointer-events: auto;
                       transition: opacity 0.3s ease;
+                      z-index: 10;
                     ">
                       <div style="
                         background: rgba(15, 23, 42, 0.95);
@@ -1563,7 +1564,7 @@
                       </div>
                     </div>
                     
-                    <!-- 4. Canvas Zoom Slider (FOURTH = TOPMOST LAYER) -->
+                    <!-- Canvas Zoom Slider - Positioned outside white canvas -->
                     <div class="zoom-bar" role="group" aria-label="Zoom controls" style="
                       position: absolute;
                       left: 50%;
@@ -1579,6 +1580,7 @@
                       -webkit-backdrop-filter: blur(8px);
                       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(39, 225, 193, 0.2);
                       transition: all 0.3s ease;
+                      z-index: 10;
                     ">
                       <!-- Magnifying Glass Icon -->
                       <span class="zoom-icon" aria-hidden="true" style="
