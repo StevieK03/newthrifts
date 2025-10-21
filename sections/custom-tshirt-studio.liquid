@@ -2329,13 +2329,110 @@
     });
 
     // Download preview
-    document.getElementById(`downloadBtn-${sectionId}`).addEventListener('click', () => {
-        alert('📥 Preview download feature coming soon!');
+    // Download Preview
+    document.getElementById(`downloadBtn-${sectionId}`).addEventListener('click', async () => {
+        try {
+            console.log('📥 Download button clicked');
+            
+            // Capture the current mockup
+            const mockupDataUrl = await window.designerCaptureMockup();
+            
+            if (!mockupDataUrl) {
+                alert('⚠️ Please create a design first!');
+                return;
+            }
+            
+            // Create download link
+            const link = document.createElement('a');
+            const timestamp = new Date().toISOString().slice(0, 10);
+            link.download = `newthrifts-design-${timestamp}.png`;
+            link.href = mockupDataUrl;
+            link.click();
+            
+            console.log('✅ Design downloaded successfully!');
+            
+            // Show success feedback
+            const btn = document.getElementById(`downloadBtn-${sectionId}`);
+            const originalText = btn.textContent;
+            btn.textContent = '✅ Downloaded!';
+            btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+            
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.background = '';
+            }, 2000);
+        } catch (error) {
+            console.error('❌ Download failed:', error);
+            alert('⚠️ Unable to download. Please try again.');
+        }
     });
 
     // Share design
-    document.getElementById(`shareBtn-${sectionId}`).addEventListener('click', () => {
-        alert('🔗 Share feature coming soon!');
+    // Share Design
+    document.getElementById(`shareBtn-${sectionId}`).addEventListener('click', async () => {
+        try {
+            console.log('🔗 Share button clicked');
+            
+            // Capture the current mockup
+            const mockupDataUrl = await window.designerCaptureMockup();
+            
+            if (!mockupDataUrl) {
+                alert('⚠️ Please create a design first!');
+                return;
+            }
+            
+            // Get design details
+            const designText = textInput.value;
+            const tshirtColorName = tshirtColor.charAt(0).toUpperCase() + tshirtColor.slice(1);
+            
+            // Create share data
+            const shareTitle = 'Check out my custom T-shirt design!';
+            const shareText = `I designed a custom ${tshirtColorName} t-shirt${designText && designText !== 'YOUR DESIGN HERE' ? ` with "${designText}"` : ''} on NewThrifts!`;
+            
+            // Check if Web Share API is available (mobile)
+            if (navigator.share) {
+                // Convert data URL to Blob for sharing
+                const response = await fetch(mockupDataUrl);
+                const blob = await response.blob();
+                const file = new File([blob], 'my-tshirt-design.png', { type: 'image/png' });
+                
+                // Check if files can be shared
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    await navigator.share({
+                        title: shareTitle,
+                        text: shareText,
+                        files: [file]
+                    });
+                    console.log('✅ Design shared successfully!');
+                } else {
+                    // Share without file
+                    await navigator.share({
+                        title: shareTitle,
+                        text: shareText,
+                        url: window.location.href
+                    });
+                    console.log('✅ Link shared successfully!');
+                }
+            } else {
+                // Fallback: Download the image
+                const link = document.createElement('a');
+                link.download = 'my-tshirt-design.png';
+                link.href = mockupDataUrl;
+                link.click();
+                
+                alert('✅ Design downloaded! You can now share the image file.');
+            }
+        } catch (error) {
+            console.error('❌ Share failed:', error);
+            
+            // If share was cancelled, don't show error
+            if (error.name === 'AbortError') {
+                console.log('Share cancelled by user');
+                return;
+            }
+            
+            alert('⚠️ Unable to share. Try downloading the design instead!');
+        }
     });
 
     // Initialize
