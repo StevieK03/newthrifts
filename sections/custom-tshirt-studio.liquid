@@ -1396,22 +1396,19 @@
                        --overlay-rotate: 0deg;
                      ">
                     
-                    <!-- T-shirt Layer (Bottom) -->
-                    <div style="position: absolute; top: 60px; left: 60px; right: 60px; bottom: 60px;">
-                  
-                      <!-- 1. Base Mockup (FIRST = BOTTOM LAYER) -->
-                      <img
-                        id="nt-base-{{ section.id }}"
-                        class="nt-mockup__base"
-                        src="{{ 'tshirt-view.png' | asset_url }}"
-                        alt="T-shirt mockup"
-                        loading="eager"
-                        decoding="async"
-                        fetchpriority="high"
-                        style="position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; object-fit: contain !important; pointer-events: none !important; display: block !important; opacity: 1 !important; visibility: visible !important; max-width: 100% !important; max-height: 100% !important;"
-                        onerror="console.error('❌ Failed to load t-shirt image:', this.src); this.style.border='2px solid red';"
-                        onload="console.log('✅ T-shirt image loaded:', this.src); this.style.opacity='1';"
-                      >
+                    <!-- T-shirt Layer (Bottom) - Direct positioning within canvas -->
+                    <img
+                      id="nt-base-{{ section.id }}"
+                      class="nt-mockup__base"
+                      src="{{ 'tshirt-view.png' | asset_url }}"
+                      alt="T-shirt mockup"
+                      loading="eager"
+                      decoding="async"
+                      fetchpriority="high"
+                      style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; display: block; opacity: 1; visibility: visible; z-index: 1;"
+                      onerror="console.error('❌ Failed to load t-shirt image:', this.src); this.style.border='2px solid red';"
+                      onload="console.log('✅ T-shirt image loaded:', this.src); this.style.opacity='1';"
+                    >
                     
                     <!-- Debug assets (hidden) -->
                     <div id="debug-assets-{{ section.id }}" style="position: absolute; top: -100px; left: -100px; width: 1px; height: 1px; overflow: hidden;">
@@ -1421,11 +1418,11 @@
                       <img src="{{ 'Women-side.png' | asset_url }}" onload="console.log('✅ Direct asset test - Women-side.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - Women-side.png failed:', this.src);">
                     </div>
                     
-                    <!-- 2. Dynamic Design Overlay (SECOND = MIDDLE LAYER) -->
+                    <!-- 2. Dynamic Design Overlay (Above T-shirt) -->
                     <div
                       id="nt-overlay-{{ section.id }}"
                       class="nt-mockup__overlay"
-                      style="position: absolute; width: 37%; height: 42%; left: 50.214286%; top: 29.142857%; transform: translateX(-50%) rotate(0deg); display: flex; align-items: center; justify-content: center; cursor: grab; transition: all 0.1s ease; border: 2px dashed rgba(102, 126, 234, 0.4); border-radius: 8px; background: transparent;"
+                      style="position: absolute; width: 37%; height: 42%; left: 50.214286%; top: 29.142857%; transform: translateX(-50%) rotate(0deg); display: flex; align-items: center; justify-content: center; cursor: grab; transition: all 0.1s ease; border: 2px dashed rgba(102, 126, 234, 0.4); border-radius: 8px; background: transparent; z-index: 10;"
                     >
                       <span id="nt-design-text-{{ section.id }}" 
                             style="position: relative; z-index: 2; font-family: 'Bebas Neue', sans-serif; font-size: 32px; font-weight: bold; color: #000000; text-align: center; white-space: nowrap; user-select: none; text-shadow: 1px 1px 2px rgba(255,255,255,0.8); pointer-events: none;">
