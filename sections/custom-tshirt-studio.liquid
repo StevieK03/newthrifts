@@ -789,7 +789,7 @@
 
             <div class="cts-control-card-{{ section.id }}">
                 <h3>🖼️ Upload Image</h3>
-                <input type="file" class="cts-file-input-{{ section.id }}" id="imageUpload-{{ section.id }}" accept="image/*">
+                <input type="file" class="cts-file-input-{{ section.id }}" id="imageUpload-{{ section.id }}" accept="image/png,image/jpeg,image/jpg,image/gif,image/webp,image/svg+xml">
                 <label for="imageUpload-{{ section.id }}" class="cts-file-upload-btn-{{ section.id }}">
                     📤 Choose Image File
                 </label>
@@ -1378,6 +1378,26 @@
     imageUpload.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file) {
+            // Validate file type
+            const validTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/webp', 'image/svg+xml'];
+            const isValidType = validTypes.includes(file.type.toLowerCase());
+            
+            if (!isValidType) {
+                alert('❌ Invalid file format!\n\nSupported formats:\n✅ PNG (.png)\n✅ JPG/JPEG (.jpg, .jpeg)\n✅ GIF (.gif)\n✅ WebP (.webp)\n✅ SVG (.svg)');
+                imageUpload.value = ''; // Clear the input
+                return;
+            }
+            
+            // Validate file size (max 10MB)
+            const maxSize = 10 * 1024 * 1024; // 10MB in bytes
+            if (file.size > maxSize) {
+                alert('❌ File too large!\n\nMaximum file size: 10MB\nYour file: ' + (file.size / 1024 / 1024).toFixed(2) + 'MB');
+                imageUpload.value = ''; // Clear the input
+                return;
+            }
+            
+            console.log('✅ Valid image uploaded:', file.name, file.type, (file.size / 1024).toFixed(2) + 'KB');
+            
             saveState();
             const reader = new FileReader();
             reader.onload = (event) => {

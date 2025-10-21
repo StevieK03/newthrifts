@@ -39,10 +39,28 @@
     },
     
     handleImageUpload: function(file, callback) {
-      if (!file || !file.type.match('image.*')) {
-        alert('Please upload a valid image file');
+      if (!file) {
+        alert('No file selected');
         return;
       }
+      
+      // Validate file type - Support PNG, JPG/JPEG, GIF, WebP, SVG
+      const validTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/webp', 'image/svg+xml'];
+      const isValidType = validTypes.includes(file.type.toLowerCase());
+      
+      if (!isValidType) {
+        alert('❌ Invalid file format!\n\nSupported formats:\n✅ PNG (.png)\n✅ JPG/JPEG (.jpg, .jpeg)\n✅ GIF (.gif)\n✅ WebP (.webp)\n✅ SVG (.svg)\n\nYour file: ' + file.type);
+        return;
+      }
+      
+      // Validate file size (max 10MB)
+      const maxSize = 10 * 1024 * 1024; // 10MB
+      if (file.size > maxSize) {
+        alert('❌ File too large!\n\nMaximum: 10MB\nYour file: ' + (file.size / 1024 / 1024).toFixed(2) + 'MB');
+        return;
+      }
+      
+      console.log('✅ Valid image:', file.name, file.type, (file.size / 1024).toFixed(2) + 'KB');
       
       const reader = new FileReader();
       reader.onload = function(e) {
