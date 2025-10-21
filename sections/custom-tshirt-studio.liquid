@@ -1577,11 +1577,17 @@
     // Expose functions for enhanced features to use
     window.designerGetState = function() {
         return {
-            layers: state.layers,
+            layers: window.designerGetLayers(), // Use the properly built layers
             designText: textInput.value,
             fontSize: parseInt(sizeSlider.value),
             rotation: parseInt(rotateSlider.value),
-            uploadedImage: uploadedImage ? uploadedImage.src : null
+            currentColor: currentColor,
+            currentFont: currentFont,
+            tshirtColor: tshirtColor,
+            uploadedImage: uploadedImage ? uploadedImage.src : null,
+            inverted: invertBtn.classList.contains('active'),
+            flippedH: flipHBtn.classList.contains('active'),
+            flippedV: flipVBtn.classList.contains('active')
         };
     };
     
@@ -1594,7 +1600,62 @@
     };
     
     window.designerGetLayers = function() {
-        return state.layers;
+        // Build layers array from current design state
+        const layers = [];
+        
+        // Add uploaded image layer if exists
+        if (uploadedImage && uploadedImage.src) {
+            layers.push({
+                id: 'image-layer',
+                type: 'image',
+                src: uploadedImage.src,
+                visible: true,
+                transform: {
+                    x: 50, // Center position
+                    y: 50,
+                    rotation: parseInt(rotateSlider.value) || 0,
+                    scale: (parseInt(sizeSlider.value) || 100) / 100,
+                    flipH: flipHBtn.classList.contains('active'),
+                    flipV: flipVBtn.classList.contains('active')
+                },
+                filters: {
+                    brightness: 100,
+                    contrast: 100,
+                    saturate: 100,
+                    grayscale: 0,
+                    sepia: 0,
+                    blur: 0
+                }
+            });
+        }
+        
+        // Add text layer if text exists
+        if (textInput.value && textInput.value.trim() !== '' && textInput.value !== 'YOUR DESIGN HERE') {
+            layers.push({
+                id: 'text-layer',
+                type: 'text',
+                text: textInput.value,
+                fontFamily: currentFont || 'Arial',
+                fontSize: parseInt(sizeSlider.value) || 48,
+                color: currentColor || '#000000',
+                visible: true,
+                letterSpacing: 0,
+                align: 'center',
+                textCase: 'none',
+                stroke: { enabled: false },
+                shadow: { enabled: false },
+                transform: {
+                    x: 50, // Center position
+                    y: 50,
+                    rotation: parseInt(rotateSlider.value) || 0,
+                    scale: 1,
+                    flipH: flipHBtn.classList.contains('active'),
+                    flipV: flipVBtn.classList.contains('active')
+                }
+            });
+        }
+        
+        return layers;
     };
     
     window.designerGetSelectedLayer = function() {
