@@ -1148,22 +1148,23 @@
         }
         
         .cts-container-{{ section.id }} {
-            padding: 20px 10px; /* Reduce horizontal padding */
-            gap: 20px;
+            padding: 12px 8px; /* Tighter padding for mobile */
+            gap: 12px; /* Reduced gap */
             width: 100%;
             max-width: 100%; /* Full width on mobile */
             box-sizing: border-box;
         }
         
         .cts-header-{{ section.id }} {
-            padding: 15px 10px;
+            padding: 12px 8px;
             flex-direction: column;
             align-items: flex-start;
-            gap: 12px;
+            gap: 8px;
         }
         
         .cts-header-{{ section.id }} h1 {
-            font-size: 20px;
+            font-size: 18px;
+            margin: 0;
         }
         
         .cts-preview-section-{{ section.id }},
@@ -1174,24 +1175,46 @@
         }
         
         .cts-preview-card-{{ section.id }} {
-            padding: 20px 10px; /* Reduce padding on mobile */
+            padding: 12px 8px; /* Tighter padding */
+        }
+        
+        .cts-mockup-canvas-{{ section.id }} {
+            min-height: 280px !important; /* Reduce canvas height */
+            max-height: 350px !important;
         }
         
         .cts-mockup-stage-{{ section.id }} {
-            padding: 15px 5px;
+            padding: 10px 5px; /* Tighter padding */
+            max-width: 280px; /* Limit canvas width */
+            margin: 0 auto;
+        }
+        
+        .cts-tshirt-container-{{ section.id }} img {
+            max-height: 280px !important; /* Smaller t-shirt */
         }
         
         .cts-controls-section-{{ section.id }} {
-            padding: 15px 10px;
+            padding: 8px;
         }
         
         .cts-control-card-{{ section.id }} {
-            padding: 12px;
+            padding: 10px 8px;
+            margin-bottom: 10px;
+        }
+        
+        .cts-control-card-{{ section.id }} h3 {
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .cts-control-group-{{ section.id }} {
+            margin-bottom: 12px;
         }
         
         .cts-text-input-{{ section.id }} {
             font-size: 14px;
-            padding: 12px;
+            padding: 10px;
+            min-height: 80px;
         }
         
         .cts-slider-{{ section.id }} {
@@ -1287,27 +1310,73 @@
         }
         
         /* Workflow Steps - Smaller */
+        .cts-workflow-{{ section.id }} {
+            gap: 10px;
+            padding: 8px;
+        }
+        
         .cts-workflow-step-{{ section.id }} {
-            padding: 16px;
+            padding: 12px 10px;
         }
         
         .cts-workflow-icon-{{ section.id }} {
-            width: 50px;
-            height: 50px;
-            font-size: 24px;
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
         }
         
         .cts-workflow-step-{{ section.id }} h3 {
-                    font-size: 16px;
+            font-size: 14px;
+            margin-bottom: 4px;
         }
         
         .cts-workflow-step-{{ section.id }} p {
-            font-size: 13px;
+            font-size: 12px;
+            line-height: 1.4;
         }
         
         .cts-workflow-action-btn-{{ section.id }} {
-            padding: 10px 18px;
-            font-size: 13px;
+            padding: 8px 14px;
+            font-size: 12px;
+        }
+        
+        /* Submit Request Button - Compact */
+        .cts-submit-request-btn-{{ section.id }} {
+            padding: 14px 24px !important;
+            font-size: 15px !important;
+        }
+    }
+    
+    /* Samsung Galaxy S25 & Similar (360px - 412px) */
+    @media (max-width: 428px) and (min-width: 360px) {
+        .cts-mockup-canvas-{{ section.id }} {
+            min-height: 260px !important;
+            max-height: 320px !important;
+        }
+        
+        .cts-mockup-stage-{{ section.id }} {
+            max-width: 260px;
+        }
+        
+        .cts-tshirt-container-{{ section.id }} img {
+            max-height: 260px !important;
+        }
+        
+        .cts-header-{{ section.id }} h1 {
+            font-size: 17px;
+        }
+        
+        .cts-control-card-{{ section.id }} {
+            padding: 8px;
+        }
+        
+        /* Reduce spacing between sections */
+        .cts-container-{{ section.id }} {
+            gap: 8px;
+        }
+        
+        .cts-control-group-{{ section.id }} {
+            margin-bottom: 8px;
         }
     }
     
