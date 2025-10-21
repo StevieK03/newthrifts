@@ -1081,17 +1081,58 @@
             height: auto !important;
         }
         
-        /* Mobile Touch Feedback - Zoom & Highlight */
+        /* Mobile Touch Feedback - Highlight Active Hex */
         #hexColorPicker-{{ section.id }} polygon {
-            transition: all 0.2s ease;
+            transition: opacity 0.1s ease;
             cursor: pointer;
         }
         
-        #hexColorPicker-{{ section.id }} polygon.touching {
-            transform: scale(1.5);
-            stroke-width: 4 !important;
-            filter: drop-shadow(0 0 8px currentColor) brightness(1.2);
-            z-index: 100;
+        #hexColorPicker-{{ section.id }} polygon.active-hex {
+            stroke: white !important;
+            stroke-width: 3 !important;
+            opacity: 1 !important;
+        }
+        
+        /* Floating Magnifier Preview */
+        .cts-color-magnifier-{{ section.id }} {
+            position: fixed;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6),
+                        0 0 0 2px rgba(0, 0, 0, 0.3);
+            pointer-events: none;
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.5);
+            transition: opacity 0.15s ease, transform 0.15s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: white;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+        }
+        
+        .cts-color-magnifier-{{ section.id }}.visible {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        
+        .cts-color-magnifier-{{ section.id }}::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 10px solid white;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
         }
         
         /* Quick Actions - Full Width Buttons */
@@ -1724,6 +1765,15 @@
         const svg = document.getElementById(`hexSvg-${sectionId}`);
         const cells = buildAxialHexDisk(HEX_RADIUS);
         
+        // Create magnifier element for mobile preview
+        let magnifier = document.getElementById(`colorMagnifier-${sectionId}`);
+        if (!magnifier) {
+            magnifier = document.createElement('div');
+            magnifier.id = `colorMagnifier-${sectionId}`;
+            magnifier.className = `cts-color-magnifier-${sectionId}`;
+            document.body.appendChild(magnifier);
+        }
+        
         // Calculate viewBox dimensions
         let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
         cells.forEach(({ q, r }) => {
@@ -1758,6 +1808,12 @@
             polygon.setAttribute('filter', `url(#hexShadow-${sectionId})`);
             polygon.dataset.color = fill.toUpperCase();
             
+            // Store color data for touch handling
+            polygon.dataset.q = q;
+            polygon.dataset.r = r;
+            polygon.dataset.color = fill;
+            
+            // Desktop click handler
             polygon.addEventListener('click', () => {
                 saveState();
                 
@@ -1776,37 +1832,121 @@
                 updateBrightnessSliderGradient();
             });
             
-            // MOBILE: Add touch zoom & highlight effect
-            polygon.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                polygon.classList.add('touching');
-                console.log('🎨 Touch zoom active:', fill);
-            }, { passive: false });
-            
-            polygon.addEventListener('touchend', (e) => {
-                e.preventDefault();
-                polygon.classList.remove('touching');
-                
-                // Trigger color selection
-                saveState();
-                pickerHue = hueFromAxial(q, r);
-                pickerSat = satFromAxial(q, r, HEX_RADIUS);
-                const newColor = hsvToHex(pickerHue, pickerSat, pickerVal).toUpperCase();
-                currentColor = newColor;
-                designText.style.color = currentColor;
-                hexInput.value = currentColor;
-                hexPreview.style.background = currentColor;
-                updateSVGHexSelection(currentColor);
-                updateBrightnessSliderGradient();
-                
-                console.log('✅ Color selected:', newColor);
-            }, { passive: false });
-            
-            polygon.addEventListener('touchcancel', () => {
-                polygon.classList.remove('touching');
-            });
-            
             svg.appendChild(polygon);
+        });
+        
+        // Mobile Touch Variables
+        let isDragging = false;
+        let activePolygon = null;
+        
+        // Helper: Get polygon at touch point
+        function getPolygonAtPoint(x, y) {
+            magnifier.style.pointerEvents = 'none';
+            const element = document.elementFromPoint(x, y);
+            magnifier.style.pointerEvents = 'none';
+            
+            if (element && element.tagName === 'polygon' && element.dataset.color) {
+                return element;
+            }
+            return null;
+        }
+        
+        // Helper: Update magnifier position and color
+        function updateMagnifier(x, y, color) {
+            magnifier.style.left = x + 'px';
+            magnifier.style.top = (y - 100) + 'px'; // Position above finger
+            magnifier.style.backgroundColor = color;
+            magnifier.textContent = color;
+            
+            // Adjust text color for contrast
+            const rgb = parseInt(color.slice(1), 16);
+            const r = (rgb >> 16) & 0xff;
+            const g = (rgb >> 8) & 0xff;
+            const b = rgb & 0xff;
+            const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+            magnifier.style.color = brightness > 128 ? '#000' : '#fff';
+        }
+        
+        // Helper: Set active hexagon
+        function setActiveHex(polygon) {
+            if (activePolygon) {
+                activePolygon.classList.remove('active-hex');
+            }
+            if (polygon) {
+                polygon.classList.add('active-hex');
+                activePolygon = polygon;
+            }
+        }
+        
+        // Helper: Select color
+        function selectColorFromPolygon(polygon) {
+            if (!polygon) return;
+            
+            saveState();
+            const q = parseInt(polygon.dataset.q);
+            const r = parseInt(polygon.dataset.r);
+            
+            pickerHue = hueFromAxial(q, r);
+            pickerSat = satFromAxial(q, r, HEX_RADIUS);
+            const newColor = hsvToHex(pickerHue, pickerSat, pickerVal).toUpperCase();
+            currentColor = newColor;
+            designText.style.color = currentColor;
+            hexInput.value = currentColor;
+            hexPreview.style.background = currentColor;
+            updateSVGHexSelection(currentColor);
+            updateBrightnessSliderGradient();
+            
+            console.log('✅ Color selected:', newColor);
+        }
+        
+        // MOBILE: Touch Start - Show Magnifier
+        svg.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            isDragging = true;
+            const touch = e.touches[0];
+            const polygon = getPolygonAtPoint(touch.clientX, touch.clientY);
+            
+            if (polygon && polygon.dataset.color) {
+                const color = polygon.dataset.color;
+                setActiveHex(polygon);
+                updateMagnifier(touch.clientX, touch.clientY, color);
+                magnifier.classList.add('visible');
+            }
+        }, { passive: false });
+        
+        // MOBILE: Touch Move - Drag to Preview Colors
+        svg.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            if (!isDragging) return;
+            
+            const touch = e.touches[0];
+            const polygon = getPolygonAtPoint(touch.clientX, touch.clientY);
+            
+            if (polygon && polygon.dataset.color) {
+                const color = polygon.dataset.color;
+                setActiveHex(polygon);
+                updateMagnifier(touch.clientX, touch.clientY, color);
+            }
+        }, { passive: false });
+        
+        // MOBILE: Touch End - Select Color
+        svg.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            isDragging = false;
+            magnifier.classList.remove('visible');
+            
+            if (activePolygon) {
+                selectColorFromPolygon(activePolygon);
+            }
+            
+            setTimeout(() => setActiveHex(null), 200);
+        }, { passive: false });
+        
+        // MOBILE: Touch Cancel
+        svg.addEventListener('touchcancel', () => {
+            isDragging = false;
+            magnifier.classList.remove('visible');
+            setTimeout(() => setActiveHex(null), 200);
         });
         
         // Set initial selection
