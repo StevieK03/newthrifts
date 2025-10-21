@@ -23,6 +23,9 @@
         min-height: 100vh;
         color: #e2e8f0;
         padding: 0;
+        width: 100%;
+        overflow-x: hidden; /* Prevent horizontal scroll */
+        box-sizing: border-box;
     }
 
     .cts-header-{{ section.id }} {
@@ -95,6 +98,8 @@
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         overflow: auto; /* Allow scrolling for zoomed content */
         max-height: none; /* Remove any max-height constraints */
+        width: 100%; /* Ensure full width */
+        box-sizing: border-box; /* Include padding in width */
     }
 
     .cts-mockup-stage-{{ section.id }} {
@@ -131,6 +136,8 @@
         -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
         overscroll-behavior: contain; /* Prevent scroll chaining */
         scroll-behavior: smooth; /* Smooth scrolling animation */
+        min-height: 400px; /* Ensure minimum height on mobile */
+        box-sizing: border-box; /* Include padding in dimensions */
     }
 
     .cts-tshirt-container-{{ section.id }} {
@@ -990,7 +997,16 @@
     /* Mobile Styles - Standard Phones */
     @media (max-width: 480px) {
         .custom-tshirt-studio-{{ section.id }} {
-            padding: 10px 5px;
+            padding: 0; /* Remove padding to prevent white space */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        
+        .cts-container-{{ section.id }} {
+            padding: 20px 10px; /* Reduce horizontal padding */
+            gap: 20px;
+            width: 100%;
+            max-width: 100%; /* Full width on mobile */
+            box-sizing: border-box;
         }
         
         .cts-header-{{ section.id }} {
@@ -1002,6 +1018,17 @@
         
         .cts-header-{{ section.id }} h1 {
             font-size: 20px;
+        }
+        
+        .cts-preview-section-{{ section.id }},
+        .cts-preview-card-{{ section.id }} {
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+        
+        .cts-preview-card-{{ section.id }} {
+            padding: 20px 10px; /* Reduce padding on mobile */
         }
         
         .cts-mockup-stage-{{ section.id }} {
