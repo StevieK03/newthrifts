@@ -1120,19 +1120,23 @@
             
             tshirtColor = btn.dataset.color;
             
-            // Update t-shirt image (you can add different mockup images here)
+            // Update t-shirt image - use actual black t-shirt mockup
             if (tshirtColor === 'black') {
-                tshirtImage.style.filter = 'brightness(0.3)';
-                // Adjust text color for visibility
+                tshirtImage.src = "{{ 'tshirt-black-v2.png' | asset_url }}";
+                tshirtImage.style.filter = 'none';
+                
+                // Adjust text color for visibility on black shirt
                 if (currentColor === '#000000') {
                     currentColor = '#ffffff';
                     designText.style.color = currentColor;
                     hexInput.value = currentColor;
                     hexPreview.style.background = currentColor;
                     updateColorSwatches();
+                    updateSVGHexSelection(currentColor);
                 }
             } else {
-                tshirtImage.style.filter = 'brightness(1)';
+                tshirtImage.src = "{{ 'tshirt-view.png' | asset_url }}";
+                tshirtImage.style.filter = 'none';
             }
         });
     });
