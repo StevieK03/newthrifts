@@ -642,8 +642,8 @@
         <div class="cts-preview-section-{{ section.id }}">
             <div class="cts-preview-card-{{ section.id }}">
                 <div class="cts-mockup-stage-{{ section.id }}">
-                    <div class="cts-mockup-canvas-{{ section.id }}">
-                        <div class="cts-tshirt-container-{{ section.id }}">
+                    <div class="cts-mockup-canvas-{{ section.id }}" id="mockupCanvas-{{ section.id }}">
+                        <div class="cts-tshirt-container-{{ section.id }}" id="tshirtContainer-{{ section.id }}">
                             <img 
                                 class="cts-tshirt-image-{{ section.id }}" 
                                 id="tshirtImage-{{ section.id }}"
@@ -1655,13 +1655,15 @@
         return new Promise((resolve) => {
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
-            const mockupContainer = document.getElementById(`nt-mockup-canvas-${sectionId}`);
+            const mockupContainer = document.getElementById(`mockupCanvas-${sectionId}`);
             
             if (!mockupContainer) {
-                console.error('❌ Mockup container not found');
+                console.error('❌ Mockup container not found:', `mockupCanvas-${sectionId}`);
                 resolve(null);
                 return;
             }
+            
+            console.log('✅ Mockup container found', mockupContainer);
             
             // Set canvas size to match the mockup container (higher resolution for email)
             const rect = mockupContainer.getBoundingClientRect();
