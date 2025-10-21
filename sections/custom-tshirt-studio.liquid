@@ -300,17 +300,15 @@
       background-size: 300% 300% !important;
     }
 
-    /* T-shirt image - centered */
+    /* T-shirt image - centered with flexbox (inline styles take precedence) */
     .nt-mockup__base {
-      position: absolute !important;
-      top: 50% !important;
-      left: 50% !important;
-      transform: translate(-50%, -50%) !important;
-      width: 85% !important;
-      height: 85% !important;
-      object-fit: contain !important;
-      display: block !important;
-      pointer-events: none !important;
+      /* Removed conflicting position/transform rules to allow inline flexbox styles */
+      width: 85%;
+      height: 85%;
+      max-width: 85%;
+      max-height: 85%;
+      object-fit: contain;
+      display: block;
     }
     
     /* ===== ZOOM SLIDER STYLING ===== */
