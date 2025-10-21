@@ -383,17 +383,25 @@
         box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
     }
 
-    /* SVG Hexagonal Color Picker */
+    /* SVG Hexagonal Color Picker with Brightness Slider */
     .hex-picker-container-{{ section.id }} {
         position: relative;
     }
 
-    .hex-svg-container-{{ section.id }} {
-        width: 100%;
+    .hex-picker-grid-wrapper-{{ section.id }} {
+        display: flex;
+        gap: 16px;
         padding: 20px;
         background: rgba(0, 0, 0, 0.2);
         border-radius: 12px;
         margin-bottom: 16px;
+    }
+
+    .hex-svg-container-{{ section.id }} {
+        flex: 1;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 8px;
+        padding: 12px;
     }
 
     .hex-svg-{{ section.id }} {
@@ -416,6 +424,45 @@
         stroke: #60a5fa !important;
         stroke-width: 2.5 !important;
         filter: brightness(1.2) drop-shadow(0 0 6px rgba(96, 165, 250, 0.6));
+    }
+
+    /* Brightness Slider */
+    .brightness-slider-container-{{ section.id }} {
+        width: 40px;
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        user-select: none;
+    }
+
+    .brightness-slider-track-{{ section.id }} {
+        position: relative;
+        width: 24px;
+        height: 256px;
+        border-radius: 12px;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+    }
+
+    .brightness-slider-input-{{ section.id }} {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+        -webkit-appearance: slider-vertical;
+        appearance: slider-vertical;
+        writing-mode: bt-lr; /* For vertical slider in some browsers */
+    }
+
+    .brightness-slider-label-{{ section.id }} {
+        font-size: 10px;
+        color: rgba(255, 255, 255, 0.4);
+        margin-top: 8px;
+        text-align: center;
     }
 
     .hex-display-{{ section.id }} {
@@ -653,18 +700,34 @@
                 <h3>🎨 Text Color</h3>
                 
                 <div class="hex-picker-container-{{ section.id }}">
-                    <!-- SVG Hexagonal Color Grid -->
-                    <div class="hex-svg-container-{{ section.id }}">
-                        <svg id="hexSvg-{{ section.id }}" 
-                             class="hex-svg-{{ section.id }}" 
-                             role="img" 
-                             aria-label="Hexagonal color picker">
-                            <defs>
-                                <filter id="hexShadow-{{ section.id }}" x="-50%" y="-50%" width="200%" height="200%">
-                                    <feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.3"/>
-                                </filter>
-                            </defs>
-                        </svg>
+                    <!-- SVG Hexagonal Color Grid + Brightness Slider -->
+                    <div class="hex-picker-grid-wrapper-{{ section.id }}">
+                        <div class="hex-svg-container-{{ section.id }}">
+                            <svg id="hexSvg-{{ section.id }}" 
+                                 class="hex-svg-{{ section.id }}" 
+                                 role="img" 
+                                 aria-label="Hexagonal color picker">
+                                <defs>
+                                    <filter id="hexShadow-{{ section.id }}" x="-50%" y="-50%" width="200%" height="200%">
+                                        <feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.3"/>
+                                    </filter>
+                                </defs>
+                            </svg>
+                        </div>
+                        
+                        <!-- Brightness Slider -->
+                        <div class="brightness-slider-container-{{ section.id }}">
+                            <div class="brightness-slider-track-{{ section.id }}" id="brightnessTrack-{{ section.id }}">
+                                <input type="range" 
+                                       class="brightness-slider-input-{{ section.id }}" 
+                                       id="brightnessSlider-{{ section.id }}"
+                                       min="0" 
+                                       max="100" 
+                                       value="100"
+                                       orient="vertical">
+                            </div>
+                            <div class="brightness-slider-label-{{ section.id }}">Brightness</div>
+                        </div>
                     </div>
                     
                     <!-- Hex Display with Input -->
@@ -759,13 +822,18 @@
     const MAX_UNDO = 20;
 
     // ============================================
-    // SVG HEXAGONAL COLOR PICKER (Axial Coordinates)
+    // SVG HEXAGONAL COLOR PICKER (Axial Coordinates + HSV Brightness)
     // ============================================
     
     const SQRT3 = Math.sqrt(3);
     const HEX_RADIUS = 5;      // Number of hexagon rings
     const HEX_SIZE = 22;       // Pixel radius of each hexagon
     const HEX_PADDING = 24;    // Padding around the grid
+    
+    // HSV state for brightness control
+    let pickerHue = 0;
+    let pickerSat = 0;
+    let pickerVal = 1;
     
     // Convert axial coordinates (q, r) to pixel position (pointy-top hex)
     function axialToPixel(q, r, size) {
@@ -799,6 +867,39 @@
         return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
     }
     
+    // Convert HSV to HEX
+    function hsvToHex(h, s, v) {
+        s = Math.max(0, Math.min(1, s));
+        v = Math.max(0, Math.min(1, v));
+        const c = v * s;
+        const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+        const m = v - c;
+        let r = 0, g = 0, b = 0;
+        if (0 <= h && h < 60) [r, g, b] = [c, x, 0];
+        else if (60 <= h && h < 120) [r, g, b] = [x, c, 0];
+        else if (120 <= h && h < 180) [r, g, b] = [0, c, x];
+        else if (180 <= h && h < 240) [r, g, b] = [0, x, c];
+        else if (240 <= h && h < 300) [r, g, b] = [x, 0, c];
+        else [r, g, b] = [c, 0, x];
+        const toHex = (n) => Math.round((n + m) * 255).toString(16).padStart(2, '0');
+        return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+    }
+    
+    // Extract hue from axial coordinates
+    function hueFromAxial(q, r) {
+        const angle = Math.atan2(SQRT3 * (r + q / 2), 1.5 * q);
+        return ((angle * 180) / Math.PI + 360) % 360;
+    }
+    
+    // Extract saturation from axial coordinates
+    function satFromAxial(q, r, radius) {
+        const x = q;
+        const y = -q - r;
+        const z = r;
+        const dist = Math.max(Math.abs(x), Math.abs(y), Math.abs(z));
+        return dist === 0 ? 0 : Math.min(1, 0.9 * (dist / radius) + 0.1);
+    }
+    
     // Map axial coordinate to a color (hue by angle, lightness by distance)
     function colorForAxial(q, r, radius) {
         const x = q;
@@ -810,6 +911,16 @@
         const l = 85 - (dist / radius) * 40; // 85% at center to ~45% at edge
         const s = dist === 0 ? 0 : 80; // Neutral center
         return hslToHex(hue, s, l);
+    }
+    
+    // Update brightness slider gradient
+    function updateBrightnessSliderGradient() {
+        const track = document.getElementById(`brightnessTrack-${sectionId}`);
+        if (track) {
+            const topColor = hsvToHex(pickerHue, pickerSat, 1);
+            const bottomColor = '#000000';
+            track.style.background = `linear-gradient(to bottom, ${topColor} 0%, ${bottomColor} 100%)`;
+        }
     }
     
     // Build all hex cells in a disk of given radius
@@ -866,11 +977,20 @@
             
             polygon.addEventListener('click', () => {
                 saveState();
-                currentColor = fill.toUpperCase();
+                
+                // Update HSV state from axial coordinates
+                pickerHue = hueFromAxial(q, r);
+                pickerSat = satFromAxial(q, r, HEX_RADIUS);
+                // Keep current brightness value
+                
+                // Generate color with current brightness
+                const newColor = hsvToHex(pickerHue, pickerSat, pickerVal).toUpperCase();
+                currentColor = newColor;
                 designText.style.color = currentColor;
                 hexInput.value = currentColor;
                 hexPreview.style.background = currentColor;
                 updateSVGHexSelection(currentColor);
+                updateBrightnessSliderGradient();
             });
             
             svg.appendChild(polygon);
@@ -878,6 +998,22 @@
         
         // Set initial selection
         updateSVGHexSelection(currentColor);
+        updateBrightnessSliderGradient();
+        
+        // Brightness slider handler
+        const brightnessSlider = document.getElementById(`brightnessSlider-${sectionId}`);
+        if (brightnessSlider) {
+            brightnessSlider.addEventListener('input', (e) => {
+                saveState();
+                pickerVal = Number(e.target.value) / 100;
+                const newColor = hsvToHex(pickerHue, pickerSat, pickerVal).toUpperCase();
+                currentColor = newColor;
+                designText.style.color = currentColor;
+                hexInput.value = currentColor;
+                hexPreview.style.background = currentColor;
+                updateSVGHexSelection(newColor);
+            });
+        }
     }
     
     // Update selection state in SVG hexagonal grid
