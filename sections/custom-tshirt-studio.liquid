@@ -622,9 +622,250 @@
         transform: scale(1.05);
     }
 
+    /* Tablet Styles */
     @media (max-width: 1024px) {
         .cts-container-{{ section.id }} {
             grid-template-columns: 1fr;
+        }
+    }
+    
+    /* Mobile Styles - Large Phones & Small Tablets */
+    @media (max-width: 768px) {
+        .cts-header-{{ section.id }} h1 {
+            font-size: 24px;
+        }
+        
+        .cts-header-actions-{{ section.id }} {
+            flex-direction: column;
+            gap: 8px;
+            width: 100%;
+        }
+        
+        .cts-header-btn-{{ section.id }} {
+            width: 100%;
+            min-height: 44px; /* Touch-friendly */
+        }
+        
+        .cts-mockup-stage-{{ section.id }} {
+            padding: 20px 10px;
+        }
+        
+        .cts-mockup-canvas-{{ section.id }} {
+            max-width: 100%;
+            height: auto;
+            aspect-ratio: 1;
+        }
+        
+        .cts-controls-section-{{ section.id }} {
+            padding: 20px 15px;
+        }
+        
+        .cts-control-card-{{ section.id }} {
+            padding: 16px;
+        }
+        
+        .cts-control-card-{{ section.id }} h3 {
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+        
+        .cts-color-palette-{{ section.id }} {
+            grid-template-columns: repeat(auto-fit, minmax(35px, 1fr));
+            gap: 8px;
+        }
+        
+        .cts-color-option-{{ section.id }} {
+            width: 35px;
+            height: 35px;
+            min-height: 44px; /* Touch target */
+            min-width: 44px;
+        }
+        
+        .cts-transform-btn-{{ section.id }},
+        .cts-tshirt-color-btn-{{ section.id }} {
+            padding: 12px 16px;
+            font-size: 14px;
+            min-height: 44px; /* Touch-friendly */
+        }
+        
+        .cts-file-upload-btn-{{ section.id }} {
+            padding: 14px 20px;
+            font-size: 15px;
+            min-height: 44px;
+        }
+        
+        /* Workflow Steps - Stack on Mobile */
+        .cts-workflow-steps-{{ section.id }} {
+            flex-direction: column;
+        }
+        
+        .cts-workflow-step-{{ section.id }} {
+            max-width: 100%;
+        }
+        
+        /* Form Grid - Single Column */
+        #customerInfoForm-{{ section.id }} {
+            padding: 24px 16px !important;
+            margin: 20px 10px !important;
+        }
+        
+        #customerInfoForm-{{ section.id }} > form > div[style*="grid-template-columns"] {
+            grid-template-columns: 1fr !important;
+        }
+    }
+    
+    /* Mobile Styles - Standard Phones */
+    @media (max-width: 480px) {
+        .custom-tshirt-studio-{{ section.id }} {
+            padding: 10px 5px;
+        }
+        
+        .cts-header-{{ section.id }} {
+            padding: 15px 10px;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        
+        .cts-header-{{ section.id }} h1 {
+            font-size: 20px;
+        }
+        
+        .cts-mockup-stage-{{ section.id }} {
+            padding: 15px 5px;
+        }
+        
+        .cts-controls-section-{{ section.id }} {
+            padding: 15px 10px;
+        }
+        
+        .cts-control-card-{{ section.id }} {
+            padding: 12px;
+        }
+        
+        .cts-text-input-{{ section.id }} {
+            font-size: 14px;
+            padding: 12px;
+        }
+        
+        .cts-slider-{{ section.id }} {
+            height: 8px;
+        }
+        
+        .cts-slider-value-{{ section.id }} {
+            font-size: 13px;
+            min-width: 50px;
+        }
+        
+        /* Hex Color Picker - Scale Down */
+        #hexColorPicker-{{ section.id }} svg {
+            max-width: 200px !important;
+            height: auto !important;
+        }
+        
+        /* Quick Actions - Full Width Buttons */
+        .cts-quick-actions-{{ section.id }} {
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+        
+        .cts-action-btn-{{ section.id }} {
+            font-size: 14px;
+            padding: 14px 20px;
+        }
+        
+        /* Workflow Steps - Smaller */
+        .cts-workflow-step-{{ section.id }} {
+            padding: 16px;
+        }
+        
+        .cts-workflow-icon-{{ section.id }} {
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+        }
+        
+        .cts-workflow-step-{{ section.id }} h3 {
+            font-size: 16px;
+        }
+        
+        .cts-workflow-step-{{ section.id }} p {
+            font-size: 13px;
+        }
+        
+        .cts-workflow-action-btn-{{ section.id }} {
+            padding: 10px 18px;
+            font-size: 13px;
+        }
+    }
+    
+    /* Mobile Styles - Small Phones (iPhone SE, etc.) */
+    @media (max-width: 375px) {
+        .cts-header-{{ section.id }} h1 {
+            font-size: 18px;
+        }
+        
+        .cts-control-card-{{ section.id }} h3 {
+            font-size: 14px;
+        }
+        
+        .cts-transform-group-{{ section.id }} {
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+        
+        .cts-transform-btn-{{ section.id }} {
+            width: 100%;
+        }
+        
+        .cts-tshirt-color-options-{{ section.id }} {
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+        
+        .cts-tshirt-color-btn-{{ section.id }} {
+            width: 100%;
+        }
+        
+        /* Color Palette - Larger Touch Targets */
+        .cts-color-option-{{ section.id }} {
+            width: 40px;
+            height: 40px;
+        }
+        
+        /* Font Selector - Stack Options */
+        .cts-font-option-{{ section.id }} {
+            padding: 10px;
+            font-size: 13px;
+        }
+    }
+    
+    /* Touch Device Improvements */
+    @media (hover: none) and (pointer: coarse) {
+        /* Increase all interactive elements for touch */
+        .cts-header-btn-{{ section.id }},
+        .cts-transform-btn-{{ section.id }},
+        .cts-tshirt-color-btn-{{ section.id }},
+        .cts-file-upload-btn-{{ section.id }},
+        .cts-action-btn-{{ section.id }},
+        .cts-workflow-action-btn-{{ section.id }} {
+            min-height: 48px;
+            min-width: 48px;
+        }
+        
+        /* Remove hover effects on touch devices */
+        .cts-header-btn-{{ section.id }}:hover,
+        .cts-transform-btn-{{ section.id }}:hover,
+        .cts-action-btn-{{ section.id }}:hover {
+            transform: none;
+        }
+        
+        /* Add active state for touch feedback */
+        .cts-header-btn-{{ section.id }}:active,
+        .cts-transform-btn-{{ section.id }}:active,
+        .cts-action-btn-{{ section.id }}:active {
+            transform: scale(0.95);
+            opacity: 0.8;
         }
     }
 </style>
@@ -2024,8 +2265,127 @@
         });
     }
     
+    // ============================================
+    // MOBILE TOUCH GESTURE SUPPORT
+    // ============================================
+    
+    // Add touch gesture support for mobile devices
+    let touchStartDistance = 0;
+    let touchStartRotation = 0;
+    let initialSize = 0;
+    let initialRotation = 0;
+    
+    // Helper function to get distance between two touch points
+    function getTouchDistance(touch1, touch2) {
+        const dx = touch1.clientX - touch2.clientX;
+        const dy = touch1.clientY - touch2.clientY;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+    
+    // Helper function to get angle between two touch points
+    function getTouchAngle(touch1, touch2) {
+        const dx = touch2.clientX - touch1.clientX;
+        const dy = touch2.clientY - touch1.clientY;
+        return Math.atan2(dy, dx) * 180 / Math.PI;
+    }
+    
+    // Add pinch-to-zoom and rotate gestures on design overlay
+    if (designOverlay) {
+        designOverlay.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 2) {
+                e.preventDefault();
+                saveState();
+                
+                // Store initial values
+                touchStartDistance = getTouchDistance(e.touches[0], e.touches[1]);
+                touchStartRotation = getTouchAngle(e.touches[0], e.touches[1]);
+                initialSize = parseInt(sizeSlider.value);
+                initialRotation = parseInt(rotateSlider.value);
+                
+                console.log('📱 Touch gesture started - pinch/rotate enabled');
+            }
+        }, { passive: false });
+        
+        designOverlay.addEventListener('touchmove', (e) => {
+            if (e.touches.length === 2) {
+                e.preventDefault();
+                
+                // Calculate new distance and angle
+                const currentDistance = getTouchDistance(e.touches[0], e.touches[1]);
+                const currentAngle = getTouchAngle(e.touches[0], e.touches[1]);
+                
+                // Pinch to zoom (size)
+                const scaleFactor = currentDistance / touchStartDistance;
+                let newSize = Math.round(initialSize * scaleFactor);
+                newSize = Math.max(10, Math.min(200, newSize)); // Clamp between 10-200%
+                
+                if (sizeSlider.value !== newSize.toString()) {
+                    sizeSlider.value = newSize;
+                    sizeValue.textContent = `${newSize}%`;
+                    updateTransform();
+                }
+                
+                // Rotate gesture
+                const angleDiff = currentAngle - touchStartRotation;
+                let newRotation = initialRotation + angleDiff;
+                
+                // Normalize rotation to -180 to 180
+                while (newRotation > 180) newRotation -= 360;
+                while (newRotation < -180) newRotation += 360;
+                
+                newRotation = Math.round(newRotation);
+                
+                if (rotateSlider.value !== newRotation.toString()) {
+                    rotateSlider.value = newRotation;
+                    rotateValue.textContent = `${newRotation}°`;
+                    updateTransform();
+                }
+            }
+        }, { passive: false });
+        
+        designOverlay.addEventListener('touchend', (e) => {
+            if (e.touches.length < 2) {
+                console.log('📱 Touch gesture ended');
+            }
+        });
+    }
+    
+    // Prevent double-tap zoom on buttons (improves mobile UX)
+    const buttons = document.querySelectorAll(`
+        .cts-header-btn-${sectionId},
+        .cts-transform-btn-${sectionId},
+        .cts-tshirt-color-btn-${sectionId},
+        .cts-action-btn-${sectionId},
+        .cts-workflow-action-btn-${sectionId}
+    `);
+    
+    buttons.forEach(button => {
+        button.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            button.click();
+        });
+    });
+    
+    // Add mobile-friendly scroll behavior
+    if ('ontouchstart' in window) {
+        console.log('📱 Mobile device detected - Touch optimizations enabled');
+        
+        // Smooth scroll for mobile
+        document.querySelectorAll(`[id*="workflow-${sectionId}"]`).forEach(btn => {
+            btn.addEventListener('click', () => {
+                setTimeout(() => {
+                    window.scrollTo({
+                        top: window.scrollY + 100,
+                        behavior: 'smooth'
+                    });
+                }, 100);
+            });
+        });
+    }
+    
     console.log('✅ Submit Request functionality initialized');
     console.log('✅ Designer integration points ready for enhancements');
+    console.log('📱 Mobile touch gestures enabled (pinch-to-zoom, rotate)');
 })();
 </script>
 
