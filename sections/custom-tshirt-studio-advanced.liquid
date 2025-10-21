@@ -1,7 +1,10 @@
 {% comment %}
   Advanced Custom T-Shirt Design Studio with Multi-Layer Text Support
   Features: Layers, Effects, Transform, Undo/Redo, Export
+  Enhanced with: Image layers, Curved text, Full export, Animations, Gradients, Templates, Auto-save
 {% endcomment %}
+
+<script src="{{ 'designer-enhancements.js' | asset_url }}" defer></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -787,6 +790,9 @@
                     </div>
                 </div>
 
+                {% comment %} ENHANCED FEATURES - Image, Curved Text, Animations, Gradients, Templates {% endcomment %}
+                {% render 'designer-enhanced-controls', section: section %}
+
             </div>
         </div>
     </div>
@@ -1488,6 +1494,53 @@
     
     // Initial render
     render();
+    
+    // ============================================
+    // INTEGRATION POINTS FOR ENHANCEMENTS
+    // ============================================
+    
+    // Expose functions for enhanced features to use
+    window.designerGetState = function() {
+        return {
+            layers: state.layers,
+            selectedLayerId: state.selectedLayerId,
+            tshirtColor: state.tshirtColor
+        };
+    };
+    
+    window.designerLoadState = function(newState) {
+        if (newState.layers) state.layers = newState.layers;
+        if (newState.selectedLayerId !== undefined) state.selectedLayerId = newState.selectedLayerId;
+        if (newState.tshirtColor) state.tshirtColor = newState.tshirtColor;
+        render();
+    };
+    
+    window.designerGetLayers = function() {
+        return state.layers;
+    };
+    
+    window.designerGetSelectedLayer = function() {
+        return state.layers.find(l => l.id === state.selectedLayerId);
+    };
+    
+    window.designerLoadTemplate = function(layers) {
+        if (!Array.isArray(layers)) return;
+        state.layers = layers;
+        state.selectedLayerId = layers.length > 0 ? layers[0].id : null;
+        state.history = [{ layers: JSON.parse(JSON.stringify(state.layers)) }];
+        state.historyIndex = 0;
+        render();
+    };
+    
+    window.designerApplyGradient = function(gradient) {
+        const layer = state.layers.find(l => l.id === state.selectedLayerId);
+        if (layer && layer.type === 'text') {
+            layer.gradient = gradient;
+            render();
+        }
+    };
+    
+    console.log('✅ Designer integration points ready for enhancements');
 })();
 </script>
 
