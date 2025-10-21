@@ -294,9 +294,23 @@
       100% { background-position: 0% 50%; }
     }
     
-    .canvas-gradient-animated {
+    .canvas-gradient-animated,
+    .canvas-gradient-wrapper {
       animation: canvasGradientShift 15s ease infinite !important;
       background-size: 300% 300% !important;
+    }
+
+    /* T-shirt image - centered */
+    .nt-mockup__base {
+      position: absolute !important;
+      top: 50% !important;
+      left: 50% !important;
+      transform: translate(-50%, -50%) !important;
+      width: 85% !important;
+      height: 85% !important;
+      object-fit: contain !important;
+      display: block !important;
+      pointer-events: none !important;
     }
     
     /* ===== ZOOM SLIDER STYLING ===== */
@@ -1337,65 +1351,26 @@
 
             <!-- Enhanced Preview Stage -->
             <div class="nt-mockup__stage" style="width: 100%; display: flex; justify-content: center; align-items: center; margin-top: 30px !important; margin-bottom: 40px !important; padding: 0; box-sizing: border-box;">
-                <div class="nt-mockup__canvas" 
-                     id="nt-mockup-canvas-{{ section.id }}"
-                     style="
-                       position: relative;
-                       width: 900px;
-                       max-width: 90vw;
-                       height: 900px;
-                       max-height: 90vw;
-                       margin: 0 auto;
-                       background: #ffffff;
-                       border: 2px solid #e5e7eb;
-                       border-radius: 12px;
-                       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-                       padding: 40px;
-                       box-sizing: border-box;
-                       --overlay-top: 29.142857%;
-                       --overlay-left: 50.214286%;
-                       --overlay-width: 37%;
-                       --overlay-height: 42%;
-                       --overlay-rotate: 0deg;
-                     ">
-                    
-                    <!-- T-shirt Mockup Container with Isolated Stacking -->
-                    <div style="position: relative; width: 100%; aspect-ratio: 1 / 1; cursor: grab; isolation: isolate; background: transparent;" id="nt-mockup-container-{{ section.id }}">
+                
+                <!-- Colorful Gradient Wrapper (ALWAYS VISIBLE) -->
+                <div class="canvas-gradient-wrapper" style="position: relative; width: min(900px, 90%); max-width: 90vw; aspect-ratio: 1; margin: 0 auto; background: linear-gradient(135deg, #27e1c1 0%, #667eea 20%, #764ba2 35%, #f093fb 50%, #4facfe 65%, #27e1c1 100%); background-size: 300% 300%; animation: canvasGradientShift 15s ease infinite; border-radius: 20px; box-shadow: 0 25px 80px rgba(39, 225, 193, 0.3), 0 10px 30px rgba(0,0,0,0.2); padding: 40px; overflow: visible;">
                   
-                      <!-- 1. Base Mockup (FIRST = BOTTOM LAYER) -->
-                      <!-- Using both <img> and background-image as fallback -->
-                      <div style="
-                        position: absolute !important;
-                        inset: 0 !important;
-                        width: 100% !important;
-                        height: 100% !important;
-                        background-image: url('{{ 'tshirt-view.png' | asset_url }}');
-                        background-size: contain;
-                        background-position: center;
-                        background-repeat: no-repeat;
-                        pointer-events: none !important;
-                      ">
-                        <img
-                          id="nt-base-{{ section.id }}"
-                          class="nt-mockup__base"
-                          src="{{ 'tshirt-view.png' | asset_url }}"
-                          alt="T-shirt mockup"
-                          loading="eager"
-                          decoding="async"
-                          fetchpriority="high"
-                          style="position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; object-fit: contain !important; pointer-events: none !important; display: block !important; opacity: 1 !important; visibility: visible !important; max-width: 100% !important; max-height: 100% !important;"
-                          onerror="console.error('❌ IMG Failed, using background-image fallback:', this.src); this.style.display='none'; this.parentElement.style.border='2px solid blue';"
-                          onload="console.log('✅ T-shirt IMG loaded successfully:', this.src); this.style.border='2px solid green';"
-                        >
-                      </div>
+                  <!-- White Canvas Container -->
+                  <div class="nt-mockup__canvas" id="nt-mockup-canvas-{{ section.id }}" style="position: relative; width: 100%; height: 100%; background: #ffffff; border-radius: 12px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); --overlay-top: 29.142857%; --overlay-left: 50.214286%; --overlay-width: 37%; --overlay-height: 42%; --overlay-rotate: 0deg; overflow: hidden;">
                     
-                    <!-- Debug assets (hidden) -->
-                    <div id="debug-assets-{{ section.id }}" style="position: absolute; top: -100px; left: -100px; width: 1px; height: 1px; overflow: hidden;">
-                      <img src="{{ 'tshirt-view.png' | asset_url }}" onload="console.log('✅ Direct asset test - tshirt-view.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - tshirt-view.png failed:', this.src);">
-                      <img src="{{ 'tshirt-black-v2.png' | asset_url }}" onload="console.log('✅ Direct asset test - tshirt-black-v2.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - tshirt-black-v2.png failed:', this.src);">
-                      <img src="{{ 'Girl-Model.png' | asset_url }}" onload="console.log('✅ Direct asset test - Girl-Model.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - Girl-Model.png failed:', this.src);">
-                      <img src="{{ 'Women-side.png' | asset_url }}" onload="console.log('✅ Direct asset test - Women-side.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - Women-side.png failed:', this.src);">
-                    </div>
+                    <!-- T-shirt Container -->
+                    <div style="position: relative; width: 100%; height: 100%; cursor: grab; isolation: isolate; display: flex; align-items: center; justify-content: center;" id="nt-mockup-container-{{ section.id }}">
+                      
+                      <!-- T-shirt Image -->
+                      <img id="nt-base-{{ section.id }}" class="nt-mockup__base" src="{{ 'tshirt-view.png' | asset_url }}" alt="T-shirt mockup" loading="eager" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; height: 85%; object-fit: contain; pointer-events: none; display: block;" onerror="console.error('❌ T-shirt failed to load:', this.src);" onload="console.log('✅ T-shirt loaded:', this.src);">
+                      
+                      <!-- Debug assets (hidden) -->
+                      <div id="debug-assets-{{ section.id }}" style="position: absolute; top: -100px; left: -100px; width: 1px; height: 1px; overflow: hidden;">
+                        <img src="{{ 'tshirt-view.png' | asset_url }}" onload="console.log('✅ Direct asset test - tshirt-view.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - tshirt-view.png failed:', this.src);">
+                        <img src="{{ 'tshirt-black-v2.png' | asset_url }}" onload="console.log('✅ Direct asset test - tshirt-black-v2.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - tshirt-black-v2.png failed:', this.src);">
+                        <img src="{{ 'Girl-Model.png' | asset_url }}" onload="console.log('✅ Direct asset test - Girl-Model.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - Girl-Model.png failed:', this.src);">
+                        <img src="{{ 'Women-side.png' | asset_url }}" onload="console.log('✅ Direct asset test - Women-side.png loaded:', this.src);" onerror="console.error('❌ Direct asset test - Women-side.png failed:', this.src);">
+                      </div>
                     
                     <!-- 2. Dynamic Design Overlay (SECOND = MIDDLE LAYER) -->
                     <div
@@ -1650,8 +1625,18 @@
                         "
                       >100%</output>
                     </div>
+                    
+                    </div>
+                    <!-- End nt-mockup-container -->
+                    
+                  </div>
+                  <!-- End white canvas -->
+                  
                 </div>
+                <!-- End gradient wrapper -->
+                
             </div>
+            <!-- End nt-mockup__stage -->
             
             <!-- Layer Controls (Hidden by default, shown when both image and text exist) -->
             <div id="layer-controls-{{ section.id }}" style="
