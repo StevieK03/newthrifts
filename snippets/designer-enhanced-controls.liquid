@@ -231,21 +231,6 @@
     </div>
 </div>
 
-<!-- Template Library Section -->
-<div class="cts-section-{{ section.id }}">
-    <h3>📚 Template Library</h3>
-    <div class="cts-section-content-{{ section.id }}">
-        <label class="cts-label-{{ section.id }}">Pre-made Designs</label>
-        <div id="templateList-{{ section.id }}" style="display: grid; grid-template-columns: 1fr; gap: 8px;">
-            <!-- Templates will be inserted here by JS -->
-        </div>
-        
-        <button class="cts-btn-secondary-{{ section.id }}" id="saveTemplate-{{ section.id }}" style="margin-top: 12px;">
-            💾 Save as Template
-        </button>
-    </div>
-</div>
-
 <!-- Enhanced Export Section -->
 <div class="cts-section-{{ section.id }}">
     <h3>💾 Enhanced Export</h3>
@@ -292,31 +277,6 @@
         console.log('🚀 Initializing enhanced controls...');
         
         const Enhancements = window.DesignerEnhancements;
-        
-        // Initialize templates display
-        const templateList = document.getElementById(`templateList-${sectionId}`);
-        if (templateList) {
-            const templates = Enhancements.Templates.presets;
-            templateList.innerHTML = templates.map(t => `
-                <div class="cts-template-card-${sectionId}" data-template="${t.name}">
-                    <div style="font-weight: 600; margin-bottom: 4px;">${t.name}</div>
-                    <div style="font-size: 11px; color: #94a3b8;">${t.description}</div>
-                </div>
-            `).join('');
-            
-            // Template click handlers
-            templateList.querySelectorAll('.cts-template-card-${sectionId}').forEach(card => {
-                card.addEventListener('click', function() {
-                    const templateName = this.dataset.template;
-                    if (confirm(`Load "${templateName}" template? This will replace your current design.`)) {
-                        const layers = Enhancements.Templates.loadTemplate(templateName);
-                        if (layers && window.designerLoadTemplate) {
-                            window.designerLoadTemplate(layers);
-                        }
-                    }
-                });
-            });
-        }
         
         // Enhanced SVG Export
         document.getElementById(`exportSVGEnhanced-${sectionId}`)?.addEventListener('click', function() {

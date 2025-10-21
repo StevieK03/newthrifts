@@ -204,34 +204,6 @@
         letter-spacing: 2px;
     }
 
-    /* T-Shirt Color Toggle */
-    .cts-tshirt-toggle-{{ section.id }} {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        display: flex;
-        gap: 8px;
-        z-index: 5;
-    }
-
-    .cts-toggle-btn-{{ section.id }} {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        border: 3px solid white;
-        cursor: pointer;
-        transition: all 0.2s;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    }
-
-    .cts-toggle-btn-{{ section.id }}:hover {
-        transform: scale(1.1);
-    }
-
-    .cts-toggle-btn-{{ section.id }}.active {
-        box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.5);
-    }
-
     .cts-quick-actions-{{ section.id }} {
         display: flex;
         gap: 12px;
@@ -621,6 +593,35 @@
         border-color: #60a5fa;
     }
 
+    /* T-Shirt Color Picker in Controls Panel */
+    .cts-tshirt-color-picker-{{ section.id }} {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .cts-tshirt-color-option-{{ section.id }} {
+        padding: 20px;
+        border-radius: 12px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .cts-tshirt-color-option-{{ section.id }}:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .cts-tshirt-color-option-{{ section.id }}.active {
+        box-shadow: 0 0 0 3px #60a5fa;
+        transform: scale(1.05);
+    }
+
     @media (max-width: 1024px) {
         .cts-container-{{ section.id }} {
             grid-template-columns: 1fr;
@@ -643,18 +644,6 @@
                 <div class="cts-mockup-stage-{{ section.id }}">
                     <div class="cts-mockup-canvas-{{ section.id }}">
                         <div class="cts-tshirt-container-{{ section.id }}">
-                            <!-- T-Shirt Color Toggle -->
-                            <div class="cts-tshirt-toggle-{{ section.id }}">
-                                <div class="cts-toggle-btn-{{ section.id }} active" 
-                                     data-color="white" 
-                                     style="background: white;"
-                                     title="White T-Shirt"></div>
-                                <div class="cts-toggle-btn-{{ section.id }}" 
-                                     data-color="black" 
-                                     style="background: #1a1a1a;"
-                                     title="Black T-Shirt"></div>
-                            </div>
-
                             <img 
                                 class="cts-tshirt-image-{{ section.id }}" 
                                 id="tshirtImage-{{ section.id }}"
@@ -692,6 +681,27 @@
                         <div class="cts-font-option-{{ section.id }} active" data-font="'Bebas Neue', sans-serif" style="font-family: 'Bebas Neue', sans-serif;">Bebas</div>
                         <div class="cts-font-option-{{ section.id }}" data-font="'Inter', sans-serif" style="font-family: 'Inter', sans-serif; font-weight: 700;">Inter</div>
                         <div class="cts-font-option-{{ section.id }}" data-font="Arial, sans-serif" style="font-family: Arial, sans-serif; font-weight: bold;">Arial</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cts-control-card-{{ section.id }}">
+                <h3>👕 T-Shirt Color</h3>
+                <div class="cts-control-group-{{ section.id }}">
+                    <label>Choose Background</label>
+                    <div class="cts-tshirt-color-picker-{{ section.id }}">
+                        <div class="cts-tshirt-color-option-{{ section.id }} active" 
+                             data-color="white" 
+                             style="background: white; border: 2px solid rgba(0, 0, 0, 0.1);"
+                             title="White T-Shirt">
+                            <span style="color: #64748b; font-size: 12px; font-weight: 600;">White</span>
+                        </div>
+                        <div class="cts-tshirt-color-option-{{ section.id }}" 
+                             data-color="black" 
+                             style="background: #1a1a1a; border: 2px solid rgba(255, 255, 255, 0.1);"
+                             title="Black T-Shirt">
+                            <span style="color: #94a3b8; font-size: 12px; font-weight: 600;">Black</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1103,9 +1113,9 @@
     });
 
     // T-Shirt color toggle
-    document.querySelectorAll(`.cts-toggle-btn-${sectionId}`).forEach(btn => {
+    document.querySelectorAll(`.cts-tshirt-color-option-${sectionId}`).forEach(btn => {
         btn.addEventListener('click', () => {
-            document.querySelectorAll(`.cts-toggle-btn-${sectionId}`).forEach(b => b.classList.remove('active'));
+            document.querySelectorAll(`.cts-tshirt-color-option-${sectionId}`).forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             
             tshirtColor = btn.dataset.color;
