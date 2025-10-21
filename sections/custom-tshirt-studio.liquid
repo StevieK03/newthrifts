@@ -1,6 +1,6 @@
 {% comment %}
   Custom T-Shirt Design Studio Section
-  Modern, clean interface for custom t-shirt design
+  Enhanced with hex color picker, undo, invert, flip, placement guide, and more
 {% endcomment %}
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,6 +27,9 @@
         backdrop-filter: blur(10px);
         padding: 20px 40px;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 
     .cts-header-{{ section.id }} h1 {
@@ -36,6 +39,33 @@
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
+    }
+
+    .cts-header-actions-{{ section.id }} {
+        display: flex;
+        gap: 12px;
+    }
+
+    .cts-header-btn-{{ section.id }} {
+        padding: 10px 20px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        color: white;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .cts-header-btn-{{ section.id }}:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateY(-2px);
+    }
+
+    .cts-header-btn-{{ section.id }}:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
     }
 
     .cts-container-{{ section.id }} {
@@ -101,6 +131,7 @@
         width: 100%;
         height: 100%;
         object-fit: contain;
+        transition: opacity 0.3s ease;
     }
 
     .cts-design-overlay-{{ section.id }} {
@@ -139,6 +170,65 @@
         pointer-events: none;
     }
 
+    /* Placement Guide Overlay */
+    .cts-placement-guide-{{ section.id }} {
+        position: absolute;
+        width: 37%;
+        height: 42%;
+        left: 50%;
+        top: 29%;
+        transform: translateX(-50%);
+        border: 2px dashed rgba(96, 165, 250, 0.6);
+        background: rgba(96, 165, 250, 0.1);
+        pointer-events: none;
+        display: none;
+        z-index: 10;
+    }
+
+    .cts-placement-guide-{{ section.id }}.active {
+        display: block;
+    }
+
+    .cts-placement-guide-{{ section.id }}::before {
+        content: 'SAFE PRINT AREA';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 12px;
+        font-weight: 700;
+        color: rgba(96, 165, 250, 0.8);
+        letter-spacing: 2px;
+    }
+
+    /* T-Shirt Color Toggle */
+    .cts-tshirt-toggle-{{ section.id }} {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        display: flex;
+        gap: 8px;
+        z-index: 5;
+    }
+
+    .cts-toggle-btn-{{ section.id }} {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 3px solid white;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .cts-toggle-btn-{{ section.id }}:hover {
+        transform: scale(1.1);
+    }
+
+    .cts-toggle-btn-{{ section.id }}.active {
+        box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.5);
+    }
+
     .cts-quick-actions-{{ section.id }} {
         display: flex;
         gap: 12px;
@@ -168,6 +258,23 @@
         display: flex;
         flex-direction: column;
         gap: 20px;
+        max-height: calc(100vh - 200px);
+        overflow-y: auto;
+        padding-right: 10px;
+    }
+
+    .cts-controls-panel-{{ section.id }}::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .cts-controls-panel-{{ section.id }}::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 4px;
+    }
+
+    .cts-controls-panel-{{ section.id }}::-webkit-scrollbar-thumb {
+        background: rgba(96, 165, 250, 0.5);
+        border-radius: 4px;
     }
 
     .cts-control-card-{{ section.id }} {
@@ -219,7 +326,7 @@
         background: rgba(255, 255, 255, 0.08);
     }
 
-    .cts-text-input-{{ section.id }} textarea {
+    textarea.cts-text-input-{{ section.id }} {
         resize: vertical;
         min-height: 80px;
     }
@@ -252,6 +359,7 @@
         display: grid;
         grid-template-columns: repeat(6, 1fr);
         gap: 8px;
+        margin-bottom: 12px;
     }
 
     .cts-color-option-{{ section.id }} {
@@ -270,6 +378,64 @@
     .cts-color-option-{{ section.id }}.active {
         border-color: white;
         box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+    }
+
+    /* Hex Color Input */
+    .cts-hex-input-container-{{ section.id }} {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+
+    .cts-hex-input-{{ section.id }} {
+        flex: 1;
+        padding: 10px 12px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        color: white;
+        font-size: 14px;
+        font-family: 'Courier New', monospace;
+        text-transform: uppercase;
+    }
+
+    .cts-hex-preview-{{ section.id }} {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* Transform Controls */
+    .cts-transform-grid-{{ section.id }} {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .cts-transform-btn-{{ section.id }} {
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        color: white;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
+
+    .cts-transform-btn-{{ section.id }}:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .cts-transform-btn-{{ section.id }}.active {
+        background: rgba(96, 165, 250, 0.2);
+        border-color: #60a5fa;
     }
 
     .cts-slider-container-{{ section.id }} {
@@ -370,6 +536,10 @@
 <div class="custom-tshirt-studio-{{ section.id }}" id="custom-tshirt-studio-{{ section.id }}" style="display: none;">
     <div class="cts-header-{{ section.id }}">
         <h1>✨ Custom T-Shirt Designer</h1>
+        <div class="cts-header-actions-{{ section.id }}">
+            <button class="cts-header-btn-{{ section.id }}" id="undoBtn-{{ section.id }}" disabled>↶ Undo</button>
+            <button class="cts-header-btn-{{ section.id }}" id="guideBtn-{{ section.id }}">📐 Placement Guide</button>
+        </div>
     </div>
 
     <div class="cts-container-{{ section.id }}">
@@ -378,10 +548,26 @@
                 <div class="cts-mockup-stage-{{ section.id }}">
                     <div class="cts-mockup-canvas-{{ section.id }}">
                         <div class="cts-tshirt-container-{{ section.id }}">
+                            <!-- T-Shirt Color Toggle -->
+                            <div class="cts-tshirt-toggle-{{ section.id }}">
+                                <div class="cts-toggle-btn-{{ section.id }} active" 
+                                     data-color="white" 
+                                     style="background: white;"
+                                     title="White T-Shirt"></div>
+                                <div class="cts-toggle-btn-{{ section.id }}" 
+                                     data-color="black" 
+                                     style="background: #1a1a1a;"
+                                     title="Black T-Shirt"></div>
+                            </div>
+
                             <img 
                                 class="cts-tshirt-image-{{ section.id }}" 
+                                id="tshirtImage-{{ section.id }}"
                                 src="{{ 'tshirt-view.png' | asset_url }}"
                                 alt="T-shirt mockup">
+                            
+                            <!-- Placement Guide Overlay -->
+                            <div class="cts-placement-guide-{{ section.id }}" id="placementGuide-{{ section.id }}"></div>
                             
                             <div class="cts-design-overlay-{{ section.id }}" id="designOverlay-{{ section.id }}">
                                 <span class="cts-design-text-{{ section.id }}" id="designText-{{ section.id }}">YOUR DESIGN HERE</span>
@@ -431,6 +617,28 @@
                     <div class="cts-color-option-{{ section.id }}" data-color="#06b6d4" style="background: #06b6d4;"></div>
                     <div class="cts-color-option-{{ section.id }}" data-color="#f97316" style="background: #f97316;"></div>
                 </div>
+                
+                <div class="cts-control-group-{{ section.id }}">
+                    <label>Custom Hex Color</label>
+                    <div class="cts-hex-input-container-{{ section.id }}">
+                        <input type="text" 
+                               class="cts-hex-input-{{ section.id }}" 
+                               id="hexInput-{{ section.id }}"
+                               placeholder="#000000" 
+                               maxlength="7"
+                               value="#000000">
+                        <div class="cts-hex-preview-{{ section.id }}" id="hexPreview-{{ section.id }}" style="background: #000000;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cts-control-card-{{ section.id }}">
+                <h3>🔄 Transform</h3>
+                <div class="cts-transform-grid-{{ section.id }}">
+                    <button class="cts-transform-btn-{{ section.id }}" id="flipHBtn-{{ section.id }}">↔️ Flip H</button>
+                    <button class="cts-transform-btn-{{ section.id }}" id="flipVBtn-{{ section.id }}">↕️ Flip V</button>
+                    <button class="cts-transform-btn-{{ section.id }}" id="invertBtn-{{ section.id }}">🔁 Invert</button>
+                </div>
             </div>
 
             <div class="cts-control-card-{{ section.id }}">
@@ -476,21 +684,165 @@
     const sizeValue = document.getElementById(`sizeValue-${sectionId}`);
     const rotateValue = document.getElementById(`rotateValue-${sectionId}`);
     const resetBtn = document.getElementById(`resetBtn-${sectionId}`);
+    const undoBtn = document.getElementById(`undoBtn-${sectionId}`);
+    const guideBtn = document.getElementById(`guideBtn-${sectionId}`);
+    const placementGuide = document.getElementById(`placementGuide-${sectionId}`);
+    const hexInput = document.getElementById(`hexInput-${sectionId}`);
+    const hexPreview = document.getElementById(`hexPreview-${sectionId}`);
+    const flipHBtn = document.getElementById(`flipHBtn-${sectionId}`);
+    const flipVBtn = document.getElementById(`flipVBtn-${sectionId}`);
+    const invertBtn = document.getElementById(`invertBtn-${sectionId}`);
+    const tshirtImage = document.getElementById(`tshirtImage-${sectionId}`);
 
     let uploadedImage = null;
     let currentFont = "'Bebas Neue', sans-serif";
     let currentColor = '#000000';
+    let flipH = false;
+    let flipV = false;
+    let inverted = false;
+    let guideActive = false;
+    let tshirtColor = 'white';
+    
+    // Undo history
+    let undoHistory = [];
+    const MAX_UNDO = 20;
 
-    // Text input
-    textInput.addEventListener('input', (e) => {
-        if (!uploadedImage) {
-            designText.textContent = e.target.value || 'YOUR DESIGN HERE';
+    // Save state for undo
+    function saveState() {
+        const state = {
+            text: textInput.value,
+            color: currentColor,
+            font: currentFont,
+            size: sizeSlider.value,
+            rotation: rotateSlider.value,
+            flipH: flipH,
+            flipV: flipV,
+            inverted: inverted,
+            left: designOverlay.style.left,
+            top: designOverlay.style.top
+        };
+        
+        undoHistory.push(state);
+        if (undoHistory.length > MAX_UNDO) {
+            undoHistory.shift();
+        }
+        
+        undoBtn.disabled = undoHistory.length === 0;
+    }
+
+    // Undo last action
+    undoBtn.addEventListener('click', () => {
+        if (undoHistory.length > 0) {
+            const state = undoHistory.pop();
+            
+            textInput.value = state.text;
+            designText.textContent = state.text || 'YOUR DESIGN HERE';
+            currentColor = state.color;
+            designText.style.color = state.color;
+            hexInput.value = state.color;
+            hexPreview.style.background = state.color;
+            currentFont = state.font;
+            designText.style.fontFamily = state.font;
+            sizeSlider.value = state.size;
+            sizeValue.textContent = `${state.size}%`;
+            rotateSlider.value = state.rotation;
+            rotateValue.textContent = `${state.rotation}°`;
+            flipH = state.flipH;
+            flipV = state.flipV;
+            inverted = state.inverted;
+            designOverlay.style.left = state.left;
+            designOverlay.style.top = state.top;
+            
+            updateTransform();
+            updateFlipButtons();
+            updateColorSwatches();
+            
+            undoBtn.disabled = undoHistory.length === 0;
         }
     });
+
+    // Placement guide toggle
+    guideBtn.addEventListener('click', () => {
+        guideActive = !guideActive;
+        if (guideActive) {
+            placementGuide.classList.add('active');
+            guideBtn.textContent = '✓ Guide On';
+            guideBtn.style.background = 'rgba(96, 165, 250, 0.2)';
+            guideBtn.style.borderColor = '#60a5fa';
+        } else {
+            placementGuide.classList.remove('active');
+            guideBtn.textContent = '📐 Placement Guide';
+            guideBtn.style.background = 'rgba(255, 255, 255, 0.1)';
+            guideBtn.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+        }
+    });
+
+    // T-Shirt color toggle
+    document.querySelectorAll(`.cts-toggle-btn-${sectionId}`).forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll(`.cts-toggle-btn-${sectionId}`).forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            tshirtColor = btn.dataset.color;
+            
+            // Update t-shirt image (you can add different mockup images here)
+            if (tshirtColor === 'black') {
+                tshirtImage.style.filter = 'brightness(0.3)';
+                // Adjust text color for visibility
+                if (currentColor === '#000000') {
+                    currentColor = '#ffffff';
+                    designText.style.color = currentColor;
+                    hexInput.value = currentColor;
+                    hexPreview.style.background = currentColor;
+                    updateColorSwatches();
+                }
+            } else {
+                tshirtImage.style.filter = 'brightness(1)';
+            }
+        });
+    });
+
+    // Text input with boundary control
+    textInput.addEventListener('input', (e) => {
+        if (!uploadedImage) {
+            saveState();
+            designText.textContent = e.target.value || 'YOUR DESIGN HERE';
+            checkBoundary();
+        }
+    });
+
+    // Hex color input
+    hexInput.addEventListener('input', (e) => {
+        let hex = e.target.value;
+        if (!hex.startsWith('#')) {
+            hex = '#' + hex;
+        }
+        
+        // Validate hex color
+        if (/^#[0-9A-F]{6}$/i.test(hex)) {
+            saveState();
+            currentColor = hex;
+            designText.style.color = hex;
+            hexPreview.style.background = hex;
+            updateColorSwatches();
+        }
+    });
+
+    // Update color swatches to show active state
+    function updateColorSwatches() {
+        document.querySelectorAll(`.cts-color-option-${sectionId}`).forEach(option => {
+            if (option.dataset.color.toLowerCase() === currentColor.toLowerCase()) {
+                option.classList.add('active');
+            } else {
+                option.classList.remove('active');
+            }
+        });
+    }
 
     // Font selector
     document.querySelectorAll(`.cts-font-option-${sectionId}`).forEach(option => {
         option.addEventListener('click', () => {
+            saveState();
             document.querySelectorAll(`.cts-font-option-${sectionId}`).forEach(o => o.classList.remove('active'));
             option.classList.add('active');
             currentFont = option.dataset.font;
@@ -501,17 +853,62 @@
     // Color selector
     document.querySelectorAll(`.cts-color-option-${sectionId}`).forEach(option => {
         option.addEventListener('click', () => {
+            saveState();
             document.querySelectorAll(`.cts-color-option-${sectionId}`).forEach(o => o.classList.remove('active'));
             option.classList.add('active');
             currentColor = option.dataset.color;
             designText.style.color = currentColor;
+            hexInput.value = currentColor;
+            hexPreview.style.background = currentColor;
         });
+    });
+
+    // Flip Horizontal
+    flipHBtn.addEventListener('click', () => {
+        saveState();
+        flipH = !flipH;
+        updateTransform();
+        updateFlipButtons();
+    });
+
+    // Flip Vertical
+    flipVBtn.addEventListener('click', () => {
+        saveState();
+        flipV = !flipV;
+        updateTransform();
+        updateFlipButtons();
+    });
+
+    // Update flip button states
+    function updateFlipButtons() {
+        flipHBtn.classList.toggle('active', flipH);
+        flipVBtn.classList.toggle('active', flipV);
+    }
+
+    // Invert colors
+    invertBtn.addEventListener('click', () => {
+        saveState();
+        inverted = !inverted;
+        invertBtn.classList.toggle('active', inverted);
+        
+        if (inverted) {
+            designText.style.filter = 'invert(1) hue-rotate(180deg)';
+            if (uploadedImage) {
+                uploadedImage.style.filter = 'invert(1) hue-rotate(180deg)';
+            }
+        } else {
+            designText.style.filter = 'none';
+            if (uploadedImage) {
+                uploadedImage.style.filter = 'none';
+            }
+        }
     });
 
     // Image upload
     imageUpload.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file) {
+            saveState();
             const reader = new FileReader();
             reader.onload = (event) => {
                 if (uploadedImage) {
@@ -521,6 +918,10 @@
                 uploadedImage = document.createElement('img');
                 uploadedImage.className = `cts-design-image-${sectionId}`;
                 uploadedImage.src = event.target.result;
+                
+                if (inverted) {
+                    uploadedImage.style.filter = 'invert(1) hue-rotate(180deg)';
+                }
                 
                 designText.style.display = 'none';
                 designOverlay.appendChild(uploadedImage);
@@ -535,19 +936,55 @@
         updateTransform();
     });
 
+    sizeSlider.addEventListener('change', () => {
+        saveState();
+    });
+
     // Rotation slider
     rotateSlider.addEventListener('input', (e) => {
         rotateValue.textContent = `${e.target.value}°`;
         updateTransform();
     });
 
+    rotateSlider.addEventListener('change', () => {
+        saveState();
+    });
+
     function updateTransform() {
         const scale = sizeSlider.value / 100;
         const rotate = rotateSlider.value;
-        designOverlay.style.transform = `translateX(-50%) scale(${scale}) rotate(${rotate}deg)`;
+        const scaleX = flipH ? -1 : 1;
+        const scaleY = flipV ? -1 : 1;
+        
+        designOverlay.style.transform = `translateX(-50%) scale(${scale * scaleX}, ${scale * scaleY}) rotate(${rotate}deg)`;
+        checkBoundary();
     }
 
-    // Drag functionality
+    // Check if design stays within boundary
+    function checkBoundary() {
+        const overlay = designOverlay.getBoundingClientRect();
+        const container = designOverlay.parentElement.getBoundingClientRect();
+        
+        // Print area boundaries (37% width, 42% height from center)
+        const printAreaLeft = container.left + (container.width * 0.315); // (1 - 0.37) / 2
+        const printAreaRight = container.right - (container.width * 0.315);
+        const printAreaTop = container.top + (container.height * 0.29);
+        const printAreaBottom = printAreaTop + (container.height * 0.42);
+        
+        // Check if design is outside print area
+        const isOutside = overlay.left < printAreaLeft || 
+                         overlay.right > printAreaRight || 
+                         overlay.top < printAreaTop || 
+                         overlay.bottom > printAreaBottom;
+        
+        if (isOutside) {
+            designOverlay.style.outline = '2px solid rgba(239, 68, 68, 0.8)';
+        } else {
+            designOverlay.style.outline = '';
+        }
+    }
+
+    // Drag functionality with boundary constraints
     let isDragging = false;
     let startX, startY, startLeft, startTop;
 
@@ -557,8 +994,8 @@
         startY = e.clientY;
         const rect = designOverlay.getBoundingClientRect();
         const parent = designOverlay.parentElement.getBoundingClientRect();
-        startLeft = ((rect.left - parent.left) / parent.width) * 100;
-        startTop = ((rect.top - parent.top) / parent.height) * 100;
+        startLeft = ((rect.left + rect.width / 2 - parent.left) / parent.width) * 100;
+        startTop = ((rect.top + rect.height / 2 - parent.top) / parent.height) * 100;
         designOverlay.style.cursor = 'grabbing';
     });
 
@@ -569,28 +1006,47 @@
         const deltaX = ((e.clientX - startX) / parent.width) * 100;
         const deltaY = ((e.clientY - startY) / parent.height) * 100;
         
-        designOverlay.style.left = `${startLeft + deltaX}%`;
-        designOverlay.style.top = `${startTop + deltaY}%`;
+        let newLeft = startLeft + deltaX;
+        let newTop = startTop + deltaY;
+        
+        // Constrain to safe area (with some margin)
+        const margin = 5;
+        newLeft = Math.max(31.5 + margin, Math.min(68.5 - margin, newLeft));
+        newTop = Math.max(29 + margin, Math.min(71 - margin, newTop));
+        
+        designOverlay.style.left = `${newLeft}%`;
+        designOverlay.style.top = `${newTop}%`;
+        
+        checkBoundary();
     });
 
     document.addEventListener('mouseup', () => {
-        isDragging = false;
-        designOverlay.style.cursor = 'move';
+        if (isDragging) {
+            saveState();
+            isDragging = false;
+            designOverlay.style.cursor = 'move';
+        }
     });
 
     // Reset button
     resetBtn.addEventListener('click', () => {
+        saveState();
+        
         textInput.value = 'YOUR DESIGN HERE';
         designText.textContent = 'YOUR DESIGN HERE';
         designText.style.display = 'block';
         designText.style.fontFamily = "'Bebas Neue', sans-serif";
         designText.style.color = '#000000';
+        designText.style.filter = 'none';
+        
+        currentColor = '#000000';
+        hexInput.value = '#000000';
+        hexPreview.style.background = '#000000';
         
         document.querySelectorAll(`.cts-font-option-${sectionId}`).forEach(o => o.classList.remove('active'));
         document.querySelector(`.cts-font-option-${sectionId}`).classList.add('active');
         
-        document.querySelectorAll(`.cts-color-option-${sectionId}`).forEach(o => o.classList.remove('active'));
-        document.querySelector(`.cts-color-option-${sectionId}`).classList.add('active');
+        updateColorSwatches();
         
         sizeSlider.value = 100;
         rotateSlider.value = 0;
@@ -598,6 +1054,12 @@
         rotateValue.textContent = '0°';
         designOverlay.style.left = '50%';
         designOverlay.style.top = '29%';
+        
+        flipH = false;
+        flipV = false;
+        inverted = false;
+        updateFlipButtons();
+        invertBtn.classList.remove('active');
         
         if (uploadedImage) {
             uploadedImage.remove();
@@ -608,20 +1070,23 @@
         updateTransform();
     });
 
-    // Add to cart simulation
+    // Add to cart
     document.getElementById(`addToCartBtn-${sectionId}`).addEventListener('click', () => {
         alert('🎉 Design added to cart! (This is a demo)');
     });
 
-    // Download preview simulation
+    // Download preview
     document.getElementById(`downloadBtn-${sectionId}`).addEventListener('click', () => {
         alert('📥 Preview download feature coming soon!');
     });
 
-    // Share design simulation
+    // Share design
     document.getElementById(`shareBtn-${sectionId}`).addEventListener('click', () => {
         alert('🔗 Share feature coming soon!');
     });
+
+    // Initialize
+    checkBoundary();
 })();
 </script>
 
