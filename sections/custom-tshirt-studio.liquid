@@ -2040,43 +2040,23 @@
     const mockupStage = document.querySelector(`.cts-mockup-stage-${sectionId}`);
     const tshirtContainer = document.getElementById(`tshirtContainer-${sectionId}`);
     
-    // Update canvas zoom
+    // Update canvas zoom - MOBILE-OPTIMIZED APPROACH
     function updateCanvasZoom() {
         const zoomLevel = canvasZoomSlider.value / 100;
         
         if (mockupCanvas && tshirtContainer && mockupStage) {
-            // Remove aspect-ratio constraint when zooming
-            if (zoomLevel !== 1) {
-                mockupStage.style.aspectRatio = 'unset';
-            } else {
-                mockupStage.style.aspectRatio = '1';
-            }
-            
-            // MOBILE FIX: Use mockupCanvas dimensions directly to prevent horizontal overflow
-            const canvasWidth = mockupCanvas.offsetWidth;
-            const canvasHeight = mockupCanvas.offsetHeight;
-            
-            // Use the smaller dimension to ensure content fits
-            const baseSize = Math.min(canvasWidth, canvasHeight);
-            const scaledSize = baseSize * zoomLevel;
-            
-            // Apply dimensions to mockup stage
-            mockupStage.style.width = `${scaledSize}px`;
-            mockupStage.style.height = `${scaledSize}px`;
-            mockupStage.style.minWidth = `${scaledSize}px`;
-            mockupStage.style.minHeight = `${scaledSize}px`;
-            
-            // MOBILE FIX: Prevent the stage from causing horizontal layout shifts
-            mockupStage.style.maxWidth = 'none';
-            mockupStage.style.margin = '0 auto';
-            
             // Update zoom display
             zoomValue.textContent = `${canvasZoomSlider.value}%`;
+            
+            // MOBILE FIX: Use CSS transform scale instead of changing dimensions
+            // This prevents layout shifts and white space issues
+            mockupStage.style.transform = `scale(${zoomLevel})`;
+            mockupStage.style.transformOrigin = 'center center';
             
             // Make canvas scrollable when zoomed
             if (zoomLevel > 1) {
                 mockupCanvas.style.overflow = 'auto';
-                mockupCanvas.style.overscrollBehavior = 'contain'; // Prevent scroll chaining on mobile
+                mockupCanvas.style.overscrollBehavior = 'contain';
                 
                 // Center the scrolled content
                 setTimeout(() => {
@@ -2087,7 +2067,7 @@
                 mockupCanvas.style.overflow = 'hidden';
             }
             
-            console.log(`🔍 Canvas zoom: ${canvasZoomSlider.value}% - Canvas: ${canvasWidth}×${canvasHeight}px - Stage: ${scaledSize.toFixed(0)}px`);
+            console.log(`🔍 Canvas zoom: ${canvasZoomSlider.value}% (using CSS transform: scale)`);
         }
     }
     
