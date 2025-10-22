@@ -32,10 +32,7 @@
       "settings": {
         "heading": "",
         "body": "",
-        "facebook_url": "",
-        "instagram_url": "",
         "twitter_url": "",
-        "tiktok_url": "",
         "youtube_url": "",
         "pad_y": 24,
         "section_bg": "#f8fafc"
@@ -156,10 +153,7 @@
       "type": "custom-tshirt-studio",
       "name": "Custom T-Shirt Studio",
       "settings": {
-        "title": "Custom T-Shirt Studio",
-        "description": "Create stunning custom t-shirts with our advanced design tools. Upload your artwork, customize colors, adjust positioning, and see your design come to life in real-time.",
-        "padding_top": 36,
-        "padding_bottom": 36
+        "heading": "✨ Custom T-Shirt Designer"
       }
     },
     "visitor_counter_section": {
@@ -231,12 +225,34 @@
     },
     "featured_collection_ETkhqA": {
       "type": "featured-collection",
+      "disabled": true,
       "name": "Featured Products",
       "settings": {
         "heading": "Featured Collection",
         "subheading": "",
         "collection": "entire-collection",
         "max_products": 12
+      }
+    },
+    "featured_collection_nt_xi7ELH": {
+      "type": "featured-collection-nt",
+      "name": "Featured Collection (NT)",
+      "settings": {
+        "heading": "Featured Collection",
+        "subheading": "Discover our handpicked favorites",
+        "collection": "",
+        "products_limit": 12,
+        "columns_desktop": 4,
+        "columns_tablet": 2,
+        "columns_mobile": 1,
+        "card_style": "elevated",
+        "show_vendor": false,
+        "show_rating": true,
+        "show_badges": true,
+        "show_swatches": true,
+        "enable_quick_add": true,
+        "enable_quick_view": true,
+        "enable_auto_theme": true
       }
     }
   },
@@ -254,6 +270,7 @@
     "visitor_counter_section",
     "product_poll_section",
     "marquee",
-    "featured_collection_ETkhqA"
+    "featured_collection_ETkhqA",
+    "featured_collection_nt_xi7ELH"
   ]
 }
