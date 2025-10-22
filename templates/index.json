@@ -234,25 +234,14 @@
         "max_products": 12
       }
     },
-    "featured_collection_nt_xi7ELH": {
-      "type": "featured-collection-nt",
-      "name": "Featured Collection (NT)",
+    "featured_collection_mDHN8k": {
+      "type": "featured-collection",
+      "name": "Featured collection",
       "settings": {
         "heading": "Featured Collection",
-        "subheading": "Discover our handpicked favorites",
-        "collection": "",
-        "products_limit": 12,
-        "columns_desktop": 4,
-        "columns_tablet": 2,
-        "columns_mobile": 1,
-        "card_style": "elevated",
-        "show_vendor": false,
-        "show_rating": true,
-        "show_badges": true,
-        "show_swatches": true,
-        "enable_quick_add": true,
-        "enable_quick_view": true,
-        "enable_auto_theme": true
+        "subheading": "Curated pieces in neon fades and cool pastels.",
+        "collection": "entire-collection",
+        "max_products": 6
       }
     }
   },
@@ -271,6 +260,6 @@
     "product_poll_section",
     "marquee",
     "featured_collection_ETkhqA",
-    "featured_collection_nt_xi7ELH"
+    "featured_collection_mDHN8k"
   ]
 }
