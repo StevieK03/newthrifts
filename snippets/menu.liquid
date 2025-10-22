@@ -1,0 +1,37 @@
+{% if menu != blank %}
+  <ul style="display:flex; gap:10px; list-style:none; padding:0; margin:0; flex-wrap:wrap;">
+    {% for link in menu.links %}
+      <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+    {% endfor %}
+    <!-- Cart link -->
+    <li class="nav-cart">
+      <a class="cart-link" href="{{ routes.cart_url }}" aria-label="View cart">
+        <svg class="cart-ic" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M6 6h.9l1.2 9.2a2 2 0 0 0 2 1.8h6.9a2 2 0 0 0 2-1.7l1.1-7.3H8.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="10" cy="20" r="1.4" fill="currentColor"/>
+          <circle cx="17.5" cy="20" r="1.4" fill="currentColor"/>
+        </svg>
+        <span class="cart-text">Cart</span>
+        <span class="cart-count" aria-live="polite">{{ cart.item_count }}</span>
+      </a>
+    </li>
+  </ul>
+{% else %}
+  <ul style="display:flex; gap:10px; list-style:none; padding:0; margin:0;">
+    <li><a href="/collections/all">Shop</a></li>
+    <li><a href="/pages/about">About</a></li>
+    <li><a href="/pages/contact">Contact</a></li>
+    <!-- Cart link -->
+    <li class="nav-cart">
+      <a class="cart-link" href="{{ routes.cart_url }}" aria-label="View cart">
+        <svg class="cart-ic" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M6 6h.9l1.2 9.2a2 2 0 0 0 2 1.8h6.9a2 2 0 0 0 2-1.7l1.1-7.3H8.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="10" cy="20" r="1.4" fill="currentColor"/>
+          <circle cx="17.5" cy="20" r="1.4" fill="currentColor"/>
+        </svg>
+        <span class="cart-text">Cart</span>
+        <span class="cart-count" aria-live="polite">{{ cart.item_count }}</span>
+      </a>
+    </li>
+  </ul>
+{% endif %}

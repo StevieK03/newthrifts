@@ -1,0 +1,813 @@
+{%- comment -%}
+User Profile Dashboard Section
+Shows user profile information and management options
+{%- endcomment -%}
+
+<div class="user-profile-dashboard" id="user-profile-dashboard">
+  <div class="dashboard-container">
+    <!-- Profile Header -->
+    <div class="profile-header">
+      <div class="profile-avatar">
+        <div class="avatar-placeholder" id="profile-avatar">
+          <span id="avatar-initials">U</span>
+        </div>
+        <button class="avatar-upload-btn" id="avatar-upload-btn" title="Upload Profile Picture">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17,8 12,3 7,8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+        </button>
+        <input type="file" id="avatar-upload-input" accept="image/*" style="display: none;">
+      </div>
+      
+      <div class="profile-info">
+        <h2 id="profile-name">Loading...</h2>
+        <p id="profile-email">Loading...</p>
+        <div class="profile-stats">
+          <div class="stat-item">
+            <span class="stat-number" id="orders-count">0</span>
+            <span class="stat-label">Orders</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" id="wishlist-count">0</span>
+            <span class="stat-label">Wishlist</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" id="reviews-count">0</span>
+            <span class="stat-label">Reviews</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="profile-actions">
+        <button class="btn btn-secondary" id="edit-profile-btn">Edit Profile</button>
+        <button class="btn btn-outline" id="logout-btn">Sign Out</button>
+      </div>
+    </div>
+
+    <!-- Dashboard Tabs -->
+    <div class="dashboard-tabs">
+      <button class="tab-btn active" data-tab="overview">Overview</button>
+      <button class="tab-btn" data-tab="orders">Orders</button>
+      <button class="tab-btn" data-tab="wishlist">Wishlist</button>
+      <button class="tab-btn" data-tab="reviews">Reviews</button>
+      <button class="tab-btn" data-tab="settings">Settings</button>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="tab-content">
+      <!-- Overview Tab -->
+      <div class="tab-panel active" id="overview-tab">
+        <div class="overview-grid">
+          <div class="overview-card">
+            <h3>Recent Orders</h3>
+            <div class="recent-orders" id="recent-orders">
+              <div class="loading-state">Loading orders...</div>
+            </div>
+          </div>
+          
+          <div class="overview-card">
+            <h3>Style Preferences</h3>
+            <div class="preferences-display" id="preferences-display">
+              <div class="loading-state">Loading preferences...</div>
+            </div>
+          </div>
+          
+          <div class="overview-card">
+            <h3>Account Activity</h3>
+            <div class="activity-feed" id="activity-feed">
+              <div class="loading-state">Loading activity...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Orders Tab -->
+      <div class="tab-panel" id="orders-tab">
+        <div class="orders-list" id="orders-list">
+          <div class="loading-state">Loading orders...</div>
+        </div>
+      </div>
+
+      <!-- Wishlist Tab -->
+      <div class="tab-panel" id="wishlist-tab">
+        <div class="wishlist-grid" id="wishlist-grid">
+          <div class="loading-state">Loading wishlist...</div>
+        </div>
+      </div>
+
+      <!-- Reviews Tab -->
+      <div class="tab-panel" id="reviews-tab">
+        <div class="reviews-list" id="reviews-list">
+          <div class="loading-state">Loading reviews...</div>
+        </div>
+      </div>
+
+      <!-- Settings Tab -->
+      <div class="tab-panel" id="settings-tab">
+        <div class="settings-sections">
+          <div class="settings-section">
+            <h3>Profile Information</h3>
+            <form id="profile-edit-form">
+              <div class="form-group">
+                <label for="edit-full-name">Full Name</label>
+                <input type="text" id="edit-full-name" name="full-name" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="edit-phone">Phone Number</label>
+                <input type="tel" id="edit-phone" name="phone">
+              </div>
+              
+              <div class="form-group">
+                <label for="edit-birthday">Birthday</label>
+                <input type="date" id="edit-birthday" name="birthday">
+              </div>
+              
+              <div class="form-group">
+                <label>Style Preferences</label>
+                <div class="preference-tags">
+                  <label class="tag-label">
+                    <input type="checkbox" name="preferences" value="casual">
+                    <span>Casual</span>
+                  </label>
+                  <label class="tag-label">
+                    <input type="checkbox" name="preferences" value="formal">
+                    <span>Formal</span>
+                  </label>
+                  <label class="tag-label">
+                    <input type="checkbox" name="preferences" value="streetwear">
+                    <span>Streetwear</span>
+                  </label>
+                  <label class="tag-label">
+                    <input type="checkbox" name="preferences" value="vintage">
+                    <span>Vintage</span>
+                  </label>
+                  <label class="tag-label">
+                    <input type="checkbox" name="preferences" value="sporty">
+                    <span>Sporty</span>
+                  </label>
+                </div>
+              </div>
+              
+              <button type="submit" class="btn btn-primary">Save Changes</button>
+            </form>
+          </div>
+          
+          <div class="settings-section">
+            <h3>Notifications</h3>
+            <div class="notification-settings">
+              <label class="setting-item">
+                <input type="checkbox" id="email-notifications" checked>
+                <span>Email notifications</span>
+              </label>
+              <label class="setting-item">
+                <input type="checkbox" id="newsletter-subscription" checked>
+                <span>Newsletter subscription</span>
+              </label>
+              <label class="setting-item">
+                <input type="checkbox" id="order-updates" checked>
+                <span>Order updates</span>
+              </label>
+              <label class="setting-item">
+                <input type="checkbox" id="promotional-emails">
+                <span>Promotional emails</span>
+              </label>
+            </div>
+          </div>
+          
+          <div class="settings-section">
+            <h3>Privacy & Security</h3>
+            <div class="security-settings">
+              <button class="btn btn-secondary" id="change-password-btn">Change Password</button>
+              <button class="btn btn-outline" id="delete-account-btn">Delete Account</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.user-profile-dashboard {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: rgba(15, 23, 42, 0.8);
+  border-radius: 20px;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(39, 225, 193, 0.2);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), 0 8px 16px rgba(39, 225, 193, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Light mode dashboard */
+[data-theme="light"] .user-profile-dashboard {
+  background: rgba(248, 250, 252, 0.8);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(59, 130, 246, 0.1);
+}
+
+.user-profile-dashboard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(39, 225, 193, 0.02), rgba(255, 79, 163, 0.02));
+  pointer-events: none;
+  z-index: 0;
+}
+
+.user-profile-dashboard > * {
+  position: relative;
+  z-index: 1;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.profile-avatar {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.avatar-placeholder {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #27e1c1, #ff4fa3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  position: relative;
+}
+
+.avatar-upload-btn {
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #27e1c1;
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.avatar-upload-btn:hover {
+  background: #1fb8a3;
+  transform: scale(1.1);
+}
+
+.profile-info {
+  flex: 1;
+}
+
+.profile-info h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  background: linear-gradient(135deg, #27e1c1, #ff4fa3);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.profile-info p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.profile-stats {
+  display: flex;
+  gap: 2rem;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #27e1c1;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.profile-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.dashboard-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tab-btn {
+  padding: 0.75rem 1.5rem;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.tab-btn:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.tab-btn.active {
+  color: #27e1c1;
+  border-bottom-color: #27e1c1;
+}
+
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.active {
+  display: block;
+}
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2rem;
+}
+
+.overview-card {
+  background: rgba(30, 41, 59, 0.6);
+  border-radius: 16px;
+  padding: 2rem;
+  border: 1px solid rgba(39, 225, 193, 0.2);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Light mode cards */
+[data-theme="light"] .overview-card {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.overview-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(39, 225, 193, 0.03), rgba(255, 79, 163, 0.03));
+  pointer-events: none;
+  z-index: 0;
+}
+
+.overview-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.overview-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(39, 225, 193, 0.3);
+}
+
+.overview-card h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.loading-state {
+  color: rgba(255, 255, 255, 0.6);
+  font-style: italic;
+  text-align: center;
+  padding: 2rem;
+}
+
+.preference-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tag-label {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: normal;
+  margin-bottom: 0;
+}
+
+.tag-label:hover {
+  background: rgba(39, 225, 193, 0.1);
+  border-color: #27e1c1;
+}
+
+.tag-label input[type="checkbox"] {
+  margin-right: 0.5rem;
+  width: auto;
+}
+
+.tag-label input[type="checkbox"]:checked + span {
+  color: #27e1c1;
+  font-weight: 600;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #27e1c1, #ff4fa3);
+  color: white;
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-outline {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(39, 225, 193, 0.2);
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.form-group input[type="text"],
+.form-group input[type="tel"],
+.form-group input[type="date"] {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #27e1c1;
+  box-shadow: 0 0 0 3px rgba(39, 225, 193, 0.1);
+}
+
+.settings-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.settings-section {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.settings-section h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.notification-settings,
+.security-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.setting-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: normal;
+  margin-bottom: 0;
+  cursor: pointer;
+}
+
+.setting-item input[type="checkbox"] {
+  width: auto;
+}
+
+@media (max-width: 768px) {
+  .user-profile-dashboard {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+  
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .profile-stats {
+    justify-content: center;
+  }
+  
+  .overview-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .dashboard-tabs {
+    flex-wrap: wrap;
+  }
+  
+  .preference-tags {
+    flex-direction: column;
+  }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const dashboard = document.getElementById('user-profile-dashboard');
+  const tabButtons = document.querySelectorAll('.tab-btn');
+  const tabPanels = document.querySelectorAll('.tab-panel');
+  
+  // Initialize dashboard
+  initializeDashboard();
+  
+  // Tab switching
+  tabButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const targetTab = this.getAttribute('data-tab');
+      
+      // Remove active class from all buttons and panels
+      tabButtons.forEach(btn => btn.classList.remove('active'));
+      tabPanels.forEach(panel => panel.classList.remove('active'));
+      
+      // Add active class to clicked button and corresponding panel
+      this.classList.add('active');
+      document.getElementById(targetTab + '-tab').classList.add('active');
+    });
+  });
+  
+  // Avatar upload
+  const avatarUploadBtn = document.getElementById('avatar-upload-btn');
+  const avatarUploadInput = document.getElementById('avatar-upload-input');
+  
+  avatarUploadBtn.addEventListener('click', function() {
+    avatarUploadInput.click();
+  });
+  
+  avatarUploadInput.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+      uploadAvatar(file);
+    }
+  });
+  
+  // Edit profile form
+  const profileEditForm = document.getElementById('profile-edit-form');
+  profileEditForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    await updateProfile();
+  });
+  
+  // Logout
+  const logoutBtn = document.getElementById('logout-btn');
+  logoutBtn.addEventListener('click', function() {
+    logout();
+  });
+  
+  async function initializeDashboard() {
+    try {
+      if (window.supabaseClient) {
+        const user = await window.supabaseClient.getCurrentUser();
+        if (user.user) {
+          await loadUserProfile(user.user);
+          await loadDashboardData(user.user);
+        } else {
+          showLoginPrompt();
+        }
+      } else {
+        showLoginPrompt();
+      }
+    } catch (error) {
+      console.error('Dashboard initialization error:', error);
+      showLoginPrompt();
+    }
+  }
+  
+  async function loadUserProfile(user) {
+    // Update profile header
+    document.getElementById('profile-name').textContent = user.user_metadata?.full_name || 'User';
+    document.getElementById('profile-email').textContent = user.email;
+    
+    // Update avatar initials
+    const initials = getInitials(user.user_metadata?.full_name || user.email);
+    document.getElementById('avatar-initials').textContent = initials;
+    
+    // Update edit form
+    document.getElementById('edit-full-name').value = user.user_metadata?.full_name || '';
+    document.getElementById('edit-phone').value = user.user_metadata?.phone || '';
+    document.getElementById('edit-birthday').value = user.user_metadata?.birthday || '';
+    
+    // Update preferences
+    const preferences = user.user_metadata?.style_preferences || [];
+    document.querySelectorAll('input[name="preferences"]').forEach(checkbox => {
+      checkbox.checked = preferences.includes(checkbox.value);
+    });
+    
+    // Update notification settings
+    document.getElementById('newsletter-subscription').checked = user.user_metadata?.newsletter_subscribed || false;
+  }
+  
+  async function loadDashboardData(user) {
+    try {
+      // Load user stats
+      await loadUserStats(user.id);
+      
+      // Load recent orders
+      await loadRecentOrders(user.id);
+      
+      // Load wishlist
+      await loadWishlist(user.id);
+      
+      // Load reviews
+      await loadReviews(user.id);
+      
+      // Load activity feed
+      await loadActivityFeed(user.id);
+      
+    } catch (error) {
+      console.error('Error loading dashboard data:', error);
+    }
+  }
+  
+  async function loadUserStats(userId) {
+    // This would typically fetch from your backend
+    // For now, we'll show placeholder data
+    document.getElementById('orders-count').textContent = '0';
+    document.getElementById('wishlist-count').textContent = '0';
+    document.getElementById('reviews-count').textContent = '0';
+  }
+  
+  async function loadRecentOrders(userId) {
+    const recentOrdersDiv = document.getElementById('recent-orders');
+    recentOrdersDiv.innerHTML = '<div class="loading-state">No recent orders found.</div>';
+  }
+  
+  async function loadWishlist(userId) {
+    const wishlistGrid = document.getElementById('wishlist-grid');
+    wishlistGrid.innerHTML = '<div class="loading-state">No items in wishlist.</div>';
+  }
+  
+  async function loadReviews(userId) {
+    const reviewsList = document.getElementById('reviews-list');
+    reviewsList.innerHTML = '<div class="loading-state">No reviews yet.</div>';
+  }
+  
+  async function loadActivityFeed(userId) {
+    const activityFeed = document.getElementById('activity-feed');
+    activityFeed.innerHTML = '<div class="loading-state">No recent activity.</div>';
+  }
+  
+  async function updateProfile() {
+    const formData = new FormData(profileEditForm);
+    const preferences = Array.from(document.querySelectorAll('input[name="preferences"]:checked'))
+      .map(cb => cb.value);
+    
+    const profileData = {
+      full_name: formData.get('full-name'),
+      phone: formData.get('phone'),
+      birthday: formData.get('birthday'),
+      style_preferences: preferences,
+      newsletter_subscribed: document.getElementById('newsletter-subscription').checked
+    };
+    
+    try {
+      if (window.supabaseClient) {
+        const result = await window.supabaseClient.updateUserProfile(profileData);
+        if (result.error) {
+          console.error('Profile update error:', result.error);
+          alert('Failed to update profile. Please try again.');
+        } else {
+          alert('Profile updated successfully!');
+          await loadUserProfile(result.data.user);
+        }
+      }
+    } catch (error) {
+      console.error('Profile update error:', error);
+      alert('An error occurred while updating your profile.');
+    }
+  }
+  
+  async function uploadAvatar(file) {
+    try {
+      // This would typically upload to Supabase Storage
+      // For now, we'll show a placeholder
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const avatarPlaceholder = document.getElementById('profile-avatar');
+        avatarPlaceholder.style.backgroundImage = `url(${e.target.result})`;
+        avatarPlaceholder.style.backgroundSize = 'cover';
+        avatarPlaceholder.style.backgroundPosition = 'center';
+        document.getElementById('avatar-initials').style.display = 'none';
+      };
+      reader.readAsDataURL(file);
+    } catch (error) {
+      console.error('Avatar upload error:', error);
+      alert('Failed to upload avatar. Please try again.');
+    }
+  }
+  
+  async function logout() {
+    try {
+      if (window.supabaseClient) {
+        await window.supabaseClient.signOut();
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  }
+  
+  function getInitials(name) {
+    if (!name) return 'U';
+    return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+  }
+  
+  function showLoginPrompt() {
+    dashboard.innerHTML = `
+      <div class="login-prompt">
+        <h2>Please Sign In</h2>
+        <p>You need to be signed in to view your profile.</p>
+        <button class="btn btn-primary" onclick="window.location.href='#user-profile-signup'">Sign In</button>
+      </div>
+    `;
+  }
+});
+</script>
+

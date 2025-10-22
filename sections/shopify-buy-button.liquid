@@ -1,0 +1,318 @@
+{% comment %}
+Shopify Buy Button SDK - Embed Products Without CSP Issues
+This uses Shopify's official SDK instead of iframes
+{% endcomment %}
+
+<!-- Mount point for Buy Button SDK -->
+<div id="shopify-buy-collection-{{ section.id }}" style="max-width:1200px;margin:0 auto;padding:20px;"></div>
+
+<!-- Shopify Buy Button SDK -->
+<script>
+(function () {
+  var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
+  if (window.ShopifyBuy && window.ShopifyBuy.UI) {
+    startBuyButton{{ section.id }}();
+  } else {
+    var script = document.createElement('script');
+    script.async = true;
+    script.src = scriptURL;
+    script.onload = startBuyButton{{ section.id }};
+    document.head.appendChild(script);
+  }
+
+  function startBuyButton{{ section.id }}() {
+    /* ====== Configuration from Theme Settings ====== */
+    var domain = '{{ section.settings.shopify_domain | default: shop.permanent_domain }}';
+    var storefrontAccessToken = '{{ section.settings.storefront_token }}';
+    /* ============================================= */
+
+    {% if section.settings.storefront_token == blank %}
+      console.warn('Shopify Buy Button: Please configure your Storefront Access Token in the theme settings.');
+      return;
+    {% endif %}
+
+    var client = ShopifyBuy.buildClient({ 
+      domain: domain, 
+      storefrontAccessToken: storefrontAccessToken 
+    });
+    
+    ShopifyBuy.UI.onReady(client).then(function (ui) {
+      {% if section.settings.embed_type == 'collection' %}
+        /* Render a Collection grid */
+        var collectionId = '{{ section.settings.collection_id }}';
+        if (!collectionId) {
+          console.warn('Shopify Buy Button: Please configure a Collection ID.');
+          return;
+        }
+        
+        ui.createComponent('collection', {
+          id: collectionId,
+          node: document.getElementById('shopify-buy-collection-{{ section.id }}'),
+          moneyFormat: '{{ shop.money_format | escape }}',
+          options: {
+            product: {
+              styles: {
+                product: { 
+                  "text-align": "left", 
+                  "border-radius": "{{ section.settings.border_radius | default: 16 }}px", 
+                  "box-shadow": "0 8px 20px rgba(0,0,0,.05)", 
+                  "padding": "16px" 
+                },
+                button: { 
+                  "border-radius": "9999px", 
+                  "padding": "12px 18px",
+                  "background-color": "{{ section.settings.button_color | default: '#000000' }}",
+                  "color": "{{ section.settings.button_text_color | default: '#ffffff' }}"
+                },
+                title: { "font-weight": "600" },
+                price: { "font-weight": "600", "color": "{{ section.settings.price_color | default: '#000000' }}" }
+              },
+              isButton: false,
+              contents: {
+                img: true, 
+                title: true, 
+                price: true, 
+                options: false
+              },
+              text: {
+                button: "{{ section.settings.button_text | default: 'Add to cart' }}"
+              }
+            },
+            productSet: {
+              styles: { 
+                products: { 
+                  "display": "grid", 
+                  "grid-template-columns": "repeat(auto-fill, minmax({{ section.settings.min_column_width | default: 220 }}px, 1fr))", 
+                  "gap": "{{ section.settings.grid_gap | default: 16 }}px" 
+                } 
+              }
+            },
+            modalProduct: {
+              contents: { 
+                img: true, 
+                imgWithCarousel: true, 
+                options: true, 
+                description: true 
+              }
+            },
+            cart: {
+              styles: {
+                footer: { "padding": "16px" },
+                title: { "font-weight": "700" }
+              },
+              text: {
+                total: "Subtotal",
+                button: "Checkout"
+              },
+              popup: {{ section.settings.cart_popup }}
+            },
+            toggle: {
+              styles: { 
+                toggle: { "border-radius": "9999px" } 
+              }
+            }
+          }
+        });
+      {% elsif section.settings.embed_type == 'product' %}
+        /* Render a single Product */
+        var productId = '{{ section.settings.product_id }}';
+        if (!productId) {
+          console.warn('Shopify Buy Button: Please configure a Product ID.');
+          return;
+        }
+        
+        ui.createComponent('product', {
+          id: productId,
+          node: document.getElementById('shopify-buy-collection-{{ section.id }}'),
+          moneyFormat: '{{ shop.money_format | escape }}',
+          options: { 
+            cart: { 
+              popup: {{ section.settings.cart_popup }} 
+            },
+            product: {
+              styles: {
+                button: {
+                  "background-color": "{{ section.settings.button_color | default: '#000000' }}",
+                  "color": "{{ section.settings.button_text_color | default: '#ffffff' }}",
+                  "border-radius": "9999px",
+                  "padding": "12px 24px"
+                }
+              },
+              text: {
+                button: "{{ section.settings.button_text | default: 'Add to cart' }}"
+              }
+            }
+          }
+        });
+      {% endif %}
+    });
+  }
+})();
+</script>
+
+<style>
+  #shopify-buy-collection-{{ section.id }} {
+    background: {{ section.settings.background_color | default: 'transparent' }};
+  }
+  
+  /* Dark mode support */
+  [data-theme="dark"] #shopify-buy-collection-{{ section.id }} {
+    background: {{ section.settings.dark_background_color | default: 'transparent' }};
+  }
+  
+  /* Responsive padding */
+  @media (max-width: 768px) {
+    #shopify-buy-collection-{{ section.id }} {
+      padding: 16px !important;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Shopify Buy Button",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "This section uses Shopify's Buy Button SDK to embed products without CSP iframe issues. Configure your Storefront API credentials below."
+    },
+    {
+      "type": "header",
+      "content": "API Configuration"
+    },
+    {
+      "type": "text",
+      "id": "shopify_domain",
+      "label": "Shopify Domain",
+      "default": "newthrifts.myshopify.com",
+      "info": "Your store's myshopify.com domain"
+    },
+    {
+      "type": "text",
+      "id": "storefront_token",
+      "label": "Storefront Access Token",
+      "info": "Get this from: Admin → Settings → Apps and channels → Develop apps → Create app → Configure Storefront API → Generate token"
+    },
+    {
+      "type": "header",
+      "content": "Embed Settings"
+    },
+    {
+      "type": "select",
+      "id": "embed_type",
+      "label": "Embed Type",
+      "options": [
+        {
+          "value": "collection",
+          "label": "Collection (multiple products)"
+        },
+        {
+          "value": "product",
+          "label": "Single Product"
+        }
+      ],
+      "default": "collection"
+    },
+    {
+      "type": "text",
+      "id": "collection_id",
+      "label": "Collection ID (GID)",
+      "info": "Format: gid://shopify/Collection/XXXXXXXXXXXX - Find this in your collection's admin URL"
+    },
+    {
+      "type": "text",
+      "id": "product_id",
+      "label": "Product ID (GID)",
+      "info": "Format: gid://shopify/Product/XXXXXXXXXXXX - Find this in your product's admin URL"
+    },
+    {
+      "type": "header",
+      "content": "Display Settings"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Add to cart"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button Background Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "price_color",
+      "label": "Price Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section Background Color",
+      "default": "transparent"
+    },
+    {
+      "type": "color",
+      "id": "dark_background_color",
+      "label": "Dark Mode Background Color",
+      "default": "transparent"
+    },
+    {
+      "type": "header",
+      "content": "Layout Settings"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Product Card Border Radius",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "min_column_width",
+      "min": 180,
+      "max": 400,
+      "step": 20,
+      "unit": "px",
+      "label": "Minimum Column Width",
+      "default": 220
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "label": "Grid Gap",
+      "default": 16
+    },
+    {
+      "type": "checkbox",
+      "id": "cart_popup",
+      "label": "Show Cart Popup",
+      "default": false,
+      "info": "Show cart as popup (true) or sidebar (false)"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shopify Buy Button",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}
+

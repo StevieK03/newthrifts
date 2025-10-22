@@ -1,0 +1,685 @@
+{% comment %}
+  Supabase Authentication Section
+  Provides user authentication functionality for Shopify theme
+{% endcomment %}
+
+<section id="supabase-auth-{{ section.id }}" class="supabase-auth-section">
+  <div class="auth-container">
+    <!-- Authentication Status -->
+    <div id="auth-status" class="auth-status" style="display: none;">
+      <div class="status-content">
+        <div class="user-info">
+          <div class="user-avatar">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+          <div class="user-details">
+            <span class="user-name" id="user-name">Loading...</span>
+            <span class="user-email" id="user-email">Loading...</span>
+          </div>
+        </div>
+        <button id="sign-out-btn" class="auth-btn sign-out-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <polyline points="16,17 21,12 16,7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="21" y1="12" x2="9" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Sign Out
+        </button>
+      </div>
+    </div>
+
+    <!-- Login Form -->
+    <div id="login-form" class="auth-form">
+      <div class="form-header">
+        <h3 class="form-title">Welcome Back</h3>
+        <p class="form-subtitle">Sign in to your account</p>
+      </div>
+      
+      <form id="signin-form" class="auth-form-content">
+        <div class="form-group">
+          <label for="signin-email" class="form-label">Email Address</label>
+          <input 
+            type="email" 
+            id="signin-email" 
+            name="email" 
+            class="form-input" 
+            placeholder="Enter your email"
+            required
+          >
+        </div>
+        
+        <div class="form-group">
+          <label for="signin-password" class="form-label">Password</label>
+          <input 
+            type="password" 
+            id="signin-password" 
+            name="password" 
+            class="form-input" 
+            placeholder="Enter your password"
+            required
+          >
+        </div>
+        
+        <button type="submit" class="auth-btn primary-btn" id="signin-submit">
+          <span class="btn-text">Sign In</span>
+          <div class="btn-loader" style="display: none;">
+            <div class="spinner"></div>
+          </div>
+        </button>
+      </form>
+      
+      <div class="form-footer">
+        <p class="form-switch">
+          Don't have an account? 
+          <button type="button" id="show-signup" class="form-link">Sign up</button>
+        </p>
+      </div>
+    </div>
+
+    <!-- Signup Form -->
+    <div id="signup-form" class="auth-form" style="display: none;">
+      <div class="form-header">
+        <h3 class="form-title">Create Account</h3>
+        <p class="form-subtitle">Join our community</p>
+      </div>
+      
+      <form id="signup-form-content" class="auth-form-content">
+        <div class="form-group">
+          <label for="signup-email" class="form-label">Email Address</label>
+          <input 
+            type="email" 
+            id="signup-email" 
+            name="email" 
+            class="form-input" 
+            placeholder="Enter your email"
+            required
+          >
+        </div>
+        
+        <div class="form-group">
+          <label for="signup-password" class="form-label">Password</label>
+          <input 
+            type="password" 
+            id="signup-password" 
+            name="password" 
+            class="form-input" 
+            placeholder="Create a password"
+            required
+            minlength="6"
+          >
+        </div>
+        
+        <div class="form-group">
+          <label for="signup-confirm" class="form-label">Confirm Password</label>
+          <input 
+            type="password" 
+            id="signup-confirm" 
+            name="confirm_password" 
+            class="form-input" 
+            placeholder="Confirm your password"
+            required
+          >
+        </div>
+        
+        <button type="submit" class="auth-btn primary-btn" id="signup-submit">
+          <span class="btn-text">Create Account</span>
+          <div class="btn-loader" style="display: none;">
+            <div class="spinner"></div>
+          </div>
+        </button>
+      </form>
+      
+      <div class="form-footer">
+        <p class="form-switch">
+          Already have an account? 
+          <button type="button" id="show-signin" class="form-link">Sign in</button>
+        </p>
+      </div>
+    </div>
+
+    <!-- Success/Error Messages -->
+    <div id="auth-messages" class="auth-messages" style="display: none;">
+      <div id="auth-success" class="message success" style="display: none;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <polyline points="22,4 12,14.01 9,11.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span id="success-message">Success!</span>
+      </div>
+      
+      <div id="auth-error" class="message error" style="display: none;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+          <line x1="15" y1="9" x2="9" y2="15" stroke="currentColor" stroke-width="2"/>
+          <line x1="9" y1="9" x2="15" y2="15" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        <span id="error-message">An error occurred</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Supabase Auth Styles */
+  .supabase-auth-section {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 24px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e5e7eb;
+  }
+
+  .auth-container {
+    width: 100%;
+  }
+
+  /* Auth Status */
+  .auth-status {
+    padding: 16px;
+    background: linear-gradient(135deg, #10b981, #059669);
+    border-radius: 8px;
+    color: white;
+  }
+
+  .status-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .user-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .user-name {
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .user-email {
+    font-size: 12px;
+    opacity: 0.8;
+  }
+
+  /* Auth Forms */
+  .auth-form {
+    width: 100%;
+  }
+
+  .form-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .form-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #111827;
+    margin: 0 0 8px 0;
+  }
+
+  .form-subtitle {
+    color: #6b7280;
+    font-size: 14px;
+    margin: 0;
+  }
+
+  .auth-form-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .form-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+  }
+
+  .form-input {
+    padding: 12px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    background: #ffffff;
+  }
+
+  .form-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  .form-input:invalid {
+    border-color: #ef4444;
+  }
+
+  /* Buttons */
+  .auth-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    min-height: 44px;
+  }
+
+  .primary-btn {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    color: white;
+    width: 100%;
+  }
+
+  .primary-btn:hover {
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  }
+
+  .sign-out-btn {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .sign-out-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  /* Form Footer */
+  .form-footer {
+    text-align: center;
+    margin-top: 16px;
+  }
+
+  .form-switch {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 0;
+  }
+
+  .form-link {
+    background: none;
+    border: none;
+    color: #3b82f6;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  .form-link:hover {
+    color: #2563eb;
+  }
+
+  /* Messages */
+  .auth-messages {
+    margin-top: 16px;
+  }
+
+  .message {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .message.success {
+    background: #d1fae5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+  }
+
+  .message.error {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fca5a5;
+  }
+
+  /* Loading States */
+  .btn-loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  /* Dark Mode Support */
+  [data-theme="dark"] .supabase-auth-section {
+    background: #1f2937;
+    border-color: #374151;
+  }
+
+  [data-theme="dark"] .form-title {
+    color: #f9fafb;
+  }
+
+  [data-theme="dark"] .form-subtitle {
+    color: #9ca3af;
+  }
+
+  [data-theme="dark"] .form-label {
+    color: #d1d5db;
+  }
+
+  [data-theme="dark"] .form-input {
+    background: #374151;
+    border-color: #4b5563;
+    color: #f9fafb;
+  }
+
+  [data-theme="dark"] .form-input:focus {
+    border-color: #3b82f6;
+  }
+
+  [data-theme="dark"] .form-switch {
+    color: #9ca3af;
+  }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    .supabase-auth-section {
+      margin: 16px;
+      padding: 20px;
+    }
+    
+    .form-title {
+      font-size: 20px;
+    }
+  }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const authSection = document.getElementById('supabase-auth-{{ section.id }}');
+  const authStatus = document.getElementById('auth-status');
+  const loginForm = document.getElementById('login-form');
+  const signupForm = document.getElementById('signup-form');
+  const authMessages = document.getElementById('auth-messages');
+  const successMessage = document.getElementById('auth-success');
+  const errorMessage = document.getElementById('auth-error');
+  const successText = document.getElementById('success-message');
+  const errorText = document.getElementById('error-message');
+
+  // Form elements
+  const signinForm = document.getElementById('signin-form');
+  const signupFormContent = document.getElementById('signup-form-content');
+  const showSignup = document.getElementById('show-signup');
+  const showSignin = document.getElementById('show-signin');
+  const signOutBtn = document.getElementById('sign-out-btn');
+
+  // User info elements
+  const userName = document.getElementById('user-name');
+  const userEmail = document.getElementById('user-email');
+
+  // Initialize authentication
+  initAuth();
+
+  async function initAuth() {
+    try {
+      // Wait for Supabase client to be available
+      if (typeof window.supabaseClient === 'undefined') {
+        console.log('⏳ Waiting for Supabase client...');
+        setTimeout(initAuth, 100);
+        return;
+      }
+
+      const client = await window.supabaseClient.getClient();
+      if (!client) {
+        console.error('❌ Supabase client not available');
+        return;
+      }
+
+      // Check current user
+      const { user, error } = await window.supabaseClient.getCurrentUser();
+      if (user && !error) {
+        showAuthenticatedState(user);
+      } else {
+        showUnauthenticatedState();
+      }
+
+      // Listen for auth state changes
+      client.auth.onAuthStateChange((event, session) => {
+        console.log('🔄 Auth state changed:', event, session?.user?.email);
+        if (session?.user) {
+          showAuthenticatedState(session.user);
+        } else {
+          showUnauthenticatedState();
+        }
+      });
+
+    } catch (error) {
+      console.error('❌ Auth initialization failed:', error);
+      showUnauthenticatedState();
+    }
+  }
+
+  function showAuthenticatedState(user) {
+    authStatus.style.display = 'block';
+    loginForm.style.display = 'none';
+    signupForm.style.display = 'none';
+    authMessages.style.display = 'none';
+
+    userName.textContent = user.user_metadata?.full_name || user.email;
+    userEmail.textContent = user.email;
+  }
+
+  function showUnauthenticatedState() {
+    authStatus.style.display = 'none';
+    loginForm.style.display = 'block';
+    signupForm.style.display = 'none';
+    authMessages.style.display = 'none';
+  }
+
+  function showMessage(type, message) {
+    authMessages.style.display = 'block';
+    successMessage.style.display = type === 'success' ? 'flex' : 'none';
+    errorMessage.style.display = type === 'error' ? 'flex' : 'none';
+    
+    if (type === 'success') {
+      successText.textContent = message;
+    } else {
+      errorText.textContent = message;
+    }
+
+    // Auto-hide after 5 seconds
+    setTimeout(() => {
+      authMessages.style.display = 'none';
+    }, 5000);
+  }
+
+  function setLoading(button, loading) {
+    const btnText = button.querySelector('.btn-text');
+    const btnLoader = button.querySelector('.btn-loader');
+    
+    if (loading) {
+      btnText.style.display = 'none';
+      btnLoader.style.display = 'block';
+      button.disabled = true;
+    } else {
+      btnText.style.display = 'block';
+      btnLoader.style.display = 'none';
+      button.disabled = false;
+    }
+  }
+
+  // Form switching
+  showSignup.addEventListener('click', () => {
+    loginForm.style.display = 'none';
+    signupForm.style.display = 'block';
+    authMessages.style.display = 'none';
+  });
+
+  showSignin.addEventListener('click', () => {
+    signupForm.style.display = 'none';
+    loginForm.style.display = 'block';
+    authMessages.style.display = 'none';
+  });
+
+  // Sign in form
+  signinForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const email = document.getElementById('signin-email').value;
+    const password = document.getElementById('signin-password').value;
+    const submitBtn = document.getElementById('signin-submit');
+
+    setLoading(submitBtn, true);
+
+    try {
+      const { data, error } = await window.supabaseClient.signIn(email, password);
+      
+      if (error) {
+        showMessage('error', error.message || 'Sign in failed');
+      } else {
+        showMessage('success', 'Welcome back!');
+        // Auth state change will handle the UI update
+      }
+    } catch (error) {
+      showMessage('error', 'An unexpected error occurred');
+    } finally {
+      setLoading(submitBtn, false);
+    }
+  });
+
+  // Sign up form
+  signupFormContent.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const email = document.getElementById('signup-email').value;
+    const password = document.getElementById('signup-password').value;
+    const confirmPassword = document.getElementById('signup-confirm').value;
+    const submitBtn = document.getElementById('signup-submit');
+
+    if (password !== confirmPassword) {
+      showMessage('error', 'Passwords do not match');
+      return;
+    }
+
+    if (password.length < 6) {
+      showMessage('error', 'Password must be at least 6 characters');
+      return;
+    }
+
+    setLoading(submitBtn, true);
+
+    try {
+      const { data, error } = await window.supabaseClient.signUp(email, password, {
+        full_name: email.split('@')[0] // Use email prefix as name
+      });
+      
+      if (error) {
+        showMessage('error', error.message || 'Sign up failed');
+      } else {
+        showMessage('success', 'Account created! Please check your email to verify your account.');
+        // Clear form
+        signupFormContent.reset();
+      }
+    } catch (error) {
+      showMessage('error', 'An unexpected error occurred');
+    } finally {
+      setLoading(submitBtn, false);
+    }
+  });
+
+  // Sign out
+  signOutBtn.addEventListener('click', async () => {
+    try {
+      const { error } = await window.supabaseClient.signOut();
+      if (error) {
+        showMessage('error', 'Sign out failed');
+      } else {
+        showMessage('success', 'Signed out successfully');
+      }
+    } catch (error) {
+      showMessage('error', 'An unexpected error occurred');
+    }
+  });
+});
+</script>
+
+{% schema %}
+{
+  "name": "Supabase Authentication",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Authentication Settings"
+    },
+    {
+      "type": "text",
+      "id": "supabase_url",
+      "label": "Supabase URL",
+      "info": "Your Supabase project URL"
+    },
+    {
+      "type": "text",
+      "id": "supabase_anon_key",
+      "label": "Supabase Anon Key",
+      "info": "Your Supabase anonymous key"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Supabase Authentication"
+    }
+  ]
+}
+{% endschema %}
+
+
+

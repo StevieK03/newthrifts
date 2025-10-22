@@ -1,0 +1,165 @@
+{% comment %}
+Simple Cart template — drop-in
+- Shows items, lets you update qty / remove
+- Checkout button
+- Uses Shopify form 'cart'
+{% endcomment %}
+
+<div class="cart-page-wrapper">
+<section class="container" style="max-width:1100px; margin:24px auto; padding:20px;">
+  <h1 style="font-family:'Bebas Neue', sans-serif; font-size:46px; margin:0 0 16px;">Your cart</h1>
+
+  {% if cart.item_count == 0 %}
+    <p>Your cart is empty.</p>
+    <p><a class="button button--primary continue-shopping-btn" href="{{ routes.all_products_collection_url }}">Continue shopping</a></p>
+  {% else %}
+    {% form 'cart', cart %}
+      <table style="width:100%; border-collapse:collapse;">
+        <thead>
+          <tr style="background: #334155; border-radius: 12px 12px 0 0; overflow: hidden;">
+            <th style="text-align:left; padding:16px 20px 16px 24px; font-weight: 600; color: #f8fafc; border-radius: 12px 0 0 0;">Item</th>
+            <th style="text-align:right; padding:16px 20px; font-weight: 600; color: #f8fafc;">Price</th>
+            <th style="text-align:center; padding:16px 20px; font-weight: 600; color: #f8fafc;">Qty</th>
+            <th style="text-align:right; padding:16px 24px 16px 20px; font-weight: 600; color: #f8fafc; border-radius: 0 12px 0 0;">Total</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for item in cart.items %}
+            <tr style="border-top:1px solid rgba(0,0,0,.08); background: #1e293b; border-radius: 0 0 12px 12px;">
+              <td style="padding:16px 20px 16px 24px;">
+                <a href="{{ item.url }}" style="text-decoration:none; color:#f8fafc; display:inline-flex; gap:10px; align-items:center;">
+                  {% if item.image %}
+                    <img
+                      src="{{ item.image | image_url: width: 120 }}"
+                      width="60" height="60"
+                      alt="{{ item.product.title | escape }}"
+                      style="width:60px; height:60px; object-fit:cover; border-radius:10px;">
+                  {% endif %}
+                  <span>
+                    {% comment %} Shorten product title to match homepage {% endcomment %}
+                    {% assign full_title = item.product.title %}
+                    {% assign short_title = full_title %}
+                    
+                    {% comment %} Handle specific long product names {% endcomment %}
+                    {% if full_title contains 'Boo-tiful Ghost Toddler Long Sleeve Tee' %}
+                      {% assign short_title = 'Boo-tiful Ghost Toddler Tee' %}
+                    {% elsif full_title contains 'Baby T-Shirt Cutest Pumpkin' %}
+                      {% assign short_title = 'Cutest Pumpkin Baby Tee' %}
+                    {% elsif full_title contains 'Butterfly Floral Boxy Tee' %}
+                      {% assign short_title = 'Butterfly Floral Boxy Tee' %}
+                    {% elsif full_title contains 'Miami Nights Boxy Tee for Women' %}
+                      {% assign short_title = 'Miami Nights Boxy Tee' %}
+                    {% elsif full_title contains 'BABY T-SHIRT' %}
+                      {% assign short_title = full_title | replace: 'BABY T-SHIRT', 'BABY TEE' %}
+                    {% elsif full_title contains 'TODDLER LONG SLEEVE TEE' %}
+                      {% assign short_title = full_title | replace: 'TODDLER LONG SLEEVE TEE, HALLOWEEN SHIRT, CUTE KIDS TEE, SPOOKY SEASON APPAREL, TODDLER HALLOWEEN CLOTHING', 'TODDLER TEE' %}
+                    {% elsif full_title contains 'HALLOWEEN' %}
+                      {% assign short_title = full_title | split: 'HALLOWEEN' | first | append: 'HALLOWEEN' %}
+                    {% endif %}
+                    
+                    {{ short_title }}{% unless item.variant.title == 'Default Title' %} — {{ item.variant.title }}{% endunless %}
+                  </span>
+                </a>
+
+                <!-- Remove link (non-JS fallback works) -->
+                <div>
+                  <a class="cart-remove"
+                     href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0"
+                     data-line="{{ forloop.index }}"
+                     style="color:#d00;cursor:pointer;text-decoration:underline; font-weight:600;">
+                    Remove
+                  </a>
+                </div>
+              </td>
+
+              <td style="text-align:right; white-space:nowrap; padding:16px 20px; color: #f8fafc;">
+                {{ item.final_price | money }}
+                {% if item.original_price > item.final_price %}
+                  <br><small style="opacity:.7; text-decoration:line-through;">{{ item.original_price | money }}</small>
+                {% endif %}
+              </td>
+
+              <td style="text-align:center; padding:16px 20px;">
+                <!-- Theme Check prefers key-based updates -->
+                <input
+                  name="updates[{{ item.key }}]"
+                  type="number"
+                  min="0"
+                  value="{{ item.quantity }}"
+                  inputmode="numeric"
+                  style="width:70px; padding:6px 8px; border:1px solid #475569; border-radius:8px; background: #334155; color: #f8fafc; text-align:center;">
+              </td>
+
+              <td style="text-align:right; white-space:nowrap; font-weight:600; padding:16px 24px 16px 20px; color: #f8fafc;">
+                {{ item.final_line_price | money }}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+
+        <tfoot style="border-top:2px solid rgba(0,0,0,.08);">
+          <tr style="background: #334155; border-radius: 0 0 12px 12px; overflow: hidden;">
+            <td style="padding:16px 20px 16px 24px; border-radius: 0 0 0 12px;"></td>
+            <td style="padding:16px 20px;"></td>
+            <td style="text-align:right; padding:16px 20px; font-weight:700; color: #f8fafc;">Subtotal</td>
+            <td style="text-align:right; padding:16px 24px 16px 20px; font-weight:700; color: #f8fafc; border-radius: 0 0 12px 0;">{{ cart.total_price | money }}</td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <div style="display:flex; gap:12px; justify-content:flex-end; margin-top:16px;">
+        <button type="submit" name="update" class="button" style="padding:10px 16px;">Update cart</button>
+        <button type="submit" name="checkout" class="button button--primary btn-glow" style="padding:10px 18px;">Checkout</button>
+      </div>
+    {% endform %}
+
+    <!-- Progressive enhancement: AJAX remove; falls back to link if it fails -->
+    <script src="{{ 'cart.js' | asset_url }}" defer></script>
+  {% endif %}
+</section>
+</div>
+
+<style>
+/* Cart Page Wrapper - Full Height Background */
+.cart-page-wrapper {
+  min-height: 100vh;
+  background: #f8fafc;
+  padding-bottom: 40px;
+}
+
+/* Dark Mode Background */
+[data-theme="dark"] .cart-page-wrapper {
+  background: #0f172a;
+}
+
+/* Continue Shopping Button - Dark Mode Support */
+.continue-shopping-btn {
+  display: inline-block;
+  padding: 12px 24px;
+  background: transparent !important;
+  border: 2px solid #1e293b !important;
+  color: #1e293b !important;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: none !important;
+}
+
+.continue-shopping-btn:hover {
+  background: #1e293b !important;
+  color: #f8fafc !important;
+}
+
+/* Dark Mode */
+[data-theme="dark"] .continue-shopping-btn {
+  border-color: #f8fafc !important;
+  color: #f8fafc !important;
+}
+
+[data-theme="dark"] .continue-shopping-btn:hover {
+  background: #f8fafc !important;
+  color: #1e293b !important;
+}
+</style>

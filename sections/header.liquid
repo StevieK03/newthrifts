@@ -1,0 +1,1375 @@
+<header id="Header-{{ section.id }}" class="nt-header" role="banner">
+  <div class="nt-header__wrap">
+    <!-- Logo -->
+    <div class="nt-header__logo">
+      {% if section.settings.logo != blank %}
+        <a href="{{ routes.root_url }}" class="nt-header__logo-link">
+          <img src="{{ section.settings.logo | img_url: '200x' }}" alt="{{ shop.name }}" class="nt-header__logo-img">
+        </a>
+      {% else %}
+        <a href="{{ routes.root_url }}" class="nt-header__logo-text">{{ section.settings.logo_text }}</a>
+      {% endif %}
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nt-header__nav" aria-label="Main navigation">
+      {% assign menu = section.settings.menu %}
+      {% if menu != blank %}
+        <ul class="nt-header__list">
+          {% for link in menu.links %}
+            <li><a href="{{ link.url }}" class="nt-header__link">{{ link.title }}</a></li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <!-- Fallback links if no menu chosen in settings -->
+        <ul class="nt-header__list">
+          <li><a href="/collections/all" class="nt-header__link">Shop</a></li>
+        </ul>
+      {% endif %}
+      
+    </nav>
+
+    <!-- Sign In Button / Account Menu -->
+    <div class="nt-header__signin">
+      {% if customer %}
+        <a href="{{ routes.account_url }}" class="nt-header__signin-link" aria-label="My account">
+          <svg class="user-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          <span class="signin-text">Account</span>
+        </a>
+      {% else %}
+        <a href="{{ routes.account_login_url }}" class="nt-header__signin-link" aria-label="Sign in">
+          <svg class="user-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          <span class="signin-text">Sign in</span>
+        </a>
+      {% endif %}
+    </div>
+
+    <!-- Dark Mode Toggle - Modern Design -->
+    <div class="nt-header__dark-mode">
+      <button class="dark-mode-toggle" id="dark-mode-toggle" aria-label="Toggle dark mode">
+        <div class="toggle-track">
+          <div class="toggle-slider">
+            <svg class="slider-icon" width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
+              <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+          <svg class="toggle-sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="12" cy="12" r="5" fill="currentColor"/>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          <svg class="toggle-moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="currentColor"/>
+          </svg>
+        </div>
+      </button>
+    </div>
+
+    <!-- Cart Button -->
+    <div class="nt-header__cart">
+      <a href="{{ routes.cart_url }}" class="nt-header__cart-link" aria-label="View cart">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="nt-header__cart-icon">
+          <path d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.5 5.1 16.5H17M17 13V17C17 17.6 16.6 18 16 18H8C7.4 18 7 17.6 7 17V13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="nt-header__cart-count" id="cart-count">{{ cart.item_count }}</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<style>
+  /* ===== Dark Mode CSS Variables ===== */
+  :root {
+    /* Light mode defaults - Clean & Teal Accented */
+    --bg-primary: #ffffff;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #f8fafc;
+    --bg-accent: #27e1c1;
+    --text-primary: #0f172a;
+    --text-secondary: #1e293b;
+    --text-muted: #64748b;
+    --text-accent: #27e1c1;
+    --border-primary: #e5e7eb;
+    --border-secondary: #27e1c1;
+    --button-primary: #27e1c1;
+    --button-primary-hover: #1fb89a;
+    --button-secondary: #475569;
+    --button-secondary-hover: #334155;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --error: #ef4444;
+    --info: #3b82f6;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    --glass-bg: rgba(255, 255, 255, 0.8);
+    --glass-border: rgba(148, 163, 184, 0.2);
+    --glass-backdrop: blur(16px);
+  }
+  
+  /* Dark mode variables */
+  :root[data-theme="dark"] {
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-tertiary: #334155;
+    --bg-accent: #475569;
+    --text-primary: #f8fafc;
+    --text-secondary: #e2e8f0;
+    --text-muted: #94a3b8;
+    --text-accent: #27e1c1;
+    --border-primary: #334155;
+    --border-secondary: #475569;
+    --button-primary: #27e1c1;
+    --button-primary-hover: #5fe9d0;
+    --button-secondary: #475569;
+    --button-secondary-hover: #334155;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --error: #ef4444;
+    --info: #3b82f6;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+    --glass-bg: rgba(15, 23, 42, 0.8);
+    --glass-border: rgba(148, 163, 184, 0.2);
+    --glass-backdrop: blur(16px);
+  }
+
+  /* ===== Modern Clean Header ===== */
+  #Header-{{ section.id }},
+  [data-theme="light"] #Header-{{ section.id }}{
+    background: #ffffff !important;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    position: relative;
+    z-index: 50;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+    border: none !important;
+    border-radius: 0;
+  }
+  
+  /* Dark mode header styling */
+  [data-theme="dark"] #Header-{{ section.id }} {
+    background: var(--glass-bg) !important;
+    backdrop-filter: var(--glass-backdrop);
+    -webkit-backdrop-filter: var(--glass-backdrop);
+    box-shadow: var(--shadow-lg), 0 4px 20px rgba(39, 225, 193, 0.15);
+    border: 1px solid rgba(39, 225, 193, 0.2);
+    border-bottom: 2px solid rgba(39, 225, 193, 0.3);
+  }
+  #Header-{{ section.id }} *{ box-sizing:border-box }
+  #Header-{{ section.id }} .nt-header__wrap{
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between;
+    padding: 20px 30px;
+    backdrop-filter: none !important; 
+    -webkit-backdrop-filter: none !important;
+    gap: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
+    flex-wrap: nowrap;
+  }
+  
+  /* Sign In Button Styling */
+  #Header-{{ section.id }} .nt-header__signin {
+    display: flex;
+    align-items: center;
+    margin-right: 12px;
+  }
+  
+  #Header-{{ section.id }} .nt-header__signin-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 12px 20px;
+    border-radius: 12px;
+    text-decoration: none;
+    color: white !important;
+    font-weight: 500;
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+    min-width: 120px;
+    height: 48px;
+    flex-shrink: 0;
+    gap: 8px;
+  }
+  
+  #Header-{{ section.id }} .nt-header__signin-link:hover {
+    background: rgba(0, 0, 0, 0.9);
+    color: white !important;
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+  
+  #Header-{{ section.id }} .user-icon {
+    color: white;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+  }
+  
+  #Header-{{ section.id }} .nt-header__signin-link:hover .user-icon {
+    transform: scale(1.05);
+    color: white;
+  }
+  
+  #Header-{{ section.id }} .signin-text {
+    font-size: 0.9rem;
+    white-space: nowrap;
+    color: white;
+    font-weight: 500;
+  }
+  
+  /* Dark mode sign in button styling */
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__signin-link {
+    background: rgba(71, 85, 105, 0.2);
+    border: 1px solid var(--border-primary);
+    color: var(--text-primary) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  }
+  
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__signin-link:hover {
+    background: rgba(59, 130, 246, 0.2);
+    border-color: var(--button-primary);
+    color: var(--text-accent) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  }
+  
+  [data-theme="dark"] #Header-{{ section.id }} .user-icon {
+    color: var(--text-primary);
+  }
+  
+  [data-theme="dark"] #Header-{{ section.id }} .signin-text {
+    color: var(--text-primary);
+  }
+
+  /* Dark Mode Toggle Styling - Modern Sliding Design */
+  /* ===== EPIC DARK MODE TOGGLE - Futuristic Design ===== */
+  #Header-{{ section.id }} .nt-header__dark-mode {
+    display: flex;
+    align-items: center;
+    margin-right: 12px;
+  }
+  
+  #Header-{{ section.id }} .dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 0;
+    border-radius: 50%;
+    border: none;
+    width: 56px;
+    height: 56px;
+    flex-shrink: 0;
+    cursor: pointer;
+    overflow: visible;
+    background: transparent;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* Outer glow ring */
+  #Header-{{ section.id }} .dark-mode-toggle::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ffd700, #ff6b35, #f72585, #4cc9f0);
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    animation: rotate-glow 3s linear infinite;
+    z-index: -1;
+  }
+  
+  #Header-{{ section.id }} .dark-mode-toggle:hover::before {
+    opacity: 0.6;
+  }
+  
+  /* Inner background circle */
+  #Header-{{ section.id }} .dark-mode-toggle::after {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ffd700 0%, #ffb347 50%, #ff8c42 100%);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 0;
+    box-shadow: 0 4px 20px rgba(255, 193, 7, 0.4),
+                inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  }
+  
+  /* Icon container */
+  #Header-{{ section.id }} .toggle-track {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+  }
+  
+  /* Orbiting Star */
+  #Header-{{ section.id }} .toggle-track::before {
+    content: '⭐';
+    position: absolute;
+    font-size: 14px;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: orbit-star 4s linear infinite, star-glow-pulse 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 4px rgba(255, 215, 0, 1)) 
+            drop-shadow(0 0 8px rgba(255, 193, 7, 0.9)) 
+            drop-shadow(0 0 12px rgba(255, 193, 7, 0.7))
+            drop-shadow(0 0 20px rgba(255, 215, 0, 0.5));
+    z-index: 10;
+    pointer-events: none;
+  }
+  
+  /* Different star color in dark mode with enhanced glow */
+  [data-theme="dark"] #Header-{{ section.id }} .toggle-track::before {
+    content: '⭐';
+    animation: orbit-star 4s linear infinite, star-glow-pulse-dark 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 4px rgba(147, 197, 253, 1)) 
+            drop-shadow(0 0 8px rgba(96, 165, 250, 1)) 
+            drop-shadow(0 0 16px rgba(59, 130, 246, 0.8))
+            drop-shadow(0 0 24px rgba(37, 99, 235, 0.6))
+            drop-shadow(0 0 32px rgba(29, 78, 216, 0.4));
+  }
+  
+  /* Sun/Moon Icon */
+  #Header-{{ section.id }} .toggle-slider {
+    position: relative;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: rotate(0deg) scale(1);
+  }
+  
+  #Header-{{ section.id }} .slider-icon {
+    color: #fff;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: rotate(0deg);
+  }
+  
+  /* Hover effect - Light Mode */
+  #Header-{{ section.id }} .dark-mode-toggle:hover {
+    transform: scale(1.1) rotate(10deg);
+  }
+  
+  #Header-{{ section.id }} .dark-mode-toggle:hover .slider-icon {
+    transform: rotate(90deg) scale(1.1);
+  }
+  
+  #Header-{{ section.id }} .dark-mode-toggle:active {
+    transform: scale(0.95);
+  }
+  
+  /* ===== DARK MODE STATE ===== */
+  [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle::before {
+    background: linear-gradient(135deg, #667eea, #764ba2, #f093fb, #4facfe);
+    opacity: 0.8;
+  }
+  
+  [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle:hover::before {
+    opacity: 1;
+  }
+  
+  [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle::after {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+    box-shadow: 0 4px 20px rgba(96, 165, 250, 0.5),
+                inset 0 2px 4px rgba(255, 255, 255, 0.1),
+                0 0 30px rgba(139, 92, 246, 0.3);
+  }
+  
+  [data-theme="dark"] #Header-{{ section.id }} .slider-icon {
+    color: #60a5fa;
+    filter: drop-shadow(0 0 8px rgba(96, 165, 250, 0.6));
+    animation: float-moon 3s ease-in-out infinite, pulse-moon 2s ease-in-out infinite;
+  }
+  
+  /* Moon craters - add texture */
+  [data-theme="dark"] #Header-{{ section.id }} .slider-icon::before {
+    content: '';
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    top: 8px;
+    left: 6px;
+    box-shadow: 6px 2px 0 1px rgba(0, 0, 0, 0.15),
+                2px -3px 0 1px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Animated stars around moon */
+  [data-theme="dark"] #Header-{{ section.id }} .toggle-slider::after {
+    content: '✦';
+    position: absolute;
+    color: #fbbf24;
+    font-size: 8px;
+    animation: twinkle-stars 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.8));
+  }
+  
+  [data-theme="dark"] #Header-{{ section.id }} .toggle-slider::before {
+    content: '✦';
+    position: absolute;
+    color: #a78bfa;
+    font-size: 6px;
+    top: 4px;
+    right: -8px;
+    animation: twinkle-stars 2.5s ease-in-out infinite 0.5s;
+    filter: drop-shadow(0 0 3px rgba(167, 139, 250, 0.8));
+  }
+  
+  /* Additional sparkles */
+  [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle::after {
+    box-shadow: 0 4px 20px rgba(96, 165, 250, 0.5),
+                inset 0 2px 4px rgba(255, 255, 255, 0.1),
+                0 0 30px rgba(139, 92, 246, 0.3),
+                -15px -15px 0 -10px rgba(251, 191, 36, 0.6),
+                15px 15px 0 -10px rgba(167, 139, 250, 0.6);
+  }
+  
+  [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle:hover {
+    transform: scale(1.1) rotate(-10deg);
+  }
+  
+  [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle:hover .slider-icon {
+    transform: rotate(-90deg) scale(1.1);
+    filter: drop-shadow(0 0 16px rgba(96, 165, 250, 1)) drop-shadow(0 0 8px rgba(167, 139, 250, 0.8));
+    animation: float-moon 3s ease-in-out infinite, pulse-moon 1s ease-in-out infinite;
+  }
+  
+  /* Shooting star effect on click */
+  [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle.clicked::before {
+    background: linear-gradient(135deg, #667eea, #764ba2, #f093fb, #4facfe);
+    opacity: 1;
+    animation: rotate-glow 0.5s linear, pulse-ring 0.8s ease-out;
+  }
+  
+  /* ===== EPIC ANIMATIONS ===== */
+  @keyframes orbit-star {
+    0% {
+      transform: rotate(0deg) translateX(35px) rotate(0deg);
+      opacity: 1;
+    }
+    25% {
+      opacity: 0.7;
+      transform: rotate(90deg) translateX(35px) rotate(-90deg) scale(1.2);
+    }
+    50% {
+      opacity: 1;
+      transform: rotate(180deg) translateX(35px) rotate(-180deg);
+    }
+    75% {
+      opacity: 0.7;
+      transform: rotate(270deg) translateX(35px) rotate(-270deg) scale(0.8);
+    }
+    100% {
+      transform: rotate(360deg) translateX(35px) rotate(-360deg);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes rotate-glow {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 4px 20px rgba(255, 193, 7, 0.4),
+                  inset 0 2px 4px rgba(255, 255, 255, 0.3);
+    }
+    50% {
+      box-shadow: 0 4px 30px rgba(255, 193, 7, 0.6),
+                  inset 0 2px 4px rgba(255, 255, 255, 0.3);
+    }
+  }
+  
+  @keyframes pulse-glow-dark {
+    0%, 100% {
+      box-shadow: 0 4px 20px rgba(96, 165, 250, 0.5),
+                  inset 0 2px 4px rgba(255, 255, 255, 0.1),
+                  0 0 30px rgba(139, 92, 246, 0.3);
+    }
+    50% {
+      box-shadow: 0 4px 30px rgba(96, 165, 250, 0.7),
+                  inset 0 2px 4px rgba(255, 255, 255, 0.1),
+                  0 0 40px rgba(139, 92, 246, 0.5);
+    }
+  }
+  
+  @keyframes icon-spin {
+    0% {
+      transform: rotate(0deg) scale(1);
+    }
+    50% {
+      transform: rotate(180deg) scale(0.8);
+    }
+    100% {
+      transform: rotate(360deg) scale(1);
+    }
+  }
+  
+  /* Click animation */
+  #Header-{{ section.id }} .dark-mode-toggle.clicked .toggle-slider {
+    animation: icon-spin 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  #Header-{{ section.id }} .dark-mode-toggle.clicked::after {
+    animation: pulse-glow 0.8s ease-out;
+  }
+  
+  [data-theme="dark"] #Header-{{ section.id }} .dark-mode-toggle.clicked::after {
+    animation: pulse-glow-dark 0.8s ease-out;
+  }
+  
+  /* Moon floating animation */
+  @keyframes float-moon {
+    0%, 100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    25% {
+      transform: translateY(-3px) rotate(-2deg);
+    }
+    50% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    75% {
+      transform: translateY(3px) rotate(2deg);
+    }
+  }
+  
+  /* Moon pulse glow */
+  @keyframes pulse-moon {
+    0%, 100% {
+      filter: drop-shadow(0 0 8px rgba(96, 165, 250, 0.6));
+    }
+    50% {
+      filter: drop-shadow(0 0 16px rgba(96, 165, 250, 0.9)) drop-shadow(0 0 8px rgba(167, 139, 250, 0.6));
+    }
+  }
+  
+  /* Twinkling stars */
+  @keyframes twinkle-stars {
+    0%, 100% {
+      opacity: 0.3;
+      transform: scale(0.8) rotate(0deg);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.2) rotate(180deg);
+    }
+  }
+  
+  /* Star glow pulse for light mode */
+  @keyframes star-glow-pulse {
+    0%, 100% {
+      filter: drop-shadow(0 0 4px rgba(255, 215, 0, 1)) 
+              drop-shadow(0 0 8px rgba(255, 193, 7, 0.9)) 
+              drop-shadow(0 0 12px rgba(255, 193, 7, 0.7))
+              drop-shadow(0 0 20px rgba(255, 215, 0, 0.5));
+    }
+    50% {
+      filter: drop-shadow(0 0 6px rgba(255, 215, 0, 1)) 
+              drop-shadow(0 0 12px rgba(255, 193, 7, 1)) 
+              drop-shadow(0 0 20px rgba(255, 193, 7, 0.9))
+              drop-shadow(0 0 28px rgba(255, 215, 0, 0.7))
+              drop-shadow(0 0 36px rgba(255, 215, 0, 0.5));
+    }
+  }
+  
+  /* Star glow pulse for dark mode */
+  @keyframes star-glow-pulse-dark {
+    0%, 100% {
+      filter: drop-shadow(0 0 4px rgba(147, 197, 253, 1)) 
+              drop-shadow(0 0 8px rgba(96, 165, 250, 1)) 
+              drop-shadow(0 0 16px rgba(59, 130, 246, 0.8))
+              drop-shadow(0 0 24px rgba(37, 99, 235, 0.6))
+              drop-shadow(0 0 32px rgba(29, 78, 216, 0.4));
+    }
+    50% {
+      filter: drop-shadow(0 0 6px rgba(147, 197, 253, 1)) 
+              drop-shadow(0 0 12px rgba(96, 165, 250, 1)) 
+              drop-shadow(0 0 20px rgba(59, 130, 246, 1))
+              drop-shadow(0 0 32px rgba(37, 99, 235, 0.9))
+              drop-shadow(0 0 44px rgba(29, 78, 216, 0.7))
+              drop-shadow(0 0 56px rgba(30, 64, 175, 0.5));
+    }
+  }
+  
+  /* Pulse ring on click */
+  @keyframes pulse-ring {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 0.8;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 0.6;
+    }
+  }
+  
+  /* Floating particles effect */
+  @keyframes float-particle {
+    0%, 100% {
+      transform: translate(0, 0) scale(1);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      transform: translate(var(--tx), var(--ty)) scale(0);
+      opacity: 0;
+    }
+  }
+
+  /* Cart Button Styling - Matches navigation buttons */
+  #Header-{{ section.id }} .nt-header__cart {
+    display: flex;
+    align-items: center;
+  }
+  
+  #Header-{{ section.id }} .nt-header__cart-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 12px 20px;
+    border-radius: 12px;
+    text-decoration: none;
+    color: white !important;
+    font-weight: 500;
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+    min-width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+  }
+  
+  #Header-{{ section.id }} .nt-header__cart-link:hover {
+    background: rgba(0, 0, 0, 0.9);
+    color: white !important;
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+  
+  #Header-{{ section.id }} .nt-header__cart-icon {
+    color: white;
+    transition: all 0.3s ease;
+    width: 20px;
+    height: 20px;
+  }
+  
+  #Header-{{ section.id }} .nt-header__cart-link:hover .nt-header__cart-icon {
+    transform: scale(1.05);
+    color: white;
+  }
+  
+  /* Dark mode cart button styling */
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__cart-link {
+    background: rgba(71, 85, 105, 0.2);
+    border: 1px solid var(--border-primary);
+    color: var(--text-primary) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  }
+  
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__cart-link:hover {
+    background: rgba(59, 130, 246, 0.2);
+    border-color: var(--button-primary);
+    color: var(--text-accent) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  }
+  
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__cart-icon {
+    color: var(--text-primary);
+  }
+  
+  #Header-{{ section.id }} .nt-header__cart-count {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: #dc2626;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    min-width: 20px;
+  }
+  
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+  
+  /* Mobile touch improvements */
+  @media (max-width: 768px) {
+    #Header-{{ section.id }} .nt-header__link:active {
+      transform: scale(0.95);
+      transition: transform 0.1s ease;
+    }
+    
+    #Header-{{ section.id }} .nt-header__cart-link:active {
+      transform: scale(0.95);
+      transition: transform 0.1s ease;
+    }
+    
+    #Header-{{ section.id }} .wishlist-toggle:active {
+      transform: scale(0.95);
+      transition: transform 0.1s ease;
+    }
+    
+    /* Improved scrollbar for navigation */
+    #Header-{{ section.id }} .nt-header__nav::-webkit-scrollbar {
+      height: 2px;
+    }
+    
+    #Header-{{ section.id }} .nt-header__nav::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 1px;
+    }
+    
+    #Header-{{ section.id }} .nt-header__nav::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 1px;
+    }
+  }
+  
+  #Header-{{ section.id }} .nt-header__cart-count:empty {
+    display: none;
+  }
+
+  /* Mobile header adjustments */
+  @media (max-width: 768px) {
+    #Header-{{ section.id }} {
+      border-radius: 0 0 15px 15px;
+      backdrop-filter: blur(15px) saturate(150%);
+      -webkit-backdrop-filter: blur(15px) saturate(150%);
+      overflow-x: hidden;
+      max-width: 100vw;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    
+    #Header-{{ section.id }} .nt-header__wrap {
+      justify-content: space-between;
+      gap: 8px;
+      padding: 12px 15px;
+      flex-wrap: nowrap;
+      min-height: 60px;
+      overflow-x: hidden;
+      overflow-y: visible;
+      max-width: 100vw;
+      box-sizing: border-box;
+    }
+    
+    #Header-{{ section.id }} .nt-header__logo {
+      margin-left: 0;
+      flex-shrink: 0;
+      flex: 0 0 auto;
+    }
+    
+    #Header-{{ section.id }} .nt-header__logo-img { 
+      max-height: 50px; 
+      width: auto;
+    }
+    
+    #Header-{{ section.id }} .nt-header__logo-text {
+      font-size: 1.4rem;
+      line-height: 1.2;
+    }
+    
+    #Header-{{ section.id }} .nt-header__nav {
+      flex-shrink: 1;
+      min-width: 0;
+      overflow: hidden;
+      flex: 1 1 auto;
+      max-width: 50%;
+    }
+    
+    #Header-{{ section.id }} .nt-header__list {
+      gap: 0;
+      flex-wrap: nowrap;
+      padding: 0;
+      display: flex;
+      align-items: center;
+    }
+    
+    #Header-{{ section.id }} .nt-header__link {
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      border-radius: 25px;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      flex-shrink: 0;
+    }
+    
+    /* Mobile sign in button adjustments */
+    #Header-{{ section.id }} .nt-header__signin {
+      flex-shrink: 0;
+      margin-right: 0;
+      flex: 0 0 auto;
+    }
+    
+    #Header-{{ section.id }} .nt-header__signin-link {
+      padding: 10px 16px;
+      min-width: 100px;
+      height: 40px;
+      border-radius: 25px;
+      gap: 6px;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    #Header-{{ section.id }} .user-icon {
+      width: 16px;
+      height: 16px;
+    }
+    
+    #Header-{{ section.id }} .signin-text {
+      font-size: 0.8rem;
+    }
+
+    /* Mobile dark mode toggle adjustments */
+    #Header-{{ section.id }} .nt-header__dark-mode {
+      flex-shrink: 0;
+      margin-right: 0;
+      flex: 0 0 auto;
+    }
+    
+    #Header-{{ section.id }} .dark-mode-toggle {
+      width: 48px;
+      height: 48px;
+      padding: 0;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    #Header-{{ section.id }} .toggle-slider {
+      width: 24px;
+      height: 24px;
+    }
+    
+    #Header-{{ section.id }} .toggle-sun-icon,
+    #Header-{{ section.id }} .toggle-moon-icon {
+      width: 14px;
+      height: 14px;
+    }
+    
+    #Header-{{ section.id }} .slider-icon {
+      width: 12px;
+      height: 12px;
+    }
+    
+    [data-theme="dark"] #Header-{{ section.id }} .toggle-slider {
+      left: calc(100% - 29px);
+    }
+    
+    /* Mobile orbiting star - smaller and closer orbit */
+    #Header-{{ section.id }} .toggle-track::before {
+      font-size: 10px;
+      width: 14px;
+      height: 14px;
+      animation: orbit-star-mobile 4s linear infinite, star-glow-pulse 2s ease-in-out infinite;
+    }
+    
+    /* Dark mode glow on mobile */
+    [data-theme="dark"] #Header-{{ section.id }} .toggle-track::before {
+      animation: orbit-star-mobile 4s linear infinite, star-glow-pulse-dark 2s ease-in-out infinite;
+    }
+    
+    @keyframes orbit-star-mobile {
+      0% {
+        transform: rotate(0deg) translateX(28px) rotate(0deg);
+        opacity: 1;
+      }
+      25% {
+        opacity: 0.7;
+        transform: rotate(90deg) translateX(28px) rotate(-90deg) scale(1.1);
+      }
+      50% {
+        opacity: 1;
+        transform: rotate(180deg) translateX(28px) rotate(-180deg);
+      }
+      75% {
+        opacity: 0.7;
+        transform: rotate(270deg) translateX(28px) rotate(-270deg) scale(0.9);
+      }
+      100% {
+        transform: rotate(360deg) translateX(28px) rotate(-360deg);
+        opacity: 1;
+      }
+    }
+
+    /* Mobile cart button adjustments */
+    #Header-{{ section.id }} .nt-header__cart {
+      flex-shrink: 0;
+      flex: 0 0 auto;
+    }
+    
+    #Header-{{ section.id }} .nt-header__cart-link {
+      padding: 10px 14px;
+      min-width: 40px;
+      height: 40px;
+      border-radius: 25px;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      flex-shrink: 0;
+    }
+    
+    #Header-{{ section.id }} .nt-header__cart-icon {
+      width: 18px;
+      height: 18px;
+    }
+    
+    #Header-{{ section.id }} .nt-header__cart-count {
+      width: 18px;
+      height: 18px;
+      font-size: 10px;
+      top: -4px;
+      right: -4px;
+      min-width: 18px;
+    }
+    
+    #Header-{{ section.id }} .header-wishlist {
+      margin-left: 12px;
+    }
+    
+    #Header-{{ section.id }} .wishlist-toggle {
+      width: 40px;
+      height: 40px;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      flex-shrink: 0;
+    }
+  }
+  
+  /* Extra small mobile screens */
+  @media (max-width: 480px) {
+    #Header-{{ section.id }} .nt-header__wrap {
+      padding: 10px 12px;
+      gap: 8px;
+      min-height: 56px;
+    }
+    
+    #Header-{{ section.id }} .nt-header__logo-text {
+      font-size: 1.2rem;
+    }
+    
+    #Header-{{ section.id }} .nt-header__logo-img { 
+      max-height: 45px; 
+    }
+    
+    #Header-{{ section.id }} .nt-header__link {
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      min-height: 40px;
+    }
+    
+    #Header-{{ section.id }} .nt-header__signin-link {
+      padding: 8px 12px;
+      min-width: 90px;
+      height: 40px;
+      gap: 4px;
+    }
+    
+    #Header-{{ section.id }} .user-icon {
+      width: 14px;
+      height: 14px;
+    }
+    
+    #Header-{{ section.id }} .signin-text {
+      font-size: 0.75rem;
+    }
+    
+    #Header-{{ section.id }} .nt-header__cart-link {
+      padding: 10px 12px;
+      min-width: 48px;
+      height: 40px;
+    }
+    
+    #Header-{{ section.id }} .nt-header__cart-icon {
+      width: 18px;
+      height: 18px;
+    }
+    
+    #Header-{{ section.id }} .dark-mode-toggle {
+      width: 38px;
+      height: 38px;
+      border-width: 1px;
+    }
+    
+    #Header-{{ section.id }} .dark-mode-toggle svg {
+      width: 16px;
+      height: 16px;
+    }
+    
+    #Header-{{ section.id }} .wishlist-toggle {
+      width: 40px;
+      height: 40px;
+    }
+  }
+  #Header-{{ section.id }} .nt-header__logo-img{ max-height:80px; display:block }
+  #Header-{{ section.id }} .nt-header__logo-text{
+    font-weight: 800; 
+    text-decoration: none;
+    color: #1f2937 !important;
+    font-size: 2rem;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    letter-spacing: -0.02em;
+    transition: all 0.3s ease;
+  }
+  
+  #Header-{{ section.id }} .nt-header__logo-text:hover {
+    transform: scale(1.05);
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Dark mode logo styling - match button text color */
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__logo-text {
+    color: white !important;
+    text-shadow: 0 0 10px rgba(96, 165, 250, 0.3);
+  }
+  
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__logo-text:hover {
+    text-shadow: 0 0 15px rgba(96, 165, 250, 0.5);
+  }
+  
+  /* Dark mode logo image styling - invert and brighten for visibility */
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__logo-img {
+    filter: brightness(0) invert(1) drop-shadow(0 4px 8px rgba(255, 255, 255, 0.2));
+  }
+  
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__logo-img:hover {
+    filter: brightness(0) invert(1) drop-shadow(0 4px 12px rgba(96, 165, 250, 0.4));
+  }
+  
+  #Header-{{ section.id }} .nt-header__list{
+    display: flex; 
+    gap: 8px; 
+    list-style: none; 
+    margin: 0; 
+    padding: 0;
+    flex-shrink: 1;
+    min-width: 0;
+  }
+  #Header-{{ section.id }} .nt-header__link{
+    text-decoration: none; 
+    color: #1f2937 !important; 
+    font-weight: 600;
+    padding: 12px 20px;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    font-size: 0.9rem;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  
+  #Header-{{ section.id }} .nt-header__link:hover{
+    background: rgba(39, 225, 193, 0.2);
+    color: #27e1c1 !important;
+    transform: translateY(-1px);
+    border-color: rgba(39, 225, 193, 0.5);
+    box-shadow: 0 0 15px rgba(39, 225, 193, 0.3);
+  }
+  
+  /* Removed shine effect to clean up header */
+  
+  /* Restore proper header styling */
+  #Header-{{ section.id }} {
+    background: var(--glass-bg, rgba(255, 255, 255, 0.1)) !important;
+    backdrop-filter: var(--glass-backdrop, blur(20px)) saturate(180%) !important;
+    -webkit-backdrop-filter: var(--glass-backdrop, blur(20px)) saturate(180%) !important;
+  }
+  
+  /* Button styling with proper backgrounds */
+  #Header-{{ section.id }} .nt-header__signin-link,
+  #Header-{{ section.id }} .dark-mode-toggle,
+  #Header-{{ section.id }} .nt-header__cart-link {
+    background: rgba(0, 0, 0, 0.8) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  }
+  
+  /* Ensure text and icons are visible */
+  #Header-{{ section.id }} .nt-header__signin-link,
+  #Header-{{ section.id }} .nt-header__signin-link span,
+  #Header-{{ section.id }} .nt-header__link {
+    color: white !important;
+  }
+  
+  /* Navigation links styling */
+  #Header-{{ section.id }} .nt-header__link {
+    background: rgba(0, 0, 0, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+    padding: 8px 16px !important;
+    border-radius: 12px !important;
+    text-decoration: none !important;
+    transition: all 0.3s ease !important;
+  }
+  
+  #Header-{{ section.id }} .nt-header__link:hover {
+    background: rgba(0, 0, 0, 0.3) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    color: white !important;
+  }
+  
+  /* Specific overrides for icons */
+  #Header-{{ section.id }} .user-icon,
+  #Header-{{ section.id }} .nt-header__cart-icon,
+  #Header-{{ section.id }} .moon-icon {
+    color: white !important;
+  }
+  
+  /* Moon icon special color */
+  #Header-{{ section.id }} .moon-icon {
+    color: #ffa500 !important;
+  }
+
+  /* Shop Button - Light Mode with Teal Accent */
+  #Header-{{ section.id }} .nt-header__link,
+  [data-theme="light"] #Header-{{ section.id }} .nt-header__link {
+    background: rgba(0, 0, 0, 0.8) !important;
+    border: 1px solid rgba(39, 225, 193, 0.3) !important;
+    color: white !important;
+  }
+
+  #Header-{{ section.id }} .nt-header__link:hover,
+  [data-theme="light"] #Header-{{ section.id }} .nt-header__link:hover {
+    background: rgba(39, 225, 193, 0.25) !important;
+    border-color: rgba(39, 225, 193, 0.7) !important;
+    color: #27e1c1 !important;
+    box-shadow: 0 0 25px rgba(39, 225, 193, 0.6) !important;
+  }
+
+  /* Dark Mode - Shop Button */
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__link {
+    background: rgba(71, 85, 105, 0.2) !important;
+    border: 1px solid var(--border-primary) !important;
+    color: var(--text-primary) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  }
+
+  [data-theme="dark"] #Header-{{ section.id }} .nt-header__link:hover {
+    background: rgba(39, 225, 193, 0.2) !important;
+    border-color: var(--button-primary) !important;
+    color: #27e1c1 !important;
+    box-shadow: 0 0 20px rgba(39, 225, 193, 0.4), 0 6px 20px rgba(0, 0, 0, 0.4);
+  }
+</style>
+
+<script>
+// Set light theme as default
+(function() {
+  // Check if user has a stored preference, otherwise default to light
+  const storedTheme = localStorage.getItem('theme');
+  const theme = storedTheme || 'light';
+  document.documentElement.setAttribute('data-theme', theme);
+  
+  // Remove any white boxes from header
+  function removeWhiteBoxes() {
+    const header = document.querySelector('header');
+    if (header) {
+      // Find and remove any elements with white background
+      const whiteElements = header.querySelectorAll('*');
+      whiteElements.forEach(el => {
+        const style = window.getComputedStyle(el);
+        const bgColor = style.backgroundColor;
+        if (bgColor === 'rgb(255, 255, 255)' || bgColor === 'white' || bgColor === '#ffffff') {
+          // Check if it's not one of our intended buttons
+          if (!el.classList.contains('nt-header__signin-link') && 
+              !el.classList.contains('dark-mode-toggle') && 
+              !el.classList.contains('nt-header__cart-link') &&
+              !el.classList.contains('wishlist-toggle') &&
+              el.id !== 'header-wishlist-toggle') {
+            el.style.display = 'none';
+          }
+        }
+      });
+    }
+  }
+  
+  // Run immediately and after DOM is ready
+  removeWhiteBoxes();
+  document.addEventListener('DOMContentLoaded', removeWhiteBoxes);
+  
+  // Also run after a short delay to catch dynamically added elements
+  setTimeout(removeWhiteBoxes, 1000);
+})();
+
+// Update cart count dynamically
+function updateCartCount() {
+  fetch('/cart.js')
+    .then(response => response.json())
+    .then(cart => {
+      const cartCountElement = document.getElementById('cart-count');
+      if (cartCountElement) {
+        cartCountElement.textContent = cart.item_count;
+        
+        // Hide count badge if cart is empty
+        if (cart.item_count === 0) {
+          cartCountElement.style.display = 'none';
+        } else {
+          cartCountElement.style.display = 'flex';
+        }
+      }
+    })
+    .catch(error => console.error('Error updating cart count:', error));
+}
+
+// Listen for cart updates
+document.addEventListener('DOMContentLoaded', function() {
+  // Update cart count on page load
+  updateCartCount();
+  
+  // Listen for custom cart update events
+  document.addEventListener('cart:updated', updateCartCount);
+  
+  // Listen for cart form submissions
+  document.addEventListener('submit', function(e) {
+    if (e.target.classList.contains('product-form') || 
+        e.target.querySelector('input[name="add"]')) {
+      setTimeout(updateCartCount, 1000); // Update after form submission
+    }
+  });
+});
+
+// Global function to trigger cart count update
+window.updateCartCount = updateCartCount;
+
+// Dark Mode Functionality
+class DarkMode {
+  constructor() {
+    this.toggle = document.getElementById('dark-mode-toggle');
+    // Get current theme from DOM or localStorage, default to dark
+    this.currentTheme = document.documentElement.getAttribute('data-theme') || this.getStoredTheme() || 'dark';
+    this.init();
+  }
+
+  init() {
+    // Only apply theme if it's not already set
+    if (!document.documentElement.getAttribute('data-theme')) {
+      this.applyTheme(this.currentTheme);
+    }
+    this.toggle?.addEventListener('click', () => this.toggleTheme());
+    
+    // Listen for system theme changes (only if no stored preference)
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (!this.getStoredTheme()) {
+        // Keep dark mode as default even if system changes
+        this.applyTheme('dark');
+      }
+    });
+  }
+
+  getSystemTheme() {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+
+  getStoredTheme() {
+    return localStorage.getItem('theme');
+  }
+
+  setStoredTheme(theme) {
+    localStorage.setItem('theme', theme);
+  }
+
+  applyTheme(theme) {
+    this.currentTheme = theme;
+    document.documentElement.setAttribute('data-theme', theme);
+    this.setStoredTheme(theme);
+  }
+
+  toggleTheme() {
+    const newTheme = this.currentTheme === 'dark' ? 'light' : 'dark';
+    this.applyTheme(newTheme);
+    
+    // Add beautiful animation feedback
+    if (this.toggle) {
+      this.toggle.classList.add('clicked');
+      
+      setTimeout(() => {
+        this.toggle.classList.remove('clicked');
+      }, 800);
+    }
+  }
+}
+
+// Initialize dark mode when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  new DarkMode();
+});
+</script>
+
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    { 
+      "type": "image_picker", 
+      "id": "logo", 
+      "label": "Upload Your Logo",
+      "info": "Recommended size: 400px wide. PNG with transparent background works best."
+    },
+    { 
+      "type": "text", 
+      "id": "logo_text", 
+      "label": "Logo text (fallback)", 
+      "default": "New Thrifts",
+      "info": "Used when no logo image is uploaded"
+    },
+    { "type": "link_list", "id": "menu", "label": "Main menu" }
+  ]
+}
+{% endschema %}

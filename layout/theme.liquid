@@ -1,0 +1,1347 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <title>{% if page_title %}{{ page_title }} – {% endif %}{{ shop.name }}</title>
+
+    {%- comment -%} ✅ Mobile Optimization for all devices {%- endcomment -%}
+    {% render 'mobile-optimization' %}
+
+    {%- comment -%} Use Primary accent for browser UI color (falls back if not set) {%- endcomment -%}
+    <meta name="theme-color" content="{{ settings.accent | default: '#27e1c1' }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ 'base.css' | asset_url }}?v={{ 'now' | date: '%s' }}" />
+
+    {%- comment -%} ✅ Dark Mode styles {%- endcomment -%}
+    {{ 'dark-mode.css' | asset_url | stylesheet_tag }}
+    
+    {%- comment -%} ✅ Size Chart Styles {%- endcomment -%}
+    {{ 'size-chart.css' | asset_url | stylesheet_tag }}
+
+    {%- comment -%} ✅ Halloween styles (global include) {%- endcomment -%}
+    {{ 'halloween.css' | asset_url | stylesheet_tag }}
+
+    {%- comment -%}
+      Moved the “force-brand-teal” block into <head> (valid HTML)
+    {%- endcomment -%}
+     <style id="force-brand-teal">
+      :root{ --brand-teal: rgb(0, 0, 0); } /* your teal */
+
+      /* Higher specificity + !important so it beats any earlier .brand-line rules */
+      html body header.header .brand-title .brand-line{
+        color: var(--brand-teal) !important;
+
+      /* Make sure pills stay red-glow too (even if --accent is pink) */
+      html body header.header .nav a{
+        box-shadow: 0 4px 14px rgba(241, 20, 31, 0.18), 0 0 10px rgba(242, 10, 2, 0.94) !important;
+        border: 1px solid rgba(246, 5, 5, 0.25) !important;
+      }
+      html body header.header .nav a:hover{
+        background: rgba(39,225,193,.10) !important;
+        border-color: rgba(39,225,193,.45) !important;
+        box-shadow: 0 8px 20px rgba(39,225,193,.28), 0 0 18px rgba(39,225,193,.35) !important;
+      }
+    </style>
+
+    {%- comment -%} Theme variables + header/nav styling {%- endcomment -%}
+    <style>
+      :root{
+        --bg-deep: {{ settings.bg_deep | default: '#0B1220' }};
+        --bg-mid: {{ settings.bg_mid | default: '#1A1031' }};
+        --neon-teal: {{ settings.neon_teal | default: '#00F5D4' }};
+        --neon-pink: {{ settings.neon_pink | default: '#FFFFFF' }};
+        --neon-purple: {{ settings.neon_purple | default: '#9D4EDD' }};
+        --accent: {{ settings.accent | default: '#27e1c1' }};
+        --accent-2: {{ settings.accent_2 | default: '#ff4fa3' }};
+      }
+
+      /* ===== HEADER: dark theme compatible ===== */
+      body > header.header,
+      .header{
+        background: var(--glass-bg, rgba(255, 255, 255, 0.1)) !important;
+        color: var(--text-primary, #0f172a);
+        border-bottom: 1px solid var(--glass-border, rgba(255, 255, 255, 0.2));
+        position: relative; 
+        z-index: 50;
+        backdrop-filter: var(--glass-backdrop, blur(20px));
+      }
+      .header::before, .header::after{ background: transparent !important; }
+
+      .header__inner{ display:flex; align-items:center; justify-content:space-between; padding:14px 20px; }
+
+      /* Logo image styling */
+      .brand-logo-link{ display:flex; align-items:center; justify-content:center; text-decoration:none; margin:0; }
+      .brand-logo-img{ 
+        max-height:50px; 
+        width:auto; 
+        display:block;
+        transition: transform 0.3s ease;
+      }
+      .brand-logo-img:hover{ transform:scale(1.05); }
+      @media (min-width:768px){ .brand-logo-img{ max-height:60px; } }
+
+      /* Fallback text brand (teal + glow) */
+      .brand-title{ display:flex; flex-direction:column; align-items:center; justify-content:center; text-decoration:none; margin:0; }
+      .brand-line{
+        font-family:'Bebas Neue', sans-serif; line-height:0.95; letter-spacing:.08em; text-align:center;
+        color: var(--accent,rgba(39,225,193,.70)) !important;
+        text-shadow:
+          0 0 6px rgba(39,225,193,.70),
+          0 0 14px rgba(39,225,193,.50),
+          0 0 24px rgba(39,225,193,.35);
+        font-size:26px;
+      }
+      @media (min-width:768px){ .brand-line{ font-size:32px; } }
+
+      /* Menu layout: horizontal, no bullets */
+      .nav{ display:flex; align-items:center; }
+      .nav .menu, .nav ul{
+        display:flex !important; flex-wrap:wrap; gap:10px; align-items:center;
+        margin:0 !important; padding:0 !important; list-style:none !important;
+      }
+      .nav li{ list-style:none !important; }
+
+      /* Pill links + black glow */
+.nav .menu a,
+.nav ul a,
+.nav a {
+  display:inline-flex; align-items:center; justify-content:center;
+  padding:9px 16px; border-radius:9999px; text-decoration:none;
+  background:#fff; color:#0f172a; font-weight:700; letter-spacing:.01em;
+  border:1px solid rgba(0,0,0,.10);
+  /* changed teal glow to black glow */
+  box-shadow: 0 4px 14px rgba(0,0,0,.18), 0 0 10px rgba(0,0,0,.22);
+  transition:transform .15s ease, box-shadow .22s ease, background .22s ease, border-color .22s ease;
+}
+.nav .menu a:hover,
+.nav ul a:hover,
+.nav a:hover {
+  /* changed hover teal to black */
+  background: rgba(0,0,0,.05); /* subtle black tint on hover */
+  border-color: rgba(0,0,0,.45);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(0,0,0,.28), 0 0 18px rgba(0,0,0,.35);
+}
+
+    </style>
+
+    <script>document.documentElement.classList.add('no-js');</script>
+    {{ content_for_header }}
+    
+    {%- comment -%} Analytics Integration - Load before Supabase {%- endcomment -%}
+    {{ 'analytics.js' | asset_url | script_tag }}
+  </head>
+
+  <body>
+    <!-- Cursor trail and particles elements -->
+    <div id="cursor-trail"></div>
+    <div id="floating-particles"></div>
+    
+    {% section 'header' %}
+
+    <!-- Quick View Modal (Global) -->
+    <div class="quick-view-modal" id="quick-view-modal" role="dialog" aria-hidden="true">
+      <div class="quick-view-overlay" id="quick-view-overlay"></div>
+      <div class="quick-view-container">
+        <div class="quick-view-header">
+          <button class="quick-view-close" id="quick-view-close" aria-label="Close">×</button>
+        </div>
+        <div class="quick-view-content" id="quick-view-content">
+          <div class="quick-view-loading">Loading...</div>
+        </div>
+      </div>
+    </div>
+
+    <main role="main">
+      {{ content_for_layout }}
+    </main>
+
+    <footer class="nt-footer">
+      <div class="nt-footer__top-glow"></div>
+      <div class="container">
+        <div class="nt-footer__grid">
+          <div class="nt-footer__column">
+            <h4 class="nt-footer__heading">About</h4>
+            <p class="nt-footer__text">{{ settings.footer_about | default: "Sunset palettes, neon nights, and beach-breeze basics." }}</p>
+          </div>
+          <div class="nt-footer__column">
+            <h4 class="nt-footer__heading">Links</h4>
+            <div class="nt-footer__links">
+              {% render 'menu', menu: settings.footer_menu %}
+            </div>
+          </div>
+          <div class="nt-footer__column">
+            <h4 class="nt-footer__heading">Newsletter</h4>
+            {% form 'customer', class: 'nt-footer__form' %}
+              <div class="nt-footer__input-wrapper">
+                <input type="email" name="contact[email]" placeholder="Your email" class="nt-footer__input" required>
+                <button class="nt-footer__button" type="submit">
+                  <span>Subscribe</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14m-7-7l7 7-7 7"/>
+                  </svg>
+                </button>
+              </div>
+            {% endform %}
+          </div>
+        </div>
+        <div class="nt-footer__bottom">
+          <small class="nt-footer__copyright">© {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</small>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Mobile Navigation -->
+
+    {%- comment -%} ✅ Halloween script (global include, non-module) {%- endcomment -%}
+    {{ 'halloween.js' | asset_url | append: '?v=' | append: 'now' | date: '%s' | script_tag }}
+
+    <!-- Global Interactive Elements - Removed cursor trail and floating particles -->
+    
+    <script src="{{ 'theme.js' | asset_url }}?v={{ 'now' | date: '%s' }}" defer></script>
+    <script src="{{ 'swatch.js' | asset_url }}?v={{ 'now' | date: '%s' }}" defer></script>
+    <script src="{{ 'variant-selector.js' | asset_url }}?v={{ 'now' | date: '%s' }}" defer></script>
+    
+    {%- comment -%} Supabase Integration {%- endcomment -%}
+    {%- comment -%} Supabase loads after analytics {%- endcomment -%}
+    <script src="{{ 'supabase-config.js' | asset_url }}?v={{ 'now' | date: '%s' }}"></script>
+    <script src="{{ 'supabase-designs.js' | asset_url }}?v={{ 'now' | date: '%s' }}"></script>
+    <script src="{{ 'supabase-size-helper.js' | asset_url }}?v={{ 'now' | date: '%s' }}"></script>
+    <script src="{{ 'supabase-custom-requests.js' | asset_url }}?v={{ 'now' | date: '%s' }}"></script>
+    <script src="{{ 'visitor-counter.js' | asset_url }}?v={{ 'now' | date: '%s' }}" defer></script>
+    
+    {%- comment -%} EmailJS Integration for Email with Attachments {%- endcomment -%}
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+      // Initialize EmailJS
+      (function() {
+        emailjs.init('p3BJ3t5_tiP_xTf5L'); // Your EmailJS Public Key
+      })();
+    </script>
+    
+    <!-- Enhanced Homepage Features -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Custom Cursor Trail Effect
+      const cursorTrail = document.getElementById('cursor-trail');
+      let mouseX = 0, mouseY = 0;
+      let trailX = 0, trailY = 0;
+      
+      document.addEventListener('mousemove', function(e) {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+      
+      function animateTrail() {
+        if (!cursorTrail) return; // Exit if element doesn't exist
+        
+        trailX += (mouseX - trailX) * 0.1;
+        trailY += (mouseY - trailY) * 0.1;
+        
+        cursorTrail.style.left = trailX + 'px';
+        cursorTrail.style.top = trailY + 'px';
+        
+        requestAnimationFrame(animateTrail);
+      }
+      if (cursorTrail) animateTrail();
+      
+      // Floating Particles System
+      const particlesContainer = document.getElementById('floating-particles');
+      const particleCount = 10;
+      
+      if (particlesContainer) {
+        for (let i = 0; i < particleCount; i++) {
+          const particle = document.createElement('div');
+          particle.className = 'floating-particle';
+          particle.style.position = 'fixed';
+          particle.style.width = Math.random() * 2 + 'px';
+          particle.style.height = particle.style.width;
+          particle.style.background = Math.random() > 0.5 ? 'rgba(0,0,0,0.1)' : 'rgba(0,0,0,0.05)';
+          particle.style.borderRadius = '50%';
+          particle.style.left = Math.random() * 100 + '%';
+          particle.style.top = Math.random() * 100 + '%';
+          particle.style.pointerEvents = 'none';
+          particle.style.zIndex = '1';
+          particle.style.animation = `particleFloat ${Math.random() * 20 + 10}s linear infinite`;
+          particle.style.animationDelay = Math.random() * 10 + 's';
+          particlesContainer.appendChild(particle);
+        }
+      }
+      
+      // Parallax Scrolling Effect
+      const parallaxElements = document.querySelectorAll('[data-parallax]');
+      
+      function updateParallax() {
+        const scrolled = window.pageYOffset;
+        const rate = scrolled * -0.5;
+        
+        parallaxElements.forEach(element => {
+          const speed = element.dataset.parallax || 0.5;
+          element.style.transform = `translateY(${scrolled * speed}px)`;
+        });
+      }
+      
+      window.addEventListener('scroll', updateParallax);
+      
+      // Smooth Scroll for Anchor Links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      });
+      
+      // Intersection Observer for Fade-in Animations
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-in');
+          }
+        });
+      }, observerOptions);
+      
+      // Observe all sections for animations
+      document.querySelectorAll('section').forEach(section => {
+        section.classList.add('fade-in-section');
+        observer.observe(section);
+      });
+    });
+    </script>
+    
+    <style>
+    /* Global Interactive Styles */
+    /* Removed cursor trail and floating particles styles */
+    
+    @keyframes particleFloat {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+    }
+    
+    /* Fade-in Section Animations */
+    .fade-in-section {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease;
+    }
+    
+    .fade-in-section.animate-in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    /* Enhanced Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(45deg, #27e1c1, #ff4fa3);
+      border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(45deg, #ff4fa3, #27e1c1);
+    }
+    
+    /* Smooth scrolling */
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    /* Mobile optimizations - cleaned up */
+    
+    /* Global Quick View Modal Styles */
+    .quick-view-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .quick-view-modal.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .quick-view-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+    }
+
+    .quick-view-container {
+      position: relative;
+      background: white;
+      border-radius: 16px;
+      max-width: 90vw;
+      max-height: 90vh;
+      width: 800px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+    }
+
+    .quick-view-modal.active .quick-view-container {
+      transform: scale(1);
+    }
+
+    .quick-view-header {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0;
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 10000;
+    }
+
+    .quick-view-close {
+      background: rgba(255, 255, 255, 0.95);
+      border: none;
+      color: #374151;
+      cursor: pointer;
+      padding: 0;
+      border-radius: 50%;
+      transition: all 0.2s ease;
+      font-size: 20px;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      line-height: 1;
+    }
+
+    .quick-view-close:hover {
+      background: #3b82f6;
+      color: white;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+      transform: scale(1.05);
+    }
+
+    .quick-view-content {
+      padding: 24px;
+      max-height: calc(90vh - 80px);
+      overflow-y: auto;
+    }
+
+    .quick-view-loading {
+      text-align: center;
+      padding: 40px;
+      color: #6b7280;
+    }
+    
+    /* Force swatches to match homepage - white pills with image chips */
+    .quick-view-content .swatch {
+      --size: 34px;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      padding: 6px 8px 6px 6px !important;
+      border-radius: 9999px !important;
+      border: 1px solid rgba(15,23,42,.12) !important;
+      background: #fff !important;
+      color: #0f172a !important;
+      cursor: pointer !important;
+      transition: transform .12s ease, box-shadow .2s ease, border-color .2s ease !important;
+    }
+    
+    .quick-view-content .swatch:hover {
+      transform: translateY(-1px) !important;
+      box-shadow: 0 8px 18px rgba(0,0,0,.08) !important;
+      border-color: rgba(15,23,42,.20) !important;
+      background: #fff !important;
+    }
+    
+    .quick-view-content .swatch.is-selected {
+      border-color: var(--accent, #27e1c1) !important;
+      box-shadow: 0 0 0 3px rgba(39,225,193,.18) !important;
+      background: #fff !important;
+    }
+    
+    .quick-view-content .swatch__chip {
+      width: var(--size) !important;
+      height: var(--size) !important;
+      border-radius: 9999px !important;
+      background-size: cover !important;
+      background-position: center !important;
+      background-repeat: no-repeat !important;
+      border: 1px solid rgba(15,23,42,.15) !important;
+      display: inline-block !important;
+      flex-shrink: 0 !important;
+    }
+    
+    .quick-view-content .swatch__label {
+      font-size: .86rem !important;
+      font-weight: 700 !important;
+      color: #0f172a !important;
+    }
+    
+    .quick-view-content .vp-legend {
+      color: #0f172a;
+    }
+    
+    /* Dark mode styling for quickview swatches - match homepage */
+    [data-theme="dark"] .quick-view-content .swatch {
+      background: #fff !important;
+      border: 1px solid rgba(15,23,42,.12) !important;
+      color: #0f172a !important;
+    }
+    
+    [data-theme="dark"] .quick-view-content .swatch__label {
+      color: #0f172a !important;
+      text-shadow: none !important;
+    }
+    
+    [data-theme="dark"] .quick-view-content .vp-legend {
+      color: #f8fafc !important;
+    }
+    
+    [data-theme="dark"] .quick-view-content .swatch.is-selected {
+      border-color: var(--accent, #27e1c1) !important;
+      box-shadow: 0 0 0 3px rgba(39,225,193,.18) !important;
+      background: #fff !important;
+    }
+    
+    [data-theme="dark"] .quick-view-content .swatch:hover {
+      background: #fff !important;
+      border-color: rgba(15,23,42,.20) !important;
+    }
+    
+    /* Mobile Quick View - Fits phone frame perfectly */
+    @media (max-width: 768px) {
+      .quick-view-container {
+        width: 100vw !important;
+        height: 100vh !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        max-width: none !important;
+        max-height: none !important;
+        top: 0 !important;
+        left: 0 !important;
+        transform: none !important;
+        display: flex !important;
+        flex-direction: column !important;
+      }
+      
+      .quick-view-header {
+        flex-shrink: 0 !important;
+        padding: 15px 20px !important;
+        background: white !important;
+        border-bottom: 1px solid #e5e7eb !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+      }
+      
+      .quick-view-content {
+        flex: 1 !important;
+        padding: 15px !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        display: flex !important;
+        flex-direction: column !important;
+      }
+      
+      .quick-view-product {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 12px !important;
+        flex: 1 !important;
+      }
+      
+      .quick-view-image-section {
+        flex-shrink: 0 !important;
+        text-align: center !important;
+      }
+      
+      .quick-view-details-section {
+        flex: 1 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        min-height: 0 !important;
+      }
+      
+      #quick-view-image {
+        max-width: 100% !important;
+        max-height: 200px !important;
+        width: auto !important;
+        height: auto !important;
+        object-fit: contain !important;
+        border-radius: 8px !important;
+      }
+      
+      #quick-view-title {
+        font-size: 18px !important;
+        margin-bottom: 6px !important;
+        line-height: 1.2 !important;
+        text-align: center !important;
+        color: #1e293b !important;
+      }
+      
+      [data-theme="dark"] #quick-view-title {
+        color: #f8fafc !important;
+      }
+      
+      #quick-view-price {
+        font-size: 16px !important;
+        margin-bottom: 10px !important;
+        text-align: center !important;
+      }
+      
+      /* Swatches use base.css styles - no overrides needed */
+      
+      .quick-view-options {
+        margin-bottom: 10px !important;
+      }
+      
+      .quick-view-option-select {
+        width: 100% !important;
+        padding: 8px 12px !important;
+        font-size: 14px !important;
+        margin-bottom: 8px !important;
+      }
+      
+      .quick-view-info-sections {
+        flex: 1 !important;
+        overflow-y: auto !important;
+        margin-bottom: 10px !important;
+        max-height: 200px !important;
+      }
+      
+      .info-section {
+        margin-bottom: 8px !important;
+      }
+      
+      .info-section-toggle {
+        width: 100% !important;
+        padding: 10px 12px !important;
+        font-size: 14px !important;
+        margin-bottom: 4px !important;
+        background: #f8f9fa !important;
+        border: 1px solid #e9ecef !important;
+        border-radius: 6px !important;
+        text-align: left !important;
+        cursor: pointer !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        transition: all 0.3s ease !important;
+      }
+      
+      .info-section-toggle:hover {
+        background: #e9ecef !important;
+        border-color: #dee2e6 !important;
+      }
+      
+      .section-title {
+        font-weight: 600 !important;
+        color: #374151 !important;
+        font-size: 14px !important;
+      }
+      
+      .toggle-icon {
+        transition: transform 0.3s ease !important;
+        font-size: 12px !important;
+        color: #6b7280 !important;
+      }
+      
+      .section-content {
+        padding: 10px 12px !important;
+        font-size: 13px !important;
+        line-height: 1.4 !important;
+        margin-bottom: 6px !important;
+        background: #f9fafb !important;
+        border-radius: 6px !important;
+        color: #4b5563 !important;
+        border: 1px solid #e5e7eb !important;
+        display: none !important;
+      }
+      
+      .section-content[style*="block"] {
+        display: block !important;
+      }
+      
+      #quick-view-add-to-cart {
+        width: 100% !important;
+        padding: 12px 16px !important;
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        border-radius: 6px !important;
+        margin-bottom: 8px !important;
+        flex-shrink: 0 !important;
+      }
+      
+      .quick-view-close {
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 20px !important;
+        background: white !important;
+        border: 1px solid #e5e7eb !important;
+        border-radius: 50% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+    }
+    </style>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Global Quick View functionality
+      const quickViewModal = document.getElementById('quick-view-modal');
+      const quickViewOverlay = document.getElementById('quick-view-overlay');
+      const quickViewClose = document.getElementById('quick-view-close');
+      const quickViewContent = document.getElementById('quick-view-content');
+      
+      // Open Quick View function
+      window.openQuickView = function(productHandle) {
+        showQuickViewModal();
+        loadQuickViewProduct(productHandle);
+      };
+      
+      function showQuickViewModal() {
+        quickViewModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        quickViewModal.setAttribute('aria-hidden', 'false');
+      }
+      
+      function hideQuickViewModal() {
+        quickViewModal.classList.remove('active');
+        document.body.style.overflow = '';
+        quickViewModal.setAttribute('aria-hidden', 'true');
+      }
+      
+      async function loadQuickViewProduct(productHandle) {
+        try {
+          quickViewContent.innerHTML = '<div class="quick-view-loading">Loading product...</div>';
+          
+          const response = await fetch(`/products/${productHandle}.js`);
+          
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          
+          const product = await response.json();
+          
+          // Validate product data
+          if (!product || !product.title) {
+            throw new Error('Invalid product data received');
+          }
+          
+          // Ensure variants exist
+          if (!product.variants || product.variants.length === 0) {
+            throw new Error('No variants available for this product');
+          }
+          
+          const firstVariant = product.variants[0];
+          
+          // Generate swatches HTML - match homepage pill style
+          let swatchesHTML = '';
+          if (product.options && product.options.length > 0) {
+            const colorOption = product.options.find(opt => opt.name && opt.name.toLowerCase() === 'color');
+            if (colorOption && colorOption.values && colorOption.values.length > 1) {
+              swatchesHTML = `
+                <div class="swatch-block" style="margin: 8px 0 16px;">
+                  <div class="vp-legend" style="display: block; font-size: 0.95rem; font-weight: 700; margin-bottom: 8px;">Color</div>
+                  <div class="swatch-list" style="display: flex; flex-wrap: wrap; gap: 10px;">
+                    ${colorOption.values.map((color, index) => {
+                      // Find variant that matches this color with default size
+                      const defaultSize = product.options.find(opt => opt.name && opt.name.toLowerCase() !== 'color')?.values?.[0];
+                      const variant = product.variants.find(v => {
+                        if (!v.options) return false;
+                        const colorIndex = product.options.findIndex(opt => opt.name && opt.name.toLowerCase() === 'color');
+                        const sizeIndex = product.options.findIndex(opt => opt.name && opt.name.toLowerCase() !== 'color');
+                        return v.options[colorIndex] === color && 
+                               (sizeIndex === -1 || v.options[sizeIndex] === defaultSize);
+                      });
+                      
+                      // Get the variant image for this color
+                      const variantImage = variant?.featured_image || product.images[0];
+                      let imageUrl = '';
+                      
+                      if (variantImage) {
+                        // Handle both string URLs and image objects
+                        const imageSrc = typeof variantImage === 'string' ? variantImage : variantImage.src || variantImage.url;
+                        if (imageSrc && typeof imageSrc === 'string') {
+                          // Use higher resolution for swatches - 100x100 instead of 80x80
+                          imageUrl = imageSrc.includes('?') ? imageSrc + '&width=100' : imageSrc + '?width=100';
+                        }
+                      }
+                      
+                      const colorClass = color.toLowerCase().replace(/\s+/g, '-');
+                      const isSelected = index === 0 ? 'is-selected' : '';
+                      const isAvailable = variant?.available !== false;
+                      const soldOutClass = !isAvailable ? 'is-soldout' : '';
+                      
+                      // Get high-resolution image for main product view
+                      const highResImage = variantImage ? 
+                        (typeof variantImage === 'string' ? variantImage : variantImage.src || variantImage.url) : '';
+                      const mainImageUrl = highResImage ? (highResImage.includes('?') ? highResImage + '&width=1200' : highResImage + '?width=1200') : '';
+                      
+                      return `
+                        <button class="swatch ${isSelected} ${soldOutClass}" 
+                                data-color="${color}" 
+                                data-variant-id="${variant?.id}"
+                                data-img="${mainImageUrl}"
+                                data-price="${variant?.price || product.price}"
+                                data-available="${isAvailable}"
+                                title="${color}"
+                                ${!isAvailable ? 'disabled' : ''}>
+                          <span class="swatch__chip" style="background-image: ${imageUrl ? `url('${imageUrl}')` : 'none'};"></span>
+                          <span class="swatch__label">${color}</span>
+                        </button>
+                      `;
+                    }).join('')}
+                  </div>
+                </div>
+              `;
+            }
+          }
+          
+          // Shorten product title to match homepage exactly
+          let cleanTitle = product.title;
+          
+          // Handle specific long product names - match homepage logic exactly
+          if (cleanTitle.includes('Boo-tiful Ghost Toddler Long Sleeve Tee')) {
+            cleanTitle = 'Boo-tiful Ghost Toddler Tee';
+          } else if (cleanTitle.includes('Baby T-Shirt Cutest Pumpkin')) {
+            cleanTitle = 'Cutest Pumpkin Baby Tee';
+          } else if (cleanTitle.includes('Butterfly Floral Boxy Tee')) {
+            cleanTitle = 'Butterfly Floral Boxy Tee';
+          } else if (cleanTitle.includes('Miami Nights Boxy Tee for Women')) {
+            cleanTitle = 'Miami Nights Boxy Tee';
+          } else if (cleanTitle.includes('BABY T-SHIRT')) {
+            cleanTitle = cleanTitle.replace('BABY T-SHIRT', 'BABY TEE');
+          } else if (cleanTitle.includes('TODDLER LONG SLEEVE TEE')) {
+            cleanTitle = cleanTitle.replace('TODDLER LONG SLEEVE TEE, HALLOWEEN SHIRT, CUTE KIDS TEE, SPOOKY SEASON APPAREL, TODDLER HALLOWEEN CLOTHING', 'TODDLER TEE');
+          } else if (cleanTitle.includes('HALLOWEEN')) {
+            cleanTitle = cleanTitle.split('HALLOWEEN')[0] + 'HALLOWEEN';
+          }
+          
+          // Remove brand/vendor info like "Gildan 5200"
+          cleanTitle = cleanTitle.replace(/Gildan 5200/g, '');
+          cleanTitle = cleanTitle.replace(/Gildan/g, '');
+          cleanTitle = cleanTitle.replace(/5200/g, '');
+          cleanTitle = cleanTitle.replace(/  /g, ' '); // Replace double spaces
+          cleanTitle = cleanTitle.trim();
+          
+          // Get high-resolution image URL
+          const getImageUrl = (url, size) => {
+            if (!url) return '';
+            // Add size parameter to Shopify CDN URL
+            return url.includes('?') ? `${url}&width=${size}` : `${url}?width=${size}`;
+          };
+          
+          const mainImageUrl = getImageUrl(product.images[0], 1200);
+          
+          quickViewContent.innerHTML = `
+            <div class="quick-view-product" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+              <div class="quick-view-image-section">
+                <img id="quick-view-image" src="${mainImageUrl}" alt="${cleanTitle}" style="width: 100%; border-radius: 8px;">
+              </div>
+              <div class="quick-view-details-section">
+                <h3 id="quick-view-title" style="margin: 0 0 12px 0; font-size: 24px; color: #1e293b;">${cleanTitle}</h3>
+                <div id="quick-view-price" style="font-size: 20px; color: #dc2626; font-weight: 600; margin-bottom: 16px;">
+                  ${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(firstVariant.price / 100)}
+                </div>
+                ${swatchesHTML}
+                
+                <!-- Size and Options Dropdowns -->
+                <div class="quick-view-options" style="margin-bottom: 16px;">
+                  ${generateQuickViewOptions(product, firstVariant)}
+                </div>
+                
+                <!-- Collapsible Product Information Sections -->
+                <div class="quick-view-info-sections" style="margin-bottom: 24px;">
+                  <div class="info-section">
+                    <button class="info-section-toggle" style="width: 100%; padding: 12px 16px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                      <span class="section-title" style="font-weight: 600; color: #374151;">Product Description</span>
+                      <span class="toggle-icon" style="transition: transform 0.3s ease;">▼</span>
+                    </button>
+                    <div class="section-content" style="display: none; padding: 16px; background: #f9fafb; border-radius: 8px; color: #6b7280; line-height: 1.6;">
+                      ${product.description || 'No description available.'}
+                    </div>
+                  </div>
+                  
+                  <div class="info-section">
+                    <button class="info-section-toggle" style="width: 100%; padding: 12px 16px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                      <span class="section-title" style="font-weight: 600; color: #374151;">Product Features</span>
+                      <span class="toggle-icon" style="transition: transform 0.3s ease;">▼</span>
+                    </button>
+                    <div class="section-content" style="display: none; padding: 16px; background: #f9fafb; border-radius: 8px; color: #6b7280; line-height: 1.6;">
+                      <ul style="margin: 0; padding-left: 20px;">
+                        <li>High-quality materials</li>
+                        <li>Comfortable fit</li>
+                        <li>Durable construction</li>
+                        <li>Easy care instructions</li>
+                      </ul>
+                    </div>
+                  </div>
+                  
+                  <div class="info-section">
+                    <button class="info-section-toggle" style="width: 100%; padding: 12px 16px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                      <span class="section-title" style="font-weight: 600; color: #374151;">Care Instructions</span>
+                      <span class="toggle-icon" style="transition: transform 0.3s ease;">▼</span>
+                    </button>
+                    <div class="section-content" style="display: none; padding: 16px; background: #f9fafb; border-radius: 8px; color: #6b7280; line-height: 1.6;">
+                      <ul style="margin: 0; padding-left: 20px;">
+                        <li>Machine wash cold</li>
+                        <li>Tumble dry low</li>
+                        <li>Do not bleach</li>
+                        <li>Iron on low heat if needed</li>
+                      </ul>
+                    </div>
+                  </div>
+                  
+                  <div class="info-section">
+                    <button class="info-section-toggle" style="width: 100%; padding: 12px 16px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                      <span class="section-title" style="font-weight: 600; color: #374151;">Size Chart</span>
+                      <span class="toggle-icon" style="transition: transform 0.3s ease;">▼</span>
+                    </button>
+                    <div class="section-content" style="display: none; padding: 16px; background: #f9fafb; border-radius: 8px; color: #6b7280; line-height: 1.6;">
+                      <p>Size chart information available on full product page.</p>
+                    </div>
+                  </div>
+                </div>
+                <button id="quick-view-add-to-cart" onclick="addToCartFromQuickView('${firstVariant.id}')" 
+                        style="width: 100%; padding: 16px; background: #27e1c1; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;"
+                        ${!firstVariant.available ? 'disabled' : ''}>
+                  ${firstVariant.available ? 'Add to Cart' : 'Sold Out'}
+                </button>
+                <a href="${product.url}" style="display: block; text-align: center; margin-top: 12px; color: #6b7280; text-decoration: none;">
+                  View Full Details
+                </a>
+              </div>
+            </div>
+          `;
+          
+          // Initialize swatch functionality in quick view
+          initQuickViewSwatches(product);
+          initQuickViewOptions(product);
+          
+          // Initialize collapsible sections
+          initQuickViewSections();
+        } catch (error) {
+          console.error('Error loading product:', error);
+          quickViewContent.innerHTML = '<div class="quick-view-loading">Error loading product</div>';
+        }
+      }
+      
+      // Generate dropdown options for Quick View
+      function generateQuickViewOptions(product, selectedVariant) {
+        console.log('generateQuickViewOptions called with:', { product, selectedVariant });
+        let optionsHTML = '';
+        
+        // Check if product and options exist
+        if (!product) {
+          console.error('Product is null or undefined');
+          return optionsHTML;
+        }
+        
+        if (!product.options) {
+          console.error('Product.options is null or undefined');
+          return optionsHTML;
+        }
+        
+        console.log('Product options:', product.options);
+        console.log('Product options_with_values:', product.options_with_values);
+        
+        // Use options_with_values if available, otherwise fall back to options
+        const options = product.options_with_values || product.options || [];
+        console.log('Using options:', options);
+        
+        // Skip Color option (already handled by swatches)
+        if (Array.isArray(options)) {
+          options.forEach((option, index) => {
+            if (option.name && option.name.toLowerCase() !== 'color') {
+            optionsHTML += `
+              <div style="margin-bottom: 12px;">
+                <label style="display: block; font-weight: 600; color: #374151; margin-bottom: 6px; font-size: 14px;">
+                  ${option.name}
+                </label>
+                <select 
+                  class="quick-view-option-select" 
+                  data-option-index="${index}"
+                  style="width: 100%; padding: 8px 12px; border: 2px solid #e5e7eb; border-radius: 6px; background: white; font-size: 14px; cursor: pointer;">
+                  ${option.values.map(value => 
+                    `<option value="${value}" ${selectedVariant.options[index] === value ? 'selected' : ''}>${value}</option>`
+                  ).join('')}
+                </select>
+              </div>
+            `;
+            }
+          });
+        } else {
+          console.error('Options is not an array:', options);
+        }
+        
+        return optionsHTML;
+      }
+      
+      // Swatch color mapping function
+      function getSwatchColor(colorName) {
+        const colorMap = {
+          'black': '#000000',
+          'white': '#ffffff',
+          'pink': '#ff69b4',
+          'blue': '#0066cc',
+          'royal': '#4169e1',
+          'true royal': '#4169e1',
+          'red': '#dc2626',
+          'green': '#10b981',
+          'neon green': '#00ff00',
+          'yellow': '#fbbf24',
+          'purple': '#8b5cf6',
+          'orange': '#f97316',
+          'gray': '#6b7280',
+          'grey': '#6b7280',
+          'navy': '#1e3a8a',
+          'brown': '#92400e',
+          'chalky mint': '#a7f3d0',
+          'orchid': '#d946ef',
+          'peachy': '#fed7aa',
+          'ivory': '#fffbeb',
+          'new york': '#2563eb',
+          'heather': '#9ca3af',
+          'charcoal': '#374151',
+          'forest': '#065f46',
+          'maroon': '#7f1d1d',
+          'cream': '#fef7ed',
+          'sand': '#fbbf24',
+          'slate': '#475569'
+        };
+        
+        const normalizedColor = colorName.toLowerCase().trim();
+        return colorMap[normalizedColor] || '#e5e7eb';
+      }
+      
+      // Initialize Quick View swatches
+      function initQuickViewSwatches(product) {
+        const swatches = document.querySelectorAll('.swatch-list .swatch');
+        const quickViewImage = document.getElementById('quick-view-image');
+        const quickViewPrice = document.getElementById('quick-view-price');
+        const addToCartBtn = document.getElementById('quick-view-add-to-cart');
+        
+        swatches.forEach(swatch => {
+          swatch.addEventListener('click', function() {
+            if (this.disabled) return; // Don't allow clicking disabled (sold out) swatches
+            
+            // Remove selected state from all swatches
+            swatches.forEach(s => {
+              s.classList.remove('is-selected');
+            });
+            
+            // Add selected state to clicked swatch
+            this.classList.add('is-selected');
+            
+            // Get the variant data from the swatch (same as home page)
+            const color = this.dataset.color;
+            const variantId = this.dataset.variantId;
+            const variantImage = this.dataset.img;
+            const variantPrice = this.dataset.price;
+            
+            // Find the matching variant
+            const variant = product.variants.find(v => v.id == variantId);
+            
+            if (variant) {
+              // Update price
+              if (quickViewPrice) {
+                quickViewPrice.textContent = new Intl.NumberFormat('en-US', {
+                  style: 'currency',
+                  currency: 'USD'
+                }).format(variant.price / 100);
+              }
+              
+              // Update image with smooth transition (same as home page)
+              if (variantImage && quickViewImage) {
+                quickViewImage.style.opacity = '0.5';
+                setTimeout(() => {
+                  quickViewImage.src = variantImage;
+                  quickViewImage.alt = `${product.title} - ${color}`;
+                  quickViewImage.style.opacity = '1';
+                }, 150);
+              }
+              
+              // Update add to cart button
+              if (addToCartBtn) {
+                addToCartBtn.onclick = () => addToCartFromQuickView(variant.id);
+                addToCartBtn.disabled = !variant.available;
+                addToCartBtn.textContent = variant.available ? 'Add to Cart' : 'Sold Out';
+                addToCartBtn.style.background = variant.available ? '#27e1c1' : '#6b7280';
+              }
+              
+              // Update other option selects to match this variant
+              const quickViewSelects = document.querySelectorAll('.quick-view-option-select');
+              quickViewSelects.forEach(select => {
+                const optionIndex = parseInt(select.dataset.optionIndex);
+                if (variant.options[optionIndex]) {
+                  select.value = variant.options[optionIndex];
+                }
+              });
+            }
+          });
+        });
+      }
+      
+      // Initialize Quick View dropdown options
+      function initQuickViewOptions(product) {
+        const optionSelects = document.querySelectorAll('.quick-view-option-select');
+        optionSelects.forEach(select => {
+          select.addEventListener('change', function() {
+            const optionIndex = parseInt(this.dataset.optionIndex);
+            const selectedValue = this.value;
+            
+            // Find matching variant using all selected options
+            const quickViewSelects = document.querySelectorAll('.quick-view-option-select');
+            const selectedOptions = [];
+            
+            // Get all selected options by index
+            quickViewSelects.forEach(select => {
+              const optIndex = parseInt(select.dataset.optionIndex);
+              selectedOptions[optIndex] = select.value;
+            });
+            
+            // Update the changed option
+            selectedOptions[optionIndex] = selectedValue;
+            
+            const matchingVariant = product.variants.find(variant => 
+              variant.options.every((optVal, index) => optVal === selectedOptions[index])
+            );
+            
+            if (matchingVariant) {
+              // Update price
+              const priceElement = document.getElementById('quick-view-price');
+              if (priceElement) {
+                priceElement.textContent = new Intl.NumberFormat('en-US', { 
+                  style: 'currency', 
+                  currency: 'USD' 
+                }).format(matchingVariant.price / 100);
+              }
+              
+              // Update add to cart button
+              const addToCartBtn = document.getElementById('quick-view-add-to-cart');
+              if (addToCartBtn) {
+                addToCartBtn.onclick = () => addToCartFromQuickView(matchingVariant.id);
+                addToCartBtn.disabled = !matchingVariant.available;
+                addToCartBtn.textContent = matchingVariant.available ? 'Add to Cart' : 'Sold Out';
+              }
+            }
+          });
+        });
+      }
+      
+      // Initialize collapsible sections in Quick View
+      function initQuickViewSections() {
+        const toggleButtons = document.querySelectorAll('.info-section-toggle');
+        
+        toggleButtons.forEach(button => {
+          button.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const section = this.closest('.info-section');
+            const content = section.querySelector('.section-content');
+            const icon = this.querySelector('.toggle-icon');
+            
+            if (content.style.display === 'none' || !content.style.display) {
+              content.style.display = 'block';
+              icon.style.transform = 'rotate(180deg)';
+              this.style.background = '#e9ecef';
+              this.style.borderColor = '#dee2e6';
+            } else {
+              content.style.display = 'none';
+              icon.style.transform = 'rotate(0deg)';
+              this.style.background = '#f8f9fa';
+              this.style.borderColor = '#e9ecef';
+            }
+          });
+        });
+      }
+      
+      // Add to cart from quick view
+      window.addToCartFromQuickView = async function(variantId) {
+        try {
+          const response = await fetch('/cart/add.js', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: variantId, quantity: 1 })
+          });
+          
+          if (response.ok) {
+            showMessage('Added to cart!', 'success');
+            hideQuickViewModal();
+          } else {
+            showMessage('Failed to add to cart', 'error');
+          }
+        } catch (error) {
+          console.error('Add to cart error:', error);
+          showMessage('Error adding to cart', 'error');
+        }
+      };
+      
+      // Quick View event listeners
+      if (quickViewClose) {
+        quickViewClose.addEventListener('click', hideQuickViewModal);
+      }
+      
+      if (quickViewOverlay) {
+        quickViewOverlay.addEventListener('click', hideQuickViewModal);
+      }
+      
+      // Keyboard navigation
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && quickViewModal.classList.contains('active')) {
+          hideQuickViewModal();
+        }
+      });
+      
+      console.log('Global Quick View initialized');
+      
+      // Analytics tracking is now handled by analytics.js
+    });
+    </script>
+
+    <!-- Profile Modal (Global - always available) -->
+    {% render 'profile-modal' %}
+
+    <!-- Global testPerfectFit function for console testing -->
+    <script>
+      (function() {
+        // Silent registration - no alerts or popups
+        console.log('🎯 Registering GLOBAL testPerfectFit function...');
+        
+        window.testPerfectFit = function() {
+          console.log('🎯 Testing Perfect Fit with exact dimensions...');
+          
+          // Try to find the mockup section (could have any section ID)
+          const mockupSection = document.querySelector('[id^="nt-mockup-"]');
+          if (!mockupSection) {
+            console.error('❌ Mockup section not found on this page!');
+            console.log('💡 Navigate to the home page where the Interactive Mockup section is located.');
+            return;
+          }
+          
+          const sectionId = mockupSection.id.replace('nt-mockup-', '');
+          console.log('✅ Found mockup section with ID:', sectionId);
+          
+          // Get the overlay and canvas
+          const overlay = document.getElementById(`nt-overlay-${sectionId}`);
+          const canvas = document.getElementById(`nt-mockup-canvas-${sectionId}`);
+          
+          if (!overlay || !canvas) {
+            console.error('❌ Overlay or canvas not found!');
+            return;
+          }
+          
+          // Apply exact dimensions
+          const perfectDimensions = {
+            topPct: 29.142857142856876,
+            leftPct: 50.21428571428568,
+            widthPct: 37,
+            heightPct: 42,
+            rotateDeg: 0
+          };
+          
+          // Update CSS variables
+          canvas.style.setProperty('--overlay-top', perfectDimensions.topPct + '%');
+          canvas.style.setProperty('--overlay-left', perfectDimensions.leftPct + '%');
+          canvas.style.setProperty('--overlay-width', perfectDimensions.widthPct + '%');
+          canvas.style.setProperty('--overlay-height', perfectDimensions.heightPct + '%');
+          canvas.style.setProperty('--overlay-rotate', perfectDimensions.rotateDeg + 'deg');
+          
+          // Update overlay directly
+          overlay.style.top = perfectDimensions.topPct + '%';
+          overlay.style.left = perfectDimensions.leftPct + '%';
+          overlay.style.width = perfectDimensions.widthPct + '%';
+          overlay.style.height = perfectDimensions.heightPct + '%';
+          overlay.style.transform = `translateX(-50%) rotate(${perfectDimensions.rotateDeg}deg)`;
+          
+          console.log('✅ Perfect Fit applied with exact dimensions:');
+          console.log(`Top: ${perfectDimensions.topPct}%`);
+          console.log(`Left: ${perfectDimensions.leftPct}%`);
+          console.log(`Width: ${perfectDimensions.widthPct}%`);
+          console.log(`Height: ${perfectDimensions.heightPct}%`);
+          console.log(`Rotation: ${perfectDimensions.rotateDeg}°`);
+          
+          // Add animation
+          overlay.style.transition = 'transform 0.3s ease';
+          overlay.style.transform = `translateX(-50%) rotate(${perfectDimensions.rotateDeg}deg) scale(1.05)`;
+          setTimeout(() => {
+            overlay.style.transform = `translateX(-50%) rotate(${perfectDimensions.rotateDeg}deg) scale(1)`;
+          }, 200);
+          
+          // Show success message on page
+          const existingMessage = document.querySelector('.nt-global-message');
+          if (existingMessage) {
+            existingMessage.remove();
+          }
+          
+          const message = document.createElement('div');
+          message.className = 'nt-global-message';
+          message.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, #10b981, #059669);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+            z-index: 10000;
+            font-weight: 600;
+            animation: slideInRight 0.3s ease;
+          `;
+          message.textContent = '🎯 Perfect Fit test applied with exact dimensions!';
+          document.body.appendChild(message);
+          
+          setTimeout(() => {
+            message.style.opacity = '0';
+            message.style.transition = 'opacity 0.3s ease';
+            setTimeout(() => message.remove(), 300);
+          }, 3000);
+        };
+        
+        console.log('✅ GLOBAL testPerfectFit is now available on ALL pages! Type: testPerfectFit()');
+      })();
+    </script>
+
+  </body>
+</html>

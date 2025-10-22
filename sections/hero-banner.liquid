@@ -1,0 +1,456 @@
+<section class="hero" id="hero-{{ section.id }}">
+  <!-- Animated Background -->
+  <div class="hero__bg" aria-hidden="true">
+    <div class="hero__particles" id="particles-{{ section.id }}"></div>
+    <div class="hero__gradient"></div>
+  </div>
+  
+  <!-- Floating Elements -->
+  <div class="hero__floating-elements">
+    <div class="floating-shape shape-1"></div>
+    <div class="floating-shape shape-2"></div>
+    <div class="floating-shape shape-3"></div>
+    <div class="floating-shape shape-4"></div>
+  </div>
+
+  <!-- Additional Decorative Elements -->
+  <div class="hero__decorative-elements">
+    <div class="bg-pattern"></div>
+    <div class="bg-lines">
+      <div class="line line-1"></div>
+      <div class="line line-2"></div>
+      <div class="line line-3"></div>
+    </div>
+    <div class="floating-dots">
+      <div class="dot dot-1"></div>
+      <div class="dot dot-2"></div>
+      <div class="dot dot-3"></div>
+      <div class="dot dot-4"></div>
+      <div class="dot dot-5"></div>
+    </div>
+  </div>
+  
+  <div class="container hero__content">
+    {% if section.settings.badge_text != blank %}
+      <span class="ribbon hero__badge">{{ section.settings.badge_text }}</span>
+    {% endif %}
+
+    <h1 class="hero__title" style="font-family:'Bebas Neue', sans-serif;">{{ section.settings.heading }}</h1>
+
+    {% if section.settings.subheading != blank %}
+      <p class="hero__subtitle">{{ section.settings.subheading }}</p>
+    {% endif %}
+
+    <div class="hero__buttons" style="display:flex; gap:12px; flex-wrap:wrap;">
+      {% if section.settings.primary_label != blank and section.settings.primary_link != blank %}
+        <a href="{{ section.settings.primary_link }}" class="my-button hero__btn hero__btn--primary">
+          <span class="btn-text">{{ section.settings.primary_label }}</span>
+          <div class="btn-shine"></div>
+        </a>
+      {% endif %}
+
+      {% if section.settings.secondary_label != blank and section.settings.secondary_link != blank %}
+        <a href="{{ section.settings.secondary_link }}" class="my-button my-button--ghost hero__btn hero__btn--secondary">
+          <span class="btn-text">{{ section.settings.secondary_label }}</span>
+        </a>
+      {% endif %}
+    </div>
+  </div>
+  
+  <!-- Scroll Indicator -->
+  <div class="hero__scroll-indicator">
+    <div class="scroll-arrow"></div>
+    <span class="scroll-text">Scroll to explore</span>
+  </div>
+</section>
+
+<style>
+/* Enhanced Hero Section */
+#hero-{{ section.id }} {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+}
+
+/* Animated Background */
+#hero-{{ section.id }} .hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+#hero-{{ section.id }} .hero__gradient {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at top, rgba(39, 225, 193, 0.1) 0%, transparent 50%),
+              radial-gradient(ellipse at bottom, rgba(255, 79, 163, 0.1) 0%, transparent 50%);
+  animation: gradientShift 8s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+/* Floating Particles */
+#hero-{{ section.id }} .hero__particles {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.3), transparent),
+    radial-gradient(2px 2px at 40px 70px, rgba(39,225,193,0.4), transparent),
+    radial-gradient(1px 1px at 90px 40px, rgba(255,79,163,0.3), transparent),
+    radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.2), transparent);
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  animation: particleFloat 20s linear infinite;
+}
+
+@keyframes particleFloat {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(-200px); }
+}
+
+/* Floating Shapes */
+#hero-{{ section.id }} .hero__floating-elements {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+#hero-{{ section.id }} .floating-shape {
+  position: absolute;
+  border-radius: 50%;
+  background: linear-gradient(45deg, rgba(39,225,193,0.1), rgba(255,79,163,0.1));
+  animation: float 6s ease-in-out infinite;
+}
+
+#hero-{{ section.id }} .shape-1 {
+  width: 80px;
+  height: 80px;
+  top: 20%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+#hero-{{ section.id }} .shape-2 {
+  width: 120px;
+  height: 120px;
+  top: 60%;
+  right: 15%;
+  animation-delay: 2s;
+}
+
+#hero-{{ section.id }} .shape-3 {
+  width: 60px;
+  height: 60px;
+  top: 80%;
+  left: 20%;
+  animation-delay: 4s;
+}
+
+#hero-{{ section.id }} .shape-4 {
+  width: 100px;
+  height: 100px;
+  top: 30%;
+  right: 30%;
+  animation-delay: 1s;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(180deg); }
+}
+
+/* Enhanced Content */
+#hero-{{ section.id }} .hero__content {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  animation: fadeInUp 1s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Badge Animation */
+#hero-{{ section.id }} .hero__badge {
+  display: inline-block;
+  animation: badgePulse 2s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* Title Animation */
+#hero-{{ section.id }} .hero__title {
+  animation: titleGlow 3s ease-in-out infinite;
+  text-shadow: 0 0 20px rgba(39,225,193,0.3);
+}
+
+@keyframes titleGlow {
+  0%, 100% { text-shadow: 0 0 20px rgba(39,225,193,0.3); }
+  50% { text-shadow: 0 0 30px rgba(39,225,193,0.6), 0 0 40px rgba(255,79,163,0.3); }
+}
+
+/* Enhanced Buttons */
+#hero-{{ section.id }} .hero__btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+#hero-{{ section.id }} .hero__btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(39,225,193,0.3);
+}
+
+#hero-{{ section.id }} .btn-shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+#hero-{{ section.id }} .hero__btn:hover .btn-shine {
+  left: 100%;
+}
+
+/* Scroll Indicator */
+#hero-{{ section.id }} .hero__scroll-indicator {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  text-align: center;
+  animation: bounce 2s infinite;
+}
+
+#hero-{{ section.id }} .scroll-arrow {
+  width: 20px;
+  height: 20px;
+  border-right: 2px solid rgba(255,255,255,0.6);
+  border-bottom: 2px solid rgba(255,255,255,0.6);
+  transform: rotate(45deg);
+  margin: 0 auto 10px;
+}
+
+#hero-{{ section.id }} .scroll-text {
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+  40% { transform: translateX(-50%) translateY(-10px); }
+  60% { transform: translateX(-50%) translateY(-5px); }
+}
+
+/* Additional Decorative Elements */
+#hero-{{ section.id }} .hero__decorative-elements {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: transparent;
+}
+
+#hero-{{ section.id }} .bg-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 25% 25%, rgba(255,255,255,0.05) 1px, transparent 1px),
+    radial-gradient(circle at 75% 75%, rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size: 80px 80px;
+  background-position: 0 0, 40px 40px;
+  opacity: 0.3;
+}
+
+#hero-{{ section.id }} .bg-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+#hero-{{ section.id }} .line {
+  position: absolute;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  animation: line-move 12s linear infinite;
+}
+
+#hero-{{ section.id }} .line-1 {
+  width: 200px;
+  height: 2px;
+  top: 20%;
+  left: -200px;
+  animation-delay: 0s;
+}
+
+#hero-{{ section.id }} .line-2 {
+  width: 150px;
+  height: 1px;
+  top: 60%;
+  right: -150px;
+  animation-delay: 4s;
+  animation-direction: reverse;
+}
+
+#hero-{{ section.id }} .line-3 {
+  width: 100px;
+  height: 1px;
+  top: 80%;
+  left: -100px;
+  animation-delay: 8s;
+}
+
+#hero-{{ section.id }} .floating-dots {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+#hero-{{ section.id }} .dot {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  animation: float-dot 10s ease-in-out infinite;
+  box-shadow: 0 1px 3px rgba(255,255,255,0.1);
+}
+
+#hero-{{ section.id }} .dot-1 {
+  top: 15%;
+  left: 20%;
+  animation-delay: 0s;
+}
+
+#hero-{{ section.id }} .dot-2 {
+  top: 35%;
+  right: 25%;
+  animation-delay: 2s;
+}
+
+#hero-{{ section.id }} .dot-3 {
+  top: 65%;
+  left: 15%;
+  animation-delay: 4s;
+}
+
+#hero-{{ section.id }} .dot-4 {
+  top: 45%;
+  right: 15%;
+  animation-delay: 6s;
+}
+
+#hero-{{ section.id }} .dot-5 {
+  top: 75%;
+  left: 60%;
+  animation-delay: 8s;
+}
+
+@keyframes line-move {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(calc(100vw + 200px)); }
+}
+
+@keyframes float-dot {
+  0%, 100% { transform: translateY(0px) scale(1); opacity: 0.3; }
+  50% { transform: translateY(-20px) scale(1.3); opacity: 0.8; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  #hero-{{ section.id }} .floating-shape {
+    display: none;
+  }
+  
+  #hero-{{ section.id }} .hero__particles {
+    background-size: 150px 150px;
+  }
+
+  #hero-{{ section.id }} .bg-lines {
+    display: none;
+  }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Enhanced particle system
+  const particlesContainer = document.getElementById('particles-{{ section.id }}');
+  if (particlesContainer) {
+    for (let i = 0; i < 50; i++) {
+      const particle = document.createElement('div');
+      particle.style.position = 'absolute';
+      particle.style.width = Math.random() * 3 + 1 + 'px';
+      particle.style.height = particle.style.width;
+      particle.style.background = Math.random() > 0.5 ? 'rgba(39,225,193,0.6)' : 'rgba(255,79,163,0.6)';
+      particle.style.borderRadius = '50%';
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.top = Math.random() * 100 + '%';
+      particle.style.animation = `particleFloat ${Math.random() * 10 + 10}s linear infinite`;
+      particle.style.animationDelay = Math.random() * 10 + 's';
+      particlesContainer.appendChild(particle);
+    }
+  }
+  
+  // Smooth scroll for scroll indicator
+  const scrollIndicator = document.querySelector('#hero-{{ section.id }} .hero__scroll-indicator');
+  if (scrollIndicator) {
+    scrollIndicator.addEventListener('click', function() {
+      window.scrollTo({
+        top: window.innerHeight,
+        behavior: 'smooth'
+      });
+    });
+  }
+});
+</script>
+
+{% schema %}
+{
+  "name": "Hero — Retro Miami",
+  "settings": [
+    { "type": "text", "id": "badge_text", "label": "Badge text", "default": "NEW DROP" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Neon nights. Ocean breeze." },
+    { "type": "text", "id": "subheading", "label": "Subheading", "default": "Turn heads with limited-run colorways inspired by 80s Miami." },
+    { "type": "text", "id": "primary_label", "label": "Primary button label", "default": "Shop now" },
+    { "type": "url", "id": "primary_link", "label": "Primary link" },
+    { "type": "text", "id": "secondary_label", "label": "Secondary button label", "default": "Lookbook" },
+    { "type": "url", "id": "secondary_link", "label": "Secondary link" }
+  ],
+  "blocks": [],
+  "presets": [{ "name": "Hero — Retro Miami" }]
+}
+{% endschema %}

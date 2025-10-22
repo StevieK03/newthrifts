@@ -1,0 +1,1565 @@
+{% comment %}
+  Advanced Custom T-Shirt Design Studio with Multi-Layer Text Support
+  Features: Layers, Effects, Transform, Undo/Redo, Export
+  Enhanced with: Image layers, Curved text, Full export, Animations, Gradients, Templates, Auto-save
+{% endcomment %}
+
+<script src="{{ 'designer-enhancements.js' | asset_url }}" defer></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Roboto:wght@400;700&family=Playfair+Display:wght@600&family=Montserrat:wght@600&family=Open+Sans:wght@600&display=swap" rel="stylesheet">
+
+<style>
+/* Base Styles */
+.cts-advanced-{{ section.id }} * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.cts-advanced-{{ section.id }} {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    min-height: 100vh;
+    color: #e2e8f0;
+}
+
+/* Header */
+.cts-header-{{ section.id }} {
+    background: rgba(15, 23, 42, 0.9);
+    backdrop-filter: blur(10px);
+    padding: 16px 32px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.cts-header-{{ section.id }} h1 {
+    font-size: 22px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.cts-toolbar-{{ section.id }} {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.cts-toolbar-btn-{{ section.id }} {
+    padding: 8px 14px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.cts-toolbar-btn-{{ section.id }}:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
+}
+
+.cts-toolbar-btn-{{ section.id }}:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.cts-toolbar-btn-{{ section.id }}.active {
+    background: rgba(96, 165, 250, 0.2);
+    border-color: #60a5fa;
+}
+
+/* Main Layout */
+.cts-container-{{ section.id }} {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 24px;
+    padding: 24px;
+    max-width: 1600px;
+    margin: 0 auto;
+    height: calc(100vh - 70px);
+}
+
+/* Canvas Section */
+.cts-canvas-section-{{ section.id }} {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow: hidden;
+}
+
+.cts-canvas-wrapper-{{ section.id }} {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.cts-mockup-stage-{{ section.id }} {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    aspect-ratio: 1;
+    background: linear-gradient(135deg, #27e1c1 0%, #667eea 20%, #764ba2 35%, #f093fb 50%, #4facfe 65%, #27e1c1 100%);
+    background-size: 300% 300%;
+    animation: gradientShift-{{ section.id }} 15s ease infinite;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 25px 80px rgba(39, 225, 193, 0.2);
+}
+
+@keyframes gradientShift-{{ section.id }} {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.cts-canvas-{{ section.id }} {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: #f8fafc;
+    border-radius: 16px;
+    overflow: visible;
+}
+
+.cts-tshirt-{{ section.id }} {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cts-tshirt-{{ section.id }} img {
+    width: 85%;
+    height: 85%;
+    object-fit: contain;
+    transition: filter 0.3s;
+}
+
+/* Print Area & Guides */
+.cts-print-area-{{ section.id }} {
+    position: absolute;
+    left: 31.5%;
+    top: 29%;
+    width: 37%;
+    height: 42%;
+    pointer-events: none;
+}
+
+.cts-guides-{{ section.id }} {
+    position: absolute;
+    inset: 0;
+    border: 2px dashed rgba(96, 165, 250, 0.6);
+    background: rgba(96, 165, 250, 0.05);
+    display: none;
+}
+
+.cts-guides-{{ section.id }}.active {
+    display: block;
+}
+
+.cts-guides-{{ section.id }}::before {
+    content: 'SAFE PRINT AREA';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(96, 165, 250, 0.8);
+    letter-spacing: 2px;
+}
+
+/* Text Layers */
+.cts-text-layer-{{ section.id }} {
+    position: absolute;
+    cursor: move;
+    user-select: none;
+    white-space: nowrap;
+    transform-origin: center center;
+}
+
+.cts-text-layer-{{ section.id }}.selected {
+    outline: 2px dashed #60a5fa;
+    outline-offset: 4px;
+}
+
+/* Text Tool Panel */
+.cts-panel-{{ section.id }} {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.cts-panel-content-{{ section.id }} {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.cts-panel-content-{{ section.id }}::-webkit-scrollbar {
+    width: 8px;
+}
+
+.cts-panel-content-{{ section.id }}::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+.cts-panel-content-{{ section.id }}::-webkit-scrollbar-thumb {
+    background: rgba(96, 165, 250, 0.5);
+    border-radius: 4px;
+}
+
+/* Panel Sections */
+.cts-section-{{ section.id }} {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 16px;
+}
+
+.cts-section-{{ section.id }} h3 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #f1f5f9;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cts-section-{{ section.id }}.collapsed .cts-section-content-{{ section.id }} {
+    display: none;
+}
+
+.cts-section-content-{{ section.id }} {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Buttons */
+.cts-btn-primary-{{ section.id }} {
+    width: 100%;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #14b8a6, #06b6d4);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(20, 184, 166, 0.3);
+}
+
+.cts-btn-primary-{{ section.id }}:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(20, 184, 166, 0.4);
+}
+
+.cts-btn-secondary-{{ section.id }} {
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    color: white;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.cts-btn-secondary-{{ section.id }}:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+/* Layer Item */
+.cts-layer-item-{{ section.id }} {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.cts-layer-item-{{ section.id }}:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.cts-layer-item-{{ section.id }}.selected {
+    border-color: #60a5fa;
+    background: rgba(96, 165, 250, 0.1);
+}
+
+.cts-layer-preview-{{ section.id }} {
+    flex: 1;
+    font-size: 13px;
+    color: #cbd5e1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.cts-layer-actions-{{ section.id }} {
+    display: flex;
+    gap: 4px;
+}
+
+.cts-icon-btn-{{ section.id }} {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 16px;
+}
+
+.cts-icon-btn-{{ section.id }}:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* Form Controls */
+.cts-label-{{ section.id }} {
+    font-size: 12px;
+    font-weight: 500;
+    color: #cbd5e1;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.cts-input-{{ section.id }} {
+    width: 100%;
+    padding: 10px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: white;
+    font-size: 14px;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+
+.cts-input-{{ section.id }}:focus {
+    outline: none;
+    border-color: #60a5fa;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.cts-textarea-{{ section.id }} {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.cts-select-{{ section.id }} {
+    width: 100%;
+    padding: 10px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.cts-select-{{ section.id }} option {
+    background: #1e293b;
+    color: white;
+}
+
+/* Slider */
+.cts-slider-group-{{ section.id }} {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.cts-slider-{{ section.id }} {
+    flex: 1;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    outline: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+}
+
+.cts-slider-{{ section.id }}::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    background: #14b8a6;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(20, 184, 166, 0.4);
+}
+
+.cts-slider-{{ section.id }}::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    background: #14b8a6;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 8px rgba(20, 184, 166, 0.4);
+}
+
+.cts-slider-value-{{ section.id }} {
+    font-size: 13px;
+    font-weight: 600;
+    color: #14b8a6;
+    min-width: 55px;
+    text-align: right;
+}
+
+/* Color Picker */
+.cts-color-input-{{ section.id }} {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.cts-color-preview-{{ section.id }} {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+}
+
+.cts-hex-input-{{ section.id }} {
+    flex: 1;
+    font-family: 'Courier New', monospace;
+    text-transform: uppercase;
+}
+
+/* Toggle Switch */
+.cts-toggle-{{ section.id }} {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+}
+
+.cts-switch-{{ section.id }} {
+    position: relative;
+    width: 48px;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.cts-switch-{{ section.id }}.active {
+    background: #14b8a6;
+}
+
+.cts-switch-{{ section.id }}::after {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    transition: all 0.3s;
+}
+
+.cts-switch-{{ section.id }}.active::after {
+    left: 26px;
+}
+
+/* Button Groups */
+.cts-btn-group-{{ section.id }} {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+}
+
+.cts-btn-group-option-{{ section.id }} {
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #cbd5e1;
+    font-size: 13px;
+    font-weight: 500;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.cts-btn-group-option-{{ section.id }}:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.cts-btn-group-option-{{ section.id }}.active {
+    background: rgba(20, 184, 166, 0.2);
+    border-color: #14b8a6;
+    color: #14b8a6;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .cts-container-{{ section.id }} {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+    
+    .cts-panel-{{ section.id }} {
+        max-height: 70vh;
+    }
+}
+</style>
+
+<div class="cts-advanced-{{ section.id }}" id="cts-advanced-{{ section.id }}" style="display: none;">
+    <!-- Header -->
+    <div class="cts-header-{{ section.id }}">
+        <h1>✨ Advanced T-Shirt Designer</h1>
+        <div class="cts-toolbar-{{ section.id }}">
+            <button class="cts-toolbar-btn-{{ section.id }}" id="undoBtn-{{ section.id }}" disabled title="Undo (Ctrl+Z)">
+                ↶ Undo
+            </button>
+            <button class="cts-toolbar-btn-{{ section.id }}" id="redoBtn-{{ section.id }}" disabled title="Redo (Ctrl+Shift+Z)">
+                ↷ Redo
+            </button>
+            <button class="cts-toolbar-btn-{{ section.id }}" id="guidesBtn-{{ section.id }}" title="Toggle Placement Guide">
+                📐 Guides
+            </button>
+            <button class="cts-toolbar-btn-{{ section.id }}" id="invertBtn-{{ section.id }}" title="Invert Colors">
+                🔁 Invert
+            </button>
+            <button class="cts-toolbar-btn-{{ section.id }}" id="flipHBtn-{{ section.id }}" title="Flip Horizontal">
+                ↔️ Flip H
+            </button>
+            <button class="cts-toolbar-btn-{{ section.id }}" id="flipVBtn-{{ section.id }}" title="Flip Vertical">
+                ↕️ Flip V
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="cts-container-{{ section.id }}">
+        <!-- Canvas Section -->
+        <div class="cts-canvas-section-{{ section.id }}">
+            <div class="cts-canvas-wrapper-{{ section.id }}">
+                <div class="cts-mockup-stage-{{ section.id }}">
+                    <div class="cts-canvas-{{ section.id }}" id="canvas-{{ section.id }}">
+                        <!-- T-Shirt -->
+                        <div class="cts-tshirt-{{ section.id }}">
+                            <img src="{{ 'tshirt-view.png' | asset_url }}" alt="T-shirt mockup" id="tshirt-img-{{ section.id }}">
+                        </div>
+                        
+                        <!-- Print Area with Guides -->
+                        <div class="cts-print-area-{{ section.id }}" id="printArea-{{ section.id }}">
+                            <div class="cts-guides-{{ section.id }}" id="guides-{{ section.id }}"></div>
+                            <!-- Text layers will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Text Tool Panel -->
+        <div class="cts-panel-{{ section.id }}">
+            <div class="cts-panel-content-{{ section.id }}" id="panelContent-{{ section.id }}">
+                
+                <!-- Add New Text -->
+                <button class="cts-btn-primary-{{ section.id }}" id="addTextBtn-{{ section.id }}">
+                    + Add New Text Layer
+                </button>
+
+                <!-- Layers Section -->
+                <div class="cts-section-{{ section.id }}">
+                    <h3>📋 Layers (<span id="layerCount-{{ section.id }}">0</span>)</h3>
+                    <div class="cts-section-content-{{ section.id }}" id="layersList-{{ section.id }}">
+                        <p style="color: #64748b; font-size: 13px; text-align: center;">No text layers yet. Click "Add New Text Layer" to start.</p>
+                    </div>
+                </div>
+
+                <!-- Content Section (shown when layer selected) -->
+                <div class="cts-section-{{ section.id }}" id="contentSection-{{ section.id }}" style="display: none;">
+                    <h3>📝 Text Content</h3>
+                    <div class="cts-section-content-{{ section.id }}">
+                        <textarea 
+                            class="cts-input-{{ section.id }} cts-textarea-{{ section.id }}" 
+                            id="textContent-{{ section.id }}"
+                            placeholder="Enter your text..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Font & Style Section -->
+                <div class="cts-section-{{ section.id }}" id="fontSection-{{ section.id }}" style="display: none;">
+                    <h3>🎨 Font & Style</h3>
+                    <div class="cts-section-content-{{ section.id }}">
+                        <div>
+                            <label class="cts-label-{{ section.id }}">Font Family</label>
+                            <select class="cts-select-{{ section.id }}" id="fontFamily-{{ section.id }}">
+                                <option value="Inter">Inter</option>
+                                <option value="'Bebas Neue'">Bebas Neue</option>
+                                <option value="Roboto">Roboto</option>
+                                <option value="'Playfair Display'">Playfair Display</option>
+                                <option value="Montserrat">Montserrat</option>
+                                <option value="'Open Sans'">Open Sans</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="cts-label-{{ section.id }}">Font Size</label>
+                            <div class="cts-slider-group-{{ section.id }}">
+                                <input type="range" class="cts-slider-{{ section.id }}" id="fontSize-{{ section.id }}" min="12" max="120" value="32">
+                                <span class="cts-slider-value-{{ section.id }}" id="fontSizeValue-{{ section.id }}">32px</span>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="cts-label-{{ section.id }}">Text Color</label>
+                            <div class="cts-color-input-{{ section.id }}">
+                                <input type="color" class="cts-color-preview-{{ section.id }}" id="textColor-{{ section.id }}" value="#000000">
+                                <input type="text" class="cts-input-{{ section.id }} cts-hex-input-{{ section.id }}" id="textColorHex-{{ section.id }}" value="#000000" maxlength="7">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="cts-label-{{ section.id }}">Letter Spacing</label>
+                            <div class="cts-slider-group-{{ section.id }}">
+                                <input type="range" class="cts-slider-{{ section.id }}" id="letterSpacing-{{ section.id }}" min="-5" max="20" value="0">
+                                <span class="cts-slider-value-{{ section.id }}" id="letterSpacingValue-{{ section.id }}">0px</span>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="cts-label-{{ section.id }}">Text Alignment</label>
+                            <div class="cts-btn-group-{{ section.id }}">
+                                <button class="cts-btn-group-option-{{ section.id }}" data-align="left">Left</button>
+                                <button class="cts-btn-group-option-{{ section.id }} active" data-align="center">Center</button>
+                                <button class="cts-btn-group-option-{{ section.id }}" data-align="right">Right</button>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="cts-label-{{ section.id }}">Text Case</label>
+                            <div class="cts-btn-group-{{ section.id }}">
+                                <button class="cts-btn-group-option-{{ section.id }} active" data-case="none">Normal</button>
+                                <button class="cts-btn-group-option-{{ section.id }}" data-case="uppercase">UPPER</button>
+                                <button class="cts-btn-group-option-{{ section.id }}" data-case="lowercase">lower</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Effects Section -->
+                <div class="cts-section-{{ section.id }}" id="effectsSection-{{ section.id }}" style="display: none;">
+                    <h3>✨ Effects</h3>
+                    <div class="cts-section-content-{{ section.id }}">
+                        <!-- Stroke Toggle -->
+                        <div class="cts-toggle-{{ section.id }}">
+                            <span class="cts-label-{{ section.id }}" style="margin: 0;">Text Stroke</span>
+                            <div class="cts-switch-{{ section.id }}" id="strokeToggle-{{ section.id }}"></div>
+                        </div>
+                        <div id="strokeControls-{{ section.id }}" style="display: none;">
+                            <div>
+                                <label class="cts-label-{{ section.id }}">Stroke Width</label>
+                                <div class="cts-slider-group-{{ section.id }}">
+                                    <input type="range" class="cts-slider-{{ section.id }}" id="strokeWidth-{{ section.id }}" min="1" max="10" value="2">
+                                    <span class="cts-slider-value-{{ section.id }}" id="strokeWidthValue-{{ section.id }}">2px</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="cts-label-{{ section.id }}">Stroke Color</label>
+                                <div class="cts-color-input-{{ section.id }}">
+                                    <input type="color" class="cts-color-preview-{{ section.id }}" id="strokeColor-{{ section.id }}" value="#ffffff">
+                                    <input type="text" class="cts-input-{{ section.id }} cts-hex-input-{{ section.id }}" id="strokeColorHex-{{ section.id }}" value="#ffffff" maxlength="7">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Shadow Toggle -->
+                        <div class="cts-toggle-{{ section.id }}">
+                            <span class="cts-label-{{ section.id }}" style="margin: 0;">Drop Shadow</span>
+                            <div class="cts-switch-{{ section.id }}" id="shadowToggle-{{ section.id }}"></div>
+                        </div>
+                        <div id="shadowControls-{{ section.id }}" style="display: none;">
+                            <div>
+                                <label class="cts-label-{{ section.id }}">Shadow X Offset</label>
+                                <div class="cts-slider-group-{{ section.id }}">
+                                    <input type="range" class="cts-slider-{{ section.id }}" id="shadowX-{{ section.id }}" min="-20" max="20" value="2">
+                                    <span class="cts-slider-value-{{ section.id }}" id="shadowXValue-{{ section.id }}">2px</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="cts-label-{{ section.id }}">Shadow Y Offset</label>
+                                <div class="cts-slider-group-{{ section.id }}">
+                                    <input type="range" class="cts-slider-{{ section.id }}" id="shadowY-{{ section.id }}" min="-20" max="20" value="2">
+                                    <span class="cts-slider-value-{{ section.id }}" id="shadowYValue-{{ section.id }}">2px</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="cts-label-{{ section.id }}">Shadow Blur</label>
+                                <div class="cts-slider-group-{{ section.id }}">
+                                    <input type="range" class="cts-slider-{{ section.id }}" id="shadowBlur-{{ section.id }}" min="0" max="20" value="4">
+                                    <span class="cts-slider-value-{{ section.id }}" id="shadowBlurValue-{{ section.id }}">4px</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="cts-label-{{ section.id }}">Shadow Color</label>
+                                <div class="cts-color-input-{{ section.id }}">
+                                    <input type="color" class="cts-color-preview-{{ section.id }}" id="shadowColor-{{ section.id }}" value="#000000">
+                                    <input type="text" class="cts-input-{{ section.id }} cts-hex-input-{{ section.id }}" id="shadowColorHex-{{ section.id }}" value="#000000" maxlength="7">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transform Section -->
+                <div class="cts-section-{{ section.id }}" id="transformSection-{{ section.id }}" style="display: none;">
+                    <h3>🔄 Transform</h3>
+                    <div class="cts-section-content-{{ section.id }}">
+                        <div>
+                            <label class="cts-label-{{ section.id }}">Rotation</label>
+                            <div class="cts-slider-group-{{ section.id }}">
+                                <input type="range" class="cts-slider-{{ section.id }}" id="rotation-{{ section.id }}" min="-180" max="180" value="0">
+                                <span class="cts-slider-value-{{ section.id }}" id="rotationValue-{{ section.id }}">0°</span>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="cts-label-{{ section.id }}">Scale</label>
+                            <div class="cts-slider-group-{{ section.id }}">
+                                <input type="range" class="cts-slider-{{ section.id }}" id="scale-{{ section.id }}" min="50" max="300" value="100">
+                                <span class="cts-slider-value-{{ section.id }}" id="scaleValue-{{ section.id }}">100%</span>
+                            </div>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                            <button class="cts-btn-secondary-{{ section.id }}" id="centerBtn-{{ section.id }}">📍 Center</button>
+                            <button class="cts-btn-secondary-{{ section.id }}" id="resetBtn-{{ section.id }}">🔄 Reset</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Export Section -->
+                <div class="cts-section-{{ section.id }}">
+                    <h3>💾 Export</h3>
+                    <div class="cts-section-content-{{ section.id }}" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+                        <button class="cts-btn-secondary-{{ section.id }}" id="exportSVG-{{ section.id }}">SVG</button>
+                        <button class="cts-btn-secondary-{{ section.id }}" id="exportPNG-{{ section.id }}">PNG</button>
+                        <button class="cts-btn-secondary-{{ section.id }}" id="exportJSON-{{ section.id }}">JSON</button>
+                    </div>
+                </div>
+
+                {% comment %} ENHANCED FEATURES - Image, Curved Text, Animations, Gradients, Templates {% endcomment %}
+                {% render 'designer-enhanced-controls', section: section %}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    const sectionId = '{{ section.id }}';
+    
+    // State Management
+    const state = {
+        layers: [],
+        selectedLayerId: null,
+        tshirtColor: 'white',
+        showGuides: false,
+        history: {
+            past: [],
+            future: []
+        }
+    };
+    
+    // UUID generator
+    function generateId() {
+        return 'layer-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+    }
+    
+    // Default layer
+    function createDefaultLayer() {
+        return {
+            id: generateId(),
+            text: 'Your Text Here',
+            fontFamily: 'Inter',
+            fontSize: 32,
+            color: '#000000',
+            letterSpacing: 0,
+            align: 'center',
+            textCase: 'none',
+            stroke: {
+                enabled: false,
+                width: 2,
+                color: '#ffffff'
+            },
+            shadow: {
+                enabled: false,
+                x: 2,
+                y: 2,
+                blur: 4,
+                color: '#000000'
+            },
+            transform: {
+                x: 50, // percent from left
+                y: 50, // percent from top
+                rotation: 0,
+                scale: 1,
+                flipH: false,
+                flipV: false
+            },
+            visible: true
+        };
+    }
+    
+    // Save state to history
+    function saveHistory() {
+        const currentState = JSON.parse(JSON.stringify(state));
+        state.history.past.push(currentState);
+        state.history.future = [];
+        
+        // Limit history to 50 states
+        if (state.history.past.length > 50) {
+            state.history.past.shift();
+        }
+        
+        updateUndoRedoButtons();
+    }
+    
+    // Undo
+    function undo() {
+        if (state.history.past.length === 0) return;
+        
+        const currentState = JSON.parse(JSON.stringify(state));
+        state.history.future.push(currentState);
+        
+        const previousState = state.history.past.pop();
+        Object.assign(state, previousState);
+        
+        render();
+        updateUndoRedoButtons();
+    }
+    
+    // Redo
+    function redo() {
+        if (state.history.future.length === 0) return;
+        
+        const currentState = JSON.parse(JSON.stringify(state));
+        state.history.past.push(currentState);
+        
+        const nextState = state.history.future.pop();
+        Object.assign(state, nextState);
+        
+        render();
+        updateUndoRedoButtons();
+    }
+    
+    // Update undo/redo buttons
+    function updateUndoRedoButtons() {
+        document.getElementById(`undoBtn-${sectionId}`).disabled = state.history.past.length === 0;
+        document.getElementById(`redoBtn-${sectionId}`).disabled = state.history.future.length === 0;
+    }
+    
+    // Add new text layer
+    function addTextLayer() {
+        saveHistory();
+        const layer = createDefaultLayer();
+        state.layers.push(layer);
+        state.selectedLayerId = layer.id;
+        render();
+    }
+    
+    // Delete layer
+    function deleteLayer(id) {
+        const layer = state.layers.find(l => l.id === id);
+        if (layer && layer.text.length > 0) {
+            if (!confirm('Delete this text layer?')) return;
+        }
+        
+        saveHistory();
+        state.layers = state.layers.filter(l => l.id !== id);
+        if (state.selectedLayerId === id) {
+            state.selectedLayerId = state.layers.length > 0 ? state.layers[0].id : null;
+        }
+        render();
+    }
+    
+    // Duplicate layer
+    function duplicateLayer(id) {
+        saveHistory();
+        const layer = state.layers.find(l => l.id === id);
+        if (!layer) return;
+        
+        const duplicate = JSON.parse(JSON.stringify(layer));
+        duplicate.id = generateId();
+        duplicate.text += ' (Copy)';
+        duplicate.transform.x += 5;
+        duplicate.transform.y += 5;
+        
+        state.layers.push(duplicate);
+        state.selectedLayerId = duplicate.id;
+        render();
+    }
+    
+    // Toggle layer visibility
+    function toggleLayerVisibility(id) {
+        saveHistory();
+        const layer = state.layers.find(l => l.id === id);
+        if (layer) {
+            layer.visible = !layer.visible;
+            render();
+        }
+    }
+    
+    // Select layer
+    function selectLayer(id) {
+        state.selectedLayerId = id;
+        render();
+    }
+    
+    // Update layer property
+    function updateLayer(id, updates) {
+        const layer = state.layers.find(l => l.id === id);
+        if (!layer) return;
+        
+        Object.assign(layer, updates);
+        renderLayer(layer);
+    }
+    
+    // Get selected layer
+    function getSelectedLayer() {
+        return state.layers.find(l => l.id === state.selectedLayerId);
+    }
+    
+    // Render single layer
+    function renderLayer(layer) {
+        let layerEl = document.getElementById(layer.id);
+        
+        if (!layerEl) {
+            layerEl = document.createElement('div');
+            layerEl.id = layer.id;
+            layerEl.className = `cts-text-layer-${sectionId}`;
+            document.getElementById(`printArea-${sectionId}`).appendChild(layerEl);
+            
+            // Make draggable
+            let isDragging = false;
+            let startX, startY;
+            
+            layerEl.addEventListener('mousedown', (e) => {
+                if (e.target !== layerEl) return;
+                isDragging = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                selectLayer(layer.id);
+                e.preventDefault();
+            });
+            
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging || layer.id !== state.selectedLayerId) return;
+                
+                const printArea = document.getElementById(`printArea-${sectionId}`);
+                const rect = printArea.getBoundingClientRect();
+                
+                const deltaX = e.clientX - startX;
+                const deltaY = e.clientY - startY;
+                
+                layer.transform.x += (deltaX / rect.width) * 100;
+                layer.transform.y += (deltaY / rect.height) * 100;
+                
+                // Clamp to bounds
+                layer.transform.x = Math.max(0, Math.min(100, layer.transform.x));
+                layer.transform.y = Math.max(0, Math.min(100, layer.transform.y));
+                
+                startX = e.clientX;
+                startY = e.clientY;
+                
+                renderLayer(layer);
+            });
+            
+            document.addEventListener('mouseup', () => {
+                if (isDragging) {
+                    saveHistory();
+                    isDragging = false;
+                }
+            });
+        }
+        
+        // Apply styles
+        let text = layer.text;
+        if (layer.textCase === 'uppercase') text = text.toUpperCase();
+        else if (layer.textCase === 'lowercase') text = text.toLowerCase();
+        
+        layerEl.textContent = text;
+        layerEl.style.fontFamily = layer.fontFamily;
+        layerEl.style.fontSize = `${layer.fontSize}px`;
+        layerEl.style.color = layer.color;
+        layerEl.style.letterSpacing = `${layer.letterSpacing}px`;
+        layerEl.style.textAlign = layer.align;
+        layerEl.style.left = `${layer.transform.x}%`;
+        layerEl.style.top = `${layer.transform.y}%`;
+        layerEl.style.display = layer.visible ? 'block' : 'none';
+        
+        // Transform
+        const scaleX = layer.transform.flipH ? -layer.transform.scale : layer.transform.scale;
+        const scaleY = layer.transform.flipV ? -layer.transform.scale : layer.transform.scale;
+        layerEl.style.transform = `translate(-50%, -50%) rotate(${layer.transform.rotation}deg) scale(${scaleX}, ${scaleY})`;
+        
+        // Stroke
+        if (layer.stroke.enabled) {
+            layerEl.style.webkitTextStroke = `${layer.stroke.width}px ${layer.stroke.color}`;
+            layerEl.style.paintOrder = 'stroke fill';
+        } else {
+            layerEl.style.webkitTextStroke = '';
+        }
+        
+        // Shadow
+        if (layer.shadow.enabled) {
+            layerEl.style.textShadow = `${layer.shadow.x}px ${layer.shadow.y}px ${layer.shadow.blur}px ${layer.shadow.color}`;
+        } else {
+            layerEl.style.textShadow = '';
+        }
+        
+        // Selection
+        if (layer.id === state.selectedLayerId) {
+            layerEl.classList.add('selected');
+        } else {
+            layerEl.classList.remove('selected');
+        }
+    }
+    
+    // Render layers list
+    function renderLayersList() {
+        const list = document.getElementById(`layersList-${sectionId}`);
+        
+        if (state.layers.length === 0) {
+            list.innerHTML = '<p style="color: #64748b; font-size: 13px; text-align: center;">No text layers yet. Click "Add New Text Layer" to start.</p>';
+            return;
+        }
+        
+        list.innerHTML = state.layers.map(layer => `
+            <div class="cts-layer-item-${sectionId} ${layer.id === state.selectedLayerId ? 'selected' : ''}" onclick="window.selectLayer${sectionId}('${layer.id}')">
+                <div class="cts-layer-preview-${sectionId}">${layer.text || 'Empty Layer'}</div>
+                <div class="cts-layer-actions-${sectionId}">
+                    <button class="cts-icon-btn-${sectionId}" onclick="event.stopPropagation(); window.toggleVisibility${sectionId}('${layer.id}')" title="${layer.visible ? 'Hide' : 'Show'}">
+                        ${layer.visible ? '👁' : '👁‍🗨'}
+                    </button>
+                    <button class="cts-icon-btn-${sectionId}" onclick="event.stopPropagation(); window.duplicateLayer${sectionId}('${layer.id}')" title="Duplicate">
+                        📋
+                    </button>
+                    <button class="cts-icon-btn-${sectionId}" onclick="event.stopPropagation(); window.deleteLayer${sectionId}('${layer.id}')" title="Delete">
+                        🗑
+                    </button>
+                </div>
+            </div>
+        `).join('');
+        
+        document.getElementById(`layerCount-${sectionId}`).textContent = state.layers.length;
+    }
+    
+    // Render property panels
+    function renderPropertyPanels() {
+        const layer = getSelectedLayer();
+        const hasSelection = !!layer;
+        
+        // Show/hide sections
+        document.getElementById(`contentSection-${sectionId}`).style.display = hasSelection ? 'block' : 'none';
+        document.getElementById(`fontSection-${sectionId}`).style.display = hasSelection ? 'block' : 'none';
+        document.getElementById(`effectsSection-${sectionId}`).style.display = hasSelection ? 'block' : 'none';
+        document.getElementById(`transformSection-${sectionId}`).style.display = hasSelection ? 'block' : 'none';
+        
+        if (!layer) return;
+        
+        // Update content
+        document.getElementById(`textContent-${sectionId}`).value = layer.text;
+        
+        // Update font & style
+        document.getElementById(`fontFamily-${sectionId}`).value = layer.fontFamily;
+        document.getElementById(`fontSize-${sectionId}`).value = layer.fontSize;
+        document.getElementById(`fontSizeValue-${sectionId}`).textContent = `${layer.fontSize}px`;
+        document.getElementById(`textColor-${sectionId}`).value = layer.color;
+        document.getElementById(`textColorHex-${sectionId}`).value = layer.color;
+        document.getElementById(`letterSpacing-${sectionId}`).value = layer.letterSpacing;
+        document.getElementById(`letterSpacingValue-${sectionId}`).textContent = `${layer.letterSpacing}px`;
+        
+        // Update alignment
+        document.querySelectorAll(`[data-align]`).forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.align === layer.align);
+        });
+        
+        // Update text case
+        document.querySelectorAll(`[data-case]`).forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.case === layer.textCase);
+        });
+        
+        // Update effects
+        const strokeToggle = document.getElementById(`strokeToggle-${sectionId}`);
+        strokeToggle.classList.toggle('active', layer.stroke.enabled);
+        document.getElementById(`strokeControls-${sectionId}`).style.display = layer.stroke.enabled ? 'block' : 'none';
+        document.getElementById(`strokeWidth-${sectionId}`).value = layer.stroke.width;
+        document.getElementById(`strokeWidthValue-${sectionId}`).textContent = `${layer.stroke.width}px`;
+        document.getElementById(`strokeColor-${sectionId}`).value = layer.stroke.color;
+        document.getElementById(`strokeColorHex-${sectionId}`).value = layer.stroke.color;
+        
+        const shadowToggle = document.getElementById(`shadowToggle-${sectionId}`);
+        shadowToggle.classList.toggle('active', layer.shadow.enabled);
+        document.getElementById(`shadowControls-${sectionId}`).style.display = layer.shadow.enabled ? 'block' : 'none';
+        document.getElementById(`shadowX-${sectionId}`).value = layer.shadow.x;
+        document.getElementById(`shadowXValue-${sectionId}`).textContent = `${layer.shadow.x}px`;
+        document.getElementById(`shadowY-${sectionId}`).value = layer.shadow.y;
+        document.getElementById(`shadowYValue-${sectionId}`).textContent = `${layer.shadow.y}px`;
+        document.getElementById(`shadowBlur-${sectionId}`).value = layer.shadow.blur;
+        document.getElementById(`shadowBlurValue-${sectionId}`).textContent = `${layer.shadow.blur}px`;
+        document.getElementById(`shadowColor-${sectionId}`).value = layer.shadow.color;
+        document.getElementById(`shadowColorHex-${sectionId}`).value = layer.shadow.color;
+        
+        // Update transform
+        document.getElementById(`rotation-${sectionId}`).value = layer.transform.rotation;
+        document.getElementById(`rotationValue-${sectionId}`).textContent = `${layer.transform.rotation}°`;
+        document.getElementById(`scale-${sectionId}`).value = layer.transform.scale * 100;
+        document.getElementById(`scaleValue-${sectionId}`).textContent = `${Math.round(layer.transform.scale * 100)}%`;
+    }
+    
+    // Main render function
+    function render() {
+        // Render all layers on canvas
+        state.layers.forEach(layer => renderLayer(layer));
+        
+        // Render layers list
+        renderLayersList();
+        
+        // Render property panels
+        renderPropertyPanels();
+        
+        // Update guides
+        document.getElementById(`guides-${sectionId}`).classList.toggle('active', state.showGuides);
+    }
+    
+    // Event Listeners
+    document.getElementById(`addTextBtn-${sectionId}`).addEventListener('click', addTextLayer);
+    
+    document.getElementById(`undoBtn-${sectionId}`).addEventListener('click', undo);
+    document.getElementById(`redoBtn-${sectionId}`).addEventListener('click', redo);
+    
+    document.getElementById(`guidesBtn-${sectionId}`).addEventListener('click', () => {
+        state.showGuides = !state.showGuides;
+        document.getElementById(`guidesBtn-${sectionId}`).classList.toggle('active', state.showGuides);
+        render();
+    });
+    
+    document.getElementById(`invertBtn-${sectionId}`).addEventListener('click', () => {
+        const layer = getSelectedLayer();
+        if (!layer) return;
+        
+        saveHistory();
+        
+        // Invert color
+        const invertHex = (hex) => {
+            const rgb = parseInt(hex.slice(1), 16);
+            const r = 255 - ((rgb >> 16) & 0xff);
+            const g = 255 - ((rgb >> 8) & 0xff);
+            const b = 255 - (rgb & 0xff);
+            return '#' + ((r << 16) | (g << 8) | b).toString(16).padStart(6, '0');
+        };
+        
+        layer.color = invertHex(layer.color);
+        layer.stroke.color = invertHex(layer.stroke.color);
+        layer.shadow.color = invertHex(layer.shadow.color);
+        
+        render();
+    });
+    
+    document.getElementById(`flipHBtn-${sectionId}`).addEventListener('click', () => {
+        const layer = getSelectedLayer();
+        if (!layer) return;
+        
+        saveHistory();
+        layer.transform.flipH = !layer.transform.flipH;
+        document.getElementById(`flipHBtn-${sectionId}`).classList.toggle('active', layer.transform.flipH);
+        render();
+    });
+    
+    document.getElementById(`flipVBtn-${sectionId}`).addEventListener('click', () => {
+        const layer = getSelectedLayer();
+        if (!layer) return;
+        
+        saveHistory();
+        layer.transform.flipV = !layer.transform.flipV;
+        document.getElementById(`flipVBtn-${sectionId}`).classList.toggle('active', layer.transform.flipV);
+        render();
+    });
+    
+    // Text content
+    let contentTimeout;
+    document.getElementById(`textContent-${sectionId}`).addEventListener('input', (e) => {
+        const layer = getSelectedLayer();
+        if (!layer) return;
+        
+        clearTimeout(contentTimeout);
+        contentTimeout = setTimeout(() => {
+            saveHistory();
+            updateLayer(layer.id, { text: e.target.value });
+            renderLayersList();
+        }, 300);
+    });
+    
+    // Font family
+    document.getElementById(`fontFamily-${sectionId}`).addEventListener('change', (e) => {
+        const layer = getSelectedLayer();
+        if (!layer) return;
+        
+        saveHistory();
+        updateLayer(layer.id, { fontFamily: e.target.value });
+    });
+    
+    // Font size
+    document.getElementById(`fontSize-${sectionId}`).addEventListener('input', (e) => {
+        const layer = getSelectedLayer();
+        if (!layer) return;
+        
+        document.getElementById(`fontSizeValue-${sectionId}`).textContent = `${e.target.value}px`;
+        updateLayer(layer.id, { fontSize: parseFloat(e.target.value) });
+    });
+    
+    document.getElementById(`fontSize-${sectionId}`).addEventListener('change', () => saveHistory());
+    
+    // Color
+    document.getElementById(`textColor-${sectionId}`).addEventListener('input', (e) => {
+        const layer = getSelectedLayer();
+        if (!layer) return;
+        
+        document.getElementById(`textColorHex-${sectionId}`).value = e.target.value;
+        updateLayer(layer.id, { color: e.target.value });
+    });
+    
+    document.getElementById(`textColor-${sectionId}`).addEventListener('change', () => saveHistory());
+    
+    document.getElementById(`textColorHex-${sectionId}`).addEventListener('change', (e) => {
+        if (!/^#[0-9A-F]{6}$/i.test(e.target.value)) return;
+        
+        const layer = getSelectedLayer();
+        if (!layer) return;
+        
+        saveHistory();
+        document.getElementById(`textColor-${sectionId}`).value = e.target.value;
+        updateLayer(layer.id, { color: e.target.value });
+    });
+    
+    // Letter spacing
+    document.getElementById(`letterSpacing-${sectionId}`).addEventListener('input', (e) => {
+        const layer = getSelectedLayer();
+        if (!layer) return;
+        
+        document.getElementById(`letterSpacingValue-${sectionId}`).textContent = `${e.target.value}px`;
+        updateLayer(layer.id, { letterSpacing: parseFloat(e.target.value) });
+    });
+    
+    document.getElementById(`letterSpacing-${sectionId}`).addEventListener('change', () => saveHistory());
+    
+    // Alignment
+    document.querySelectorAll(`[data-align]`).forEach(btn => {
+        btn.addEventListener('click', () => {
+            const layer = getSelectedLayer();
+            if (!layer) return;
+            
+            saveHistory();
+            updateLayer(layer.id, { align: btn.dataset.align });
+            render();
+        });
+    });
+    
+    // Text case
+    document.querySelectorAll(`[data-case]`).forEach(btn => {
+        btn.addEventListener('click', () => {
+            const layer = getSelectedLayer();
+            if (!layer) return;
+            
+            saveHistory();
+            updateLayer(layer.id, { textCase: btn.dataset.case });
+            render();
+        });
+    });
+    
+    // Stroke toggle
+    document.getElementById(`strokeToggle-${sectionId}`).addEventListener('click', () => {
+        const layer = getSelectedLayer();
+        if (!layer) return;
+        
+        saveHistory();
+        layer.stroke.enabled = !layer.stroke.enabled;
+        render();
+    });
+    
+    // Stroke width
+    document.getElementById(`strokeWidth-${sectionId}`).addEventListener('input', (e) => {
+        const layer = getSelectedLayer();
+        if (!layer) return;
+        
+        document.getElementById(`strokeWidthValue-${sectionId}`).textContent = `${e.target.value}px`;
+        layer.stroke.width = parseFloat(e.target.value);
+        renderLayer(layer);
+    });
+    
+    document.getElementById(`strokeWidth-${sectionId}`).addEventListener('change', () => saveHistory());
+    
+    // Stroke color
+    document.getElementById(`strokeColor-${sectionId}`).addEventListener('input', (e) => {
+        const layer = getSelectedLayer();
+        if (!layer) return;
+        
+        document.getElementById(`strokeColorHex-${sectionId}`).value = e.target.value;
+        layer.stroke.color = e.target.value;
+        renderLayer(layer);
+    });
+    
+    document.getElementById(`strokeColor-${sectionId}`).addEventListener('change', () => saveHistory());
+    
+    // Shadow toggle
+    document.getElementById(`shadowToggle-${sectionId}`).addEventListener('click', () => {
+        const layer = getSelectedLayer();
+        if (!layer) return;
+        
+        saveHistory();
+        layer.shadow.enabled = !layer.shadow.enabled;
+        render();
+    });
+    
+    // Shadow controls (similar pattern for X, Y, Blur, Color)
+    ['shadowX', 'shadowY', 'shadowBlur'].forEach(prop => {
+        const key = prop.replace('shadow', '').toLowerCase();
+        document.getElementById(`${prop}-${sectionId}`).addEventListener('input', (e) => {
+            const layer = getSelectedLayer();
+            if (!layer) return;
+            
+            document.getElementById(`${prop}Value-${sectionId}`).textContent = `${e.target.value}px`;
+            layer.shadow[key] = parseFloat(e.target.value);
+            renderLayer(layer);
+        });
+        
+        document.getElementById(`${prop}-${sectionId}`).addEventListener('change', () => saveHistory());
+    });
+    
+    document.getElementById(`shadowColor-${sectionId}`).addEventListener('input', (e) => {
+        const layer = getSelectedLayer();
+        if (!layer) return;
+        
+        document.getElementById(`shadowColorHex-${sectionId}`).value = e.target.value;
+        layer.shadow.color = e.target.value;
+        renderLayer(layer);
+    });
+    
+    document.getElementById(`shadowColor-${sectionId}`).addEventListener('change', () => saveHistory());
+    
+    // Rotation
+    document.getElementById(`rotation-${sectionId}`).addEventListener('input', (e) => {
+        const layer = getSelectedLayer();
+        if (!layer) return;
+        
+        document.getElementById(`rotationValue-${sectionId}`).textContent = `${e.target.value}°`;
+        layer.transform.rotation = parseFloat(e.target.value);
+        renderLayer(layer);
+    });
+    
+    document.getElementById(`rotation-${sectionId}`).addEventListener('change', () => saveHistory());
+    
+    // Scale
+    document.getElementById(`scale-${sectionId}`).addEventListener('input', (e) => {
+        const layer = getSelectedLayer();
+        if (!layer) return;
+        
+        document.getElementById(`scaleValue-${sectionId}`).textContent = `${e.target.value}%`;
+        layer.transform.scale = parseFloat(e.target.value) / 100;
+        renderLayer(layer);
+    });
+    
+    document.getElementById(`scale-${sectionId}`).addEventListener('change', () => saveHistory());
+    
+    // Center button
+    document.getElementById(`centerBtn-${sectionId}`).addEventListener('click', () => {
+        const layer = getSelectedLayer();
+        if (!layer) return;
+        
+        saveHistory();
+        layer.transform.x = 50;
+        layer.transform.y = 50;
+        renderLayer(layer);
+    });
+    
+    // Reset button
+    document.getElementById(`resetBtn-${sectionId}`).addEventListener('click', () => {
+        const layer = getSelectedLayer();
+        if (!layer) return;
+        
+        saveHistory();
+        layer.transform = {
+            x: 50,
+            y: 50,
+            rotation: 0,
+            scale: 1,
+            flipH: false,
+            flipV: false
+        };
+        render();
+    });
+    
+    // Export SVG
+    document.getElementById(`exportSVG-${sectionId}`).addEventListener('click', () => {
+        alert('SVG export feature coming soon!');
+    });
+    
+    // Export PNG
+    document.getElementById(`exportPNG-${sectionId}`).addEventListener('click', () => {
+        alert('PNG export feature coming soon!');
+    });
+    
+    // Export JSON
+    document.getElementById(`exportJSON-${sectionId}`).addEventListener('click', () => {
+        const data = JSON.stringify(state.layers, null, 2);
+        const blob = new Blob([data], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'tshirt-design.json';
+        a.click();
+        URL.revokeObjectURL(url);
+    });
+    
+    // Global functions for inline onclick
+    window[`selectLayer${sectionId}`] = selectLayer;
+    window[`deleteLayer${sectionId}`] = deleteLayer;
+    window[`duplicateLayer${sectionId}`] = duplicateLayer;
+    window[`toggleVisibility${sectionId}`] = toggleLayerVisibility;
+    
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
+            e.preventDefault();
+            undo();
+        }
+        
+        if ((e.ctrlKey || e.metaKey) && e.key === 'z' && e.shiftKey) {
+            e.preventDefault();
+            redo();
+        }
+        
+        if (e.key === 'Delete' || e.key === 'Backspace') {
+            const layer = getSelectedLayer();
+            if (layer && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+                e.preventDefault();
+                deleteLayer(layer.id);
+            }
+        }
+    });
+    
+    // Initial render
+    render();
+    
+    // ============================================
+    // INTEGRATION POINTS FOR ENHANCEMENTS
+    // ============================================
+    
+    // Expose functions for enhanced features to use
+    window.designerGetState = function() {
+        return {
+            layers: state.layers,
+            selectedLayerId: state.selectedLayerId,
+            tshirtColor: state.tshirtColor
+        };
+    };
+    
+    window.designerLoadState = function(newState) {
+        if (newState.layers) state.layers = newState.layers;
+        if (newState.selectedLayerId !== undefined) state.selectedLayerId = newState.selectedLayerId;
+        if (newState.tshirtColor) state.tshirtColor = newState.tshirtColor;
+        render();
+    };
+    
+    window.designerGetLayers = function() {
+        return state.layers;
+    };
+    
+    window.designerGetSelectedLayer = function() {
+        return state.layers.find(l => l.id === state.selectedLayerId);
+    };
+    
+    window.designerLoadTemplate = function(layers) {
+        if (!Array.isArray(layers)) return;
+        state.layers = layers;
+        state.selectedLayerId = layers.length > 0 ? layers[0].id : null;
+        state.history = [{ layers: JSON.parse(JSON.stringify(state.layers)) }];
+        state.historyIndex = 0;
+        render();
+    };
+    
+    window.designerApplyGradient = function(gradient) {
+        const layer = state.layers.find(l => l.id === state.selectedLayerId);
+        if (layer && layer.type === 'text') {
+            layer.gradient = gradient;
+            render();
+        }
+    };
+    
+    console.log('✅ Designer integration points ready for enhancements');
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Advanced T-Shirt Studio",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "✨ Advanced T-Shirt Designer"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Advanced T-Shirt Studio"
+    }
+  ]
+}
+{% endschema %}
+

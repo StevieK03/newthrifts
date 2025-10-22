@@ -1,0 +1,76 @@
+[
+  {
+    "name": "Theme settings",
+    "settings": [
+      {
+        "type": "text",
+        "id": "logo_text",
+        "label": "Logo text",
+        "default": "Retro MB"
+      },
+      {
+        "type": "link_list",
+        "id": "main_menu",
+        "label": "Main menu"
+      },
+      {
+        "type": "link_list",
+        "id": "footer_menu",
+        "label": "Footer menu"
+      },
+      {
+        "type": "textarea",
+        "id": "footer_about",
+        "label": "Footer about text",
+        "default": "New Thrifts (NT)."
+      },
+      {
+        "type": "color",
+        "id": "accent",
+        "label": "Primary accent",
+        "default": "#27e1c1"
+      },
+      {
+        "type": "color",
+        "id": "accent_2",
+        "label": "Secondary accent",
+        "default": "#ff4fa3"
+      }
+    ]
+  },
+  {
+    "name": "Neon Theme",
+    "settings": [
+      {
+        "type": "color",
+        "id": "bg_deep",
+        "label": "Background Deep",
+        "default": "#0B1220"
+      },
+      {
+        "type": "color",
+        "id": "bg_mid",
+        "label": "Background Mid",
+        "default": "#1A1031"
+      },
+      {
+        "type": "color",
+        "id": "neon_teal",
+        "label": "Neon Teal",
+        "default": "#00F5D4"
+      },
+      {
+        "type": "color",
+        "id": "neon_pink",
+        "label": "Neon Pink",
+        "default": "#FF4D6D"
+      },
+      {
+        "type": "color",
+        "id": "neon_purple",
+        "label": "Neon Purple",
+        "default": "#9D4EDD"
+      }
+    ]
+  }
+]

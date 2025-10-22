@@ -1,0 +1,265 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "header": {
+      "type": "header",
+      "disabled": true,
+      "settings": {
+        "logo_text": "New Thrifts",
+        "menu": ""
+      }
+    },
+    "quick_view_modal": {
+      "type": "quick-view-modal",
+      "settings": {}
+    },
+    "advanced_tshirt_customizer": {
+      "type": "advanced-tshirt-customizer",
+      "name": "T-Shirt Customizer",
+      "settings": {}
+    },
+    "welcome_social_bar_JEwJ6C": {
+      "type": "welcome-social-bar",
+      "name": "Welcome / Social Bar",
+      "settings": {
+        "heading": "",
+        "body": "",
+        "twitter_url": "",
+        "youtube_url": "",
+        "pad_y": 24,
+        "section_bg": "#f8fafc"
+      }
+    },
+    "halloween-countdown": {
+      "type": "countdown-halloween",
+      "disabled": true,
+      "settings": {
+        "show_label": true,
+        "label": "Countdown to Halloween",
+        "headline": "Spooky season in:",
+        "on_day_headline": "It's Halloween!",
+        "emoji_left": "🧟‍♂️",
+        "emoji_right": "👻",
+        "size": "lg",
+        "bg_color": "#2d1b0a",
+        "bg_color_2": "#4a2c0f",
+        "text_color": "#ff8c00",
+        "muted_color": "#ff6b35",
+        "accent_color": "#ff4500",
+        "accent2_color": "#cc5500",
+        "ring_color": "#ff6600",
+        "pad_y": 18,
+        "pad_x": 18,
+        "sticky": true,
+        "target_month": 10,
+        "target_day": 31,
+        "target_hour": 0,
+        "show_progress": true,
+        "season_start_month": 8,
+        "season_start_day": 1,
+        "hours_only_under": 3,
+        "burst_on_day": true,
+        "respect_reduced_motion": false,
+        "confetti_count": 30,
+        "confetti_emojis": "['🎃','🧟‍♂️','👻','🕸️','🦇','🍬']",
+        "actor_mode": "glide",
+        "show_bats": true,
+        "bats_only_at_night": false,
+        "bats_count": 3,
+        "bat_min_speed": 10,
+        "bat_max_speed": 18,
+        "ghosts_count": 4,
+        "show_stars": true,
+        "stars_count": 20,
+        "show_moon": true,
+        "show_frankensteins": true,
+        "show_wind": true,
+        "show_cats": true,
+        "show_candy": true,
+        "show_lightning": true,
+        "lightning_debug": true,
+        "lightning_min_gap": 10,
+        "lightning_max_gap": 28,
+        "lightning_color": "#ff6600",
+        "lightning_intensity": 85,
+        "thunder_url": "",
+        "thunder_volume_pct": 35,
+        "cta_label": "Shop Halloween",
+        "cta_link": "/collections/halloween",
+        "noscript_text": "10/31 at 12:00am (your local time)"
+      }
+    },
+    "smart_design_suggestions": {
+      "type": "smart-design-suggestions",
+      "disabled": true,
+      "name": "AI Suggestions",
+      "settings": {
+        "heading": "AI-Powered Design Suggestions",
+        "description": "Let our AI help you create the perfect design! Get personalized suggestions based on trending styles, your preferences, and popular combinations.",
+        "show_trending": true,
+        "show_personalized": true,
+        "show_templates": true,
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
+    "customizer_integration": {
+      "type": "customizer-integration",
+      "disabled": true,
+      "name": "Design Process",
+      "settings": {
+        "heading": "From Design to Delivery",
+        "description": "Our advanced design studio seamlessly integrates with our production process. Create your design above, and we'll bring it to life with premium quality and fast shipping.",
+        "show_stats": true,
+        "show_combinations": true,
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
+    "interactive_mockup": {
+      "type": "interactive-mockup",
+      "disabled": true,
+      "name": "Live Preview",
+      "settings": {
+        "overlay_top": 28,
+        "overlay_left": 26,
+        "overlay_width": 48,
+        "overlay_rotate": 0,
+        "allow_download": true,
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
+    "custom_design_hero": {
+      "type": "custom-design-hero",
+      "name": "Custom Design Hero",
+      "settings": {
+        "title": "🎨 Design Your Dream T-Shirt",
+        "subtitle": "Create Something Amazing",
+        "description": "<p>Unleash your creativity with our advanced design studio. Upload your artwork, customize colors, adjust positioning, and bring your vision to life with professional-quality custom t-shirts.</p>",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "custom_tshirt_studio": {
+      "type": "custom-tshirt-studio",
+      "name": "Custom T-Shirt Studio",
+      "settings": {
+        "heading": "✨ Custom T-Shirt Designer"
+      }
+    },
+    "visitor_counter_section": {
+      "type": "visitor-counter",
+      "disabled": true,
+      "name": "Visitor Counter",
+      "settings": {
+        "show_heading": true,
+        "heading": "Site Visitors",
+        "heading_size": 32,
+        "show_subheading": true,
+        "subheading": "Join thousands of visitors exploring our collection",
+        "subheading_size": 16,
+        "bg_color": "#f8fafc",
+        "bg_color_2": "#e2e8f0",
+        "text_color": "#0f172a",
+        "counter_bg": "#ffffff",
+        "counter_border": "#0000001a",
+        "counter_color": "#27e1c1",
+        "counter_color_2": "#ff4fa3",
+        "accent_color": "#27e1c11a",
+        "accent_color_2": "#ff4fa31a",
+        "pad_y": 40,
+        "margin_y": 20,
+        "border_radius": 16,
+        "counter_size": 36,
+        "label_size": 14,
+        "show_last_updated": true
+      }
+    },
+    "product_poll_section": {
+      "type": "product-poll",
+      "blocks": {
+        "product_1": {
+          "type": "product",
+          "settings": {
+            "product": "boo-tiful-ghost-toddler-long-sleeve-tee-halloween-shirt-cute-kids-tee-spooky-season-apparel-toddler-halloween-clothing"
+          }
+        },
+        "product_2": {
+          "type": "product",
+          "settings": {
+            "product": "baby-t-shirt-cutest-pumpkin-in-the-patch-halloween-costume"
+          }
+        },
+        "product_3": {
+          "type": "product",
+          "settings": {
+            "product": "butterfly-floral-boxy-tee"
+          }
+        }
+      },
+      "block_order": [
+        "product_1",
+        "product_2",
+        "product_3"
+      ],
+      "disabled": true,
+      "name": "Product Poll",
+      "settings": {
+        "title": "Vote for Your Favorite Products!",
+        "description": "Help us decide which products to feature more prominently. Your vote matters!"
+      }
+    },
+    "marquee": {
+      "type": "marquee",
+      "disabled": true,
+      "settings": {}
+    },
+    "featured_collection_ETkhqA": {
+      "type": "featured-collection",
+      "disabled": true,
+      "name": "Featured Products",
+      "settings": {
+        "heading": "Featured Collection",
+        "subheading": "",
+        "collection": "entire-collection",
+        "max_products": 12
+      }
+    },
+    "featured_collection_mDHN8k": {
+      "type": "featured-collection",
+      "name": "Featured collection",
+      "settings": {
+        "heading": "Featured Collection",
+        "subheading": "Curated pieces in neon fades and cool pastels.",
+        "collection": "entire-collection",
+        "max_products": 12
+      }
+    }
+  },
+  "order": [
+    "header",
+    "quick_view_modal",
+    "advanced_tshirt_customizer",
+    "welcome_social_bar_JEwJ6C",
+    "halloween-countdown",
+    "smart_design_suggestions",
+    "customizer_integration",
+    "interactive_mockup",
+    "custom_design_hero",
+    "custom_tshirt_studio",
+    "visitor_counter_section",
+    "product_poll_section",
+    "marquee",
+    "featured_collection_ETkhqA",
+    "featured_collection_mDHN8k"
+  ]
+}

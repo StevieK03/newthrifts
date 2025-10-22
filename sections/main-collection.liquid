@@ -1,0 +1,810 @@
+
+<section id="collection-{{ collection.id }}" class="container" style="padding: 28px 0;">
+  <h1 style="margin-top:0; font-family:'Bebas Neue', sans-serif; font-size:42px;">{{ collection.title }}</h1>
+  {% if collection.description != blank %}<p style="opacity:.85;">{{ collection.description }}</p>{% endif %}
+  <div class="grid grid--3">
+    {% for product in collection.products %}
+      <article class="product-card enhanced-product-card" data-product-id="{{ product.id }}" data-product-handle="{{ product.handle }}" data-filters="{{ product.tags | join: ',' }}">
+        <!-- Cool Effects Elements -->
+        <div class="card-glow"></div>
+        <div class="card-shine"></div>
+        <div class="card-particles"></div>
+        
+        <a href="{{ product.url }}" class="product-card__link">
+          <div class="product-card__image">
+            <img id="ProductImage-{{ product.id }}" 
+                 src="{{ product.featured_image | image_url: width: 720 }}"
+                 alt="{{ product.title | escape }}"
+                 loading="lazy"
+                 class="product-card__img">
+          </div>
+        </a>
+
+        <div class="product-card__content">
+          <h3 class="product-card__title">
+            {%- comment -%} Shorten product names and remove brand info {%- endcomment -%}
+            {%- assign short_title = product.title -%}
+            {%- if product.title contains 'Boo-tiful Ghost Toddler Long Sleeve Tee' -%}
+              {%- assign short_title = 'Boo-tiful Ghost Toddler Tee' -%}
+            {%- elsif product.title contains 'Baby T-Shirt Cutest Pumpkin' -%}
+              {%- assign short_title = 'Cutest Pumpkin Baby Tee' -%}
+            {%- elsif product.title contains 'Butterfly Floral Boxy Tee' -%}
+              {%- assign short_title = 'Butterfly Floral Boxy Tee' -%}
+            {%- elsif product.title contains 'Miami Nights Boxy Tee for Women' -%}
+              {%- assign short_title = 'Miami Nights Boxy Tee' -%}
+            {%- elsif product.title contains 'BABY T-SHIRT' -%}
+              {%- assign short_title = product.title | replace: 'BABY T-SHIRT', 'BABY TEE' -%}
+            {%- elsif product.title contains 'TODDLER LONG SLEEVE TEE' -%}
+              {%- assign short_title = product.title | replace: 'TODDLER LONG SLEEVE TEE, HALLOWEEN SHIRT, CUTE KIDS TEE, SPOOKY SEASON APPAREL, TODDLER HALLOWEEN CLOTHING', 'TODDLER TEE' -%}
+            {%- elsif product.title contains 'HALLOWEEN' -%}
+              {%- assign short_title = product.title | split: 'HALLOWEEN' | first | append: 'HALLOWEEN' -%}
+            {%- endif -%}
+            
+            {%- comment -%} Remove brand/vendor info like "Gildan 5200" {%- endcomment -%}
+            {%- assign short_title = short_title | replace: 'Gildan 5200', '' -%}
+            {%- assign short_title = short_title | replace: 'Gildan', '' -%}
+            {%- assign short_title = short_title | replace: '5200', '' -%}
+            {%- assign short_title = short_title | replace: '  ', ' ' -%}
+            {%- assign short_title = short_title | strip -%}
+            
+            {{ short_title }}
+          </h3>
+
+          <!-- optional badge -->
+          {% if product.compare_at_price_max > product.price_min %}
+            <small class="badge">On sale</small>
+          {% endif %}
+
+          <!-- price at bottom-left -->
+          <div class="product-card__price">
+            {% if product.compare_at_price_max > product.price_min %}
+              <span class="price price--sale" data-product-price>{{ product.price_min | money }}</span>
+              <span class="price price--compare" style="text-decoration:line-through;">
+                {{ product.compare_at_price_max | money }}
+              </span>
+            {% else %}
+              <span class="price" data-product-price>{{ product.price_min | money }}</span>
+            {% endif %}
+          </div>
+
+          {%- comment -%} Full swatch functionality for collection page - same as homepage {%- endcomment -%}
+          {%- assign color_index = 0 -%}
+          {%- for opt in product.options -%}
+            {%- assign opt_lc = opt | downcase -%}
+            {%- if opt_lc == 'color' -%}
+              {%- assign color_index = forloop.index0 -%}
+              {%- break -%}
+            {%- endif -%}
+          {%- endfor -%}
+
+          {%- if product.options_with_values[color_index].values.size > 1 -%}
+            <div class="swatch-block" data-swatch-group data-option-index="{{ color_index }}" aria-label="Color">
+              <div class="vp-legend">Color</div>
+              <div class="swatch-list">
+                {%- assign seen = '' -%}
+                {%- for v in product.options_with_values[color_index].values -%}
+                  {%- assign key = v | downcase | strip -%}
+                  {%- if seen contains key -%}{% continue %}{%- endif -%}
+                  {%- assign seen = seen | append: key | append: ',' -%}
+
+                  {%- comment -%} Find best matching variant for this value {%- endcomment -%}
+                  {%- assign match = nil -%}
+                  {%- for variant in product.variants -%}
+                    {%- if variant.options[color_index] == v -%}
+                      {%- assign ok = true -%}
+                      {%- for i in (0..product.options.size-1) -%}
+                        {%- if i != color_index -%}
+                          {%- if product.selected_or_first_available_variant and product.selected_or_first_available_variant.options[i] and variant.options[i] != product.selected_or_first_available_variant.options[i] -%}
+                            {%- assign ok = false -%}
+                          {%- endif -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                      {%- if ok -%}{% assign match = variant %}{% break %}{%- endif -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                  {%- if match == nil -%}
+                    {%- for variant in product.variants -%}
+                      {%- if variant.options[color_index] == v -%}{% assign match = variant %}{% break %}{%- endif -%}
+                    {%- endfor -%}
+                  {%- endif -%}
+
+                  {%- assign img = match.featured_media.preview_image | default: product.featured_image -%}
+                  {%- assign media_id = match.featured_media.id | default: '' -%}
+                  {%- assign price_str = match.price | money -%}
+
+                  <button
+                    type="button"
+                    class="swatch"
+                    data-swatch
+                    data-option-index="{{ color_index }}"
+                    data-value="{{ v | escape }}"
+                    data-variant-id="{{ match.id }}"
+                    data-available="{{ match.available }}"
+                    {% if media_id != blank %}data-media-id="{{ media_id }}"{% endif %}
+                    data-img="{{ img | image_url: width: 800 }}"
+                    data-price="{{ price_str }}"
+                    aria-label="Color: {{ v }}"
+                    title="{{ v }}"
+                  >
+                    <span class="swatch__chip" data-swatch-chip
+                          style="background-image:url('{{ img | image_url: width: 80 }}');"></span>
+                    <span class="swatch__label">{{ v }}</span>
+                  </button>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+</section>
+
+<style>
+  /* Enhanced Collection Page Styling */
+  #collection-{{ collection.id }} .enhanced-card {
+    position: relative;
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    border: 1px solid rgba(0,0,0,0.05);
+  }
+  
+  /* Remove hover effects from entire card - only apply to image area */
+  #collection-{{ collection.id }} .enhanced-card:hover {
+    transform: none;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+  
+  /* Card Glow Effect - Disabled to prevent white overlay */
+  #collection-{{ collection.id }} .card-glow {
+    display: none !important;
+  }
+  
+  #collection-{{ collection.id }} .enhanced-card:hover .card-glow {
+    display: none !important;
+  }
+  
+  /* Card Shine Effect - Disabled to prevent white overlay */
+  #collection-{{ collection.id }} .card-shine {
+    display: none !important;
+  }
+  
+  #collection-{{ collection.id }} .enhanced-card:hover .card-shine {
+    display: none !important;
+  }
+  
+  /* Image Container */
+  #collection-{{ collection.id }} .image-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px 16px 0 0;
+  }
+  
+  #collection-{{ collection.id }} .product-card__img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    aspect-ratio: unset !important;
+    transition: transform 0.4s ease;
+    display: block;
+  }
+  
+  /* Enhanced hover effects on image area only */
+  #collection-{{ collection.id }} .enhanced-card:hover .product-card__image {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 32px rgba(0,0,0,0.12);
+  }
+
+  #collection-{{ collection.id }} .enhanced-card:hover .product-card__img {
+    transform: scale(1.08);
+  }
+  
+  /* Image Overlay */
+  #collection-{{ collection.id }} .image-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 3;
+  }
+  
+  #collection-{{ collection.id }} .enhanced-card:hover .image-overlay {
+    opacity: 1;
+  }
+  
+  /* Product Actions */
+  #collection-{{ collection.id }} .product-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transform: translateY(20px);
+    transition: transform 0.3s ease 0.1s;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  #collection-{{ collection.id }} .enhanced-card:hover .product-actions {
+    transform: translateY(0);
+  }
+  
+  /* Action Buttons */
+  #collection-{{ collection.id }} .action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 24px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border: none;
+    border-radius: 30px;
+    color: #333;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    min-width: 140px;
+    white-space: nowrap;
+  }
+  
+  #collection-{{ collection.id }} .action-btn:hover {
+    background: white;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  }
+  
+  #collection-{{ collection.id }} .quick-view-btn:hover {
+    background: linear-gradient(135deg, #27e1c1, #00d4aa);
+    color: white;
+  }
+  
+  #collection-{{ collection.id }} .wishlist-btn:hover {
+    background: linear-gradient(135deg, #ff4fa3, #e91e63);
+    color: white;
+  }
+  
+  /* Product Card Body */
+  #collection-{{ collection.id }} .product-card__body {
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+  }
+  
+  #collection-{{ collection.id }} .product-card__body h3 {
+    transition: color 0.3s ease;
+    text-align: center;
+  }
+  
+  #collection-{{ collection.id }} .enhanced-card:hover .product-card__body h3 {
+    color: #333;
+  }
+  
+  /* Center product titles */
+  #collection-{{ collection.id }} .product-card__title,
+  #collection-{{ collection.id }} .product-card h3 {
+    text-align: center;
+    color: #1e293b !important;
+  }
+  
+  /* Center product prices */
+  #collection-{{ collection.id }} .product-card__price {
+    text-align: center;
+  }
+  
+  /* Center swatch blocks */
+  #collection-{{ collection.id }} .swatch-block {
+    text-align: center;
+  }
+  
+  /* Center swatch lists */
+  #collection-{{ collection.id }} .swatch-list {
+    justify-content: center;
+  }
+  
+  /* Swatch Enhancements */
+  #collection-{{ collection.id }} .swatch-block {
+    margin-top: 12px;
+    transition: all 0.3s ease;
+  }
+  
+  /* Remove hover effects from swatch area to keep them fully interactive */
+  #collection-{{ collection.id }} .enhanced-card:hover .swatch-block {
+    transform: none;
+  }
+  
+  #collection-{{ collection.id }} .swatch {
+    --size: 34px;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+    padding: 6px 8px 6px 6px;
+    border-radius: 9999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  #collection-{{ collection.id }} .swatch:hover {
+    transform: scale(1.1);
+    border-color: #666;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+  
+  #collection-{{ collection.id }} .swatch__chip {
+    width: var(--size);
+    height: var(--size);
+    border-radius: 9999px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 1px solid rgba(15,23,42,.15);
+    display: inline-block;
+  }
+  
+  #collection-{{ collection.id }} .swatch__label {
+    font-size: 0.86rem;
+    font-weight: 700;
+  }
+  
+  /* Price Animation */
+  #collection-{{ collection.id }} .product-card__price {
+    transition: all 0.3s ease;
+  }
+  
+  /* Remove price animation to avoid interference with swatches */
+  #collection-{{ collection.id }} .enhanced-card:hover .product-card__price {
+    transform: none;
+  }
+  
+  /* Floating Animation */
+  #collection-{{ collection.id }} .enhanced-card:nth-child(1) { animation-delay: 0.1s; }
+  #collection-{{ collection.id }} .enhanced-card:nth-child(2) { animation-delay: 0.2s; }
+  #collection-{{ collection.id }} .enhanced-card:nth-child(3) { animation-delay: 0.3s; }
+  #collection-{{ collection.id }} .enhanced-card:nth-child(4) { animation-delay: 0.4s; }
+  #collection-{{ collection.id }} .enhanced-card:nth-child(5) { animation-delay: 0.5s; }
+  #collection-{{ collection.id }} .enhanced-card:nth-child(6) { animation-delay: 0.6s; }
+  
+  #collection-{{ collection.id }} .enhanced-card {
+    animation: cardFloat 6s ease-in-out infinite;
+  }
+  
+  @keyframes cardFloat {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-3px); }
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    #collection-{{ collection.id }} .enhanced-card:hover {
+      transform: translateY(-4px) scale(1.01);
+    }
+    
+    #collection-{{ collection.id }} .quick-view-btn {
+      padding: 10px 20px;
+      font-size: 12px;
+    }
+  }
+</style>
+
+<!-- Scoped price color override (red) -->
+<style id="price-override-{{ collection.id }}">
+  #collection-{{ collection.id }} .product-card__price .price {
+    color:#e53935 !important;
+  }
+</style>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  
+  const cards = document.querySelectorAll('#collection-{{ collection.id }} .enhanced-card');
+  
+  cards.forEach(card => {
+    // Add magnetic effect
+    card.addEventListener('mousemove', function(e) {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = (y - centerY) / 10;
+      const rotateY = (centerX - x) / 10;
+      
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+    });
+    
+    card.addEventListener('mouseleave', function() {
+      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
+    });
+    
+    // Quick View and Wishlist removed from collection page
+    // These features are only available on the Featured Collection (homepage)
+  });
+  
+  // Intersection Observer for scroll animations
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.animationPlayState = 'running';
+        entry.target.classList.add('animate-in');
+      }
+    });
+  }, observerOptions);
+  
+  cards.forEach(card => {
+    card.style.animationPlayState = 'paused';
+    observer.observe(card);
+  });
+  
+  // Initialize swatches for collection page using the same logic as homepage
+  console.log('Initializing swatches for collection page');
+  
+  // Use the same swatch initialization as the homepage
+  const swatchGroups = document.querySelectorAll('#collection-{{ collection.id }} [data-swatch-group]');
+  console.log('Found swatch groups:', swatchGroups.length);
+  
+  swatchGroups.forEach(group => {
+    const swatches = group.querySelectorAll('.swatch');
+    console.log('Found swatches in group:', swatches.length);
+    
+    swatches.forEach(swatch => {
+      console.log('Adding click listener to:', swatch.querySelector('.swatch__label')?.textContent);
+      
+      swatch.addEventListener('click', function(evt) {
+        console.log('[collection swatch] handleSwatchClick called');
+        const btn = evt.currentTarget;
+        const form = btn.closest('form');
+
+        const optIndex  = parseInt(btn.getAttribute('data-option-index'), 10);
+        const value     = btn.getAttribute('data-value');
+        const variantId = btn.getAttribute('data-variant-id');
+        const available = btn.getAttribute('data-available') === 'true';
+        const mediaId   = btn.getAttribute('data-media-id') || null;
+        const thumb     = btn.getAttribute('data-img') || null;
+        const priceStr  = btn.getAttribute('data-price') || null;
+
+        console.log('[collection swatch] Swatch data:', { value, variantId, available, thumb, priceStr, hasForm: !!form });
+
+        // Handle collection page swatches (no form context)
+        if (!form) {
+          // Update price in the same product card
+          const card = btn.closest('.product-card');
+          if (card) {
+            const priceEl = card.querySelector('[data-product-price]');
+            if (priceEl && priceStr) priceEl.textContent = priceStr;
+          }
+        }
+
+        // Swap image using the same logic as homepage
+        if (thumb) {
+          console.log('[collection swatch] Attempting to swap image:', thumb);
+          if (mediaId) {
+            console.log('[collection swatch] Has mediaId:', mediaId);
+            const mediaEl = document.querySelector(`[data-media-id="${mediaId}"] img`) || document.getElementById('MainProductImage');
+            if (mediaEl) {
+              console.log('[collection swatch] Found media element, updating src');
+              mediaEl.src = thumb;
+            } else {
+              console.log('[collection swatch] No media element found for mediaId:', mediaId, 'falling back to product card logic');
+              // Fall back to product card logic when mediaId doesn't work
+              const card = btn.closest('.product-card');
+              if (card) {
+                const cardImg = card.querySelector('img.product-card__img');
+                if (cardImg) {
+                  console.log('[collection swatch] Found product card image, updating src');
+                  cardImg.src = thumb;
+                } else {
+                  console.log('[collection swatch] No product card image found, available images:', card.querySelectorAll('img'));
+                }
+              } else {
+                console.log('[collection swatch] No product card found');
+              }
+            }
+          } else {
+            // For collection page product cards, find the image in the same card
+            const card = btn.closest('.product-card');
+            if (card) {
+              const cardImg = card.querySelector('img.product-card__img');
+              if (cardImg) {
+                console.log('[collection swatch] Found product card image, updating src');
+                cardImg.src = thumb;
+              } else {
+                console.log('[collection swatch] No product card image found, available images:', card.querySelectorAll('img'));
+              }
+            } else {
+              console.log('[collection swatch] No product card found');
+            }
+          }
+        }
+
+        // Visual state - same as homepage
+        const group = btn.closest('[data-swatch-group]');
+        if (group) {
+          // Remove selected state from all swatches in group
+          group.querySelectorAll('.swatch').forEach(s => s.classList.remove('is-selected'));
+          // Add selected state to clicked swatch
+          btn.classList.add('is-selected');
+        }
+      });
+    });
+  });
+});
+
+/* ========================================
+   DARK MODE STYLING FOR COLLECTION PAGE
+   Cache-busting: {{ 'now' | date: '%s' }}
+   ======================================== */
+
+/* Collection page container - Force refresh {{ 'now' | date: '%Y%m%d%H%M%S' }} */
+[data-theme="dark"] #collection-{{ collection.id }} {
+  background: var(--bg-primary, #0f172a) !important;
+  color: var(--text-primary, #f8fafc) !important;
+}
+
+/* Center product titles and content - Match homepage */
+#collection-{{ collection.id }} .product-card__content {
+  text-align: center !important;
+}
+
+#collection-{{ collection.id }} .product-card__title,
+#collection-{{ collection.id }} .product-card h3 {
+  text-align: center !important;
+  color: #1e293b !important;
+}
+
+#collection-{{ collection.id }} .product-card__price {
+  text-align: center !important;
+}
+
+/* Fix swatch overflow and center them - Match homepage */
+#collection-{{ collection.id }} .swatch-list {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  gap: 6px !important;
+}
+
+/* Collection title and description */
+[data-theme="dark"] #collection-{{ collection.id }} h1 {
+  color: var(--text-primary, #f8fafc) !important;
+  text-shadow: 0 0 10px rgba(96, 165, 250, 0.3);
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} p {
+  color: var(--text-secondary, #e2e8f0) !important;
+  opacity: 0.9;
+}
+
+/* Product cards dark mode - Match header color exactly */
+[data-theme="dark"] #collection-{{ collection.id }} .enhanced-card {
+  background: var(--bg-primary, #0f172a) !important; /* Same as header */
+  border: 1px solid var(--border-primary, #334155) !important;
+  color: var(--text-primary, #f8fafc) !important;
+}
+
+/* Additional selectors to ensure header color is applied */
+[data-theme="dark"] #collection-{{ collection.id }} .product-card {
+  background: var(--bg-primary, #0f172a) !important; /* Same as header */
+  border: 1px solid var(--border-primary, #334155) !important;
+  color: var(--text-primary, #f8fafc) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} article {
+  background: var(--bg-primary, #0f172a) !important; /* Same as header */
+  border: 1px solid var(--border-primary, #334155) !important;
+  color: var(--text-primary, #f8fafc) !important;
+}
+
+/* Image container styling to match featured collection */
+[data-theme="dark"] #collection-{{ collection.id }} .image-container {
+  background: var(--bg-tertiary, #334155) !important;
+  border-radius: 8px !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .product-card__img {
+  background: var(--bg-tertiary, #334155) !important;
+  border-radius: 8px !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .enhanced-card:hover {
+  box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.5)) !important;
+  border-color: var(--button-primary, #3b82f6) !important;
+}
+
+/* Product card content - Match header color */
+[data-theme="dark"] #collection-{{ collection.id }} .product-card__content {
+  background: var(--bg-primary, #0f172a) !important; /* Same as header */
+  color: var(--text-primary, #f8fafc) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .product-card__body {
+  background: var(--bg-primary, #0f172a) !important; /* Same as header */
+  color: var(--text-primary, #f8fafc) !important;
+}
+
+/* Aggressive targeting for white backgrounds */
+[data-theme="dark"] #collection-{{ collection.id }} .card {
+  background: var(--bg-primary, #0f172a) !important;
+  color: var(--text-primary, #f8fafc) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .product-info {
+  background: var(--bg-primary, #0f172a) !important;
+  color: var(--text-primary, #f8fafc) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .product-details {
+  background: var(--bg-primary, #0f172a) !important;
+  color: var(--text-primary, #f8fafc) !important;
+}
+
+/* Override any white backgrounds */
+[data-theme="dark"] #collection-{{ collection.id }} * {
+  background-color: var(--bg-primary, #0f172a) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .enhanced-card * {
+  background-color: var(--bg-primary, #0f172a) !important;
+}
+
+/* Specific targeting for product card content areas */
+[data-theme="dark"] #collection-{{ collection.id }} .product-card__body > * {
+  background: var(--bg-primary, #0f172a) !important;
+  color: var(--text-primary, #f8fafc) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .product-card__body div {
+  background: var(--bg-primary, #0f172a) !important;
+  color: var(--text-primary, #f8fafc) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .product-card__body p {
+  background: var(--bg-primary, #0f172a) !important;
+  color: var(--text-primary, #f8fafc) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .product-card__body span {
+  background: var(--bg-primary, #0f172a) !important;
+  color: var(--text-primary, #f8fafc) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .product-card__title {
+  color: var(--text-primary, #f8fafc) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .product-card__price {
+  color: var(--success, #10b981) !important; /* Match featured collection green prices */
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .price {
+  color: var(--success, #10b981) !important; /* Match featured collection green prices */
+}
+
+/* Swatch styling - Match featured collection exactly */
+[data-theme="dark"] #collection-{{ collection.id }} .swatch {
+  background: var(--bg-tertiary, #334155) !important;
+  border: 2px solid var(--border-primary, #334155) !important;
+  color: var(--text-primary, #f8fafc) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .swatch:hover {
+  border-color: var(--button-primary, #3b82f6) !important;
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.3) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .swatch.selected,
+[data-theme="dark"] #collection-{{ collection.id }} .swatch.is-selected {
+  border-color: var(--button-primary, #3b82f6) !important;
+  background: rgba(59, 130, 246, 0.2) !important;
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.4) !important;
+}
+
+/* Size/option buttons to match featured collection */
+[data-theme="dark"] #collection-{{ collection.id }} .size-option,
+[data-theme="dark"] #collection-{{ collection.id }} .option-button {
+  background: var(--bg-tertiary, #334155) !important;
+  border: 2px solid var(--border-primary, #334155) !important;
+  color: var(--text-primary, #f8fafc) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .size-option:hover,
+[data-theme="dark"] #collection-{{ collection.id }} .option-button:hover {
+  border-color: var(--button-primary, #3b82f6) !important;
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.3) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .size-option.selected,
+[data-theme="dark"] #collection-{{ collection.id }} .option-button.selected {
+  border-color: var(--button-primary, #3b82f6) !important;
+  background: rgba(59, 130, 246, 0.2) !important;
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.4) !important;
+}
+
+/* Swatch legend */
+[data-theme="dark"] #collection-{{ collection.id }} .vp-legend {
+  color: var(--text-secondary, #e2e8f0) !important;
+  font-weight: 600;
+}
+
+/* Quick View and Wishlist buttons */
+[data-theme="dark"] #collection-{{ collection.id }} .quick-view-btn {
+  background: var(--bg-tertiary, #334155) !important;
+  border: 1px solid var(--border-primary, #334155) !important;
+  color: var(--text-primary, #f8fafc) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .quick-view-btn:hover {
+  background: var(--button-primary, #3b82f6) !important;
+  border-color: var(--button-primary, #3b82f6) !important;
+  color: white !important;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.3) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .wishlist-btn {
+  background: var(--bg-tertiary, #334155) !important;
+  border: 1px solid var(--border-primary, #334155) !important;
+  color: var(--text-primary, #f8fafc) !important;
+}
+
+[data-theme="dark"] #collection-{{ collection.id }} .wishlist-btn:hover {
+  background: var(--error, #ef4444) !important;
+  border-color: var(--error, #ef4444) !important;
+  color: white !important;
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.3) !important;
+}
+
+/* Image overlay dark mode */
+[data-theme="dark"] #collection-{{ collection.id }} .image-overlay {
+  background: rgba(15, 23, 42, 0.9) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+/* Card glow effect for dark mode */
+[data-theme="dark"] #collection-{{ collection.id }} .card-glow {
+  background: linear-gradient(45deg, rgba(59, 130, 246, 0.1), rgba(96, 165, 250, 0.2)) !important;
+}
+
+/* Badge styling */
+[data-theme="dark"] #collection-{{ collection.id }} .badge {
+  background: var(--error, #ef4444) !important;
+  color: white !important;
+  border: 1px solid var(--error, #ef4444) !important;
+}
+
+/* Mobile responsive dark mode */
+@media (max-width: 768px) {
+  [data-theme="dark"] #collection-{{ collection.id }} {
+    padding: 1rem 0 !important;
+  }
+  
+  [data-theme="dark"] #collection-{{ collection.id }} h1 {
+    font-size: 2rem !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  [data-theme="dark"] #collection-{{ collection.id }} .enhanced-card {
+    margin-bottom: 1rem !important;
+  }
+}
+</script>
+
+{% schema %}
+{
+  "name": "Main collection",
+  "settings": [],
+  "presets": [{ "name": "Main collection" }]
+}
+{% endschema %}

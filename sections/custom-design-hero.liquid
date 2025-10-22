@@ -1,0 +1,670 @@
+{% comment %}
+  Custom Design Hero Section
+  A stunning, modern, premium hero banner for the custom t-shirt studio
+{% endcomment %}
+
+<div class="custom-design-hero-section">
+  <style>
+    /* Premium Modern Hero Section with Teal */
+    .custom-design-hero-section {
+      background: linear-gradient(135deg, 
+        #27e1c1 0%, 
+        #667eea 20%, 
+        #764ba2 35%, 
+        #f093fb 50%, 
+        #4facfe 65%,
+        #27e1c1 80%, 
+        #00f2fe 100%);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+      padding: 40px 20px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: auto;
+    }
+    
+    /* Animated gradient background */
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    /* Floating blob animations */
+    .hero-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.3;
+      animation: float 20s ease-in-out infinite;
+    }
+    
+    .hero-blob-1 {
+      width: 400px;
+      height: 400px;
+      background: linear-gradient(135deg, #27e1c1, #f093fb, #f5576c);
+      top: -10%;
+      left: -5%;
+      animation-delay: 0s;
+    }
+    
+    .hero-blob-2 {
+      width: 350px;
+      height: 350px;
+      background: linear-gradient(135deg, #27e1c1, #4facfe, #00f2fe);
+      bottom: -10%;
+      right: -5%;
+      animation-delay: 7s;
+    }
+    
+    .hero-blob-3 {
+      width: 300px;
+      height: 300px;
+      background: linear-gradient(135deg, #27e1c1, #43e97b, #38f9d7);
+      top: 50%;
+      right: 10%;
+      animation-delay: 14s;
+    }
+    
+    @keyframes float {
+      0%, 100% {
+        transform: translate(0, 0) rotate(0deg) scale(1);
+      }
+      33% {
+        transform: translate(30px, -30px) rotate(120deg) scale(1.1);
+      }
+      66% {
+        transform: translate(-20px, 20px) rotate(240deg) scale(0.9);
+      }
+    }
+    
+    /* Glassmorphism card with Teal Accent */
+    .hero-content {
+      max-width: 950px;
+      width: 100%;
+      z-index: 10;
+      position: relative;
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(30px) saturate(180%);
+      -webkit-backdrop-filter: blur(30px) saturate(180%);
+      border-radius: 32px;
+      padding: 45px 50px;
+      border: 2px solid rgba(39, 225, 193, 0.5);
+      box-shadow: 
+        0 30px 80px rgba(0, 0, 0, 0.15),
+        0 0 0 1px rgba(39, 225, 193, 0.3) inset,
+        0 0 60px rgba(39, 225, 193, 0.2) inset,
+        0 0 80px rgba(39, 225, 193, 0.15);
+      animation: fadeInUp 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* Typography - Modern & Bold */
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: #ffffff;
+      margin: 0 0 16px 0;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      text-shadow: 
+        0 4px 20px rgba(0, 0, 0, 0.2),
+        0 0 40px rgba(255, 255, 255, 0.3);
+      background: linear-gradient(135deg, 
+        #ffffff 0%, 
+        #f0f9ff 30%, 
+        #e0f2fe 60%, 
+        #ffffff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      background-size: 300% auto;
+      animation: shimmerText 6s linear infinite;
+    }
+    
+    @keyframes shimmerText {
+      0% { background-position: 0% center; }
+      100% { background-position: 300% center; }
+    }
+    
+    .hero-subtitle {
+      font-size: 1.35rem;
+      color: rgba(255, 255, 255, 0.95);
+      margin: 0 0 14px 0;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    }
+    
+    .hero-description {
+      font-size: 1.05rem;
+      color: rgba(255, 255, 255, 0.9);
+      margin: 0 0 28px 0;
+      line-height: 1.6;
+      max-width: 750px;
+      margin-left: auto;
+      margin-right: auto;
+      text-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+      font-weight: 400;
+    }
+    
+    /* Premium Feature Pills with Icons */
+    .hero-features {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 28px 0 32px 0;
+    }
+    
+    .feature-pill {
+      background: rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(15px);
+      padding: 10px 22px;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      color: #0f172a;
+      font-weight: 600;
+      border: 2px solid rgba(39, 225, 193, 0.4);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(39, 225, 193, 0.15);
+    }
+    
+    .feature-pill::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.3), 
+        transparent);
+      transition: left 0.6s ease;
+    }
+    
+    .feature-pill:hover::before {
+      left: 100%;
+    }
+    
+    .feature-pill:hover {
+      background: rgba(39, 225, 193, 0.25);
+      transform: translateY(-4px) scale(1.05);
+      box-shadow: 
+        0 8px 25px rgba(39, 225, 193, 0.3),
+        0 0 30px rgba(39, 225, 193, 0.4);
+      border-color: rgba(39, 225, 193, 0.7);
+    }
+    
+    .feature-pill .icon {
+      font-size: 1.2rem;
+      animation: iconPulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes iconPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    
+    /* Premium 3D Glowing CTA Button with Teal Accent */
+    .hero-cta-button {
+      background: linear-gradient(135deg, 
+        #27e1c1 0%, 
+        #06b6d4 25%, 
+        #3b82f6 50%, 
+        #8b5cf6 75%, 
+        #27e1c1 100%);
+      background-size: 300% 300%;
+      animation: gradientFlow 4s ease infinite;
+      color: #ffffff;
+      border: none;
+      padding: 22px 60px;
+      border-radius: 50px;
+      font-size: 1.2rem;
+      font-weight: 800;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      box-shadow: 
+        0 12px 40px rgba(39, 225, 193, 0.4),
+        0 0 0 3px rgba(255, 255, 255, 0.3),
+        0 0 0 6px rgba(39, 225, 193, 0.3);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: perspective(1000px) translateZ(0);
+    }
+    
+    @keyframes gradientFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    .hero-cta-button::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s ease, height 0.6s ease;
+    }
+    
+    .hero-cta-button:hover::before {
+      width: 400px;
+      height: 400px;
+    }
+    
+    .hero-cta-button:hover {
+      transform: perspective(1000px) translateZ(20px) translateY(-6px) scale(1.05);
+      box-shadow: 
+        0 20px 60px rgba(39, 225, 193, 0.6),
+        0 0 0 4px rgba(255, 255, 255, 0.5),
+        0 0 0 8px rgba(39, 225, 193, 0.4),
+        0 0 80px rgba(39, 225, 193, 0.5);
+    }
+    
+    .hero-cta-button:active {
+      transform: perspective(1000px) translateZ(10px) translateY(-2px) scale(1.02);
+    }
+    
+    .hero-cta-button .arrow {
+      font-size: 1.3rem;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      z-index: 1;
+    }
+    
+    .hero-cta-button:hover .arrow {
+      transform: translateX(8px);
+    }
+    
+    .hero-cta-button span {
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* Floating sparkles */
+    .sparkle-effect {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+      animation: sparkleFloat 3s ease-in-out infinite;
+      pointer-events: none;
+    }
+    
+    .sparkle-1 { top: 15%; left: 10%; animation-delay: 0s; }
+    .sparkle-2 { top: 25%; right: 15%; animation-delay: 1s; }
+    .sparkle-3 { bottom: 20%; left: 20%; animation-delay: 2s; }
+    .sparkle-4 { bottom: 30%; right: 10%; animation-delay: 1.5s; }
+    
+    @keyframes sparkleFloat {
+      0%, 100% {
+        transform: translateY(0) scale(1);
+        opacity: 0.4;
+      }
+      50% {
+        transform: translateY(-20px) scale(1.5);
+        opacity: 1;
+      }
+    }
+    
+    /* Responsive Design - Mobile First */
+    @media (max-width: 768px) {
+      .custom-design-hero-section {
+        padding: 24px 16px;
+        min-height: auto;
+        overflow-x: hidden;
+        max-width: 100vw;
+        background-size: 200% 200%;
+      }
+      
+      .hero-content {
+        padding: 28px 20px;
+        border-radius: 20px;
+        max-width: 100%;
+        width: calc(100% - 10px);
+        margin: 0 auto;
+        box-sizing: border-box;
+        background: rgba(255, 255, 255, 0.35);
+        backdrop-filter: blur(25px);
+        box-shadow: 
+          0 15px 35px rgba(0, 0, 0, 0.12),
+          0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+      }
+      
+      .hero-title {
+        font-size: 2.25rem;
+        margin-bottom: 14px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        line-height: 1.15;
+        letter-spacing: -0.01em;
+      }
+      
+      .hero-subtitle {
+        font-size: 1.05rem;
+        margin-bottom: 14px;
+        line-height: 1.4;
+      }
+      
+      .hero-description {
+        font-size: 0.95rem;
+        margin-bottom: 24px;
+        line-height: 1.65;
+        max-width: 100%;
+      }
+      
+      .hero-features {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin: 24px 0 32px 0;
+        width: 100%;
+      }
+      
+      .feature-pill {
+        font-size: 0.8rem;
+        padding: 10px 14px;
+        white-space: nowrap;
+        border-radius: 20px;
+        text-align: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.35);
+        backdrop-filter: blur(12px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      }
+      
+      .feature-pill .icon {
+        font-size: 1rem;
+      }
+      
+      .hero-cta-button {
+        width: 100%;
+        max-width: 100%;
+        justify-content: center;
+        padding: 17px 36px;
+        font-size: 0.95rem;
+        letter-spacing: 1.2px;
+        box-sizing: border-box;
+        border-radius: 40px;
+        background-size: 200% 200%;
+        box-shadow: 
+          0 10px 30px rgba(139, 92, 246, 0.35),
+          0 0 0 3px rgba(255, 255, 255, 0.25);
+      }
+      
+      .hero-cta-button:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 
+          0 15px 40px rgba(139, 92, 246, 0.45),
+          0 0 0 3px rgba(255, 255, 255, 0.35);
+      }
+      
+      .hero-cta-button .arrow {
+        font-size: 1.1rem;
+      }
+      
+      .hero-blob {
+        display: none;
+      }
+      
+      .sparkle-effect {
+        display: none;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .custom-design-hero-section {
+        padding: 24px 12px;
+      }
+      
+      .hero-content {
+        padding: 28px 18px;
+        border-radius: 18px;
+        width: calc(100% - 8px);
+      }
+      
+      .hero-title {
+        font-size: 1.85rem;
+        line-height: 1.2;
+        margin-bottom: 12px;
+      }
+      
+      .hero-subtitle {
+        font-size: 0.95rem;
+        margin-bottom: 12px;
+      }
+      
+      .hero-description {
+        font-size: 0.9rem;
+        margin-bottom: 20px;
+        line-height: 1.6;
+      }
+      
+      .hero-features {
+        gap: 8px;
+        margin: 20px 0 28px 0;
+      }
+      
+      .feature-pill {
+        font-size: 0.75rem;
+        padding: 9px 12px;
+      }
+      
+      .feature-pill .icon {
+        font-size: 0.95rem;
+      }
+      
+      .hero-cta-button {
+        padding: 16px 32px;
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+      }
+      
+      .hero-cta-button .arrow {
+        font-size: 1rem;
+      }
+    }
+    
+    @media (max-width: 360px) {
+      .hero-content {
+        padding: 24px 16px;
+      }
+      
+      .hero-title {
+        font-size: 1.65rem;
+      }
+      
+      .hero-subtitle {
+        font-size: 0.9rem;
+      }
+      
+      .hero-description {
+        font-size: 0.85rem;
+      }
+      
+      .feature-pill {
+        font-size: 0.7rem;
+        padding: 8px 10px;
+      }
+      
+      .hero-cta-button {
+        padding: 15px 28px;
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+  
+  <!-- Floating blob backgrounds -->
+  <div class="hero-blob hero-blob-1"></div>
+  <div class="hero-blob hero-blob-2"></div>
+  <div class="hero-blob hero-blob-3"></div>
+  
+  <!-- Floating sparkles -->
+  <div class="sparkle-effect sparkle-1"></div>
+  <div class="sparkle-effect sparkle-2"></div>
+  <div class="sparkle-effect sparkle-3"></div>
+  <div class="sparkle-effect sparkle-4"></div>
+  
+  <!-- Main content card -->
+  <div class="hero-content" role="main" aria-label="Design Studio Welcome">
+    <h1 class="hero-title">{{ section.settings.title | default: "🎨 Design Your Dream T-Shirt" }}</h1>
+    <p class="hero-subtitle">{{ section.settings.subtitle | default: "Professional Custom Design Studio" }}</p>
+    <p class="hero-description">
+      {{ section.settings.description | default: "Unleash your creativity with our advanced design studio. Upload your artwork, customize colors, adjust positioning, and bring your vision to life with professional-quality custom t-shirts." }}
+    </p>
+    
+    <!-- Premium Feature Pills with Icons -->
+    <div class="hero-features" role="list">
+      <div class="feature-pill" role="listitem">
+        <span class="icon">⚡</span>
+        <span>Real-Time Preview</span>
+      </div>
+      <div class="feature-pill" role="listitem">
+        <span class="icon">🎨</span>
+        <span>Multiple Colors</span>
+      </div>
+      <div class="feature-pill" role="listitem">
+        <span class="icon">📏</span>
+        <span>Perfect Positioning</span>
+      </div>
+      <div class="feature-pill" role="listitem">
+        <span class="icon">💎</span>
+        <span>Premium Quality</span>
+      </div>
+      <div class="feature-pill" role="listitem">
+        <span class="icon">📥</span>
+        <span>Instant Download</span>
+      </div>
+    </div>
+    
+    <!-- Premium 3D CTA Button -->
+    <div style="display: flex; justify-content: center; width: 100%;">
+      <button class="hero-cta-button" onclick="openCustomDesignStudio()" aria-label="Start designing your custom t-shirt">
+        <span>Start Designing</span>
+        <span class="arrow">→</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Ensure the openCustomDesignStudio function is available globally
+window.openCustomDesignStudio = window.openCustomDesignStudio || function() {
+  console.log('🎨 Opening Advanced Design Studio...');
+  
+  // Hide hero section
+  const hero = document.querySelector('[id*="shopify-section-template--"]');
+  if (hero) {
+    hero.style.display = 'none';
+  }
+  
+  // Hide main content
+  const mainContent = document.querySelector('.main-content');
+  if (mainContent) {
+    mainContent.style.display = 'none';
+  }
+  
+  // Try to show advanced studio first, then fall back to basic
+  let studio = document.querySelector('[id*="cts-advanced"]');
+  if (!studio) {
+    studio = document.querySelector('[id*="custom-tshirt-studio"]');
+  }
+  
+  if (studio) {
+    console.log('✅ Studio found, showing it...');
+    studio.style.display = 'block';
+    
+    // Wait a moment for the display change to take effect, then scroll to the studio
+    setTimeout(() => {
+      studio.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  } else {
+    console.error('❌ Studio element not found!');
+  }
+};
+
+// Log when this script loads
+console.log('✅ openCustomDesignStudio function loaded');
+</script>
+
+{% schema %}
+{
+  "name": "Custom Design Hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "🎨 Design Your Dream T-Shirt"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Professional Custom Design Studio"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Unleash your creativity with our advanced design studio. Upload your artwork, customize colors, adjust positioning, and bring your vision to life with professional-quality custom t-shirts."
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 80
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Design Hero"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,481 @@
+{% comment %}
+  Enhanced Designer Controls Snippet
+  Adds UI for: Image upload, Curved text, Animations, Gradients, Templates, Export
+  Include this in custom-tshirt-studio-advanced.liquid
+{% endcomment %}
+
+<script src="{{ 'designer-enhancements.js' | asset_url }}" defer></script>
+
+<style>
+/* Enhanced Controls Styles */
+.cts-gradient-preview-{{ section.id }} {
+    width: 100%;
+    height: 40px;
+    border-radius: 8px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.cts-gradient-preview-{{ section.id }}:hover {
+    border-color: rgba(20, 184, 166, 0.5);
+    transform: scale(1.02);
+}
+
+.cts-template-card-{{ section.id }} {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.cts-template-card-{{ section.id }}:hover {
+    border-color: #14b8a6;
+    background: rgba(20, 184, 166, 0.1);
+}
+
+.cts-animation-preview-{{ section.id }} {
+    display: inline-block;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.cts-animation-preview-{{ section.id }}:hover {
+    background: rgba(20, 184, 166, 0.1);
+    border-color: #14b8a6;
+}
+
+.cts-autosave-indicator-{{ section.id }} {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    background: rgba(20, 184, 166, 0.95);
+    color: white;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(20, 184, 166, 0.4);
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+.cts-autosave-indicator-{{ section.id }}.show {
+    opacity: 1;
+}
+
+.drag-over {
+    background: rgba(20, 184, 166, 0.1) !important;
+    border-color: #14b8a6 !important;
+}
+</style>
+
+<!-- Image Upload Section -->
+<div class="cts-section-{{ section.id }}" id="imageSection-{{ section.id }}" style="display: none;">
+    <h3>🖼️ Image Layer</h3>
+    <div class="cts-section-content-{{ section.id }}">
+        <input type="file" class="cts-file-input-{{ section.id }}" id="imageLayerUpload-{{ section.id }}" accept="image/png,image/jpeg,image/jpg,image/gif,image/webp,image/svg+xml">
+        <label for="imageLayerUpload-{{ section.id }}" class="cts-file-upload-btn-{{ section.id }}">
+            📤 Upload Image
+        </label>
+        <p style="font-size: 12px; color: rgba(255, 255, 255, 0.6); margin: 8px 0 0 0; text-align: center; line-height: 1.4;">
+            Supported: PNG, JPG, JPEG, GIF, WebP, SVG<br>
+            <span style="font-size: 11px; opacity: 0.8;">Max size: 10MB</span>
+        </p>
+        
+        <div id="imageFilters-{{ section.id }}" style="display: none; margin-top: 12px;">
+            <div>
+                <label class="cts-label-{{ section.id }}">Brightness</label>
+                <div class="cts-slider-group-{{ section.id }}">
+                    <input type="range" class="cts-slider-{{ section.id }}" id="imgBrightness-{{ section.id }}" min="0" max="200" value="100">
+                    <span class="cts-slider-value-{{ section.id }}" id="imgBrightnessValue-{{ section.id }}">100%</span>
+                </div>
+            </div>
+            
+            <div>
+                <label class="cts-label-{{ section.id }}">Contrast</label>
+                <div class="cts-slider-group-{{ section.id }}">
+                    <input type="range" class="cts-slider-{{ section.id }}" id="imgContrast-{{ section.id }}" min="0" max="200" value="100">
+                    <span class="cts-slider-value-{{ section.id }}" id="imgContrastValue-{{ section.id }}">100%</span>
+                </div>
+            </div>
+            
+            <div>
+                <label class="cts-label-{{ section.id }}">Saturation</label>
+                <div class="cts-slider-group-{{ section.id }}">
+                    <input type="range" class="cts-slider-{{ section.id }}" id="imgSaturate-{{ section.id }}" min="0" max="200" value="100">
+                    <span class="cts-slider-value-{{ section.id }}" id="imgSaturateValue-{{ section.id }}">100%</span>
+                </div>
+            </div>
+            
+            <div>
+                <label class="cts-label-{{ section.id }}">Blur</label>
+                <div class="cts-slider-group-{{ section.id }}">
+                    <input type="range" class="cts-slider-{{ section.id }}" id="imgBlur-{{ section.id }}" min="0" max="20" value="0">
+                    <span class="cts-slider-value-{{ section.id }}" id="imgBlurValue-{{ section.id }}">0px</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Curved Text Section -->
+<div class="cts-section-{{ section.id }}" id="curvedTextSection-{{ section.id }}" style="display: none;">
+    <h3>〰️ Curved Text</h3>
+    <div class="cts-section-content-{{ section.id }}">
+        <div class="cts-toggle-{{ section.id }}">
+            <span class="cts-label-{{ section.id }}" style="margin: 0;">Enable Curved Text</span>
+            <div class="cts-switch-{{ section.id }}" id="curvedTextToggle-{{ section.id }}"></div>
+        </div>
+        
+        <div id="curvedTextControls-{{ section.id }}" style="display: none; margin-top: 12px;">
+            <label class="cts-label-{{ section.id }}">Curve Radius</label>
+            <div class="cts-slider-group-{{ section.id }}">
+                <input type="range" class="cts-slider-{{ section.id }}" id="curveRadius-{{ section.id }}" min="-300" max="300" value="0">
+                <span class="cts-slider-value-{{ section.id }}" id="curveRadiusValue-{{ section.id }}">0</span>
+            </div>
+            <p style="font-size: 11px; color: #64748b; margin-top: 6px;">
+                Negative = curve up, Positive = curve down
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Animation Section -->
+<div class="cts-section-{{ section.id }}" id="animationSection-{{ section.id }}" style="display: none;">
+    <h3>✨ Animations</h3>
+    <div class="cts-section-content-{{ section.id }}">
+        <label class="cts-label-{{ section.id }}">Animation Preset</label>
+        <select class="cts-select-{{ section.id }}" id="animationPreset-{{ section.id }}">
+            <option value="">No Animation</option>
+            <option value="fade-in">Fade In</option>
+            <option value="slide-up">Slide Up</option>
+            <option value="slide-down">Slide Down</option>
+            <option value="scale-in">Scale In</option>
+            <option value="rotate-in">Rotate In</option>
+            <option value="bounce">Bounce</option>
+            <option value="pulse">Pulse</option>
+        </select>
+        
+        <div style="margin-top: 12px;">
+            <div class="cts-toggle-{{ section.id }}">
+                <span class="cts-label-{{ section.id }}" style="margin: 0;">Loop Animation</span>
+                <div class="cts-switch-{{ section.id }}" id="animationLoop-{{ section.id }}"></div>
+            </div>
+        </div>
+        
+        <button class="cts-btn-secondary-{{ section.id }}" id="previewAnimation-{{ section.id }}" style="margin-top: 12px;">
+            ▶️ Preview Animation
+        </button>
+    </div>
+</div>
+
+<!-- Gradient Section -->
+<div class="cts-section-{{ section.id }}" id="gradientSection-{{ section.id }}" style="display: none;">
+    <h3>🌈 Gradient Fill</h3>
+    <div class="cts-section-content-{{ section.id }}">
+        <div class="cts-toggle-{{ section.id }}">
+            <span class="cts-label-{{ section.id }}" style="margin: 0;">Use Gradient</span>
+            <div class="cts-switch-{{ section.id }}" id="gradientToggle-{{ section.id }}"></div>
+        </div>
+        
+        <div id="gradientControls-{{ section.id }}" style="display: none; margin-top: 12px;">
+            <label class="cts-label-{{ section.id }}">Gradient Presets</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;">
+                <div class="cts-gradient-preview-{{ section.id }}" 
+                     data-gradient="sunset" 
+                     style="background: linear-gradient(45deg, #ff6b6b, #feca57);"
+                     title="Sunset"></div>
+                <div class="cts-gradient-preview-{{ section.id }}" 
+                     data-gradient="ocean" 
+                     style="background: linear-gradient(135deg, #4facfe, #00f2fe);"
+                     title="Ocean"></div>
+                <div class="cts-gradient-preview-{{ section.id }}" 
+                     data-gradient="purple" 
+                     style="background: linear-gradient(90deg, #a78bfa, #ec4899);"
+                     title="Purple Haze"></div>
+                <div class="cts-gradient-preview-{{ section.id }}" 
+                     data-gradient="forest" 
+                     style="background: linear-gradient(180deg, #134e4a, #10b981);"
+                     title="Forest"></div>
+            </div>
+            
+            <div>
+                <label class="cts-label-{{ section.id }}">Gradient Angle</label>
+                <div class="cts-slider-group-{{ section.id }}">
+                    <input type="range" class="cts-slider-{{ section.id }}" id="gradientAngle-{{ section.id }}" min="0" max="360" value="45">
+                    <span class="cts-slider-value-{{ section.id }}" id="gradientAngleValue-{{ section.id }}">45°</span>
+                </div>
+            </div>
+            
+            <div style="margin-top: 12px;">
+                <label class="cts-label-{{ section.id }}">Color 1</label>
+                <div class="cts-color-input-{{ section.id }}">
+                    <input type="color" class="cts-color-preview-{{ section.id }}" id="gradientColor1-{{ section.id }}" value="#ff6b6b">
+                    <input type="text" class="cts-input-{{ section.id }} cts-hex-input-{{ section.id }}" id="gradientColor1Hex-{{ section.id }}" value="#ff6b6b" maxlength="7">
+                </div>
+            </div>
+            
+            <div style="margin-top: 12px;">
+                <label class="cts-label-{{ section.id }}">Color 2</label>
+                <div class="cts-color-input-{{ section.id }}">
+                    <input type="color" class="cts-color-preview-{{ section.id }}" id="gradientColor2-{{ section.id }}" value="#feca57">
+                    <input type="text" class="cts-input-{{ section.id }} cts-hex-input-{{ section.id }}" id="gradientColor2Hex-{{ section.id }}" value="#feca57" maxlength="7">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Enhanced Export Section -->
+<div class="cts-section-{{ section.id }}">
+    <h3>💾 Enhanced Export</h3>
+    <div class="cts-section-content-{{ section.id }}">
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 12px;">
+            <button class="cts-btn-secondary-{{ section.id }}" id="exportSVGEnhanced-{{ section.id }}">
+                📄 SVG
+            </button>
+            <button class="cts-btn-secondary-{{ section.id }}" id="exportPNGEnhanced-{{ section.id }}">
+                🖼️ PNG (300 DPI)
+            </button>
+        </div>
+        
+        <button class="cts-btn-secondary-{{ section.id }}" id="exportJSONEnhanced-{{ section.id }}" style="width: 100%;">
+            📦 Save Design (JSON)
+        </button>
+        
+        <input type="file" id="importJSON-{{ section.id }}" accept=".json" style="display: none;">
+        <label for="importJSON-{{ section.id }}" class="cts-btn-secondary-{{ section.id }}" style="margin-top: 8px; display: block; text-align: center; cursor: pointer;">
+            📂 Load Design
+        </label>
+    </div>
+</div>
+
+<!-- Auto-Save Indicator -->
+<div class="cts-autosave-indicator-{{ section.id }}" id="autosaveIndicator-{{ section.id }}">
+    ✓ Design Auto-Saved
+</div>
+
+<script>
+(function() {
+    const sectionId = '{{ section.id }}';
+    
+    // Wait for enhancements to load
+    function waitForEnhancements(callback) {
+        if (window.DesignerEnhancements) {
+            callback();
+        } else {
+            setTimeout(() => waitForEnhancements(callback), 100);
+        }
+    }
+    
+    waitForEnhancements(function() {
+        console.log('🚀 Initializing enhanced controls...');
+        
+        const Enhancements = window.DesignerEnhancements;
+        
+        // Enhanced SVG Export - NOTE: SVG export uses layers (original design only)
+        // For mockup with t-shirt, use PNG export instead
+        document.getElementById(`exportSVGEnhanced-${sectionId}`)?.addEventListener('click', function() {
+            if (!window.designerGetLayers) {
+                alert('Designer not ready');
+                return;
+            }
+            
+            const layers = window.designerGetLayers();
+            console.log('🎨 Exporting SVG with layers (original design only):', layers);
+            
+            if (!layers || layers.length === 0) {
+                alert('⚠️ No design to export! Add text or upload an image first.');
+                return;
+            }
+            
+            const svg = DesignerEnhancements.Export.exportToSVG(layers, 400, 400);
+            console.log('📄 SVG generated:', svg.substring(0, 200) + '...');
+            DesignerEnhancements.Export.downloadFile(svg, 'design-original.svg', 'image/svg+xml');
+            
+            // Show info about mockup export
+            setTimeout(() => {
+                alert('ℹ️ SVG exported the original design.\n\nFor t-shirt mockup, use PNG export instead!');
+            }, 100);
+        });
+        
+        // Enhanced PNG Export - Captures FULL MOCKUP (t-shirt with design)
+        document.getElementById(`exportPNGEnhanced-${sectionId}`)?.addEventListener('click', async function() {
+            if (!window.designerCaptureMockup) {
+                alert('Designer not ready');
+                return;
+            }
+            
+            const layers = window.designerGetLayers();
+            if (!layers || layers.length === 0) {
+                alert('⚠️ No design to export! Add text or upload an image first.');
+                return;
+            }
+            
+            this.disabled = true;
+            this.textContent = '⏳ Capturing mockup...';
+            
+            try {
+                console.log('📸 Capturing full t-shirt mockup...');
+                
+                // Capture the complete mockup (t-shirt + design)
+                const mockupDataUrl = await window.designerCaptureMockup();
+                
+                if (!mockupDataUrl) {
+                    throw new Error('Failed to capture mockup');
+                }
+                
+                console.log('✅ Mockup captured successfully');
+                
+                // Convert data URL to blob for download
+                const response = await fetch(mockupDataUrl);
+                const blob = await response.blob();
+                
+                console.log('🖼️ PNG mockup generated:', blob.size, 'bytes');
+                
+                // Download the file
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'tshirt-mockup.png';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                this.textContent = '✓ Downloaded!';
+            } catch (e) {
+                console.error('❌ Export failed:', e);
+                alert('Export failed: ' + e.message);
+                this.textContent = '🖼️ PNG (300 DPI)';
+            } finally {
+                this.disabled = false;
+                setTimeout(() => {
+                    this.textContent = '🖼️ PNG (300 DPI)';
+                }, 2000);
+            }
+        });
+        
+        // Enhanced JSON Export
+        document.getElementById(`exportJSONEnhanced-${sectionId}`)?.addEventListener('click', function() {
+            if (!window.designerGetState) {
+                alert('Designer not ready');
+                return;
+            }
+            
+            const state = window.designerGetState();
+            console.log('💾 Exporting state:', state);
+            
+            if (!state.layers || state.layers.length === 0) {
+                alert('⚠️ No design to export! Add text or upload an image first.');
+                return;
+            }
+            
+            const json = JSON.stringify(state, null, 2);
+            console.log('📝 JSON size:', json.length, 'chars');
+            DesignerEnhancements.Export.downloadFile(json, 'design.json', 'application/json');
+        });
+        
+        // Import JSON
+        document.getElementById(`importJSON-${sectionId}`)?.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                try {
+                    const state = JSON.parse(event.target.result);
+                    if (window.designerLoadState) {
+                        window.designerLoadState(state);
+                        alert('✓ Design loaded successfully!');
+                    }
+                } catch (err) {
+                    alert('Failed to load design file. Invalid format.');
+                    console.error(err);
+                }
+            };
+            reader.readAsText(file);
+        });
+        
+        // Auto-save initialization (DISABLED - was too intrusive)
+        // if (window.designerGetState && window.designerLoadState) {
+        //     const indicator = document.getElementById(`autosaveIndicator-${sectionId}`);
+        //     
+        //     // Start auto-save every 30 seconds
+        //     Enhancements.AutoSave.startAutoSave(
+        //         () => window.designerGetState(),
+        //         30000
+        //     );
+        //     
+        //     // Show indicator on save
+        //     const originalSave = Enhancements.AutoSave.save;
+        //     Enhancements.AutoSave.save = function(state) {
+        //         const result = originalSave.call(this, state);
+        //         if (result && indicator) {
+        //             indicator.classList.add('show');
+        //             setTimeout(() => indicator.classList.remove('show'), 2000);
+        //         }
+        //         return result;
+        //     };
+        //     
+        //     // Check for saved state on load
+        //     const savedState = Enhancements.AutoSave.load();
+        //     const lastSave = Enhancements.AutoSave.getLastSaveTime();
+        //     
+        //     if (savedState && lastSave) {
+        //         const minutesAgo = Math.round((Date.now() - lastSave.getTime()) / 60000);
+        //         if (confirm(`Found auto-saved design from ${minutesAgo} minute(s) ago. Restore it?`)) {
+        //             window.designerLoadState(savedState);
+        //         }
+        //     }
+        // }
+        
+        console.log('Auto-save disabled for better UX');
+        
+        // Animation preview
+        document.getElementById(`previewAnimation-${sectionId}`)?.addEventListener('click', function() {
+            const preset = document.getElementById(`animationPreset-${sectionId}`).value;
+            const loop = document.getElementById(`animationLoop-${sectionId}`).classList.contains('active');
+            
+            if (!preset) {
+                alert('Please select an animation preset first');
+                return;
+            }
+            
+            if (window.designerGetSelectedLayer) {
+                const layer = window.designerGetSelectedLayer();
+                if (layer) {
+                    const element = document.getElementById(layer.id);
+                    if (element) {
+                        Enhancements.Animations.applyAnimation(element, preset, loop);
+                    }
+                }
+            }
+        });
+        
+        // Gradient presets
+        document.querySelectorAll(`.cts-gradient-preview-${sectionId}`).forEach(preview => {
+            preview.addEventListener('click', function() {
+                const gradientName = this.dataset.gradient;
+                const preset = Enhancements.Gradients.presets.find(p => p.name.toLowerCase().includes(gradientName));
+                
+                if (preset && window.designerApplyGradient) {
+                    window.designerApplyGradient(preset.gradient);
+                }
+            });
+        });
+        
+        console.log('✅ Enhanced controls initialized');
+    });
+})();
+</script>
+

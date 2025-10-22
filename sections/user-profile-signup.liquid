@@ -1,0 +1,938 @@
+{%- comment -%}
+User Profile Signup Section
+Allows users to create accounts with profile information
+{%- endcomment -%}
+
+{%- comment -%}
+User Profile Signup Section - Only show for non-authenticated users
+{%- endcomment -%}
+
+<!-- Profile Section - CTA Hidden (accessed via header button) -->
+<div class="profile-cta-section" id="user-profile-signup" style="display: none !important;">
+  <div class="profile-cta-container">
+    <div class="cta-content">
+      <h3>Join NewThrifts</h3>
+      <p>Create your profile to save preferences, track orders, and get personalized style recommendations.</p>
+      <button class="profile-cta-btn" id="open-profile-modal">
+        <span class="btn-icon">👤</span>
+        <span class="btn-text">Create Your Profile</span>
+        <span class="btn-arrow">→</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Full Profile Modal (hidden by default) -->
+<div class="profile-modal" id="profile-modal" style="display: none;">
+  <div class="modal-overlay" id="modal-overlay"></div>
+  <div class="modal-container">
+    <div class="modal-header">
+      <h2>Create Your Profile</h2>
+      <button class="modal-close" id="close-profile-modal">×</button>
+    </div>
+    
+    <div class="modal-content">
+      <div class="profile-forms">
+        <!-- Sign Up Form -->
+        <div class="signup-form" id="signup-form">
+          <h3>Sign Up</h3>
+          <form id="user-signup-form">
+            <div class="form-group">
+              <label for="signup-email">Email Address</label>
+              <input type="email" id="signup-email" name="email" required>
+              <span class="error-message" id="signup-email-error"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="signup-password">Password</label>
+              <input type="password" id="signup-password" name="password" required minlength="6">
+              <span class="error-message" id="signup-password-error"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="signup-confirm-password">Confirm Password</label>
+              <input type="password" id="signup-confirm-password" name="confirm-password" required>
+              <span class="error-message" id="signup-confirm-password-error"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="signup-full-name">Full Name</label>
+              <input type="text" id="signup-full-name" name="full-name" required>
+              <span class="error-message" id="signup-full-name-error"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="signup-phone">Phone Number (Optional)</label>
+              <input type="tel" id="signup-phone" name="phone">
+            </div>
+
+            <div class="form-group">
+              <label for="signup-birthday">Birthday (Optional)</label>
+              <input type="date" id="signup-birthday" name="birthday">
+            </div>
+
+            <div class="form-group">
+              <label for="signup-preferences">Style Preferences</label>
+              <div class="preference-tags">
+                <label class="tag-label">
+                  <input type="checkbox" name="preferences" value="casual">
+                  <span>Casual</span>
+                </label>
+                <label class="tag-label">
+                  <input type="checkbox" name="preferences" value="formal">
+                  <span>Formal</span>
+                </label>
+                <label class="tag-label">
+                  <input type="checkbox" name="preferences" value="streetwear">
+                  <span>Streetwear</span>
+                </label>
+                <label class="tag-label">
+                  <input type="checkbox" name="preferences" value="vintage">
+                  <span>Vintage</span>
+                </label>
+                <label class="tag-label">
+                  <input type="checkbox" name="preferences" value="sporty">
+                  <span>Sporty</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="signup-newsletter">
+                <input type="checkbox" id="signup-newsletter" name="newsletter" checked>
+                Subscribe to our newsletter for exclusive offers and style tips
+              </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="signup-submit" style="background: #27e1c1 !important; background-image: none !important; color: #0f172a !important;">
+              <span class="btn-text">Create Profile</span>
+              <span class="btn-loading" style="display: none;">Creating...</span>
+            </button>
+          </form>
+
+          <div class="form-switch">
+            <p>Already have an account? <a href="#" id="switch-to-login">Sign In</a></p>
+          </div>
+        </div>
+
+        <!-- Sign In Form -->
+        <div class="login-form" id="login-form" style="display: none;">
+          <h3>Sign In</h3>
+          <form id="user-login-form" action="/account/login" method="post">
+            <input type="hidden" name="form_type" value="customer_login">
+            <input type="hidden" name="utf8" value="✓">
+            
+            <div class="form-group">
+              <label for="login-email">Email Address</label>
+              <input type="email" id="login-email" name="customer[email]" required>
+              <span class="error-message" id="login-email-error"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="login-password">Password</label>
+              <input type="password" id="login-password" name="customer[password]" required>
+              <span class="error-message" id="login-password-error"></span>
+            </div>
+
+            <div class="form-options">
+              <label class="remember-me">
+                <input type="checkbox" id="remember-me" name="remember-me">
+                Remember me
+              </label>
+              <a href="#" class="forgot-password">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="login-submit" style="background: #27e1c1 !important; background-image: none !important; color: #0f172a !important;">
+              <span class="btn-text">Sign In</span>
+              <span class="btn-loading" style="display: none;">Signing in...</span>
+            </button>
+          </form>
+
+          <div class="form-switch">
+            <p>Don't have an account? <a href="#" id="switch-to-signup">Create Profile</a></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Success/Error Messages -->
+      <div class="message-container">
+        <div class="success-message" id="success-message" style="display: none;">
+          <div class="message-icon">✓</div>
+          <div class="message-text" id="success-text"></div>
+        </div>
+        <div class="error-message" id="error-message" style="display: none;">
+          <div class="message-icon">✗</div>
+          <div class="message-text" id="error-text"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* Cache-busting comment: v2.6 - Fixed modal cut-off issues */
+/* Compact CTA Section */
+.profile-cta-section {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.profile-cta-container {
+  background: #27e1c1;
+  border-radius: 24px;
+  padding: 3rem 2rem;
+  text-align: center;
+  border: none;
+  box-shadow: 0 20px 40px rgba(39, 225, 193, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-cta-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: transparent;
+  pointer-events: none;
+}
+
+.cta-content h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #0f172a;
+}
+
+.cta-content p {
+  color: #0f172a;
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.profile-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: #27e1c1 !important;
+  border: none;
+  border-radius: 50px;
+  color: #0f172a !important;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(39, 225, 193, 0.4);
+}
+
+.profile-cta-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(39, 225, 193, 0.5) !important;
+}
+
+.btn-icon {
+  font-size: 1.2rem;
+}
+
+.btn-arrow {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.profile-cta-btn:hover .btn-arrow {
+  transform: translateX(3px);
+}
+
+/* Modal Styles - Force correct display */
+.profile-modal {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 9999 !important;
+  display: none !important; /* Changed from flex to none - modal opens via JS only */
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 20px !important;
+}
+
+.modal-overlay {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: rgba(0, 0, 0, 0.8) !important;
+  backdrop-filter: blur(5px) !important;
+  z-index: 1 !important;
+}
+
+.modal-container {
+  position: relative !important;
+  max-width: 650px !important;
+  max-height: 95vh !important;
+  width: 90% !important;
+  background: rgba(15, 23, 42, 0.95) !important;
+  border-radius: 20px !important;
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(39, 225, 193, 0.2) !important;
+  overflow: hidden !important;
+  animation: modalSlideIn 0.3s ease-out !important;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(39, 225, 193, 0.1) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  z-index: 2 !important;
+  margin: auto !important;
+}
+
+/* Light mode modal */
+[data-theme="light"] .modal-container {
+  background: rgba(255, 255, 255, 0.98) !important;
+  border: 1px solid rgba(39, 225, 193, 0.3) !important;
+  box-shadow: 0 25px 50px rgba(39, 225, 193, 0.2), 0 0 0 1px rgba(39, 225, 193, 0.15) !important;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #27e1c1;
+  margin: 0;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.modal-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2rem;
+  min-height: 0;
+}
+
+.user-profile-signup {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.profile-header h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #27e1c1;
+}
+
+.profile-header p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.1rem;
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="tel"],
+.form-group input[type="date"] {
+  width: 100%;
+  padding: 0.875rem 1.25rem;
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(39, 225, 193, 0.3);
+  border-radius: 12px;
+  color: var(--text-primary, #f8fafc);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+/* Light mode form inputs */
+[data-theme="light"] .form-group input[type="text"],
+[data-theme="light"] .form-group input[type="email"],
+[data-theme="light"] .form-group input[type="password"],
+[data-theme="light"] .form-group input[type="tel"],
+[data-theme="light"] .form-group input[type="date"] {
+  background: #ffffff !important;
+  border: 1px solid rgba(39, 225, 193, 0.3) !important;
+  color: var(--text-primary, #1e293b);
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #27e1c1;
+  box-shadow: 0 0 0 3px rgba(39, 225, 193, 0.2), 0 4px 12px rgba(39, 225, 193, 0.1);
+  transform: translateY(-1px);
+}
+
+/* Light mode focus states */
+[data-theme="light"] .form-group input:focus {
+  border-color: #27e1c1 !important;
+  box-shadow: 0 0 0 3px rgba(39, 225, 193, 0.2), 0 4px 12px rgba(39, 225, 193, 0.1) !important;
+}
+
+.preference-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.tag-label {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: normal;
+  margin-bottom: 0;
+}
+
+.tag-label:hover {
+  background: rgba(39, 225, 193, 0.1);
+  border-color: #27e1c1;
+}
+
+.tag-label input[type="checkbox"] {
+  margin-right: 0.5rem;
+  width: auto;
+}
+
+.tag-label input[type="checkbox"]:checked + span {
+  color: #27e1c1;
+  font-weight: 600;
+}
+
+.btn {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary,
+#signup-submit.btn-primary,
+#login-submit.btn-primary,
+button.btn-primary,
+.btn.btn-primary {
+  background: #27e1c1 !important;
+  background-image: none !important;
+  background-color: #27e1c1 !important;
+  color: #0f172a !important;
+}
+
+.btn-primary:hover,
+#signup-submit.btn-primary:hover,
+#login-submit.btn-primary:hover,
+button.btn-primary:hover,
+.btn.btn-primary:hover {
+  transform: translateY(-2px);
+  background: #27e1c1 !important;
+  background-image: none !important;
+  box-shadow: 0 8px 25px rgba(39, 225, 193, 0.4) !important;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  font-weight: normal;
+  margin-bottom: 0;
+}
+
+.remember-me input[type="checkbox"] {
+  margin-right: 0.5rem;
+  width: auto;
+}
+
+.forgot-password {
+  color: #27e1c1;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
+
+.form-switch {
+  text-align: center;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.form-switch a {
+  color: #27e1c1;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.form-switch a:hover {
+  text-decoration: underline;
+}
+
+.message-container {
+  margin-top: 1.5rem;
+}
+
+.success-message,
+.error-message {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.success-message {
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: #22c55e;
+}
+
+.error-message {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+}
+
+.message-icon {
+  font-size: 1.2rem;
+  margin-right: 0.75rem;
+  font-weight: bold;
+}
+
+.error-message .error-message {
+  color: #ef4444;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+@media (max-width: 768px) {
+  .modal-container {
+    max-height: 98vh;
+    width: 95%;
+    margin: 1rem;
+  }
+  
+  .modal-content {
+    padding: 1.5rem;
+  }
+  
+  .user-profile-signup {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+  
+  .preference-tags {
+    flex-direction: column;
+  }
+  
+  .tag-label {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-container {
+    max-height: 100vh;
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+  }
+  
+  .modal-content {
+    padding: 1rem;
+  }
+}
+</style>
+
+<script>
+console.log('🎯 Profile signup section script loaded');
+
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('🎯 Profile signup DOMContentLoaded fired');
+  
+  // Check if user is authenticated and show/hide section accordingly
+  checkAuthAndShowSection();
+  
+  // Modal functionality
+  const openModalBtn = document.getElementById('open-profile-modal');
+  const closeModalBtn = document.getElementById('close-profile-modal');
+  const modalOverlay = document.getElementById('modal-overlay');
+  const profileModal = document.getElementById('profile-modal');
+  
+  const signupForm = document.getElementById('user-signup-form');
+  const loginForm = document.getElementById('user-login-form');
+  const signupSection = document.getElementById('signup-form');
+  const loginSection = document.getElementById('login-form');
+  const switchToLogin = document.getElementById('switch-to-login');
+  const switchToSignup = document.getElementById('switch-to-signup');
+
+  // Modal open/close functionality
+  if (openModalBtn) {
+    openModalBtn.addEventListener('click', function() {
+      profileModal.style.display = 'flex';
+      document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    });
+  }
+
+  function closeModal() {
+    profileModal.style.display = 'none';
+    document.body.style.overflow = 'auto'; // Restore scrolling
+  }
+
+  if (closeModalBtn) {
+    closeModalBtn.addEventListener('click', closeModal);
+  }
+
+  if (modalOverlay) {
+    modalOverlay.addEventListener('click', closeModal);
+  }
+
+  // Close modal on Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && profileModal.style.display === 'flex') {
+      closeModal();
+    }
+  });
+
+  // Form switching
+  switchToLogin.addEventListener('click', function(e) {
+    e.preventDefault();
+    signupSection.style.display = 'none';
+    loginSection.style.display = 'block';
+    clearMessages();
+  });
+
+  switchToSignup.addEventListener('click', function(e) {
+    e.preventDefault();
+    loginSection.style.display = 'none';
+    signupSection.style.display = 'block';
+    clearMessages();
+  });
+
+  // Signup form handling
+  signupForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const submitBtn = document.getElementById('signup-submit');
+    const btnText = submitBtn.querySelector('.btn-text');
+    const btnLoading = submitBtn.querySelector('.btn-loading');
+    
+    // Show loading state
+    submitBtn.disabled = true;
+    btnText.style.display = 'none';
+    btnLoading.style.display = 'inline';
+    
+    try {
+      const formData = new FormData(signupForm);
+      const password = formData.get('password');
+      const confirmPassword = formData.get('confirm-password');
+      
+      // Validate passwords match
+      if (password !== confirmPassword) {
+        showError('Passwords do not match');
+        return;
+      }
+      
+      // Get preferences
+      const preferences = Array.from(document.querySelectorAll('input[name="preferences"]:checked'))
+        .map(cb => cb.value);
+      
+      // Create user profile data
+      const profileData = {
+        email: formData.get('email'),
+        password: password,
+        full_name: formData.get('full-name'),
+        phone: formData.get('phone') || null,
+        birthday: formData.get('birthday') || null,
+        style_preferences: preferences,
+        newsletter_subscribed: formData.has('newsletter'),
+        shopify_customer_id: window.Shopify?.customer?.id || null
+      };
+      
+      // Sign up user
+      if (window.supabaseClient) {
+        const result = await window.supabaseClient.signUp(profileData.email, profileData.password, {
+          full_name: profileData.full_name,
+          phone: profileData.phone,
+          birthday: profileData.birthday,
+          style_preferences: profileData.style_preferences,
+          newsletter_subscribed: profileData.newsletter_subscribed,
+          shopify_customer_id: profileData.shopify_customer_id
+        });
+        
+        if (result.error) {
+          showError(result.error.message || 'Signup failed. Please try again.');
+        } else {
+          showSuccess('Profile created successfully! Please check your email to verify your account.');
+          signupForm.reset();
+          
+          // Track signup event
+          if (window.trackPageView) {
+            window.trackPageView({source: 'user_signup', profile_created: true});
+          }
+          
+          // Close modal after 2 seconds
+          setTimeout(() => {
+            closeModal();
+            checkAuthAndShowSection(); // Hide CTA since user is now authenticated
+          }, 2000);
+        }
+      } else {
+        showError('Authentication service not available. Please try again later.');
+      }
+      
+    } catch (error) {
+      console.error('Signup error:', error);
+      showError('An unexpected error occurred. Please try again.');
+    } finally {
+      // Reset button state
+      submitBtn.disabled = false;
+      btnText.style.display = 'inline';
+      btnLoading.style.display = 'none';
+    }
+  });
+
+  // Login form handling - Allow Shopify native authentication
+  loginForm.addEventListener('submit', async function(e) {
+    // Don't prevent default - let Shopify handle the authentication
+    // Only show loading state
+    const submitBtn = document.getElementById('login-submit');
+    const btnText = submitBtn.querySelector('.btn-text');
+    const btnLoading = submitBtn.querySelector('.btn-loading');
+    
+    // Show loading state
+    submitBtn.disabled = true;
+    btnText.style.display = 'none';
+    btnLoading.style.display = 'inline';
+    
+    // Let the form submit naturally to Shopify
+    // The form will redirect or show errors as needed
+  });
+
+  function showSuccess(message) {
+    clearMessages();
+    const successDiv = document.getElementById('success-message');
+    const successText = document.getElementById('success-text');
+    successText.textContent = message;
+    successDiv.style.display = 'flex';
+  }
+
+  function showError(message) {
+    clearMessages();
+    const errorDiv = document.getElementById('error-message');
+    const errorText = document.getElementById('error-text');
+    errorText.textContent = message;
+    errorDiv.style.display = 'flex';
+  }
+
+  function clearMessages() {
+    document.getElementById('success-message').style.display = 'none';
+    document.getElementById('error-message').style.display = 'none';
+  }
+
+  async function checkAuthAndShowSection() {
+    const ctaSection = document.getElementById('user-profile-signup');
+    
+    // Always ensure the section is visible first
+    if (ctaSection) {
+      ctaSection.style.display = 'block';
+      console.log('✅ Profile section is visible');
+    }
+    
+    try {
+      // Wait for Supabase to initialize (with timeout)
+      let attempts = 0;
+      while (!window.supabaseClient && attempts < 10) {
+        await new Promise(resolve => setTimeout(resolve, 300));
+        attempts++;
+      }
+      
+      if (window.supabaseClient) {
+        console.log('✅ Supabase client found, checking auth status...');
+        const result = await window.supabaseClient.getCurrentUser();
+        
+        if (result.user) {
+          // User is authenticated, hide the CTA section
+          console.log('✅ User is authenticated:', result.user.email);
+          if (ctaSection) ctaSection.style.display = 'none';
+        } else {
+          // User is not authenticated, keep showing the CTA section
+          console.log('ℹ️ User is not authenticated, showing signup CTA');
+          if (ctaSection) ctaSection.style.display = 'block';
+        }
+      } else {
+        // Supabase not available after waiting, keep showing the CTA section
+        console.warn('⚠️ Supabase not available, showing signup CTA anyway');
+        if (ctaSection) ctaSection.style.display = 'block';
+      }
+    } catch (error) {
+      console.error('❌ Auth check error:', error);
+      // On error, keep showing the CTA section
+      if (ctaSection) ctaSection.style.display = 'block';
+    }
+  }
+
+  // Clear individual field errors on input
+  const inputs = document.querySelectorAll('input');
+  inputs.forEach(input => {
+    input.addEventListener('input', function() {
+      const errorSpan = document.getElementById(this.id + '-error');
+      if (errorSpan) {
+        errorSpan.textContent = '';
+      }
+    });
+  });
+
+  // Force teal button colors - override any conflicting styles
+  function forceButtonColors() {
+    const buttons = document.querySelectorAll('#signup-submit, #login-submit, .btn-primary');
+    buttons.forEach(btn => {
+      if (btn) {
+        btn.style.setProperty('background', '#27e1c1', 'important');
+        btn.style.setProperty('background-color', '#27e1c1', 'important');
+        btn.style.setProperty('background-image', 'none', 'important');
+        btn.style.setProperty('color', '#0f172a', 'important');
+      }
+    });
+    
+    // Force white input backgrounds with teal borders
+    const inputs = document.querySelectorAll('.form-group input[type="text"], .form-group input[type="email"], .form-group input[type="password"], .form-group input[type="tel"], .form-group input[type="date"]');
+    inputs.forEach(input => {
+      if (input) {
+        input.style.setProperty('background', '#ffffff', 'important');
+        input.style.setProperty('background-color', '#ffffff', 'important');
+        input.style.setProperty('border', '1px solid rgba(39, 225, 193, 0.3)', 'important');
+      }
+    });
+  }
+  
+  // Apply immediately
+  forceButtonColors();
+  
+  // Apply after a short delay in case other scripts run
+  setTimeout(forceButtonColors, 100);
+  setTimeout(forceButtonColors, 500);
+  setTimeout(forceButtonColors, 1000);
+  
+  // Watch for DOM changes and reapply
+  const observer = new MutationObserver(forceButtonColors);
+  observer.observe(document.body, { childList: true, subtree: true });
+});
+</script>
+<!-- User Profile System Active -->
+
+{% schema %}
+{
+  "name": "User Profile Signup",
+  "tag": "section",
+  "class": "section-user-profile-signup",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Profile Signup Settings"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Join NewThrifts"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Create your profile to save preferences, track orders, and get personalized style recommendations."
+    }
+  ],
+  "presets": [
+    {
+      "name": "User Profile Signup"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,122 @@
+{%- comment -%}
+User Profile Page Template
+Displays user profile signup and dashboard
+{%- endcomment -%}
+
+{% assign page_title = 'User Profile' %}
+
+<div class="profile-page-wrapper">
+  <div class="profile-page-container">
+    {% comment %} Show signup form if user is not authenticated {% endcomment %}
+    <div id="profile-signup-section">
+      {% section 'user-profile-signup' %}
+    </div>
+    
+    {% comment %} Show dashboard if user is authenticated {% endcomment %}
+    <div id="profile-dashboard-section" style="display: none;">
+      {% section 'user-profile-dashboard' %}
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Profile Page Background and Layout */
+  .profile-page-wrapper {
+    min-height: 100vh;
+    background: var(--bg-primary, #0f172a);
+    padding: 2rem 0;
+    position: relative;
+  }
+
+  /* Light mode background */
+  [data-theme="light"] .profile-page-wrapper {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  }
+
+  /* Dark mode background with gradient */
+  [data-theme="dark"] .profile-page-wrapper {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+  }
+
+  .profile-page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Ensure all content has proper dark mode styling */
+  .profile-page-wrapper * {
+    color: inherit;
+  }
+
+  /* Dark mode text colors */
+  [data-theme="dark"] .profile-page-wrapper {
+    color: var(--text-primary, #f8fafc);
+  }
+
+  /* Light mode text colors */
+  [data-theme="light"] .profile-page-wrapper {
+    color: var(--text-primary, #1e293b);
+  }
+
+  /* Add subtle background pattern for visual interest */
+  .profile-page-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      radial-gradient(circle at 20% 80%, rgba(39, 225, 193, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(255, 79, 163, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Enhanced mobile responsiveness */
+  @media (max-width: 768px) {
+    .profile-page-wrapper {
+      padding: 1rem 0;
+    }
+    
+    .profile-page-container {
+      padding: 0 0.5rem;
+    }
+  }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  checkAuthStatus();
+});
+
+async function checkAuthStatus() {
+  try {
+    if (window.supabaseClient) {
+      const user = await window.supabaseClient.getCurrentUser();
+      if (user.user) {
+        // User is authenticated, show dashboard
+        document.getElementById('profile-signup-section').style.display = 'none';
+        document.getElementById('profile-dashboard-section').style.display = 'block';
+      } else {
+        // User is not authenticated, show signup form
+        document.getElementById('profile-signup-section').style.display = 'block';
+        document.getElementById('profile-dashboard-section').style.display = 'none';
+      }
+    } else {
+      // Supabase not available, show signup form
+      document.getElementById('profile-signup-section').style.display = 'block';
+      document.getElementById('profile-dashboard-section').style.display = 'none';
+    }
+  } catch (error) {
+    console.error('Auth check error:', error);
+    // On error, show signup form
+    document.getElementById('profile-signup-section').style.display = 'block';
+    document.getElementById('profile-dashboard-section').style.display = 'none';
+  }
+}
+</script>
+

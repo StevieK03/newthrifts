@@ -1,0 +1,315 @@
+{% comment %}
+  Supabase Connection Test
+  Add this snippet to any page to test Supabase connection
+{% endcomment %}
+
+<div id="supabase-test-{{ section.id }}" class="supabase-test">
+  <div class="test-container">
+    <h3>🔗 Supabase Connection Test</h3>
+    
+    <div class="test-results">
+      <div id="test-status" class="test-item">
+        <span class="test-label">Status:</span>
+        <span id="status-text" class="test-value">Testing...</span>
+      </div>
+      
+      <div id="test-client" class="test-item">
+        <span class="test-label">Client:</span>
+        <span id="client-text" class="test-value">Testing...</span>
+      </div>
+      
+      <div id="test-auth" class="test-item">
+        <span class="test-label">Authentication:</span>
+        <span id="auth-text" class="test-value">Testing...</span>
+      </div>
+      
+      <div id="test-database" class="test-item">
+        <span class="test-label">Database:</span>
+        <span id="database-text" class="test-value">Testing...</span>
+      </div>
+    </div>
+    
+    <div class="test-actions">
+      <button id="retest-btn" class="test-btn" onclick="runSupabaseTest()">
+        🔄 Run Test Again
+      </button>
+      <button id="clear-btn" class="test-btn secondary" onclick="clearTestResults()">
+        🗑️ Clear Results
+      </button>
+    </div>
+    
+    <div id="test-details" class="test-details" style="display: none;">
+      <h4>📋 Test Details</h4>
+      <pre id="test-output"></pre>
+    </div>
+  </div>
+</div>
+
+<style>
+  .supabase-test {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  .test-container h3 {
+    margin: 0 0 20px 0;
+    color: #1f2937;
+    font-size: 18px;
+  }
+
+  .test-results {
+    margin-bottom: 20px;
+  }
+
+  .test-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .test-item:last-child {
+    border-bottom: none;
+  }
+
+  .test-label {
+    font-weight: 600;
+    color: #374151;
+  }
+
+  .test-value {
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+
+  .test-value.success {
+    background: #d1fae5;
+    color: #065f46;
+  }
+
+  .test-value.error {
+    background: #fee2e2;
+    color: #991b1b;
+  }
+
+  .test-value.warning {
+    background: #fef3c7;
+    color: #92400e;
+  }
+
+  .test-value.info {
+    background: #dbeafe;
+    color: #1e40af;
+  }
+
+  .test-actions {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .test-btn {
+    padding: 8px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background: white;
+    color: #374151;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .test-btn:hover {
+    background: #f3f4f6;
+    border-color: #9ca3af;
+  }
+
+  .test-btn.secondary {
+    background: #f9fafb;
+    color: #6b7280;
+  }
+
+  .test-details {
+    background: #1f2937;
+    color: #f9fafb;
+    padding: 16px;
+    border-radius: 6px;
+    font-size: 12px;
+  }
+
+  .test-details h4 {
+    margin: 0 0 12px 0;
+    color: #f9fafb;
+  }
+
+  .test-details pre {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+
+  /* Dark mode */
+  [data-theme="dark"] .supabase-test {
+    background: #1f2937;
+    border-color: #374151;
+  }
+
+  [data-theme="dark"] .test-container h3 {
+    color: #f9fafb;
+  }
+
+  [data-theme="dark"] .test-label {
+    color: #d1d5db;
+  }
+
+  [data-theme="dark"] .test-btn {
+    background: #374151;
+    border-color: #4b5563;
+    color: #d1d5db;
+  }
+
+  [data-theme="dark"] .test-btn:hover {
+    background: #4b5563;
+  }
+</style>
+
+<script>
+// Global test results
+let testResults = [];
+
+function updateTestStatus(elementId, status, message, details = null) {
+  const element = document.getElementById(elementId);
+  if (element) {
+    element.textContent = message;
+    element.className = `test-value ${status}`;
+  }
+  
+  // Store result
+  testResults.push({
+    test: elementId,
+    status: status,
+    message: message,
+    details: details,
+    timestamp: new Date().toISOString()
+  });
+}
+
+function clearTestResults() {
+  testResults = [];
+  document.getElementById('test-details').style.display = 'none';
+}
+
+function showTestDetails() {
+  const detailsElement = document.getElementById('test-details');
+  const outputElement = document.getElementById('test-output');
+  
+  if (testResults.length > 0) {
+    outputElement.textContent = JSON.stringify(testResults, null, 2);
+    detailsElement.style.display = 'block';
+  }
+}
+
+async function runSupabaseTest() {
+  console.log('🧪 Starting Supabase connection test...');
+  
+  // Clear previous results
+  testResults = [];
+  
+  // Test 1: Check if Supabase client exists
+  updateTestStatus('test-client', 'info', 'Checking...');
+  
+  if (typeof window.supabaseClient === 'undefined') {
+    updateTestStatus('test-client', 'error', 'Not Found', 'supabaseClient not defined');
+    updateTestStatus('test-status', 'error', 'Failed - Client Missing');
+    showTestDetails();
+    return;
+  }
+  
+  updateTestStatus('test-client', 'success', 'Found');
+  
+  // Test 2: Initialize client
+  updateTestStatus('test-status', 'info', 'Initializing...');
+  
+  try {
+    const client = await window.supabaseClient.getClient();
+    if (!client) {
+      updateTestStatus('test-status', 'error', 'Failed - No Client');
+      showTestDetails();
+      return;
+    }
+    
+    updateTestStatus('test-status', 'success', 'Connected');
+    
+  } catch (error) {
+    updateTestStatus('test-status', 'error', 'Failed', error.message);
+    showTestDetails();
+    return;
+  }
+  
+  // Test 3: Check authentication
+  updateTestStatus('test-auth', 'info', 'Checking...');
+  
+  try {
+    const { user, error } = await window.supabaseClient.getCurrentUser();
+    
+    if (error) {
+      updateTestStatus('test-auth', 'warning', 'Auth Error', error.message);
+    } else if (user) {
+      updateTestStatus('test-auth', 'success', `Signed in as ${user.email}`);
+    } else {
+      updateTestStatus('test-auth', 'info', 'Not signed in');
+    }
+    
+  } catch (error) {
+    updateTestStatus('test-auth', 'error', 'Auth Failed', error.message);
+  }
+  
+  // Test 4: Test database connection
+  updateTestStatus('test-database', 'info', 'Testing...');
+  
+  try {
+    const client = await window.supabaseClient.getClient();
+    
+    // Try a simple query to test database connection
+    const { data, error } = await client
+      .from('analytics_events')
+      .select('count')
+      .limit(1);
+    
+    if (error) {
+      updateTestStatus('test-database', 'warning', 'Query Error', error.message);
+    } else {
+      updateTestStatus('test-database', 'success', 'Connected');
+    }
+    
+  } catch (error) {
+    updateTestStatus('test-database', 'error', 'DB Failed', error.message);
+  }
+  
+  // Show detailed results
+  showTestDetails();
+  
+  console.log('✅ Supabase test completed');
+}
+
+// Auto-run test when page loads
+document.addEventListener('DOMContentLoaded', function() {
+  // Wait a bit for Supabase to initialize
+  setTimeout(runSupabaseTest, 1000);
+});
+
+// Make function globally available
+window.runSupabaseTest = runSupabaseTest;
+window.clearTestResults = clearTestResults;
+</script>
+
+
+

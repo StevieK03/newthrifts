@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T-Shirt Mockup Design Buttons - Complete Example</title>
+    
+    <!-- Include the CSS -->
+    <link rel="stylesheet" href="tshirt-mockup-buttons-css.css">
+    
+    <style>
+        /* Additional styles for this example page */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .mockup-stage {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+        
+        .controls-panel {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .preview-panel {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .mockup-canvas {
+            width: 300px;
+            height: 400px;
+            background: #f8fafc;
+            border-radius: 16px;
+            position: relative;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .base-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 16px;
+        }
+        
+        .design-overlay {
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            width: 50%;
+            height: 65%;
+            transform: translateX(-50%);
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            cursor: grab;
+            transition: all 0.3s ease;
+        }
+        
+        .design-overlay:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+        }
+        
+        .design-overlay:active {
+            cursor: grabbing;
+        }
+        
+        .design-text {
+            color: #374151;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            text-align: center;
+            pointer-events: none;
+        }
+        
+        .design-overlay img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            pointer-events: none;
+        }
+        
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        /* Animation keyframes for messages */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes slideOut {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+        }
+        
+        /* File input styling */
+        #nt-file-input {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 T-Shirt Mockup Design Buttons</h1>
+        
+        <div class="mockup-stage">
+            <!-- Controls Panel -->
+            <div class="controls-panel">
+                <div class="section-title">Design Customization Controls</div>
+                
+                <!-- VIEW CONTROL BUTTONS -->
+                <div class="nt-mockup__group">
+                    <span class="nt-mockup__label" style="font-weight: 600; font-size: 14px; color: #374151; margin-right: 12px;">View</span>
+                    <div class="nt-mockup__buttons" role="tablist" aria-label="T-shirt view" style="display: flex; gap: 8px;">
+                        
+                        <!-- Front View -->
+                        <button class="nt-btn nt-btn--view enhanced-view-btn" data-view="front" aria-selected="true" style="
+                          padding: 12px 20px; 
+                          border: 2px solid transparent; 
+                          background: linear-gradient(135deg, #27e1c1, #20b2aa); 
+                          color: white; 
+                          border-radius: 16px; 
+                          font-size: 14px; 
+                          font-weight: 600; 
+                          cursor: pointer; 
+                          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+                          box-shadow: 0 4px 16px rgba(39, 225, 193, 0.3);
+                          backdrop-filter: blur(10px);
+                          -webkit-backdrop-filter: blur(10px);
+                        ">
+                          👕 Front
+                        </button>
+
+                        <!-- Back View -->
+                        <button class="nt-btn nt-btn--view enhanced-view-btn" data-view="back" aria-selected="false" style="
+                          padding: 12px 20px; 
+                          border: 2px solid transparent; 
+                          background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); 
+                          color: #374151; 
+                          border-radius: 16px; 
+                          font-size: 14px; 
+                          font-weight: 600; 
+                          cursor: pointer; 
+                          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+                          box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+                          backdrop-filter: blur(10px);
+                          -webkit-backdrop-filter: blur(10px);
+                        ">
+                          👕 Back
+                        </button>
+
+                        <!-- Hanging View -->
+                        <button class="nt-btn nt-btn--view enhanced-view-btn" data-view="hanging" aria-selected="false" style="
+                          padding: 12px 20px; 
+                          border: 2px solid transparent; 
+                          background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); 
+                          color: #374151; 
+                          border-radius: 16px; 
+                          font-size: 14px; 
+                          font-weight: 600; 
+                          cursor: pointer; 
+                          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+                          box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+                          backdrop-filter: blur(10px);
+                          -webkit-backdrop-filter: blur(10px);
+                        ">
+                          👕 Hanging
+                        </button>
+
+                        <!-- Person Model 1 -->
+                        <button class="nt-btn nt-btn--view enhanced-view-btn" data-view="person1" aria-selected="false" style="
+                          padding: 12px 20px; 
+                          border: 2px solid transparent; 
+                          background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); 
+                          color: #374151; 
+                          border-radius: 16px; 
+                          font-size: 14px; 
+                          font-weight: 600; 
+                          cursor: pointer; 
+                          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+                          box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+                          backdrop-filter: blur(10px);
+                          -webkit-backdrop-filter: blur(10px);
+                        ">
+                          👤 Model 1
+                        </button>
+
+                        <!-- Person Model 2 -->
+                        <button class="nt-btn nt-btn--view enhanced-view-btn" data-view="person2" aria-selected="false" style="
+                          padding: 12px 20px; 
+                          border: 2px solid transparent; 
+                          background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); 
+                          color: #374151; 
+                          border-radius: 16px; 
+                          font-size: 14px; 
+                          font-weight: 600; 
+                          cursor: pointer; 
+                          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+                          box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+                          backdrop-filter: blur(10px);
+                          -webkit-backdrop-filter: blur(10px);
+                        ">
+                          👤 Model 2
+                        </button>
+                    </div>
+                </div>
+
+                <!-- COLOR CONTROL BUTTONS -->
+                <div class="nt-mockup__group">
+                    <span class="nt-mockup__label" style="font-weight: 600; font-size: 14px; color: #374151; margin-right: 12px;">Color</span>
+                    <div class="nt-mockup__buttons" role="tablist" aria-label="Shirt color" style="display: flex; gap: 8px;">
+                        
+                        <!-- White (Active) -->
+                        <button class="nt-btn nt-btn--color is-active enhanced-color-btn" data-color="white" aria-selected="true" style="
+                          padding: 12px 20px; 
+                          border: 2px solid transparent; 
+                          background: linear-gradient(135deg, #27e1c1, #20b2aa); 
+                          color: white; 
+                          border-radius: 16px; 
+                          font-size: 14px; 
+                          font-weight: 600; 
+                          cursor: pointer; 
+                          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+                          box-shadow: 0 4px 16px rgba(39, 225, 193, 0.3);
+                          backdrop-filter: blur(10px);
+                          -webkit-backdrop-filter: blur(10px);
+                        ">
+                          ⚪ White
+                        </button>
+
+                        <!-- Black -->
+                        <button class="nt-btn nt-btn--color enhanced-color-btn" data-color="black" aria-selected="false" style="
+                          padding: 12px 20px; 
+                          border: 2px solid transparent; 
+                          background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); 
+                          color: #374151; 
+                          border-radius: 16px; 
+                          font-size: 14px; 
+                          font-weight: 600; 
+                          cursor: pointer; 
+                          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+                          box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+                          backdrop-filter: blur(10px);
+                          -webkit-backdrop-filter: blur(10px);
+                        ">
+                          ⚫ Black
+                        </button>
+
+                        <!-- Pink -->
+                        <button class="nt-btn nt-btn--color enhanced-color-btn" data-color="pink" aria-selected="false" style="
+                          padding: 12px 20px; 
+                          border: 2px solid transparent; 
+                          background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); 
+                          color: #374151; 
+                          border-radius: 16px; 
+                          font-size: 14px; 
+                          font-weight: 600; 
+                          cursor: pointer; 
+                          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+                          box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+                          backdrop-filter: blur(10px);
+                          -webkit-backdrop-filter: blur(10px);
+                        ">
+                          🩷 Pink
+                        </button>
+
+                        <!-- Blue -->
+                        <button class="nt-btn nt-btn--color enhanced-color-btn" data-color="blue" aria-selected="false" style="
+                          padding: 12px 20px; 
+                          border: 2px solid transparent; 
+                          background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); 
+                          color: #374151; 
+                          border-radius: 16px; 
+                          font-size: 14px; 
+                          font-weight: 600; 
+                          cursor: pointer; 
+                          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+                          box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+                          backdrop-filter: blur(10px);
+                          -webkit-backdrop-filter: blur(10px);
+                        ">
+                          🔵 Blue
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3D CONTROL BUTTONS -->
+                <div class="nt-mockup__group" style="background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); padding: 16px; border-radius: 16px; border: 2px solid rgba(255,255,255,0.2); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);">
+                    <span class="nt-mockup__label" style="font-weight: 600; font-size: 14px; color: #334155; margin-right: 12px;">🎯 3D Controls</span>
+                    <div class="nt-mockup__buttons" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        
+                        <!-- 3D Rotate -->
+                        <button class="nt-btn nt-btn--3d enhanced-3d-btn" id="nt-3d-rotate" style="
+                          padding: 12px 20px; 
+                          border: 2px solid transparent; 
+                          background: linear-gradient(135deg, #3b82f6, #1d4ed8); 
+                          color: white; 
+                          border-radius: 16px; 
+                          font-size: 14px; 
+                          font-weight: 600; 
+                          cursor: pointer; 
+                          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+                          box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+                          backdrop-filter: blur(10px);
+                          -webkit-backdrop-filter: blur(10px);
+                        ">
+                          🔄 3D Rotate
+                        </button>
+
+                        <!-- Zoom -->
+                        <button class="nt-btn nt-btn--zoom enhanced-3d-btn" id="nt-zoom" style="
+                          padding: 12px 20px; 
+                          border: 2px solid transparent; 
+                          background: linear-gradient(135deg, #8b5cf6, #7c3aed); 
+                          color: white; 
+                          border-radius: 16px; 
+                          font-size: 14px; 
+                          font-weight: 600; 
+                          cursor: pointer; 
+                          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+                          box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);
+                          backdrop-filter: blur(10px);
+                          -webkit-backdrop-filter: blur(10px);
+                        ">
+                          🔍 Zoom
+                        </button>
+
+                        <!-- Validate -->
+                        <button class="nt-btn nt-btn--validate enhanced-3d-btn" id="nt-validate" style="
+                          padding: 12px 20px; 
+                          border: 2px solid transparent; 
+                          background: linear-gradient(135deg, #10b981, #059669); 
+                          color: white; 
+                          border-radius: 16px; 
+                          font-size: 14px; 
+                          font-weight: 600; 
+                          cursor: pointer; 
+                          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+                          box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+                          backdrop-filter: blur(10px);
+                          -webkit-backdrop-filter: blur(10px);
+                        ">
+                          ✅ Validate
+                        </button>
+
+                        <!-- Reset -->
+                        <button class="nt-btn nt-btn--reset enhanced-3d-btn" id="nt-reset" style="
+                          padding: 12px 20px; 
+                          border: 2px solid transparent; 
+                          background: linear-gradient(135deg, #f59e0b, #d97706); 
+                          color: white; 
+                          border-radius: 16px; 
+                          font-size: 14px; 
+                          font-weight: 600; 
+                          cursor: pointer; 
+                          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+                          box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
+                          backdrop-filter: blur(10px);
+                          -webkit-backdrop-filter: blur(10px);
+                        ">
+                          🔄 Reset
+                        </button>
+                    </div>
+                </div>
+
+                <!-- HERO UPLOAD BUTTON (Royal Blue with Animations) -->
+                <div class="upload-section" style="display: flex; flex-direction: column; gap: 8px; align-items: center; margin-bottom: 24px;">
+                    <button class="nt-btn nt-btn--upload upload-hero-btn" id="nt-upload" style="
+                      padding: 18px 32px; 
+                      background: linear-gradient(135deg, #1e40af, #3b82f6, #1d4ed8, #1e40af); 
+                      background-size: 300% 300%;
+                      color: white; 
+                      border: none; 
+                      border-radius: 20px; 
+                      font-size: 16px; 
+                      font-weight: 700; 
+                      cursor: pointer; 
+                      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+                      position: relative; 
+                      overflow: hidden;
+                      box-shadow: 0 8px 32px rgba(30, 64, 175, 0.4);
+                      backdrop-filter: blur(10px);
+                      -webkit-backdrop-filter: blur(10px);
+                      min-height: 60px;
+                      width: 100%;
+                      max-width: 300px;
+                      text-transform: uppercase;
+                      letter-spacing: 1px;
+                      animation: upload-royal-flow 3s ease-in-out infinite;
+                    ">
+                        <span style="position: relative; z-index: 2; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                          📁 Upload Your Design
+                          <span class="upload-sparkle" style="
+                            position: absolute;
+                            width: 4px;
+                            height: 4px;
+                            background: rgba(255, 255, 255, 0.8);
+                            border-radius: 50%;
+                            animation: sparkle-float 2s ease-in-out infinite;
+                            animation-delay: 0.5s;
+                          "></span>
+                          <span class="upload-sparkle" style="
+                            position: absolute;
+                            width: 3px;
+                            height: 3px;
+                            background: rgba(255, 255, 255, 0.6);
+                            border-radius: 50%;
+                            animation: sparkle-float 2s ease-in-out infinite;
+                            animation-delay: 1s;
+                            top: -8px;
+                            right: -12px;
+                          "></span>
+                        </span>
+                        <div style="
+                          position: absolute;
+                          top: 0;
+                          left: -100%;
+                          width: 100%;
+                          height: 100%;
+                          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+                          transition: left 0.8s ease;
+                        "></div>
+                        <input type="file" id="nt-file-input" accept=".png,.jpg,.jpeg,.svg,.pdf,.ai,.psd" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 3;">
+                    </button>
+                    
+                    <div class="file-info" style="display: flex; gap: 12px; align-items: center; font-size: 12px; color: #6b7280;">
+                        <span>📄 Accepts:</span>
+                        <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+                            <span class="file-type" style="background: #e5e7eb; padding: 2px 6px; border-radius: 4px; font-size: 11px;">PNG</span>
+                            <span class="file-type" style="background: #e5e7eb; padding: 2px 6px; border-radius: 4px; font-size: 11px;">JPG</span>
+                            <span class="file-type" style="background: #e5e7eb; padding: 2px 6px; border-radius: 4px; font-size: 11px;">SVG</span>
+                            <span class="file-type" style="background: #e5e7eb; padding: 2px 6px; border-radius: 4px; font-size: 11px;">PDF</span>
+                        </div>
+                        <button class="help-link" id="nt-help" style="background: none; border: none; color: #3b82f6; cursor: pointer; font-size: 11px; text-decoration: underline;">
+                          ℹ️ Help
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ACTION BUTTONS GRID -->
+                <div class="action-buttons-grid" style="
+                  display: grid;
+                  grid-template-columns: 1fr 1fr;
+                  gap: 12px;
+                  margin-bottom: 12px;
+                ">
+                    
+                    <!-- Download Mockup -->
+                    <button class="nt-btn nt-btn--primary enhanced-action-btn" id="nt-download" style="
+                      padding: 12px 16px; 
+                      background: linear-gradient(135deg, #10b981, #059669); 
+                      color: white; 
+                      border: none; 
+                      border-radius: 12px; 
+                      font-size: 13px; 
+                      font-weight: 600; 
+                      cursor: pointer; 
+                      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+                      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+                      backdrop-filter: blur(10px);
+                      -webkit-backdrop-filter: blur(10px);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      gap: 6px;
+                      min-height: 44px;
+                    ">
+                      📥 Download Mockup
+                    </button>
+                    
+                    <!-- Edit Design -->
+                    <button class="nt-btn nt-btn--secondary enhanced-action-btn" id="nt-edit" style="
+                      padding: 12px 16px; 
+                      background: linear-gradient(135deg, #6b7280, #4b5563); 
+                      color: white; 
+                      border: none; 
+                      border-radius: 12px; 
+                      font-size: 13px; 
+                      font-weight: 600; 
+                      cursor: pointer; 
+                      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+                      box-shadow: 0 4px 16px rgba(107, 114, 128, 0.3);
+                      backdrop-filter: blur(10px);
+                      -webkit-backdrop-filter: blur(10px);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      gap: 6px;
+                      min-height: 44px;
+                    ">
+                      ✏️ Edit Design
+                    </button>
+                </div>
+
+                <!-- PRIMARY ACTION BUTTONS -->
+                <div class="primary-actions" style="
+                  display: grid;
+                  grid-template-columns: 1fr 1fr;
+                  gap: 12px;
+                  margin-bottom: 12px;
+                ">
+                    
+                    <!-- Submit Request (Pink/Red Gradient with Pulse) -->
+                    <button class="nt-btn nt-btn--success submit-hero-btn" id="nt-submit-request-btn" style="
+                      padding: 16px 20px; 
+                      background: linear-gradient(135deg, #ff4fa3, #ef4444, #ff4fa3); 
+                      background-size: 200% 200%;
+                      color: white; 
+                      border: none; 
+                      border-radius: 16px; 
+                      font-size: 14px; 
+                      font-weight: 700; 
+                      cursor: pointer; 
+                      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+                      box-shadow: 0 6px 24px rgba(255, 79, 163, 0.4);
+                      backdrop-filter: blur(10px);
+                      -webkit-backdrop-filter: blur(10px);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      gap: 8px;
+                      min-height: 56px;
+                      text-transform: uppercase;
+                      letter-spacing: 1px;
+                      position: relative;
+                      overflow: hidden;
+                      animation: submit-pulse 2s ease-in-out infinite;
+                    ">
+                        <span style="position: relative; z-index: 2; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                          🚀 Submit Request
+                        </span>
+                        <div style="
+                          position: absolute;
+                          top: 0;
+                          left: -100%;
+                          width: 100%;
+                          height: 100%;
+                          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+                          transition: left 0.8s ease;
+                        "></div>
+                    </button>
+                    
+                    <!-- Placement Guide -->
+                    <button class="nt-btn enhanced-action-btn" id="nt-toggle-guide" style="
+                      padding: 14px 16px; 
+                      background: linear-gradient(135deg, #f59e0b, #d97706); 
+                      color: white; 
+                      border: none; 
+                      border-radius: 12px; 
+                      font-size: 13px; 
+                      font-weight: 600; 
+                      cursor: pointer; 
+                      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+                      box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
+                      backdrop-filter: blur(10px);
+                      -webkit-backdrop-filter: blur(10px);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      gap: 6px;
+                      min-height: 48px;
+                    ">
+                      📐 <span id="nt-guide-text">Show</span> Placement Guide
+                    </button>
+                </div>
+
+                <!-- PERFECT FIT BUTTON -->
+                <button class="nt-btn nt-btn--perfect-fit enhanced-action-btn" id="nt-perfect-fit-btn" style="
+                  padding: 12px 16px; 
+                  background: linear-gradient(135deg, #8b5cf6, #7c3aed); 
+                  color: white; 
+                  border: none; 
+                  border-radius: 12px; 
+                  font-size: 13px; 
+                  font-weight: 600; 
+                  cursor: pointer; 
+                  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+                  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);
+                  backdrop-filter: blur(10px);
+                  -webkit-backdrop-filter: blur(10px);
+                  display: none; 
+                  margin-top: 8px;
+                  width: 100%;
+                  min-height: 44px;
+                ">
+                  ✨ Perfect Fit
+                </button>
+
+                <!-- REMOVE DESIGN BUTTON -->
+                <button class="nt-btn nt-btn--danger enhanced-action-btn" id="nt-remove" style="
+                  padding: 12px 16px; 
+                  background: linear-gradient(135deg, #ef4444, #dc2626); 
+                  color: white; 
+                  border: none; 
+                  border-radius: 12px; 
+                  font-size: 13px; 
+                  font-weight: 600; 
+                  cursor: pointer; 
+                  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+                  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+                  backdrop-filter: blur(10px);
+                  -webkit-backdrop-filter: blur(10px);
+                  display: none; 
+                  margin-top: 8px;
+                  width: 100%;
+                  min-height: 44px;
+                ">
+                  🗑️ Remove Design
+                </button>
+            </div>
+
+            <!-- Preview Panel -->
+            <div class="preview-panel">
+                <div class="mockup-canvas" id="nt-mockup-canvas">
+                    <img id="nt-base" class="base-image" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDMwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjRjhGQUZDIi8+CjxyZWN0IHg9IjUwIiB5PSIxMDAiIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRTVFN0VCIiBzdHJva2U9IiNEMUQ1REIiIHN0cm9rZS13aWR0aD0iMiIvPgo8dGV4dCB4PSIxNTAiIHk9IjIxMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzZCNzI4MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE2Ij5ULVNoaXJ0IFZpZXc8L3RleHQ+Cjwvc3ZnPgo=" alt="T-Shirt Base">
+                    <div id="nt-overlay" class="design-overlay">
+                        <div id="nt-design-text" class="design-text">Your Design Here</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include the JavaScript -->
+    <script src="tshirt-mockup-buttons-javascript.js"></script>
+    
+    <script>
+        // Initialize the mockup with the correct IDs
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update the mockup object to use the correct IDs for this example
+            window.mockup = {
+                ...window.mockup,
+                mockupImages: {
+                    front: { white: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDMwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjRjhGQUZDIi8+CjxyZWN0IHg9IjUwIiB5PSIxMDAiIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRTVFN0VCIiBzdHJva2U9IiNEMUQ1REIiIHN0cm9rZS13aWR0aD0iMiIvPgo8dGV4dCB4PSIxNTAiIHk9IjIxMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzZCNzI4MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE2Ij5ULVNoaXJ0IEZyb250PC90ZXh0Pgo8L3N2Zz4K" },
+                    back: { white: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDMwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjRjhGQUZDIi8+CjxyZWN0IHg9IjUwIiB5PSIxMDAiIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRTVFN0VCIiBzdHJva2U9IiNEMUQ1REIiIHN0cm9rZS13aWR0aD0iMiIvPgo8dGV4dCB4PSIxNTAiIHk9IjIxMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzZCNzI4MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE2Ij5ULVNoaXJ0IEJhY2s8L3RleHQ+Cjwvc3ZnPgo=" },
+                    hanging: { white: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDMwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjRjhGQUZDIi8+CjxyZWN0IHg9IjUwIiB5PSIxMDAiIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRTVFN0VCIiBzdHJva2U9IiNEMUQ1REIiIHN0cm9rZS13aWR0aD0iMiIvPgo8dGV4dCB4PSIxNTAiIHk9IjIxMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzZCNzI4MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE2Ij5ULVNoaXJ0IEhhbmdpbmc8L3RleHQ+Cjwvc3ZnPgo=" },
+                    person1: { white: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDMwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjRjhGQUZDIi8+CjxyZWN0IHg9IjUwIiB5PSIxMDAiIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRTVFN0VCIiBzdHJva2U9IiNEMUQ1REIiIHN0cm9rZS13aWR0aD0iMiIvPgo8dGV4dCB4PSIxNTAiIHk9IjIxMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzZCNzI4MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE2Ij5QZXJzb24gTW9kZWwgMTwvdGV4dD4KPC9zdmc+Cg==" },
+                    person2: { white: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDMwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjRjhGQUZDIi8+CjxyZWN0IHg9IjUwIiB5PSIxMDAiIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRTVFN0VCIiBzdHJva2U9IiNEMUQ1REIiIHN0cm9rZS13aWR0aD0iMiIvPgo8dGV4dCB4PSIxNTAiIHk9IjIxMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzZCNzI4MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE2Ij5QZXJzb24gTW9kZWwgMjwvdGV4dD4KPC9zdmc+Cg==" }
+                },
+                baseMockup: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDMwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjRjhGQUZDIi8+CjxyZWN0IHg9IjUwIiB5PSIxMDAiIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRTVFN0VCIiBzdHJva2U9IiNEMUQ1REIiIHN0cm9rZS13aWR0aD0iMiIvPgo8dGV4dCB4PSIxNTAiIHk9IjIxMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzZCNzI4MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE2Ij5ULVNoaXJ0IFZpZXc8L3RleHQ+Cjwvc3ZnPgo="
+            };
+            
+            // Initialize the mockup
+            window.mockup.init();
+        });
+    </script>
+</body>
+</html>
