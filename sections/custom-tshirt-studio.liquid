@@ -1475,6 +1475,67 @@
             opacity: 0.8;
         }
     }
+
+    /* ===== CUSTOMER INFORMATION FORM STYLING ===== */
+    
+    /* Light Mode - Ensure select text is visible */
+    #customerInfoForm-{{ section.id }} select,
+    #customerInfoForm-{{ section.id }} input,
+    #customerInfoForm-{{ section.id }} textarea {
+        color: #1f2937 !important;
+    }
+    
+    #customerInfoForm-{{ section.id }} select option {
+        color: #1f2937 !important;
+        background: white !important;
+    }
+    
+    /* Dark Mode - Customer Information Form */
+    [data-theme="dark"] #customerInfoForm-{{ section.id }} {
+        background: linear-gradient(135deg, rgba(30, 41, 59, 0.5), rgba(51, 65, 85, 0.5)) !important;
+        border-color: rgba(39, 225, 193, 0.3) !important;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
+    }
+    
+    /* Dark Mode - Title */
+    [data-theme="dark"] #customerInfoForm-{{ section.id }} h2 {
+        color: #27e1c1 !important;
+    }
+    
+    /* Dark Mode - Subtitle and labels */
+    [data-theme="dark"] #customerInfoForm-{{ section.id }} p,
+    [data-theme="dark"] #customerInfoForm-{{ section.id }} label {
+        color: #e2e8f0 !important;
+    }
+    
+    /* Dark Mode - Input fields */
+    [data-theme="dark"] #customerInfoForm-{{ section.id }} input,
+    [data-theme="dark"] #customerInfoForm-{{ section.id }} select,
+    [data-theme="dark"] #customerInfoForm-{{ section.id }} textarea {
+        background: rgba(30, 41, 59, 0.8) !important;
+        border-color: rgba(148, 163, 184, 0.3) !important;
+        color: #f8fafc !important;
+    }
+    
+    /* Dark Mode - Select dropdown options */
+    [data-theme="dark"] #customerInfoForm-{{ section.id }} select option {
+        background: #1e293b !important;
+        color: #f8fafc !important;
+    }
+    
+    /* Dark Mode - Placeholder text */
+    [data-theme="dark"] #customerInfoForm-{{ section.id }} input::placeholder,
+    [data-theme="dark"] #customerInfoForm-{{ section.id }} textarea::placeholder {
+        color: #94a3b8 !important;
+    }
+    
+    /* Dark Mode - Focus states */
+    [data-theme="dark"] #customerInfoForm-{{ section.id }} input:focus,
+    [data-theme="dark"] #customerInfoForm-{{ section.id }} select:focus,
+    [data-theme="dark"] #customerInfoForm-{{ section.id }} textarea:focus {
+        border-color: #27e1c1 !important;
+        box-shadow: 0 0 0 3px rgba(39, 225, 193, 0.2) !important;
+    }
 </style>
 
 <div class="custom-tshirt-studio-{{ section.id }}" id="custom-tshirt-studio-{{ section.id }}" style="display: none;">
