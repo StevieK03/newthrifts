@@ -123,6 +123,9 @@ Main product section — safe + styled + correct add-to-cart
       </div>
       </div>
 
+    {% comment %} AR Try-On Call-to-Action Banner {% endcomment %}
+    {% render 'ar-tryon-cta' %}
+
     {% comment %} Extract main product description for collapsible section {% endcomment %}
     {% assign description_parts = product.description | split: 'Product features' %}
     {% assign clean_description = description_parts[0] | split: 'Care instructions' %}
