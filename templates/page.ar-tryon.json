@@ -13,11 +13,7 @@
       "type": "ar-tryon",
       "settings": {
         "heading": "👕 Virtual Try-On Experience",
-        "description": "See how our t-shirts look on you in real-time using AR technology",
-        "product_1": "funny-tea-shirt",
-        "product_2": "butterfly-floral-boxy-tee",
-        "product_3": "mens-gold-soft-touch-t-shirt-m-o-4800",
-        "product_4": "new-york-sweatshirt"
+        "description": "See how our t-shirts look on you in real-time using AR technology"
       }
     }
   },
@@ -25,3 +21,4 @@
     "ar_tryon_section"
   ]
 }
+
