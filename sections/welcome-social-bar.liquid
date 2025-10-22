@@ -314,6 +314,8 @@ Welcome / Social Bar — Enhanced Modern Design
       box-shadow: 0 10px 30px rgba(102,126,234,.25);
       border: 1px solid rgba(255,255,255,.1);
       text-align: center;
+      max-width: 100%;
+      overflow: hidden;
     }
 
     #welcome-{{ section.id }} .newsletter-icon {
@@ -389,6 +391,7 @@ Welcome / Social Bar — Enhanced Modern Design
       padding: 6px;
       border: 1px solid rgba(255,255,255,.2);
       transition: all .3s ease;
+      max-width: 100%;
     }
 
     #welcome-{{ section.id }} .email-input-wrapper:focus-within {
@@ -398,6 +401,7 @@ Welcome / Social Bar — Enhanced Modern Design
 
     #welcome-{{ section.id }} .email-input {
       flex: 1;
+      min-width: 0;
       background: transparent;
       border: none;
       padding: 12px 16px;
@@ -414,12 +418,12 @@ Welcome / Social Bar — Enhanced Modern Design
     #welcome-{{ section.id }} .subscribe-btn {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       background: rgba(255, 255, 255, 0.25);
       backdrop-filter: blur(10px);
       color: #ffffff;
       border: 1px solid rgba(255, 255, 255, 0.3);
-      padding: 12px 24px;
+      padding: 12px 20px;
       border-radius: 10px;
       font-weight: 700;
       font-size: 15px;
@@ -427,6 +431,7 @@ Welcome / Social Bar — Enhanced Modern Design
       transition: all .3s ease;
       white-space: nowrap;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      flex-shrink: 0;
     }
 
     #welcome-{{ section.id }} .subscribe-btn:hover {
