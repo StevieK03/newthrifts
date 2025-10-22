@@ -1624,6 +1624,27 @@
 
         <div class="cts-controls-panel-{{ section.id }}">
             <div class="cts-control-card-{{ section.id }}">
+                <h3>👕 T-Shirt Color</h3>
+                <div class="cts-control-group-{{ section.id }}">
+                    <label>Choose Background</label>
+                    <div class="cts-tshirt-color-picker-{{ section.id }}">
+                        <div class="cts-tshirt-color-option-{{ section.id }} active" 
+                             data-color="white" 
+                             style="background: white; border: 2px solid rgba(0, 0, 0, 0.1);"
+                             title="White T-Shirt">
+                            <span style="color: #64748b; font-size: 12px; font-weight: 600;">White</span>
+            </div>
+                        <div class="cts-tshirt-color-option-{{ section.id }}" 
+                             data-color="black" 
+                             style="background: #000000; border: 2px solid rgba(255, 255, 255, 0.1);"
+                             title="Black T-Shirt">
+                            <span style="color: #ffffff; font-size: 12px; font-weight: 600;">Black</span>
+            </div>
+            </div>
+          </div>
+        </div>
+
+            <div class="cts-control-card-{{ section.id }}">
                 <h3>📝 Design Text</h3>
                 <div class="cts-control-group-{{ section.id }}">
                     <label>Your Text</label>
@@ -1700,27 +1721,6 @@
                         <div class="cts-font-option-{{ section.id }}" data-font="'Lobster', cursive" data-category="handwriting" data-name="lobster" style="font-family: 'Lobster', cursive;">Lobster</div>
                     </div>
                 </div>
-        </div>
-
-            <div class="cts-control-card-{{ section.id }}">
-                <h3>👕 T-Shirt Color</h3>
-                <div class="cts-control-group-{{ section.id }}">
-                    <label>Choose Background</label>
-                    <div class="cts-tshirt-color-picker-{{ section.id }}">
-                        <div class="cts-tshirt-color-option-{{ section.id }} active" 
-                             data-color="white" 
-                             style="background: white; border: 2px solid rgba(0, 0, 0, 0.1);"
-                             title="White T-Shirt">
-                            <span style="color: #64748b; font-size: 12px; font-weight: 600;">White</span>
-            </div>
-                        <div class="cts-tshirt-color-option-{{ section.id }}" 
-                             data-color="black" 
-                             style="background: #000000; border: 2px solid rgba(255, 255, 255, 0.1);"
-                             title="Black T-Shirt">
-                            <span style="color: #ffffff; font-size: 12px; font-weight: 600;">Black</span>
-            </div>
-            </div>
-          </div>
         </div>
 
             <div class="cts-control-card-{{ section.id }}">
@@ -2865,10 +2865,13 @@
         isDragging = true;
         startX = e.clientX;
         startY = e.clientY;
-        const rect = designOverlay.getBoundingClientRect();
-        const parent = designOverlay.parentElement.getBoundingClientRect();
-        startLeft = ((rect.left + rect.width / 2 - parent.left) / parent.width) * 100;
-        startTop = ((rect.top + rect.height / 2 - parent.top) / parent.height) * 100;
+        
+        // Get current position from style or use defaults
+        const currentLeft = parseFloat(designOverlay.style.left) || 50;
+        const currentTop = parseFloat(designOverlay.style.top) || 29;
+        
+        startLeft = currentLeft;
+        startTop = currentTop;
         designOverlay.style.cursor = 'grabbing';
     });
 
