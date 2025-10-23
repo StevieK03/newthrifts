@@ -5062,11 +5062,20 @@
     console.log('🖼️ Thumbnail Gallery initialized with 4 views');
 
     // ============================================
-    // DEBUG CONTROL PANEL FOR PRINT AREA METRICS
+    // ENHANCED DEBUG CONTROL PANEL
+    // Comprehensive metrics with collapsible sections
     // ============================================
     
-    // Create Debug Panel
-    function createDebugPanel() {
+    // Track metrics over time
+    let metricsHistory = {
+        adjustments: 0,
+        lastAdjustTime: null,
+        startTime: Date.now(),
+        frames: 0
+    };
+
+    // Create Enhanced Debug Panel
+    function createEnhancedDebugPanel() {
         // Check if panel already exists
         if (document.getElementById(`debugPanel-${sectionId}`)) {
             return;
@@ -5395,10 +5404,10 @@
         }
     }
 
-    // Initialize debug panel after a short delay
+    // Initialize enhanced debug panel after a short delay
     setTimeout(() => {
-        createDebugPanel();
-        console.log('🔧 Debug control panel initialized');
+        createEnhancedDebugPanel();
+        console.log('🔧 Enhanced debug control panel initialized');
     }, 2000);
 
     // ============================================
