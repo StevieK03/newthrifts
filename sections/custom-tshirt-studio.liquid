@@ -1619,6 +1619,37 @@
     }
 
     /* ============================================
+       CHARACTER COUNTER STYLES
+       ============================================ */
+    .cts-char-counter-{{ section.id }} {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 8px;
+        font-size: 12px;
+        color: #94a3b8;
+        padding: 0 4px;
+    }
+    
+    .cts-char-count-{{ section.id }} {
+        font-weight: 600;
+        transition: color 0.2s;
+    }
+    
+    .cts-char-count-{{ section.id }}.warning {
+        color: #fbbf24;
+    }
+    
+    .cts-char-count-{{ section.id }}.danger {
+        color: #ef4444;
+    }
+    
+    .cts-char-limit-{{ section.id }} {
+        font-size: 11px;
+        opacity: 0.7;
+    }
+
+    /* ============================================
        TEXT & IMAGE CONTAINMENT SYSTEM
        ============================================ */
     .cts-design-overlay-{{ section.id }} {
@@ -1779,7 +1810,16 @@
                 <h3>📝 Design Text</h3>
                 <div class="cts-control-group-{{ section.id }}">
                     <label>Your Text</label>
-                    <textarea class="cts-text-input-{{ section.id }}" id="textInput-{{ section.id }}" placeholder="Enter your custom text...">YOUR DESIGN HERE</textarea>
+                    <textarea class="cts-text-input-{{ section.id }}" id="textInput-{{ section.id }}" placeholder="Enter your custom text..." maxlength="100">YOUR DESIGN HERE</textarea>
+                    <!-- Character Counter -->
+                    <div class="cts-char-counter-{{ section.id }}">
+                        <span class="cts-char-count-{{ section.id }}" id="charCount-{{ section.id }}">
+                            0 characters
+                        </span>
+                        <span class="cts-char-limit-{{ section.id }}">
+                            Recommended max: 50
+                        </span>
+                    </div>
             </div>
                 <div class="cts-control-group-{{ section.id }}">
                     <label>Font Style</label>
@@ -2135,6 +2175,48 @@
     // Undo history
     let undoHistory = [];
     const MAX_UNDO = 20;
+
+    // ============================================
+    // CHARACTER COUNTER
+    // ============================================
+    
+    const charCountDisplay = document.getElementById(`charCount-${sectionId}`);
+    
+    // Character limits
+    const CHAR_WARNING = 40;  // Show warning color
+    const CHAR_DANGER = 50;   // Show danger color
+    const CHAR_MAX = 100;     // Hard limit (set in HTML maxlength)
+    
+    // Update character counter
+    function updateCharCounter() {
+        if (!textInput || !charCountDisplay) return;
+        
+        const length = textInput.value.length;
+        
+        // Update text
+        charCountDisplay.textContent = `${length} character${length !== 1 ? 's' : ''}`;
+        
+        // Update color based on length
+        charCountDisplay.classList.remove('warning', 'danger');
+        
+        if (length >= CHAR_DANGER) {
+            charCountDisplay.classList.add('danger');
+        } else if (length >= CHAR_WARNING) {
+            charCountDisplay.classList.add('warning');
+        }
+    }
+    
+    // Add event listener to text input for character counting
+    if (textInput && charCountDisplay) {
+        textInput.addEventListener('input', updateCharCounter);
+        
+        // Initialize counter on page load
+        setTimeout(() => {
+            updateCharCounter();
+        }, 100);
+        
+        console.log('✅ Character counter initialized');
+    }
 
     // ============================================
     // PRODUCT THUMBNAIL GALLERY
