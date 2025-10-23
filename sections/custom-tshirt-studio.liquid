@@ -4589,12 +4589,12 @@
 
     // Configuration
     const CONTAINMENT_CONFIG = {
-        maxWidth: 0.95,
-        maxHeight: 0.95,
-        padding: 8,
+        maxWidth: 1.0,       // Changed to 100% - full width
+        maxHeight: 1.0,      // Changed to 100% - full height
+        padding: 0,          // Changed to 0 - no extra padding
         minFontSize: 14,
         maxFontSize: 72,
-        imageMaxWidth: 0.90,    // Images use slightly less space
+        imageMaxWidth: 0.90,
         imageMaxHeight: 0.90
     };
 
@@ -5352,10 +5352,10 @@
                     <div class="cts-debug-label-${sectionId}">Text Max Width (%)</div>
                     <input type="range" class="cts-debug-slider-${sectionId}" 
                            id="debugMaxWidth-${sectionId}" 
-                           min="50" max="100" step="1" value="95">
+                           min="50" max="100" step="1" value="100">
                     <div class="cts-debug-slider-label-${sectionId}">
                         <span>50%</span>
-                        <span id="debugMaxWidthVal-${sectionId}">95%</span>
+                        <span id="debugMaxWidthVal-${sectionId}">100%</span>
                         <span>100%</span>
                     </div>
                 </div>
@@ -5365,10 +5365,10 @@
                     <div class="cts-debug-label-${sectionId}">Text Max Height (%)</div>
                     <input type="range" class="cts-debug-slider-${sectionId}" 
                            id="debugMaxHeight-${sectionId}" 
-                           min="50" max="100" step="1" value="95">
+                           min="50" max="100" step="1" value="100">
                     <div class="cts-debug-slider-label-${sectionId}">
                         <span>50%</span>
-                        <span id="debugMaxHeightVal-${sectionId}">95%</span>
+                        <span id="debugMaxHeightVal-${sectionId}">100%</span>
                         <span>100%</span>
                     </div>
                 </div>
@@ -5404,10 +5404,10 @@
                     <div class="cts-debug-label-${sectionId}">Padding (px)</div>
                     <input type="range" class="cts-debug-slider-${sectionId}" 
                            id="debugPadding-${sectionId}" 
-                           min="0" max="50" step="1" value="8">
+                           min="0" max="50" step="1" value="0">
                     <div class="cts-debug-slider-label-${sectionId}">
                         <span>0px</span>
-                        <span id="debugPaddingVal-${sectionId}">8px</span>
+                        <span id="debugPaddingVal-${sectionId}">0px</span>
                         <span>50px</span>
                     </div>
                 </div>
@@ -5531,11 +5531,11 @@
         // Reset button
         if (resetBtn) {
             resetBtn.addEventListener('click', () => {
-                maxWidthSlider.value = 95;
-                maxHeightSlider.value = 95;
+                maxWidthSlider.value = 100;
+                maxHeightSlider.value = 100;
                 imageMaxWidthSlider.value = 90;
                 imageMaxHeightSlider.value = 90;
-                paddingSlider.value = 8;
+                paddingSlider.value = 0;
                 minFontSlider.value = 14;
                 maxFontSlider.value = 72;
                 updateConfig();
