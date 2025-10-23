@@ -150,7 +150,7 @@
       }
     },
     "custom_tshirt_studio": {
-      "type": "custom-tshirt-studio-with-gallery",
+      "type": "custom-tshirt-studio",
       "name": "Custom T-Shirt Studio",
       "settings": {
         "heading": "✨ Custom T-Shirt Designer"
