@@ -1617,6 +1617,51 @@
         border-color: #27e1c1 !important;
         box-shadow: 0 0 0 3px rgba(39, 225, 193, 0.2) !important;
     }
+
+    /* ============================================
+       TEXT & IMAGE CONTAINMENT SYSTEM
+       ============================================ */
+    .cts-design-overlay-{{ section.id }} {
+        text-align: center;
+        /* Keep existing positioning */
+    }
+
+    .cts-design-text-{{ section.id }} {
+        /* Text wrapping without hiding */
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        line-height: 1.2;
+        /* Allow text to show even when image is present */
+        position: relative;
+        z-index: 2;
+    }
+
+    .cts-design-image-{{ section.id }} {
+        /* Constrain images to print area */
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        /* Allow image to layer with text */
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Warning animations */
+    @keyframes warningPulse-{{ section.id }} {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.7; }
+    }
+
+    @keyframes slideIn-{{ section.id }} {
+        from {
+            opacity: 0;
+            transform: translateX(-50%) translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    }
 </style>
 
 <div class="custom-tshirt-studio-{{ section.id }}" id="custom-tshirt-studio-{{ section.id }}" style="display: none;">
@@ -3963,6 +4008,480 @@
     
     // Initialize thumbnail gallery
     initializeThumbnailGallery();
+    
+    // ============================================
+    // TEXT & IMAGE CONTAINMENT SYSTEM
+    // ============================================
+
+    console.log('🎯 Loading complete containment system (text + images)...');
+
+    // Configuration
+    const CONTAINMENT_CONFIG = {
+        maxWidth: 0.95,
+        maxHeight: 0.95,
+        padding: 8,
+        minFontSize: 14,
+        maxFontSize: 72,
+        imageMaxWidth: 0.90,    // Images use slightly less space
+        imageMaxHeight: 0.90
+    };
+
+    // Get elements
+    const cOverlay = document.getElementById(`designOverlay-${sectionId}`);
+    const cText = document.getElementById(`designText-${sectionId}`);
+    const cTextInput = document.getElementById(`textInput-${sectionId}`);
+    const cSizeSlider = document.getElementById(`sizeSlider-${sectionId}`);
+    const cSizeValue = document.getElementById(`sizeValue-${sectionId}`);
+    const cImageUpload = document.getElementById(`imageUpload-${sectionId}`);
+
+    // Track state
+    let hasUploadedImage = false;
+    let currentImageElement = null;
+
+    // Verify elements exist
+    if (!cOverlay || !cText) {
+        console.error('❌ Containment: Required elements not found');
+    } else {
+        console.log('✅ Containment: Elements found successfully');
+    }
+
+    // Create warning indicator
+    function createWarningIndicator() {
+        if (document.getElementById(`containmentWarning-${sectionId}`)) {
+            return document.getElementById(`containmentWarning-${sectionId}`);
+        }
+        
+        const warning = document.createElement('div');
+        warning.id = `containmentWarning-${sectionId}`;
+        warning.style.cssText = `
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            display: none;
+            z-index: 2000;
+            box-shadow: 0 6px 16px rgba(239, 68, 68, 0.5);
+            animation: warningPulse-${sectionId} 2s infinite, slideIn-${sectionId} 0.3s ease-out;
+            white-space: nowrap;
+            pointer-events: none;
+        `;
+        warning.innerHTML = '⚠️ Design exceeds print area';
+        
+        if (cOverlay) {
+            if (window.getComputedStyle(cOverlay).position === 'static') {
+                cOverlay.style.position = 'relative';
+            }
+            cOverlay.appendChild(warning);
+            console.log('✅ Warning indicator created');
+        }
+        
+        return warning;
+    }
+
+    const cWarning = createWarningIndicator();
+
+    // Check if content fits
+    function checkContentFit(element) {
+        if (!element || !cOverlay) {
+            return { fits: true, reason: 'Elements not found' };
+        }
+        
+        try {
+            const contentRect = element.getBoundingClientRect();
+            const overlayRect = cOverlay.getBoundingClientRect();
+            
+            if (overlayRect.width === 0 || overlayRect.height === 0) {
+                return { fits: true, reason: 'Not rendered yet' };
+            }
+            
+            const maxWidth = overlayRect.width * CONTAINMENT_CONFIG.maxWidth - (CONTAINMENT_CONFIG.padding * 2);
+            const maxHeight = overlayRect.height * CONTAINMENT_CONFIG.maxHeight - (CONTAINMENT_CONFIG.padding * 2);
+            
+            const exceedsWidth = contentRect.width > maxWidth;
+            const exceedsHeight = contentRect.height > maxHeight;
+            
+            return {
+                fits: !exceedsWidth && !exceedsHeight,
+                exceedsWidth,
+                exceedsHeight,
+                contentWidth: contentRect.width,
+                contentHeight: contentRect.height,
+                maxWidth,
+                maxHeight,
+                usageWidth: ((contentRect.width / maxWidth) * 100).toFixed(1),
+                usageHeight: ((contentRect.height / maxHeight) * 100).toFixed(1)
+            };
+        } catch (error) {
+            console.error('Error checking fit:', error);
+            return { fits: true, reason: 'Error' };
+        }
+    }
+
+    // Check if overall design (text + image) fits
+    function checkOverallFit() {
+        let textFits = { fits: true };
+        let imageFits = { fits: true };
+        
+        // Check text if visible
+        if (cText && cText.style.display !== 'none') {
+            textFits = checkContentFit(cText);
+        }
+        
+        // Check image if present
+        if (currentImageElement && currentImageElement.style.display !== 'none') {
+            imageFits = checkContentFit(currentImageElement);
+        }
+        
+        return {
+            textFits: textFits.fits,
+            imageFits: imageFits.fits,
+            overallFits: textFits.fits && imageFits.fits,
+            textData: textFits,
+            imageData: imageFits
+        };
+    }
+
+    // Auto-adjust text size
+    function autoAdjustText() {
+        if (!cText || !cOverlay) return;
+        
+        console.log('📏 Auto-adjusting text size...');
+        
+        let currentSize = parseInt(window.getComputedStyle(cText).fontSize);
+        let fits = checkContentFit(cText);
+        let iterations = 0;
+        
+        while (!fits.fits && currentSize > CONTAINMENT_CONFIG.minFontSize && iterations < 100) {
+            currentSize -= 1;
+            cText.style.fontSize = currentSize + 'px';
+            fits = checkContentFit(cText);
+            iterations++;
+        }
+        
+        // Update slider
+        if (cSizeSlider && cSizeValue) {
+            cSizeSlider.value = currentSize;
+            cSizeValue.textContent = currentSize;
+        }
+        
+        if (fits.fits) {
+            console.log(`✅ Text adjusted to ${currentSize}px (${fits.usageWidth}% width, ${fits.usageHeight}% height)`);
+        } else {
+            console.warn('⚠️ Text still too large at minimum size');
+        }
+        
+        return fits.fits;
+    }
+
+    // Constrain uploaded image
+    function constrainImage(img) {
+        if (!img || !cOverlay) return;
+        
+        try {
+            const overlayRect = cOverlay.getBoundingClientRect();
+            if (overlayRect.width === 0) return;
+            
+            const maxWidth = (overlayRect.width * CONTAINMENT_CONFIG.imageMaxWidth) - (CONTAINMENT_CONFIG.padding * 2);
+            const maxHeight = (overlayRect.height * CONTAINMENT_CONFIG.imageMaxHeight) - (CONTAINMENT_CONFIG.padding * 2);
+            
+            // Set max dimensions
+            img.style.maxWidth = maxWidth + 'px';
+            img.style.maxHeight = maxHeight + 'px';
+            img.style.width = 'auto';
+            img.style.height = 'auto';
+            img.style.objectFit = 'contain';
+            
+            console.log(`🖼️ Image constrained: ${maxWidth.toFixed(0)}px × ${maxHeight.toFixed(0)}px`);
+            
+            // Check if it fits
+            setTimeout(() => {
+                const fits = checkContentFit(img);
+                if (!fits.fits) {
+                    console.warn('⚠️ Image still exceeds boundaries after constraint');
+                } else {
+                    console.log(`✅ Image fits: ${fits.usageWidth}% width, ${fits.usageHeight}% height`);
+                }
+            }, 100);
+        } catch (error) {
+            console.error('Error constraining image:', error);
+        }
+    }
+
+    // Show warning
+    function showWarning() {
+        if (cWarning) cWarning.style.display = 'block';
+        if (cOverlay) {
+            cOverlay.style.outline = '3px solid #ef4444';
+            cOverlay.style.outlineOffset = '4px';
+        }
+    }
+
+    // Hide warning
+    function hideWarning() {
+        if (cWarning) cWarning.style.display = 'none';
+        if (cOverlay) {
+            cOverlay.style.outline = '';
+            cOverlay.style.outlineOffset = '';
+        }
+    }
+
+    // Apply word wrapping
+    function applyWordWrapping() {
+        if (!cText || !cOverlay) return;
+        
+        try {
+            const overlayRect = cOverlay.getBoundingClientRect();
+            if (overlayRect.width === 0) return;
+            
+            const maxWidth = (overlayRect.width * CONTAINMENT_CONFIG.maxWidth) - (CONTAINMENT_CONFIG.padding * 2);
+            
+            cText.style.maxWidth = maxWidth + 'px';
+            cText.style.wordWrap = 'break-word';
+            cText.style.overflowWrap = 'break-word';
+            
+            console.log('📐 Word wrapping applied');
+        } catch (error) {
+            console.error('Error applying wrapping:', error);
+        }
+    }
+
+    // Monitor text input
+    if (cTextInput) {
+        cTextInput.addEventListener('input', function(e) {
+            setTimeout(() => {
+                applyWordWrapping();
+                const overall = checkOverallFit();
+                
+                if (!overall.overallFits) {
+                    showWarning();
+                    if (!overall.textFits) {
+                        console.log('📏 Text exceeds boundaries');
+                    }
+                } else {
+                    hideWarning();
+                }
+            }, 100);
+        });
+        console.log('✅ Text input monitoring active');
+    }
+
+    // Monitor size slider
+    if (cSizeSlider) {
+        cSizeSlider.addEventListener('input', function(e) {
+            setTimeout(() => {
+                const overall = checkOverallFit();
+                
+                if (!overall.overallFits) {
+                    showWarning();
+                } else {
+                    hideWarning();
+                }
+            }, 100);
+        });
+        console.log('✅ Size slider monitoring active');
+    }
+
+    // Enhanced image upload handler
+    if (cImageUpload) {
+        // Store original handler if exists
+        const originalUploadHandler = cImageUpload.onchange;
+        
+        cImageUpload.addEventListener('change', function(e) {
+            // Call original handler first if it exists
+            if (originalUploadHandler) {
+                originalUploadHandler.call(this, e);
+            }
+            
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            console.log('📁 Image upload detected:', file.name);
+            
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                // Wait a moment for existing handler to create/update image element
+                setTimeout(() => {
+                    // Find the image element (it should have been created by existing code)
+                    currentImageElement = document.getElementById(`designImage-${sectionId}`);
+                    
+                    if (currentImageElement) {
+                        hasUploadedImage = true;
+                        
+                        // Constrain the image
+                        constrainImage(currentImageElement);
+                        
+                        // Check overall fit after image loads
+                        currentImageElement.onload = function() {
+                            setTimeout(() => {
+                                const overall = checkOverallFit();
+                                
+                                if (!overall.overallFits) {
+                                    showWarning();
+                                    console.log('⚠️ Design (text + image) exceeds print area');
+                                } else {
+                                    hideWarning();
+                                    console.log('✅ Design (text + image) fits within print area');
+                                }
+                            }, 200);
+                        };
+                        
+                        console.log('✅ Image upload processed with containment');
+                    } else {
+                        console.warn('⚠️ Could not find image element after upload');
+                    }
+                }, 300);
+            };
+            reader.readAsDataURL(file);
+        });
+        console.log('✅ Image upload monitoring active');
+    }
+
+    // Add Auto-Fit button
+    function addAutoFitButton() {
+        if (document.getElementById(`containmentAutoFitBtn-${sectionId}`)) {
+            console.log('ℹ️ Auto-fit button already exists');
+            return;
+        }
+        
+        const sizeGroup = cSizeSlider?.parentElement?.parentElement;
+        if (!sizeGroup) {
+            console.warn('⚠️ Could not find size slider group');
+            return;
+        }
+        
+        const autoFitBtn = document.createElement('button');
+        autoFitBtn.id = `containmentAutoFitBtn-${sectionId}`;
+        autoFitBtn.className = `cts-btn-${sectionId} cts-btn-secondary-${sectionId}`;
+        autoFitBtn.style.marginTop = '10px';
+        autoFitBtn.innerHTML = '📏 Auto-Fit Design to Print Area';
+        autoFitBtn.type = 'button';
+        
+        autoFitBtn.onclick = function(e) {
+            e.preventDefault();
+            console.log('🎯 Auto-fit triggered');
+            
+            applyWordWrapping();
+            
+            // Adjust text
+            if (cText && cText.style.display !== 'none') {
+                autoAdjustText();
+            }
+            
+            // Re-constrain image if present
+            if (currentImageElement && currentImageElement.style.display !== 'none') {
+                constrainImage(currentImageElement);
+            }
+            
+            // Check overall result
+            setTimeout(() => {
+                const overall = checkOverallFit();
+                if (!overall.overallFits) {
+                    showWarning();
+                    console.log('⚠️ Design still exceeds after auto-fit');
+                } else {
+                    hideWarning();
+                    console.log('✅ Design now fits within print area');
+                }
+            }, 300);
+        };
+        
+        if (sizeGroup.nextSibling) {
+            sizeGroup.parentNode.insertBefore(autoFitBtn, sizeGroup.nextSibling);
+        } else {
+            sizeGroup.parentNode.appendChild(autoFitBtn);
+        }
+        
+        console.log('✅ Auto-fit button added');
+    }
+
+    // Window resize handler
+    let cResizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(cResizeTimeout);
+        cResizeTimeout = setTimeout(() => {
+            console.log('📱 Window resized, recalculating...');
+            
+            applyWordWrapping();
+            
+            // Re-constrain image if present
+            if (currentImageElement) {
+                constrainImage(currentImageElement);
+            }
+            
+            // Check fit
+            setTimeout(() => {
+                const overall = checkOverallFit();
+                if (!overall.overallFits) {
+                    showWarning();
+                } else {
+                    hideWarning();
+                }
+            }, 100);
+        }, 300);
+    });
+
+    // Initialize containment system
+    function initCompleteContainment() {
+        console.log('🎯 Initializing complete containment system...');
+        console.log('📐 Config:', CONTAINMENT_CONFIG);
+        
+        setTimeout(() => {
+            applyWordWrapping();
+            addAutoFitButton();
+            
+            // Check for existing image
+            const existingImage = document.getElementById(`designImage-${sectionId}`);
+            if (existingImage) {
+                currentImageElement = existingImage;
+                hasUploadedImage = true;
+                constrainImage(existingImage);
+                console.log('🖼️ Found existing image, applying constraints');
+            }
+            
+            // Initial check
+            setTimeout(() => {
+                const overall = checkOverallFit();
+                
+                if (cText && cText.textContent !== 'YOUR TEXT HERE') {
+                    if (!overall.overallFits) {
+                        showWarning();
+                        console.log('⚠️ Initial design exceeds boundaries');
+                    } else {
+                        console.log('✅ Initial design fits');
+                    }
+                }
+            }, 500);
+        }, 1000);
+        
+        console.log('✅ Complete containment system initialized');
+    }
+
+    // Start initialization
+    initCompleteContainment();
+
+    console.log('🎨 Complete containment module loaded (text + images)');
+
+    // Export functions for debugging
+    window.ContainmentSystem = window.ContainmentSystem || {};
+    window.ContainmentSystem[sectionId] = {
+        checkOverallFit,
+        checkContentFit,
+        autoAdjustText,
+        constrainImage,
+        showWarning,
+        hideWarning,
+        config: CONTAINMENT_CONFIG
+    };
+
+    // ============================================
+    // END COMPLETE CONTAINMENT SYSTEM
+    // ============================================
     
     console.log('✅ Submit Request functionality initialized');
     console.log('✅ Designer integration points ready for enhancements');
