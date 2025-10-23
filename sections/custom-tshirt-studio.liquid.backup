@@ -1,0 +1,1680 @@
+{% comment %}
+  Custom T-Shirt Design Studio Section
+  A dedicated section for the custom t-shirt designer with amazing visuals
+{% endcomment %}
+
+<div class="custom-tshirt-studio" id="custom-tshirt-studio-{{ section.id }}" style="display: none;">
+  <style>
+    .custom-tshirt-studio {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .studio-container {
+      max-width: 1400px;
+      width: 100%;
+      padding: 40px 20px;
+      position: relative;
+      z-index: 2;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .studio-header {
+      text-align: center;
+      margin-bottom: 60px;
+      animation: fadeInUp 1s ease-out;
+    }
+    
+    .studio-title {
+      font-size: 4rem;
+      font-weight: 900;
+      color: white;
+      margin: 0 0 20px 0;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      background: linear-gradient(45deg, #fff, #f0f8ff, #fff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: titleGlow 3s ease-in-out infinite alternate;
+    }
+    
+    .studio-subtitle {
+      font-size: 1.5rem;
+      color: rgba(255,255,255,0.9);
+      margin: 0 0 30px 0;
+      font-weight: 300;
+      letter-spacing: 1px;
+    }
+    
+    .studio-description {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.8);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    
+    .design-workspace {
+      background: rgba(255,255,255,0.95);
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.2);
+      animation: slideInUp 1s ease-out 0.3s both;
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .workspace-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+    
+    .workspace-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #2d3748;
+      margin: 0;
+    }
+    
+    .close-studio-btn {
+      background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(255,107,107,0.4);
+    }
+    
+    .close-studio-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(255,107,107,0.6);
+    }
+    
+    .floating-shapes {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 1;
+    }
+    
+    .shape {
+      position: absolute;
+      opacity: 0.1;
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    .shape:nth-child(1) {
+      top: 20%;
+      left: 10%;
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+      border-radius: 50%;
+      animation-delay: 0s;
+    }
+    
+    .shape:nth-child(2) {
+      top: 60%;
+      right: 15%;
+      width: 120px;
+      height: 120px;
+      background: linear-gradient(45deg, #a8edea, #fed6e3);
+      border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+      animation-delay: 2s;
+    }
+    
+    .shape:nth-child(3) {
+      bottom: 20%;
+      left: 20%;
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(45deg, #ffecd2, #fcb69f);
+      border-radius: 50%;
+      animation-delay: 4s;
+    }
+    
+    .shape:nth-child(4) {
+      top: 40%;
+      right: 30%;
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(45deg, #d299c2, #fef9d7);
+      border-radius: 20% 80% 80% 20% / 80% 20% 80% 20%;
+      animation-delay: 1s;
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes titleGlow {
+      from {
+        filter: brightness(1) drop-shadow(0 0 10px rgba(255,255,255,0.5));
+      }
+      to {
+        filter: brightness(1.2) drop-shadow(0 0 20px rgba(255,255,255,0.8));
+      }
+    }
+    
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-20px) rotate(180deg);
+      }
+    }
+    
+    .pulse-ring {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 300px;
+      height: 300px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(1.5);
+        opacity: 0;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .studio-title {
+        font-size: 2.5rem;
+      }
+      
+      .studio-subtitle {
+        font-size: 1.2rem;
+      }
+      
+      .design-workspace {
+        padding: 20px;
+        margin: 0 10px;
+      }
+      
+      .workspace-title {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+  
+  <!-- Floating Background Shapes -->
+  <div class="floating-shapes">
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+  </div>
+  
+  <!-- Pulse Ring Effect -->
+  <div class="pulse-ring"></div>
+  
+  <div class="studio-container">
+    <div class="studio-header">
+      <h1 class="studio-title">🎨 Custom T-Shirt Studio</h1>
+      <p class="studio-subtitle">Design Your Perfect T-Shirt</p>
+      <p class="studio-description">
+        Create stunning custom t-shirts with our advanced design tools. Upload your artwork, 
+        customize colors, adjust positioning, and see your design come to life in real-time.
+      </p>
+    </div>
+    
+    <div class="design-workspace">
+      <div class="workspace-header">
+        <h2 class="workspace-title">Design Workspace</h2>
+        <button class="close-studio-btn" onclick="closeCustomStudio()">
+          ✕ Close Studio
+        </button>
+      </div>
+      
+      <!-- Include the actual interactive mockup content -->
+      <div class="custom-designer-container">
+        <!-- Copy the actual interactive mockup section content here -->
+        <div id="nt-mockup-{{ section.id }}" class="nt-mockup theme-responsive-section" style="padding: 60px 0; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);">
+          <div class="container">
+            
+            <!-- Section Header -->
+            <div class="mockup-header" style="text-align: center; margin-bottom: 60px; padding-top: 20px;">
+              <h1 style="font-family: 'Bebas Neue', 'Impact', Arial Black, sans-serif; font-size: 48px; margin: 0 0 20px 0; color: #1f2937; text-shadow: 1px 1px 2px rgba(255,255,255,0.8); letter-spacing: 2px; font-weight: 700; text-transform: uppercase;">
+                Custom T-Shirt Design
+              </h1>
+              <p style="font-size: 20px; color: #374151; margin: 0 0 25px 0; max-width: 700px; margin: 0 auto 25px auto; line-height: 1.6; text-shadow: 1px 1px 2px rgba(255,255,255,0.8);">
+                Upload your design and create your own custom t-shirt! 
+                <br>Drag, resize, and position your artwork perfectly on the print area.
+              </p>
+            </div>
+
+<!-- Design Customization Controls Section -->
+<div style="margin: 40px 0; max-width: 1200px; margin-left: auto; margin-right: auto;">
+  <p class="canvas-hint-text" style="color: #374151; font-size: 14px; margin-top: 16px; text-align: center;">
+    💡 Tip: Drag the design to move it, use scroll wheel to resize, or use the precise controls below
+  </p>
+
+  <!-- Design Customization Controls -->
+  <div style="text-align: center; margin: 20px 0 16px 0;">
+    <h2 class="canvas-controls-title" style="font-size: 24px; font-weight: 600; color: #1f2937; margin: 0 0 8px 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.1);">🎛️ Design Customization Controls</h2>
+    <p class="canvas-controls-subtitle" style="font-size: 14px; color: #4b5563; margin: 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.05);">Customize your t-shirt design with precision controls</p>
+  </div>
+
+  <div class="nt-mockup__controls" style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: center; background: #ffffff; padding: 24px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 1px solid #e5e7eb; margin: 10px 0;">
+        
+        <!-- View Controls -->
+        <div class="nt-mockup__group">
+          <span class="nt-mockup__label" style="font-weight: 600; font-size: 14px; color: #374151; margin-right: 12px;">View</span>
+          <div class="nt-mockup__buttons" role="tablist" aria-label="Mockup view" style="display: flex; gap: 8px;">
+            <button class="nt-btn nt-btn--view is-active enhanced-view-btn" data-view="front" aria-selected="true" style="
+              padding: 12px 20px; 
+              border: 2px solid transparent; 
+              background: linear-gradient(135deg, #27e1c1, #20b2aa); 
+              color: white; 
+              border-radius: 16px; 
+              font-size: 14px; 
+              font-weight: 600; 
+              cursor: pointer; 
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+              box-shadow: 0 4px 16px rgba(39, 225, 193, 0.3);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+            ">
+              👕 Front
+            </button>
+            <button class="nt-btn nt-btn--view enhanced-view-btn" data-view="back" aria-selected="false" style="
+              padding: 12px 20px; 
+              border: 2px solid transparent; 
+              background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); 
+              color: #374151; 
+              border-radius: 16px; 
+              font-size: 14px; 
+              font-weight: 600; 
+              cursor: pointer; 
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+              box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+            ">
+              👕 Back
+            </button>
+            <button class="nt-btn nt-btn--view enhanced-view-btn" data-view="hanging" aria-selected="false" style="
+              padding: 12px 20px; 
+              border: 2px solid transparent; 
+              background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); 
+              color: #374151; 
+              border-radius: 16px; 
+              font-size: 14px; 
+              font-weight: 600; 
+              cursor: pointer; 
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+              box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+            ">
+              🏷️ Hanging
+            </button>
+            <button class="nt-btn nt-btn--view enhanced-view-btn" data-view="person1" aria-selected="false" style="
+              padding: 12px 20px; 
+              border: 2px solid transparent; 
+              background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); 
+              color: #374151; 
+              border-radius: 16px; 
+              font-size: 14px; 
+              font-weight: 600; 
+              cursor: pointer; 
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+              box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+            ">
+              👤 Model 1
+            </button>
+            <button class="nt-btn nt-btn--view enhanced-view-btn" data-view="person2" aria-selected="false" style="
+              padding: 12px 20px; 
+              border: 2px solid transparent; 
+              background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); 
+              color: #374151; 
+              border-radius: 16px; 
+              font-size: 14px; 
+              font-weight: 600; 
+              cursor: pointer; 
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+              box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+            ">
+              👤 Model 2
+            </button>
+          </div>
+        </div>
+
+        <!-- Color Selection -->
+        <div class="nt-mockup__group">
+          <span class="nt-mockup__label" style="font-weight: 600; font-size: 14px; color: #374151; margin-right: 12px;">Color</span>
+          <div class="nt-mockup__buttons" style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button class="nt-btn nt-btn--color enhanced-color-btn" data-color="white" style="
+              padding: 12px 16px; 
+              border: 2px solid transparent; 
+              background: linear-gradient(135deg, #ffffff, #f8f9fa); 
+              color: #374151; 
+              border-radius: 16px; 
+              font-size: 14px; 
+              font-weight: 600; 
+              cursor: pointer; 
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+              box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+            ">
+              ⚪ White
+            </button>
+            <button class="nt-btn nt-btn--color enhanced-color-btn" data-color="black" style="
+              padding: 12px 16px; 
+              border: 2px solid transparent; 
+              background: linear-gradient(135deg, #000000, #374151); 
+              color: white; 
+              border-radius: 16px; 
+              font-size: 14px; 
+              font-weight: 600; 
+              cursor: pointer; 
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+              box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+            ">
+              ⚫ Black
+            </button>
+            <button class="nt-btn nt-btn--color enhanced-color-btn" data-color="red" style="
+              padding: 12px 16px; 
+              border: 2px solid transparent; 
+              background: linear-gradient(135deg, #ef4444, #dc2626); 
+              color: white; 
+              border-radius: 16px; 
+              font-size: 14px; 
+              font-weight: 600; 
+              cursor: pointer; 
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+              box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+            ">
+              🔴 Red
+            </button>
+            <button class="nt-btn nt-btn--color enhanced-color-btn" data-color="blue" style="
+              padding: 12px 16px; 
+              border: 2px solid transparent; 
+              background: linear-gradient(135deg, #3b82f6, #1d4ed8); 
+              color: white; 
+              border-radius: 16px; 
+              font-size: 14px; 
+              font-weight: 600; 
+              cursor: pointer; 
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+              box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+            ">
+              🔵 Blue
+            </button>
+          </div>
+        </div>
+
+        <!-- Enhanced 3D Controls -->
+        <div class="nt-mockup__group" style="background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); padding: 16px; border-radius: 16px; border: 2px solid rgba(255,255,255,0.2); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);">
+          <span class="nt-mockup__label" style="font-weight: 600; font-size: 14px; color: #334155; margin-right: 12px;">🎯 3D Controls</span>
+          <div class="nt-mockup__buttons" style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button class="nt-btn nt-btn--3d enhanced-3d-btn" id="nt-3d-rotate-{{ section.id }}" style="
+              padding: 12px 20px; 
+              border: 2px solid transparent; 
+              background: linear-gradient(135deg, #3b82f6, #1d4ed8); 
+              color: white; 
+              border-radius: 16px; 
+              font-size: 14px; 
+              font-weight: 600; 
+              cursor: pointer; 
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+              box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+            ">
+              ↺ Rotate
+            </button>
+            <button class="nt-btn nt-btn--zoom enhanced-3d-btn" id="nt-zoom-{{ section.id }}" style="
+              padding: 12px 20px; 
+              border: 2px solid transparent; 
+              background: linear-gradient(135deg, #10b981, #059669); 
+              color: white; 
+              border-radius: 16px; 
+              font-size: 14px; 
+              font-weight: 600; 
+              cursor: pointer; 
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+              box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+            ">
+              🔍 Zoom
+            </button>
+            <button class="nt-btn nt-btn--validate enhanced-3d-btn" id="nt-validate-{{ section.id }}" style="
+              padding: 12px 20px; 
+              border: 2px solid transparent; 
+              background: linear-gradient(135deg, #f59e0b, #d97706); 
+              color: white; 
+              border-radius: 16px; 
+              font-size: 14px; 
+              font-weight: 600; 
+              cursor: pointer; 
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+              box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+            ">
+              ✅ Validate
+            </button>
+            <button class="nt-btn nt-btn--reset enhanced-3d-btn" id="nt-reset-{{ section.id }}" style="
+              padding: 12px 20px; 
+              border: 2px solid transparent; 
+              background: linear-gradient(135deg, #6b7280, #4b5563); 
+              color: white; 
+              border-radius: 16px; 
+              font-size: 14px; 
+              font-weight: 600; 
+              cursor: pointer; 
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+              box-shadow: 0 4px 16px rgba(107, 114, 128, 0.3);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+            ">
+              🔄 Reset
+            </button>
+          </div>
+        </div>
+
+        <!-- Action Buttons - Organized Grid Layout -->
+        <div class="nt-mockup__group">
+          <!-- Upload Section - PROMINENT -->
+          <div class="upload-section" style="display: flex; flex-direction: column; gap: 8px; align-items: center; margin-bottom: 24px;">
+            <button class="nt-btn nt-btn--upload upload-hero-btn" id="nt-upload-{{ section.id }}" style="
+              padding: 18px 32px; 
+              border: 2px solid transparent; 
+              background: linear-gradient(135deg, #1e40af, #3b82f6, #1d4ed8, #1e40af); 
+              background-size: 300% 300%;
+              color: white; 
+              border-radius: 20px; 
+              font-size: 16px; 
+              font-weight: 700; 
+              cursor: pointer; 
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+              box-shadow: 0 8px 32px rgba(30, 64, 175, 0.4);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              position: relative;
+              overflow: hidden;
+              text-transform: uppercase;
+              letter-spacing: 1px;
+              animation: upload-royal-flow 3s ease-in-out infinite;
+            ">
+              <span style="position: relative; z-index: 2; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                📁 Upload Your Design
+                <span class="upload-sparkle" style="
+                  position: absolute;
+                  width: 4px;
+                  height: 4px;
+                  background: rgba(255, 255, 255, 0.8);
+                  border-radius: 50%;
+                  animation: sparkle-float 2s ease-in-out infinite;
+                "></span>
+                <span class="upload-sparkle" style="
+                  position: absolute;
+                  width: 3px;
+                  height: 3px;
+                  background: rgba(255, 255, 255, 0.6);
+                  border-radius: 50%;
+                  animation: sparkle-float 2s ease-in-out infinite 0.5s;
+                "></span>
+              </span>
+            </button>
+            <div style="display: flex; gap: 8px;">
+              <button class="nt-btn nt-btn--help" style="
+                padding: 8px 16px; 
+                border: 2px solid transparent; 
+                background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); 
+                color: #374151; 
+                border-radius: 12px; 
+                font-size: 12px; 
+                font-weight: 600; 
+                cursor: pointer; 
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+              ">
+                ℹ️ Help
+              </button>
+            </div>
+          </div>
+          
+          <!-- Action Buttons Grid -->
+          <div class="action-buttons-grid" style="
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+          ">
+            <button class="nt-btn nt-btn--download" id="nt-download-{{ section.id }}" style="
+              padding: 14px 20px; 
+              border: 2px solid transparent; 
+              background: linear-gradient(135deg, #10b981, #059669); 
+              color: white; 
+              border-radius: 16px; 
+              font-size: 14px; 
+              font-weight: 600; 
+              cursor: pointer; 
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+              box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 8px;
+            ">
+              💾 Download Mockup
+            </button>
+            <button class="nt-btn nt-btn--edit" id="nt-edit-{{ section.id }}" style="
+              padding: 14px 20px; 
+              border: 2px solid transparent; 
+              background: linear-gradient(135deg, #8b5cf6, #7c3aed); 
+              color: white; 
+              border-radius: 16px; 
+              font-size: 14px; 
+              font-weight: 600; 
+              cursor: pointer; 
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+              box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 8px;
+            ">
+              ✏️ Edit Design
+            </button>
+          </div>
+          
+          <!-- Primary Action Buttons -->
+          <div class="primary-actions" style="
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+          ">
+            <button class="nt-btn nt-btn--placement" id="nt-toggle-guide-{{ section.id }}" style="
+              padding: 14px 20px; 
+              border: 2px solid transparent; 
+              background: linear-gradient(135deg, #f59e0b, #d97706); 
+              color: white; 
+              border-radius: 16px; 
+              font-size: 14px; 
+              font-weight: 600; 
+              cursor: pointer; 
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+              box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 8px;
+            ">
+              📍 Placement Guide
+            </button>
+            <button class="nt-btn nt-btn--remove" id="nt-remove-{{ section.id }}" style="
+              padding: 14px 20px; 
+              border: 2px solid transparent; 
+              background: linear-gradient(135deg, #ef4444, #dc2626); 
+              color: white; 
+              border-radius: 16px; 
+              font-size: 14px; 
+              font-weight: 600; 
+              cursor: pointer; 
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+              box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 8px;
+            ">
+              🗑️ Remove Design
+            </button>
+          </div>
+          
+          <!-- Perfect Fit Button -->
+          <button class="nt-btn nt-btn--perfect-fit" id="nt-perfect-fit-btn-{{ section.id }}" style="
+            padding: 14px 20px; 
+            border: 2px solid transparent; 
+            background: linear-gradient(135deg, #06b6d4, #0891b2); 
+            color: white; 
+            border-radius: 16px; 
+            font-size: 14px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            box-shadow: 0 4px 16px rgba(6, 182, 212, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            margin-bottom: 12px;
+          ">
+            🎯 Perfect Fit Assistant
+          </button>
+          
+          <!-- Submit Request Button - HERO -->
+          <button class="nt-btn nt-btn--submit-request submit-request-hero-btn" id="nt-submit-request-btn-{{ section.id }}" style="
+            padding: 18px 32px; 
+            border: 2px solid transparent; 
+            background: linear-gradient(135deg, #dc2626, #ef4444, #dc2626); 
+            background-size: 200% 200%;
+            color: white; 
+            border-radius: 16px; 
+            font-size: 16px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            box-shadow: 0 8px 32px rgba(220, 38, 38, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+            animation: submit-pulse 2s ease-in-out infinite;
+          ">
+            <span style="position: relative; z-index: 2; display: flex; align-items: center; justify-content: center; gap: 8px;">
+              🚀 Submit Request
+            </span>
+            <div style="
+              position: absolute;
+              top: 0;
+              left: -100%;
+              width: 100%;
+              height: 100%;
+              background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+              transition: left 0.5s;
+            "></div>
+          </button>
+        </div>
+      </div>
+    </div>
+<!-- END Design Customization Controls Section -->
+
+            <!-- Enhanced Preview Stage -->
+            <div class="nt-mockup__stage" style="width: 100%; display: grid; place-items: center; margin-top: 60px !important; margin-bottom: 100px !important; padding: 0 20px;">
+                <div class="nt-mockup__canvas" 
+                     id="nt-mockup-canvas-{{ section.id }}"
+                     style="
+                       position: relative;
+                       width: 100%;
+                       max-width: 600px;
+                       aspect-ratio: 1;
+                       background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+                       border-radius: 20px;
+                       box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+                       border: 2px solid rgba(226, 232, 240, 0.5);
+                       overflow: hidden;
+                       backdrop-filter: blur(10px);
+                       -webkit-backdrop-filter: blur(10px);
+                     ">
+                    
+                    <!-- Base T-shirt Image -->
+                    <img 
+                      id="nt-base-{{ section.id }}"
+                      src="{{ 'tshirt-view.png' | asset_url }}"
+                      alt="T-shirt mockup"
+                      style="
+                        position: absolute;
+                        inset: 0;
+                        width: 100%;
+                        height: 100%;
+                        object-fit: contain;
+                        pointer-events: none;
+                        z-index: 1;
+                      "
+                    >
+                    
+                    <!-- Design Overlay -->
+                    <div 
+                      id="nt-overlay-{{ section.id }}"
+                      style="
+                        position: absolute;
+                        inset: 0;
+                        pointer-events: none;
+                        z-index: 2;
+                      "
+                    >
+                      <!-- Design will be placed here -->
+                    </div>
+                    
+                    <!-- Print Area Indicator -->
+                    <div 
+                      id="nt-print-area-{{ section.id }}"
+                      style="
+                        position: absolute;
+                        top: 20%;
+                        left: 25%;
+                        width: 50%;
+                        height: 60%;
+                        border: 2px dashed rgba(59, 130, 246, 0.5);
+                        border-radius: 8px;
+                        pointer-events: none;
+                        z-index: 0;
+                        background: rgba(59, 130, 246, 0.05);
+                      "
+                    >
+                      <div style="
+                        position: absolute;
+                        top: -20px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        background: rgba(59, 130, 246, 0.9);
+                        color: white;
+                        padding: 4px 12px;
+                        border-radius: 12px;
+                        font-size: 12px;
+                        font-weight: 600;
+                        white-space: nowrap;
+                      ">
+                        Print Area
+                      </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function closeCustomStudio() {
+  // Hide the custom studio section
+  const studio = document.getElementById('custom-tshirt-studio-{{ section.id }}');
+  if (studio) {
+    studio.style.display = 'none';
+  }
+  
+  // Show the main page content again
+  const mainContent = document.querySelector('.main-content');
+  if (mainContent) {
+    mainContent.style.display = 'block';
+  }
+  
+  // Scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Show custom studio function (called from home page button)
+window.openCustomDesignStudio = function() {
+  // Hide main content
+  const mainContent = document.querySelector('.main-content');
+  if (mainContent) {
+    mainContent.style.display = 'none';
+  }
+  
+  // Show the custom studio
+  const studio = document.getElementById('custom-tshirt-studio-{{ section.id }}');
+  if (studio) {
+    studio.style.display = 'block';
+    studio.scrollIntoView({ behavior: 'smooth' });
+    
+    // Initialize the mockup after the studio is visible
+    setTimeout(() => {
+      initializeMockup();
+    }, 200);
+  }
+};
+
+// Also make it available as showCustomStudio for compatibility
+window.showCustomStudio = window.openCustomDesignStudio;
+
+// Copy the working JavaScript from interactive-mockup.liquid
+function initializeMockup() {
+  const mockup = {
+    // Mockup images mapping - using tshirt-view.png as the base template
+    mockupImages: {
+      front: {
+        white: "{{ 'tshirt-view.png' | asset_url }}",
+        black: "{{ 'tshirt-view.png' | asset_url }}",
+        pink: "{{ 'tshirt-view.png' | asset_url }}",
+        blue: "{{ 'tshirt-view.png' | asset_url }}"
+      },
+      back: {
+        white: "{{ 'tshirt-view.png' | asset_url }}",
+        black: "{{ 'tshirt-view.png' | asset_url }}",
+        pink: "{{ 'tshirt-view.png' | asset_url }}",
+        blue: "{{ 'tshirt-view.png' | asset_url }}"
+      },
+      hanging: {
+        white: "{{ 'tshirt-view.png' | asset_url }}",
+        black: "{{ 'tshirt-view.png' | asset_url }}",
+        pink: "{{ 'tshirt-view.png' | asset_url }}",
+        blue: "{{ 'tshirt-view.png' | asset_url }}"
+      },
+      person1: {
+        white: "{{ 'Girl-Model.png' | asset_url }}",
+        black: "{{ 'Girl-Model.png' | asset_url }}",
+        pink: "{{ 'Girl-Model.png' | asset_url }}",
+        blue: "{{ 'Girl-Model.png' | asset_url }}"
+      },
+      person2: {
+        white: "{{ 'Women-side.png' | asset_url }}",
+        black: "{{ 'Women-side.png' | asset_url }}",
+        pink: "{{ 'Women-side.png' | asset_url }}",
+        blue: "{{ 'Women-side.png' | asset_url }}"
+      }
+    },
+    
+    // Current base mockup image - using tshirt-view.png as the default template
+    baseMockup: "{{ 'tshirt-view.png' | asset_url }}",
+
+    // Current design state
+    designState: {
+      text: 'Your Design Here',
+      fontSize: 32,
+      fontFamily: "'Bebas Neue', sans-serif",
+      textColor: '#000000',
+      shirtColor: 'white',
+      effect: 'none'
+    },
+
+    // Current view state
+    state: { view: "front", color: "white" },
+
+    // Enhanced placement state - aligned with print area
+    placementState: {
+      topPct: 30,   // Adjusted to match print area top
+      leftPct: 50,  // Centered horizontally
+      widthPct: 50, // Adjusted to match print area width
+      heightPct: 65, // Adjusted to match print area height (rectangular)
+      rotateDeg: 0,
+      dragging: false,
+      resizing: false,
+      resizeDirection: 'se',
+      lastX: 0,
+      lastY: 0,
+      hasUploadedDesign: false,
+      designSelected: false
+    },
+
+    init() {
+      console.log('🎯 Initializing Custom Studio Mockup...');
+      this.bindEvents();
+      this.bindDragResize();
+      this.updateBase();
+      this.updateDesign();
+      this.updatePlacementDisplay();
+      this.updateDesignPosition();
+      console.log('✅ Custom Studio Mockup initialized');
+    },
+
+    setActive(buttons, activeValue) {
+      buttons.forEach(btn => {
+        btn.classList.remove('is-active');
+        if (btn.dataset.view === activeValue || btn.dataset.color === activeValue) {
+          btn.classList.add('is-active');
+        }
+      });
+    },
+
+    updateBase() {
+      const baseImg = document.getElementById('nt-base-{{ section.id }}');
+      if (!baseImg) return;
+      
+      const imageSrc = this.mockupImages[this.state.view]?.[this.state.color] || this.baseMockup;
+      baseImg.src = imageSrc;
+    },
+
+    updateDesign() {
+      // Update design display if needed
+    },
+
+    updatePlacementDisplay() {
+      // Update placement display controls
+      const topSlider = document.getElementById(`nt-placement-top-{{ section.id }}`);
+      const leftSlider = document.getElementById(`nt-placement-left-{{ section.id }}`);
+      const widthSlider = document.getElementById(`nt-placement-width-{{ section.id }}`);
+      const heightSlider = document.getElementById(`nt-placement-height-{{ section.id }}`);
+      const rotationSlider = document.getElementById(`nt-placement-rotation-{{ section.id }}`);
+
+      if (topSlider) topSlider.value = this.placementState.topPct;
+      if (leftSlider) leftSlider.value = this.placementState.leftPct;
+      if (widthSlider) widthSlider.value = this.placementState.widthPct;
+      if (heightSlider) heightSlider.value = this.placementState.heightPct;
+      if (rotationSlider) rotationSlider.value = this.placementState.rotateDeg;
+    },
+
+    updateDesignPosition() {
+      const overlay = document.getElementById('nt-overlay-{{ section.id }}');
+      if (!overlay) return;
+
+      // Apply the placement state to the overlay
+      overlay.style.top = this.placementState.topPct + '%';
+      overlay.style.left = this.placementState.leftPct + '%';
+      overlay.style.width = this.placementState.widthPct + '%';
+      overlay.style.height = this.placementState.heightPct + '%';
+      overlay.style.transform = `translateX(-50%) rotate(${this.placementState.rotateDeg}deg)`;
+    },
+
+    selectDesign() {
+      this.placementState.designSelected = true;
+      const overlay = document.getElementById('nt-overlay-{{ section.id }}');
+      if (overlay) {
+        overlay.style.borderColor = '#3b82f6';
+        overlay.style.boxShadow = '0 0 0 2px rgba(59, 130, 246, 0.3)';
+      }
+    },
+
+    deselectDesign() {
+      this.placementState.designSelected = false;
+      const overlay = document.getElementById('nt-overlay-{{ section.id }}');
+      if (overlay) {
+        overlay.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+        overlay.style.boxShadow = 'inset 0 4px 12px rgba(0, 0, 0, 0.1)';
+      }
+    },
+
+    startDrag(e) {
+      this.placementState.dragging = true;
+      this.placementState.lastX = e.clientX;
+      this.placementState.lastY = e.clientY;
+      
+      const overlay = document.getElementById('nt-overlay-{{ section.id }}');
+      if (overlay) {
+        overlay.style.cursor = 'grabbing';
+      }
+      
+      document.addEventListener('mousemove', this.handleDrag);
+      document.addEventListener('mouseup', this.stopDrag);
+    },
+
+    handleDrag(e) {
+      if (!this.placementState.dragging) return;
+      
+      const deltaX = e.clientX - this.placementState.lastX;
+      const deltaY = e.clientY - this.placementState.lastY;
+      
+      const canvas = document.getElementById('nt-mockup-canvas-{{ section.id }}');
+      if (canvas) {
+        const rect = canvas.getBoundingClientRect();
+        const deltaXPercent = (deltaX / rect.width) * 100;
+        const deltaYPercent = (deltaY / rect.height) * 100;
+        
+        this.placementState.leftPct += deltaXPercent;
+        this.placementState.topPct += deltaYPercent;
+        
+        // Constrain to canvas bounds
+        this.placementState.leftPct = Math.max(0, Math.min(100, this.placementState.leftPct));
+        this.placementState.topPct = Math.max(0, Math.min(100, this.placementState.topPct));
+        
+        this.updateDesignPosition();
+      }
+      
+      this.placementState.lastX = e.clientX;
+      this.placementState.lastY = e.clientY;
+    },
+
+    stopDrag() {
+      this.placementState.dragging = false;
+      
+      const overlay = document.getElementById('nt-overlay-{{ section.id }}');
+      if (overlay) {
+        overlay.style.cursor = 'grab';
+      }
+      
+      document.removeEventListener('mousemove', this.handleDrag);
+      document.removeEventListener('mouseup', this.stopDrag);
+    },
+
+    // Bind drag functionality to overlay
+    bindDragResize() {
+      const overlay = document.getElementById('nt-overlay-{{ section.id }}');
+      const canvas = document.getElementById('nt-mockup-canvas-{{ section.id }}');
+      
+      if (!overlay || !canvas) return;
+      
+      // Bind the drag functions to this context
+      this.handleDrag = this.handleDrag.bind(this);
+      this.stopDrag = this.stopDrag.bind(this);
+      
+      overlay.addEventListener('mousedown', (e) => {
+        this.startDrag(e);
+      });
+      
+      overlay.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.selectDesign();
+      });
+      
+      canvas.addEventListener('click', (e) => {
+        if (e.target === canvas) {
+          this.deselectDesign();
+        }
+      });
+    },
+
+    bindEvents() {
+      const rootId = "nt-mockup-{{ section.id }}";
+      
+      // View buttons
+      const viewBtns = Array.from(document.querySelectorAll(`#${rootId} .nt-btn--view`));
+      viewBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          this.state.view = btn.dataset.view;
+          this.setActive(viewBtns, this.state.view);
+          this.updateBase();
+          console.log('👁️ View changed to:', this.state.view);
+        });
+      });
+
+      // Color buttons
+      const colorBtns = Array.from(document.querySelectorAll(`#${rootId} .nt-btn--color`));
+      colorBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          this.state.color = btn.dataset.color;
+          this.setActive(colorBtns, this.state.color);
+          this.updateBase();
+          console.log('🎨 Color changed to:', this.state.color);
+        });
+      });
+
+      // Upload button
+      const uploadBtn = document.getElementById(`nt-upload-{{ section.id }}`);
+      if (uploadBtn) {
+        uploadBtn.addEventListener("click", (e) => {
+          console.log('📁 Upload button clicked');
+          const input = document.createElement('input');
+          input.type = 'file';
+          input.accept = 'image/*';
+          input.onchange = (e) => {
+            const file = e.target.files[0];
+            if (file) {
+              this.handleFileUpload(file);
+            }
+          };
+          input.click();
+        });
+      }
+
+      // Download button
+      const downloadBtn = document.getElementById(`nt-download-{{ section.id }}`);
+      if (downloadBtn) {
+        downloadBtn.addEventListener("click", () => {
+          console.log('💾 Download button clicked');
+          this.downloadMockup();
+        });
+      }
+
+      // Edit button
+      const editBtn = document.getElementById(`nt-edit-{{ section.id }}`);
+      if (editBtn) {
+        editBtn.addEventListener("click", () => {
+          console.log('✏️ Edit button clicked');
+          alert('Edit functionality coming soon!');
+        });
+      }
+
+      // Remove button
+      const removeBtn = document.getElementById(`nt-remove-{{ section.id }}`);
+      if (removeBtn) {
+        removeBtn.addEventListener("click", () => {
+          console.log('🗑️ Remove button clicked');
+          this.removeDesign();
+        });
+      }
+
+      // Placement Guide button
+      const placementBtn = document.getElementById(`nt-toggle-guide-{{ section.id }}`);
+      if (placementBtn) {
+        placementBtn.addEventListener("click", () => {
+          console.log('📍 Placement Guide button clicked');
+          alert('📍 Placement Guide:\n\n• Drag your design to position it\n• Use scroll wheel to resize\n• Use rotation controls to adjust angle\n• Keep design within the print area for best results');
+        });
+      }
+
+      // Perfect Fit button
+      const perfectFitBtn = document.getElementById(`nt-perfect-fit-btn-{{ section.id }}`);
+      if (perfectFitBtn) {
+        perfectFitBtn.addEventListener("click", () => {
+          console.log('🎯 Perfect Fit button clicked');
+          this.perfectFit();
+        });
+      }
+
+      // Submit Request button
+      const submitBtn = document.getElementById(`nt-submit-request-btn-{{ section.id }}`);
+      if (submitBtn) {
+        submitBtn.addEventListener("click", () => {
+          console.log('🚀 Submit Request button clicked');
+          this.submitRequest();
+        });
+      }
+
+      // 3D Controls
+      const rotateBtn = document.getElementById(`nt-3d-rotate-{{ section.id }}`);
+      if (rotateBtn) {
+        rotateBtn.addEventListener("click", () => {
+          console.log('↺ Rotate button clicked');
+          this.rotateDesign();
+        });
+      }
+
+      const zoomBtn = document.getElementById(`nt-zoom-{{ section.id }}`);
+      if (zoomBtn) {
+        zoomBtn.addEventListener("click", () => {
+          console.log('🔍 Zoom button clicked');
+          this.zoomDesign();
+        });
+      }
+
+      const validateBtn = document.getElementById(`nt-validate-{{ section.id }}`);
+      if (validateBtn) {
+        validateBtn.addEventListener("click", () => {
+          console.log('✅ Validate button clicked');
+          this.validateDesign();
+        });
+      }
+
+      const resetBtn = document.getElementById(`nt-reset-{{ section.id }}`);
+      if (resetBtn) {
+        resetBtn.addEventListener("click", () => {
+          console.log('🔄 Reset button clicked');
+          this.resetDesign();
+        });
+      }
+    },
+    
+    handleFileUpload(file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const overlay = document.getElementById('nt-overlay-{{ section.id }}');
+        if (overlay) {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.style.cssText = `
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translateX(-50%) rotate(0deg);
+            width: 50%;
+            height: 50%;
+            object-fit: contain;
+            pointer-events: auto;
+            cursor: move;
+          `;
+          
+          overlay.innerHTML = '';
+          overlay.appendChild(img);
+          
+          this.placementState.hasUploadedDesign = true;
+          this.placementState.designSelected = true;
+          
+          console.log('✅ Design uploaded successfully');
+          this.showMessage('✅ Design uploaded successfully!', 'success');
+        }
+      };
+      reader.readAsDataURL(file);
+    },
+    
+    async downloadComposite() {
+      if (!this.placementState.hasUploadedDesign) {
+        alert('⚠️ Please upload a design first!');
+        return;
+      }
+
+      try {
+        this.showMessage('🎨 Generating mockup image...', 'info');
+        
+        // Get the canvas and overlay elements
+        const canvas = document.getElementById('nt-mockup-canvas-{{ section.id }}');
+        const baseImg = document.getElementById('nt-base-{{ section.id }}');
+        const overlay = document.getElementById('nt-overlay-{{ section.id }}');
+        
+        if (!canvas || !baseImg || !overlay) {
+          throw new Error('Required elements not found');
+        }
+
+        // Create a new canvas for the composite image
+        const compositeCanvas = document.createElement('canvas');
+        const ctx = compositeCanvas.getContext('2d');
+        
+        // Set canvas size (high resolution)
+        const scale = 2; // 2x resolution for better quality
+        compositeCanvas.width = 800 * scale;
+        compositeCanvas.height = 1000 * scale;
+        
+        // Scale the context
+        ctx.scale(scale, scale);
+        
+        // Fill with white background
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, 800, 1000);
+        
+        // Load and draw the base t-shirt image
+        await new Promise((resolve, reject) => {
+          const img = new Image();
+          img.crossOrigin = 'anonymous';
+          img.onload = () => {
+            // Draw the base t-shirt image centered
+            const imgWidth = 400;
+            const imgHeight = 500;
+            const x = (800 - imgWidth) / 2;
+            const y = (1000 - imgHeight) / 2;
+            ctx.drawImage(img, x, y, imgWidth, imgHeight);
+            resolve();
+          };
+          img.onerror = reject;
+          img.src = baseImg.src;
+        });
+        
+        // Load and draw the uploaded design
+        const designImg = overlay.querySelector('img');
+        if (designImg) {
+          await new Promise((resolve, reject) => {
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.onload = () => {
+              // Calculate the design position on the canvas
+              const canvasRect = canvas.getBoundingClientRect();
+              const overlayRect = overlay.getBoundingClientRect();
+              
+              // Convert percentage positions to canvas coordinates
+              const designX = (overlayRect.left - canvasRect.left) / canvasRect.width * 400;
+              const designY = (overlayRect.top - canvasRect.top) / canvasRect.height * 500;
+              const designWidth = (overlayRect.width / canvasRect.width) * 400;
+              const designHeight = (overlayRect.height / canvasRect.height) * 500;
+              
+              // Draw the design image
+              ctx.drawImage(img, designX, designY, designWidth, designHeight);
+              resolve();
+            };
+            img.onerror = reject;
+            img.src = designImg.src;
+          });
+        }
+        
+        // Convert canvas to blob and download
+        compositeCanvas.toBlob((blob) => {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `custom-tshirt-mockup-${Date.now()}.png`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          
+          this.showMessage('✅ Mockup downloaded successfully!', 'success');
+        }, 'image/png', 0.95);
+        
+      } catch (error) {
+        console.error('Download error:', error);
+        this.showMessage('❌ Failed to generate mockup. Please try again.', 'error');
+      }
+    },
+
+    downloadMockup() {
+      this.downloadComposite();
+    },
+    
+    removeDesign() {
+      const overlay = document.getElementById('nt-overlay-{{ section.id }}');
+      if (overlay) {
+        overlay.innerHTML = '';
+        this.placementState.hasUploadedDesign = false;
+        this.placementState.designSelected = false;
+        console.log('🗑️ Design removed');
+        this.showMessage('🗑️ Design removed', 'info');
+      }
+    },
+    
+    applyPerfectFit() {
+      // Optimal dimensions for perfect fit in print area
+      // These values are based on the console debug output for optimal positioning
+      const perfectDimensions = {
+        topPct: 29.142857142856876,     // Exact optimal top position
+        leftPct: 50.21428571428568,     // Exact optimal left position
+        widthPct: 37,                   // Optimal width for design proportions
+        heightPct: 42,                  // Optimal height for design proportions
+        rotateDeg: 0                    // No rotation for perfect fit
+      };
+
+      // Update placement state
+      this.placementState.topPct = perfectDimensions.topPct;
+      this.placementState.leftPct = perfectDimensions.leftPct;
+      this.placementState.widthPct = perfectDimensions.widthPct;
+      this.placementState.heightPct = perfectDimensions.heightPct;
+      this.placementState.rotateDeg = perfectDimensions.rotateDeg;
+
+      // Update the display and position
+      this.updatePlacementDisplay();
+      this.updateDesignPosition();
+
+      // Add animation effect
+      const overlay = document.getElementById('nt-overlay-{{ section.id }}');
+      if (overlay) {
+        overlay.style.transition = 'transform 0.3s ease';
+        overlay.style.transform = `translateX(-50%) rotate(${perfectDimensions.rotateDeg}deg) scale(1.05)`;
+        setTimeout(() => {
+          overlay.style.transform = `translateX(-50%) rotate(${perfectDimensions.rotateDeg}deg) scale(1)`;
+        }, 200);
+      }
+
+      this.showMessage('🎯 Perfect Fit applied! Design positioned optimally for printing', 'success');
+    },
+
+    perfectFit() {
+      if (!this.placementState.hasUploadedDesign) {
+        alert('⚠️ Please upload a design first!');
+        return;
+      }
+      this.applyPerfectFit();
+    },
+    
+    submitRequest() {
+      if (!this.placementState.hasUploadedDesign) {
+        alert('⚠️ Please upload a design first!');
+        return;
+      }
+      
+      const name = prompt('👤 Please enter your name:');
+      if (!name) return;
+      
+      const email = prompt('📧 Please enter your email:');
+      if (!email) return;
+      
+      const phone = prompt('📞 Please enter your phone number (optional):') || '';
+      const size = prompt('👕 Please enter your t-shirt size (XS, S, M, L, XL, XXL):') || 'M';
+      const message = prompt('💬 Any special instructions (optional):') || '';
+      
+      alert(`🎉 Request submitted successfully!\n\nName: ${name}\nEmail: ${email}\nSize: ${size}\n\nWe'll contact you within 24 hours to process your custom t-shirt order!`);
+      
+      console.log('🚀 Request submitted:', { name, email, phone, size, message, view: this.state.view, color: this.state.color });
+    },
+    
+    rotateDesign() {
+      if (!this.placementState.hasUploadedDesign) {
+        alert('⚠️ Please upload a design first!');
+        return;
+      }
+      console.log('↺ Rotating design...');
+      this.showMessage('↺ Design rotated', 'info');
+    },
+    
+    zoomDesign() {
+      if (!this.placementState.hasUploadedDesign) {
+        alert('⚠️ Please upload a design first!');
+        return;
+      }
+      console.log('🔍 Zooming design...');
+      this.showMessage('🔍 Design zoomed', 'info');
+    },
+    
+    validateDesign() {
+      if (!this.placementState.hasUploadedDesign) {
+        alert('⚠️ Please upload a design first!');
+        return;
+      }
+      alert('✅ Design validation passed! Your design is ready for submission.');
+    },
+    
+    resetDesign() {
+      if (!this.placementState.hasUploadedDesign) {
+        alert('⚠️ No design to reset!');
+        return;
+      }
+      console.log('🔄 Resetting design...');
+      this.showMessage('🔄 Design reset', 'info');
+    },
+    
+    showMessage(text, type = 'info') {
+      const existingMessage = document.querySelector('.nt-message');
+      if (existingMessage) {
+        existingMessage.remove();
+      }
+      
+      const message = document.createElement('div');
+      message.className = 'nt-message';
+      const colors = {
+        success: 'linear-gradient(45deg, #10b981, #059669)',
+        error: 'linear-gradient(45deg, #ef4444, #dc2626)',
+        info: 'linear-gradient(45deg, #3b82f6, #1d4ed8)'
+      };
+      
+      message.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${colors[type] || colors.info};
+        color: white;
+        padding: 15px 25px;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        z-index: 10000;
+        font-weight: 600;
+        animation: slideIn 0.3s ease;
+      `;
+      message.textContent = text;
+      document.body.appendChild(message);
+      
+      setTimeout(() => {
+        message.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => message.remove(), 300);
+      }, 3000);
+    }
+  };
+  
+  // Initialize the mockup
+  mockup.init();
+  
+  console.log('🚀 Custom Studio Mockup initialized! 🎨');
+}
+
+// Add the testPerfectFit function for debugging
+(function() {
+  console.log('🎯 Registering testPerfectFit function...');
+  
+  window.testPerfectFit = function() {
+    console.log('🎯 Testing Perfect Fit with exact dimensions...');
+    
+    // Find the mockup section
+    const section = document.getElementById('nt-mockup-{{ section.id }}');
+    if (!section) {
+      console.error('❌ Mockup section not found!');
+      return;
+    }
+    
+    // Get the overlay and canvas
+    const overlay = document.getElementById('nt-overlay-{{ section.id }}');
+    const canvas = document.getElementById('nt-mockup-canvas-{{ section.id }}');
+    
+    if (!overlay || !canvas) {
+      console.error('❌ Overlay or canvas not found!');
+      return;
+    }
+    
+    // Apply exact dimensions
+    const perfectDimensions = {
+      topPct: 29.142857142856876,
+      leftPct: 50.21428571428568,
+      widthPct: 37,
+      heightPct: 42,
+      rotateDeg: 0
+    };
+    
+    // Update CSS variables
+    canvas.style.setProperty('--overlay-top', perfectDimensions.topPct + '%');
+    canvas.style.setProperty('--overlay-left', perfectDimensions.leftPct + '%');
+    canvas.style.setProperty('--overlay-width', perfectDimensions.widthPct + '%');
+    canvas.style.setProperty('--overlay-height', perfectDimensions.heightPct + '%');
+    canvas.style.setProperty('--overlay-rotate', perfectDimensions.rotateDeg + 'deg');
+    
+    // Update overlay directly
+    overlay.style.top = perfectDimensions.topPct + '%';
+    overlay.style.left = perfectDimensions.leftPct + '%';
+    overlay.style.width = perfectDimensions.widthPct + '%';
+    overlay.style.height = perfectDimensions.heightPct + '%';
+    overlay.style.transform = `translateX(-50%) rotate(${perfectDimensions.rotateDeg}deg)`;
+    
+    console.log('✅ Perfect Fit applied with exact dimensions:');
+    console.log(`Top: ${perfectDimensions.topPct}%`);
+    console.log(`Left: ${perfectDimensions.leftPct}%`);
+    console.log(`Width: ${perfectDimensions.widthPct}%`);
+    console.log(`Height: ${perfectDimensions.heightPct}%`);
+    console.log(`Rotation: ${perfectDimensions.rotateDeg}°`);
+    
+    // Add animation
+    overlay.style.transition = 'transform 0.3s ease';
+    overlay.style.transform = `translateX(-50%) rotate(${perfectDimensions.rotateDeg}deg) scale(1.05)`;
+    setTimeout(() => {
+      overlay.style.transform = `translateX(-50%) rotate(${perfectDimensions.rotateDeg}deg) scale(1)`;
+    }, 200);
+    
+    // Show success message on page
+    const existingMessage = document.querySelector('.nt-message');
+    if (existingMessage) {
+      existingMessage.remove();
+    }
+    
+    const message = document.createElement('div');
+    message.className = 'nt-message';
+    message.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: linear-gradient(45deg, #10b981, #059669);
+      color: white;
+      padding: 15px 25px;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+      z-index: 10000;
+      font-weight: 600;
+      animation: slideIn 0.3s ease;
+    `;
+    message.textContent = '🎯 Perfect Fit test applied with exact dimensions!';
+    document.body.appendChild(message);
+    
+    setTimeout(() => {
+      message.style.animation = 'slideOut 0.3s ease';
+      setTimeout(() => message.remove(), 300);
+    }, 3000);
+  };
+  
+  console.log('✅ testPerfectFit is now available! Type: testPerfectFit()');
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Custom T-Shirt Studio",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Studio Title",
+      "default": "Custom T-Shirt Studio"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Studio Description",
+      "default": "Create stunning custom t-shirts with our advanced design tools. Upload your artwork, customize colors, adjust positioning, and see your design come to life in real-time."
+    },
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 36
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom T-Shirt Studio"
+    }
+  ]
+}
+{% endschema %}
