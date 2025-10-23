@@ -5666,53 +5666,219 @@
         if (!cOverlay) return;
 
         const overlayRect = cOverlay.getBoundingClientRect();
+        const config = window.ContainmentSystem?.[sectionId]?.config || {};
+        
+        // Calculate max allowed dimensions
+        const maxTextWidth = (overlayRect.width * (config.maxWidth || 0.95)) - ((config.padding || 8) * 2);
+        const maxTextHeight = (overlayRect.height * (config.maxHeight || 0.95)) - ((config.padding || 8) * 2);
         
         // Update print area dimensions
-        document.getElementById(`debugPrintWidth-${sectionId}`).textContent = 
-            Math.round(overlayRect.width) + 'px';
-        document.getElementById(`debugPrintHeight-${sectionId}`).textContent = 
-            Math.round(overlayRect.height) + 'px';
+        updateElement(`debugPrintWidth-${sectionId}`, Math.round(overlayRect.width) + 'px');
+        updateElement(`debugPrintHeight-${sectionId}`, Math.round(overlayRect.height) + 'px');
+        updateElement(`debugMaxTextWidth-${sectionId}`, Math.round(maxTextWidth) + 'px');
+        updateElement(`debugMaxTextHeight-${sectionId}`, Math.round(maxTextHeight) + 'px');
 
-        // Update text dimensions
+        // Update text dimensions and analysis
         if (cText && cText.style.display !== 'none') {
             const textRect = cText.getBoundingClientRect();
-            document.getElementById(`debugTextWidth-${sectionId}`).textContent = 
-                Math.round(textRect.width) + 'px';
-            document.getElementById(`debugTextHeight-${sectionId}`).textContent = 
-                Math.round(textRect.height) + 'px';
-            
             const computedStyle = window.getComputedStyle(cText);
-            document.getElementById(`debugFontSize-${sectionId}`).textContent = 
-                computedStyle.fontSize;
+            const content = cText.textContent || '';
+            
+            updateElement(`debugTextWidth-${sectionId}`, Math.round(textRect.width) + 'px');
+            updateElement(`debugTextHeight-${sectionId}`, Math.round(textRect.height) + 'px');
+            updateElement(`debugFontSize-${sectionId}`, computedStyle.fontSize);
+            
+            // Calculate utilization
+            const widthUtil = (textRect.width / maxTextWidth * 100).toFixed(1);
+            const heightUtil = (textRect.height / maxTextHeight * 100).toFixed(1);
+            
+            updateElement(`debugWidthUtil-${sectionId}`, widthUtil + '%');
+            updateElement(`debugHeightUtil-${sectionId}`, heightUtil + '%');
+            
+            // Update progress bars
+            const widthBar = document.getElementById(`debugWidthBar-${sectionId}`);
+            const heightBar = document.getElementById(`debugHeightBar-${sectionId}`);
+            
+            if (widthBar) {
+                widthBar.style.width = Math.min(widthUtil, 100) + '%';
+                widthBar.className = `cts-debug-progress-bar-${sectionId}`;
+                if (widthUtil > 100) widthBar.classList.add('danger');
+                else if (widthUtil > 90) widthBar.classList.add('warning');
+            }
+            
+            if (heightBar) {
+                heightBar.style.width = Math.min(heightUtil, 100) + '%';
+                heightBar.className = `cts-debug-progress-bar-${sectionId}`;
+                if (heightUtil > 100) heightBar.classList.add('danger');
+                else if (heightUtil > 90) heightBar.classList.add('warning');
+            }
+            
+            // Calculate overflow
+            const overflowWidth = Math.max(0, textRect.width - maxTextWidth);
+            const overflowHeight = Math.max(0, textRect.height - maxTextHeight);
+            
+            updateElement(`debugOverflowWidth-${sectionId}`, 
+                overflowWidth > 0 ? `+${Math.round(overflowWidth)}px` : '0px',
+                overflowWidth > 0 ? 'danger' : 'success');
+            updateElement(`debugOverflowHeight-${sectionId}`, 
+                overflowHeight > 0 ? `+${Math.round(overflowHeight)}px` : '0px',
+                overflowHeight > 0 ? 'danger' : 'success');
+            
+            // Safety margin
+            const safetyMargin = Math.min(maxTextWidth - textRect.width, maxTextHeight - textRect.height);
+            updateElement(`debugSafetyMargin-${sectionId}`, 
+                safetyMargin > 0 ? Math.round(safetyMargin) + 'px' : '0px',
+                safetyMargin > 10 ? 'success' : safetyMargin > 0 ? 'warning' : 'danger');
+            
+            // Aspect ratio
+            const aspectRatio = (textRect.width / textRect.height).toFixed(2);
+            updateElement(`debugAspectRatio-${sectionId}`, aspectRatio + ':1');
+            
+            // Content analysis
+            updateElement(`debugCharCount-${sectionId}`, content.length);
+            const words = content.split(/\s+/).filter(w => w);
+            updateElement(`debugWordCount-${sectionId}`, words.length);
+            
+            // Estimate line count
+            const fontSize = parseFloat(computedStyle.fontSize);
+            const lineHeight = parseFloat(computedStyle.lineHeight) || fontSize * 1.2;
+            const estimatedLines = Math.ceil(textRect.height / lineHeight);
+            updateElement(`debugLineCount-${sectionId}`, estimatedLines);
+            
+            // Text density (chars per line)
+            const density = estimatedLines > 0 ? (content.length / estimatedLines).toFixed(1) : '0';
+            updateElement(`debugTextDensity-${sectionId}`, density + ' chars/line');
+            
+            // Edge distances
+            const printRect = overlayRect;
+            const edges = {
+                top: textRect.top - printRect.top,
+                right: printRect.right - textRect.right,
+                bottom: printRect.bottom - textRect.bottom,
+                left: textRect.left - printRect.left
+            };
+            
+            updateElement(`debugEdgeTop-${sectionId}`, `Top: ${Math.round(edges.top)}px`);
+            updateElement(`debugEdgeRight-${sectionId}`, `Right: ${Math.round(edges.right)}px`);
+            updateElement(`debugEdgeBottom-${sectionId}`, `Bottom: ${Math.round(edges.bottom)}px`);
+            updateElement(`debugEdgeLeft-${sectionId}`, `Left: ${Math.round(edges.left)}px`);
+            
+            // Position
+            const centerX = printRect.left + (printRect.width / 2);
+            const centerY = printRect.top + (printRect.height / 2);
+            const textCenterX = textRect.left + (textRect.width / 2);
+            const textCenterY = textRect.top + (textRect.height / 2);
+            
+            updateElement(`debugPosX-${sectionId}`, Math.round(textCenterX - centerX) + 'px');
+            updateElement(`debugPosY-${sectionId}`, Math.round(textCenterY - centerY) + 'px');
         } else {
-            document.getElementById(`debugTextWidth-${sectionId}`).textContent = 'N/A';
-            document.getElementById(`debugTextHeight-${sectionId}`).textContent = 'N/A';
-            document.getElementById(`debugFontSize-${sectionId}`).textContent = 'N/A';
+            updateElement(`debugTextWidth-${sectionId}`, 'N/A', 'muted');
+            updateElement(`debugTextHeight-${sectionId}`, 'N/A', 'muted');
+            updateElement(`debugFontSize-${sectionId}`, 'N/A', 'muted');
+            updateElement(`debugWidthUtil-${sectionId}`, '0%');
+            updateElement(`debugHeightUtil-${sectionId}`, '0%');
         }
 
         // Update image dimensions
         if (cImage && cImage.style.display !== 'none') {
             const imageRect = cImage.getBoundingClientRect();
-            document.getElementById(`debugImageWidth-${sectionId}`).textContent = 
-                Math.round(imageRect.width) + 'px';
-            document.getElementById(`debugImageHeight-${sectionId}`).textContent = 
-                Math.round(imageRect.height) + 'px';
+            updateElement(`debugImageWidth-${sectionId}`, Math.round(imageRect.width) + 'px');
+            updateElement(`debugImageHeight-${sectionId}`, Math.round(imageRect.height) + 'px');
+            
+            // Calculate content ratio
+            const textArea = cText ? cText.getBoundingClientRect().width * cText.getBoundingClientRect().height : 0;
+            const imageArea = imageRect.width * imageRect.height;
+            const ratio = textArea > 0 ? (textArea / imageArea).toFixed(2) : '0';
+            updateElement(`debugContentRatio-${sectionId}`, `${ratio}:1`);
         } else {
-            document.getElementById(`debugImageWidth-${sectionId}`).textContent = 'N/A';
-            document.getElementById(`debugImageHeight-${sectionId}`).textContent = 'N/A';
+            updateElement(`debugImageWidth-${sectionId}`, 'N/A', 'muted');
+            updateElement(`debugImageHeight-${sectionId}`, 'N/A', 'muted');
+            updateElement(`debugContentRatio-${sectionId}`, 'Text only');
         }
 
         // Check fit status
         if (window.ContainmentSystem && window.ContainmentSystem[sectionId]) {
             const fitResult = window.ContainmentSystem[sectionId].checkOverallFit();
             const statusEl = document.getElementById(`debugStatus-${sectionId}`);
+            const widthFitEl = document.getElementById(`debugWidthFit-${sectionId}`);
+            const heightFitEl = document.getElementById(`debugHeightFit-${sectionId}`);
             
-            if (fitResult.overallFits) {
-                statusEl.className = `cts-debug-status-${sectionId} fits`;
-                statusEl.textContent = '✓ Design Fits';
-            } else {
-                statusEl.className = `cts-debug-status-${sectionId} exceeds`;
-                statusEl.textContent = '⚠ Design Exceeds Print Area';
+            // Overall status
+            if (statusEl) {
+                if (fitResult.overallFits) {
+                    statusEl.className = `cts-debug-status-${sectionId} fits`;
+                    statusEl.textContent = '✓ Design Fits';
+                } else {
+                    statusEl.className = `cts-debug-status-${sectionId} exceeds`;
+                    statusEl.textContent = '⚠ Design Exceeds Print Area';
+                }
+            }
+            
+            // Width fit indicator
+            if (widthFitEl) {
+                if (fitResult.textFits || !cText || cText.style.display === 'none') {
+                    widthFitEl.className = `cts-debug-indicator-${sectionId} fits`;
+                    widthFitEl.textContent = '✓ Width Fits';
+                } else {
+                    widthFitEl.className = `cts-debug-indicator-${sectionId} exceeds`;
+                    widthFitEl.textContent = '✗ Width Exceeds';
+                }
+            }
+            
+            // Height fit indicator
+            if (heightFitEl) {
+                if (fitResult.textFits || !cText || cText.style.display === 'none') {
+                    heightFitEl.className = `cts-debug-indicator-${sectionId} fits`;
+                    heightFitEl.textContent = '✓ Height Fits';
+                } else {
+                    heightFitEl.className = `cts-debug-indicator-${sectionId} exceeds`;
+                    heightFitEl.textContent = '✗ Height Exceeds';
+                }
+            }
+        }
+
+        // Performance metrics
+        updateElement(`debugIterations-${sectionId}`, metricsHistory.adjustments);
+        
+        if (metricsHistory.lastAdjustTime) {
+            const elapsed = Math.round((Date.now() - metricsHistory.lastAdjustTime) / 1000);
+            updateElement(`debugLastAdjust-${sectionId}`, elapsed + 's ago', 'muted');
+        }
+        
+        updateElement(`debugFPS-${sectionId}`, fps + ' fps');
+        
+        const uptime = Math.round((Date.now() - metricsHistory.startTime) / 1000);
+        updateElement(`debugUptime-${sectionId}`, uptime + 's', 'muted');
+        
+        // Print-ready info
+        const printWidthInches = (overlayRect.width / 96).toFixed(1); // Assuming 96 DPI screen
+        const printHeightInches = (overlayRect.height / 96).toFixed(1);
+        updateElement(`debugPhysicalSize-${sectionId}`, `${printWidthInches}" × ${printHeightInches}"`);
+        
+        // Estimate print quality based on size
+        const minDimension = Math.min(overlayRect.width, overlayRect.height);
+        let quality = 'Excellent';
+        let qualityClass = 'success';
+        if (minDimension < 200) {
+            quality = 'Poor';
+            qualityClass = 'danger';
+        } else if (minDimension < 300) {
+            quality = 'Fair';
+            qualityClass = 'warning';
+        } else if (minDimension < 400) {
+            quality = 'Good';
+            qualityClass = 'success';
+        }
+        updateElement(`debugPrintQuality-${sectionId}`, quality, qualityClass);
+    }
+
+    // Helper function to update elements
+    function updateElement(id, text, className = null) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.textContent = text;
+            if (className) {
+                el.className = `cts-debug-value-${sectionId} ${className}`;
             }
         }
     }
