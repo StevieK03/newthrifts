@@ -1619,6 +1619,99 @@
     }
 
     /* ============================================
+       FONT SIZE CONTROL STYLES
+       ============================================ */
+    .cts-font-size-control-{{ section.id }} {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .cts-font-size-btn-{{ section.id }} {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        font-size: 18px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .cts-font-size-btn-{{ section.id }}:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: scale(1.05);
+    }
+    
+    .cts-font-size-btn-{{ section.id }}:active {
+        transform: scale(0.95);
+    }
+    
+    .cts-font-size-display-{{ section.id }} {
+        min-width: 60px;
+        text-align: center;
+        font-size: 18px;
+        font-weight: 700;
+        color: #60a5fa;
+    }
+    
+    .cts-font-size-slider-container-{{ section.id }} {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .cts-font-size-slider-{{ section.id }} {
+        flex: 1;
+        height: 6px;
+        border-radius: 3px;
+        background: rgba(255, 255, 255, 0.1);
+        outline: none;
+        -webkit-appearance: none;
+    }
+    
+    .cts-font-size-slider-{{ section.id }}::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #60a5fa;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .cts-font-size-slider-{{ section.id }}::-webkit-slider-thumb:hover {
+        background: #93c5fd;
+        transform: scale(1.2);
+    }
+    
+    .cts-font-size-slider-{{ section.id }}::-moz-range-thumb {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #60a5fa;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s;
+    }
+    
+    .cts-font-size-slider-{{ section.id }}::-moz-range-thumb:hover {
+        background: #93c5fd;
+        transform: scale(1.2);
+    }
+
+    /* ============================================
        CHARACTER COUNTER STYLES
        ============================================ */
     .cts-char-counter-{{ section.id }} {
@@ -1821,6 +1914,18 @@
                         </span>
                     </div>
             </div>
+                <!-- Font Size Control -->
+                <div class="cts-control-group-{{ section.id }}">
+                    <label>Font Size</label>
+                    <div class="cts-font-size-control-{{ section.id }}">
+                        <button type="button" class="cts-font-size-btn-{{ section.id }}" id="fontSizeDecrease-{{ section.id }}" title="Decrease font size">−</button>
+                        <div class="cts-font-size-display-{{ section.id }}" id="fontSizeDisplay-{{ section.id }}">32px</div>
+                        <button type="button" class="cts-font-size-btn-{{ section.id }}" id="fontSizeIncrease-{{ section.id }}" title="Increase font size">+</button>
+                        <div class="cts-font-size-slider-container-{{ section.id }}">
+                            <input type="range" class="cts-font-size-slider-{{ section.id }}" id="fontSizeSlider-{{ section.id }}" min="12" max="96" value="32" step="2">
+                        </div>
+                    </div>
+                </div>
                 <div class="cts-control-group-{{ section.id }}">
                     <label>Font Style</label>
                     
@@ -2217,6 +2322,62 @@
         
         console.log('✅ Character counter initialized');
     }
+
+    // ============================================
+    // FONT SIZE CONTROL
+    // ============================================
+    
+    const fontSizeSlider = document.getElementById(`fontSizeSlider-${sectionId}`);
+    const fontSizeDisplay = document.getElementById(`fontSizeDisplay-${sectionId}`);
+    const fontSizeIncrease = document.getElementById(`fontSizeIncrease-${sectionId}`);
+    const fontSizeDecrease = document.getElementById(`fontSizeDecrease-${sectionId}`);
+    
+    let currentFontSize = 32; // Default font size
+    
+    // Update font size function
+    function updateFontSize(size) {
+        currentFontSize = size;
+        if (designText) {
+            designText.style.fontSize = size + 'px';
+        }
+        if (fontSizeDisplay) {
+            fontSizeDisplay.textContent = size + 'px';
+        }
+        if (fontSizeSlider) {
+            fontSizeSlider.value = size;
+        }
+    }
+    
+    // Font size slider
+    if (fontSizeSlider) {
+        fontSizeSlider.addEventListener('input', (e) => {
+            updateFontSize(parseInt(e.target.value));
+        });
+        
+        fontSizeSlider.addEventListener('change', () => {
+            saveState();
+        });
+    }
+    
+    // Increase button
+    if (fontSizeIncrease) {
+        fontSizeIncrease.addEventListener('click', () => {
+            const newSize = Math.min(96, currentFontSize + 2);
+            updateFontSize(newSize);
+            saveState();
+        });
+    }
+    
+    // Decrease button
+    if (fontSizeDecrease) {
+        fontSizeDecrease.addEventListener('click', () => {
+            const newSize = Math.max(12, currentFontSize - 2);
+            updateFontSize(newSize);
+            saveState();
+        });
+    }
+    
+    console.log('✅ Font size control initialized');
 
     // ============================================
     // PRODUCT THUMBNAIL GALLERY
@@ -2631,6 +2792,7 @@
             text: textInput.value,
             color: currentColor,
             font: currentFont,
+            fontSize: currentFontSize,
             size: sizeSlider.value,
             rotation: rotateSlider.value,
             flipH: flipH,
@@ -2661,6 +2823,9 @@
             hexPreview.style.background = state.color;
             currentFont = state.font;
             designText.style.fontFamily = state.font;
+            if (state.fontSize) {
+                updateFontSize(state.fontSize);
+            }
             sizeSlider.value = state.size;
             sizeValue.textContent = `${state.size}%`;
             rotateSlider.value = state.rotation;
@@ -3200,6 +3365,7 @@
         hexInput.value = '#000000';
         hexPreview.style.background = '#000000';
         currentFont = "'Bebas Neue', sans-serif";
+        updateFontSize(32); // Reset font size to default
         
         // Reset font selection
         document.querySelectorAll(`.cts-font-option-${sectionId}`).forEach(o => o.classList.remove('active'));
