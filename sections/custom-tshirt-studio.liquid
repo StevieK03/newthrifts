@@ -5091,54 +5091,261 @@
                 <button class="cts-debug-close-${sectionId}" onclick="document.getElementById('debugPanel-${sectionId}').remove()">✕</button>
             </div>
 
-            <!-- CURRENT METRICS -->
-            <div class="cts-debug-section-${sectionId}">
-                <div class="cts-debug-section-title-${sectionId}">📊 Current Metrics</div>
-                
-                <div class="cts-debug-metric-${sectionId}">
-                    <span class="cts-debug-label-${sectionId}">Print Area Width:</span>
-                    <span class="cts-debug-value-${sectionId}" id="debugPrintWidth-${sectionId}">-</span>
-                </div>
-                
-                <div class="cts-debug-metric-${sectionId}">
-                    <span class="cts-debug-label-${sectionId}">Print Area Height:</span>
-                    <span class="cts-debug-value-${sectionId}" id="debugPrintHeight-${sectionId}">-</span>
-                </div>
-                
-                <div class="cts-debug-metric-${sectionId}">
-                    <span class="cts-debug-label-${sectionId}">Text Width:</span>
-                    <span class="cts-debug-value-${sectionId}" id="debugTextWidth-${sectionId}">-</span>
-                </div>
-                
-                <div class="cts-debug-metric-${sectionId}">
-                    <span class="cts-debug-label-${sectionId}">Text Height:</span>
-                    <span class="cts-debug-value-${sectionId}" id="debugTextHeight-${sectionId}">-</span>
-                </div>
-                
-                <div class="cts-debug-metric-${sectionId}">
-                    <span class="cts-debug-label-${sectionId}">Image Width:</span>
-                    <span class="cts-debug-value-${sectionId}" id="debugImageWidth-${sectionId}">-</span>
-                </div>
-                
-                <div class="cts-debug-metric-${sectionId}">
-                    <span class="cts-debug-label-${sectionId}">Image Height:</span>
-                    <span class="cts-debug-value-${sectionId}" id="debugImageHeight-${sectionId}">-</span>
-                </div>
-                
-                <div class="cts-debug-metric-${sectionId}">
-                    <span class="cts-debug-label-${sectionId}">Font Size:</span>
-                    <span class="cts-debug-value-${sectionId}" id="debugFontSize-${sectionId}">-</span>
-                </div>
-            </div>
-
-            <!-- STATUS -->
+            <!-- OVERALL STATUS -->
             <div class="cts-debug-status-${sectionId} fits" id="debugStatus-${sectionId}">
                 ✓ Design Fits
             </div>
 
-            <!-- ADJUSTABLE CONFIG -->
+            <!-- SECTION: FIT ANALYSIS -->
             <div class="cts-debug-section-${sectionId}">
-                <div class="cts-debug-section-title-${sectionId}">⚙️ Adjustable Config</div>
+                <div class="cts-debug-section-header-${sectionId}" onclick="toggleSection(this)">
+                    <div class="cts-debug-section-title-${sectionId}">🎯 Fit Analysis</div>
+                    <div class="cts-debug-section-toggle-${sectionId}">▼</div>
+                </div>
+                <div class="cts-debug-section-content-${sectionId}">
+                    <div class="cts-debug-indicator-grid-${sectionId}">
+                        <div class="cts-debug-indicator-${sectionId} fits" id="debugWidthFit-${sectionId}">✓ Width Fits</div>
+                        <div class="cts-debug-indicator-${sectionId} fits" id="debugHeightFit-${sectionId}">✓ Height Fits</div>
+                    </div>
+                    
+                    <div class="cts-debug-metric-${sectionId}" style="margin-top: 12px;">
+                        <span class="cts-debug-label-${sectionId}">Width Utilization</span>
+                        <span class="cts-debug-value-${sectionId}" id="debugWidthUtil-${sectionId}">0%</span>
+                    </div>
+                    <div class="cts-debug-progress-${sectionId}">
+                        <div class="cts-debug-progress-bar-${sectionId}" id="debugWidthBar-${sectionId}" style="width: 0%"></div>
+                    </div>
+                    
+                    <div class="cts-debug-metric-${sectionId}">
+                        <span class="cts-debug-label-${sectionId}">Height Utilization</span>
+                        <span class="cts-debug-value-${sectionId}" id="debugHeightUtil-${sectionId}">0%</span>
+                    </div>
+                    <div class="cts-debug-progress-${sectionId}">
+                        <div class="cts-debug-progress-bar-${sectionId}" id="debugHeightBar-${sectionId}" style="width: 0%"></div>
+                    </div>
+                    
+                    <div class="cts-debug-metric-${sectionId}">
+                        <span class="cts-debug-label-${sectionId}">Overflow (Width)</span>
+                        <span class="cts-debug-value-${sectionId}" id="debugOverflowWidth-${sectionId}">0px</span>
+                    </div>
+                    
+                    <div class="cts-debug-metric-${sectionId}">
+                        <span class="cts-debug-label-${sectionId}">Overflow (Height)</span>
+                        <span class="cts-debug-value-${sectionId}" id="debugOverflowHeight-${sectionId}">0px</span>
+                    </div>
+                    
+                    <div class="cts-debug-metric-${sectionId}">
+                        <span class="cts-debug-label-${sectionId}">Safety Margin</span>
+                        <span class="cts-debug-value-${sectionId}" id="debugSafetyMargin-${sectionId}">0px</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION: DIMENSIONS -->
+            <div class="cts-debug-section-${sectionId}">
+                <div class="cts-debug-section-header-${sectionId}" onclick="toggleSection(this)">
+                    <div class="cts-debug-section-title-${sectionId}">📐 Dimensions</div>
+                    <div class="cts-debug-section-toggle-${sectionId}">▼</div>
+                </div>
+                <div class="cts-debug-section-content-${sectionId}">
+                    <div class="cts-debug-metric-${sectionId}">
+                        <span class="cts-debug-label-${sectionId}">Print Area Width</span>
+                        <span class="cts-debug-value-${sectionId}" id="debugPrintWidth-${sectionId}">-</span>
+                    </div>
+                    
+                    <div class="cts-debug-metric-${sectionId}">
+                        <span class="cts-debug-label-${sectionId}">Print Area Height</span>
+                        <span class="cts-debug-value-${sectionId}" id="debugPrintHeight-${sectionId}">-</span>
+                    </div>
+                    
+                    <div class="cts-debug-metric-${sectionId}">
+                        <span class="cts-debug-label-${sectionId}">Max Allowed Text Width</span>
+                        <span class="cts-debug-value-${sectionId}" id="debugMaxTextWidth-${sectionId}">-</span>
+                    </div>
+                    
+                    <div class="cts-debug-metric-${sectionId}">
+                        <span class="cts-debug-label-${sectionId}">Max Allowed Text Height</span>
+                        <span class="cts-debug-value-${sectionId}" id="debugMaxTextHeight-${sectionId}">-</span>
+                    </div>
+                    
+                    <div class="cts-debug-metric-${sectionId}">
+                        <span class="cts-debug-label-${sectionId}">Text Width</span>
+                        <span class="cts-debug-value-${sectionId}" id="debugTextWidth-${sectionId}">-</span>
+                    </div>
+                    
+                    <div class="cts-debug-metric-${sectionId}">
+                        <span class="cts-debug-label-${sectionId}">Text Height</span>
+                        <span class="cts-debug-value-${sectionId}" id="debugTextHeight-${sectionId}">-</span>
+                    </div>
+                    
+                    <div class="cts-debug-metric-${sectionId}">
+                        <span class="cts-debug-label-${sectionId}">Image Width</span>
+                        <span class="cts-debug-value-${sectionId}" id="debugImageWidth-${sectionId}">-</span>
+                    </div>
+                    
+                    <div class="cts-debug-metric-${sectionId}">
+                        <span class="cts-debug-label-${sectionId}">Image Height</span>
+                        <span class="cts-debug-value-${sectionId}" id="debugImageHeight-${sectionId}">-</span>
+                    </div>
+                    
+                    <div class="cts-debug-metric-${sectionId}">
+                        <span class="cts-debug-label-${sectionId}">Aspect Ratio (Text)</span>
+                        <span class="cts-debug-value-${sectionId}" id="debugAspectRatio-${sectionId}">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!--SECTION: EDGE DISTANCES -->
+            <div class="cts-debug-section-${sectionId}">
+                <div class="cts-debug-section-header-${sectionId}" onclick="toggleSection(this)">
+                    <div class="cts-debug-section-title-${sectionId}">📍 Edge Distances</div>
+                    <div class="cts-debug-section-toggle-${sectionId} collapsed">▼</div>
+                </div>
+                <div class="cts-debug-section-content-${sectionId} collapsed">
+                    <div class="cts-debug-edge-distances-${sectionId}">
+                        <div></div>
+                        <div class="cts-debug-edge-${sectionId}" id="debugEdgeTop-${sectionId}">Top: -</div>
+                        <div></div>
+                        
+                        <div class="cts-debug-edge-${sectionId}" id="debugEdgeLeft-${sectionId}">Left: -</div>
+                        <div class="cts-debug-edge-${sectionId} center">TEXT</div>
+                        <div class="cts-debug-edge-${sectionId}" id="debugEdgeRight-${sectionId}">Right: -</div>
+                        
+                        <div></div>
+                        <div class="cts-debug-edge-${sectionId}" id="debugEdgeBottom-${sectionId}">Bottom: -</div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION: CONTENT ANALYSIS -->
+            <div class="cts-debug-section-${sectionId}">
+                <div class="cts-debug-section-header-${sectionId}" onclick="toggleSection(this)">
+                    <div class="cts-debug-section-title-${sectionId}">📝 Content Analysis</div>
+                    <div class="cts-debug-section-toggle-${sectionId} collapsed">▼</div>
+                </div>
+                <div class="cts-debug-section-content-${sectionId} collapsed">
+                    <div class="cts-debug-metric-${sectionId}">
+                        <span class="cts-debug-label-${sectionId}">Character Count</span>
+                        <span class="cts-debug-value-${sectionId}" id="debugCharCount-${sectionId}">0</span>
+                    </div>
+                    
+                    <div class="cts-debug-metric-${sectionId}">
+                        <span class="cts-debug-label-${sectionId}">Word Count</span>
+                        <span class="cts-debug-value-${sectionId}" id="debugWordCount-${sectionId}">0</span>
+                    </div>
+                    
+                    <div class="cts-debug-metric-${sectionId}">
+                        <span class="cts-debug-label-${sectionId}">Font Size</span>
+                        <span class="cts-debug-value-${sectionId}" id="debugFontSize-${sectionId}">-</span>
+                    </div>
+                    
+                    <div class="cts-debug-metric-${sectionId}">
+                        <span class="cts-debug-label-${sectionId}">Line Count (Est.)</span>
+                        <span class="cts-debug-value-${sectionId}" id="debugLineCount-${sectionId}">-</span>
+                    </div>
+                    
+                    <div class="cts-debug-metric-${sectionId}">
+                        <span class="cts-debug-label-${sectionId}">Text Density</span>
+                        <span class="cts-debug-value-${sectionId}" id="debugTextDensity-${sectionId}">-</span>
+                    </div>
+                    
+                    <div class="cts-debug-metric-${sectionId}">
+                        <span class="cts-debug-label-${sectionId}">Content Ratio (Text:Image)</span>
+                        <span class="cts-debug-value-${sectionId}" id="debugContentRatio-${sectionId}">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION: POSITION & TRANSFORM -->
+            <div class="cts-debug-section-${sectionId}">
+                <div class="cts-debug-section-header-${sectionId}" onclick="toggleSection(this)">
+                    <div class="cts-debug-section-title-${sectionId}">🎯 Position & Transform</div>
+                    <div class="cts-debug-section-toggle-${sectionId} collapsed">▼</div>
+                </div>
+                <div class="cts-debug-section-content-${sectionId} collapsed">
+                    <div class="cts-debug-metric-${sectionId}">
+                        <span class="cts-debug-label-${sectionId}">X Position</span>
+                        <span class="cts-debug-value-${sectionId}" id="debugPosX-${sectionId}">-</span>
+                    </div>
+                    
+                    <div class="cts-debug-metric-${sectionId}">
+                        <span class="cts-debug-label-${sectionId}">Y Position</span>
+                        <span class="cts-debug-value-${sectionId}" id="debugPosY-${sectionId}">-</span>
+                    </div>
+                    
+                    <div class="cts-debug-metric-${sectionId}">
+                        <span class="cts-debug-label-${sectionId}">Rotation</span>
+                        <span class="cts-debug-value-${sectionId}" id="debugRotation-${sectionId}">0°</span>
+                    </div>
+                    
+                    <div class="cts-debug-metric-${sectionId}">
+                        <span class="cts-debug-label-${sectionId}">Scale</span>
+                        <span class="cts-debug-value-${sectionId}" id="debugScale-${sectionId}">100%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION: PERFORMANCE -->
+            <div class="cts-debug-section-${sectionId}">
+                <div class="cts-debug-section-header-${sectionId}" onclick="toggleSection(this)">
+                    <div class="cts-debug-section-title-${sectionId}">⚡ Performance</div>
+                    <div class="cts-debug-section-toggle-${sectionId} collapsed">▼</div>
+                </div>
+                <div class="cts-debug-section-content-${sectionId} collapsed">
+                    <div class="cts-debug-metric-${sectionId}">
+                        <span class="cts-debug-label-${sectionId}">Adjustment Iterations</span>
+                        <span class="cts-debug-value-${sectionId}" id="debugIterations-${sectionId}">0</span>
+                    </div>
+                    
+                    <div class="cts-debug-metric-${sectionId}">
+                        <span class="cts-debug-label-${sectionId}">Last Adjustment</span>
+                        <span class="cts-debug-value-${sectionId} muted" id="debugLastAdjust-${sectionId}">Never</span>
+                    </div>
+                    
+                    <div class="cts-debug-metric-${sectionId}">
+                        <span class="cts-debug-label-${sectionId}">Render FPS</span>
+                        <span class="cts-debug-value-${sectionId}" id="debugFPS-${sectionId}">-</span>
+                    </div>
+                    
+                    <div class="cts-debug-metric-${sectionId}">
+                        <span class="cts-debug-label-${sectionId}">Uptime</span>
+                        <span class="cts-debug-value-${sectionId} muted" id="debugUptime-${sectionId}">0s</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION: PRINT-READY VALIDATION -->
+            <div class="cts-debug-section-${sectionId}">
+                <div class="cts-debug-section-header-${sectionId}" onclick="toggleSection(this)">
+                    <div class="cts-debug-section-title-${sectionId}">🖨️ Print-Ready Info</div>
+                    <div class="cts-debug-section-toggle-${sectionId} collapsed">▼</div>
+                </div>
+                <div class="cts-debug-section-content-${sectionId} collapsed">
+                    <div class="cts-debug-metric-${sectionId}">
+                        <span class="cts-debug-label-${sectionId}">Est. Physical Size</span>
+                        <span class="cts-debug-value-${sectionId}" id="debugPhysicalSize-${sectionId}">-</span>
+                    </div>
+                    
+                    <div class="cts-debug-metric-${sectionId}">
+                        <span class="cts-debug-label-${sectionId}">Resolution (DPI)</span>
+                        <span class="cts-debug-value-${sectionId}" id="debugDPI-${sectionId}">Screen</span>
+                    </div>
+                    
+                    <div class="cts-debug-metric-${sectionId}">
+                        <span class="cts-debug-label-${sectionId}">Print Quality</span>
+                        <span class="cts-debug-value-${sectionId} success" id="debugPrintQuality-${sectionId}">Excellent</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION: ADJUSTABLE CONFIG -->
+            <div class="cts-debug-section-${sectionId}">
+                <div class="cts-debug-section-header-${sectionId}" onclick="toggleSection(this)">
+                    <div class="cts-debug-section-title-${sectionId}">⚙️ Adjustable Config</div>
+                    <div class="cts-debug-section-toggle-${sectionId} collapsed">▼</div>
+                </div>
+                <div class="cts-debug-section-content-${sectionId} collapsed">
                 
                 <!-- Text Max Width -->
                 <div class="cts-debug-slider-group-${sectionId}">
@@ -5231,17 +5438,33 @@
                     </div>
                 </div>
 
-                <button class="cts-debug-reset-btn-${sectionId}" id="debugReset-${sectionId}">
-                    🔄 Reset to Defaults
-                </button>
-
-                <button class="cts-debug-export-${sectionId}" id="debugExport-${sectionId}">
-                    📋 Copy Config to Clipboard
-                </button>
+                </div>
             </div>
+
+            <!-- ACTION BUTTONS -->
+            <button class="cts-debug-btn-${sectionId} cts-debug-btn-primary-${sectionId}" id="debugReset-${sectionId}">
+                🔄 Reset to Defaults
+            </button>
+
+            <button class="cts-debug-btn-${sectionId} cts-debug-btn-secondary-${sectionId}" id="debugExport-${sectionId}">
+                📋 Copy Config to Clipboard
+            </button>
+
+            <button class="cts-debug-btn-${sectionId} cts-debug-btn-secondary-${sectionId}" id="debugSnapshot-${sectionId}">
+                📸 Export Metrics Snapshot
+            </button>
         `;
 
         document.body.appendChild(panel);
+        
+        // Make toggleSection function global for onclick handlers
+        window.toggleSection = function(header) {
+            const content = header.nextElementSibling;
+            const toggle = header.querySelector(`.cts-debug-section-toggle-${sectionId}`);
+            
+            content.classList.toggle('collapsed');
+            toggle.classList.toggle('collapsed');
+        };
         
         // Setup event listeners
         setupDebugControls();
@@ -5249,7 +5472,7 @@
         // Start real-time updates
         startRealTimeUpdates();
         
-        console.log('✅ Debug panel created');
+        console.log('✅ Enhanced debug panel created');
     }
 
     // Setup controls
@@ -5265,6 +5488,7 @@
         
         const resetBtn = document.getElementById(`debugReset-${sectionId}`);
         const exportBtn = document.getElementById(`debugExport-${sectionId}`);
+        const snapshotBtn = document.getElementById(`debugSnapshot-${sectionId}`);
 
         // Update CONTAINMENT_CONFIG when sliders change
         function updateConfig() {
@@ -5288,37 +5512,43 @@
                 document.getElementById(`debugMinFontSizeVal-${sectionId}`).textContent = minFontSlider.value + 'px';
                 document.getElementById(`debugMaxFontSizeVal-${sectionId}`).textContent = maxFontSlider.value + 'px';
                 
+                metricsHistory.adjustments++;
+                metricsHistory.lastAdjustTime = Date.now();
+                
                 console.log('📐 Config updated:', config);
             }
         }
 
         // Add event listeners
-        maxWidthSlider.addEventListener('input', updateConfig);
-        maxHeightSlider.addEventListener('input', updateConfig);
-        imageMaxWidthSlider.addEventListener('input', updateConfig);
-        imageMaxHeightSlider.addEventListener('input', updateConfig);
-        paddingSlider.addEventListener('input', updateConfig);
-        minFontSlider.addEventListener('input', updateConfig);
-        maxFontSlider.addEventListener('input', updateConfig);
+        if (maxWidthSlider) maxWidthSlider.addEventListener('input', updateConfig);
+        if (maxHeightSlider) maxHeightSlider.addEventListener('input', updateConfig);
+        if (imageMaxWidthSlider) imageMaxWidthSlider.addEventListener('input', updateConfig);
+        if (imageMaxHeightSlider) imageMaxHeightSlider.addEventListener('input', updateConfig);
+        if (paddingSlider) paddingSlider.addEventListener('input', updateConfig);
+        if (minFontSlider) minFontSlider.addEventListener('input', updateConfig);
+        if (maxFontSlider) maxFontSlider.addEventListener('input', updateConfig);
 
         // Reset button
-        resetBtn.addEventListener('click', () => {
-            maxWidthSlider.value = 95;
-            maxHeightSlider.value = 95;
-            imageMaxWidthSlider.value = 90;
-            imageMaxHeightSlider.value = 90;
-            paddingSlider.value = 8;
-            minFontSlider.value = 14;
-            maxFontSlider.value = 72;
-            updateConfig();
-            console.log('🔄 Config reset to defaults');
-        });
+        if (resetBtn) {
+            resetBtn.addEventListener('click', () => {
+                maxWidthSlider.value = 95;
+                maxHeightSlider.value = 95;
+                imageMaxWidthSlider.value = 90;
+                imageMaxHeightSlider.value = 90;
+                paddingSlider.value = 8;
+                minFontSlider.value = 14;
+                maxFontSlider.value = 72;
+                updateConfig();
+                console.log('🔄 Config reset to defaults');
+            });
+        }
 
         // Export button
-        exportBtn.addEventListener('click', () => {
-            if (window.ContainmentSystem && window.ContainmentSystem[sectionId]) {
-                const config = window.ContainmentSystem[sectionId].config;
-                const configText = `const CONTAINMENT_CONFIG = {
+        if (exportBtn) {
+            exportBtn.addEventListener('click', () => {
+                if (window.ContainmentSystem && window.ContainmentSystem[sectionId]) {
+                    const config = window.ContainmentSystem[sectionId].config;
+                    const configText = `const CONTAINMENT_CONFIG = {
     maxWidth: ${config.maxWidth},
     maxHeight: ${config.maxHeight},
     padding: ${config.padding},
@@ -5327,22 +5557,105 @@
     imageMaxWidth: ${config.imageMaxWidth},
     imageMaxHeight: ${config.imageMaxHeight}
 };`;
+                    
+                    navigator.clipboard.writeText(configText).then(() => {
+                        exportBtn.textContent = '✅ Copied!';
+                        setTimeout(() => {
+                            exportBtn.textContent = '📋 Copy Config to Clipboard';
+                        }, 2000);
+                    });
+                }
+            });
+        }
+
+        // Snapshot button
+        if (snapshotBtn) {
+            snapshotBtn.addEventListener('click', () => {
+                const snapshot = captureMetricsSnapshot();
+                const snapshotText = JSON.stringify(snapshot, null, 2);
                 
-                navigator.clipboard.writeText(configText).then(() => {
-                    exportBtn.textContent = '✅ Copied!';
+                navigator.clipboard.writeText(snapshotText).then(() => {
+                    snapshotBtn.textContent = '✅ Snapshot Copied!';
                     setTimeout(() => {
-                        exportBtn.textContent = '📋 Copy Config to Clipboard';
+                        snapshotBtn.textContent = '📸 Export Metrics Snapshot';
                     }, 2000);
+                    console.log('📸 Metrics snapshot:', snapshot);
                 });
-            }
-        });
+            });
+        }
+    }
+
+    // Capture full metrics snapshot
+    function captureMetricsSnapshot() {
+        const cOverlay = document.getElementById(`designOverlay-${sectionId}`);
+        const cText = document.getElementById(`designText-${sectionId}`);
+        const cImage = document.getElementById(`designImage-${sectionId}`);
+        
+        const snapshot = {
+            timestamp: new Date().toISOString(),
+            printArea: {},
+            text: {},
+            image: {},
+            fit: {},
+            config: {}
+        };
+
+        if (cOverlay) {
+            const rect = cOverlay.getBoundingClientRect();
+            snapshot.printArea = {
+                width: rect.width,
+                height: rect.height
+            };
+        }
+
+        if (cText && cText.style.display !== 'none') {
+            const rect = cText.getBoundingClientRect();
+            const style = window.getComputedStyle(cText);
+            snapshot.text = {
+                width: rect.width,
+                height: rect.height,
+                fontSize: style.fontSize,
+                content: cText.textContent,
+                characterCount: cText.textContent.length,
+                wordCount: cText.textContent.split(/\s+/).filter(w => w).length
+            };
+        }
+
+        if (cImage && cImage.style.display !== 'none') {
+            const rect = cImage.getBoundingClientRect();
+            snapshot.image = {
+                width: rect.width,
+                height: rect.height
+            };
+        }
+
+        if (window.ContainmentSystem && window.ContainmentSystem[sectionId]) {
+            const fitResult = window.ContainmentSystem[sectionId].checkOverallFit();
+            snapshot.fit = fitResult;
+            snapshot.config = window.ContainmentSystem[sectionId].config;
+        }
+
+        return snapshot;
     }
 
     // Real-time metric updates
+    let lastFrameTime = Date.now();
+    let frameCount = 0;
+    let fps = 0;
+
     function startRealTimeUpdates() {
         setInterval(() => {
             updateDebugMetrics();
-        }, 200); // Update every 200ms
+            
+            // Calculate FPS
+            frameCount++;
+            const now = Date.now();
+            if (now - lastFrameTime >= 1000) {
+                fps = frameCount;
+                frameCount = 0;
+                lastFrameTime = now;
+            }
+        }, 100); // Update every 100ms
     }
 
     function updateDebugMetrics() {
