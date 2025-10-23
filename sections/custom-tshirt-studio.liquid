@@ -1786,6 +1786,206 @@
             transform: translateX(-50%) translateY(0);
         }
     }
+
+    /* ============================================
+       DEBUG CONTROL PANEL FOR PRINT AREA METRICS
+       ============================================ */
+    .cts-debug-panel-{{ section.id }} {
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        width: 350px;
+        background: rgba(15, 23, 42, 0.95);
+        backdrop-filter: blur(20px);
+        border: 2px solid #60a5fa;
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        z-index: 10000;
+        color: #e2e8f0;
+        font-family: 'Monaco', 'Courier New', monospace;
+        font-size: 12px;
+        max-height: 85vh;
+        overflow-y: auto;
+    }
+
+    .cts-debug-header-{{ section.id }} {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid rgba(96, 165, 250, 0.3);
+    }
+
+    .cts-debug-title-{{ section.id }} {
+        font-size: 14px;
+        font-weight: bold;
+        color: #60a5fa;
+    }
+
+    .cts-debug-close-{{ section.id }} {
+        background: rgba(239, 68, 68, 0.2);
+        border: 1px solid #ef4444;
+        color: #ef4444;
+        padding: 4px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 11px;
+        transition: all 0.2s;
+    }
+
+    .cts-debug-close-{{ section.id }}:hover {
+        background: rgba(239, 68, 68, 0.3);
+    }
+
+    .cts-debug-section-{{ section.id }} {
+        margin-bottom: 20px;
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+    }
+
+    .cts-debug-section-title-{{ section.id }} {
+        font-size: 13px;
+        font-weight: bold;
+        color: #a78bfa;
+        margin-bottom: 10px;
+    }
+
+    .cts-debug-metric-{{ section.id }} {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 6px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .cts-debug-metric-{{ section.id }}:last-child {
+        border-bottom: none;
+    }
+
+    .cts-debug-label-{{ section.id }} {
+        color: #94a3b8;
+        font-size: 11px;
+    }
+
+    .cts-debug-value-{{ section.id }} {
+        color: #60a5fa;
+        font-weight: bold;
+        font-size: 12px;
+    }
+
+    .cts-debug-value-{{ section.id }}.warning {
+        color: #fbbf24;
+    }
+
+    .cts-debug-value-{{ section.id }}.danger {
+        color: #ef4444;
+    }
+
+    .cts-debug-value-{{ section.id }}.success {
+        color: #10b981;
+    }
+
+    .cts-debug-slider-group-{{ section.id }} {
+        margin-top: 10px;
+    }
+
+    .cts-debug-slider-{{ section.id }} {
+        width: 100%;
+        height: 6px;
+        border-radius: 3px;
+        background: rgba(255, 255, 255, 0.1);
+        outline: none;
+        -webkit-appearance: none;
+        margin: 8px 0;
+    }
+
+    .cts-debug-slider-{{ section.id }}::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #60a5fa;
+        cursor: pointer;
+        box-shadow: 0 0 10px rgba(96, 165, 250, 0.5);
+    }
+
+    .cts-debug-slider-{{ section.id }}::-moz-range-thumb {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #60a5fa;
+        cursor: pointer;
+        border: none;
+        box-shadow: 0 0 10px rgba(96, 165, 250, 0.5);
+    }
+
+    .cts-debug-slider-label-{{ section.id }} {
+        display: flex;
+        justify-content: space-between;
+        font-size: 10px;
+        color: #94a3b8;
+        margin-top: 4px;
+    }
+
+    .cts-debug-reset-btn-{{ section.id }} {
+        width: 100%;
+        padding: 10px;
+        background: rgba(96, 165, 250, 0.2);
+        border: 1px solid #60a5fa;
+        color: #60a5fa;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: bold;
+        margin-top: 10px;
+        transition: all 0.2s;
+    }
+
+    .cts-debug-reset-btn-{{ section.id }}:hover {
+        background: rgba(96, 165, 250, 0.3);
+    }
+
+    .cts-debug-status-{{ section.id }} {
+        padding: 10px;
+        border-radius: 8px;
+        margin-top: 10px;
+        text-align: center;
+        font-weight: bold;
+        font-size: 13px;
+    }
+
+    .cts-debug-status-{{ section.id }}.fits {
+        background: rgba(16, 185, 129, 0.2);
+        border: 1px solid #10b981;
+        color: #10b981;
+    }
+
+    .cts-debug-status-{{ section.id }}.exceeds {
+        background: rgba(239, 68, 68, 0.2);
+        border: 1px solid #ef4444;
+        color: #ef4444;
+    }
+
+    .cts-debug-export-{{ section.id }} {
+        width: 100%;
+        padding: 8px;
+        background: rgba(167, 139, 250, 0.2);
+        border: 1px solid #a78bfa;
+        color: #a78bfa;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 11px;
+        margin-top: 8px;
+        transition: all 0.2s;
+    }
+
+    .cts-debug-export-{{ section.id }}:hover {
+        background: rgba(167, 139, 250, 0.3);
+    }
 </style>
 
 <div class="custom-tshirt-studio-{{ section.id }}" id="custom-tshirt-studio-{{ section.id }}" style="display: none;">
@@ -4736,6 +4936,351 @@
     console.log('📱 Mobile touch gestures enabled (pinch-to-zoom, rotate)');
     console.log('🎨 Color Palette Helper initialized (76 colors available)');
     console.log('🖼️ Thumbnail Gallery initialized with 4 views');
+
+    // ============================================
+    // DEBUG CONTROL PANEL FOR PRINT AREA METRICS
+    // ============================================
+    
+    // Create Debug Panel
+    function createDebugPanel() {
+        // Check if panel already exists
+        if (document.getElementById(`debugPanel-${sectionId}`)) {
+            return;
+        }
+
+        const panel = document.createElement('div');
+        panel.id = `debugPanel-${sectionId}`;
+        panel.className = `cts-debug-panel-${sectionId}`;
+        
+        panel.innerHTML = `
+            <div class="cts-debug-header-${sectionId}">
+                <div class="cts-debug-title-${sectionId}">🔧 Print Area Debug Panel</div>
+                <button class="cts-debug-close-${sectionId}" onclick="document.getElementById('debugPanel-${sectionId}').remove()">✕</button>
+            </div>
+
+            <!-- CURRENT METRICS -->
+            <div class="cts-debug-section-${sectionId}">
+                <div class="cts-debug-section-title-${sectionId}">📊 Current Metrics</div>
+                
+                <div class="cts-debug-metric-${sectionId}">
+                    <span class="cts-debug-label-${sectionId}">Print Area Width:</span>
+                    <span class="cts-debug-value-${sectionId}" id="debugPrintWidth-${sectionId}">-</span>
+                </div>
+                
+                <div class="cts-debug-metric-${sectionId}">
+                    <span class="cts-debug-label-${sectionId}">Print Area Height:</span>
+                    <span class="cts-debug-value-${sectionId}" id="debugPrintHeight-${sectionId}">-</span>
+                </div>
+                
+                <div class="cts-debug-metric-${sectionId}">
+                    <span class="cts-debug-label-${sectionId}">Text Width:</span>
+                    <span class="cts-debug-value-${sectionId}" id="debugTextWidth-${sectionId}">-</span>
+                </div>
+                
+                <div class="cts-debug-metric-${sectionId}">
+                    <span class="cts-debug-label-${sectionId}">Text Height:</span>
+                    <span class="cts-debug-value-${sectionId}" id="debugTextHeight-${sectionId}">-</span>
+                </div>
+                
+                <div class="cts-debug-metric-${sectionId}">
+                    <span class="cts-debug-label-${sectionId}">Image Width:</span>
+                    <span class="cts-debug-value-${sectionId}" id="debugImageWidth-${sectionId}">-</span>
+                </div>
+                
+                <div class="cts-debug-metric-${sectionId}">
+                    <span class="cts-debug-label-${sectionId}">Image Height:</span>
+                    <span class="cts-debug-value-${sectionId}" id="debugImageHeight-${sectionId}">-</span>
+                </div>
+                
+                <div class="cts-debug-metric-${sectionId}">
+                    <span class="cts-debug-label-${sectionId}">Font Size:</span>
+                    <span class="cts-debug-value-${sectionId}" id="debugFontSize-${sectionId}">-</span>
+                </div>
+            </div>
+
+            <!-- STATUS -->
+            <div class="cts-debug-status-${sectionId} fits" id="debugStatus-${sectionId}">
+                ✓ Design Fits
+            </div>
+
+            <!-- ADJUSTABLE CONFIG -->
+            <div class="cts-debug-section-${sectionId}">
+                <div class="cts-debug-section-title-${sectionId}">⚙️ Adjustable Config</div>
+                
+                <!-- Text Max Width -->
+                <div class="cts-debug-slider-group-${sectionId}">
+                    <div class="cts-debug-label-${sectionId}">Text Max Width (%)</div>
+                    <input type="range" class="cts-debug-slider-${sectionId}" 
+                           id="debugMaxWidth-${sectionId}" 
+                           min="50" max="100" step="1" value="95">
+                    <div class="cts-debug-slider-label-${sectionId}">
+                        <span>50%</span>
+                        <span id="debugMaxWidthVal-${sectionId}">95%</span>
+                        <span>100%</span>
+                    </div>
+                </div>
+
+                <!-- Text Max Height -->
+                <div class="cts-debug-slider-group-${sectionId}">
+                    <div class="cts-debug-label-${sectionId}">Text Max Height (%)</div>
+                    <input type="range" class="cts-debug-slider-${sectionId}" 
+                           id="debugMaxHeight-${sectionId}" 
+                           min="50" max="100" step="1" value="95">
+                    <div class="cts-debug-slider-label-${sectionId}">
+                        <span>50%</span>
+                        <span id="debugMaxHeightVal-${sectionId}">95%</span>
+                        <span>100%</span>
+                    </div>
+                </div>
+
+                <!-- Image Max Width -->
+                <div class="cts-debug-slider-group-${sectionId}">
+                    <div class="cts-debug-label-${sectionId}">Image Max Width (%)</div>
+                    <input type="range" class="cts-debug-slider-${sectionId}" 
+                           id="debugImageMaxWidth-${sectionId}" 
+                           min="50" max="100" step="1" value="90">
+                    <div class="cts-debug-slider-label-${sectionId}">
+                        <span>50%</span>
+                        <span id="debugImageMaxWidthVal-${sectionId}">90%</span>
+                        <span>100%</span>
+                    </div>
+                </div>
+
+                <!-- Image Max Height -->
+                <div class="cts-debug-slider-group-${sectionId}">
+                    <div class="cts-debug-label-${sectionId}">Image Max Height (%)</div>
+                    <input type="range" class="cts-debug-slider-${sectionId}" 
+                           id="debugImageMaxHeight-${sectionId}" 
+                           min="50" max="100" step="1" value="90">
+                    <div class="cts-debug-slider-label-${sectionId}">
+                        <span>50%</span>
+                        <span id="debugImageMaxHeightVal-${sectionId}">90%</span>
+                        <span>100%</span>
+                    </div>
+                </div>
+
+                <!-- Padding -->
+                <div class="cts-debug-slider-group-${sectionId}">
+                    <div class="cts-debug-label-${sectionId}">Padding (px)</div>
+                    <input type="range" class="cts-debug-slider-${sectionId}" 
+                           id="debugPadding-${sectionId}" 
+                           min="0" max="50" step="1" value="8">
+                    <div class="cts-debug-slider-label-${sectionId}">
+                        <span>0px</span>
+                        <span id="debugPaddingVal-${sectionId}">8px</span>
+                        <span>50px</span>
+                    </div>
+                </div>
+
+                <!-- Min Font Size -->
+                <div class="cts-debug-slider-group-${sectionId}">
+                    <div class="cts-debug-label-${sectionId}">Min Font Size (px)</div>
+                    <input type="range" class="cts-debug-slider-${sectionId}" 
+                           id="debugMinFontSize-${sectionId}" 
+                           min="8" max="30" step="1" value="14">
+                    <div class="cts-debug-slider-label-${sectionId}">
+                        <span>8px</span>
+                        <span id="debugMinFontSizeVal-${sectionId}">14px</span>
+                        <span>30px</span>
+                    </div>
+                </div>
+
+                <!-- Max Font Size -->
+                <div class="cts-debug-slider-group-${sectionId}">
+                    <div class="cts-debug-label-${sectionId}">Max Font Size (px)</div>
+                    <input type="range" class="cts-debug-slider-${sectionId}" 
+                           id="debugMaxFontSize-${sectionId}" 
+                           min="30" max="120" step="2" value="72">
+                    <div class="cts-debug-slider-label-${sectionId}">
+                        <span>30px</span>
+                        <span id="debugMaxFontSizeVal-${sectionId}">72px</span>
+                        <span>120px</span>
+                    </div>
+                </div>
+
+                <button class="cts-debug-reset-btn-${sectionId}" id="debugReset-${sectionId}">
+                    🔄 Reset to Defaults
+                </button>
+
+                <button class="cts-debug-export-${sectionId}" id="debugExport-${sectionId}">
+                    📋 Copy Config to Clipboard
+                </button>
+            </div>
+        `;
+
+        document.body.appendChild(panel);
+        
+        // Setup event listeners
+        setupDebugControls();
+        
+        // Start real-time updates
+        startRealTimeUpdates();
+        
+        console.log('✅ Debug panel created');
+    }
+
+    // Setup controls
+    function setupDebugControls() {
+        // Get sliders
+        const maxWidthSlider = document.getElementById(`debugMaxWidth-${sectionId}`);
+        const maxHeightSlider = document.getElementById(`debugMaxHeight-${sectionId}`);
+        const imageMaxWidthSlider = document.getElementById(`debugImageMaxWidth-${sectionId}`);
+        const imageMaxHeightSlider = document.getElementById(`debugImageMaxHeight-${sectionId}`);
+        const paddingSlider = document.getElementById(`debugPadding-${sectionId}`);
+        const minFontSlider = document.getElementById(`debugMinFontSize-${sectionId}`);
+        const maxFontSlider = document.getElementById(`debugMaxFontSize-${sectionId}`);
+        
+        const resetBtn = document.getElementById(`debugReset-${sectionId}`);
+        const exportBtn = document.getElementById(`debugExport-${sectionId}`);
+
+        // Update CONTAINMENT_CONFIG when sliders change
+        function updateConfig() {
+            if (window.ContainmentSystem && window.ContainmentSystem[sectionId]) {
+                const config = window.ContainmentSystem[sectionId].config;
+                
+                config.maxWidth = parseFloat(maxWidthSlider.value) / 100;
+                config.maxHeight = parseFloat(maxHeightSlider.value) / 100;
+                config.imageMaxWidth = parseFloat(imageMaxWidthSlider.value) / 100;
+                config.imageMaxHeight = parseFloat(imageMaxHeightSlider.value) / 100;
+                config.padding = parseInt(paddingSlider.value);
+                config.minFontSize = parseInt(minFontSlider.value);
+                config.maxFontSize = parseInt(maxFontSlider.value);
+                
+                // Update displays
+                document.getElementById(`debugMaxWidthVal-${sectionId}`).textContent = maxWidthSlider.value + '%';
+                document.getElementById(`debugMaxHeightVal-${sectionId}`).textContent = maxHeightSlider.value + '%';
+                document.getElementById(`debugImageMaxWidthVal-${sectionId}`).textContent = imageMaxWidthSlider.value + '%';
+                document.getElementById(`debugImageMaxHeightVal-${sectionId}`).textContent = imageMaxHeightSlider.value + '%';
+                document.getElementById(`debugPaddingVal-${sectionId}`).textContent = paddingSlider.value + 'px';
+                document.getElementById(`debugMinFontSizeVal-${sectionId}`).textContent = minFontSlider.value + 'px';
+                document.getElementById(`debugMaxFontSizeVal-${sectionId}`).textContent = maxFontSlider.value + 'px';
+                
+                console.log('📐 Config updated:', config);
+            }
+        }
+
+        // Add event listeners
+        maxWidthSlider.addEventListener('input', updateConfig);
+        maxHeightSlider.addEventListener('input', updateConfig);
+        imageMaxWidthSlider.addEventListener('input', updateConfig);
+        imageMaxHeightSlider.addEventListener('input', updateConfig);
+        paddingSlider.addEventListener('input', updateConfig);
+        minFontSlider.addEventListener('input', updateConfig);
+        maxFontSlider.addEventListener('input', updateConfig);
+
+        // Reset button
+        resetBtn.addEventListener('click', () => {
+            maxWidthSlider.value = 95;
+            maxHeightSlider.value = 95;
+            imageMaxWidthSlider.value = 90;
+            imageMaxHeightSlider.value = 90;
+            paddingSlider.value = 8;
+            minFontSlider.value = 14;
+            maxFontSlider.value = 72;
+            updateConfig();
+            console.log('🔄 Config reset to defaults');
+        });
+
+        // Export button
+        exportBtn.addEventListener('click', () => {
+            if (window.ContainmentSystem && window.ContainmentSystem[sectionId]) {
+                const config = window.ContainmentSystem[sectionId].config;
+                const configText = `const CONTAINMENT_CONFIG = {
+    maxWidth: ${config.maxWidth},
+    maxHeight: ${config.maxHeight},
+    padding: ${config.padding},
+    minFontSize: ${config.minFontSize},
+    maxFontSize: ${config.maxFontSize},
+    imageMaxWidth: ${config.imageMaxWidth},
+    imageMaxHeight: ${config.imageMaxHeight}
+};`;
+                
+                navigator.clipboard.writeText(configText).then(() => {
+                    exportBtn.textContent = '✅ Copied!';
+                    setTimeout(() => {
+                        exportBtn.textContent = '📋 Copy Config to Clipboard';
+                    }, 2000);
+                });
+            }
+        });
+    }
+
+    // Real-time metric updates
+    function startRealTimeUpdates() {
+        setInterval(() => {
+            updateDebugMetrics();
+        }, 200); // Update every 200ms
+    }
+
+    function updateDebugMetrics() {
+        const cOverlay = document.getElementById(`designOverlay-${sectionId}`);
+        const cText = document.getElementById(`designText-${sectionId}`);
+        const cImage = document.getElementById(`designImage-${sectionId}`);
+
+        if (!cOverlay) return;
+
+        const overlayRect = cOverlay.getBoundingClientRect();
+        
+        // Update print area dimensions
+        document.getElementById(`debugPrintWidth-${sectionId}`).textContent = 
+            Math.round(overlayRect.width) + 'px';
+        document.getElementById(`debugPrintHeight-${sectionId}`).textContent = 
+            Math.round(overlayRect.height) + 'px';
+
+        // Update text dimensions
+        if (cText && cText.style.display !== 'none') {
+            const textRect = cText.getBoundingClientRect();
+            document.getElementById(`debugTextWidth-${sectionId}`).textContent = 
+                Math.round(textRect.width) + 'px';
+            document.getElementById(`debugTextHeight-${sectionId}`).textContent = 
+                Math.round(textRect.height) + 'px';
+            
+            const computedStyle = window.getComputedStyle(cText);
+            document.getElementById(`debugFontSize-${sectionId}`).textContent = 
+                computedStyle.fontSize;
+        } else {
+            document.getElementById(`debugTextWidth-${sectionId}`).textContent = 'N/A';
+            document.getElementById(`debugTextHeight-${sectionId}`).textContent = 'N/A';
+            document.getElementById(`debugFontSize-${sectionId}`).textContent = 'N/A';
+        }
+
+        // Update image dimensions
+        if (cImage && cImage.style.display !== 'none') {
+            const imageRect = cImage.getBoundingClientRect();
+            document.getElementById(`debugImageWidth-${sectionId}`).textContent = 
+                Math.round(imageRect.width) + 'px';
+            document.getElementById(`debugImageHeight-${sectionId}`).textContent = 
+                Math.round(imageRect.height) + 'px';
+        } else {
+            document.getElementById(`debugImageWidth-${sectionId}`).textContent = 'N/A';
+            document.getElementById(`debugImageHeight-${sectionId}`).textContent = 'N/A';
+        }
+
+        // Check fit status
+        if (window.ContainmentSystem && window.ContainmentSystem[sectionId]) {
+            const fitResult = window.ContainmentSystem[sectionId].checkOverallFit();
+            const statusEl = document.getElementById(`debugStatus-${sectionId}`);
+            
+            if (fitResult.overallFits) {
+                statusEl.className = `cts-debug-status-${sectionId} fits`;
+                statusEl.textContent = '✓ Design Fits';
+            } else {
+                statusEl.className = `cts-debug-status-${sectionId} exceeds`;
+                statusEl.textContent = '⚠ Design Exceeds Print Area';
+            }
+        }
+    }
+
+    // Initialize debug panel after a short delay
+    setTimeout(() => {
+        createDebugPanel();
+        console.log('🔧 Debug control panel initialized');
+    }, 2000);
+
+    // ============================================
+    // END DEBUG CONTROL PANEL
+    // ============================================
+
 })();
 </script>
 
