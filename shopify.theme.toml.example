@@ -1,0 +1,10 @@
+[environments.newthrifts]
+theme = "137255125090"
+store = "irwe0x-mk.myshopify.com"
+# password  = "YOUR_SHOPIFY_CLI_PASSWORD_HERE"
+# 
+# To use this file:
+# 1. Copy this file to shopify.theme.toml
+# 2. Run: shopify auth login
+# 3. Or add your password to the password field above
+

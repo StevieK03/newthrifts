@@ -1,5 +1,6 @@
 # Shopify specific
 .shopify/
+shopify.theme.toml
 
 # Logs
 *.log
