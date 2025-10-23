@@ -1,10 +1,28 @@
 [environments.newthrifts]
 theme = "137255125090"
 store = "irwe0x-mk.myshopify.com"
-# password  = "YOUR_SHOPIFY_CLI_PASSWORD_HERE"
+# password  = "YOUR_SHOPIFY_CLI_PASSWORD_HERE"  # NOT RECOMMENDED - Use OAuth instead!
 # 
-# To use this file:
-# 1. Copy this file to shopify.theme.toml
+# 🔐 RECOMMENDED SETUP (Choose ONE method):
+# 
+# METHOD 1: OAuth Authentication (Most Secure - Recommended)
+# --------------------------------------------------------
+# 1. Copy this file to: shopify.theme.toml
 # 2. Run: shopify auth login
-# 3. Or add your password to the password field above
+# 3. Follow browser prompts to authenticate
+# 4. Done! No password needed in this file.
+#
+# METHOD 2: Environment Variable
+# --------------------------------------------------------
+# 1. Copy this file to: shopify.theme.toml
+# 2. Set environment variable:
+#    PowerShell: $env:SHOPIFY_CLI_THEME_TOKEN = "your_token_here"
+#    Or permanently: [System.Environment]::SetEnvironmentVariable('SHOPIFY_CLI_THEME_TOKEN', 'your_token', 'User')
+# 3. Done! Token is read from environment.
+#
+# METHOD 3: Use the setup script
+# --------------------------------------------------------
+# Run: .\setup-shopify-auth.ps1
+#
+# 📚 See SHOPIFY-AUTH-GUIDE.md for detailed instructions
 
