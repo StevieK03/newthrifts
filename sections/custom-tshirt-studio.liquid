@@ -2227,14 +2227,14 @@
                 <h3>📝 Design Text</h3>
                 <div class="cts-control-group-{{ section.id }}">
                     <label>Your Text</label>
-                    <textarea class="cts-text-input-{{ section.id }}" id="textInput-{{ section.id }}" placeholder="Enter your custom text..." maxlength="100">YOUR DESIGN HERE</textarea>
+                    <textarea class="cts-text-input-{{ section.id }}" id="textInput-{{ section.id }}" placeholder="Enter your custom text..." maxlength="108">YOUR DESIGN HERE</textarea>
                     <!-- Character Counter -->
                     <div class="cts-char-counter-{{ section.id }}">
                         <span class="cts-char-count-{{ section.id }}" id="charCount-{{ section.id }}">
                             0 characters
                         </span>
                         <span class="cts-char-limit-{{ section.id }}">
-                            Recommended max: 50
+                            Max limit: 108
                         </span>
                     </div>
             </div>
@@ -2612,9 +2612,9 @@
     const charCountDisplay = document.getElementById(`charCount-${sectionId}`);
     
     // Character limits
-    const CHAR_WARNING = 40;  // Show warning color
-    const CHAR_DANGER = 50;   // Show danger color
-    const CHAR_MAX = 100;     // Hard limit (set in HTML maxlength)
+    const CHAR_WARNING = 43;  // Show warning color (40% of max)
+    const CHAR_DANGER = 54;   // Show danger color (50% of max)
+    const CHAR_MAX = 108;     // Hard limit (set in HTML maxlength)
     
     // Update character counter
     function updateCharCounter() {
