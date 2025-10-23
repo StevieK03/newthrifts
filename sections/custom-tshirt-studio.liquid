@@ -1788,14 +1788,15 @@
     }
 
     /* ============================================
-       DEBUG CONTROL PANEL FOR PRINT AREA METRICS
+       ENHANCED DEBUG CONTROL PANEL
+       Comprehensive metrics with collapsible sections
        ============================================ */
     .cts-debug-panel-{{ section.id }} {
         position: fixed;
         top: 80px;
         right: 20px;
-        width: 350px;
-        background: rgba(15, 23, 42, 0.95);
+        width: 380px;
+        background: rgba(15, 23, 42, 0.98);
         backdrop-filter: blur(20px);
         border: 2px solid #60a5fa;
         border-radius: 16px;
@@ -1805,8 +1806,23 @@
         color: #e2e8f0;
         font-family: 'Monaco', 'Courier New', monospace;
         font-size: 12px;
-        max-height: 85vh;
+        max-height: 90vh;
         overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(96, 165, 250, 0.5) transparent;
+    }
+
+    .cts-debug-panel-{{ section.id }}::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .cts-debug-panel-{{ section.id }}::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .cts-debug-panel-{{ section.id }}::-webkit-scrollbar-thumb {
+        background: rgba(96, 165, 250, 0.5);
+        border-radius: 3px;
     }
 
     .cts-debug-header-{{ section.id }} {
@@ -1840,17 +1856,49 @@
     }
 
     .cts-debug-section-{{ section.id }} {
-        margin-bottom: 20px;
-        padding: 12px;
+        margin-bottom: 15px;
         background: rgba(255, 255, 255, 0.05);
         border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .cts-debug-section-header-{{ section.id }} {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px;
+        cursor: pointer;
+        user-select: none;
+        transition: background 0.2s;
+    }
+
+    .cts-debug-section-header-{{ section.id }}:hover {
+        background: rgba(255, 255, 255, 0.08);
     }
 
     .cts-debug-section-title-{{ section.id }} {
         font-size: 13px;
         font-weight: bold;
         color: #a78bfa;
-        margin-bottom: 10px;
+    }
+
+    .cts-debug-section-toggle-{{ section.id }} {
+        font-size: 10px;
+        color: #94a3b8;
+        transition: transform 0.2s;
+    }
+
+    .cts-debug-section-toggle-{{ section.id }}.collapsed {
+        transform: rotate(-90deg);
+    }
+
+    .cts-debug-section-content-{{ section.id }} {
+        padding: 12px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .cts-debug-section-content-{{ section.id }}.collapsed {
+        display: none;
     }
 
     .cts-debug-metric-{{ section.id }} {
@@ -1868,12 +1916,14 @@
     .cts-debug-label-{{ section.id }} {
         color: #94a3b8;
         font-size: 11px;
+        flex: 1;
     }
 
     .cts-debug-value-{{ section.id }} {
         color: #60a5fa;
         font-weight: bold;
         font-size: 12px;
+        text-align: right;
     }
 
     .cts-debug-value-{{ section.id }}.warning {
@@ -1886,6 +1936,33 @@
 
     .cts-debug-value-{{ section.id }}.success {
         color: #10b981;
+    }
+
+    .cts-debug-value-{{ section.id }}.muted {
+        color: #64748b;
+    }
+
+    .cts-debug-progress-{{ section.id }} {
+        width: 100%;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 2px;
+        overflow: hidden;
+        margin-top: 4px;
+    }
+
+    .cts-debug-progress-bar-{{ section.id }} {
+        height: 100%;
+        background: #60a5fa;
+        transition: width 0.3s, background 0.3s;
+    }
+
+    .cts-debug-progress-bar-{{ section.id }}.warning {
+        background: #fbbf24;
+    }
+
+    .cts-debug-progress-bar-{{ section.id }}.danger {
+        background: #ef4444;
     }
 
     .cts-debug-slider-group-{{ section.id }} {
@@ -1931,22 +2008,36 @@
         margin-top: 4px;
     }
 
-    .cts-debug-reset-btn-{{ section.id }} {
+    .cts-debug-btn-{{ section.id }} {
         width: 100%;
         padding: 10px;
-        background: rgba(96, 165, 250, 0.2);
-        border: 1px solid #60a5fa;
-        color: #60a5fa;
         border-radius: 8px;
         cursor: pointer;
         font-size: 12px;
         font-weight: bold;
-        margin-top: 10px;
+        margin-top: 8px;
         transition: all 0.2s;
+        border: none;
     }
 
-    .cts-debug-reset-btn-{{ section.id }}:hover {
+    .cts-debug-btn-primary-{{ section.id }} {
+        background: rgba(96, 165, 250, 0.2);
+        border: 1px solid #60a5fa;
+        color: #60a5fa;
+    }
+
+    .cts-debug-btn-primary-{{ section.id }}:hover {
         background: rgba(96, 165, 250, 0.3);
+    }
+
+    .cts-debug-btn-secondary-{{ section.id }} {
+        background: rgba(167, 139, 250, 0.2);
+        border: 1px solid #a78bfa;
+        color: #a78bfa;
+    }
+
+    .cts-debug-btn-secondary-{{ section.id }}:hover {
+        background: rgba(167, 139, 250, 0.3);
     }
 
     .cts-debug-status-{{ section.id }} {
@@ -1970,21 +2061,54 @@
         color: #ef4444;
     }
 
-    .cts-debug-export-{{ section.id }} {
-        width: 100%;
-        padding: 8px;
-        background: rgba(167, 139, 250, 0.2);
-        border: 1px solid #a78bfa;
-        color: #a78bfa;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 11px;
+    .cts-debug-indicator-grid-{{ section.id }} {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
         margin-top: 8px;
-        transition: all 0.2s;
     }
 
-    .cts-debug-export-{{ section.id }}:hover {
-        background: rgba(167, 139, 250, 0.3);
+    .cts-debug-indicator-{{ section.id }} {
+        padding: 6px;
+        border-radius: 6px;
+        text-align: center;
+        font-size: 10px;
+        font-weight: bold;
+    }
+
+    .cts-debug-indicator-{{ section.id }}.fits {
+        background: rgba(16, 185, 129, 0.15);
+        color: #10b981;
+    }
+
+    .cts-debug-indicator-{{ section.id }}.exceeds {
+        background: rgba(239, 68, 68, 0.15);
+        color: #ef4444;
+    }
+
+    .cts-debug-edge-distances-{{ section.id }} {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        gap: 4px;
+        margin-top: 8px;
+        padding: 8px;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 6px;
+    }
+
+    .cts-debug-edge-{{ section.id }} {
+        text-align: center;
+        font-size: 10px;
+        padding: 4px;
+        border-radius: 4px;
+        background: rgba(96, 165, 250, 0.1);
+        color: #60a5fa;
+    }
+
+    .cts-debug-edge-{{ section.id }}.center {
+        background: transparent;
+        color: #64748b;
     }
 </style>
 
