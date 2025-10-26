@@ -2766,6 +2766,14 @@
                 thumb.classList.toggle('active', thumb.getAttribute('data-view') === viewId);
             });
             
+            // Adjust design position based on view
+            if (viewId === 'back') {
+                designOverlay.style.top = '25%';
+            } else {
+                designOverlay.style.top = '29%';
+            }
+            
+            checkBoundary();
             console.log(`🔄 Switched to view: ${view.label}`);
         }
     }
@@ -3608,10 +3616,15 @@
         const overlay = designOverlay.getBoundingClientRect();
         const container = designOverlay.parentElement.getBoundingClientRect();
         
-        // Print area boundaries (37% width, 42% height from center)
-        const printAreaLeft = container.left + (container.width * 0.315); // (1 - 0.37) / 2
-        const printAreaRight = container.right - (container.width * 0.315);
-        const printAreaTop = container.top + (container.height * 0.29);
+        // Print area boundaries - adjust based on current view
+        // Front: 37% width, 42% height, top at 29%
+        // Back: 37% width, 42% height, top at 25% (adjusted for back view centering)
+        const topOffset = (currentView === 'back') ? 0.25 : 0.29;
+        const horizontalOffset = 0.315; // (1 - 0.37) / 2
+        
+        const printAreaLeft = container.left + (container.width * horizontalOffset);
+        const printAreaRight = container.right - (container.width * horizontalOffset);
+        const printAreaTop = container.top + (container.height * topOffset);
         const printAreaBottom = printAreaTop + (container.height * 0.42);
         
         // Check if design is outside print area
