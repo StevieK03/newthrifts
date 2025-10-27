@@ -248,6 +248,15 @@
         transition: all 0.2s ease;
     }
 
+    /* Scale overlays for back view to match scaled t-shirt */
+    .cts-tshirt-container-{{ section.id }}.back-view .cts-design-overlay-{{ section.id }} {
+        transform: translateX(-50%) scale(1.3);
+    }
+
+    .cts-tshirt-container-{{ section.id }}.back-view .cts-placement-guide-{{ section.id }} {
+        transform: translateX(-50%) scale(1.3);
+    }
+
     .cts-design-overlay-{{ section.id }}:hover {
         outline: 2px dashed rgba(96, 165, 250, 0.5);
         outline-offset: 4px;
@@ -2769,11 +2778,13 @@
                 tshirtImage.src = view.image;
                 tshirtImage.style.opacity = '1';
                 
-                // Apply back-view scaling
+                // Apply back-view scaling to image and container
                 if (viewId === 'back') {
                     tshirtImage.classList.add('back-view');
+                    tshirtContainer.classList.add('back-view');
                 } else {
                     tshirtImage.classList.remove('back-view');
+                    tshirtContainer.classList.remove('back-view');
                 }
             }, 200);
             
