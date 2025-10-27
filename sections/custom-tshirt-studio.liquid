@@ -235,12 +235,13 @@
     }
     
     .cts-design-overlay-{{ section.id }} {
-      position: absolute;
-        width: 37%;
-        height: 42%;
+        position: absolute;
+        width: 71.32%;
+        height: 66.20%;
         left: 50%;
-        top: 29%;
+        top: 15.98%;
         transform: translateX(-50%);
+        margin-left: -0.13%; /* Fine-tune centering: (71.32% - (100% - 14.26% - 14.32%)) / 2 */
         display: flex;
         align-items: center;
         justify-content: center;
@@ -282,11 +283,12 @@
     /* Placement Guide Overlay */
     .cts-placement-guide-{{ section.id }} {
         position: absolute;
-        width: 37%;
-        height: 42%;
+        width: 71.32%;
+        height: 66.20%;
         left: 50%;
-        top: 29%;
+        top: 15.98%;
         transform: translateX(-50%);
+        margin-left: -0.13%;
         border: 2px dashed rgba(96, 165, 250, 0.6);
         background: rgba(96, 165, 250, 0.1);
         pointer-events: none;
