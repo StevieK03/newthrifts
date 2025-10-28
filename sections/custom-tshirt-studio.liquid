@@ -310,6 +310,154 @@
         letter-spacing: 2px;
     }
 
+    /* Print Area Adjustment Panel Styles */
+    .cts-adjust-panel-{{ section.id }} {
+        position: fixed;
+        top: 50%;
+        right: 20px;
+        transform: translateY(-50%);
+        width: 320px;
+        background: rgba(15, 23, 42, 0.98);
+        border: 1px solid rgba(96, 165, 250, 0.3);
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        z-index: 10000;
+        backdrop-filter: blur(10px);
+    }
+
+    .cts-adjust-panel-header-{{ section.id }} {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .cts-adjust-panel-header-{{ section.id }} h3 {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 600;
+        color: #60a5fa;
+    }
+
+    .cts-adjust-close-{{ section.id }} {
+        background: rgba(239, 68, 68, 0.2);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: #ef4444;
+        width: 24px;
+        height: 24px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+    }
+
+    .cts-adjust-close-{{ section.id }}:hover {
+        background: rgba(239, 68, 68, 0.3);
+    }
+
+    .cts-adjust-panel-content-{{ section.id }} {
+        padding: 15px;
+    }
+
+    .cts-adjust-control-group-{{ section.id }} {
+        margin-bottom: 15px;
+    }
+
+    .cts-adjust-control-group-{{ section.id }} label {
+        display: block;
+        font-size: 12px;
+        color: #e2e8f0;
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+
+    .cts-adjust-control-group-{{ section.id }} label span {
+        color: #60a5fa;
+        font-weight: 700;
+    }
+
+    .cts-adjust-control-group-{{ section.id }} input[type="range"] {
+        width: 100%;
+        height: 6px;
+        border-radius: 3px;
+        background: rgba(255, 255, 255, 0.1);
+        outline: none;
+        -webkit-appearance: none;
+    }
+
+    .cts-adjust-control-group-{{ section.id }} input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #60a5fa;
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .cts-adjust-control-group-{{ section.id }} input[type="range"]::-moz-range-thumb {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #60a5fa;
+        cursor: pointer;
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .cts-adjust-buttons-{{ section.id }} {
+        display: flex;
+        gap: 8px;
+        margin-top: 20px;
+    }
+
+    .cts-adjust-btn-{{ section.id }} {
+        flex: 1;
+        padding: 8px 12px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 6px;
+        color: white;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .cts-adjust-btn-{{ section.id }}:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateY(-1px);
+    }
+
+    .cts-adjust-btn-primary-{{ section.id }} {
+        background: rgba(96, 165, 250, 0.2);
+        border-color: #60a5fa;
+        color: #60a5fa;
+    }
+
+    .cts-adjust-btn-primary-{{ section.id }}:hover {
+        background: rgba(96, 165, 250, 0.3);
+    }
+
+    .cts-adjust-info-{{ section.id }} {
+        margin-top: 15px;
+        padding: 10px;
+        background: rgba(96, 165, 250, 0.1);
+        border-radius: 6px;
+        border-left: 3px solid #60a5fa;
+    }
+
+    .cts-adjust-info-{{ section.id }} small {
+        color: #94a3b8;
+        font-size: 11px;
+        line-height: 1.4;
+    }
+
     /* Canvas Zoom Control Styles */
     .cts-zoom-control-{{ section.id }} {
         margin-top: 20px;
@@ -2136,6 +2284,7 @@
         <div class="cts-header-actions-{{ section.id }}">
             <button class="cts-header-btn-{{ section.id }}" id="undoBtn-{{ section.id }}" disabled>↶ Undo</button>
             <button class="cts-header-btn-{{ section.id }}" id="guideBtn-{{ section.id }}">📐 Placement Guide</button>
+            <button class="cts-header-btn-{{ section.id }}" id="adjustBtn-{{ section.id }}">🎯 Adjust Print Area</button>
               </div>
             </div>
             
@@ -2570,6 +2719,35 @@
             <div class="cts-color-samples-{{ section.id }}" id="specialColors-{{ section.id }}"></div>
         </div>
       </div>
+    </div>
+
+    <!-- Print Area Adjustment Panel -->
+    <div class="cts-adjust-panel-{{ section.id }}" id="adjustPanel-{{ section.id }}" style="display: none;">
+        <div class="cts-adjust-panel-header-{{ section.id }}">
+            <h3>🎯 Adjust Print Area</h3>
+            <button class="cts-adjust-close-{{ section.id }}" id="closeAdjustBtn-{{ section.id }}">✕</button>
+        </div>
+        <div class="cts-adjust-panel-content-{{ section.id }}">
+            <div class="cts-adjust-control-group-{{ section.id }}">
+                <label>Width: <span id="printWidthValue-{{ section.id }}">37</span>%</label>
+                <input type="range" id="printWidth-{{ section.id }}" min="20" max="80" step="0.5" value="37">
+            </div>
+            <div class="cts-adjust-control-group-{{ section.id }}">
+                <label>Height: <span id="printHeightValue-{{ section.id }}">42</span>%</label>
+                <input type="range" id="printHeight-{{ section.id }}" min="20" max="80" step="0.5" value="42">
+            </div>
+            <div class="cts-adjust-control-group-{{ section.id }}">
+                <label>Top Position: <span id="printTopValue-{{ section.id }}">29</span>%</label>
+                <input type="range" id="printTop-{{ section.id }}" min="10" max="50" step="0.5" value="29">
+            </div>
+            <div class="cts-adjust-buttons-{{ section.id }}">
+                <button class="cts-adjust-btn-{{ section.id }}" id="resetPrintBtn-{{ section.id }}">Reset</button>
+                <button class="cts-adjust-btn-{{ section.id }} cts-adjust-btn-primary-{{ section.id }}" id="copyPrintBtn-{{ section.id }}">Copy CSS</button>
+            </div>
+            <div class="cts-adjust-info-{{ section.id }}">
+                <small>💡 Tip: Turn on Placement Guide to see the adjustments clearly</small>
+            </div>
+        </div>
     </div>
 
 <!-- Supabase Scripts for Image Upload (optional - falls back to base64 if not available) -->
@@ -3210,6 +3388,146 @@
             guideBtn.style.background = 'rgba(255, 255, 255, 0.1)';
             guideBtn.style.borderColor = 'rgba(255, 255, 255, 0.2)';
         }
+    });
+
+    // ============================================
+    // PRINT AREA ADJUSTMENT PANEL
+    // ============================================
+    const adjustBtn = document.getElementById(`adjustBtn-${sectionId}`);
+    const adjustPanel = document.getElementById(`adjustPanel-${sectionId}`);
+    const closeAdjustBtn = document.getElementById(`closeAdjustBtn-${sectionId}`);
+    const printWidthSlider = document.getElementById(`printWidth-${sectionId}`);
+    const printHeightSlider = document.getElementById(`printHeight-${sectionId}`);
+    const printTopSlider = document.getElementById(`printTop-${sectionId}`);
+    const printWidthValue = document.getElementById(`printWidthValue-${sectionId}`);
+    const printHeightValue = document.getElementById(`printHeightValue-${sectionId}`);
+    const printTopValue = document.getElementById(`printTopValue-${sectionId}`);
+    const resetPrintBtn = document.getElementById(`resetPrintBtn-${sectionId}`);
+    const copyPrintBtn = document.getElementById(`copyPrintBtn-${sectionId}`);
+
+    // Toggle adjustment panel
+    adjustBtn.addEventListener('click', () => {
+        const isVisible = adjustPanel.style.display !== 'none';
+        adjustPanel.style.display = isVisible ? 'none' : 'block';
+        if (!isVisible) {
+            adjustBtn.textContent = '✓ Adjusting';
+            adjustBtn.style.background = 'rgba(96, 165, 250, 0.2)';
+            adjustBtn.style.borderColor = '#60a5fa';
+        } else {
+            adjustBtn.textContent = '🎯 Adjust Print Area';
+            adjustBtn.style.background = 'rgba(255, 255, 255, 0.1)';
+            adjustBtn.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+        }
+    });
+
+    closeAdjustBtn.addEventListener('click', () => {
+        adjustPanel.style.display = 'none';
+        adjustBtn.textContent = '🎯 Adjust Print Area';
+        adjustBtn.style.background = 'rgba(255, 255, 255, 0.1)';
+        adjustBtn.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+    });
+
+    // Function to update print area dimensions
+    function updatePrintAreaDimensions() {
+        const width = printWidthSlider.value;
+        const height = printHeightSlider.value;
+        const top = printTopSlider.value;
+
+        // Update display values
+        printWidthValue.textContent = width;
+        printHeightValue.textContent = height;
+        printTopValue.textContent = top;
+
+        // Create or update dynamic style
+        let styleEl = document.getElementById(`printAreaDynamicStyle-${sectionId}`);
+        if (!styleEl) {
+            styleEl = document.createElement('style');
+            styleEl.id = `printAreaDynamicStyle-${sectionId}`;
+            document.head.appendChild(styleEl);
+        }
+
+        styleEl.textContent = `
+            .cts-design-overlay-{{ section.id }} {
+                width: ${width}% !important;
+                height: ${height}% !important;
+                top: ${top}% !important;
+            }
+            .cts-placement-guide-{{ section.id }} {
+                width: ${width}% !important;
+                height: ${height}% !important;
+                top: ${top}% !important;
+            }
+        `;
+
+        console.log(`🎯 Print area updated: ${width}% x ${height}%, top: ${top}%`);
+    }
+
+    // Slider event listeners
+    printWidthSlider.addEventListener('input', updatePrintAreaDimensions);
+    printHeightSlider.addEventListener('input', updatePrintAreaDimensions);
+    printTopSlider.addEventListener('input', updatePrintAreaDimensions);
+
+    // Reset button
+    resetPrintBtn.addEventListener('click', () => {
+        printWidthSlider.value = 37;
+        printHeightSlider.value = 42;
+        printTopSlider.value = 29;
+        updatePrintAreaDimensions();
+    });
+
+    // Copy CSS button
+    copyPrintBtn.addEventListener('click', () => {
+        const width = printWidthSlider.value;
+        const height = printHeightSlider.value;
+        const top = printTopSlider.value;
+
+        const cssCode = `.cts-design-overlay-{{ section.id }} {
+    position: absolute;
+    width: ${width}%;
+    height: ${height}%;
+    left: 50%;
+    top: ${top}%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: move;
+    transition: all 0.2s ease;
+}
+
+.cts-placement-guide-{{ section.id }} {
+    position: absolute;
+    width: ${width}%;
+    height: ${height}%;
+    left: 50%;
+    top: ${top}%;
+    transform: translateX(-50%);
+    border: 2px dashed rgba(96, 165, 250, 0.6);
+    background: rgba(96, 165, 250, 0.1);
+    pointer-events: none;
+    display: none;
+    z-index: 10;
+}`;
+
+        // Copy to clipboard
+        navigator.clipboard.writeText(cssCode).then(() => {
+            const originalText = copyPrintBtn.textContent;
+            copyPrintBtn.textContent = '✓ Copied!';
+            copyPrintBtn.style.background = 'rgba(34, 197, 94, 0.3)';
+            copyPrintBtn.style.borderColor = '#22c55e';
+            copyPrintBtn.style.color = '#22c55e';
+            
+            setTimeout(() => {
+                copyPrintBtn.textContent = originalText;
+                copyPrintBtn.style.background = 'rgba(96, 165, 250, 0.2)';
+                copyPrintBtn.style.borderColor = '#60a5fa';
+                copyPrintBtn.style.color = '#60a5fa';
+            }, 2000);
+        }).catch(err => {
+            console.error('Failed to copy CSS:', err);
+            alert('Failed to copy. Please copy manually from console.');
+            console.log(cssCode);
+        });
     });
 
     // T-Shirt color toggle
