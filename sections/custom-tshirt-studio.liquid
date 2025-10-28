@@ -363,6 +363,45 @@
         padding: 15px;
     }
 
+    .cts-adjust-values-display-{{ section.id }} {
+        background: linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(167, 139, 250, 0.2));
+        border: 2px solid rgba(96, 165, 250, 0.5);
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    .cts-adjust-values-display-{{ section.id }} h4 {
+        margin: 0 0 12px 0;
+        font-size: 13px;
+        color: #60a5fa;
+        text-align: center;
+        font-weight: 700;
+    }
+
+    .cts-adjust-value-row-{{ section.id }} {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .cts-adjust-value-row-{{ section.id }}:last-child {
+        border-bottom: none;
+    }
+
+    .cts-adjust-value-row-{{ section.id }} span {
+        color: #94a3b8;
+        font-size: 12px;
+    }
+
+    .cts-adjust-value-row-{{ section.id }} strong {
+        color: #60a5fa;
+        font-size: 16px;
+        font-weight: 700;
+    }
+
     .cts-adjust-control-group-{{ section.id }} {
         margin-bottom: 15px;
     }
@@ -2728,6 +2767,24 @@
             <button class="cts-adjust-close-{{ section.id }}" id="closeAdjustBtn-{{ section.id }}">✕</button>
         </div>
         <div class="cts-adjust-panel-content-{{ section.id }}">
+            <!-- Current Values Display -->
+            <div class="cts-adjust-values-display-{{ section.id }}">
+                <h4>📊 Current Values</h4>
+                <div class="cts-adjust-value-row-{{ section.id }}">
+                    <span>Width:</span>
+                    <strong id="displayWidth-{{ section.id }}">37%</strong>
+                </div>
+                <div class="cts-adjust-value-row-{{ section.id }}">
+                    <span>Height:</span>
+                    <strong id="displayHeight-{{ section.id }}">42%</strong>
+                </div>
+                <div class="cts-adjust-value-row-{{ section.id }}">
+                    <span>Top:</span>
+                    <strong id="displayTop-{{ section.id }}">29%</strong>
+                </div>
+            </div>
+
+            <!-- Sliders -->
             <div class="cts-adjust-control-group-{{ section.id }}">
                 <label>Width: <span id="printWidthValue-{{ section.id }}">37</span>%</label>
                 <input type="range" id="printWidth-{{ section.id }}" min="20" max="80" step="0.5" value="37">
@@ -3402,13 +3459,23 @@
     const printWidthValue = document.getElementById(`printWidthValue-${sectionId}`);
     const printHeightValue = document.getElementById(`printHeightValue-${sectionId}`);
     const printTopValue = document.getElementById(`printTopValue-${sectionId}`);
+    const displayWidth = document.getElementById(`displayWidth-${sectionId}`);
+    const displayHeight = document.getElementById(`displayHeight-${sectionId}`);
+    const displayTop = document.getElementById(`displayTop-${sectionId}`);
     const resetPrintBtn = document.getElementById(`resetPrintBtn-${sectionId}`);
     const copyPrintBtn = document.getElementById(`copyPrintBtn-${sectionId}`);
+
+    console.log('🎯 Print Area Adjustment Panel initialized:', {
+        adjustBtn: !!adjustBtn,
+        adjustPanel: !!adjustPanel,
+        sliders: !!(printWidthSlider && printHeightSlider && printTopSlider)
+    });
 
     // Toggle adjustment panel
     adjustBtn.addEventListener('click', () => {
         const isVisible = adjustPanel.style.display !== 'none';
         adjustPanel.style.display = isVisible ? 'none' : 'block';
+        console.log('🎯 Adjustment panel toggled:', !isVisible ? 'shown' : 'hidden');
         if (!isVisible) {
             adjustBtn.textContent = '✓ Adjusting';
             adjustBtn.style.background = 'rgba(96, 165, 250, 0.2)';
@@ -3433,10 +3500,15 @@
         const height = printHeightSlider.value;
         const top = printTopSlider.value;
 
-        // Update display values
+        // Update slider display values
         printWidthValue.textContent = width;
         printHeightValue.textContent = height;
         printTopValue.textContent = top;
+
+        // Update prominent display values
+        displayWidth.textContent = `${width}%`;
+        displayHeight.textContent = `${height}%`;
+        displayTop.textContent = `${top}%`;
 
         // Create or update dynamic style
         let styleEl = document.getElementById(`printAreaDynamicStyle-${sectionId}`);
@@ -3459,7 +3531,7 @@
             }
         `;
 
-        console.log(`🎯 Print area updated: ${width}% x ${height}%, top: ${top}%`);
+        console.log(`🎯 Print area updated: Width=${width}%, Height=${height}%, Top=${top}%`);
     }
 
     // Slider event listeners
