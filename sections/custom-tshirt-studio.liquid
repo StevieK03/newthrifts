@@ -248,19 +248,19 @@
         transition: all 0.2s ease;
     }
 
-    /* Back view specific dimensions and scaling */
+    /* Back view specific dimensions (no scaling on overlay to prevent text overflow) */
     .cts-tshirt-container-{{ section.id }}.back-view .cts-design-overlay-{{ section.id }} {
         width: 29.9%;
         height: 34.1%;
         top: 28.2%;
-        transform: translateX(-50%) scale(1.3);
+        transform: translateX(-50%);
     }
 
     .cts-tshirt-container-{{ section.id }}.back-view .cts-placement-guide-{{ section.id }} {
         width: 29.9%;
         height: 34.1%;
         top: 28.2%;
-        transform: translateX(-50%) scale(1.3);
+        transform: translateX(-50%);
     }
 
     .cts-design-overlay-{{ section.id }}:hover {
