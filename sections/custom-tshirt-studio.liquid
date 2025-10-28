@@ -250,16 +250,16 @@
 
     /* Back view specific dimensions (no scaling on overlay to prevent text overflow) */
     .cts-tshirt-container-{{ section.id }}.back-view .cts-design-overlay-{{ section.id }} {
-        width: 29.9%;
-        height: 34.1%;
-        top: 28.2%;
+        width: 37.5%;
+        height: 42.9%;
+        top: 23.9%;
         transform: translateX(-50%);
     }
 
     .cts-tshirt-container-{{ section.id }}.back-view .cts-placement-guide-{{ section.id }} {
-        width: 29.9%;
-        height: 34.1%;
-        top: 28.2%;
+        width: 37.5%;
+        height: 42.9%;
+        top: 23.9%;
         transform: translateX(-50%);
     }
 
@@ -4036,11 +4036,11 @@
         let printWidth, printHeight, topOffset, horizontalOffset;
         
         if (currentView === 'back') {
-            // Back view: 29.9% width, 34.1% height, top at 28.2%
-            printWidth = 0.299;
-            printHeight = 0.341;
-            topOffset = 0.282;
-            horizontalOffset = (1 - printWidth) / 2; // (1 - 0.299) / 2 = 0.3505
+            // Back view: 37.5% width, 42.9% height, top at 23.9%
+            printWidth = 0.375;
+            printHeight = 0.429;
+            topOffset = 0.239;
+            horizontalOffset = (1 - printWidth) / 2; // (1 - 0.375) / 2 = 0.3125
         } else {
             // Front view and others: 37% width, 42% height, top at 29%
             printWidth = 0.37;
@@ -4100,12 +4100,12 @@
         let minLeft, maxLeft, minTop, maxTop;
         
         if (currentView === 'back') {
-            // Back view: 29.9% width, 34.1% height, starting at 28.2% top
-            const horizontalOffset = (1 - 0.299) / 2 * 100; // 35.05%
-            minLeft = horizontalOffset + margin; // 35.05 + 5 = 40.05
-            maxLeft = (100 - horizontalOffset) - margin; // 64.95 - 5 = 59.95
-            minTop = 28.2 + margin; // 33.2
-            maxTop = 28.2 + 34.1 - margin; // 62.3 - 5 = 57.3
+            // Back view: 37.5% width, 42.9% height, starting at 23.9% top
+            const horizontalOffset = (1 - 0.375) / 2 * 100; // 31.25%
+            minLeft = horizontalOffset + margin; // 31.25 + 5 = 36.25
+            maxLeft = (100 - horizontalOffset) - margin; // 68.75 - 5 = 63.75
+            minTop = 23.9 + margin; // 28.9
+            maxTop = 23.9 + 42.9 - margin; // 66.8 - 5 = 61.8
         } else {
             // Front view: 37% width, 42% height, starting at 29% top
             minLeft = 31.5 + margin; // 36.5
