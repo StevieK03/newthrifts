@@ -3023,9 +3023,21 @@
                 if (viewId === 'back') {
                     tshirtImage.classList.add('back-view');
                     tshirtContainer.classList.add('back-view');
+                    
+                    // Hide scrollbars on back view
+                    const mockupCanvas = document.getElementById(`mockupCanvas-${sectionId}`);
+                    const previewCard = mockupCanvas?.closest(`.cts-preview-card-${sectionId}`);
+                    if (mockupCanvas) mockupCanvas.style.overflow = 'hidden';
+                    if (previewCard) previewCard.style.overflow = 'hidden';
                 } else {
                     tshirtImage.classList.remove('back-view');
                     tshirtContainer.classList.remove('back-view');
+                    
+                    // Restore scrollbars on other views
+                    const mockupCanvas = document.getElementById(`mockupCanvas-${sectionId}`);
+                    const previewCard = mockupCanvas?.closest(`.cts-preview-card-${sectionId}`);
+                    if (mockupCanvas) mockupCanvas.style.overflow = 'auto';
+                    if (previewCard) previewCard.style.overflow = 'auto';
                 }
             }, 200);
             
