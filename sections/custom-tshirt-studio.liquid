@@ -2787,15 +2787,15 @@
             <!-- Sliders -->
             <div class="cts-adjust-control-group-{{ section.id }}">
                 <label>Width: <span id="printWidthValue-{{ section.id }}">37</span>%</label>
-                <input type="range" id="printWidth-{{ section.id }}" min="20" max="80" step="0.5" value="37">
+                <input type="range" id="printWidth-{{ section.id }}" min="10" max="100" step="0.1" value="37">
             </div>
             <div class="cts-adjust-control-group-{{ section.id }}">
                 <label>Height: <span id="printHeightValue-{{ section.id }}">42</span>%</label>
-                <input type="range" id="printHeight-{{ section.id }}" min="20" max="80" step="0.5" value="42">
+                <input type="range" id="printHeight-{{ section.id }}" min="10" max="100" step="0.1" value="42">
             </div>
             <div class="cts-adjust-control-group-{{ section.id }}">
                 <label>Top Position: <span id="printTopValue-{{ section.id }}">29</span>%</label>
-                <input type="range" id="printTop-{{ section.id }}" min="10" max="50" step="0.5" value="29">
+                <input type="range" id="printTop-{{ section.id }}" min="0" max="60" step="0.1" value="29">
             </div>
             <div class="cts-adjust-buttons-{{ section.id }}">
                 <button class="cts-adjust-btn-{{ section.id }}" id="resetPrintBtn-{{ section.id }}">Reset</button>
@@ -3496,9 +3496,9 @@
 
     // Function to update print area dimensions
     function updatePrintAreaDimensions() {
-        const width = printWidthSlider.value;
-        const height = printHeightSlider.value;
-        const top = printTopSlider.value;
+        const width = parseFloat(printWidthSlider.value).toFixed(1);
+        const height = parseFloat(printHeightSlider.value).toFixed(1);
+        const top = parseFloat(printTopSlider.value).toFixed(1);
 
         // Update slider display values
         printWidthValue.textContent = width;
